@@ -1,5 +1,5 @@
 <?php
-$PATH = '../../../themes/';
+$PATH = 'themes/';
 $themes = [
 	'sevian' => [
 		'css' => [

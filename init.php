@@ -12,9 +12,17 @@ $structure = [
 
 $init = [
 	'theme'=>'sevian',
-	'title'=>'Sigefor 1.00',
+	'title'=>'GTcomm v1.0',
 	'templateName' => 'login',
 	'elements' => [
+		[
+			'panel'		=> 100,
+			'element'	=> 'sgArticle',
+			'name'		=> 'banner',
+			'method'	=> 'load',
+			'designMode'=> true,
+			'fixed'		=> true,
+		],
 		[
 			'panel'		=> 1,
 			'element'	=> 'menu',
@@ -29,6 +37,15 @@ $init = [
 			'element'	=> 'test4',
 			'name'		=> '',
 			'method'	=> '',
+			'designMode'=> true,
+			'fixed'		=> true,
+		],
+		
+		[
+			'panel'		=> 5,
+			'element'	=> 'sgForm',
+			'name'		=> 'login',
+			'method'	=> 'request',
 			'designMode'=> true,
 			'fixed'		=> true,
 		],

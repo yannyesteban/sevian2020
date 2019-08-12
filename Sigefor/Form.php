@@ -1,5 +1,8 @@
 <?php
 namespace Sevian\Sigefor;
+include 'ConfigMenu.php';
+
+
 
 class InfoField{
 	public $form = '';
@@ -45,94 +48,77 @@ class InfoField{
 
 }
 
-class Form extends \Sevian\Panel implements \Sevian\UserAdmin{
-	public $form = false;
-	public $title = false;
-	public $class = false;
-	public $query = '';
-	public $params = '';
-	public $tabs = '';
-	public $pages = '';
-	public $masterData = [];
+class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
 
-	public $jsonFile = 'form.json';
-	
-	
-	public $fields = [];
-	
 	public $showCaption = true;
-
-	
-	private $main = false;
-	
-
-	protected $tForms = "_sg_forms";
+	public $menus = [];
+    
+    protected $tForms = "_sg_forms";
 	protected $tFormFields = "_sg_form_fields";
-	protected $_params = false;
+	
+	protected $tMenus = "_sg_menus";
+    protected $tMenuItems = "_sg_menu_items";
 
-
-	public function login(){
-		echo 4;
-	}
-
-	public function __construct($opt = array()){
+    public function __construct($opt = []){
 		
 		foreach($opt as $k => $v){
 			$this->$k = $v;
 		}
-		
-		$this->main = new \Sevian\HTML('div');
-		
-		$this->cn = \Sevian\Connection::get();
-	}
-	
-	public function getMain(){
-		return $this->main;
-	}
-	public function evalMethod($method = ''){
-		
-		
-		//$this->loadForm();
-		$this->load();
-		
-		switch($method){
-				
-				
-			case 'request':
-				$this->main = $this->form();
-				break;
-			case 'load':
-				break;
-			case 'list':
-				break;
-			case 'save':
-				break;
-			case 'delete':
-				break;
-			case 'get_field_data':
-				break;
-				
-				
-				
-		}
-		
-	}
-	
-	private function getInfoFields($query){
 
-		return $this->cn->infoQuery($query);
-		
+		$this->_main = new \Sevian\HTML('div');
+		$this->_main->style = "color:red";
+        $this->_main->innerHTML = "betha";
+        
+        $this->cn = \Sevian\Connection::get();
 	}
-	
-	private function load(){
+
+    public function evalMethod($method = false): bool{
 		
+
+        if($method === false){
+            $method = $this->method;
+        }
+
+
+        
+        switch($method){
+            case 'create':
+
+                
+                
+            case 'request':
+                $this->_config();
+				$this->_main->innerHTML = $this->createForm();//$this->html;
+				
+				
+				
+                break;
+            case 'delete':
+                break;
+            case 'get_field_data':
+                break;
+                
+                
+                
+        }
+        return true;	
+    }
+	public function getMain(){
+		return true;
+	}
+
+    private function _config(){
+
 		$cn = $this->cn;
 
 		$cn->query = "
 			SELECT * 
 			FROM $this->tForms 
 			WHERE form = '$this->name'";
-		
+        
+          
+       
+
 		$result = $cn->execute();
 		
 		if($rs = $cn->getDataAssoc($result)){
@@ -140,28 +126,23 @@ class Form extends \Sevian\Panel implements \Sevian\UserAdmin{
 			foreach($rs as $k => $v){
 				$this->$k = $v;
 			}
-			
+
+			$this->_menu = (array)json_decode($this->params);
+			$this->_menu["caption"] = $this->_config["caption"]??$this->title;
+			$this->_menu["class"] = $this->_config["class"] ?? $this->class;
+
+
 		}
-		\Sevian\S::setSes("f", 'USA');
-		/* leemos el campo params y remplaamos la informacion del objeto */
-		$this->_params = \Sevian\S::params($this->params);
 		
-		if($this->_params){
-			
-			foreach($this->_params as $k => $v){
-				$this->$k = $v;
-			}
-		}
-
-
-		$info = $this->getInfoFields($this->query);
+		
+		$info = $this->cn->infoQuery($this->query);
 		$fields = $info->fields;
 
 		foreach($fields as $k => $v){
-			
 			$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
 		}
-
+		
+		
 		$q = "
 			SELECT * 
 			FROM $this->tFormFields 
@@ -177,57 +158,15 @@ class Form extends \Sevian\Panel implements \Sevian\UserAdmin{
 		
 		}
 
-		//print_r($this->fields);
-		
 	}
-	
-	private function loadForm(){
-		
-		
-		
-		$_forms = json_decode(file_get_contents($this->jsonFile, true), true);
-		
-		$opt = $_forms[$this->name];
-		
-		foreach($opt as $k => $v){
-			$this->$k = $v;
-		}
-		//echo $this->query;
-		
-		$this->infoFields = $this->getInfoFields($this->query);
-		
-		
-		
-		
-	}
-	
-	public function render(){
-		
-		
-		
-		
-		
-		$this->evalMethod($this->method);
-		
-		
-		return $this->main->render();
-		
-		
-		
-		
-		
-		
-	}
-	
-	
-	
-	public function form(){
+
+	private function createForm(){
 		
 		$f = new \Sevian\Form();
 		if($this->showCaption){
 			$f->setCaption($this->title);
 		}
-		
+		print_r($this->_menu);
 		
 		foreach($this->fields as $k => $field){
 			
@@ -238,28 +177,47 @@ class Form extends \Sevian\Panel implements \Sevian\UserAdmin{
 				'id'=>$field->name."_p{$this->panel}",
 				'className'=>$field->class,
 				'events'=>$field->events,
-				'value'=>123,
+				'value'=>'',
 				'parent'=>$field->parent,
 				'childs'=>$field->childs,
 				'data'=>$field->data,
-				'masterData'=>$this->masterData,
+				'masterData'=>$this->masterData ?? [],
 
 
 
 			]);
 			$field->input = $input;
-			$field->caption = $field->name;
+			$field->caption = $field->title;
 			$f->addField($field);
 			
 		}
 		
+		$menu = (new ConfigMenu())->getConfig('login');
+		//$menu->getConfig('login');
+		$div = new \Sevian\HTML('div');
+		foreach($menu['items'] as $k => $v){
+			$buttom = new \Sevian\HTML('input');
+			$buttom->type = 'button';
+			$buttom->value = $v['caption'];
+			$div->appendChild($buttom);
+			
+		}
 		
-		return $f;
+		echo $div->render();
+		$f->addRow($div);
+		
+		return $f->render();
+		
+	}// end function
+	
+	
+	private function createMenu($menu){
+
+		
 	}
 	
 	
-}
-
+}// end class
 
 
 

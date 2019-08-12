@@ -26,19 +26,17 @@ class Article extends \Sevian\Panel2 implements \Sevian\DocElement{
         if($method === false){
             $method = $this->method;
         }
-        
-        //$this->loadForm();
-        $this->_config();
-        //$this->script = ";alert(88888);";
 
-        $this->_main->innerHTML = $this->html;
+
+        
         switch($method){
             case 'create':
 
                 
                 
             case 'load':
-                //$this->main = $this->load();
+                $this->_config();
+				$this->_main->innerHTML = $this->html;
                 break;
             case 'delete':
                 break;

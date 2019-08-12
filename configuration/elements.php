@@ -37,7 +37,9 @@ $cls_elements = [
 	'test5' 		=> [
 		'file' 	=> 'Sigefor/Article.php',
 		'class' => '\Sevian\Sigefor\Article'],
-
+	'sgArticle' 		=> [
+		'file' 	=> 'Sigefor/Article.php',
+		'class' => '\Sevian\Sigefor\Article'],
 
 	];
 

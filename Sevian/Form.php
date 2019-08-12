@@ -122,7 +122,7 @@ class Form extends Page{
 		return $this->_table;
 	}
 
-	private function addRow($row){
+	public function addRow($row){
 		if(!$this->_table){
 			
 			$this->addTable();
