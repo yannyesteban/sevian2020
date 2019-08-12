@@ -224,9 +224,6 @@ function loadJson($path){
 		//$a= file_get_contents("json/mod_principal.json", true);
 		$_forms = json_decode(file_get_contents("json/mod_principal.json", true), true);
 		
-		print_r($_forms);
-		
-		
 		
 		
 	}
