@@ -191,7 +191,7 @@ class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
 			$f->addField($field);
 			
 		}
-		
+		loadJson("json/mod_principal.json");
 		$menu = (new ConfigMenu())->getConfig('login');
 		//$menu->getConfig('login');
 		$div = new \Sevian\HTML('div');
@@ -218,7 +218,18 @@ class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
 	
 	
 }// end class
-
+function loadJson($path){
+		
+		
+		//$a= file_get_contents("json/mod_principal.json", true);
+		$_forms = json_decode(file_get_contents("json/mod_principal.json", true), true);
+		
+		print_r($_forms);
+		
+		
+		
+		
+	}
 
 
 ?>

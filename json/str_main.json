@@ -1,0 +1,13 @@
+// JSON Document
+{
+	"structure":"main",
+	"title":"Principal",
+	"template":"gtconn",
+	"class":"sevian",
+	"main_panel":4,
+	"params":{},
+	"elements":{},
+	"groups":[],
+	
+	
+}

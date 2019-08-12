@@ -1,0 +1,10 @@
+{
+	"module":"principal",
+	"title":"Módulo Principal",
+	"structure":"login",
+	"config":{},
+	"procedure":{},
+	"sequence":{},
+	"theme":"sevian",
+	"debug":true
+}
