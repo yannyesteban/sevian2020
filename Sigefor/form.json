@@ -1,0 +1,47 @@
+{
+	
+	"uno_m":{
+		"title":"Datos Personales",
+		"query":"SELECT * FROM personas",
+		"tabs":{
+			"cedula":{
+				"caption":"Datos personales",
+				"class":"prism-one"
+			},
+			"codestado":{
+				"caption":"Datos personales",
+				"class":"prism-two"
+			}
+		},
+		"pages":{
+			"nombre":{
+				"caption":"Datos personales",
+				"class":"prism-one"
+			},
+			"parroquia":{
+				"caption":"Datos personales",
+				"class":"prism-two"
+			}
+		},
+		"fields":{
+			
+			"cedula":{
+				"name":"cedula",
+				"caption":"Cédula 1000",
+				"class":"prism",
+				"input":{
+					"type":"text",
+					"value":"12474737",
+					"class":"sigefor"
+				},
+				"rules":{
+					"required":true,
+					"numeric":true
+				}
+			}
+			
+		}
+		
+	}
+	
+}

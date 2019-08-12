@@ -1,0 +1,109 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: Hemihead;
+    src: url(../../../fonts/HEMIHEAD.TTF);
+    
+}
+
+@font-face {
+    font-family: Bestlovers;
+    src: url(../../../fonts/Bestlovers.TTF);
+	//font-weight: bold;
+}
+
+*{
+    box-sizing: border-box;
+    font-family: arial;
+}
+body, html{
+	padding: 0px;
+	margin: 0px;
+    height: 100%;
+}
+
+.sevian{
+    background-color: #272727f8;
+    background: linear-gradient(rgba(4,4,4,1), rgb(148, 148, 148), rgb(214, 200, 200));
+
+
+    background-image: linear-gradient(-60deg, rgb(0, 0, 0), rgb(112, 111, 111), rgb(44, 44, 44));
+
+    height: 100%;
+
+    
+   
+
+}
+
+.wrapper { 
+    display: none; 
+    grid-template-columns: repeat(3, 1fr); 
+    //grid-template-rows:2fr;
+    grid-auto-rows: auto; 
+    grid-column-gap: 10px;
+   grid-row-gap: 1em;
+   height: 100%;
+  } 
+  
+  .box1 { 
+    grid-column-start: 1; 
+    grid-column-end: 4; 
+    grid-row-start: 1; 
+    grid-row-end: 3; 
+    height: 60px;
+  }
+  
+  .box2 { 
+    grid-column-start: 1; 
+    grid-row-start: 3; 
+    grid-row-end: 5; 
+  }
+
+  .wrapper {
+    border: 2px solid #f76707;
+    border-radius: 5px;
+    background-color: #fff4e6;
+  }
+  
+  .wrapper > div {
+    border: 2px solid #ffa94d;
+    border-radius: 5px;
+    background-color: #ffd8a8;
+    padding: 1em;
+    color: #d9480f;
+  }
+
+
+  .main { 
+    display: grid; 
+    grid-template-columns: 2fr 1fr; 
+    grid-template-rows:100px auto;
+   // grid-auto-rows: auto; 
+    //grid-column-gap: 10px;
+   //grid-row-gap: 1em;
+   height: 100%;
+
+   >div{
+      // border:1px solid rgb(18, 84, 104);
+   }
+
+
+    .menu { 
+        grid-column-start: 1; 
+        grid-column-end: 3; 
+        //grid-row-start: 1; 
+        //grid-row-end: 3; 
+        //height: 60px;
+        margin: 4px 4px 0px 4px;
+        background-color:rgba(0, 0, 0, 0.8);
+    }
+    .panel-left{
+        margin:4px 0px 4px 4px;
+        background-color:rgba(0, 0, 0, 0.8);
+    }
+    .panel-right{
+        margin:4px;
+        background-color:rgba(0, 0, 0, 0.8);
+    }
+  } 

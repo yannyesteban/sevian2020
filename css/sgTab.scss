@@ -1,0 +1,51 @@
+/* Scss Document */
+
+#tab1{
+
+	border:0px solid blue;
+	height: 300px;
+	width: 500px;
+	
+}
+
+$active_color : rgba(152,0,9,1.00);
+//$active_color : rgba(13,62,177,1.00);
+.sg-tab-main{
+	>.sg-tab-menu{
+		box-sizing: padding-box!important;
+		padding: 4px;
+		>.sg-tab-imenu{
+			box-sizing: padding-box!important;
+			background-color: rgba(111,111,111,1.00);
+			text-decoration: none;
+			color:white;
+			margin: 0px 2px 0px 0px;
+			padding:4px 10px 4px 10px;
+			cursor: pointer;
+			-webkit-user-select: none;  /* Chrome 49+ */
+			-moz-user-select: none;     /* Firefox 43+ */
+			-ms-user-select: none;      /* No support yet */
+			user-select: none;          /* Likely future */ 
+			
+			
+			
+
+			border-radius: 4px 12px 0px 0px;
+			&.sg-tab-active{
+				background-color: $active_color;
+			}
+		}
+
+	}
+	>.sg-tab-body{
+		border-top:4px solid $active_color;
+		>.sg-tab-ibody{
+
+			display: none;
+			&.sg-tab-active{
+				display: block!important;
+			}
+		}
+	}	
+}
+

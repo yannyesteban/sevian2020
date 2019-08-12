@@ -1,0 +1,20 @@
+/* Scss Document */
+
+
+*[data-sg-type="selectTextPopup"]{
+	margin-left: 0px;
+	margin-top: 0px;
+	
+	background-color: white;
+	border:1px solid red;
+	max-height: 20em;
+	>*{
+		vertical-align: middle;
+		color: rgba(115,115,115,1.00);
+		border: 1px solid transparent;
+	}
+	>*.active{
+		background-color: rgba(159,8,8,1.00);
+		color:white;
+	}
+}
