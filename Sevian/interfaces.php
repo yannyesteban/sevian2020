@@ -17,3 +17,7 @@ interface StructureAdmin{
 
 }
 
+interface PanelsAdmin{
+    public function getPanels();
+
+}

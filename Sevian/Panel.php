@@ -2,6 +2,27 @@
 namespace Sevian;
 
 
+class MainElement{
+
+    public $element = "default";
+	public $name = "";
+	public $method = "";
+	public $eparams = array();
+
+    public $async = false;
+    public $updated = false;
+    
+    private $onDesing = true;
+	private $onDebug = true;
+
+    public function evalMethod($method = ""){
+
+    }
+
+
+
+}
+
 class Panel2 extends Element2{
 
 	public $css = "";

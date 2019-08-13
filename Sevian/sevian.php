@@ -27,11 +27,16 @@ function targetId($nombre=""){
 
 
 class S{
+
+	public static $user = 'pepe';
+	public static $role = 'public';
+
 	public static $title = 'SEVIAN 2017.10';
 	public static $theme = [];
 	public static $templateName = '';
 	
 	public static $elements = [];
+	public static $panels = [];
 	
 	public static $cfg = [];
 	
@@ -39,6 +44,12 @@ class S{
 	public static $req = [];
 	public static $exp = [];
 	
+	/* private */
+	private static $_init = [];
+	private static $_e = [];
+	private static $_p = [];
+
+
 	private static $ins = false;
 	private static $onAjax = false;
 	
@@ -111,6 +122,9 @@ class S{
 				self::$$k = $v;
 			}
 		}
+
+		self::$_init = new InfoInit($opt);
+		
 	}
 	public static function sessionInit(){
 		self::$lamda = function($nombre){
@@ -134,10 +148,6 @@ class S{
 		self::$cfg = &$_SESSION;
 		self::$req = &$_REQUEST;
 		
-
-
-		
-
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
 		
@@ -173,8 +183,11 @@ class S{
 				self::$_signs = $opt['signs'];
 			}
 			*/
-			foreach(self::$elements as $k => $e){
-				self::setPanel(new InfoParam($e));
+			
+			
+			
+			foreach(self::$panels as $k => $p){
+				self::setPanel(new InfoPanel($p));
 			}
 
 			
@@ -216,6 +229,12 @@ class S{
 		foreach(self::$_infoInputs as $name => $info){
 			self::setClassInput($name, $info);
 		}
+
+		foreach(self::$_init->elements as $k => $e){
+			
+			self::setElement($e);
+		}
+
 		/*
 		if(self::$cfg['INIT'] and isset($opt['sequenceInit'])){
 			self::sequence($opt['sequenceInit']);
@@ -227,6 +246,30 @@ class S{
 		*/
 		
 	}
+
+
+	public static function setElement($info, $update = false){
+
+		if(isset(self::$_clsElement[$info->element])){
+
+			self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
+			self::$_e[$info->id]->evalMethod();
+
+			if(self::$_e[$info->id] instanceof \Sevian\PanelsAdmin){
+				$panels = self::$_e[$info->id]->getPanels();
+
+				foreach($panels as $k => $p){
+					self::setPanel($p);
+				}
+				
+			}
+		}
+
+		
+		
+	}
+
+
 	public static function iMethod($params){
 
 		$info = new InfoParam($params);
@@ -686,18 +729,7 @@ class S{
 		
 		
 		$doc = new Document();
-		/*
-		$meta1 = new HTML('meta');
-		$meta1->{'http-equiv'} = 'Content-Type';
-		$meta1->content = 'text/html; charset=utf-8';
-
-		$meta2 = new HTML('meta');
-		$meta2->name = 'viewport';
-		$meta2->content = 'width=device-width, initial-scale=1';
 		
-		$doc->addMeta($meta1);
-		$doc->addMeta($meta2);
-		*/
 
 		$doc->setTitle(self::$title);
 		
@@ -728,24 +760,7 @@ class S{
 				self::setTemplate(self::$template);
 			}
 		}
-		/*
-		$template_x = self::evalTemplate();
-
 		
-if(1==0){
-	$_body = $template_x->render();
-		$_script = $template_x->getScript();
-		$_css = $template_x->getCss();
-		
-		$doc->appendCssStyle($_css);
-		$doc->appendScript($_script, true);
-		
-		$doc->body->text = $_body;
-}else{
-	$doc->body->appendChild($template_x);
-}
-		
-		*/
 
 		self::$_str->setTemplate(self::vars(self::getTemplate()));
 		
@@ -771,48 +786,7 @@ if(1==0){
 		$doc->appendScript($script, true);
 		
 		return $doc->render();
-		/* 
-		foreach($this->cssSheetsDefault as $v){
-			$doc->appendCssSheet($v);
-		}
 		
-		if(isset($this->themes[$this->theme])){
-			foreach($this->themes[$this->theme]['css'] as $v){
-				//$doc->appendCssSheet($this->themes[$this->theme]['path_css'].$v);
-				$doc->appendCssSheet($v);
-			}
-			foreach($this->themes[$this->theme]['templates'] as $k => $v){
-				//$this->_templates[$k] = $this->themes[$this->theme]['path_html'].$v;
-				$this->_templates[$k] = $v;
-			}
-		}
-		
-		foreach($this->cssSheets as $v){
-			$doc->appendCssSheet($v);
-		}
-		
-		foreach($this->jsFilesDefault as $v){
-			$doc->appendScriptDoc($v['file'], $v['begin']);//
-		}
-		
-		foreach($this->jsFiles as $v){
-			$doc->appendScriptDoc($v, true);
-		}
-		if(!$sevian->getTemplate()){
-			if($this->templateName and isset($this->_templates[$this->templateName])){
-				$this->template = file_get_contents($this->_templates[$this->templateName]);
-			}
-			$sevian->setTemplate($this->template);
-		}
-		
-		
-		$doc->body->add($sevian->evalTemplate());
-		
-		$doc->appendScript($sevian->script, true);
-		
-		$doc->setTitle($sevian->title);
-		
-		return $doc->render(); */
 	}
 	public static function evalElement($info){
 		$elem = self::getElement($info); 

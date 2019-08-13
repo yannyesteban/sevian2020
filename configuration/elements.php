@@ -1,6 +1,15 @@
 <?php
 
 $cls_elements = [
+	
+	'sgModule' 		=> [
+		'file' 	=> 'Sigefor/Module.php',
+		'class' => '\Sigefor\Module'],
+	'sgStructure' 		=> [
+		'file' 	=> 'Sigefor/Structure.php',
+		'class' => '\Sigefor\Structure'],
+	
+	
 	'form' => [
 		'file' 	=> 'SgForm.php',
 		'class' => 'SgForm'],

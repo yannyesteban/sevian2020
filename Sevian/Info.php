@@ -58,6 +58,48 @@ class InfoParam{
 		}
 	}
 }
+class InfoElement{
+	public $id = false;
+	public $element = '';
+	public $name = '';
+	public $method = '';
+	public $eparams = [];
+	public $async = false;
+	public $update = false;
+	public $debugMode = false;
+	public $designMode = false;
+	public $fixed = false;
+	
+	public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+			
+		}
+	}
+}
+class InfoPanel{
+	public $panel = false;
+	public $element = '';
+	public $name = '';
+	public $method = '';
+	public $eparams = [];
+	public $async = false;
+	public $update = false;
+	public $debugMode = false;
+	public $designMode = false;
+	public $fixed = false;
+	
+	public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+			
+		}
+	}
+}
 class InfoThemes{
 	
 	public $css = [];
@@ -71,5 +113,37 @@ class InfoThemes{
 		}
 	}
 }
+
+class InfoInit{
+	public $theme;
+	public $title;
+	public $templateName;
+	public $elements = [];
+	public $panels;
+	
+	public $css = [];
+	public $js = [];
+	public $templates = [];
+	public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				
+				if($k == 'elements'){
+					foreach($v as $kk => $vv){
+						$this->$k[$vv['id']] = new InfoElement($vv);
+					}
+					
+				}else if($k == 'panels'){
+					foreach($v as $kk => $vv){
+						$this->$k[$vv['panel']] = new InfoPanel($vv);
+					}
+				}else{
+					$this->$k = $v;
+				}
+			}
+		}
+	}
+}
+
 
 ?>
