@@ -2,7 +2,6 @@
 
 namespace Sigefor;
 
-
 class ModuloInfo{
     public $module;
     public $title;
@@ -12,8 +11,6 @@ class ModuloInfo{
     public $debug = 0;
     public $design = 0;
 
-
-
     public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
@@ -21,24 +18,14 @@ class ModuloInfo{
 			}
 		}
 	}
-
 }
 
-
-
-
-
-
 class Module extends \Sevian\MainElement{
-    //public static $cn;
-    protected $tModules = "_sg_modules";
-    
-    
 
+    protected $tModules = "_sg_modules";
     protected $info;
 
     public function __construct($opt = []){
-		
 		foreach($opt as $k => $v){
 			$this->$k = $v;
 		}
@@ -56,6 +43,7 @@ class Module extends \Sevian\MainElement{
 
         }
     }
+
     private function dbConfig(){
 
 		$cn = $this->cn;
@@ -70,9 +58,5 @@ class Module extends \Sevian\MainElement{
 		if($rs = $cn->getDataAssoc($result)){
 			$this->info = new ModuloInfo($rs);
 		}
-
     }
-
-
 }// end class
-

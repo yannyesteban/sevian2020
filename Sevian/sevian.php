@@ -1,4 +1,5 @@
 <?php
+
 namespace Sevian;
 
 include 'info.php';
@@ -254,6 +255,16 @@ class S{
 
 			self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
 			self::$_e[$info->id]->evalMethod();
+
+			if(self::$_e[$info->id] instanceof \Sevian\TemplateAdmin){
+
+				if($html = self::$_e[$info->id]->getTemplate()){
+					self::setTemplate($html);
+				}elseif(self::$_e[$info->id]->getThemeTemplate()){
+					self::$templateName = self::$_e[$info->id]->getThemeTemplate();
+				}
+				
+			}
 
 			if(self::$_e[$info->id] instanceof \Sevian\PanelsAdmin){
 				$panels = self::$_e[$info->id]->getPanels();

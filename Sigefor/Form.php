@@ -166,7 +166,7 @@ class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
 		if($this->showCaption){
 			$f->setCaption($this->title);
 		}
-		print_r($this->_menu);
+		
 		
 		foreach($this->fields as $k => $field){
 			
@@ -203,7 +203,7 @@ class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
 			
 		}
 		
-		echo $div->render();
+		
 		$f->addRow($div);
 		
 		return $f->render();

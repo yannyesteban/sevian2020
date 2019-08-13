@@ -10,9 +10,10 @@ interface UserAdmin{
 
 }
 
-interface StructureAdmin{
+interface TemplateAdmin{
 
-    public function getStructure();
+    public function getTemplate();
+    public function getThemeTemplate();
 
 
 }

@@ -1,6 +1,6 @@
 <?php
-
 namespace Sigefor;
+
 class StructureInfo{
     public $structure;
     public $title;
@@ -19,14 +19,17 @@ class StructureInfo{
 	}
 
 }
-class Structure extends \Sevian\MainElement implements \Sevian\PanelsAdmin{
+class Structure extends \Sevian\MainElement implements \Sevian\PanelsAdmin, \Sevian\TemplateAdmin{
     // public static $cn;
     
-    protected $tStructure = "_sg_structures";
+    protected $tStructures = "_sg_structures";
     protected $tStrEle = "_sg_str_ele";
+    protected $tTemplates = "_sg_templates";
 
     protected $info;
     protected $infoPanels = [];
+    protected $template_html = "";
+    protected $themeTemplate = "";
 
     public function __construct($opt = []){
 		
@@ -53,7 +56,7 @@ class Structure extends \Sevian\MainElement implements \Sevian\PanelsAdmin{
 
 		$cn->query = "
 			SELECT * 
-			FROM $this->tStructure 
+			FROM $this->tStructures 
 			WHERE structure = '$this->name'";
 
 		$result = $cn->execute();
@@ -61,6 +64,23 @@ class Structure extends \Sevian\MainElement implements \Sevian\PanelsAdmin{
 		if($rs = $cn->getDataAssoc($result)){
             $this->info = new StructureInfo($rs);
             
+            if($template = $this->info->template){
+                $cn->query = "
+                    SELECT * 
+                    FROM $this->tTemplates 
+                    WHERE template = '$template'";
+
+                
+                $result = $cn->execute();
+            
+                if($rs = $cn->getDataAssoc($result)){
+                    $this->template_html = $rs['html'];
+                   
+                }
+            }
+           
+
+
             
             $cn->query = "
                 SELECT * 
@@ -79,9 +99,16 @@ class Structure extends \Sevian\MainElement implements \Sevian\PanelsAdmin{
 
     }// end function
     
+    public function getTemplate(){
+        return  $this->template_html;
+
+    }
+    public function getThemeTemplate(){
+        return  $this->themeTemplate;
+
+    }
     public function getPanels(){
         return $this->infoPanels;
 
     }
-
 }// end class
