@@ -815,7 +815,14 @@ class S{
 		//5.-
 
 		if(self::$onAjax){
-			echo "ajax";
+			echo '{
+"a":1,
+"b":"dos",
+"c":{
+"panel":"4"
+}
+
+			}';
 		}else{
 			return self::htmlDoc();
 		}
