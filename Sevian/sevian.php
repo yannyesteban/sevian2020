@@ -117,6 +117,20 @@ class S{
 	public static function cssInit($css = []){
 		self::$_css = $css;
 	}
+
+	public static function setRole($role){
+
+	}
+	public static function getRole(){
+		
+	}
+	public static function setAuth($auth){
+
+	}
+	public static function getAuth(){
+		
+	}
+
 	public static function configInit($opt){
 		foreach($opt as $k => $v){
 			if(property_exists(__CLASS__, $k)){
@@ -128,13 +142,6 @@ class S{
 		
 	}
 	public static function sessionInit(){
-		self::$lamda = function($nombre){
-			static $i=0;
-			$i++;
-			echo $i;
-			return $i;
-		};
-		
 		
 		
 		if(isset($_REQUEST['__sg_ins'])){
@@ -151,7 +158,7 @@ class S{
 		
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
-		
+
 		if(!isset(self::$cfg['INIT'])){
 			
 			self::$cfg['INIT'] = true;
@@ -163,37 +170,15 @@ class S{
 			self::$cfg['TEMPLATE'] = &self::$_template;
 			self::$cfg['STR_PANELS'] = &self::$_strPanels;
 			
-			self::$_infoClasses = self::$_elements;
-			/*
-			if(isset($opt['clsInput'])){
-				self::$_infoInputs = $opt['clsInput'];
-			}
-			if(isset($opt['commands'])){
-				self::$_commands = $opt['commands'];
-			}
-			if(isset($opt['actions'])){
-				self::$_actions = $opt['actions'];
-			}
-			if(isset($opt['commands'])){
-				self::$_commands = $opt['commands'];
-			}
-			if(isset($opt['actions'])){
-				self::$_actions = $opt['actions'];
-			}
-			if(isset($opt['signs'])){
-				self::$_signs = $opt['signs'];
-			}
-			*/
+			foreach(self::$_init->elements as $k => $e){
 			
-			
-			
+				self::setElement($e);
+			}
+
 			foreach(self::$panels as $k => $p){
 				self::setPanel(new InfoPanel($p));
 			}
 
-			
-			self::$cfg['INFO_CLASSES'] = &self::$_infoClasses;
-			self::$cfg['INFO_INPUTS'] = &self::$_infoInputs;
 			self::$cfg['LISTEN_PANEL'] = &self::$_pSigns;
 			self::$cfg['LISTEN'] = &self::$_signs;
 			self::$cfg['COMMANDS'] = &self::$_commands;
@@ -205,8 +190,6 @@ class S{
 			
 			self::$cfg['SW'] = (self::$cfg['SW'] == '1')? '0': '1';
 			
-			self::$_infoClasses = &self::$cfg['INFO_CLASSES'];
-			self::$_infoInputs = &self::$cfg['INFO_INPUTS'];
 			
 			self::$_info = &self::$cfg['INFO'];
 			self::$_template = &self::$cfg['TEMPLATE'];
@@ -223,29 +206,13 @@ class S{
 			$info->update = false;
 		}
 		
-		foreach(self::$_infoClasses as $name => $info){
-			self::setClassElement($name, $info);
-		}
 		
-		foreach(self::$_infoInputs as $name => $info){
-			self::setClassInput($name, $info);
-		}
+		
+		
 
-		foreach(self::$_init->elements as $k => $e){
-			
-			self::setElement($e);
-		}
+		
 
-		/*
-		if(self::$cfg['INIT'] and isset($opt['sequenceInit'])){
-			self::sequence($opt['sequenceInit']);
-		}
-		
-		if(isset($opt['sequence'])){
-			self::sequence($opt['sequence']);
-		}
-		*/
-		
+
 	}
 
 
@@ -369,29 +336,30 @@ class S{
 		
 		
 	}
-
-	public static function addClassInput($name, $info){
-
-		if(isset($info["file"]) and $info["file"] != ""){
-			require_once($info["file"]);
-		}
-
-		self::$_inputs[$name] = $info;
-
-
-	}
 	public static function inputsLoad($inputs){
-
 		foreach($inputs as $k => $v){
-
 			self::addClassInput($k, $v);
 		}
-
-
-		
 	}
+
+	public static function addClassInput($name, $info){
+		if($info['file'] ?? '' != ''){
+			require_once($info['file']);
+		}
+		self::$_inputs[$name] = $info;
+	}
+
 	public static function elementsLoad($elements){
-		self::$_elements = $elements;
+		foreach($elements as $name => $info){
+			self::setClassElement($name, $info);
+		}
+	}
+
+	public static function setClassElement($name, $info){
+		if($info['file'] ?? '' != ''){
+			require_once($info['file']);
+		}
+		self::$_clsElement[$name] = $info['class'];
 	}
 	public static function themesLoad($themes){
 		self::$_themes = $themes;
@@ -681,14 +649,7 @@ class S{
 		
 	}
 	
-	/*Método para incluir los archivos de las clases que vamos a utilizar*/
-	public static function setClassElement($name, $info){
 	
-		if($info['file'] ?? '' != ''){
-			require_once($info['file']);
-		}
-		self::$_clsElement[$name] = $info['class'];
-	}
 	public static function sgElement($info){
 		
 		if(isset($this->_clsElement[$info->element])){

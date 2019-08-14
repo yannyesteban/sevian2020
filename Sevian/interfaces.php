@@ -22,3 +22,9 @@ interface PanelsAdmin{
     public function getPanels();
 
 }
+
+interface JsonRequest{
+    public function getRequest();
+
+}
+

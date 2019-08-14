@@ -1,14 +1,18 @@
 <?php
 
 $cls_elements = [
-	
+	'sgUser' 		=> [
+		'file' 	=> 'Sigefor/User.php',
+		'class' => '\Sigefor\User'],
 	'sgModule' 		=> [
 		'file' 	=> 'Sigefor/Module.php',
 		'class' => '\Sigefor\Module'],
 	'sgStructure' 		=> [
 		'file' 	=> 'Sigefor/Structure.php',
 		'class' => '\Sigefor\Structure'],
-	
+	'ajax' 		=> [
+		'file' 	=> 'Sigefor/Ajax.php',
+		'class' => '\Sigefor\Ajax'],
 	
 	'form' => [
 		'file' 	=> 'SgForm.php',

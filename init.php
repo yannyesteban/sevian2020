@@ -103,6 +103,14 @@ $init2 = [
 	'templateName' => 'login',
 	'elements' => [
 		[
+			'id'		=> 1,
+			'element'	=> 'sgUser',
+			'name'		=> '',
+			'method'	=> 'load',
+			'designMode'=> true,
+			'fixed'		=> true,
+		],
+		[
 			'id'		=> 2,
 			'element'	=> 'sgModule',
 			'name'		=> 'gt_comm',
