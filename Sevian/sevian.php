@@ -272,7 +272,12 @@ class S{
 
 	}
 	public static function evalMethod($params){
+
+		
 		$info = new InfoParam($params);
+
+
+		
 		if($info->panel != '' and $info->panel != '0'){
 			if($info->element == ''){
 				$info->element = self::$_info[$info->panel]->element;
@@ -285,8 +290,12 @@ class S{
 			self::setPanel($info, true);
 			
 			$result = $elem->evalMethod($info->method);
+			//echo $elem->render();exit;
+
+			if(!self::$onAjax){
+				self::$_str->addPanel($info->panel, $elem);
+			}
 			
-			self::$_str->addPanel($info->panel, $elem);
 
 			if($elem instanceof \Sevian\Sigefor\Form){
 				hr("si","purple");
@@ -776,8 +785,10 @@ class S{
 				'__sg_action'	=>self::$lastAction,
 				'__sg_thread'	=>'']);
 
+			if(!self::$onAjax){
+				self::$_str->addPanel($info->panel, $elem);
+			}
 			
-			self::$_str->addPanel($info->panel, $elem);
 
 
 
@@ -802,7 +813,13 @@ class S{
 		//4.-
 		self::evalElements();
 		//5.-
-		return self::htmlDoc();
+
+		if(self::$onAjax){
+			echo "ajax";
+		}else{
+			return self::htmlDoc();
+		}
+		
 	}
 }
 
