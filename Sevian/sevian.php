@@ -169,11 +169,13 @@ class S{
 			self::$cfg['VSES'] = [];
 			self::$cfg['TEMPLATE'] = &self::$_template;
 			self::$cfg['STR_PANELS'] = &self::$_strPanels;
-			
-			foreach(self::$_init->elements as $k => $e){
-			
-				self::setElement($e);
+			if(!self::$onAjax){
+				foreach(self::$_init->elements as $k => $e){
+				
+					self::setElement($e);
+				}
 			}
+			
 
 			foreach(self::$panels as $k => $p){
 				self::setPanel(new InfoPanel($p));
@@ -292,9 +294,9 @@ class S{
 			$result = $elem->evalMethod($info->method);
 			//echo $elem->render();exit;
 
-			if(!self::$onAjax){
-				self::$_str->addPanel($info->panel, $elem);
-			}
+			
+			self::$_str->addPanel($info->panel, $elem);
+			
 			
 
 			if($elem instanceof \Sevian\Sigefor\Form){
@@ -312,6 +314,8 @@ class S{
 	}
 
 	public static function _evalMethod($info){
+
+		hr("error _evalMethod");
 		$elem = self::getElement($info);
 		$result = $elem->evalMethod($info->method);
 		if($elem instanceof \Sevian\Sigefor\Form){
@@ -338,6 +342,9 @@ class S{
 
 		if(!self::$onAjax){
 			self::$_str = new Structure();
+		}else{
+			
+			self::$_str = new JsonStructure();
 		}
 
 	
@@ -769,9 +776,24 @@ class S{
 		return $doc->render();
 		
 	}
+
+	public static function jsonDoc(){
+		global $sevian;
+		
+		
+		//$elems = self::$_str->getElements();
+		
+		$p = 	self::$_str->render();
+		
+		
+		
+		return json_encode($p, JSON_PRETTY_PRINT);;
+		
+	}
 	public static function evalElement($info){
+		
 		$elem = self::getElement($info); 
-		//self::resetPanelSigns($panel);
+		
 		
 		if($elem->evalMethod()===true){
 			
@@ -785,20 +807,20 @@ class S{
 				'__sg_action'	=>self::$lastAction,
 				'__sg_thread'	=>'']);
 
-			if(!self::$onAjax){
-				self::$_str->addPanel($info->panel, $elem);
-			}
 			
-
-
-
-
-
+			self::$_str->addPanel($info->panel, $elem);
+	
 		}
 	}
 	
 	public static function evalElements(){
+
+
+		if(self::$onAjax){
+			return true;
+		}
 		foreach(self::$_info as $panel => $e){
+		
 			self::evalElement($e);
 		}
 	}
@@ -815,14 +837,7 @@ class S{
 		//5.-
 
 		if(self::$onAjax){
-			echo '{
-"a":1,
-"b":"dos",
-"c":{
-"panel":"4"
-}
-
-			}';
+			return self::jsonDoc();
 		}else{
 			return self::htmlDoc();
 		}

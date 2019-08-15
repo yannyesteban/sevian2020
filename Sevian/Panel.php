@@ -142,10 +142,10 @@ class Element2{
 	
 	private function getInfoRequest(){
 		
-		$info = new \InfoRequest();
+		$info = new InfoRequest();
 		
 		$info->panel = $this->panel;
-		$info->targetId = "";//$this->targetId;
+		$info->targetId = "form_p{$this->panel}";
 
 		$info->html = $this->html;
 		$info->script = $this->script;
@@ -172,7 +172,9 @@ class Element2{
 		
 	}
 	
-	
+	public function toRender(){
+
+	}
 	
 	
 	public function setJsonPanel($info){

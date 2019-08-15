@@ -294,7 +294,8 @@ if(!Sevian){
 			var panel = this.getPanel(opt.panel);
 			
 			if(opt.valid !== false && panel && panel.valid && !panel.valid(opt.valid)){
-				return false;
+				alert("valid");
+				//return false;
 			}
 			
 			if(!panel){

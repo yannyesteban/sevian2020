@@ -15,7 +15,7 @@ class Ajax extends \Sevian\Panel2 implements \Sevian\DocElement, \Sevian\JsonReq
 
 		$this->_main = new \Sevian\HTML('div');
 		$this->_main->style = "color:red";
-        $this->_main->innerHTML = "betha";
+        $this->_main->innerHTML = "ajax";
         
         $this->cn = \Sevian\Connection::get();
 	}
@@ -27,7 +27,7 @@ class Ajax extends \Sevian\Panel2 implements \Sevian\DocElement, \Sevian\JsonReq
             $method = $this->method;
         }
 
-
+$this->html = "hola 2020";
         
         switch($method){
             case 'create':
