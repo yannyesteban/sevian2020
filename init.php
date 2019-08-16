@@ -127,6 +127,7 @@ $init2 = [
 			'fixed'		=> true,
 		],
 	],
+	
 	'panels'=>[],
 	'sequences' => [],
 	'actions' => [],
