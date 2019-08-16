@@ -2,6 +2,7 @@
 
 namespace Sevian;
 
+include 'Types.php';
 include 'info.php';
 
 include 'Tool.php';
@@ -19,12 +20,6 @@ include 'Panel.php';
 include 'Input.php';
 include 'Page.php';
 include 'Form.php';
-
-function targetId($nombre=""){
-	return "Hooooola: $nombre";
-}
-
-
 
 
 class S{
@@ -49,6 +44,8 @@ class S{
 	private static $_init = [];
 	private static $_e = [];
 	private static $_p = [];
+	// save all fragments
+	private static $_f = [];
 
 
 	private static $ins = false;
@@ -217,6 +214,9 @@ class S{
 
 	}
 
+	public static function addFrament($frag){
+		self::$_f = array_merge(self::$_f, $frag);
+	}
 
 	public static function setElement($info, $update = false){
 
@@ -224,6 +224,10 @@ class S{
 
 			self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
 			self::$_e[$info->id]->evalMethod();
+
+
+			self::addFrament(self::$_e[$info->id]->getResponse());
+
 
 			if(self::$_e[$info->id] instanceof \Sevian\TemplateAdmin){
 
@@ -267,7 +271,7 @@ class S{
 			
 			$result = $elem->evalMethod($info->method);
 		
-			
+			self::addFrament($elem->getResponse());
 
 
 		}
@@ -292,6 +296,7 @@ class S{
 			self::setPanel($info, true);
 			
 			$result = $elem->evalMethod($info->method);
+			self::addFrament($elem->getResponse());
 			//echo $elem->render();exit;
 
 			
@@ -785,9 +790,14 @@ class S{
 		
 		$p = 	self::$_str->render();
 		
+		//echo json_encode(self::$_f, JSON_PRETTY_PRINT);
 		
-		
-		return json_encode($p, JSON_PRETTY_PRINT);;
+		$response = [
+			'panels'=>$p,
+			'fragments'=>self::$_f
+			];
+
+		return json_encode($response, JSON_PRETTY_PRINT);
 		
 	}
 	public static function evalElement($info){
@@ -807,7 +817,7 @@ class S{
 				'__sg_action'	=>self::$lastAction,
 				'__sg_thread'	=>'']);
 
-			
+			self::addFrament($elem->getResponse());
 			self::$_str->addPanel($info->panel, $elem);
 	
 		}

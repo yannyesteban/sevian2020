@@ -81,7 +81,7 @@ class JsonStructure{
 	public function render(){
 		$j = [];
 		foreach($this->_ele as $panel => $e){
-			$e->tar
+			
 			$j[] = $e->request();
 		}
 		return $j;

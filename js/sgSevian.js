@@ -195,7 +195,39 @@ if(!Sevian){
 		
 		requestPanel: function(p){
 			
-			
+
+
+			if(p.panels){
+				for(var x in p.panels){
+					
+					sgJson.iPanel(p.panels[x]);
+				}
+			}
+			if(p.fragments){
+				for(var x in p.fragments){
+					switch(p.fragments[x].token){
+						case "fragment":
+							sgJson.iFragment(p.fragments[x]);
+							break;
+
+						case "dataInput":
+							sgJson.iDataInput(p.fragments[x]);
+							break;
+						case "propertyHTML":
+							sgJson.iPropertyHTML(p.fragments[x]);
+							break;
+						case "objectData":
+							sgJson.iFragment(p.fragments[x]);
+							break;
+
+						case "message":
+							break;
+
+					}
+					
+				}
+			}
+			return;
 			var isNew = false;
 			
 			for(var x in p){

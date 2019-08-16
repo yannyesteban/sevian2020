@@ -11,7 +11,9 @@ class MainElement{
 
     public $async = false;
     public $updated = false;
-    
+
+	private $_response = [];
+
     private $onDesing = true;
 	private $onDebug = true;
 
@@ -19,7 +21,14 @@ class MainElement{
 
     }
 
+	public function addFragment($frag){
+		$this->_response[]=$fram;
+	}
+	public function getResponse(){
 
+
+		return $this->_response;
+	}
 
 }
 
@@ -96,6 +105,7 @@ class Element2{
 	public $element = "default";
 	public $name = "";
 	public $method = "";
+	public $class = "";
 	public $eparams = array();
 
 	public $typePanel = "normal";
@@ -111,7 +121,7 @@ class Element2{
 	
 	private $_signs = false;
 	private $_infoRequest = false;
-	
+	private $_response = [];
 	
 	static function setElementType(){
 		
@@ -138,23 +148,26 @@ class Element2{
 		
 	}
 	
-	
+
+	public function addFragment($frag){
+		$this->_response[] = $frag;
+	}
+	public function getResponse(){
+
+
+		return $this->_response;
+	}
 	
 	private function getInfoRequest(){
 		
-		$info = new InfoRequest();
-		
-		$info->panel = $this->panel;
-		$info->targetId = "form_p{$this->panel}";
-
-		$info->html = $this->html;
-		$info->script = $this->script;
-		$info->css = $this->css;
-		
-		$info->title = $this->title;
-		$info->typeAppend = 1;
-		$info->hidden = false;
-		$info->window = false;
+		$info = new iPanel([
+			'panel'=> $this->panel,
+			'title'=> $this->title,
+			'html'=> $this->html,
+			'script'=> $this->script,
+			'css'=> $this->css,
+			'class'=> $this->class,
+		]);
 		
 		return $info;
 		

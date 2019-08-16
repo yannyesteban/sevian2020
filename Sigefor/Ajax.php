@@ -45,7 +45,28 @@ $this->html = "hola 2020";
                 
                 
                 
-        }
+		}
+		
+		$this->addFragment(new \Sevian\iFragment([
+			"targetId"=>"titulo",
+			"html"=>"Mi Primer Fragmento"
+
+		]));
+
+		$this->addFragment(new \Sevian\iFragment([
+			"targetId"=>"nombre",
+			"html"=>"Mi Primer Nombre"
+
+		]));
+
+		$this->addFragment(new \Sevian\iPropertyHTML([
+			"targetId"=>"milogo",
+			"style"=>['width'=>'50px'],
+			"propertys"=>['title'=>'hola a la imagen',
+			'width'=>'10px']
+
+		]));
+		
         return true;	
     }
 	public function getMain(){

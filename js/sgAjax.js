@@ -348,5 +348,118 @@ var SgAjax = (function($){
 	
 	
 })(_sgQuery);
+var sgJson;
+(function($){
+sgJson = {
+	iPanel: function(opt){
 
+		var target = $("form_p"+opt.panel);
+		
+		target.text(opt.html);
+		
+		if(opt.script){
+			$.appendScript(opt.script);
+		}
+		
+		if(opt.css){
+			$.appendStyle(opt.css);
+		}
+	},
 
+	
+	iFragment: function(opt){
+		
+		var target = $(opt.targetId);
+		
+		if(opt.targetId !== false && opt.targetId !== ""){
+			
+			if(!target.get()){
+				target = $("").create({
+					tagName: "div",
+					style: {display: "none"},
+					id: opt.targetId
+				});
+				opt.hidden = true;
+			}
+
+			if(target.get()){
+
+				if(opt.hidden){
+					target.get().style.display = "none";
+				}else{
+					target.get().style.display = "";
+				}
+
+				if(opt.mode){
+
+					switch(opt.mode){
+						case 1:
+						default:	
+							target.text(opt.html);
+							break;
+						case 2:
+							target.text(opt.html, true);
+							break;
+						case 3:
+							target.insertFirst(opt.html);
+							break;
+
+					}
+				}
+			}
+		}
+				
+		if(opt.script){
+			$.appendScript(opt.script);
+		}
+		
+		if(opt.css){
+			$.appendStyle(opt.css);
+		}
+	},
+
+	iDataInput: function(opt){
+		
+		var target = $(opt.targetId);
+		
+		if(target && target.get()){
+
+			if(opt.data){
+				var option = false;
+				target.get().length = 0;
+				for(var x in opt.data){
+					option = target.create("option");
+					option.prop({
+						value: opt.data[x].value,
+						text: opt.data[x].text
+					});
+				}
+			}
+		}
+	},
+
+	iPropertyHTML: function(opt){
+		
+		var target = $(opt.targetId);
+		
+		if(target){
+			
+			if(opt.propertys){
+				for(var x in opt.propertys){
+					target.get()[x] = opt.propertys[x];
+				}
+			}
+
+			if(opt.style){
+				for(x in opt.style){
+					target.style()[x] = opt.style[x];
+				}
+			}
+
+			
+		}
+
+	},
+};
+
+})(_sgQuery);
