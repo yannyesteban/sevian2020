@@ -20,7 +20,7 @@ class ModuloInfo{
 	}
 }
 
-class Module extends \Sevian\MainElement{
+class Module extends \Sevian\Element{
 
     protected $tModules = "_sg_modules";
     protected $info;

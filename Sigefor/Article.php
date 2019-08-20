@@ -2,9 +2,9 @@
 
 namespace Sevian\Sigefor;
 
-class Article extends \Sevian\Panel2 implements \Sevian\DocElement{
+class Article extends \Sevian\Element{
 
-    protected $tArticles = "_sg_articles";
+    protected $tArticles = '_sg_articles';
     
 
     public function __construct($opt = []){
@@ -13,9 +13,6 @@ class Article extends \Sevian\Panel2 implements \Sevian\DocElement{
 			$this->$k = $v;
 		}
 
-		$this->_main = new \Sevian\HTML('div');
-		$this->_main->style = "color:red";
-        $this->_main->innerHTML = "betha";
         
         $this->cn = \Sevian\Connection::get();
 	}
@@ -29,6 +26,7 @@ class Article extends \Sevian\Panel2 implements \Sevian\DocElement{
 
 
         
+        
         switch($method){
             case 'create':
 
@@ -36,7 +34,12 @@ class Article extends \Sevian\Panel2 implements \Sevian\DocElement{
                 
             case 'load':
                 $this->_config();
-				$this->_main->innerHTML = $this->html;
+               // $this->panel = new \Sevian\ElementPanel();
+       $this->panel = new  \Sevian\HTML('');
+        //$this->_panel->style = "color:pink";
+        $this->panel->innerHTML = $this->html;
+        //$this->panel->appendChild($div);
+				//$this->panel->innerHTML = $this->html;
                 break;
             case 'delete':
                 break;
@@ -48,7 +51,7 @@ class Article extends \Sevian\Panel2 implements \Sevian\DocElement{
         }
         return true;	
     }
-	public function getMain(){
+	public function _getMain(){
 		return true;
 	}
 

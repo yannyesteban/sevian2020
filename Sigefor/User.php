@@ -20,7 +20,7 @@ class UserInfo{
 	}
 }
 
-class User extends \Sevian\MainElement{
+class User extends \Sevian\Element{
 
 
     protected $auth = false;

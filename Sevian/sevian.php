@@ -155,6 +155,16 @@ class S{
 		
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
+		
+
+		if(!self::$onAjax){
+			self::$_str = new Structure();
+		}else{
+			
+			self::$_str = new JsonStructure();
+		}
+		
+		self::$_str->ins = self::$ins;
 
 		if(!isset(self::$cfg['INIT'])){
 			
@@ -166,6 +176,9 @@ class S{
 			self::$cfg['VSES'] = [];
 			self::$cfg['TEMPLATE'] = &self::$_template;
 			self::$cfg['STR_PANELS'] = &self::$_strPanels;
+
+			self::$_str->sw = self::$cfg['SW'];
+
 			if(!self::$onAjax){
 				foreach(self::$_init->elements as $k => $e){
 				
@@ -188,7 +201,7 @@ class S{
 			self::$cfg['INIT'] = false;
 			
 			self::$cfg['SW'] = (self::$cfg['SW'] == '1')? '0': '1';
-			
+			self::$_str->sw = self::$cfg['SW'];
 			
 			self::$_info = &self::$cfg['INFO'];
 			self::$_template = &self::$cfg['TEMPLATE'];
@@ -201,6 +214,8 @@ class S{
 			self::$_actions = &self::$cfg['ACTIONS'];
 		}
 		
+		
+
 		foreach(self::$_info as $info){
 			$info->update = false;
 		}
@@ -222,31 +237,38 @@ class S{
 
 		if(isset(self::$_clsElement[$info->element])){
 
-			self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
-			self::$_e[$info->id]->evalMethod();
+			$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
+			
+			$e->config();
+			$e->getSequenceBefore();
+			$e->evalMethod();
+			$e->getSequenceAfter();
 
+			self::addFrament($e->getResponse());
 
-			self::addFrament(self::$_e[$info->id]->getResponse());
-
-
-			if(self::$_e[$info->id] instanceof \Sevian\TemplateAdmin){
-
-				if($html = self::$_e[$info->id]->getTemplate()){
+			if($e instanceof \Sevian\TemplateAdmin){
+				if($html = $e->getTemplate()){
 					self::setTemplate($html);
-				}elseif(self::$_e[$info->id]->getThemeTemplate()){
-					self::$templateName = self::$_e[$info->id]->getThemeTemplate();
+				}elseif($e->getThemeTemplate()){
+					self::$templateName = $e->getThemeTemplate();
 				}
-				
 			}
 
-			if(self::$_e[$info->id] instanceof \Sevian\PanelsAdmin){
-				$panels = self::$_e[$info->id]->getPanels();
-
+			if($e instanceof \Sevian\PanelsAdmin){
+				$panels = $e->getPanels();
 				foreach($panels as $k => $p){
-					self::setPanel($p);
+					self::setElement($p);
 				}
+			}
+
+			if($e->panel){
+				
+				self::$_str->addPanel($info->id, $e->getPanel());
 				
 			}
+			
+
+
 		}
 
 		
@@ -343,14 +365,7 @@ class S{
 
 	public static function init($opt = []){
 
-		self::$onAjax = self::getReq('__sg_async');
-
-		if(!self::$onAjax){
-			self::$_str = new Structure();
-		}else{
-			
-			self::$_str = new JsonStructure();
-		}
+		
 
 	
 
@@ -416,7 +431,7 @@ class S{
 	}
 	public static function sequence($seq){
 
-//		foreach($seq as $cmd => $params){
+		//		foreach($seq as $cmd => $params){
 
 		foreach($seq as $line){
 
@@ -448,11 +463,15 @@ class S{
 				$this->params = array_merge($this->params, $this->cmd->get_param($value));
 				break;
 			case "setPanel":
-				self::setPanel(new InfoParam($params), true);
+
+			
+				//self::setElement($params, true);
+				//self::setPanel(new InfoParam($params), true);
 				break;
 			case "setMethod":
 				
-				self::evalMethod($params);
+				self::setElement(new InfoElement($params), true);
+				//self::evalMethod($params);
 				
 				break;
 			case "iMethod":
@@ -763,7 +782,7 @@ class S{
 				
 				if(!isset(self::$_info[$panel])){
 				
-					self::evalElement(self::setPanel(new InfoParam(['panel' => $panel])));
+					//self::evalElement(self::setPanel(new InfoParam(['panel' => $panel])));
 				}
 			}
 		}
@@ -783,7 +802,6 @@ class S{
 	}
 
 	public static function jsonDoc(){
-		global $sevian;
 		
 		
 		//$elems = self::$_str->getElements();
@@ -831,7 +849,31 @@ class S{
 		}
 		foreach(self::$_info as $panel => $e){
 		
-			self::evalElement($e);
+			//self::evalElement($e);
+		}
+	}
+
+
+	public static function evalElementX($info){
+		
+		$elem = self::getElement($info); 
+		
+		
+		if($elem->evalMethod()===true){
+			
+			$elem->addConfig([
+				'__sg_panel'	=>$info->panel,
+				'__sg_sw'		=>self::$cfg['SW'],
+				'__sg_sw2'		=>self::$cfg['SW'],
+				'__sg_ins'		=>self::$ins,
+				'__sg_params'	=>'',
+				'__sg_async'	=>'',
+				'__sg_action'	=>self::$lastAction,
+				'__sg_thread'	=>'']);
+
+			self::addFrament($elem->getResponse());
+			self::$_str->addPanel($info->panel, $elem);
+	
 		}
 	}
 

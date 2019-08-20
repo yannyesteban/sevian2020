@@ -2,7 +2,7 @@
 
 namespace Sevian\Sigefor;
 
-class ConfigMenu  implements \Sevian\DocElement{
+class ConfigMenu{
 
 		public $menu = "";
 		public $title = "MENU 5.0";

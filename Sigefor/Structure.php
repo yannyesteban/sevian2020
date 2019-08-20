@@ -19,7 +19,7 @@ class StructureInfo{
 	}
 
 }
-class Structure extends \Sevian\MainElement implements \Sevian\PanelsAdmin, \Sevian\TemplateAdmin{
+class Structure extends \Sevian\Element implements \Sevian\PanelsAdmin, \Sevian\TemplateAdmin{
     // public static $cn;
     
     protected $tStructures = "_sg_structures";
@@ -91,7 +91,7 @@ class Structure extends \Sevian\MainElement implements \Sevian\PanelsAdmin, \Sev
             $result = $cn->execute();
 		
 		    while($rs = $cn->getDataAssoc($result)){
-                $this->infoPanels[] = new \Sevian\InfoPanel($rs);
+                $this->infoPanels[] = new \Sevian\InfoElement($rs);
             }
 
 

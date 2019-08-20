@@ -2,7 +2,7 @@
 namespace Sevian;
 
 class iPanel{
-	public $panel = 0;
+	public $id = 0;
     public $title = '';
     public $html = '';
 	public $script = '';

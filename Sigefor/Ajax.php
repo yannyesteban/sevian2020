@@ -2,13 +2,13 @@
 
 namespace Sigefor;
 
-class Ajax extends \Sevian\Panel2 implements \Sevian\DocElement, \Sevian\JsonRequest{
+class Ajax extends \Sevian\Element implements \Sevian\JsonRequest{
 
     protected $tArticles = "_sg_articles";
     
 
     public function __construct($opt = []){
-		
+		$this->dinamic = true;
 		foreach($opt as $k => $v){
 			$this->$k = $v;
 		}
@@ -27,7 +27,9 @@ class Ajax extends \Sevian\Panel2 implements \Sevian\DocElement, \Sevian\JsonReq
             $method = $this->method;
         }
 
-$this->html = "hola 2020";
+		$this->panel = new \Sevian\HTML('div');
+		$this->panel->style = "color:red";
+		$this->panel->innerHTML = "hola.. 2024";
         
         switch($method){
             case 'create':

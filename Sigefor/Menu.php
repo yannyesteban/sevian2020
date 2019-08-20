@@ -2,7 +2,7 @@
 
 namespace Sevian\Sigefor;
 
-class Menu extends \Sevian\Panel2 implements \Sevian\DocElement{
+class Menu extends \Sevian\Element{
 
 		public $menu = "";
 		public $title = "MENU 5.0";
@@ -135,7 +135,7 @@ class Menu extends \Sevian\Panel2 implements \Sevian\DocElement{
 			$menu = new \Sevian\Menu($opt);
 			//$menu->class = "uva";
 
-			$this->_main = $menu;
+			$this->panel = $menu;
 	
 			return;
 

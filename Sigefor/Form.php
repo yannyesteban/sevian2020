@@ -48,7 +48,7 @@ class InfoField{
 
 }
 
-class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
+class Form extends \Sevian\Element{
 
 	public $showCaption = true;
 	public $menus = [];
@@ -65,9 +65,7 @@ class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
 			$this->$k = $v;
 		}
 
-		$this->_main = new \Sevian\HTML('div');
-		$this->_main->style = "color:red";
-        $this->_main->innerHTML = "betha";
+		
         
         $this->cn = \Sevian\Connection::get();
 	}
@@ -87,8 +85,13 @@ class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
                 
                 
             case 'request':
-                $this->_config();
-				$this->_main->innerHTML = $this->createForm();//$this->html;
+				$this->_config();
+				
+				$this->panel = new \Sevian\HTML('div');
+				$this->panel->style = "color:red";
+				$this->panel->innerHTML = "betha";
+
+				$this->panel->innerHTML = $this->createForm();//$this->html;
 				
 				
 				
@@ -174,7 +177,7 @@ class Form extends \Sevian\Panel2 implements \Sevian\DocElement{
 
 				'type'=>'text',
 				'name'=>$field->name,
-				'id'=>$field->name."_p{$this->panel}",
+				'id'=>$field->name."_p{$this->id}",
 				'className'=>$field->class,
 				'events'=>$field->events,
 				'value'=>'',
