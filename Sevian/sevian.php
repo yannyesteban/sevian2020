@@ -262,7 +262,8 @@ class S{
 			}
 
 			if($e->panel){
-				
+				self::$_p[$info->id] = true;
+				// if this->mail panel then title = this->title
 				self::$_str->addPanel($info->id, $e->getPanel());
 				
 			}
@@ -710,7 +711,7 @@ class S{
 			
 		}else{
 		
-			$obj = new Panel2($info);
+			$obj = new Element($info);
 			
 		}
 		return $obj;
@@ -780,9 +781,8 @@ class S{
 			self::$_strPanels = self::$_str->getStrPanels();
 			foreach(self::$_strPanels as $panel){
 				
-				if(!isset(self::$_info[$panel])){
-				
-					//self::evalElement(self::setPanel(new InfoParam(['panel' => $panel])));
+				if(!isset(self::$_p[$panel])){
+					self::$_str->addPanel($panel, new \Sevian\HTML(''));
 				}
 			}
 		}

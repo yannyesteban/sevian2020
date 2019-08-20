@@ -2,7 +2,7 @@
 namespace Sevian;
 
 
-class mMenu extends Panel{
+class mMenu extends Element{
 	
 	
 	

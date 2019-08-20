@@ -1,6 +1,6 @@
 <?php
 
-class ssFragment extends Sevian\Panel{
+class ssFragment extends Sevian\Element{
 	
 	public $title = "FORM 3.0";
 	

@@ -352,7 +352,7 @@ var sgJson;
 (function($){
 sgJson = {
 	iPanel: function(opt){
-db("id "+opt.id)
+
 		var target = $("form_p"+opt.id);
 		
 		target.text(opt.html);

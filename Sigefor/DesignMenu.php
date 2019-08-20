@@ -2,7 +2,7 @@
 include "Action.php";
 //namespace Sevian\Sigefor;
 
-class DesignMenu extends Sevian\Panel{
+class DesignMenu extends Sevian\Element{
 	
 	
 	

@@ -4,7 +4,7 @@ namespace Sevian;
 
 
 
-class ImagesDir extends Panel{
+class ImagesDir extends Element{
 	
 	
 	

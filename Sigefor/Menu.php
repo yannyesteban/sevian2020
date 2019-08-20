@@ -337,7 +337,7 @@ class Menu extends \Sevian\Element{
 
 
 
-class Test4 extends \Sevian\Panel2 {
+class Test4 extends \Sevian\Element {
 	public function __construct($opt = []){
 			
 		foreach($opt as $k => $v){
@@ -352,7 +352,7 @@ class Test4 extends \Sevian\Panel2 {
 
 
 }
-class Test5 extends \Sevian\Panel2 {
+class Test5 extends \Sevian\Element {
 	public function __construct($opt = []){
 			
 		foreach($opt as $k => $v){

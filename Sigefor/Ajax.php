@@ -28,9 +28,9 @@ class Ajax extends \Sevian\Element implements \Sevian\JsonRequest{
         }
 
 		$this->panel = new \Sevian\HTML('div');
-		$this->panel->style = "color:red";
+		$this->panel->style = "color:yellow";
 		$this->panel->innerHTML = "hola.. 2024";
-        
+        $this->panel->script = 'document.title="color:aqua";document.body.style="color:aqua"';
         switch($method){
             case 'create':
 

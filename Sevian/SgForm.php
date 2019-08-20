@@ -1,7 +1,7 @@
 <?php
 //use Sevian;
 
-class SgForm extends Sevian\Panel{
+class SgForm extends Sevian\Element{
 	
 	public $title = "FORM 3.0";
 	
