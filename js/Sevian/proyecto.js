@@ -1,5 +1,26 @@
 
 
+var g = new Sevian.Form({
+    target:"f100",
+    caption:"Form 01",
+    fields:[{
+        name:"cedula",
+        id:"p4_cedula",
+        caption:"Cédula",
+        control:"Std",
+        type:'text',
+        value:'12474737',
+        propertys:{
+            id:"my_cedula",
+        },
+        events:{
+            click:'alert(8)'
+        }
+
+    }]
+});
+
+
 var xx ={
 	async: false,
 	panel:4,

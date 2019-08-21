@@ -75,7 +75,8 @@ var ssInput = false;
 				this._main = $(this.main);
 			}else{
 				var opt = {};
-
+				//opt.name=this.name;
+				//opt.id=this.id;
 				switch(this.type){
 					case "text":
 					case "password":

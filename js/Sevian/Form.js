@@ -4,7 +4,11 @@ if(!Sevian){
 	var Sevian = {};
 }
 
-Sevian.Input = {};
+if(!Sevian.Input){
+	
+	Sevian.Input = {};
+	
+}
 
 (function(namespace, $, Tab, popup){
 	/*$(document).on("wheel", function(event){
@@ -376,7 +380,7 @@ Sevian.Input = {};
 			this._setPage(this._body, false, false);
 			
 			if(this.tabs){
-				alert(88888)
+				
 				for(var x in this.tabs){
 					if(this.tabs.hasOwnProperty(x)){
 						this.addTab(this.tabs[x]);
