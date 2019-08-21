@@ -128,7 +128,7 @@ if(!Sevian){
 		}
 		
 	};
-	
+	/*
 	var opt = {
 		async: true,
 		panel: 4,
@@ -137,7 +137,7 @@ if(!Sevian){
 		confirm: "",
 		params:[],
 	}
-	
+	*/
 	sevian = {
 		
 		INS: 0,
@@ -401,103 +401,7 @@ if(!Sevian){
 			
 		},
 		
-		test:function(){
-			
-			var opt = [
-				{
-					"setPanel":{
-						"panel":8,
-						"element":"menu",
-						"name":"prueba 01",
-						"method":"load",
-
-						"eparams":{
-							"record":{
-								"cedula":12474737,
-								"tipo":"v"
-							},
-							"page":1
-
-						}
-					}
-
-				},
-				{
-					"vses":{
-						"xx":"Yanny Esteban"
-					},
-					"vexp":{
-						"aux":"Núñez"
-					}
-				},
-				{
-					"vreq":
-						{"abc":"Jiménez"}
-
-				}
-
-			];
-			
-			var params = [
-				{setPanel:{
-					panel:8,
-					element:"menu",
-					}
-				},
-				{setPanel:{
-					panel:99,
-					element:"form",
-					}
-				},
-			];
-			
-			params = [
-				{procedure:"yanny esteban"},
-				{setPanel:{
-					panel:2,
-					element:"form",
-					}
-				},
-				{setPanel:{
-					panel:6,
-					element:"procedure",
-					}
-				},
 				
-				{setMethod:{
-					panel:6,
-					element:"procedure",
-					method:"test",
-					}
-				},
-			];
-			
-			params = [
-				{_form: "save_person"},
-				{setMethod:{
-					panel:6,
-					element:"procedure",
-					method:"test",
-					}
-				},
-				
-			];
-			opt = {
-				async: false,
-				panel: 4,
-				
-				valid: false,
-				confirm_: "Seguro?",
-				params:params,
-				
-				window:{
-					
-				}
-			};
-			this.send(opt);
-			//alert(this.SW);
-		},
-		
 		loadPanels: function(opt){
 			
 			for(var x in opt){
@@ -509,37 +413,10 @@ if(!Sevian){
 		
 	};
 		
-	var info = [
-		{
-			"setPanel":{
-				"panel":4,
-				"element":"form",
-				"name":"prueba 01",
-				"method":"load",
-				"eparams":{
-					"record":{
-						"cedula":12474737,
-						"tipo":"v"
-					},
-					"page":1
 
-				}
-			}
-				
-		}
-		
-	];
-	//alert(info[0].setPanel.name);	
 	
 	namespace.action = sevian;
 	
 })(Sevian, _sgQuery, sgWindow);
 
 
-var T = {
-
-	fun: "Menu",
-	params:{}
-
-
-};

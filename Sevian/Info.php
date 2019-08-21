@@ -66,6 +66,7 @@ class InfoElement{
 	public $eparams = [];
 	public $async = false;
 	public $update = false;
+    public $isPanel = false;
 	public $debugMode = false;
 	public $designMode = false;
 	public $fixed = false;

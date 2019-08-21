@@ -74,7 +74,7 @@ class FormField extends HTML{
 			if(isset($this->input["name"]) and $this->input["name"]){
 				$this->_caption->for = $this->input["name"];
 			}
-*/
+			*/
 		}
 		$this->_caption->text = $caption;
 		return $this->_caption;

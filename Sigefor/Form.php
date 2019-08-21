@@ -87,13 +87,9 @@ class Form extends \Sevian\Element{
             case 'request':
 				$this->_config();
 				
-				$this->panel = new \Sevian\HTML('div');
-				$this->panel->style = "color:red";
-				$this->panel->innerHTML = "betha";
 
-				$this->panel->innerHTML = $this->createForm();//$this->html;
 				
-				
+				$this->panel = $this->createForm();//$this->html;
 				
                 break;
             case 'delete':
@@ -207,9 +203,9 @@ class Form extends \Sevian\Element{
 		}
 		
 		
-		$f->addRow($div);
-		
-		return $f->render();
+		$f->addNav($div);
+		return $f;
+		//return $f->render();
 		
 	}// end function
 	

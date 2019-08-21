@@ -96,8 +96,9 @@ class Page extends HTML{
 
     public function addNav($opt){
 
-        $nav = new HTML("nav");
-        HTML:appendChild($nav);
+		$nav = new HTML("nav");
+		$nav->appendChild($opt);
+        HTML::appendChild($nav);
     } 
 
 }

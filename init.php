@@ -103,7 +103,7 @@ $init2 = [
 	'templateName' => 'login',
 	'elements' => [
 		[
-			'id'		=> 1,
+			'id'		=> 20,
 			'element'	=> 'sgUser',
 			'name'		=> '',
 			'method'	=> 'load',
@@ -111,7 +111,7 @@ $init2 = [
 			'fixed'		=> true,
 		],
 		[
-			'id'		=> 2,
+			'id'		=> 21,
 			'element'	=> 'sgModule',
 			'name'		=> 'gt_comm',
 			'method'	=> 'load',
@@ -119,7 +119,7 @@ $init2 = [
 			'fixed'		=> true,
 		],
 		[
-			'id'		=> 3,
+			'id'		=> 22,
 			'element'	=> 'sgStructure',
 			'name'		=> 'main',
 			'method'	=> 'load',
@@ -142,7 +142,7 @@ $init2 = [
 	'templateName' => 'login',
 	'elements' => [
 		[
-			'id'		=> 1,
+			'id'		=> 20,
 			'element'	=> 'sgUser',
 			'name'		=> '',
 			'method'	=> 'load',
@@ -150,7 +150,7 @@ $init2 = [
 			'fixed'		=> true,
 		],
 		[
-			'id'		=> 2,
+			'id'		=> 21,
 			'element'	=> 'sgModule',
 			'name'		=> 'gt_comm',
 			'method'	=> 'load',
@@ -158,7 +158,7 @@ $init2 = [
 			'fixed'		=> true,
 		],
 		[
-			'id'		=> 3,
+			'id'		=> 22,
 			'element'	=> 'sgStructure',
 			'name'		=> 'main',
 			'method'	=> 'load',
