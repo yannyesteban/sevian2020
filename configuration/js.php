@@ -49,7 +49,12 @@ $js = [
 	[
 		'file' 	=> "{$PATH}js/Sevian/proyecto.js",
 		'begin'	=> true],
-	
+	[
+		'file' 	=> "{$PATH}js/Sevian.js",
+		'begin'	=> true],
+	[
+		'file' 	=> "{$PATH}js/Form.js",
+		'begin'	=> true],
 ];
 
 Sevian\S::jsInit($js);

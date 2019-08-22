@@ -1,7 +1,6 @@
-export const sqrt = Math.sqrt;
-export function square(x) {
-    return x * x;
-}
-export function diag(x, y) {
-    return sqrt(square(x) + square(y));
-}
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Opp = () => {
+    alert(89);
+};
+exports.default = Opp;

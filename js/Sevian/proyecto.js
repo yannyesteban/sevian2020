@@ -1,5 +1,5 @@
 
-
+/*
 var g = new Sevian.Form({
     target:"f100",
     caption:"Form 01",
@@ -19,7 +19,7 @@ var g = new Sevian.Form({
 
     }]
 });
-
+*/
 
 var xx ={
 	async: false,

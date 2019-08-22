@@ -1,49 +1,87 @@
 /* Scss Document */
+.sg-tab {
+  border: 4px solid blue;
+  height: 300px;
+  width: 500px;
+  background-color: slateblue; }
+  .sg-tab > .sg-tab-menu {
+    box-sizing: padding-box !important;
+    padding: 0px;
+    margin: 4px;
+    padding: 0px; }
+    .sg-tab > .sg-tab-menu > * {
+      display: inline;
+      box-sizing: padding-box !important;
+      background-color: #6f6f6f;
+      margin: 0px 2px 0px 0px;
+      padding: 4px 10px 4px 10px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      /* Chrome 49+ */
+      -moz-user-select: none;
+      /* Firefox 43+ */
+      -ms-user-select: none;
+      /* No support yet */
+      user-select: none;
+      /* Likely future */
+      border-radius: 4px 12px 0px 0px; }
+      .sg-tab > .sg-tab-menu > * > a {
+        text-decoration: none;
+        color: white; }
+      .sg-tab > .sg-tab-menu > *.sg-tab-active {
+        background-color: #980009; }
+    .sg-tab > .sg-tab-menu > .sg-tab-body {
+      border-top: 4px solid #980009; }
+      .sg-tab > .sg-tab-menu > .sg-tab-body > .sg-tab-ibody {
+        display: none; }
+        .sg-tab > .sg-tab-menu > .sg-tab-body > .sg-tab-ibody.sg-tab-active {
+          display: block !important; }
+  .sg-tab > .sg-tab-body {
+    color: white !important;
+    border-top: 4px solid #980009;
+    margin: 0px;
+    padding: 0px; }
+    .sg-tab > .sg-tab-body > * {
+      display: none; }
+      .sg-tab > .sg-tab-body > *.sg-tab-active {
+        display: block !important; }
+
 #tab1 {
   border: 0px solid blue;
   height: 300px;
-  width: 500px;
-}
+  width: 500px; }
 
 .sg-tab-main > .sg-tab-menu {
-  -webkit-box-sizing: padding-box !important;
-          box-sizing: padding-box !important;
-  padding: 4px;
-}
-
-.sg-tab-main > .sg-tab-menu > .sg-tab-imenu {
-  -webkit-box-sizing: padding-box !important;
-          box-sizing: padding-box !important;
-  background-color: #6f6f6f;
-  text-decoration: none;
-  color: white;
-  margin: 0px 2px 0px 0px;
-  padding: 4px 10px 4px 10px;
-  cursor: pointer;
-  -webkit-user-select: none;
-  /* Chrome 49+ */
-  -moz-user-select: none;
-  /* Firefox 43+ */
-  -ms-user-select: none;
-  /* No support yet */
-  user-select: none;
-  /* Likely future */
-  border-radius: 4px 12px 0px 0px;
-}
-
-.sg-tab-main > .sg-tab-menu > .sg-tab-imenu.sg-tab-active {
-  background-color: #980009;
-}
-
+  box-sizing: padding-box !important;
+  padding: 4px; }
+  .sg-tab-main > .sg-tab-menu > .sg-tab-imenu {
+    box-sizing: padding-box !important;
+    background-color: #6f6f6f;
+    text-decoration: none;
+    color: white;
+    margin: 0px 2px 0px 0px;
+    padding: 4px 10px 4px 10px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    /* Chrome 49+ */
+    -moz-user-select: none;
+    /* Firefox 43+ */
+    -ms-user-select: none;
+    /* No support yet */
+    user-select: none;
+    /* Likely future */
+    border-radius: 4px 12px 0px 0px; }
+    .sg-tab-main > .sg-tab-menu > .sg-tab-imenu.sg-tab-active {
+      background-color: #980009; }
+  .sg-tab-main > .sg-tab-menu > .sg-tab-body {
+    border-top: 4px solid #980009; }
+    .sg-tab-main > .sg-tab-menu > .sg-tab-body > .sg-tab-ibody {
+      display: none; }
+      .sg-tab-main > .sg-tab-menu > .sg-tab-body > .sg-tab-ibody.sg-tab-active {
+        display: block !important; }
 .sg-tab-main > .sg-tab-body {
-  border-top: 4px solid #980009;
-}
-
-.sg-tab-main > .sg-tab-body > .sg-tab-ibody {
-  display: none;
-}
-
-.sg-tab-main > .sg-tab-body > .sg-tab-ibody.sg-tab-active {
-  display: block !important;
-}
-/*# sourceMappingURL=sgTab.css.map */
+  border-top: 4px solid #980009; }
+  .sg-tab-main > .sg-tab-body > .sg-tab-ibody {
+    display: none; }
+    .sg-tab-main > .sg-tab-body > .sg-tab-ibody.sg-tab-active {
+      display: block !important; }
