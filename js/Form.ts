@@ -80,7 +80,7 @@ const mTab = (($) => {
 				return false;
 			}
 			if(this.value !== false){
-				var onClose=true;// = this.onClose(index);
+				var onClose=true;// =this.onClose(index);
 				
 				if(onClose === undefined || onClose === true){
 					this.setVisible(this.value, false);
