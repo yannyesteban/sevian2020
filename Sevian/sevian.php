@@ -590,7 +590,7 @@ class S{
 			$doc->appendCssSheet($v);
 		}
 		foreach(self::$_js as $k=> $v){
-			$doc->appendScriptDoc($v['file'], $v['begin']);
+			$doc->appendScriptDoc($v['file'], $v['begin']??true, $v['attrib']??[]);
 		}
 
 		$templates = [];

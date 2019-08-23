@@ -1,21 +1,24 @@
-const mTab = (($) => {
+//import { Query as $} from './Query.js';
+(function ($) {
     class Tab {
         constructor(opt) {
             this.target = false;
             this.name = "";
-            this.id = "";
+            this.id = 0;
             this.value = 0;
+            this.mode = "";
+            this.className = "";
+            this.pages = [];
+            this.onOpen = (index) => { return true; };
+            this.onClose = (index) => { return true; };
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
                 }
             }
             let _target = $(this.target);
-            if (_target && _target.get().tagName != "FORM") {
-                let form = _target.create({
-                    tagName: "form",
-                    name: this.name
-                }).ds("sgType", "sg-form");
+            if (_target) {
+                this.create();
             }
             else {
                 this.load();
@@ -31,8 +34,58 @@ const mTab = (($) => {
             for (let i = 0; i < mItem.length; i++) {
                 $(mItem[i]).on("click", this._click(i)).on("focus", this._click(i)).removeClass("sg-tab-active");
             }
+            $(menu).addClass("sg-tab-menu");
             $(page).addClass("sg-tab-body");
             this.setValue(this.value);
+        }
+        create() {
+            let _target = $(this.target);
+            _target.create({
+                tagName: "div",
+                id: this.id,
+                className: this.className
+            })
+                .ds("sgType", "sg-tab")
+                .addClass("sg-tab")
+                .add({
+                "tagName": "div",
+                "className": "sg-tab-menu"
+            })
+                .add({
+                "tagName": "div",
+                "className": "sg-tab-body"
+            });
+            if (this.pages) {
+                for (var x in this.pages) {
+                    if (this.pages.hasOwnProperty(x)) {
+                        this.add(this.pages[x]);
+                    }
+                }
+            }
+        }
+        add(opt) {
+            let main = $(this.id);
+            let tab_parts = main.childs();
+            let menu = tab_parts[0];
+            let page = tab_parts[1];
+            let index = menu.children.length;
+            $(menu).create("a").on("click", this._click(index)).on("focus", this._click(index))
+                .addClass("sg-tab-imenu")
+                .text(opt.title || "")
+                .attr("href", "javascript:void(0);")
+                .ds("sgTabIndex", index);
+            return;
+            var iBody = this._body.create("div");
+            iBody.addClass("sg-tab-ibody");
+            if (opt.child) {
+                iBody.append(opt.child);
+            }
+            iBody.ds().sgTabIndex = this._index;
+            this.item[this._index] = { iMenu: iMenu, iBody: iBody };
+            if (this.value === this._index) {
+                this.setVisible(this._index, true);
+            }
+            return this.item[this._index++];
         }
         _click(index) {
             var ME = this;
@@ -63,7 +116,7 @@ const mTab = (($) => {
                 return false;
             }
             if (this.value !== false) {
-                var onClose = true; // =this.onClose(index);
+                var onClose = this.onClose(index);
                 if (onClose === undefined || onClose === true) {
                     this.setVisible(this.value, false);
                 }
@@ -73,19 +126,39 @@ const mTab = (($) => {
             }
             this.setVisible(index, true);
             this.value = index;
-            //this.onOpen(index);
+            this.onOpen(index);
             return true;
         }
         setValue(index) {
             this.value = false;
             this.show(index);
         }
+        setMode(mode) {
+            $(this.id).removeClass(this.mode)
+                .addClass(mode)
+                .ds("sgMenuMode", mode);
+            this.mode = mode;
+        }
+        getMode() {
+            return this.mode;
+        }
     }
-    return Tab;
+    let tab = new Tab({
+        "id": "tab01"
+    });
+    let tab2 = new Tab({
+        target: "tabii",
+        id: "tab_x01",
+        pages: [
+            {
+                title: "tab001",
+            },
+            {
+                title: "tab0012",
+            },
+        ],
+    });
 })(_sgQuery);
-let tab = new mTab({
-    id: "tab01"
-});
 const Input = (($) => {
     class Input {
         constructor(opt) {
@@ -136,6 +209,6 @@ const Form = (($) => {
     return Form;
 })(_sgQuery);
 let F = new Form({
-    target: "f100",
+    target: "_f100",
     name: "form_100"
 });

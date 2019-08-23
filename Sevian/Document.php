@@ -88,10 +88,16 @@ class Document{
 		}
 	}
 	
-	public function appendScriptDoc($src, $toEnd = false){
+	public function appendScriptDoc($src, $begin = true, $attrib = []){
 		$doc = new HTML("script");
-		$doc->src = $src;		
-		if(!$toEnd){
+
+
+		$doc->src = $src;
+		foreach($attrib as $k => $v){
+			$doc->$k = $v;	
+		}
+
+		if($begin){
 			$this->head->appendChild($doc);
 			//$this->head->appendChild("\n");			
 		}else{

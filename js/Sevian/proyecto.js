@@ -1,3 +1,13 @@
+//import { Query as $} from '../Query.js';
+
+
+
+
+import { square, diag } from './modulo1.js';
+console.log(square(11)); // 121
+console.log(diag(4, 3)); // 5
+//var dl = $("tab01").addClass("1247").text("eee");
+
 
 /*
 var g = new Sevian.Form({
@@ -45,7 +55,7 @@ var xx ={
 
 
 var Modulo = (function(){
-    U=1000;
+   let U=1000;
     function X(){
         alert(U);
     }
@@ -104,4 +114,4 @@ menu1.add({
 };
 
 
-db(1000);
+//db(1000);

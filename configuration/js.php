@@ -5,56 +5,67 @@ $PATH = "";
 $js = [
 	[
 		'file' 	=> "{$PATH}js/_sgQuery.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgAjax.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/drag.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgWindow.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgDB.js",
-		'begin'	=> true],
+		'begin'	=> false],
 	[
 		'file' 	=> "{$PATH}js/sgInit.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgSevian.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/Sevian/Tab.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/Sevian/Menu.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/Sevian/DesignMenu.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	/*[
 		'file' 	=> "{$PATH}js/Sevian/Upload.js",
-		'begin'	=> false],*/
+		'begin'	=> true],*/
 	[
 		'file' 	=> "{$PATH}js/sgCalendar.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/Sevian/Input.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/Sevian/Form.js",
-		'begin'	=> false],
+		'begin'	=> true],
 
+	/*[
+		'file' 	=> "{$PATH}js/Sevian/modulo1.js",
+		'begin'	=> false,
+		'attrib' => [
+			'type'=>'module'
+		]],*/
 	[
 		'file' 	=> "{$PATH}js/Sevian/proyecto.js",
-		'begin'	=> true],
+		'begin'	=> false,
+		'attrib' => [
+			'type'=>'module'
+		]],
 	[
 		'file' 	=> "{$PATH}js/Sevian.js",
-		'begin'	=> true],
+		'begin'	=> false],
 	[
 		'file' 	=> "{$PATH}js/Form.js",
-		'begin'	=> true],
+		'attrib' => [
+			'type'=>'module'
+		]],
 ];
 
 Sevian\S::jsInit($js);

@@ -83,13 +83,21 @@ _sgObjet.prototype = {
 	},
 	
 	create: function(tagName){
-		return this.append(_sgQuery.create(tagName));
-		
-	},
+        for(var i in tagName){
+            db(i+"="+tagName[i]);
+        }
 
-	add: function(tagName){
+        let y = _sgQuery.create(tagName);
+        db(y.get(),"red")
+        let x = this.append(y);
+        
+        db(x.get(),"blue")
+		return x;
+    },
+    
+    add: function(tagName){
 		this.append(_sgQuery.create(tagName));
-		return this;
+		return this.e;
 		
 	},
 	
@@ -137,9 +145,10 @@ _sgObjet.prototype = {
 		if(!this.e || !this.e.appendChild){
 			return this;
 		}
-
+        
 		if(typeof(obj) === "object"){
-			if(obj instanceof _sgObjet){
+            db(obj instanceof _sgObjet, "aqua","blue")
+			if(obj instanceof _sgObjet){db(obj, "pink")
 				this.e.appendChild(obj.get());
 				return obj;
 				
@@ -385,7 +394,7 @@ _sgObjet.prototype = {
 
 
 
-var _sgQuery = function(obj){
+export  function Query(obj){
 	
 	if(obj instanceof _sgObjet){
 		return obj;
@@ -411,7 +420,7 @@ var _sgQuery = function(obj){
 	
 };
 
-_sgQuery.byId= function(id){
+Query.byId= function(id){
 	if(document.getElementById(id)){
 		return document.getElementById(id);
 	}
@@ -419,12 +428,12 @@ _sgQuery.byId= function(id){
 	
 };
 
-_sgQuery.create= function(opt){
+Query.create= function(opt){
 	var e;
 	if(typeof(opt) === "object"){
 		e = document.createElement(opt.tagName);
 		for(var x in opt){
-			if(opt.hasOwnProperty(x) && opt[x] !== false && opt[x] !== null){
+			if(opt.hasOwnProperty(x) && opt[x] !== false && opt[x] !== null && x !="tagName"){
 				
 				if(typeof(opt[x]) === "object"){
 					
@@ -443,7 +452,7 @@ _sgQuery.create= function(opt){
 	return _sgQuery(e);
 };
 
-_sgQuery.prop = function(obj, prop){
+Query.prop = function(obj, prop){
 	for(var x in prop){
 		if(prop.hasOwnProperty(x)){
 			
@@ -453,7 +462,7 @@ _sgQuery.prop = function(obj, prop){
 	
 };
 
-_sgQuery.bind =function(fn, context){
+Query.bind =function(fn, context){
 	if(typeof(fn) === "function"){
 		return fn.bind(context);
 		/*
@@ -473,7 +482,7 @@ _sgQuery.bind =function(fn, context){
 };
 
 
-_sgQuery.appendStyle = function(style){
+Query.appendStyle = function(style){
 	var elem = document.createElement('style');
 	
 	elem.setAttribute("type", "text/css");
@@ -490,7 +499,7 @@ _sgQuery.appendStyle = function(style){
 
 };
 
-_sgQuery.appendScript = function(script){
+Query.appendScript = function(script){
 	var elem = document.createElement('script');
 	
 	if(document.all){
@@ -504,20 +513,20 @@ _sgQuery.appendScript = function(script){
 };
 
 
-_sgQuery.query = function(selector){
+Query.query = function(selector){
 	if(document.querySelector(selector)){
 		return document.querySelector(selector);
 	}
 	return false;
 };
-_sgQuery.queryAll = function(selector){
+Query.queryAll = function(selector){
 	if(document.querySelectorAll(selector)){
 		return document.querySelectorAll(selector);
 	}
 	return false;
 };
 
-_sgQuery.unSelect = function(){
+Query.unSelect = function(){
 
 	if(window.getSelection){
 		if(window.getSelection().empty){  // Chrome
