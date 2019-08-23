@@ -27,37 +27,17 @@ const mTab = (($) => {
         load(){
             let main = $(this.id);
             main.addClass("sg-tab");
-            let tab_parts = main.childs();//main.queryAll("*> ul");
-
-            //let tab_parts = this.e.childNodes;
+            let tab_parts = main.childs();
 
             let menu = tab_parts[0];
             let page = tab_parts[1];
-            //alert(menu.children.length)
-            let mItem = menu.children;//main.queryAll(":nth-child(1) >  :not(FOO)");
+
+            let mItem = menu.children;
 
             for(let i=0; i<mItem.length;i++){
                 $(mItem[i]).on("click", this._click(i)).on("focus", this._click(i)).removeClass("sg-tab-active"); 
             }
             $(page).addClass("sg-tab-body");
-            /*
-            mItem.forEach(function(e, index){
-                $(e).on("click", this._click(index)).on("focus", this._click(index)).removeClass("sg-tab-active");
-                db(e.innerHTML);
-                db(index)
-
-            })
-            */
-            //alert(mItem.length);
-
-            let m_items = $(menu).addClass("sg-tab-menu");//.queryAll(":scope > *");
-            
-            
-
-            [].forEach.call(m_items, function(e, index){
-				//$(e).on("click", this._click(index)).on("focus", this._click(index)).removeClass("sg-tab-active");
-				//alert(e.tagName)
-            }, this);
             
             this.setValue(this.value);
 
@@ -70,17 +50,15 @@ const mTab = (($) => {
 			
         }
         setVisible(index: any, value: any){
+            
             let main = $(this.id);
            
-            let tab_parts = main.childs();//main.queryAll("*> ul");
+            let tab_parts = main.childs();
             let menu = tab_parts[0];
             let page = tab_parts[1];
 
-
-
-            let mItem = menu.children;//main.queryAll(":nth-child(1) >  :not(FOO)");
+            let mItem = menu.children;
             let pItem = page.children;
-
 
             if(mItem[index] && pItem[index]){
 				
