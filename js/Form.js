@@ -24,13 +24,28 @@ const mTab = (($) => {
         load() {
             let main = $(this.id);
             main.addClass("sg-tab");
-            let tab_parts = main.queryAll("* > ul");
+            let tab_parts = main.childs(); //main.queryAll("*> ul");
+            //let tab_parts = this.e.childNodes;
             let menu = tab_parts[0];
             let page = tab_parts[1];
-            let m_items = $(menu).addClass("sg-tab-menu").queryAll(":scope > *");
+            //alert(menu.children.length)
+            let mItem = menu.children; //main.queryAll(":nth-child(1) >  :not(FOO)");
+            for (let i = 0; i < mItem.length; i++) {
+                $(mItem[i]).on("click", this._click(i)).on("focus", this._click(i)).removeClass("sg-tab-active");
+            }
             $(page).addClass("sg-tab-body");
-            [].forEach.call(m_items, function (e, index) {
+            /*
+            mItem.forEach(function(e, index){
                 $(e).on("click", this._click(index)).on("focus", this._click(index)).removeClass("sg-tab-active");
+                db(e.innerHTML);
+                db(index)
+
+            })
+            */
+            //alert(mItem.length);
+            let m_items = $(menu).addClass("sg-tab-menu"); //.queryAll(":scope > *");
+            [].forEach.call(m_items, function (e, index) {
+                //$(e).on("click", this._click(index)).on("focus", this._click(index)).removeClass("sg-tab-active");
                 //alert(e.tagName)
             }, this);
             this.setValue(this.value);
@@ -43,19 +58,19 @@ const mTab = (($) => {
         }
         setVisible(index, value) {
             let main = $(this.id);
-            let tab_parts = main.queryAll(":scope > *");
+            let tab_parts = main.childs(); //main.queryAll("*> ul");
             let menu = tab_parts[0];
             let page = tab_parts[1];
-            let m_items = $(menu).queryAll(":scope > *");
-            let p_items = $(page).queryAll(":scope > *");
-            if (m_items[index] && p_items[index]) {
+            let mItem = menu.children; //main.queryAll(":nth-child(1) >  :not(FOO)");
+            let pItem = page.children;
+            if (mItem[index] && pItem[index]) {
                 if (value) {
-                    $(m_items[index]).addClass("sg-tab-active");
-                    $(p_items[index]).addClass("sg-tab-active");
+                    $(mItem[index]).addClass("sg-tab-active");
+                    $(pItem[index]).addClass("sg-tab-active");
                 }
                 else {
-                    $(m_items[index]).removeClass("sg-tab-active");
-                    $(p_items[index]).removeClass("sg-tab-active");
+                    $(mItem[index]).removeClass("sg-tab-active");
+                    $(pItem[index]).removeClass("sg-tab-active");
                 }
             }
         }
@@ -64,7 +79,7 @@ const mTab = (($) => {
                 return false;
             }
             if (this.value !== false) {
-                var onClose = true; // = this.onClose(index);
+                var onClose = true; // =this.onClose(index);
                 if (onClose === undefined || onClose === true) {
                     this.setVisible(this.value, false);
                 }
