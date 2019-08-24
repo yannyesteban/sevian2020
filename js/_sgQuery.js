@@ -96,7 +96,7 @@ _sgObjet.prototype = {
 	text: function(text, append){
 		
 		if (text === undefined) {
-		   return this.e.innerHTML;
+            return this.e.innerHTML;
 		}
 		
 		if(append){
