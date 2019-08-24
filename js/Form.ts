@@ -34,7 +34,7 @@ class Tab{
         }else{
             this.load();
         }
-db(this.getLenght()+"..."+this.value, "green")
+        //db(this.getLenght()+"..."+this.value, "green")
         if((this.value+1) > this.getLenght()){
             this.setValue(this.getLenght()-1); 
         }else{
@@ -101,24 +101,19 @@ db(this.getLenght()+"..."+this.value, "green")
     }
 
     add(opt:any, pos:any = false){
-        let main = $(this.id);
-       
-        let tab_parts = main.childs();
-        let menu = tab_parts[0];
-        let page = tab_parts[1];
+        
+        let index = this._menu.get().children.length;
 
-        let index = menu.children.length;
-
-        $(menu).create("a")
+        this._menu.create("a")
             .on("click", this._click(index))
             .on("focus", this._click(index))
             .addClass("sg-tab-imenu")
             .text(opt.title || "")
             .attr("href", "javascript:void(0);")
-            .ds("sgTabIndex",index);
+            .ds("sgTabIndex", index);
 
-        let body = $(page).create("div")
-            .ds("sgTabIndex",index);
+        let body = this._page.create("div")
+            .ds("sgTabIndex", index);
 
         if(opt.child){
             body.append(opt.child);
@@ -127,7 +122,7 @@ db(this.getLenght()+"..."+this.value, "green")
         }
 
         if(opt.active === true){
-            this.show(index, true);
+            this.show(index);
         }
 
         return body;
