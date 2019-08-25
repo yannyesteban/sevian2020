@@ -46,6 +46,10 @@ class S{
 	private static $_p = [];
 	// save all fragments
 	private static $_f = [];
+    // save all js Elements
+    private static $_jsElement = [];
+    // save all js main Elements
+    private static $_jsPanel = [];
 
 
 	private static $ins = false;
@@ -233,7 +237,26 @@ class S{
 	public static function addFrament($frag){
 		self::$_f = array_merge(self::$_f, $frag);
 	}
+    
+    public static function getJsConfigPanel(){}
 
+    public static function addJsElement($opt){
+		self::$_jsElement = array_merge(self::$_jsElement, $opt);
+	}
+
+    public static function getJsElement(){
+		return self::$_jsElement;
+	}
+
+    public static function addJsPanel($opt){
+		self::$_jsPanel[] = $opt;//array_merge(self::$_jsPanel, $opt);
+	}
+
+    public static function getJsPanel(){
+		return self::$_jsPanel;
+	}
+
+    
 	public static function setElement($info, $update = false){
 
 		if(isset(self::$_clsElement[$info->element])){
@@ -267,8 +290,15 @@ class S{
 				self::$_info[$info->id]->isPanel = true;
 				// if this->mail panel then title = this->title
 				self::$_str->addPanel($info->id, $e->getPanel());
+                if($e instanceof \Sevian\JsPanelRequest){
+                    self::addJsPanel($e->getJsConfigPanel());
+                }
+                
 				
 			}
+            if($e instanceof \Sevian\JsElementRequest){
+                self::addJsElement($e->getJsElement());
+            }
 			
 
 
@@ -632,8 +662,10 @@ class S{
 				
 		$doc->appendScript(self::$script, true);
 		//hr(self::$_mainPanels, "green");
-		$json = json_encode(self::$_mainPanels, JSON_PRETTY_PRINT);
-		$script = "//Sevian.loadPanels($json)";
+		//$json = json_encode(self::$_mainPanels, JSON_PRETTY_PRINT);
+		//$script = "//Sevian.loadPanels($json)";
+        $json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
+        $script = "Sevian.init($json)";
 		
 		$doc->appendScript($script, true);
 		

@@ -23,8 +23,26 @@ interface PanelsAdmin{
 
 }
 
+interface JsElement{
+    public function getJsType();
+
+}
+
 interface JsonRequest{
     public function getRequest();
 
 }
+
+
+interface JsPanelRequest{
+    public function getJsConfigPanel():jsConfigPanel;
+    public function getJsType();
+}
+
+interface JsElementRequest{
+    public function addJsElement(jsConfigElement $opt);
+    public function getJsElement();
+
+}
+
 

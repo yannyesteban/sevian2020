@@ -2,9 +2,10 @@
 
 (function($){
 class Tab{
+
     target: any = false;
-    
     id:any = 0;
+
     value:any = 0;
     mode:string = "";
     className:string = "";
@@ -21,54 +22,41 @@ class Tab{
         
         for(var x in opt){
             if(this.hasOwnProperty(x)) {
-             
                 this[x] = opt[x];
             }
         }
        
-        let _target = $(this.target);
-        if(_target){
-            
+        if($(this.target)){
            this.create();
-            
         }else{
             this.load();
         }
-        //db(this.getLenght()+"..."+this.value, "green")
+        
         if((this.value+1) > this.getLenght()){
             this.setValue(this.getLenght()-1); 
         }else{
            this.setValue(this.value); 
         } 
+        
     }
 
     load(){
        
-        let main = $(this.id);
-        main.addClass("sg-tab");
-        let tab_parts = main.childs();
+        let tab_parts = $(this.id).addClass(this.className).addClass("sg-tab").childs();
 
-        let menu = tab_parts[0];
-        let page = tab_parts[1];
+        this._menu = $(tab_parts[0]).addClass("sg-tab-menu");
+        this._page = $(tab_parts[1]).addClass("sg-tab-body");
         
-        this._menu = $(menu);
-        this._page = $(page);
+        let mItem = this._menu.get().children;
+        let pItem = this._page.get().children;
 
-        $(menu).addClass("sg-tab-menu");
-        $(page).addClass("sg-tab-body");
-        
-        let mItem = menu.children;
-        let pItem = page.children;
-
-        for(let i=0; i<mItem.length;i++){
-            $(mItem[i]).on("click", this._click(i)).on("focus", this._click(i)).removeClass("sg-tab-active"); 
+        for(let i = 0; i < mItem.length; i++){
+            $(mItem[i]).on("click", this._click(i))
+            .on("focus", this._click(i)).removeClass("sg-tab-active"); 
         }
         for(let i=0; i<pItem.length;i++){
             $(pItem[i]).ds("sgTabIndex", i).removeClass("sg-tab-active"); 
         }
-         
-
-        
 
     }
 
@@ -132,6 +120,7 @@ class Tab{
     getLenght(){
         return this._menu.get().children.length;
     }
+    
     _click(index: any){
         var ME = this;
         return function(){
@@ -139,19 +128,13 @@ class Tab{
         };
         
     }
+    
     setVisible(index: any, value: any){
         
-        let main = $(this.id);
-        
-        let tab_parts = main.childs();
-        let menu = tab_parts[0];
-        let page = tab_parts[1];
-
-        let mItem = menu.children;
-        let pItem = page.children;
+        let mItem = this._menu.get().children;
+        let pItem = this._page.get().children;
 
         if(mItem[index] && pItem[index]){
-            
             if(value){
                 $(mItem[index]).addClass("sg-tab-active");
                 $(pItem[index]).addClass("sg-tab-active");
@@ -160,8 +143,6 @@ class Tab{
                 $(pItem[index]).removeClass("sg-tab-active");
             }
         }
-
-        
     }
     
     show (index: any){
@@ -187,8 +168,12 @@ class Tab{
     setValue(index){
         this.value = false;
         this.show(index);
-        
     }
+
+    getValue(){
+        return this.value;
+    }
+    
     setMode(mode:string){
         $(this.id).removeClass(this.mode)
         .addClass(mode)
@@ -196,6 +181,7 @@ class Tab{
         
         this.mode = mode;
     }
+    
     getMode(){
         return this.mode;	
     }
@@ -203,9 +189,9 @@ class Tab{
 }
     
 
-
 let tab = new Tab({
-    "id":"tab01",
+    id:"tab01",
+    className: "xclass",
     value:11,
     onOpen:(index:any)=>{
         db(index);
@@ -224,6 +210,7 @@ tab.add({
 let tab2 = new Tab({
     target: "tabii",
     id:"tab_x01",
+    className: "yclass",
     value:1,
     onOpen:(index:any)=>{
         db(index,"yellow","red");
@@ -256,7 +243,7 @@ let tab2 = new Tab({
 tab2.add({
     title:"tab0 x",
     html:"hola ee mundo txt 100...",
-    active1:true,
+    active:true,
     
 });
 })(_sgQuery);

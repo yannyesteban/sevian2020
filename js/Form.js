@@ -18,14 +18,12 @@
                     this[x] = opt[x];
                 }
             }
-            let _target = $(this.target);
-            if (_target) {
+            if ($(this.target)) {
                 this.create();
             }
             else {
                 this.load();
             }
-            //db(this.getLenght()+"..."+this.value, "green")
             if ((this.value + 1) > this.getLenght()) {
                 this.setValue(this.getLenght() - 1);
             }
@@ -34,19 +32,14 @@
             }
         }
         load() {
-            let main = $(this.id);
-            main.addClass("sg-tab");
-            let tab_parts = main.childs();
-            let menu = tab_parts[0];
-            let page = tab_parts[1];
-            this._menu = $(menu);
-            this._page = $(page);
-            $(menu).addClass("sg-tab-menu");
-            $(page).addClass("sg-tab-body");
-            let mItem = menu.children;
-            let pItem = page.children;
+            let tab_parts = $(this.id).addClass(this.className).addClass("sg-tab").childs();
+            this._menu = $(tab_parts[0]).addClass("sg-tab-menu");
+            this._page = $(tab_parts[1]).addClass("sg-tab-body");
+            let mItem = this._menu.get().children;
+            let pItem = this._page.get().children;
             for (let i = 0; i < mItem.length; i++) {
-                $(mItem[i]).on("click", this._click(i)).on("focus", this._click(i)).removeClass("sg-tab-active");
+                $(mItem[i]).on("click", this._click(i))
+                    .on("focus", this._click(i)).removeClass("sg-tab-active");
             }
             for (let i = 0; i < pItem.length; i++) {
                 $(pItem[i]).ds("sgTabIndex", i).removeClass("sg-tab-active");
@@ -108,12 +101,8 @@
             };
         }
         setVisible(index, value) {
-            let main = $(this.id);
-            let tab_parts = main.childs();
-            let menu = tab_parts[0];
-            let page = tab_parts[1];
-            let mItem = menu.children;
-            let pItem = page.children;
+            let mItem = this._menu.get().children;
+            let pItem = this._page.get().children;
             if (mItem[index] && pItem[index]) {
                 if (value) {
                     $(mItem[index]).addClass("sg-tab-active");
@@ -147,6 +136,9 @@
             this.value = false;
             this.show(index);
         }
+        getValue() {
+            return this.value;
+        }
         setMode(mode) {
             $(this.id).removeClass(this.mode)
                 .addClass(mode)
@@ -158,7 +150,8 @@
         }
     }
     let tab = new Tab({
-        "id": "tab01",
+        id: "tab01",
+        className: "xclass",
         value: 11,
         onOpen: (index) => {
             db(index);
@@ -174,6 +167,7 @@
     let tab2 = new Tab({
         target: "tabii",
         id: "tab_x01",
+        className: "yclass",
         value: 1,
         onOpen: (index) => {
             db(index, "yellow", "red");
@@ -199,7 +193,7 @@
     tab2.add({
         title: "tab0 x",
         html: "hola ee mundo txt 100...",
-        active1: true,
+        active: true,
     });
 })(_sgQuery);
 const Input = (($) => {

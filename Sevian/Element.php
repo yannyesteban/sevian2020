@@ -27,6 +27,8 @@ class Element{
 	protected $_secAfter = false;
 	protected $_config = [];
 	protected $_response = [];
+    
+    protected $_jsElement = [];
 	
 	public function __construct($opt = []){
 
@@ -89,6 +91,28 @@ class Element{
 			'class'=> 'xxx',
 		]);
 		
+	}
+    
+    public function _getJsConfigPanel():jsConfigPanel{
+        
+        return new jsConfigPanel([
+            "panel"   => $this->id,
+            "type"    => "sgPanel",
+            "options" => []
+            
+        ]);
+        
+    }
+    
+    public function _addJsElement($opt){
+		
+		$this->_jsElement[] = $opt;
+	
+	}
+	public function _getJsElement(){
+
+		return $this->_jsElement;
+
 	}
 }
 

@@ -82,11 +82,11 @@ class FormField extends HTML{
 
 	public function getInput(){
 		return $this->_input;
-	} 
+	}
 
 }
 
-class Form extends Page{
+class Form extends Page implements JsElement{
 	
 	
 	public $_fields = [];
@@ -165,6 +165,9 @@ class Form extends Page{
 		}
 		return false;
 	}
+    public function getJsType(){
+        return "sgForm";
+    }
 }
 
 class FieldSet extends HTML{

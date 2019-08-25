@@ -102,3 +102,33 @@ class iMessage{
         $this->token = 'message';
 	}
 }
+
+
+class jsConfigPanel{
+    
+    public $panel = '';
+    public $type = '';
+    public $option = [];
+
+    public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+        }
+	}
+}
+class jsConfigElement{
+    
+    public $id = '';
+    public $type = '';
+    public $option = [];
+
+    public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+        }
+	}
+}

@@ -48,7 +48,7 @@ class InfoField{
 
 }
 
-class Form extends \Sevian\Element{
+class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	public $showCaption = true;
 	public $menus = [];
@@ -214,7 +214,17 @@ class Form extends \Sevian\Element{
 
 		
 	}
-	
+	public function getJsConfigPanel():\Sevian\jsConfigPanel{
+        return new \Sevian\jsConfigPanel([
+            "panel"   => $this->id,
+            "type"    => "sgForm",
+            "options" => []
+            
+        ]);
+    }
+    public function getJsType(){
+        
+    }
 	
 }// end class
 function loadJson($path){
