@@ -125,7 +125,7 @@
                     },
                     {
                         caption: "tres:b",
-                        items: [{ caption: "caracas" }, { caption: "valencia" }, { caption: "san carlos" }],
+                        items: [{ caption: "caracas" }, { caption: "valencia" }, { caption: "san carlos" }, { caption: "yaritagua" }],
                     },
                     {
                         caption: "tres:c",
