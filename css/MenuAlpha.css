@@ -1,0 +1,75 @@
+/* Scss Document */
+@keyframes open {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+    transform-origin: 0 0; }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: 0 0; } }
+@keyframes close {
+  0% {
+    opacity: 1;
+    visibility: visible; }
+  100% {
+    opacity: 0;
+    visibility: hidden !important; } }
+@keyframes acc-open {
+  0% {
+    max-height: 0px;
+    overflow: hidden;
+    padding-left: 30px;
+    opacity: 0; }
+  100% {
+    max-height: 600px;
+    opacity: 1; } }
+@keyframes acc-close {
+  0% {
+    max-height: 600px;
+    opacity: 1; }
+  100% {
+    max-height: 0px;
+    overflow: hidden; } }
+.sg-menu {
+  background-color: #171717; }
+  .sg-menu > .caption {
+    background-color: #1D2CF3;
+    line-height: 2em;
+    font-size: 11pt;
+    text-align: center;
+    color: aliceblue; }
+  .sg-menu a {
+    text-decoration: none; }
+  .sg-menu ul {
+    margin: 0px;
+    padding: 0px; }
+  .sg-menu li {
+    list-style-type: none; }
+  .sg-menu .menu {
+    margin: 2px;
+    border: 1px solid #D5D5D5; }
+  .sg-menu .menu > .item {
+    margin: 2px;
+    padding: 4px;
+    border-bottom: solid 1px white; }
+    .sg-menu .menu > .item > .option {
+      color: white;
+      background-color: red;
+      line-height: 2em; }
+    .sg-menu .menu > .item.close > .menu {
+      max-height: 0px;
+      overflow: hidden;
+      padding-left: 30px;
+      opacity: 0;
+      transition-duration: 0.2s;
+      transition-property: all; }
+    .sg-menu .menu > .item.open > .menu {
+      max-height: 600px;
+      opacity: 1;
+      transition-duration: 0.5s;
+      transition-property: all;
+      transition-timing-function: ease-in; }
+  .sg-menu .submenu.close {
+    position: absolute;
+    visibility: hidden; }

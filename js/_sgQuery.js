@@ -260,6 +260,10 @@ _sgObjet.prototype = {
 		
 	},
 	
+    hasClass: function(className){
+        return this.e.classList.contains(className);
+    },
+    
 	attr: function(attr, value){
 		if(value === undefined){
 			return this.e[attr];

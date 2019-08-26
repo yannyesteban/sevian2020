@@ -1,31 +1,106 @@
 <!doctype html>
 <html>
 <head>
+    
 <meta charset="utf-8">
+ 
 <title>Documento sin título</title>
+    
+<link href="../css/Form.css"  rel="stylesheet" type="text/css" />
+<link href="../css/sgTab.css"  rel="stylesheet" type="text/css" />
+<link href="../css/sgWindow.css" rel="stylesheet" type="text/css"/>
+    <!--<link href="../css/Menu.css"  rel="stylesheet" type="text/css" />-->
+<link href="../css/MenuAlpha.css"  rel="stylesheet" type="text/css" />
+<script src="_sgQuery.js"></script>
+<script src="drag.js"></script>
+    <script src="sgWindow.js"></script>
+
 </head>
 
 <body>
-    
-    <div>
-        <header class="head">Formulario</header>
+   <div id="menu2">
+      
+      </div> 
+  <form class="sg-form" name="a" onInput="alert(8)">
+      <header class="head">Formulario</header>
+      <div class="sg-page">
+        <div class="head">Grupo uno</div>
         <div class="body">
-        <div>
-            <div><label for="cedula">Cédula</label></div>
-            <div><input name="cedula" id="cedula" type="text" value="12474737"/></div>
+            
+            <div sgForm="input" sg-input="text" class="sg-input sg-input-text">
+                <div><label for="cedula">Cédula</label></div>
+                <div><input name="cedula" id="cedula" type="text" value="12474737"/></div>
+            </div>
+            
+            <div sgForm="input" sg-input="text" class="sg-input sg-input-text">
+                <div><label for="nombre">Nombre</label></div>
+                <div><input name="nombre" id="nombre" type="text" value="Yanny Esteban"/></div>
+            </div>
+            
+            <div sgForm="input" sg-input="text" class="sg-input sg-input-text">
+                <div><label for="apellido">Apellido</label></div>
+                <div><input name="apellido" id="apellido" type="text" value="Núñez Jiménez"/></div>
+            </div>
+          
+          
         </div>
-        
-        
-        </div>
-        <div class="nav">
-        
-        
-        
-        </div>
+      
+      
+      </div>
+      
     
-    
-    </div>
-    
-    
+    <div id="tab01" class="sg-tab" data-sg-type="tab">
+		<div class="sg-tab-menu">
+			<a class="sg-tab-active" href="javascript:void(0);">Uno</a>
+			<a href="javascript:void(0);">Dos</a>
+			<a href="javascript:void(0);">Tres</a>
+		</div>
+		<ul class="sg-tab-body ">
+			<li class="sg-tab-active">Uno zlkdj saldjslak j UNO</li>
+			<li>Dos df jsdlkgdfg f</li>
+			<li>Tres d edfgjfdjg</li>
+		</ul>
+	</div>
+
+
+    <div id="menu1" sg-menu="" class="sg-menu menu type-default mode-close">
+        <div class="caption">Menu Principal</div>
+        <ul class="menu">
+            <li class="item close"><a class="option" href="#">Uno</a></li>
+            <li class="item close"><a class="option" href="#">Dos</a></li>
+            <li class="item close"><a class="option" href="#">Tres</a></li>
+            <li class="item close">
+                <a class="option" href="#">Cuatro</a>
+                <ul class="menu">
+                    <li class="item"><button class="option" href="#">Cinco</button></li>
+                    <li class="item"><button class="option" href="#">Seis</button></li>
+                    <li class="item"><button class="option" href="#">Siete</button></li>
+                </ul>
+
+            </li>
+        </ul>
+      
+    </div>  
+ 
+    <div sg-menu="" class="purple sg-menu type-default mode-close">
+        <div class="caption">Menu Principal</div>
+        <ul class="menu">
+            <li class="item close"><button class="option" href="#">Uno</button></li>
+            <li class="item close"><button class="option" href="#">Dos</button></li>
+            <li class="item close"><button class="option" href="#">Tres</button></li>
+            <li class="item close">
+                <button class="option" href="#">Cuatro</button>
+                
+            </li>
+        </ul>
+      
+    </div> 
+      
+      
+      
+   </form>  
+
+</div><script src="sgDB.js"></script>   
+<script src="Menu.js"></script>    
 </body>
 </html>

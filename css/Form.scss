@@ -14,6 +14,66 @@ body, html{
 	padding: 10px;
 	
 }
+
+
+.sg-form{
+    
+      
+    border: 2px solid #424242;
+    padding:4px;
+    width: 800px;
+    >.head{
+        text-align: center;
+        background-color: #72A0A0;
+        margin: 2px;
+        &:after{
+            content: '+'; /* Unicode character for "plus" sign (+) */
+        }
+    }
+    
+}
+
+.sg-page{
+    margin: 2px;
+    border: 2px #6D5858 solid;
+    >.head{
+        text-align: center;
+        color:red;
+    }
+    
+    >.body{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+         align-items: baseline;
+        >*{
+           flex:1 1 auto;
+        }
+    }
+    
+}
+
+.sg-input{
+    border:2px solid #9F9F9F;
+    color:#5C5C5C;
+    margin:4px;
+    padding: 4px;
+    border-radius: 4px;
+    
+    display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+         align-items: baseline;
+    
+    input{
+        
+        font-size: 12pt;
+        color:#565656;
+    }
+}
+
 .ss-form, .form{
 	width: 100%;
 	//background: linear-gradient(rgba(247,247,247,1.00), rgba(225,225,225,1.00)) ;
