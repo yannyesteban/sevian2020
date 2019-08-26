@@ -2,6 +2,11 @@
 
 var db = false, hr = false;
 (function($){
+	$(window).on("load", function(){
+        _myDb();
+    })
+	_myDb = function(){
+	
 		var linea = 0;
 		var div = $.create("div");
 		div.prop("id","debug_1");
@@ -44,7 +49,7 @@ var db = false, hr = false;
 		
 		
 	
-	
+	}
 		
 	
 })(_sgQuery);
