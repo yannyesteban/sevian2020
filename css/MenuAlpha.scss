@@ -1,6 +1,8 @@
 /* Scss Document */
+
+
 #menu2{
-    width:300px;
+    width:400px;
 }
 @keyframes open {
 	0%{
@@ -54,9 +56,112 @@
 	}
 }
 
-.sg-menu{
+$font-size: 12pt;
+$font-family: arial;
+.sg-menu.summer{
+    
+    &.nav{
+        
+    }
+    &.menu-dropdown{
+        .option{
+            min-width: 160px;
+        }
+        
+    }
+    
+    >.caption{
+        font-size: $font-size;
+        font-family: $font-family;
+        font-weight: bold;
+        background-color: #C0C0C0;
+        line-height: 2em;
+        
+        text-align: center;
+        color:  #3F3F3F;
+        letter-spacing: 0.2em;
+    }
+    .menu{
+        background-color: #DADADA;
+        padding: 2px;
+        .item{
+            //background-color: red;
+            margin:2px;
+            font-size: $font-size - 1pt;
+            button.option{
+                height: 100%;
+                width: 100%;
+                vertical-align: bottom;
+                line-height: 2em;
+                
+               
+            }
+            .option:not(button){
+                background-color: #525252;
+                color: #BEBEBE;
+                line-height: 2em;
+                padding-left: 4px;
+                
+                &:hover{
+                    background-color: #2F0133;
+                    color:pink;
+                }
+            }
+        }
+        
+    }
+    
+    
+}
 
-    &.menu-system{
+.sg-menu{
+    
+    .w-icon{
+        
+    }
+    &.n-icon .icon{
+        display: none;
+    }
+    .submenu .item{
+        min-width: 150px;
+        
+    }
+    .option{
+        //display: block;
+        //padding: 4px;
+        display: flex;
+        flex-direction: row;
+
+        //align-content: center;
+        //justify-content: center;
+        align-items: center;
+        >.text{
+            margin-left:4px;
+            flex:1 1 auto;
+        }
+        >.ind{
+
+            flex:0 0 auto;
+            margin-right:4px;
+        }
+    }
+    button{
+        
+        //display: block;
+    }
+    a{
+        text-decoration: none;
+    }
+    ul{
+        margin:0px;
+        padding:0px;
+    }        
+    li{
+        list-style-type: none;
+    }
+    
+    
+    &.menu-system, &.menu-nav{
         >.caption{
             display: none;
         }
@@ -71,12 +176,18 @@
         
     }
     .menu > .item{
+        .option .icon{
+            width: 20px;
+            height: 20px;
+            border:1px solid #CECECE;
+        }
+        
         &.close{
             > .option >.ind{
-                float:right;
-                margin:10px;
-                width: 0;
-                height: 0;
+                //float:right;
+               // margin:5px;
+                width: 10px;
+                height: 10px;
                 border-style: solid;
                 border-width: 9px 6px 0 6px;
                 border-color: #d9ff00 transparent transparent transparent;
@@ -86,21 +197,22 @@
         }
         &.open{
             > .option >.ind{
-                float:right;
-                margin:10px;
-                width:8px;
+                //float:right;
+                //margin:5px;
+                width:10px;
                 height:3px;
-                margin-right: 12px;
+                //margin-right: 12px;
                 background-size: 100%;
                 background-color: rgba(196,196,196,1.00);
             }
         }
     }
 
-    &.menu-dropdown, &.menu-system{
+    &.menu-dropdown, &.menu-system, &.menu-nav{
         .menu > .item{
             &.close{
                 > .submenu{
+                    
                     animation: close  0.5s ease-out;
                 }
             }
@@ -120,7 +232,7 @@
                     overflow: hidden;
                     padding-left: 30px;
                     opacity: 0;
-
+                    padding: 0px;
                     transition-duration: 0.2s;
                     transition-property: all;
                 }
@@ -129,7 +241,9 @@
                 > .submenu{
                     max-height: 600px;
                     opacity: 1;
-                    transition-duration: 0.5s;
+                    padding: 0px 0px 0px 4px;
+                    
+                    transition-duration: 0.3s;
                     transition-property: all;
                     transition-timing-function: ease-in;
                 }
@@ -140,52 +254,22 @@
 
     }
 
-    background-color: #707070;
-    .menu{
-       background-color: #171717; 
-    }
-    
-    >.caption{
-        background-color: #1D2CF3;
-        line-height: 2em;
-        font-size: 11pt;
-        text-align: center;
-        color: aliceblue;
-        
-    }
     
     
-    
-    a{
-        text-decoration: none;
-        
-    }
-    ul{
-        margin:0px;
-        padding:0px;
-    }        
-    li{
-        list-style-type: none;
-    }
-    .menu{
-        margin:2px;
-        border:1px solid #D5D5D5;
-       
-        
-        
-    }
+
     .menu>.item{
         
-        margin:2px;
-        padding: 4px;
-        border-bottom: solid 1px white;
+        //margin:2px;
+        //padding: 4px;
+        //border-bottom: solid 1px white;
         
         
         >.option{
-            color:white;
-            background-color: red;
-            line-height: 2em;
-            display: block;
+            
+            //color:white;
+            //background-color: red;
+            //line-height: 2em;
+            //display: block;
         }
 
         &.close_{
@@ -200,31 +284,7 @@
 			
 		}
 
-        &.close1{
-            >.menu{
-                //border:4px solid #3C3C3C;
-                //visibility:hidden;
-                //position: absolute;
-                //animation: acc-close  0.2s ease-out;
-                max-height: 0px;
-                overflow: hidden;
-                padding-left: 30px;
-                opacity: 0;
-
-                transition-duration: 0.2s;
-                transition-property: all;
-            }
-        }
-        &.open1{
-            >.menu{
-                //animation: acc-open  0.5s ease-out;
-                max-height: 600px;
-                opacity: 1;
-                transition-duration: 0.5s;
-                transition-property: all;
-                transition-timing-function: ease-in;
-            }
-        }
+        
     }
     .submenu{
         

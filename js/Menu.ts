@@ -40,7 +40,7 @@
 
     class Menu{
 
-        type:string = "system";//default,buttons,dropdown,accordion[x|y]
+        type:string = "nav";//default,nav,dropdown,accordion[x|y]
 
         id:string = "";
         target:string = "";
@@ -50,6 +50,9 @@
         _menu:object = null;
         _main:object = null;
         
+        action:any = null;
+        check:any = null;
+        useIcon:boolean = false;
 
         static init(){
             let menus = $().queryAll(".sg-menu")
@@ -94,7 +97,9 @@
         create(main:any){   
             db("create");
             
-            main.addClass("sg-menu");
+            main.addClass("sg-menu").addClass(this.className)
+            .addClass(this.useIcon? "w-icon": "n-icon");
+            
             main.addClass(`menu-${this.getType()}`)
             if(this.caption){
                 main.create({
@@ -121,7 +126,7 @@
             if(submenu){
                 
                 menu.addClass("submenu");
-                if(this.type == "dropdown" || this.type == "system"){
+                if(this.type == "dropdown" || this.type == "system" || this.type == "nav"){
                     menu.style({
                         position: "fixed",
                         userSelect: "none",
@@ -148,12 +153,31 @@
         }
         add(main:any, info:any){
 
+            let item = main.create("div").addClass("item");
+            
+            let tagType = "a";
+            if((this.type === "system1" || this.type === "nav") && !main.hasClass("submenu")){
+                tagType = "button";    
+            }
            
-            let item = main.create("div").addClass("item"));
-            let link = item.create("a")
+            
+            let link = item.create(tagType)
                 .addClass("option")
-                .prop("href", info.url || "javascript:void(0)");
-            link.text(info.caption);
+                .prop("href", info.url || "javascript:void(0)")
+                .ds("value", info.value || "");
+
+            if(info.useCheck || true){
+                let chk = link.create("input").attr("type","checkbox").on("click", ()=>{
+                    event.stopPropagation();
+                });
+
+                if(this.check){
+					chk.on("click", (event)=>{this.check(this, item);});
+				}
+                  
+            }    
+            link.create("span").addClass("icon").addClass(info.iconClass || "");
+            link.create("span").addClass("text").text(info.caption);
             
 
             if(info.items){
@@ -161,10 +185,6 @@
                 link.create("span").addClass("ind").ds("sgMenuType", "ind");
                 let menu = this.createMenu(item, info.items, true);
                 link.on("click", (event:Event)=>{
-
-                    
-                    
-                    
                     
                     switch(this.type){
 
@@ -172,6 +192,7 @@
                         case "dropdown":
                         case "system":
                         case "default":   
+                        case "nav":
                             if(item.hasClass("open")){
                                 db("abiertoooo");
                                 event.stopPropagation();
@@ -185,7 +206,8 @@
                                  });
                                  item.removeClass("close")
                                  item.addClass("open");
-                                 if(this.type === "system" && !main.hasClass("submenu")){
+                                 //Float.setIndex(menu.get());
+                                 if((this.type === "system" || this.type === "nav") && !main.hasClass("submenu")){
                                     Float.showMenu({
                                         ref: item.get(), e: menu.get(), 
                                         left: "left", top: "down", 
@@ -199,9 +221,6 @@
                                     });
                                  }
                                 
-                            
-
-                            
                         
                             break;
                         case "accordion":
@@ -219,14 +238,9 @@
                             }else{
                                 item.removeClass("close").addClass("open");
                             
-                            //   item.removeClass("close")
                             }
                             break;    
                     }
-
-                    
-
-                    
 
                     
                     event.stopPropagation();
@@ -235,6 +249,13 @@
                 });
     
                 
+            }else{
+                if(info.action){
+					link.on("click", $.bind(info.action, this));
+                }
+                if(this.action){
+					link.on("click", (event)=>{this.action(this, item);});
+				}
             }
         }
         closeMenu(menu:any){
@@ -273,7 +294,8 @@
 
         closeAll(){
            
-            if(this.type == "default" || this.type == "dropdown" || this.type == "system" || this.type == "accordion"){
+            if(this.type == "default" || this.type == "dropdown" 
+                || this.type == "system" || this.type == "nav" || this.type == "accordion"){
                 this.closeMenu(this._main);
             }
             
@@ -295,20 +317,34 @@
     let newMenus = function (){
         let m = new Menu({
             id:"menu1",
+            className:"summer",
+            type:"dropdown"
 
         });
         let m2 = new Menu({
             id:"menu2",
             caption:"Menu Opciones",
+            type:"nav",
+            className:"summer",
+            useIcon: false,
+            action:function(menu, item){
+                //alert(item.get());
+            },
+            check:function(menu, item){
+                alert(2)
+                db (item.get());    
+            },
             items:[
                 {
-                    caption:"uno"
+                    caption:"uno",
+                    action:"alert(1)",
                 },
                 {
                     caption:"dos"
                 },
                 {
                     caption:"tres",
+                    iconClass:"fruit",
                     items:[
                     {
                         caption:"tres:a",
