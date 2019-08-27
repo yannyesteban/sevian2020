@@ -47,12 +47,18 @@
         caption:string = "";
         className:string = "";
         items:object[] = [];
+
+        context:object = null;
+
         _menu:object = null;
         _main:object = null;
         
         action:any = null;
         check:any = null;
         useIcon:boolean = false;
+
+        _isCheck:boolean = false;
+        _isItem:boolean = false;
 
         static init(){
             let menus = $().queryAll(".sg-menu")
@@ -69,9 +75,8 @@
                 }
             }
 
-
-           
             let main = $(this.id);
+
             if(main){
 
                 if(main.hasClass("sg-menu")){
@@ -82,10 +87,68 @@
                 this._main = main;
             }
 
-            $().on("click", (event:Event)=>{
-                this.closeAll();
-            })
+            if(this.context){
+                let context = $(this.context).on("click", ()=>{
+                    main.style({
+                        position:"absolute",
+                        visibility:"visible",
+                    })
+                    Float.showMenu({
+                        ref:context.get(),
+                        e:main.get(),
+                        left:"front",
+                        top:"top"
+
             
+                    })
+                });
+
+                Float.init(main.get());
+                main.style({
+                    position:"absolute",
+                    visibility:"hidden",
+                });
+
+                $().on("mousedown", (event:Event)=>{
+                    if(main.ds("active") == "0"){
+                        main.style({
+                            position:"absolute",
+                            visibility:"hidden",
+                        });
+                    }
+                });
+                $().on("click", (event:Event)=>{
+                    if(main.ds("active") == "1" && !this._isCheck && this._isItem){
+                        main.style({
+                            position:"absolute",
+                            visibility:"hidden",
+                        });
+                    }
+                });
+
+            }
+
+
+            main.on("mouseenter", (event:Event)=>{
+                main.ds("active", "1");
+            });
+
+            main.on("mouseleave", (event:Event)=>{
+                main.ds("active", "0");
+            })
+
+            $().on("mousedown", (event:Event)=>{
+                if(main.ds("active") == "0"){
+                    this.closeAll();
+                }
+            });
+            
+            $().on("click", (event:Event)=>{
+                if(main.ds("active") == "1" && !this._isCheck && this._isItem){
+                    this.closeAll();
+                }
+            });
+
         }
 
         setType(type:string){
@@ -167,12 +230,25 @@
                 .ds("value", info.value || "");
 
             if(info.useCheck || true){
-                let chk = link.create("input").attr("type","checkbox").on("click", ()=>{
-                    event.stopPropagation();
-                });
+                let chk = link.create("input").attr("type","checkbox")
+                    .on("click", ()=>{
+                        if(this._main.ds("active")=="1"){
+                            event.stopPropagation();
+                        }
+                    })
+                    .on("mouseenter", ()=>{
+                        this._isCheck = true;
+                    })
+                    .on("mouseleave", ()=>{
+                        this._isCheck = false;
+                    });
+                
+                
 
                 if(this.check){
-					chk.on("click", (event)=>{this.check(this, item);});
+					chk.on("click", (event)=>{
+                        this.check(this, item);
+                    });
 				}
                   
             }    
@@ -182,10 +258,10 @@
 
             if(info.items){
 
-                link.create("span").addClass("ind").ds("sgMenuType", "ind");
+                link.addClass("m-menu").create("span").addClass("ind").ds("sgMenuType", "ind");
                 let menu = this.createMenu(item, info.items, true);
                 link.on("click", (event:Event)=>{
-                    
+                   
                     switch(this.type){
 
 
@@ -194,10 +270,6 @@
                         case "default":   
                         case "nav":
                             if(item.hasClass("open")){
-                                db("abiertoooo");
-                                event.stopPropagation();
-                                //event.cancelBubble = true; 
-                                event.preventDefault();
                                 return false;
                             }    
                             this._closeBrothers(item);                     
@@ -225,15 +297,12 @@
                             break;
                         case "accordion":
                         case "accordionx":
-                                db (item.get().className);
-                            db (item.hasClass("open"),"red");
                             this._closeBrothers(item); 
                         case "accordiony":    
                             menu.style({
                                 visibility: "visible"
                             });
                             if(item.hasClass("open")){
-                                db("tratando de cerrar")
                                 item.removeClass("open").addClass("close");
                             }else{
                                 item.removeClass("close").addClass("open");
@@ -241,28 +310,34 @@
                             }
                             break;    
                     }
-
-                    
-                    event.stopPropagation();
-					//event.cancelBubble = true; 
-					event.preventDefault();
+                
+                    //event.stopPropagation();
+					    //event.cancelBubble = true; 
+					//event.preventDefault();
                 });
     
                 
             }else{
+                link.addClass("m-item")
+                    .on("mouseenter", ()=>{
+                        this._isItem = true;
+                    })
+                    .on("mouseleave", ()=>{
+                        this._isItem = false;
+                    });
                 if(info.action){
 					link.on("click", $.bind(info.action, this));
                 }
                 if(this.action){
 					link.on("click", (event)=>{this.action(this, item);});
-				}
+                }
+                
             }
         }
         closeMenu(menu:any){
             let menus = menu.queryAll(".submenu");
+
             menus.forEach((e)=>{
-                // alert(e.tagName)
-                 //return
                  $(e.parentNode).removeClass("open")
                  .addClass("close");
                  $(e).style({
@@ -279,7 +354,6 @@
             menus.forEach((e)=>{
                 
                  if(e.parentNode === menu.get()){
-                     db ("return....")
                      return;
                  }
                 
@@ -296,6 +370,7 @@
            
             if(this.type == "default" || this.type == "dropdown" 
                 || this.type == "system" || this.type == "nav" || this.type == "accordion"){
+                  
                 this.closeMenu(this._main);
             }
             
@@ -321,57 +396,65 @@
             type:"dropdown"
 
         });
-        let m2 = new Menu({
-            id:"menu2",
-            caption:"Menu Opciones",
-            type:"nav",
-            className:"summer",
-            useIcon: false,
-            action:function(menu, item){
-                //alert(item.get());
-            },
-            check:function(menu, item){
-                alert(2)
-                db (item.get());    
-            },
+
+let Info = {
+    id:"menu2",
+    caption:"Menu Opciones",
+    type:"dropdown",
+    className:"summer",
+    useIcon: false,
+    
+    action:function(menu, item){
+        //alert(item.get());
+    },
+    check:function(menu, item){
+       // db ("checkeando")
+        //db (item.get());    
+    },
+    items:[
+        {
+            caption:"uno",
+            action:"db('action UNO')",
+        },
+        {
+            caption:"dos"
+        },
+        {
+            caption:"tres",
+            iconClass:"fruit",
             items:[
-                {
-                    caption:"uno",
-                    action:"alert(1)",
-                },
-                {
-                    caption:"dos"
-                },
-                {
-                    caption:"tres",
-                    iconClass:"fruit",
-                    items:[
-                    {
-                        caption:"tres:a",
-                    },
-                    {
-                        caption:"tres:b",
-                        items:[{caption:"caracas",
-                            items:[{caption:"alpha"},{caption:"betha"},{caption:"gamma"}]
-                        },{caption:"valencia"},{caption:"san carlos"},{caption:"yaritagua"}],
-                    },
-                    {
-                        caption:"tres:c",
-                        items:[{caption:"caracas II"},{caption:"valencia II"},{caption:"san carlos II"},{caption:"yaritagua II"}],
-                    },
-                    ]
-                },
-                {
-                    caption:"IV"
-                }
-                ,
-                {
-                    caption:"V",
-                    items:[
-                        {caption:"Perla"},{caption:"diamante"},{caption:"esmeralda"}
-                    ]
-                }
+            {
+                caption:"tres:a",
+                action:"db('aaaaaa','yellow','red');",
+            },
+            {
+                caption:"tres:b",
+                items:[{caption:"caracas",
+                    items:[{caption:"alpha"},{caption:"betha"},{caption:"gamma"}]
+                },{caption:"valencia"},{caption:"san carlos"},{caption:"yaritagua"}],
+            },
+            {
+                caption:"tres:c",
+                items:[{caption:"caracas II"},{caption:"valencia II"},{caption:"san carlos II"},{caption:"yaritagua II"}],
+            },
             ]
-        });
+        },
+        {
+            caption:"IV"
+        }
+        ,
+        {
+            caption:"V",
+            items:[
+                {caption:"Perla"},{caption:"diamante"},{caption:"esmeralda"}
+            ]
+        }
+    ]
+};
+Info.context = "cedula";
+        let m2 = new Menu(Info);
+        Info.context = false;
+        Info.id = "menu4";
+        let m3 = new Menu(Info);
     }
 })(_sgQuery, _sgFloat);

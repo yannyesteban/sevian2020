@@ -30,11 +30,14 @@
             this.caption = "";
             this.className = "";
             this.items = [];
+            this.context = null;
             this._menu = null;
             this._main = null;
             this.action = null;
             this.check = null;
             this.useIcon = false;
+            this._isCheck = false;
+            this._isItem = false;
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
@@ -50,8 +53,56 @@
                 }
                 this._main = main;
             }
+            if (this.context) {
+                let context = $(this.context).on("click", () => {
+                    main.style({
+                        position: "absolute",
+                        visibility: "visible",
+                    });
+                    Float.showMenu({
+                        ref: context.get(),
+                        e: main.get(),
+                        left: "front",
+                        top: "top"
+                    });
+                });
+                Float.init(main.get());
+                main.style({
+                    position: "absolute",
+                    visibility: "hidden",
+                });
+                $().on("mousedown", (event) => {
+                    if (main.ds("active") == "0") {
+                        main.style({
+                            position: "absolute",
+                            visibility: "hidden",
+                        });
+                    }
+                });
+                $().on("click", (event) => {
+                    if (main.ds("active") == "1" && !this._isCheck && this._isItem) {
+                        main.style({
+                            position: "absolute",
+                            visibility: "hidden",
+                        });
+                    }
+                });
+            }
+            main.on("mouseenter", (event) => {
+                main.ds("active", "1");
+            });
+            main.on("mouseleave", (event) => {
+                main.ds("active", "0");
+            });
+            $().on("mousedown", (event) => {
+                if (main.ds("active") == "0") {
+                    this.closeAll();
+                }
+            });
             $().on("click", (event) => {
-                this.closeAll();
+                if (main.ds("active") == "1" && !this._isCheck && this._isItem) {
+                    this.closeAll();
+                }
             });
         }
         static init() {
@@ -119,17 +170,28 @@
                 .prop("href", info.url || "javascript:void(0)")
                 .ds("value", info.value || "");
             if (info.useCheck || true) {
-                let chk = link.create("input").attr("type", "checkbox").on("click", () => {
-                    event.stopPropagation();
+                let chk = link.create("input").attr("type", "checkbox")
+                    .on("click", () => {
+                    if (this._main.ds("active") == "1") {
+                        event.stopPropagation();
+                    }
+                })
+                    .on("mouseenter", () => {
+                    this._isCheck = true;
+                })
+                    .on("mouseleave", () => {
+                    this._isCheck = false;
                 });
                 if (this.check) {
-                    chk.on("click", (event) => { this.check(this, item); });
+                    chk.on("click", (event) => {
+                        this.check(this, item);
+                    });
                 }
             }
             link.create("span").addClass("icon").addClass(info.iconClass || "");
             link.create("span").addClass("text").text(info.caption);
             if (info.items) {
-                link.create("span").addClass("ind").ds("sgMenuType", "ind");
+                link.addClass("m-menu").create("span").addClass("ind").ds("sgMenuType", "ind");
                 let menu = this.createMenu(item, info.items, true);
                 link.on("click", (event) => {
                     switch (this.type) {
@@ -138,10 +200,6 @@
                         case "default":
                         case "nav":
                             if (item.hasClass("open")) {
-                                db("abiertoooo");
-                                event.stopPropagation();
-                                //event.cancelBubble = true; 
-                                event.preventDefault();
                                 return false;
                             }
                             this._closeBrothers(item);
@@ -168,15 +226,12 @@
                             break;
                         case "accordion":
                         case "accordionx":
-                            db(item.get().className);
-                            db(item.hasClass("open"), "red");
                             this._closeBrothers(item);
                         case "accordiony":
                             menu.style({
                                 visibility: "visible"
                             });
                             if (item.hasClass("open")) {
-                                db("tratando de cerrar");
                                 item.removeClass("open").addClass("close");
                             }
                             else {
@@ -184,12 +239,19 @@
                             }
                             break;
                     }
-                    event.stopPropagation();
+                    //event.stopPropagation();
                     //event.cancelBubble = true; 
-                    event.preventDefault();
+                    //event.preventDefault();
                 });
             }
             else {
+                link.addClass("m-item")
+                    .on("mouseenter", () => {
+                    this._isItem = true;
+                })
+                    .on("mouseleave", () => {
+                    this._isItem = false;
+                });
                 if (info.action) {
                     link.on("click", $.bind(info.action, this));
                 }
@@ -201,8 +263,6 @@
         closeMenu(menu) {
             let menus = menu.queryAll(".submenu");
             menus.forEach((e) => {
-                // alert(e.tagName)
-                //return
                 $(e.parentNode).removeClass("open")
                     .addClass("close");
                 $(e).style({
@@ -215,7 +275,6 @@
             let menus = $(parent).queryAll(".submenu");
             menus.forEach((e) => {
                 if (e.parentNode === menu.get()) {
-                    db("return....");
                     return;
                 }
                 $(e.parentNode).removeClass("open")
@@ -247,23 +306,23 @@
             className: "summer",
             type: "dropdown"
         });
-        let m2 = new Menu({
+        let Info = {
             id: "menu2",
             caption: "Menu Opciones",
-            type: "nav",
+            type: "dropdown",
             className: "summer",
             useIcon: false,
             action: function (menu, item) {
                 //alert(item.get());
             },
             check: function (menu, item) {
-                alert(2);
-                db(item.get());
+                // db ("checkeando")
+                //db (item.get());    
             },
             items: [
                 {
                     caption: "uno",
-                    action: "alert(1)",
+                    action: "db('action UNO')",
                 },
                 {
                     caption: "dos"
@@ -274,6 +333,7 @@
                     items: [
                         {
                             caption: "tres:a",
+                            action: "db('aaaaaa','yellow','red');",
                         },
                         {
                             caption: "tres:b",
@@ -297,6 +357,11 @@
                     ]
                 }
             ]
-        });
+        };
+        Info.context = "cedula";
+        let m2 = new Menu(Info);
+        Info.context = false;
+        Info.id = "menu4";
+        let m3 = new Menu(Info);
     };
 })(_sgQuery, _sgFloat);
