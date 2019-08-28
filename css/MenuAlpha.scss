@@ -1,8 +1,8 @@
 /* Scss Document */
 
 
-#menu2{
-    width:400px;
+#menu2, #menu10{
+   // width:400px;
 }
 @keyframes open {
 	0%{
@@ -59,10 +59,31 @@
 $font-size: 12pt;
 $font-family: arial;
 .sg-menu.summer{
-    
-    &.nav{
-        
+    width:350px;
+
+    .item{
+        >.popup{
+            position: fixed;
+            user-select: "none";
+            overflow: "none";
+            z-index: 150000000;
+        }
+        &.open{
+            >.popup{
+                visibility: visible;
+            }
+        }
+        &.close{
+            >.popup{
+                visibility: hidden;
+            }
+        }
+
     }
+
+
+
+
     &.menu-dropdown{
         .option{
             min-width: 160px;
@@ -290,8 +311,8 @@ $font-family: arial;
         
         
         &.close{
-            position: absolute;
-            visibility: hidden;
+            //position: absolute;
+            //visibility: hidden;
         }
         
     }
