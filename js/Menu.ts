@@ -248,8 +248,6 @@
                     .on("mouseleave", ()=>{
                         this._isCheck = false;
                     });
-                
-                
 
                 if(this.check){
 					chk.on("click", (event)=>{
@@ -316,14 +314,11 @@
                             }
                             break;    
                     }
-                
-                    //event.stopPropagation();
-					    //event.cancelBubble = true; 
-					//event.preventDefault();
+
                 });
-    
                 
             }else{
+               
                 link.addClass("m-item")
                     .on("mouseenter", ()=>{
                         this._isItem = true;

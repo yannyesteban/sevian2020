@@ -241,9 +241,6 @@
                             }
                             break;
                     }
-                    //event.stopPropagation();
-                    //event.cancelBubble = true; 
-                    //event.preventDefault();
                 });
             }
             else {
