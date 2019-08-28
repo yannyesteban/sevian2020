@@ -1,4 +1,5 @@
 (function ($, Float) {
+    db = db;
     class Drag {
     }
     class Item {
@@ -117,10 +118,12 @@
             return this.type;
         }
         create(main) {
-            db("create");
             main.addClass("sg-menu").addClass(this.className)
                 .addClass(this.useIcon ? "w-icon" : "n-icon");
+            this.add(main, { caption: this.caption, items: this.items });
             main.addClass(`menu-${this.getType()}`);
+            return;
+            db("create");
             if (this.caption) {
                 main.create({
                     tagName: "div",
@@ -133,7 +136,7 @@
         load(main) {
             db("load");
         }
-        createMenu(main, items, submenu = false) {
+        createMenu(main, items, submenu = true) {
             let menu = main.create({
                 tagName: "div",
                 className: "menu",
@@ -365,9 +368,5 @@
         Info.context = false;
         Info.id = "menu4";
         let m3 = new Menu(Info);
-        let Info2 = {
-            id: "menu10"
-        };
-        let m4 = new Menu(Info2);
     };
 })(_sgQuery, _sgFloat);

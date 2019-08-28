@@ -1,5 +1,5 @@
 (function($, Float){
-   
+    db=db;
 
 
     class Drag{
@@ -159,13 +159,18 @@
         getType(){
             return this.type;
         }
-        create(main:any){   
-            db("create");
-            
+        create(main:any){
             main.addClass("sg-menu").addClass(this.className)
             .addClass(this.useIcon? "w-icon": "n-icon");
-            
+            this.add(main, {caption:this.caption, items:this.items});
             main.addClass(`menu-${this.getType()}`)
+            return;
+
+            db("create");
+            
+            
+            
+            
             if(this.caption){
                 main.create({
                     tagName:"div",
@@ -179,15 +184,13 @@
         }
 
         load(main:any){
-            db ("load");
-
-            
-
-
+            db ("load")
         }
 
-        createMenu(main:any, items:any, submenu:boolean = false){
+        createMenu(main:any, items:any, submenu:boolean = true){
           
+            
+
             let menu = main.create({
                 tagName:"div",
                 className:"menu",
@@ -279,25 +282,25 @@
                                 return false;
                             }    
                             this._closeBrothers(item);                     
-                            menu.style({
-                                visibility: "visible"
-                            });
-                            item.removeClass("close")
-                            item.addClass("open");
-                            //Float.setIndex(menu.get());
-                            if((this.type === "system" || this.type === "nav") && !main.hasClass("submenu")){
-                                Float.showMenu({
-                                    ref: item.get(), e: menu.get(), 
-                                    left: "left", top: "down", 
-                                    deltaX: 0, deltaY: 0, z: 0
-                                });
-                            }else{
-                                Float.showMenu({
-                                    ref: item.get(), e: menu.get(), 
-                                    left: "front", top: "top", 
-                                    deltaX: -2, deltaY: 5, z: 0
-                                });
-                            }
+                                menu.style({
+                                    visibility: "visible"
+                                 });
+                                 item.removeClass("close")
+                                 item.addClass("open");
+                                 //Float.setIndex(menu.get());
+                                 if((this.type === "system" || this.type === "nav") && !main.hasClass("submenu")){
+                                    Float.showMenu({
+                                        ref: item.get(), e: menu.get(), 
+                                        left: "left", top: "down", 
+                                        deltaX: 0, deltaY: 0, z: 0
+                                    });
+                                 }else{
+                                     Float.showMenu({
+                                        ref: item.get(), e: menu.get(), 
+                                        left: "front", top: "top", 
+                                        deltaX: -2, deltaY: 5, z: 0
+                                    });
+                                 }
                                 
                         
                             break;
@@ -403,72 +406,64 @@
 
         });
 
-        let Info = {
-            id:"menu2",
-            caption:"Menu Opciones",
-            type:"dropdown",
-            className:"summer",
-            useIcon: false,
-            
-            action:function(menu, item){
-                //alert(item.get());
-            },
-            check:function(menu, item){
-            // db ("checkeando")
-                //db (item.get());    
-            },
+let Info = {
+    id:"menu2",
+    caption:"Menu Opciones",
+    type:"dropdown",
+    className:"summer",
+    useIcon: false,
+    
+    action:function(menu, item){
+        //alert(item.get());
+    },
+    check:function(menu, item){
+       // db ("checkeando")
+        //db (item.get());    
+    },
+    items:[
+        {
+            caption:"uno",
+            action:"db('action UNO')",
+        },
+        {
+            caption:"dos"
+        },
+        {
+            caption:"tres",
+            iconClass:"fruit",
             items:[
-                {
-                    caption:"uno",
-                    action:"db('action UNO')",
-                },
-                {
-                    caption:"dos"
-                },
-                {
-                    caption:"tres",
-                    iconClass:"fruit",
-                    items:[
-                    {
-                        caption:"tres:a",
-                        action:"db('aaaaaa','yellow','red');",
-                    },
-                    {
-                        caption:"tres:b",
-                        items:[{caption:"caracas",
-                            items:[{caption:"alpha"},{caption:"betha"},{caption:"gamma"}]
-                        },{caption:"valencia"},{caption:"san carlos"},{caption:"yaritagua"}],
-                    },
-                    {
-                        caption:"tres:c",
-                        items:[{caption:"caracas II"},{caption:"valencia II"},{caption:"san carlos II"},{caption:"yaritagua II"}],
-                    },
-                    ]
-                },
-                {
-                    caption:"IV"
-                }
-                ,
-                {
-                    caption:"V",
-                    items:[
-                        {caption:"Perla"},{caption:"diamante"},{caption:"esmeralda"}
-                    ]
-                }
+            {
+                caption:"tres:a",
+                action:"db('aaaaaa','yellow','red');",
+            },
+            {
+                caption:"tres:b",
+                items:[{caption:"caracas",
+                    items:[{caption:"alpha"},{caption:"betha"},{caption:"gamma"}]
+                },{caption:"valencia"},{caption:"san carlos"},{caption:"yaritagua"}],
+            },
+            {
+                caption:"tres:c",
+                items:[{caption:"caracas II"},{caption:"valencia II"},{caption:"san carlos II"},{caption:"yaritagua II"}],
+            },
             ]
-        };
-        Info.context = "cedula";
+        },
+        {
+            caption:"IV"
+        }
+        ,
+        {
+            caption:"V",
+            items:[
+                {caption:"Perla"},{caption:"diamante"},{caption:"esmeralda"}
+            ]
+        }
+    ]
+};
+Info.context = "cedula";
         let m2 = new Menu(Info);
         Info.context = false;
         Info.id = "menu4";
         let m3 = new Menu(Info);
-
-
-        let Info2 = {
-            id:"menu10"
-        }
-        let m4 = new Menu(Info2);
-    };
-
-
+    }
 })(_sgQuery, _sgFloat);

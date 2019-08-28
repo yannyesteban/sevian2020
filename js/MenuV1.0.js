@@ -1,4 +1,5 @@
 (function ($, Float) {
+    db = db;
     class Drag {
     }
     class Item {
@@ -365,9 +366,5 @@
         Info.context = false;
         Info.id = "menu4";
         let m3 = new Menu(Info);
-        let Info2 = {
-            id: "menu10"
-        };
-        let m4 = new Menu(Info2);
     };
 })(_sgQuery, _sgFloat);
