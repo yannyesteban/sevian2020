@@ -136,7 +136,11 @@ $font-family: arial;
 }
 
 .sg-menu{
-    
+    .icon{
+            background-image: url("../icons/png/003-curling.png");
+            background-size: 100% 100%;
+
+        }
     .w-icon{
         
     }
@@ -182,7 +186,7 @@ $font-family: arial;
     }
     
     
-    &.menu-system, &.menu-nav{
+    &.menu-dropdown{
         >.caption{
             display: none;
         }
@@ -229,7 +233,7 @@ $font-family: arial;
         }
     }
 
-    &.menu-dropdown, &.menu-system, &.menu-nav{
+    &.menu-popup{
         .menu > .item{
             &.close{
                 > .submenu{
@@ -245,7 +249,7 @@ $font-family: arial;
         }
 
     }
-    &.menu-accordion, &.menu-accordionx, &.menu-accordiony{
+    &.menu-accordion{
         .menu > .item{
             &.close{
                 > .submenu{

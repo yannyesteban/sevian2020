@@ -16,21 +16,49 @@
     <script src="sgWindow.js"></script>
 </div><script src="sgDB.js"></script>   
     <script src="Menu.js"></script>  
+    <script src="Form.js"></script> 
 </head>
 
 <body>
 
+    <div id="q"></div>
+    
+
+    <div id="menu11" class="sg-menu sg-detect summer menu-accordion menu-default">
     
     
-<div id="menu10" class="sg-menu summer menu-system">
+        <div class="caption">Menu Dinamico</div>
+        <ul class="menu">
+            <li class="item"><a class="option" href="javascript:void(0)"><input type="checkbox">item001</a></li>
+            <li class="item"><a class="option" href="javascript:void(0)">item002</a></li>
+            <li class="item close" id="y">
+                <a class="option" href="javascript:void(0)"><span class="icon"></span><span class="text">Personal</span><span class="ind"></span></a>
+                <ul class="menu">
+                    <li class="item"><a class="option" href="javascript:void(0)">item004</a></li>
+                    <li class="item"><a class="option" href="javascript:void(0)">item005</a></li>
+                    <li class="item"><a class="option" href="javascript:void(0)">item006</a></li>
+                    <li class="item close">
+                        <a class="option" href="javascript:void(0)"><span class="icon"></span><span class="text">text</span><span class="ind"></span></a>
+                        <ul class="menu">
+                            <li class="item"><a class="option" href="javascript:void(0)">item007</a></li>
+                            <li class="item"><a class="option" href="javascript:void(0)">item008</a></li>
+                            <li class="item"><a class="option" href="javascript:void(0)">item009</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div> 
+
+<div id="menu10" class="sg-menu sg-detect summer menu-popup menu-dropdown">
     
     
     <div class="caption">Caption</div>
     <ul class="menu">
         <li class="item"><a class="option" href="javascript:void(0)"><input type="checkbox">item001</a></li>
         <li class="item"><a class="option" href="javascript:void(0)">item002</a></li>
-        <li class="item close">
-            <a class="option" href="javascript:void(0)" id="y"><span class="icon"></span><span class="text">Personal</span><span class="ind"></span></a>
+        <li class="item close" id="y">
+            <a class="option" href="javascript:void(0)"><span class="icon"></span><span class="text">Personal</span><span class="ind"></span></a>
             <ul class="menu">
                 <li class="item"><a class="option" href="javascript:void(0)">item004</a></li>
                 <li class="item"><a class="option" href="javascript:void(0)">item005</a></li>
@@ -79,7 +107,8 @@
       
       </div>
       
-    
+    <div id="tabii"></div>
+    <hr>
     <div id="tab01" class="sg-tab" data-sg-type="tab">
 		<div class="sg-tab-menu">
 			<a class="sg-tab-active" href="javascript:void(0);">Uno</a>
@@ -91,9 +120,34 @@
 			<li>Dos df jsdlkgdfg f</li>
 			<li>Tres d edfgjfdjg</li>
 		</ul>
-	</div>
+    </div>
 
+    <div id="tab02" class="sg-tab">
+		<div>
+			<a href="javascript:void(0);">Uno</a>
+			<a href="javascript:void(0);">Dos</a>
+			<a href="javascript:void(0);">Tres</a>
+		</div>
+		<ul>
+			<li>Uno zlkdj saldjslak j UNO</li>
+			<li>Dos df jsdlkgdfg f</li>
+			<li>Tres d edfgjfdjg</li>
+		</ul>
+    </div>
+    
 
+    <div class="sg-tab sg-detect" data-value="1">
+		<div>
+			<a href="javascript:void(0);">Amarillo</a>
+			<a href="javascript:void(0);">Azul</a>
+			<a href="javascript:void(0);">Rojo</a>
+		</div>
+		<ul>
+			<li>Oro Platano</li>
+			<li>Mar Cielo</li>
+			<li>Sangre Fresa</li>
+		</ul>
+    </div>
     
 
 

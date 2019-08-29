@@ -18,12 +18,29 @@
                     this[x] = opt[x];
                 }
             }
-            if ($(this.target)) {
-                this.create();
+            let main = (this.id) ? $(this.id) : false;
+            if (main) {
+                if (main.ds("sgTab")) {
+                    return;
+                }
+                if (main.hasClass("sg-tab")) {
+                    this.load(main);
+                }
+                else {
+                    this.create(main);
+                }
             }
             else {
-                this.load();
+                let target = (this.target) ? $(this.target) : false;
+                if (target) {
+                    main = target.create("div").attr("id", this.id);
+                    this.create(main);
+                }
+                else {
+                    return;
+                }
             }
+            main.ds("sgTab", "tab");
             if ((this.value + 1) > this.getLenght()) {
                 this.setValue(this.getLenght() - 1);
             }
@@ -31,8 +48,18 @@
                 this.setValue(this.value);
             }
         }
-        load() {
-            let tab_parts = $(this.id).addClass(this.className).addClass("sg-tab").childs();
+        static init() {
+            let menus = $().queryAll(".sg-tab.sg-detect");
+            for (let x of menus) {
+                if ($(x).ds("sgTab")) {
+                    continue;
+                }
+                new Tab({ id: x });
+            }
+        }
+        load(main) {
+            main.addClass(this.className).addClass("sg-tab");
+            let tab_parts = main.childs();
             this._menu = $(tab_parts[0]).addClass("sg-tab-menu");
             this._page = $(tab_parts[1]).addClass("sg-tab-body");
             let mItem = this._menu.get().children;
@@ -44,15 +71,12 @@
             for (let i = 0; i < pItem.length; i++) {
                 $(pItem[i]).ds("sgTabIndex", i).removeClass("sg-tab-active");
             }
+            if (main.ds("value") >= 0) {
+                this.value = main.ds("value") * 1;
+            }
         }
-        create() {
-            let main = $(this.target).create({
-                tagName: "div",
-                id: this.id,
-                className: this.className
-            })
-                .ds("sgType", "sg-tab")
-                .addClass("sg-tab");
+        create(main) {
+            main.addClass("sg-tab");
             this._menu = main.create({
                 "tagName": "div",
                 "className": "sg-tab-menu"
@@ -95,9 +119,8 @@
             return this._menu.get().children.length;
         }
         _click(index) {
-            var ME = this;
-            return function () {
-                ME.show(index);
+            return () => {
+                this.show(index);
             };
         }
         setVisible(index, value) {
@@ -149,52 +172,69 @@
             return this.mode;
         }
     }
-    let tab = new Tab({
-        id: "tab01",
-        className: "xclass",
-        value: 11,
-        onOpen: (index) => {
-            db(index);
-        },
-        onClose: (index) => {
-            db(index, "red");
-        }
+    $(window).on("load", function () {
+        Tab.init();
+        ini();
     });
-    tab.add({
-        title: "tab001",
-        html: "hola mundo txt",
-    });
-    let tab2 = new Tab({
-        target: "tabii",
-        id: "tab_x01",
-        className: "yclass",
-        value: 1,
-        onOpen: (index) => {
-            db(index, "yellow", "red");
-        },
-        onClose: (index) => {
-            db(index, "aqua", "blue");
-        },
-        pages: [
-            {
-                title: "tab001", html: "uno"
+    function ini() {
+        let tab = new Tab({
+            id: "tab01",
+            className: "xclass",
+            value: 11,
+            onOpen: (index) => {
+                db(index);
             },
-            {
-                title: "tab002", html: "que "
+            onClose: (index) => {
+                db(index, "red");
+            }
+        });
+        tab.add({
+            title: "tab001",
+            html: "hola mundo txt",
+        });
+        let tab2 = new Tab({
+            target: "tabii",
+            //id:"tab_x01",
+            className: "yclass",
+            value: 1,
+            onOpen: (index) => {
+                db(index, "yellow", "red");
             },
-            {
-                title: "tab003", html: "Opps",
+            onClose: (index) => {
+                db(index, "aqua", "blue");
             },
-            {
-                title: "tab004", html: "Cuatro"
+            pages: [
+                {
+                    title: "tab001", html: "uno"
+                },
+                {
+                    title: "tab002", html: "que "
+                },
+                {
+                    title: "tab003", html: "Opps",
+                },
+                {
+                    title: "tab004", html: "Cuatro"
+                },
+            ],
+        });
+        tab2.add({
+            title: "tab0 x",
+            html: "hola ee mundo txt 100...",
+            active: true,
+        });
+        let tabii = new Tab({
+            id: "tab02",
+            className: "xclass",
+            value: 11,
+            onOpen: (index) => {
+                db(index);
             },
-        ],
-    });
-    tab2.add({
-        title: "tab0 x",
-        html: "hola ee mundo txt 100...",
-        active: true,
-    });
+            onClose: (index) => {
+                db(index, "red");
+            }
+        });
+    }
 })(_sgQuery);
 const Input = (($) => {
     class Input {

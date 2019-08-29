@@ -164,6 +164,11 @@
   color: pink;
 }
 
+.sg-menu .icon {
+  background-image: url("../icons/png/003-curling.png");
+  background-size: 100% 100%;
+}
+
 .sg-menu.n-icon .icon {
   display: none;
 }
@@ -212,11 +217,11 @@
   list-style-type: none;
 }
 
-.sg-menu.menu-system > .caption, .sg-menu.menu-nav > .caption {
+.sg-menu.menu-dropdown > .caption {
   display: none;
 }
 
-.sg-menu.menu-system > .menu, .sg-menu.menu-nav > .menu {
+.sg-menu.menu-dropdown > .menu {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -226,7 +231,7 @@
           flex-direction: row;
 }
 
-.sg-menu.menu-system > .menu > *, .sg-menu.menu-nav > .menu > * {
+.sg-menu.menu-dropdown > .menu > * {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
@@ -254,17 +259,17 @@
   background-color: #c4c4c4;
 }
 
-.sg-menu.menu-dropdown .menu > .item.close > .submenu, .sg-menu.menu-system .menu > .item.close > .submenu, .sg-menu.menu-nav .menu > .item.close > .submenu {
+.sg-menu.menu-popup .menu > .item.close > .submenu {
   -webkit-animation: close  0.5s ease-out;
           animation: close  0.5s ease-out;
 }
 
-.sg-menu.menu-dropdown .menu > .item.open > .submenu, .sg-menu.menu-system .menu > .item.open > .submenu, .sg-menu.menu-nav .menu > .item.open > .submenu {
+.sg-menu.menu-popup .menu > .item.open > .submenu {
   -webkit-animation: open  0.2s ease-out;
           animation: open  0.2s ease-out;
 }
 
-.sg-menu.menu-accordion .menu > .item.close > .submenu, .sg-menu.menu-accordionx .menu > .item.close > .submenu, .sg-menu.menu-accordiony .menu > .item.close > .submenu {
+.sg-menu.menu-accordion .menu > .item.close > .submenu {
   max-height: 0px;
   overflow: hidden;
   padding-left: 30px;
@@ -276,7 +281,7 @@
   transition-property: all;
 }
 
-.sg-menu.menu-accordion .menu > .item.open > .submenu, .sg-menu.menu-accordionx .menu > .item.open > .submenu, .sg-menu.menu-accordiony .menu > .item.open > .submenu {
+.sg-menu.menu-accordion .menu > .item.open > .submenu {
   max-height: 600px;
   opacity: 1;
   padding: 0px 0px 0px 4px;

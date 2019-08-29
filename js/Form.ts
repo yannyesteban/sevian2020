@@ -1,6 +1,7 @@
 //import { Query as $} from './Query.js';
 
 (function($){
+    
 class Tab{
 
     target: any = false;
@@ -18,31 +19,67 @@ class Tab{
     _page:any = false;
     _length:number = 0;
 
+    static init(){
+        let menus = $().queryAll(".sg-tab.sg-detect");
+
+        for(let x of menus){
+            if($(x).ds("sgTab")){
+                continue;
+            }
+            new Tab({id:x});
+        }
+    }
+
     constructor(opt: any){
-        
+      
         for(var x in opt){
             if(this.hasOwnProperty(x)) {
                 this[x] = opt[x];
             }
         }
        
-        if($(this.target)){
-           this.create();
+        let main = (this.id)? $(this.id): false;
+
+        if(main){
+            
+            if(main.ds("sgTab")){
+                return;
+            }
+
+            if(main.hasClass("sg-tab")){
+                this.load(main);
+            }else{
+                this.create(main);
+            }
+
         }else{
-            this.load();
+            
+            let target = (this.target)? $(this.target): false;
+            if(target){
+                main = target.create("div").attr("id", this.id);
+                this.create(main);
+            }else{
+               return; 
+            }
+        
         }
         
+        main.ds("sgTab", "tab");
+       
         if((this.value+1) > this.getLenght()){
+            
             this.setValue(this.getLenght()-1); 
         }else{
            this.setValue(this.value); 
         } 
         
+        
     }
 
-    load(){
-       
-        let tab_parts = $(this.id).addClass(this.className).addClass("sg-tab").childs();
+    load(main:any){
+        
+        main.addClass(this.className).addClass("sg-tab");
+        let tab_parts = main.childs();
 
         this._menu = $(tab_parts[0]).addClass("sg-tab-menu");
         this._page = $(tab_parts[1]).addClass("sg-tab-body");
@@ -54,20 +91,22 @@ class Tab{
             $(mItem[i]).on("click", this._click(i))
             .on("focus", this._click(i)).removeClass("sg-tab-active"); 
         }
-        for(let i=0; i<pItem.length;i++){
+        for(let i = 0; i < pItem.length; i++){
             $(pItem[i]).ds("sgTabIndex", i).removeClass("sg-tab-active"); 
+        }
+
+        if(main.ds("value") >= 0){
+            
+            this.value = main.ds("value")*1;
+
         }
 
     }
 
-    create(){
-            
-        let main = $(this.target).create({
-            tagName:"div",
-            id:this.id,
-            className: this.className})
-            .ds("sgType", "sg-tab")
-            .addClass("sg-tab");
+    create(main:any){
+        main.addClass("sg-tab");
+
+
 
         this._menu = main.create({
             "tagName": "div",
@@ -122,9 +161,9 @@ class Tab{
     }
     
     _click(index: any){
-        var ME = this;
-        return function(){
-            ME.show(index);
+        
+        return ()=>{
+            this.show(index);
         };
         
     }
@@ -171,6 +210,7 @@ class Tab{
     }
 
     getValue(){
+        
         return this.value;
     }
     
@@ -187,8 +227,14 @@ class Tab{
     }
     
 }
-    
+$(window).on("load", function(){
+       
+    Tab.init();
 
+
+    ini();
+})   
+function ini(){
 let tab = new Tab({
     id:"tab01",
     className: "xclass",
@@ -209,7 +255,7 @@ tab.add({
 
 let tab2 = new Tab({
     target: "tabii",
-    id:"tab_x01",
+    //id:"tab_x01",
     className: "yclass",
     value:1,
     onOpen:(index:any)=>{
@@ -246,6 +292,20 @@ tab2.add({
     active:true,
     
 });
+
+let tabii = new Tab({
+    id:"tab02",
+    className: "xclass",
+    value:11,
+    onOpen:(index:any)=>{
+        db(index);
+    },
+    onClose:(index:any)=>{
+        db(index, "red");
+    }
+});
+
+}
 })(_sgQuery);
 const Input = (($) => {
     class Input{

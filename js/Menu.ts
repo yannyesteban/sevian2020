@@ -1,46 +1,17 @@
 (function($, Float){
    
-
-
-    class Drag{
-
-    }
-
-    class Item{
-
-        caption:string = "";
-        className:string = "";
-
-        withCheck:boolean = false;
-		withIcon:boolean = false;
-
-        iconSource:string = "";
-
-        onOpen = (index:number)=>{return true};
-        onClose = (index:number)=>{return true};
-
-
-
-        constructor(opt: any){
-        
-            for(var x in opt){
-                if(this.hasOwnProperty(x)) {
-                    this[x] = opt[x];
-                }
-            }
-        }
-
-        create(){
-
-        }
-        load(){
-
-        }
-    }
-
     class Menu{
-
-        type:string = "nav";//default,nav,dropdown,accordion[x|y]
+        /* 
+        type in ("accordion", "popup")
+        */
+        type:string = "accordion";
+        
+        /*
+        subType to popup {"default", "system"};
+        subType to accordion {"default", "one", "any"};
+        */
+        subType:string = "default";
+        tagLink:string = "a";
 
         id:string = "";
         target:string = "";
@@ -55,16 +26,20 @@
         
         action:any = null;
         check:any = null;
-        useIcon:boolean = false;
+        useIcon:boolean = true;
 
         _isCheck:boolean = false;
         _isItem:boolean = false;
 
         static init(){
-            let menus = $().queryAll(".sg-menu")
+            let menus = $().queryAll(".sg-menu.sg-detect");
 
-            alert(menus.length);
-
+            for(let x of menus){
+                if($(x).ds("sgMenu")){
+                    continue;
+                }
+                new Menu({id:x});
+            }
         }
 
         constructor(opt: any){
@@ -77,21 +52,34 @@
                 }
             }
 
-            let main = $(this.id);
+            let main = (this.id)? $(this.id): false;
 
             if(main){
- 
+                
+                if(main.ds("sgMenu")){
+                    return;
+                }
+
                 if(main.hasClass("sg-menu")){
                     this.load(main);
                 }else{
                     this.create(main);
                 }
-                
-                this._main = main;
-            }else{
-                return;
-            }
 
+            }else{
+                
+                let target = (this.target)? $(this.target): false;
+                if(target){
+                    main = target.create("div").attr("id", this.id);
+                    this.create(main);
+                }else{
+                   return; 
+                }
+            
+            }
+            
+            main.ds("sgMenu", "menu");
+            this._main = main;
             if(this.context){
                 let context = $(this.context).on("click", ()=>{
                     main.style({
@@ -153,7 +141,7 @@
             });
            
             let items = main.queryAll(".submenu");
-            if(this.type == "dropdown" || this.type == "system" || this.type == "nav"){
+            if(this.type === "popup"){
                 for(x of items){
                     $(x).addClass("popup");
                 }
@@ -195,26 +183,26 @@
             }
         }
 
-        setType(type:string){
+        setType(type:string, subType:string="default"){
             
             this.type = type;
-            let types = ["nav","accordion","accordionx","accordiony","system","dropdown"];
+            this.subType = subType;
+            let types = ["accordion","popup","default","one","any","dropdown"];
+            
             types.forEach((e)=>{
                 this._main.removeClass(`menu-${e}`);
-                 
             });
-            this._main.addClass(`menu-${type}`);
+
+            this._main.addClass(`menu-${type}`).addClass(`menu-${subType}`);
             
-            
-            if(this.type != "dropdown" && this.type != "system" && this.type != "nav"){
+            if(this.type === "accordion"){
                 let items = this._main.queryAll(".popup");
                 for(var x of items){
                     $(x).removeClass("popup");
                 }
             }
-            
            
-            if(this.type == "dropdown" || this.type == "system" || this.type == "nav"){
+            if(this.type === "popup"){
                 let items = this._main.queryAll(".submenu");
                 for(x of items){
                     $(x).addClass("popup");
@@ -225,13 +213,16 @@
         getType(){
             return this.type;
         }
+        getSubType(){
+            return this.subType;
+        }
         create(main:any){   
-            db("create");
             
             main.addClass("sg-menu").addClass(this.className)
             .addClass(this.useIcon? "w-icon": "n-icon")
             
-            .addClass(`menu-${this.getType()}`);
+            .addClass(`menu-${this.getType()}`)
+            .addClass(`menu-${this.getSubType()}`);
             if(this.caption){
                 main.create({
                     tagName:"div",
@@ -251,9 +242,7 @@
             let _item = menu.get().children;
             for(let e of _item){
                 this.loadItem($(e));
-                
             }
-
         }
 
         loadItem(item:any){
@@ -262,16 +251,16 @@
             let link = $(_item_ch[0]);
             if(_item_ch[1]){
                 this.loadMenu($(_item_ch[1]), true);
-                link.on("click",this._show(item));
+                link.on("click", (event)=>{this.show(item)});
             }
-
         }
 
         load(main:any){
-            db ("load");
+
+            main.addClass(this.className);
 
             let type = "";
-            let types = ["nav","accordion","accordionx","accordiony","system","dropdown"];
+            let types = ["accordion","popup"];
             types.forEach((e)=>{
                 if(main.hasClass(`menu-${e}`)){
                     type = e;
@@ -280,21 +269,23 @@
             if(type !== ""){
                 this.type = type;
             }else{
-                main.addClass(`menu-${this.getType()}`).addClass("s8");
+                main.addClass(`menu-${this.getType()}`);
             }
-
-            let _main = main.get().children;
-            //let _menu = _main[1];
-            $(_main[0]).addClass("_CAPTION");
-
-
             
-            this.loadMenu($(_main[1]));
+            type = "";
+            types = ["default","one","any","dropdown"];
+            types.forEach((e)=>{
+                if(main.hasClass(`menu-${e}`)){
+                    type = e;
+                }
+            });
+            if(type !== ""){
+                this.subType = type;
+            }else{
+                main.addClass(`menu-${this.getSubType()}`);
+            }
             
-
-            
-
-            
+            this.loadMenu($(main.get().children[1]));
 
         }
 
@@ -304,10 +295,10 @@
                 tagName:"div",
                 className:"menu",
             });
+            
             if(submenu){
                 main.addClass("close");
                 menu.addClass("submenu");
-                
             }
             
             if(items){
@@ -319,17 +310,12 @@
             }
             
         }
+        
         add(main:any, info:any){
 
             let item = main.create("div").addClass("item");
             
-            let tagType = "a";
-            if((this.type === "system1" || this.type === "nav") && !main.hasClass("submenu")){
-                tagType = "button";    
-            }
-           
-            
-            let link = item.create(tagType)
+            let link = item.create(this.tagLink)
                 .addClass("option")
                 .prop("href", info.url || "javascript:void(0)")
                 .ds("value", info.value || "");
@@ -342,77 +328,53 @@
             link.create("span").addClass("text").text(info.caption);
 
             if(info.items){
-
-                link.create("span").addClass("ind").ds("sgMenuType", "ind");
+                link.create("span").addClass("ind");
                 this.createMenu(item, info.items, true);
-                link.on("click", this._show(item));
-                
-                
-            }else{
-                if(info.action){
-					link.on("click", $.bind(info.action, this));
-                }
-                
-                
+                link.on("click", (event)=>{this.show(item)});
+            }else if(info.action){
+                link.on("click", $.bind(info.action, this));
             }
         }
 
-
-        _show(item){
-            
-            return (event:Event)=>{
+        show(item){
                 
-                let link = $(item.get().children[0]);
-                let menu =  $(item.get().children[1]);  
-                     
-                switch(this.type){
-
-                    case "dropdown":
-                    case "system":
-                    case "default":   
-                    case "nav":
-                        if(item.hasClass("open")){
-                            return false;
-                        }    
-                        this._closeBrothers(item);                     
-                        
-                        item.removeClass("close")
-                        item.addClass("open");
-                        Float.setIndex(menu.get());
-                        
-                        if((this.type === "system" || this.type === "nav") && !$(item.get().parentNode).hasClass("submenu")){
-                            Float.showMenu({
-                                ref: item.get(), e: menu.get(), 
-                                left: "left", top: "down", 
-                                deltaX: 0, deltaY: 0, z: 0
-                            });
-                        }else{
-                            Float.showMenu({
-                                ref: item.get(), e: menu.get(), 
-                                left: "front", top: "top", 
-                                deltaX: -2, deltaY: 5, z: 0
-                            });
-                        }
-                            
+            let link = $(item.get().children[0]);
+            let menu = $(item.get().children[1]);  
                     
-                        break;
-                    case "accordion":
-                    case "accordionx":
-                        this._closeBrothers(item); 
-                    case "accordiony":    
-                        
-                        if(item.hasClass("open")){
-                            item.removeClass("open").addClass("close");
-                        }else{
-                            item.removeClass("close").addClass("open");
-                        
-                        }
-                        break;    
+            if(this.type === "popup"){
+                if(item.hasClass("open")){
+                    return false;
+                }    
+                this._closeBrothers(item);                     
+                
+                item.removeClass("close")
+                item.addClass("open");
+                Float.setIndex(menu.get());
+                
+                if((this.subType === "dropdown") && !$(item.get().parentNode).hasClass("submenu")){
+                    Float.showMenu({
+                        ref: item.get(), e: menu.get(), 
+                        left: "left", top: "down", 
+                        deltaX: 0, deltaY: 0, z: 0
+                    });
+                }else{
+                    Float.showMenu({
+                        ref: item.get(), e: menu.get(), 
+                        left: "front", top: "top", 
+                        deltaX: -2, deltaY: 5, z: 0
+                    });
                 }
-
-            };
-            
-
+                        
+            }else{
+                if(this.subType!=="any"){
+                    this._closeBrothers(item); 
+                }
+                if(item.hasClass("open")){
+                    item.removeClass("open").addClass("close");
+                }else{
+                    item.removeClass("close").addClass("open");
+                }
+            }
         }
 
         closeMenu(menu:any){
@@ -421,34 +383,28 @@
             menus.forEach((e)=>{
                  $(e.parentNode).removeClass("open").addClass("close");
                  
-             })
-
+             });
         }
+
         _closeBrothers(menu:any){
 
             let parent = menu.get().parentNode;
-
             let menus = $(parent).queryAll(".submenu");
+
             menus.forEach((e)=>{
-                
                  if(e.parentNode === menu.get()){
                      return;
                  }
-                
                  $(e.parentNode).removeClass("open").addClass("close");
-                 
-             })
+             });
 
         }
 
         closeAll(){
            
-            if(this.type == "default" || this.type == "dropdown" 
-                || this.type == "system" || this.type == "nav" || this.type == "accordion"){
-                  
+            if(this.subType !== "any" && this.subType !== "one"){
                 this.closeMenu(this._main);
             }
-            
 
         }
 
@@ -456,7 +412,11 @@
 
     
     $(window).on("load", function(){
-        newMenus();
+       
+        Menu.init();
+
+
+        //newMenus();
     })
     /*
     window.onload = function(event){
@@ -468,16 +428,17 @@
         let m = new Menu({
             id:"menu1",
             className:"summer",
-            type:"dropdown"
+            type:"popup"
 
         });
 
         let Info = {
             id:"menu2",
             caption:"Menu Opciones",
-            type:"accordiony",
+            type:"accordion",
             className:"summer",
-            useIcon: false,
+            useIcon: true,
+            target:"",
             context:"",
             
             action:function(menu, item){
@@ -490,28 +451,40 @@
             },
             items:[
                 {
-                    caption:"Accordion",
+                    caption:"popup",
                     action:function(menu, item){
-                        this.setType("accordion");
-                        m4.setType("accordion");
+                        this.setType("popup","default");
+                        m4.setType("popup","default");
                     },
                 },
                 {
                     caption:"Navegador",
                     action:function(menu, item){
-                        this.setType("nav");
-                        m4.setType("nav");
+                        this.setType("popup","dropdown");
+                        m4.setType("popup","dropdown");
                     },
                 },
                 {
-                    caption:"dropdown",
+                    caption:"Acc<b>o</b>rdion",
                     action:function(menu, item){
-                        this.setType("dropdown");
-                        m4.setType("dropdown");
+                        this.setType("accordion","default");
+                        m4.setType("accordion","default");
+                    },
+                },
+                
+                {
+                    caption:"Accordion Y",
+                    action:function(menu, item){
+                        this.setType("accordion","any");
+                        m4.setType("accordion","any");
                     },
                 },
                 {
-                    caption:"dos"
+                    caption:"Accordion X",
+                    action:function(menu, item){
+                        this.setType("accordion","one");
+                        m4.setType("accordion","one");
+                    },
                 },
                 {
                     caption:"tres",
@@ -547,15 +520,23 @@
         };
         Info.context = "cedula";
         let m2 = new Menu(Info);
+       
         Info.context = "";
         Info.id = "menu4";
         let m3 = new Menu(Info);
-
-
+        
+        Info.context = "";
+        Info.caption = "Menu X";
+        Info.target = "q";
+        Info.id = null;
+        let m5 = new Menu(Info);
+        
+db ("info. target "+Info.target, "blue");
         let Info2 = {
             id:"menu10",
-            type:"nav",
-            action:(){
+            type:"popup",
+            subType:"system",
+            action:()=>{
                 db ("ssss");
             }
         }
@@ -563,7 +544,8 @@
 
 
         let btn = $().create({tagName:"input",type:"button",value:"ok"}).on("click",()=>{
-            $("#y").fire("click");
+            
+            m4.show($("y"));//$("#y").fire("click");
             //m4._show()
            // alert(this)
         });

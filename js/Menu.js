@@ -1,29 +1,16 @@
 (function ($, Float) {
-    class Drag {
-    }
-    class Item {
-        constructor(opt) {
-            this.caption = "";
-            this.className = "";
-            this.withCheck = false;
-            this.withIcon = false;
-            this.iconSource = "";
-            this.onOpen = (index) => { return true; };
-            this.onClose = (index) => { return true; };
-            for (var x in opt) {
-                if (this.hasOwnProperty(x)) {
-                    this[x] = opt[x];
-                }
-            }
-        }
-        create() {
-        }
-        load() {
-        }
-    }
     class Menu {
         constructor(opt) {
-            this.type = "nav"; //default,nav,dropdown,accordion[x|y]
+            /*
+            type in ("accordion", "popup")
+            */
+            this.type = "accordion";
+            /*
+            subType to popup {"default", "system"};
+            subType to accordion {"default", "one", "any"};
+            */
+            this.subType = "default";
+            this.tagLink = "a";
             this.id = "";
             this.target = "";
             this.caption = "";
@@ -34,7 +21,7 @@
             this._main = null;
             this.action = null;
             this.check = null;
-            this.useIcon = false;
+            this.useIcon = true;
             this._isCheck = false;
             this._isItem = false;
             let x;
@@ -43,19 +30,30 @@
                     this[x] = opt[x];
                 }
             }
-            let main = $(this.id);
+            let main = (this.id) ? $(this.id) : false;
             if (main) {
+                if (main.ds("sgMenu")) {
+                    return;
+                }
                 if (main.hasClass("sg-menu")) {
                     this.load(main);
                 }
                 else {
                     this.create(main);
                 }
-                this._main = main;
             }
             else {
-                return;
+                let target = (this.target) ? $(this.target) : false;
+                if (target) {
+                    main = target.create("div").attr("id", this.id);
+                    this.create(main);
+                }
+                else {
+                    return;
+                }
             }
+            main.ds("sgMenu", "menu");
+            this._main = main;
             if (this.context) {
                 let context = $(this.context).on("click", () => {
                     main.style({
@@ -109,7 +107,7 @@
                 }
             });
             let items = main.queryAll(".submenu");
-            if (this.type == "dropdown" || this.type == "system" || this.type == "nav") {
+            if (this.type === "popup") {
                 for (x of items) {
                     $(x).addClass("popup");
                 }
@@ -147,23 +145,29 @@
             }
         }
         static init() {
-            let menus = $().queryAll(".sg-menu");
-            alert(menus.length);
+            let menus = $().queryAll(".sg-menu.sg-detect");
+            for (let x of menus) {
+                if ($(x).ds("sgMenu")) {
+                    continue;
+                }
+                new Menu({ id: x });
+            }
         }
-        setType(type) {
+        setType(type, subType = "default") {
             this.type = type;
-            let types = ["nav", "accordion", "accordionx", "accordiony", "system", "dropdown"];
+            this.subType = subType;
+            let types = ["accordion", "popup", "default", "one", "any", "dropdown"];
             types.forEach((e) => {
                 this._main.removeClass(`menu-${e}`);
             });
-            this._main.addClass(`menu-${type}`);
-            if (this.type != "dropdown" && this.type != "system" && this.type != "nav") {
+            this._main.addClass(`menu-${type}`).addClass(`menu-${subType}`);
+            if (this.type === "accordion") {
                 let items = this._main.queryAll(".popup");
                 for (var x of items) {
                     $(x).removeClass("popup");
                 }
             }
-            if (this.type == "dropdown" || this.type == "system" || this.type == "nav") {
+            if (this.type === "popup") {
                 let items = this._main.queryAll(".submenu");
                 for (x of items) {
                     $(x).addClass("popup");
@@ -173,11 +177,14 @@
         getType() {
             return this.type;
         }
+        getSubType() {
+            return this.subType;
+        }
         create(main) {
-            db("create");
             main.addClass("sg-menu").addClass(this.className)
                 .addClass(this.useIcon ? "w-icon" : "n-icon")
-                .addClass(`menu-${this.getType()}`);
+                .addClass(`menu-${this.getType()}`)
+                .addClass(`menu-${this.getSubType()}`);
             if (this.caption) {
                 main.create({
                     tagName: "div",
@@ -201,13 +208,13 @@
             let link = $(_item_ch[0]);
             if (_item_ch[1]) {
                 this.loadMenu($(_item_ch[1]), true);
-                link.on("click", this._show(item));
+                link.on("click", (event) => { this.show(item); });
             }
         }
         load(main) {
-            db("load");
+            main.addClass(this.className);
             let type = "";
-            let types = ["nav", "accordion", "accordionx", "accordiony", "system", "dropdown"];
+            let types = ["accordion", "popup"];
             types.forEach((e) => {
                 if (main.hasClass(`menu-${e}`)) {
                     type = e;
@@ -217,12 +224,22 @@
                 this.type = type;
             }
             else {
-                main.addClass(`menu-${this.getType()}`).addClass("s8");
+                main.addClass(`menu-${this.getType()}`);
             }
-            let _main = main.get().children;
-            //let _menu = _main[1];
-            $(_main[0]).addClass("_CAPTION");
-            this.loadMenu($(_main[1]));
+            type = "";
+            types = ["default", "one", "any", "dropdown"];
+            types.forEach((e) => {
+                if (main.hasClass(`menu-${e}`)) {
+                    type = e;
+                }
+            });
+            if (type !== "") {
+                this.subType = type;
+            }
+            else {
+                main.addClass(`menu-${this.getSubType()}`);
+            }
+            this.loadMenu($(main.get().children[1]));
         }
         createMenu(main, items, submenu = false) {
             let menu = main.create({
@@ -243,11 +260,7 @@
         }
         add(main, info) {
             let item = main.create("div").addClass("item");
-            let tagType = "a";
-            if ((this.type === "system1" || this.type === "nav") && !main.hasClass("submenu")) {
-                tagType = "button";
-            }
-            let link = item.create(tagType)
+            let link = item.create(this.tagLink)
                 .addClass("option")
                 .prop("href", info.url || "javascript:void(0)")
                 .ds("value", info.value || "");
@@ -257,60 +270,51 @@
             link.create("span").addClass("icon").addClass(info.iconClass || "");
             link.create("span").addClass("text").text(info.caption);
             if (info.items) {
-                link.create("span").addClass("ind").ds("sgMenuType", "ind");
+                link.create("span").addClass("ind");
                 this.createMenu(item, info.items, true);
-                link.on("click", this._show(item));
+                link.on("click", (event) => { this.show(item); });
             }
-            else {
-                if (info.action) {
-                    link.on("click", $.bind(info.action, this));
-                }
+            else if (info.action) {
+                link.on("click", $.bind(info.action, this));
             }
         }
-        _show(item) {
-            return (event) => {
-                let link = $(item.get().children[0]);
-                let menu = $(item.get().children[1]);
-                switch (this.type) {
-                    case "dropdown":
-                    case "system":
-                    case "default":
-                    case "nav":
-                        if (item.hasClass("open")) {
-                            return false;
-                        }
-                        this._closeBrothers(item);
-                        item.removeClass("close");
-                        item.addClass("open");
-                        Float.setIndex(menu.get());
-                        if ((this.type === "system" || this.type === "nav") && !$(item.get().parentNode).hasClass("submenu")) {
-                            Float.showMenu({
-                                ref: item.get(), e: menu.get(),
-                                left: "left", top: "down",
-                                deltaX: 0, deltaY: 0, z: 0
-                            });
-                        }
-                        else {
-                            Float.showMenu({
-                                ref: item.get(), e: menu.get(),
-                                left: "front", top: "top",
-                                deltaX: -2, deltaY: 5, z: 0
-                            });
-                        }
-                        break;
-                    case "accordion":
-                    case "accordionx":
-                        this._closeBrothers(item);
-                    case "accordiony":
-                        if (item.hasClass("open")) {
-                            item.removeClass("open").addClass("close");
-                        }
-                        else {
-                            item.removeClass("close").addClass("open");
-                        }
-                        break;
+        show(item) {
+            let link = $(item.get().children[0]);
+            let menu = $(item.get().children[1]);
+            if (this.type === "popup") {
+                if (item.hasClass("open")) {
+                    return false;
                 }
-            };
+                this._closeBrothers(item);
+                item.removeClass("close");
+                item.addClass("open");
+                Float.setIndex(menu.get());
+                if ((this.subType === "dropdown") && !$(item.get().parentNode).hasClass("submenu")) {
+                    Float.showMenu({
+                        ref: item.get(), e: menu.get(),
+                        left: "left", top: "down",
+                        deltaX: 0, deltaY: 0, z: 0
+                    });
+                }
+                else {
+                    Float.showMenu({
+                        ref: item.get(), e: menu.get(),
+                        left: "front", top: "top",
+                        deltaX: -2, deltaY: 5, z: 0
+                    });
+                }
+            }
+            else {
+                if (this.subType !== "any") {
+                    this._closeBrothers(item);
+                }
+                if (item.hasClass("open")) {
+                    item.removeClass("open").addClass("close");
+                }
+                else {
+                    item.removeClass("close").addClass("open");
+                }
+            }
         }
         closeMenu(menu) {
             let menus = menu.queryAll(".submenu");
@@ -329,14 +333,14 @@
             });
         }
         closeAll() {
-            if (this.type == "default" || this.type == "dropdown"
-                || this.type == "system" || this.type == "nav" || this.type == "accordion") {
+            if (this.subType !== "any" && this.subType !== "one") {
                 this.closeMenu(this._main);
             }
         }
     }
     $(window).on("load", function () {
-        newMenus();
+        Menu.init();
+        //newMenus();
     });
     /*
     window.onload = function(event){
@@ -348,14 +352,15 @@
         let m = new Menu({
             id: "menu1",
             className: "summer",
-            type: "dropdown"
+            type: "popup"
         });
         let Info = {
             id: "menu2",
             caption: "Menu Opciones",
-            type: "accordiony",
+            type: "accordion",
             className: "summer",
-            useIcon: false,
+            useIcon: true,
+            target: "",
             context: "",
             action: function (menu, item) {
                 // alert(menu.type)
@@ -367,28 +372,39 @@
             },
             items: [
                 {
-                    caption: "Accordion",
+                    caption: "popup",
                     action: function (menu, item) {
-                        this.setType("accordion");
-                        m4.setType("accordion");
+                        this.setType("popup", "default");
+                        m4.setType("popup", "default");
                     },
                 },
                 {
                     caption: "Navegador",
                     action: function (menu, item) {
-                        this.setType("nav");
-                        m4.setType("nav");
+                        this.setType("popup", "dropdown");
+                        m4.setType("popup", "dropdown");
                     },
                 },
                 {
-                    caption: "dropdown",
+                    caption: "Acc<b>o</b>rdion",
                     action: function (menu, item) {
-                        this.setType("dropdown");
-                        m4.setType("dropdown");
+                        this.setType("accordion", "default");
+                        m4.setType("accordion", "default");
                     },
                 },
                 {
-                    caption: "dos"
+                    caption: "Accordion Y",
+                    action: function (menu, item) {
+                        this.setType("accordion", "any");
+                        m4.setType("accordion", "any");
+                    },
+                },
+                {
+                    caption: "Accordion X",
+                    action: function (menu, item) {
+                        this.setType("accordion", "one");
+                        m4.setType("accordion", "one");
+                    },
                 },
                 {
                     caption: "tres",
@@ -426,16 +442,23 @@
         Info.context = "";
         Info.id = "menu4";
         let m3 = new Menu(Info);
+        Info.context = "";
+        Info.caption = "Menu X";
+        Info.target = "q";
+        Info.id = null;
+        let m5 = new Menu(Info);
+        db("info. target " + Info.target, "blue");
         let Info2 = {
             id: "menu10",
-            type: "nav",
+            type: "popup",
+            subType: "system",
             action: () => {
                 db("ssss");
             }
         };
         let m4 = new Menu(Info2);
         let btn = $().create({ tagName: "input", type: "button", value: "ok" }).on("click", () => {
-            $("#y").fire("click");
+            m4.show($("y")); //$("#y").fire("click");
             //m4._show()
             // alert(this)
         });

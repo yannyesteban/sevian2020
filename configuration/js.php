@@ -17,7 +17,7 @@ $js = [
 		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgDB.js",
-		'begin'	=> false],
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgInit.js",
 		'begin'	=> true],
@@ -63,9 +63,8 @@ $js = [
 		'begin'	=> false],
 	[
 		'file' 	=> "{$PATH}js/Form.js",
-		'attrib' => [
-			'type'=>'module'
-		]],
+		//'attrib' => [			'_type'=>'module'		]
+	],
 ];
 
 Sevian\S::jsInit($js);
