@@ -37,7 +37,8 @@
             this.useIcon = false;
             this._isCheck = false;
             this._isItem = false;
-            for (var x in opt) {
+            let x;
+            for (x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
                 }
@@ -50,7 +51,6 @@
                 else {
                     this.create(main);
                 }
-                db(main.get(), "blue");
                 this._main = main;
             }
             else {
@@ -91,10 +91,11 @@
                     }
                 });
             }
+            main.ds("active", "0");
             main.on("mouseenter", (event) => {
                 main.ds("active", "1");
-            });
-            main.on("mouseleave", (event) => {
+            })
+                .on("mouseleave", (event) => {
                 main.ds("active", "0");
             });
             $().on("mousedown", (event) => {
@@ -107,12 +108,67 @@
                     this.closeAll();
                 }
             });
+            let items = main.queryAll(".submenu");
+            if (this.type == "dropdown" || this.type == "system" || this.type == "nav") {
+                for (x of items) {
+                    $(x).addClass("popup");
+                }
+            }
+            items = main.queryAll(".option:only-child"); //m-item
+            for (let x of items) {
+                let item = $(x).on("mouseenter", () => {
+                    this._isItem = true;
+                })
+                    .on("mouseleave", () => {
+                    this._isItem = false;
+                });
+                if (this.action) {
+                    item.on("click", (event) => { this.action(this, $(x.parentNode)); });
+                }
+            }
+            items = main.queryAll("input[type='checkbox']");
+            for (x of items) {
+                let chk = $(x).on("mouseenter", () => {
+                    this._isCheck = true;
+                })
+                    .on("mouseleave", () => {
+                    this._isCheck = false;
+                })
+                    .on("click", () => {
+                    if (this._main.ds("active") == "1") {
+                        event.stopPropagation();
+                    }
+                });
+                if (this.check) {
+                    chk.on("click", (event) => {
+                        this.check(this, chk.get().parentNode.parentNode);
+                    });
+                }
+            }
         }
         static init() {
             let menus = $().queryAll(".sg-menu");
             alert(menus.length);
         }
         setType(type) {
+            this.type = type;
+            let types = ["nav", "accordion", "accordionx", "accordiony", "system", "dropdown"];
+            types.forEach((e) => {
+                this._main.removeClass(`menu-${e}`);
+            });
+            this._main.addClass(`menu-${type}`);
+            if (this.type != "dropdown" && this.type != "system" && this.type != "nav") {
+                let items = this._main.queryAll(".popup");
+                for (var x of items) {
+                    $(x).removeClass("popup");
+                }
+            }
+            if (this.type == "dropdown" || this.type == "system" || this.type == "nav") {
+                let items = this._main.queryAll(".submenu");
+                for (x of items) {
+                    $(x).addClass("popup");
+                }
+            }
         }
         getType() {
             return this.type;
@@ -120,8 +176,8 @@
         create(main) {
             db("create");
             main.addClass("sg-menu").addClass(this.className)
-                .addClass(this.useIcon ? "w-icon" : "n-icon");
-            main.addClass(`menu-${this.getType()}`);
+                .addClass(this.useIcon ? "w-icon" : "n-icon")
+                .addClass(`menu-${this.getType()}`);
             if (this.caption) {
                 main.create({
                     tagName: "div",
@@ -131,43 +187,38 @@
             }
             this.createMenu(main, this.items);
         }
-        loadMenu(menu) {
-            //menu.addClass("close");
+        loadMenu(menu, submenu = false) {
+            if (submenu) {
+                menu.addClass("submenu");
+            }
             let _item = menu.get().children;
             for (let e of _item) {
                 this.loadItem($(e));
             }
         }
         loadItem(item) {
-            item.addClass("s");
             let _item_ch = item.get().children;
             let link = $(_item_ch[0]);
             if (_item_ch[1]) {
-                link.addClass("m-menu");
-                db(_item_ch[1], "green");
-                this.loadMenu($(_item_ch[1]));
+                this.loadMenu($(_item_ch[1]), true);
                 link.on("click", this._show(item));
-            }
-            else {
-                link.addClass("m-item")
-                    .on("mouseenter", () => {
-                    this._isItem = true;
-                })
-                    .on("mouseleave", () => {
-                    this._isItem = false;
-                });
-                /*
-                    if(info.action){
-                    link.on("click", $.bind(info.action, this));
-                }
-                if(this.action){
-                    link.on("click", (event)=>{this.action(this, item);});
-                }
-                */
             }
         }
         load(main) {
             db("load");
+            let type = "";
+            let types = ["nav", "accordion", "accordionx", "accordiony", "system", "dropdown"];
+            types.forEach((e) => {
+                if (main.hasClass(`menu-${e}`)) {
+                    type = e;
+                }
+            });
+            if (type !== "") {
+                this.type = type;
+            }
+            else {
+                main.addClass(`menu-${this.getType()}`).addClass("s8");
+            }
             let _main = main.get().children;
             //let _menu = _main[1];
             $(_main[0]).addClass("_CAPTION");
@@ -181,22 +232,6 @@
             if (submenu) {
                 main.addClass("close");
                 menu.addClass("submenu");
-                if (this.type == "dropdown" || this.type == "system" || this.type == "nav") {
-                    menu.addClass("popup");
-                    /*
-                    menu.style({
-                        position: "fixed",
-                        userSelect: "none",
-                        MozUserSelect: "none",
-                        visibility: "hidden",
-                        overflow: "none",
-                        zIndex: 150000000,
-                        //border:"4px solid red",
-                        
-
-                    });
-                    */
-                }
             }
             if (items) {
                 for (let x in items) {
@@ -205,7 +240,6 @@
                     }
                 }
             }
-            return menu;
         }
         add(main, info) {
             let item = main.create("div").addClass("item");
@@ -218,92 +252,18 @@
                 .prop("href", info.url || "javascript:void(0)")
                 .ds("value", info.value || "");
             if (info.useCheck || true) {
-                let chk = link.create("input").attr("type", "checkbox")
-                    .on("click", () => {
-                    if (this._main.ds("active") == "1") {
-                        event.stopPropagation();
-                    }
-                })
-                    .on("mouseenter", () => {
-                    this._isCheck = true;
-                })
-                    .on("mouseleave", () => {
-                    this._isCheck = false;
-                });
-                if (this.check) {
-                    chk.on("click", (event) => {
-                        this.check(this, item);
-                    });
-                }
+                let chk = link.create("input").attr("type", "checkbox");
             }
             link.create("span").addClass("icon").addClass(info.iconClass || "");
             link.create("span").addClass("text").text(info.caption);
             if (info.items) {
-                link.addClass("m-menu").create("span").addClass("ind").ds("sgMenuType", "ind");
-                let menu = this.createMenu(item, info.items, true);
+                link.create("span").addClass("ind").ds("sgMenuType", "ind");
+                this.createMenu(item, info.items, true);
                 link.on("click", this._show(item));
-                return;
-                link.on("click", (event) => {
-                    switch (this.type) {
-                        case "dropdown":
-                        case "system":
-                        case "default":
-                        case "nav":
-                            if (item.hasClass("open")) {
-                                return false;
-                            }
-                            this._closeBrothers(item);
-                            menu.style({
-                            //visibility: "visible"
-                            });
-                            item.removeClass("close");
-                            item.addClass("open");
-                            //Float.setIndex(menu.get());
-                            if ((this.type === "system" || this.type === "nav") && !main.hasClass("submenu")) {
-                                Float.showMenu({
-                                    ref: item.get(), e: menu.get(),
-                                    left: "left", top: "down",
-                                    deltaX: 0, deltaY: 0, z: 0
-                                });
-                            }
-                            else {
-                                Float.showMenu({
-                                    ref: item.get(), e: menu.get(),
-                                    left: "front", top: "top",
-                                    deltaX: -2, deltaY: 5, z: 0
-                                });
-                            }
-                            break;
-                        case "accordion":
-                        case "accordionx":
-                            this._closeBrothers(item);
-                        case "accordiony":
-                            menu.style({
-                            //visibility: "visible"
-                            });
-                            if (item.hasClass("open")) {
-                                item.removeClass("open").addClass("close");
-                            }
-                            else {
-                                item.removeClass("close").addClass("open");
-                            }
-                            break;
-                    }
-                });
             }
             else {
-                link.addClass("m-item")
-                    .on("mouseenter", () => {
-                    this._isItem = true;
-                })
-                    .on("mouseleave", () => {
-                    this._isItem = false;
-                });
                 if (info.action) {
                     link.on("click", $.bind(info.action, this));
-                }
-                if (this.action) {
-                    link.on("click", (event) => { this.action(this, item); });
                 }
             }
         }
@@ -320,13 +280,10 @@
                             return false;
                         }
                         this._closeBrothers(item);
-                        menu.style({
-                        // visibility: "visible"
-                        });
                         item.removeClass("close");
                         item.addClass("open");
                         Float.setIndex(menu.get());
-                        if ((this.type === "system" || this.type === "nav") && !$(menu.get().parentNode).hasClass("submenu")) {
+                        if ((this.type === "system" || this.type === "nav") && !$(item.get().parentNode).hasClass("submenu")) {
                             Float.showMenu({
                                 ref: item.get(), e: menu.get(),
                                 left: "left", top: "down",
@@ -358,11 +315,7 @@
         closeMenu(menu) {
             let menus = menu.queryAll(".submenu");
             menus.forEach((e) => {
-                $(e.parentNode).removeClass("open")
-                    .addClass("close");
-                $(e).style({
-                //visibility: "hidden"
-                });
+                $(e.parentNode).removeClass("open").addClass("close");
             });
         }
         _closeBrothers(menu) {
@@ -372,11 +325,7 @@
                 if (e.parentNode === menu.get()) {
                     return;
                 }
-                $(e.parentNode).removeClass("open")
-                    .addClass("close");
-                $(e).style({
-                //visibility: "hidden"
-                });
+                $(e.parentNode).removeClass("open").addClass("close");
             });
         }
         closeAll() {
@@ -404,12 +353,13 @@
         let Info = {
             id: "menu2",
             caption: "Menu Opciones",
-            type: "dropdown",
+            type: "accordiony",
             className: "summer",
             useIcon: false,
             context: "",
             action: function (menu, item) {
-                //alert(item.get());
+                // alert(menu.type)
+                db(item.get().className);
             },
             check: function (menu, item) {
                 // db ("checkeando")
@@ -417,8 +367,25 @@
             },
             items: [
                 {
-                    caption: "uno",
-                    action: "db('action UNO')",
+                    caption: "Accordion",
+                    action: function (menu, item) {
+                        this.setType("accordion");
+                        m4.setType("accordion");
+                    },
+                },
+                {
+                    caption: "Navegador",
+                    action: function (menu, item) {
+                        this.setType("nav");
+                        m4.setType("nav");
+                    },
+                },
+                {
+                    caption: "dropdown",
+                    action: function (menu, item) {
+                        this.setType("dropdown");
+                        m4.setType("dropdown");
+                    },
                 },
                 {
                     caption: "dos"
@@ -462,7 +429,15 @@
         let Info2 = {
             id: "menu10",
             type: "nav",
+            action: () => {
+                db("ssss");
+            }
         };
         let m4 = new Menu(Info2);
+        let btn = $().create({ tagName: "input", type: "button", value: "ok" }).on("click", () => {
+            $("#y").fire("click");
+            //m4._show()
+            // alert(this)
+        });
     };
 })(_sgQuery, _sgFloat);
