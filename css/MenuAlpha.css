@@ -1,4 +1,26 @@
 /* Scss Document */
+.master {
+  background-color: #2F0133;
+  color: white;
+}
+
+.master .flex {
+  color: yellow;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.master .flex > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
 @-webkit-keyframes open {
   0% {
     opacity: 0;
@@ -15,6 +37,7 @@
             transform-origin: 0 0;
   }
 }
+
 @keyframes open {
   0% {
     opacity: 0;

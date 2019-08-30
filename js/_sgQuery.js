@@ -457,7 +457,8 @@ _sgQuery.prop = function(obj, prop){
 	
 };
 
-_sgQuery.bind =function(fn, context){
+_sgQuery.bind =function(fn, context, arg){
+
 	if(typeof(fn) === "function"){
 		return fn.bind(context);
 		/*
@@ -467,11 +468,19 @@ _sgQuery.bind =function(fn, context){
 		});
 		*/
 	}else if(typeof(fn) === "string"){
+
+		if(arg){
+			return Function(arg, fn).bind(context);
+		
+			
+		}
 		//function(){eval(ME.events[x])};
 		//function(){Function("ME", ME.events[x]).call(this, ME);};
 		//this._main.on(x, function(){Function(ME.events[x]).call(ME);});
-		return Function(fn).bind(context);
+		
 		//this._main.on(x, Function(this.events[x]));
+
+		return Function(fn).bind(context);
 
 	}
 };

@@ -24,6 +24,8 @@
             this.useIcon = true;
             this._isCheck = false;
             this._isItem = false;
+            this._action = function (index) { };
+            this._check = function (index) { };
             let x;
             for (x in opt) {
                 if (this.hasOwnProperty(x)) {
@@ -32,28 +34,35 @@
             }
             let main = (this.id) ? $(this.id) : false;
             if (main) {
+                this._main = main;
                 if (main.ds("sgMenu")) {
                     return;
                 }
                 if (main.hasClass("sg-menu")) {
-                    this.load(main);
+                    this._load(main);
                 }
                 else {
-                    this.create(main);
+                    this._create(main);
                 }
             }
             else {
                 let target = (this.target) ? $(this.target) : false;
                 if (target) {
                     main = target.create("div").attr("id", this.id);
-                    this.create(main);
+                    this._main = main;
+                    this._create(main);
                 }
                 else {
                     return;
                 }
             }
+            if (this.action) {
+                this._action = $.bind(this.action, this, 'item');
+            }
+            if (this.check) {
+                this._check = $.bind(this.check, this, 'item');
+            }
             main.ds("sgMenu", "menu");
-            this._main = main;
             if (this.context) {
                 let context = $(this.context).on("click", () => {
                     main.style({
@@ -89,8 +98,8 @@
                     }
                 });
             }
-            main.ds("active", "0");
-            main.on("mouseenter", (event) => {
+            main.ds("active", "0")
+                .on("mouseenter", (event) => {
                 main.ds("active", "1");
             })
                 .on("mouseleave", (event) => {
@@ -121,7 +130,7 @@
                     this._isItem = false;
                 });
                 if (this.action) {
-                    item.on("click", (event) => { this.action(this, $(x.parentNode)); });
+                    item.on("click", (event) => { this._action($(x.parentNode)); });
                 }
             }
             items = main.queryAll("input[type='checkbox']");
@@ -139,7 +148,7 @@
                 });
                 if (this.check) {
                     chk.on("click", (event) => {
-                        this.check(this, chk.get().parentNode.parentNode);
+                        this._check($(chk.get().parentNode.parentNode));
                     });
                 }
             }
@@ -192,7 +201,7 @@
         getSubType() {
             return this.subType;
         }
-        create(main) {
+        _create(main) {
             main.addClass("sg-menu").addClass(this.className)
                 .addClass(this.useIcon ? "w-icon" : "n-icon")
                 .addClass(`menu-${this.getType()}`)
@@ -223,7 +232,7 @@
                 link.on("click", (event) => { this.show(item); });
             }
         }
-        load(main) {
+        _load(main) {
             main.addClass(this.className);
             let type = "";
             let types = ["accordion", "popup"];
@@ -287,7 +296,8 @@
                 link.on("click", (event) => { this.show(item); });
             }
             else if (info.action) {
-                link.on("click", $.bind(info.action, this));
+                let action = $.bind(info.action, this, "item");
+                link.on("click", (event) => { action(item); });
             }
         }
         show(item) {
@@ -352,8 +362,8 @@
     }
     Menu._objs = [];
     $(window).on("load", function () {
+        // newMenus();
         Menu.init();
-        //newMenus();
     });
     /*
     window.onload = function(event){
@@ -369,26 +379,28 @@
         });
         let Info = {
             id: "menu2",
-            caption: "Menu Opciones",
+            caption: "Menu Opciones 1",
             type: "accordion",
             className: "summer",
             useIcon: true,
             target: "",
             context: "",
-            action: function (menu, item) {
+            action_: function (item) {
                 // alert(menu.type)
-                db(item.get().className);
+                db(item.get());
             },
-            check: function (menu, item) {
-                // db ("checkeando")
-                //db (item.get());    
+            action__: "db('item class name is '+item.get());",
+            check: function (item) {
+                db("checkeando " + event.target);
+                db(item.get(), "blue", "aqua");
             },
             items: [
                 {
                     caption: "popup",
-                    action: function (menu, item) {
+                    action: function (item) {
+                        db(this.caption, "orange");
                         this.setType("popup", "default");
-                        m4.setType("popup", "default");
+                        //m4.setType("popup","default");
                     },
                 },
                 {
@@ -465,9 +477,6 @@
             id: "menu10",
             type: "popup",
             subType: "system",
-            action: () => {
-                db("ssss");
-            }
         };
         let m4 = new Menu(Info2);
         let btn = $().create({ tagName: "input", type: "button", value: "ok" }).on("click", () => {

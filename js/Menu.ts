@@ -30,6 +30,9 @@
 
         _isCheck:boolean = false;
         _isItem:boolean = false;
+
+        _action = function(index){};
+        _check = function(index){};
         static _objs = [];
         static init(){
             let menus = $().queryAll(".sg-menu.sg-detect");
@@ -61,19 +64,19 @@
                     this[x] = opt[x];
                 }
             }
-
+            
             let main = (this.id)? $(this.id): false;
-
+            
             if(main){
-                
+                this._main = main;
                 if(main.ds("sgMenu")){
                     return;
                 }
 
                 if(main.hasClass("sg-menu")){
-                    this.load(main);
+                    this._load(main);
                 }else{
-                    this.create(main);
+                    this._create(main);
                 }
 
             }else{
@@ -81,29 +84,34 @@
                 let target = (this.target)? $(this.target): false;
                 if(target){
                     main = target.create("div").attr("id", this.id);
-                    this.create(main);
+                    this._main = main;
+                    this._create(main);
                 }else{
                    return; 
                 }
             
             }
-            
+            if(this.action){
+                this._action = $.bind(this.action, this, 'item');
+            }
+            if(this.check){
+                this._check = $.bind(this.check, this, 'item');
+            }
             main.ds("sgMenu", "menu");
-            this._main = main;
+            
             if(this.context){
                 let context = $(this.context).on("click", ()=>{
                     main.style({
                         position:"absolute",
                         visibility:"visible",
-                    })
+                    });
                     Float.showMenu({
                         ref:context.get(),
                         e:main.get(),
                         left:"front",
                         top:"top"
-
             
-                    })
+                    });
                 });
 
                 Float.init(main.get());
@@ -130,8 +138,9 @@
                 });
 
             }
-            main.ds("active", "0");
-            main.on("mouseenter", (event:Event)=>{
+           
+            main.ds("active", "0")
+            .on("mouseenter", (event:Event)=>{
                 main.ds("active", "1");
             })
             .on("mouseleave", (event:Event)=>{
@@ -166,7 +175,7 @@
                     this._isItem = false;
                 });
                 if(this.action){
-                    item.on("click", (event)=>{this.action(this, $(x.parentNode));});
+                    item.on("click", (event)=>{this._action($(x.parentNode));});
                 }
             
             }
@@ -187,7 +196,7 @@
 
                 if(this.check){
                     chk.on("click", (event)=>{
-                        this.check(this, chk.get().parentNode.parentNode);
+                        this._check($(chk.get().parentNode.parentNode));
                     });
                 }
             }
@@ -226,7 +235,7 @@
         getSubType(){
             return this.subType;
         }
-        create(main:any){   
+        _create(main:any){   
             
             main.addClass("sg-menu").addClass(this.className)
             .addClass(this.useIcon? "w-icon": "n-icon")
@@ -265,7 +274,7 @@
             }
         }
 
-        load(main:any){
+        _load(main:any){
 
             main.addClass(this.className);
 
@@ -342,7 +351,8 @@
                 this.createMenu(item, info.items, true);
                 link.on("click", (event)=>{this.show(item)});
             }else if(info.action){
-                link.on("click", $.bind(info.action, this));
+                let action = $.bind(info.action, this, "item");
+                link.on("click", (event)=>{action(item);});
             }
         }
 
@@ -422,11 +432,11 @@
 
     
     $(window).on("load", function(){
-       
+       // newMenus();
         Menu.init();
 
 
-        //newMenus();
+       
     })
     /*
     window.onload = function(event){
@@ -444,27 +454,29 @@
 
         let Info = {
             id:"menu2",
-            caption:"Menu Opciones",
+            caption:"Menu Opciones 1",
             type:"accordion",
             className:"summer",
             useIcon: true,
             target:"",
             context:"",
             
-            action:function(menu, item){
+            action_:function(item){
                // alert(menu.type)
-               db (item.get().className);
+               db (item.get());
             },
-            check:function(menu, item){
-            // db ("checkeando")
-                //db (item.get());    
+            action__:"db('item class name is '+item.get());",
+            check:function(item){
+                db ("checkeando "+event.target);
+                db (item.get(), "blue", "aqua");    
             },
             items:[
                 {
                     caption:"popup",
-                    action:function(menu, item){
+                    action:function(item){
+                        db (this.caption, "orange")
                         this.setType("popup","default");
-                        m4.setType("popup","default");
+                        //m4.setType("popup","default");
                     },
                 },
                 {
@@ -546,9 +558,7 @@ db ("info. target "+Info.target, "blue");
             id:"menu10",
             type:"popup",
             subType:"system",
-            action:()=>{
-                db ("ssss");
-            }
+            
         }
         let m4 = new Menu(Info2);
 

@@ -62,6 +62,18 @@ $js = [
 		'file' 	=> "{$PATH}js/Sevian.js",
 		'begin'	=> false],
 	[
+		'file' 	=> "{$PATH}js/Page.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
+		'file' 	=> "{$PATH}js/Tab.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
+		'file' 	=> "{$PATH}js/Input.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
 		'file' 	=> "{$PATH}js/Form.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
