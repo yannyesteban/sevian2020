@@ -30,7 +30,7 @@
 
         _isCheck:boolean = false;
         _isItem:boolean = false;
-
+        static _objs = [];
         static init(){
             let menus = $().queryAll(".sg-menu.sg-detect");
 
@@ -38,10 +38,20 @@
                 if($(x).ds("sgMenu")){
                     continue;
                 }
-                new Menu({id:x});
+                if(x.id){
+                    this.create(x.id,{id:x});
+                }else{
+                    new Menu({id:x});
+                }
             }
         }
-
+        static create(name, info:any){
+            this._objs[name] = new Menu(info);
+            return this._objs[name];
+        }
+        static get(name){
+            return this._objs[name];
+        }
         constructor(opt: any){
             
             let x:any;

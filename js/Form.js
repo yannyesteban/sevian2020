@@ -1,4 +1,5 @@
 //import { Query as $} from './Query.js';
+var _tab;
 (function ($) {
     class Tab {
         constructor(opt) {
@@ -24,17 +25,17 @@
                     return;
                 }
                 if (main.hasClass("sg-tab")) {
-                    this.load(main);
+                    this._load(main);
                 }
                 else {
-                    this.create(main);
+                    this._create(main);
                 }
             }
             else {
                 let target = (this.target) ? $(this.target) : false;
                 if (target) {
                     main = target.create("div").attr("id", this.id);
-                    this.create(main);
+                    this._create(main);
                 }
                 else {
                     return;
@@ -54,36 +55,49 @@
                 if ($(x).ds("sgTab")) {
                     continue;
                 }
-                new Tab({ id: x });
+                if (x.id) {
+                    this.create(x.id, { id: x });
+                }
+                else {
+                    new Tab({ id: x });
+                }
             }
         }
-        load(main) {
+        static create(name, info) {
+            this._objs[name] = new Tab(info);
+            return this._objs[name];
+        }
+        static get(name) {
+            return this._objs[name];
+        }
+        _load(main) {
             main.addClass(this.className).addClass("sg-tab");
             let tab_parts = main.childs();
-            this._menu = $(tab_parts[0]).addClass("sg-tab-menu");
-            this._page = $(tab_parts[1]).addClass("sg-tab-body");
+            this._menu = $(tab_parts[0]).addClass("tab-menu");
+            this._page = $(tab_parts[1]).addClass("tab-body");
             let mItem = this._menu.get().children;
             let pItem = this._page.get().children;
             for (let i = 0; i < mItem.length; i++) {
                 $(mItem[i]).on("click", this._click(i))
-                    .on("focus", this._click(i)).removeClass("sg-tab-active");
+                    .on("focus", this._click(i)).ds("tabIndex", i)
+                    .removeClass("tab-active");
             }
             for (let i = 0; i < pItem.length; i++) {
-                $(pItem[i]).ds("sgTabIndex", i).removeClass("sg-tab-active");
+                $(pItem[i]).ds("tabIndex", i).removeClass("tab-active");
             }
             if (main.ds("value") >= 0) {
                 this.value = main.ds("value") * 1;
             }
         }
-        create(main) {
+        _create(main) {
             main.addClass("sg-tab");
             this._menu = main.create({
                 "tagName": "div",
-                "className": "sg-tab-menu"
+                "className": "tab-menu"
             });
             this._page = main.create({
                 "tagName": "div",
-                "className": "sg-tab-body"
+                "className": "tab-body"
             });
             if (this.pages) {
                 for (var x in this.pages) {
@@ -98,12 +112,11 @@
             this._menu.create("a")
                 .on("click", this._click(index))
                 .on("focus", this._click(index))
-                .addClass("sg-tab-imenu")
                 .text(opt.title || "")
                 .attr("href", "javascript:void(0);")
-                .ds("sgTabIndex", index);
+                .ds("tabIndex", index);
             let body = this._page.create("div")
-                .ds("sgTabIndex", index);
+                .ds("tabIndex", index);
             if (opt.child) {
                 body.append(opt.child);
             }
@@ -128,12 +141,12 @@
             let pItem = this._page.get().children;
             if (mItem[index] && pItem[index]) {
                 if (value) {
-                    $(mItem[index]).addClass("sg-tab-active");
-                    $(pItem[index]).addClass("sg-tab-active");
+                    $(mItem[index]).addClass("tab-active");
+                    $(pItem[index]).addClass("tab-active");
                 }
                 else {
-                    $(mItem[index]).removeClass("sg-tab-active");
-                    $(pItem[index]).removeClass("sg-tab-active");
+                    $(mItem[index]).removeClass("tab-active");
+                    $(pItem[index]).removeClass("tab-active");
                 }
             }
         }
@@ -172,6 +185,8 @@
             return this.mode;
         }
     }
+    Tab._objs = [];
+    _tab = Tab;
     $(window).on("load", function () {
         Tab.init();
         ini();

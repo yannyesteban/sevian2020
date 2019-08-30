@@ -136,7 +136,7 @@
     </div>
     
 
-    <div class="sg-tab sg-detect" data-value="1">
+    <div id="tx" class="sg-tab sg-detect" data-value="1">
 		<div>
 			<a href="javascript:void(0);">Amarillo</a>
 			<a href="javascript:void(0);">Azul</a>
@@ -150,7 +150,16 @@
     </div>
     
 
-
+    <input type="button" value="OK" onclick='
+    _tab.get("tx")
+    .add({
+    title:"Verde",
+    html:"Manzana Lechuga Dolares",
+    active:true,
+    
+});
+    
+    '>
       
       
       

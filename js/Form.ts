@@ -1,5 +1,5 @@
 //import { Query as $} from './Query.js';
-
+var _tab;
 (function($){
     
 class Tab{
@@ -19,6 +19,7 @@ class Tab{
     _page:any = false;
     _length:number = 0;
 
+    static _objs = [];
     static init(){
         let menus = $().queryAll(".sg-tab.sg-detect");
 
@@ -26,10 +27,20 @@ class Tab{
             if($(x).ds("sgTab")){
                 continue;
             }
-            new Tab({id:x});
+            if(x.id){
+                this.create(x.id,{id:x});
+            }else{
+                new Tab({id:x});
+            }
         }
     }
-
+    static create(name, info:any){
+        this._objs[name] = new Tab(info);
+        return this._objs[name];
+    }
+    static get(name){
+        return this._objs[name];
+    }
     constructor(opt: any){
       
         for(var x in opt){
@@ -47,9 +58,9 @@ class Tab{
             }
 
             if(main.hasClass("sg-tab")){
-                this.load(main);
+                this._load(main);
             }else{
-                this.create(main);
+                this._create(main);
             }
 
         }else{
@@ -57,7 +68,7 @@ class Tab{
             let target = (this.target)? $(this.target): false;
             if(target){
                 main = target.create("div").attr("id", this.id);
-                this.create(main);
+                this._create(main);
             }else{
                return; 
             }
@@ -76,23 +87,24 @@ class Tab{
         
     }
 
-    load(main:any){
+    _load(main:any){
         
         main.addClass(this.className).addClass("sg-tab");
         let tab_parts = main.childs();
 
-        this._menu = $(tab_parts[0]).addClass("sg-tab-menu");
-        this._page = $(tab_parts[1]).addClass("sg-tab-body");
+        this._menu = $(tab_parts[0]).addClass("tab-menu");
+        this._page = $(tab_parts[1]).addClass("tab-body");
         
         let mItem = this._menu.get().children;
         let pItem = this._page.get().children;
 
         for(let i = 0; i < mItem.length; i++){
             $(mItem[i]).on("click", this._click(i))
-            .on("focus", this._click(i)).removeClass("sg-tab-active"); 
+            .on("focus", this._click(i)).ds("tabIndex", i)
+            .removeClass("tab-active"); 
         }
         for(let i = 0; i < pItem.length; i++){
-            $(pItem[i]).ds("sgTabIndex", i).removeClass("sg-tab-active"); 
+            $(pItem[i]).ds("tabIndex", i).removeClass("tab-active"); 
         }
 
         if(main.ds("value") >= 0){
@@ -103,18 +115,16 @@ class Tab{
 
     }
 
-    create(main:any){
+    _create(main:any){
         main.addClass("sg-tab");
-
-
 
         this._menu = main.create({
             "tagName": "div",
-            "className": "sg-tab-menu"
+            "className": "tab-menu"
         });
         this._page = main.create({
             "tagName": "div",
-            "className": "sg-tab-body"
+            "className": "tab-body"
         });
 
         if(this.pages){
@@ -134,13 +144,13 @@ class Tab{
         this._menu.create("a")
             .on("click", this._click(index))
             .on("focus", this._click(index))
-            .addClass("sg-tab-imenu")
+            
             .text(opt.title || "")
             .attr("href", "javascript:void(0);")
-            .ds("sgTabIndex", index);
+            .ds("tabIndex", index);
 
         let body = this._page.create("div")
-            .ds("sgTabIndex", index);
+            .ds("tabIndex", index);
 
         if(opt.child){
             body.append(opt.child);
@@ -175,11 +185,11 @@ class Tab{
 
         if(mItem[index] && pItem[index]){
             if(value){
-                $(mItem[index]).addClass("sg-tab-active");
-                $(pItem[index]).addClass("sg-tab-active");
+                $(mItem[index]).addClass("tab-active");
+                $(pItem[index]).addClass("tab-active");
             }else{
-                $(mItem[index]).removeClass("sg-tab-active");
-                $(pItem[index]).removeClass("sg-tab-active");
+                $(mItem[index]).removeClass("tab-active");
+                $(pItem[index]).removeClass("tab-active");
             }
         }
     }
@@ -227,6 +237,8 @@ class Tab{
     }
     
 }
+
+_tab = Tab;
 $(window).on("load", function(){
        
     Tab.init();

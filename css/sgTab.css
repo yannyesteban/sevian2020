@@ -1,21 +1,32 @@
 /* Scss Document */
 .sg-tab {
   border: 4px solid blue;
-  height: 100px;
   width: 500px;
   background-color: slateblue;
 }
 
-.sg-tab > .sg-tab-menu {
+.sg-tab > .tab-menu {
   -webkit-box-sizing: padding-box !important;
           box-sizing: padding-box !important;
   padding: 0px;
   margin: 4px;
   padding: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: baseline;
+      -ms-flex-pack: baseline;
+          justify-content: baseline;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
-.sg-tab > .sg-tab-menu > * {
-  display: inline;
+.sg-tab > .tab-menu > * {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis "...";
+  max-width: 90px;
+  min-width: 70px;
   -webkit-box-sizing: padding-box !important;
           box-sizing: padding-box !important;
   background-color: #6f6f6f;
@@ -35,43 +46,27 @@
   border-radius: 4px 12px 0px 0px;
 }
 
-.sg-tab > .sg-tab-menu > * > a {
-  text-decoration: none;
-  color: white;
-}
-
-.sg-tab > .sg-tab-menu > *.sg-tab-active {
+.sg-tab > .tab-menu > *.tab-active {
   background-color: #980009;
 }
 
-.sg-tab > .sg-tab-menu > .sg-tab-body {
-  border-top: 4px solid #980009;
-}
-
-.sg-tab > .sg-tab-menu > .sg-tab-body > .sg-tab-ibody {
-  display: none;
-}
-
-.sg-tab > .sg-tab-menu > .sg-tab-body > .sg-tab-ibody.sg-tab-active {
-  display: block !important;
-}
-
-.sg-tab > .sg-tab-body {
+.sg-tab > .tab-body {
   color: white !important;
   border-top: 4px solid #980009;
   margin: 0px;
   padding: 0px;
+  overflow: auto;
 }
 
-.sg-tab > .sg-tab-body > * {
+.sg-tab > .tab-body > * {
   display: none;
 }
 
-.sg-tab > .sg-tab-body > *.sg-tab-active {
+.sg-tab > .tab-body > *.tab-active {
   display: block !important;
 }
 
-#tab1 {
+#tab11 {
   border: 0px solid blue;
   height: 300px;
   width: 500px;

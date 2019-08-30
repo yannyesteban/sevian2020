@@ -150,8 +150,20 @@
                 if ($(x).ds("sgMenu")) {
                     continue;
                 }
-                new Menu({ id: x });
+                if (x.id) {
+                    this.create(x.id, { id: x });
+                }
+                else {
+                    new Menu({ id: x });
+                }
             }
+        }
+        static create(name, info) {
+            this._objs[name] = new Menu(info);
+            return this._objs[name];
+        }
+        static get(name) {
+            return this._objs[name];
         }
         setType(type, subType = "default") {
             this.type = type;
@@ -338,6 +350,7 @@
             }
         }
     }
+    Menu._objs = [];
     $(window).on("load", function () {
         Menu.init();
         //newMenus();
