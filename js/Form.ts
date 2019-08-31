@@ -87,6 +87,24 @@ let json = {
 
 }
 
+
+let f = new Form();
+
+f.add({
+
+    set:"Page",
+    name:"xxx",
+    caption:"",
+    elements:{
+
+    }
+    
+});
+
+f.page("xxx").add({});
+f.tab("xxx").add({});
+f.add();
+
 return Form;
 
 })(_sgQuery);
