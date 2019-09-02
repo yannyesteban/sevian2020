@@ -1,5 +1,4 @@
-var _tab;
-(function ($) {
+const Tab = (function ($) {
     class Tab {
         constructor(opt) {
             this.target = false;
@@ -12,6 +11,7 @@ var _tab;
             this.onClose = false;
             this._onOpen = (index) => { return true; };
             this._onClose = (index) => { return true; };
+            this._main = false;
             this._menu = false;
             this._page = false;
             this._length = 0;
@@ -36,11 +36,11 @@ var _tab;
                 let target = (this.target) ? $(this.target) : false;
                 if (target) {
                     main = target.create("div").attr("id", this.id);
-                    this._create(main);
                 }
                 else {
-                    return;
+                    main = $.create("div").attr("id", this.id);
                 }
+                this._create(main);
             }
             if (this.onOpen) {
                 this._onOpen = $.bind(this.onOpen, this, 'index');
@@ -74,11 +74,14 @@ var _tab;
             this._objs[name] = new Tab(info);
             return this._objs[name];
         }
-        static get(name) {
+        static getObj(name) {
             return this._objs[name];
         }
+        get() {
+            return this._main;
+        }
         _load(main) {
-            main.addClass(this.className).addClass("sg-tab");
+            this._main = main.addClass(this.className).addClass("sg-tab");
             let tab_parts = main.childs();
             this._menu = $(tab_parts[0]).addClass("tab-menu");
             this._page = $(tab_parts[1]).addClass("tab-body");
@@ -97,7 +100,7 @@ var _tab;
             }
         }
         _create(main) {
-            main.addClass("sg-tab");
+            this._main = main.addClass("sg-tab");
             this._menu = main.create({
                 "tagName": "div",
                 "className": "tab-menu"
@@ -169,10 +172,10 @@ var _tab;
                 else {
                     return false;
                 }
+                this._onOpen(index);
             }
             this.setVisible(index, true);
             this.value = index;
-            this._onOpen(index);
             return true;
         }
         setValue(index) {
@@ -193,7 +196,6 @@ var _tab;
         }
     }
     Tab._objs = [];
-    _tab = Tab;
     $(window).on("load", function () {
         Tab.init();
         //ini();
@@ -255,4 +257,5 @@ var _tab;
             }
         });
     }
+    return Tab;
 })(_sgQuery);

@@ -1,23 +1,32 @@
 /* Scss Document */
 
 
-.master{
-    background-color: #2F0133;
-    color:white;
-    .flex{
-        color:yellow;
-        display: flex;
-        flex-direction: row;
 
-        >*{
-            flex: 1 1 auto;
-        }
+@keyframes page-open{
+	0%{
+        max-height:0vh;
+        overflow: hidden; 
     }
+    
+	100%{
+		overflow: auto;
+        max-height:100vh;
+	}
 }
 
-#menu2, #menu10{
-   // width:400px;
+@keyframes page-close{
+	0%{
+        max-height:100vh;
+        overflow: hidden;
+	}
+    
+	100%{
+        max-height:0vh;
+        overflow: hidden;
+	}
 }
+
+
 @keyframes open {
 	0%{
 		opacity:0;
@@ -51,7 +60,8 @@
 		overflow: hidden;
 		padding-left: 30px;
 		opacity: 0;
-	}
+    }
+    
 	100%{
 		max-height: 600px;
 		opacity: 1;
@@ -72,6 +82,114 @@
 
 $font-size: 12pt;
 $font-family: arial;
+
+.sg-form{
+    border:2px solid #DADADA;
+    padding: 4px;
+    >.caption{
+        text-align: center;
+        color: #646464;
+        background-color: #DADADA;
+        line-height: 2em;
+        
+    }
+    >.page{
+       //background-color: #BEBEBE;
+
+    }
+.field{
+            margin:2px;
+            padding: 2px;
+            border:2px solid #DADADA;  
+        }
+
+
+
+}
+
+
+.sg-page{
+    width:600px;
+    >.caption{
+        //text-align: center;
+        color:rgb(129, 129, 129);
+        background: linear-gradient(rgb(224, 224, 224), rgb(214, 214, 214),);
+        -webkit-user-select: none;  /* Chrome 49+ */
+        -moz-user-select: none;     /* Firefox 43+ */
+        -ms-user-select: none;      /* No support yet */
+        user-select: none;          /* Likely future */ 
+        cursor: pointer;
+        padding: 2px;
+        display: flex;
+        //justify-content: center;
+        >.text{
+            flex:1 1 auto;
+            //text-align: center;
+            margin-left: 10px;
+        }
+
+        >.icon{
+            display:  inline-block;
+            border:1px solid white;
+            width:20px;
+            height:20px;
+            vertical-align: baseline;
+        }
+        
+    }
+    >.page{
+        position: relative;
+        overflow: auto;
+    }
+
+    &.page-default{
+        >.caption{
+            >.arrow{
+                display: none;
+            }
+        }
+    }
+
+    &.open{
+        >.caption{
+            >.arrow{
+                
+                float:right;
+                margin:5px;
+                width:10px;
+                height:3px;
+                //margin-right: 12px;
+                background-size: 100%;
+                background-color: rgba(196,196,196,1.00);
+            }
+        }
+        >.page{
+            animation: page-open  0.2s ease-out forwards;
+        }
+
+    }
+    &.close{
+        >.caption{
+            >.arrow{
+                
+                float:right;
+                margin:5px;
+                width: 10px;
+                height: 10px;
+                border-style: solid;
+                border-width: 9px 6px 0 6px;
+                border-color: #646464 transparent transparent transparent;
+                //background-repeat:no-repeat;
+                background-color: transparent;
+            }
+        }
+        >.page{
+            animation: page-close  0.2s ease-out forwards;
+        }
+
+    }
+}
+
 .sg-menu.summer{
     width:350px;
 

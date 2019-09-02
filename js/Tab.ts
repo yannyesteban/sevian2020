@@ -1,5 +1,5 @@
-var _tab;
-(function($){
+
+const Tab = (function($){
     
 class Tab{
 
@@ -16,6 +16,8 @@ class Tab{
     
     _onOpen = (index:number)=>{return true};
 	_onClose = (index:number)=>{return true};
+    
+    _main:any = false;
     _menu:any = false;
     _page:any = false;
     _length:number = 0;
@@ -39,7 +41,7 @@ class Tab{
         this._objs[name] = new Tab(info);
         return this._objs[name];
     }
-    static get(name){
+    static getObj(name){
         return this._objs[name];
     }
     constructor(opt: any){
@@ -67,13 +69,14 @@ class Tab{
         }else{
             
             let target = (this.target)? $(this.target): false;
+            
             if(target){
                 main = target.create("div").attr("id", this.id);
-                this._create(main);
             }else{
-               return; 
+                main = $.create("div").attr("id", this.id); 
             }
-        
+           
+            this._create(main);
         }
         if(this.onOpen){
             this._onOpen = $.bind(this.onOpen, this, 'index');
@@ -93,9 +96,12 @@ class Tab{
         
     }
 
+    get(){
+        return this._main; 
+    }
     _load(main:any){
         
-        main.addClass(this.className).addClass("sg-tab");
+        this._main = main.addClass(this.className).addClass("sg-tab");
         let tab_parts = main.childs();
 
         this._menu = $(tab_parts[0]).addClass("tab-menu");
@@ -122,7 +128,7 @@ class Tab{
     }
 
     _create(main:any){
-        main.addClass("sg-tab");
+        this._main = main.addClass("sg-tab");
 
         this._menu = main.create({
             "tagName": "div",
@@ -212,11 +218,13 @@ class Tab{
             }else{
                 return false;
             }
+            
+            this._onOpen(index);
         }
         
         this.setVisible(index, true);
         this.value = index;
-        this._onOpen(index);
+        
         
         return true;
     }
@@ -245,7 +253,7 @@ class Tab{
     
 }
 
-_tab = Tab;
+
 $(window).on("load", function(){
        
     Tab.init();
@@ -323,4 +331,5 @@ let tabii = new Tab({
 });
 
 }
+return Tab;
 })(_sgQuery);

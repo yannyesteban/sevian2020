@@ -5,8 +5,14 @@
 <meta charset="utf-8">
  
 <title>Documento sin título</title>
-    
-<link href="../css/Form.css"  rel="stylesheet" type="text/css" />
+   <style>
+   
+   * {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+   </style> 
+<link href="../css/Form_.css"  rel="stylesheet" type="text/css" />
 <link href="../css/sgTab.css"  rel="stylesheet" type="text/css" />
 <link href="../css/sgWindow.css" rel="stylesheet" type="text/css"/>
     <!--<link href="../css/Menu.css"  rel="stylesheet" type="text/css" />-->
@@ -27,7 +33,26 @@
 <body>
 
 </div>
-    <div id="q"></div>
+<div id="form_one"></div>
+<div id="p5" class="sg-page sg-detect">
+    <div class="caption">
+        <span class="icon"></span>
+        <span class="text">Page II</span>
+        <span class="arrow"></span>
+    </div>
+    <div class="page">sadsad s dsa</div>
+</div>
+
+<input type="button" value="Open" onclick="Page.get('p5').show(true);">
+<input type="button" value="Close" onclick="Page.get('p5').show(false);">
+<input type="button" value="Toggle" onclick="Page.get('p5').toggle();">
+
+<div id="page_one"></div>
+
+
+</div>    
+
+<div id="q"></div>
     
 
     <div id="menu11" class="sg-menu sg-detect summer menu-accordion menu-default">

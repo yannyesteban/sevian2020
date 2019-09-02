@@ -83,6 +83,10 @@ _sgObjet.prototype = {
 	},
 	
 	create: function(tagName){
+        if(tagName === false){
+            return this;
+        }
+        
 		return this.append(_sgQuery.create(tagName));
 		
 	},
@@ -134,7 +138,7 @@ _sgObjet.prototype = {
 	
 	append: function(obj){
 		
-		if(!this.e || !this.e.appendChild){
+		if(!this.e || !this.e.appendChild || obj === false){
 			return this;
 		}
 

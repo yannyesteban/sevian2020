@@ -1,24 +1,45 @@
 /* Scss Document */
-.master {
-  background-color: #2F0133;
-  color: white;
+@-webkit-keyframes page-open {
+  0% {
+    max-height: 0vh;
+    overflow: hidden;
+  }
+  100% {
+    overflow: auto;
+    max-height: 100vh;
+  }
+}
+@keyframes page-open {
+  0% {
+    max-height: 0vh;
+    overflow: hidden;
+  }
+  100% {
+    overflow: auto;
+    max-height: 100vh;
+  }
 }
 
-.master .flex {
-  color: yellow;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+@-webkit-keyframes page-close {
+  0% {
+    max-height: 100vh;
+    overflow: hidden;
+  }
+  100% {
+    max-height: 0vh;
+    overflow: hidden;
+  }
 }
 
-.master .flex > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+@keyframes page-close {
+  0% {
+    max-height: 100vh;
+    overflow: hidden;
+  }
+  100% {
+    max-height: 0vh;
+    overflow: hidden;
+  }
 }
 
 @-webkit-keyframes open {
@@ -119,6 +140,101 @@
     max-height: 0px;
     overflow: hidden;
   }
+}
+
+.sg-form {
+  border: 2px solid #DADADA;
+  padding: 4px;
+}
+
+.sg-form > .caption {
+  text-align: center;
+  color: #646464;
+  background-color: #DADADA;
+  line-height: 2em;
+}
+
+.sg-form .field {
+  margin: 2px;
+  padding: 2px;
+  border: 2px solid #DADADA;
+}
+
+.sg-page {
+  width: 600px;
+}
+
+.sg-page > .caption {
+  color: #818181;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e0e0e0), to(#d6d6d6));
+  background: linear-gradient(#e0e0e0, #d6d6d6);
+  -webkit-user-select: none;
+  /* Chrome 49+ */
+  -moz-user-select: none;
+  /* Firefox 43+ */
+  -ms-user-select: none;
+  /* No support yet */
+  user-select: none;
+  /* Likely future */
+  cursor: pointer;
+  padding: 2px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.sg-page > .caption > .text {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  margin-left: 10px;
+}
+
+.sg-page > .caption > .icon {
+  display: inline-block;
+  border: 1px solid white;
+  width: 20px;
+  height: 20px;
+  vertical-align: baseline;
+}
+
+.sg-page > .page {
+  position: relative;
+  overflow: auto;
+}
+
+.sg-page.page-default > .caption > .arrow {
+  display: none;
+}
+
+.sg-page.open > .caption > .arrow {
+  float: right;
+  margin: 5px;
+  width: 10px;
+  height: 3px;
+  background-size: 100%;
+  background-color: #c4c4c4;
+}
+
+.sg-page.open > .page {
+  -webkit-animation: page-open  0.2s ease-out forwards;
+          animation: page-open  0.2s ease-out forwards;
+}
+
+.sg-page.close > .caption > .arrow {
+  float: right;
+  margin: 5px;
+  width: 10px;
+  height: 10px;
+  border-style: solid;
+  border-width: 9px 6px 0 6px;
+  border-color: #646464 transparent transparent transparent;
+  background-color: transparent;
+}
+
+.sg-page.close > .page {
+  -webkit-animation: page-close  0.2s ease-out forwards;
+          animation: page-close  0.2s ease-out forwards;
 }
 
 .sg-menu.summer {
