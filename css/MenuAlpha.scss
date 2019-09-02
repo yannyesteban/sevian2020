@@ -109,7 +109,8 @@ $font-family: arial;
 
 
 .sg-page{
-    width:600px;
+    //max-width:600px;
+    width:100%;
     >.caption{
         //text-align: center;
         color:rgb(129, 129, 129);
@@ -164,7 +165,11 @@ $font-family: arial;
             }
         }
         >.page{
-            animation: page-open  0.2s ease-out forwards;
+            //color:red;
+            max-height: 600px;
+            transition: color 1s, max-height 1.0s ease-in, overflow 1.0s;
+            overflow: auto;
+            //animation: page-open  3.2s ease-out forwards;
         }
 
     }
@@ -184,7 +189,11 @@ $font-family: arial;
             }
         }
         >.page{
-            animation: page-close  0.2s ease-out forwards;
+            //color:green;
+            max-height: 0px;
+            overflow: hidden;
+            transition: color 1s, max-height 1.0s ease-out,overflow 1.0s;
+            //animation: page-close  3.2s ease-out forwards;
         }
 
     }

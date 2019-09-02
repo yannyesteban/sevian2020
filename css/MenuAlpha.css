@@ -161,7 +161,7 @@
 }
 
 .sg-page {
-  width: 600px;
+  width: 100%;
 }
 
 .sg-page > .caption {
@@ -217,8 +217,10 @@
 }
 
 .sg-page.open > .page {
-  -webkit-animation: page-open  0.2s ease-out forwards;
-          animation: page-open  0.2s ease-out forwards;
+  max-height: 600px;
+  -webkit-transition: color 1s, max-height 1.0s ease-in, overflow 1.0s;
+  transition: color 1s, max-height 1.0s ease-in, overflow 1.0s;
+  overflow: auto;
 }
 
 .sg-page.close > .caption > .arrow {
@@ -233,8 +235,10 @@
 }
 
 .sg-page.close > .page {
-  -webkit-animation: page-close  0.2s ease-out forwards;
-          animation: page-close  0.2s ease-out forwards;
+  max-height: 0px;
+  overflow: hidden;
+  -webkit-transition: color 1s, max-height 1.0s ease-out,overflow 1.0s;
+  transition: color 1s, max-height 1.0s ease-out,overflow 1.0s;
 }
 
 .sg-menu.summer {
