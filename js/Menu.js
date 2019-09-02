@@ -1,4 +1,4 @@
-(function ($, Float) {
+const Menu = (function ($, Float) {
     class Menu {
         constructor(opt) {
             /*
@@ -21,6 +21,7 @@
             this._main = null;
             this.action = null;
             this.check = null;
+            this.useCheck = true;
             this.useIcon = true;
             this._isCheck = false;
             this._isItem = false;
@@ -34,7 +35,6 @@
             }
             let main = (this.id) ? $(this.id) : false;
             if (main) {
-                this._main = main;
                 if (main.ds("sgMenu")) {
                     return;
                 }
@@ -49,12 +49,11 @@
                 let target = (this.target) ? $(this.target) : false;
                 if (target) {
                     main = target.create("div").attr("id", this.id);
-                    this._main = main;
-                    this._create(main);
                 }
                 else {
-                    return;
+                    main = $.create("div").attr("id", this.id);
                 }
+                this._create(main);
             }
             if (this.action) {
                 this._action = $.bind(this.action, this, 'item');
@@ -171,8 +170,11 @@
             this._objs[name] = new Menu(info);
             return this._objs[name];
         }
-        static get(name) {
+        static getObj(name) {
             return this._objs[name];
+        }
+        get() {
+            return this._main;
         }
         setType(type, subType = "default") {
             this.type = type;
@@ -202,7 +204,7 @@
             return this.subType;
         }
         _create(main) {
-            main.addClass("sg-menu").addClass(this.className)
+            this._main = main.addClass("sg-menu").addClass(this.className)
                 .addClass(this.useIcon ? "w-icon" : "n-icon")
                 .addClass(`menu-${this.getType()}`)
                 .addClass(`menu-${this.getSubType()}`);
@@ -233,7 +235,7 @@
             }
         }
         _load(main) {
-            main.addClass(this.className);
+            this._main = main.addClass(this.className);
             let type = "";
             let types = ["accordion", "popup"];
             types.forEach((e) => {
@@ -285,7 +287,7 @@
                 .addClass("option")
                 .prop("href", info.url || "javascript:void(0)")
                 .ds("value", info.value || "");
-            if (info.useCheck || true) {
+            if (this.useCheck && (info.useCheck === true)) {
                 let chk = link.create("input").attr("type", "checkbox");
             }
             link.create("span").addClass("icon").addClass(info.iconClass || "");
@@ -485,4 +487,5 @@
             // alert(this)
         });
     };
+    return Menu;
 })(_sgQuery, _sgFloat);

@@ -241,6 +241,18 @@
   transition: color 1s, max-height 1.0s ease-out,overflow 1.0s;
 }
 
+.sg-menu.sevian > .menu {
+  text-align: center;
+}
+
+.sg-menu.sevian > .menu > .item {
+  display: inline-block;
+}
+
+.sg-menu.sevian > .menu > .item .icon {
+  display: none;
+}
+
 .sg-menu.summer {
   width: 350px;
 }

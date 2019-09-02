@@ -10,7 +10,7 @@ const Form = (($) => {
         id:any = "";
         value: any = "";
         caption:string = "";
-        type:string = "";
+        type:string = "dropdown";
         iconClass:string = "";
         child:any = null;
         open:boolean = false;
@@ -75,7 +75,7 @@ const Form = (($) => {
                 if(target){
                     main = target.create("div").attr("id", this.id);
                 }else{
-                    main = $.create("div"); 
+                    main = $.create("div").attr("id", this.id); 
                 }
                 
                 this._create(main);
@@ -119,7 +119,7 @@ const Form = (($) => {
             }
 
             if(this.elements){
-                this._addElements(main, this.elements);
+                this._addElements(page, this.elements);
 
             }
 
@@ -139,7 +139,6 @@ const Form = (($) => {
                         page.append(input.get());
                         break;
                     case "field":
-                        
                         page.append(this.createField(info));
                         break;
                     case "page":
@@ -148,10 +147,32 @@ const Form = (($) => {
                     case "tab":
                         page.append(this.createTab(info));
                         break;
+                    case "menu":
+                        page.append(this.createMenu(info));
+                        break;
+                    case "tag":
+                        page.append(this.createTag(info));
+                        break;
                 }
 
             }
 
+        }
+        createTag(info:any){
+            
+            let _page = $.create(info.tagName).addClass(["page","container"]);
+            
+            if(info.elements){
+                
+                this._addElements(_page, info.elements);
+            }
+
+            return _page;
+          
+        }
+        createMenu(info:any){
+            let _menu = new Menu(info);
+            return $(_menu.get());
         }
         createPage(info:any){
             
@@ -337,6 +358,26 @@ $(window).on("load", function(){
                             caption:"Lugar de Nacimiento",
                             type:"text",
                         },
+                        {
+                            set:"menu",
+                            name:"modo",
+                            //id:"f_modo",
+                            caption:"",
+                            type:"accordion",
+                            subType:"system",
+                            className:["sevian", "nav"],
+                            useIcon: true,
+                            tagLink:"button",
+                            items:[
+                                {
+                                    caption:"Guardar",
+                                    //useCheck:true,
+                                },
+                                {
+                                    caption:"Volver"
+                                },
+                            ]
+                        },
                     ]
                 },
                 {
@@ -519,9 +560,62 @@ $(window).on("load", function(){
                             ]
                         }
 
+                    ]
+                },
+                {
+                    set:"field",
+                    name:"modo",
+                    id:"f_modo",
+                    caption:"Modo",
+                    type:"select",
+                },
+                {
+                    set:"menu",
+                    name:"modo",
+                    //id:"f_modo",
+                    caption:"",
+                    type:"accordion",
+                    subType:"system",
+                    className:["sevian", "nav"],
+                    useIcon: true,
+                    tagLink:"button",
+                    items:[
+                        {
+                            caption:"Save",
+                            //useCheck:true,
+                        },
+                        {
+                            caption:"Restore"
+                        },
+                    ]
+                },
+                {
+                    set:"tag",
+                    tagName:"div",
+                    elements:[
+                        {
+                            set:"field",
+                            caption:"Profesion",
+                            type:"text",
+                            name:"prop",
+                            id:"f_prop",
+                        },
+                        {
+                            set:"field",
+                            caption:"Estudios",
+                            type:"text",
+                            name:"estudio",
+                            id:"f_estudio",
+                        },
+                        {
+                            set:"field",
+                            caption:"Estudios II",
+                            type:"text",
+                            name:"estudio2",
+                            id:"f_estudio2",
+                        },
                     ]
                 }
-
 
             ]
 

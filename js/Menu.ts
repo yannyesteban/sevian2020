@@ -1,3 +1,4 @@
+const Menu = 
 (function($, Float){
    
     class Menu{
@@ -26,6 +27,7 @@
         
         action:any = null;
         check:any = null;
+        useCheck:boolean = true;
         useIcon:boolean = true;
 
         _isCheck:boolean = false;
@@ -52,7 +54,7 @@
             this._objs[name] = new Menu(info);
             return this._objs[name];
         }
-        static get(name){
+        static getObj(name){
             return this._objs[name];
         }
         constructor(opt: any){
@@ -68,7 +70,7 @@
             let main = (this.id)? $(this.id): false;
             
             if(main){
-                this._main = main;
+                
                 if(main.ds("sgMenu")){
                     return;
                 }
@@ -84,12 +86,11 @@
                 let target = (this.target)? $(this.target): false;
                 if(target){
                     main = target.create("div").attr("id", this.id);
-                    this._main = main;
-                    this._create(main);
                 }else{
-                   return; 
+                    main = $.create("div").attr("id", this.id); 
+                    
                 }
-            
+                this._create(main);
             }
             if(this.action){
                 this._action = $.bind(this.action, this, 'item');
@@ -201,7 +202,9 @@
                 }
             }
         }
-
+        get(){
+            return this._main; 
+        }
         setType(type:string, subType:string="default"){
             
             this.type = type;
@@ -237,7 +240,7 @@
         }
         _create(main:any){   
             
-            main.addClass("sg-menu").addClass(this.className)
+            this._main = main.addClass("sg-menu").addClass(this.className)
             .addClass(this.useIcon? "w-icon": "n-icon")
             
             .addClass(`menu-${this.getType()}`)
@@ -276,7 +279,7 @@
 
         _load(main:any){
 
-            main.addClass(this.className);
+            this._main = main.addClass(this.className);
 
             let type = "";
             let types = ["accordion","popup"];
@@ -339,7 +342,7 @@
                 .prop("href", info.url || "javascript:void(0)")
                 .ds("value", info.value || "");
 
-            if(info.useCheck || true){
+            if(this.useCheck && (info.useCheck === true)){
                 let chk = link.create("input").attr("type","checkbox");
             }    
             
@@ -572,5 +575,5 @@ db ("info. target "+Info.target, "blue");
     
     };
 
-
+    return Menu;
 })(_sgQuery, _sgFloat);

@@ -7,7 +7,7 @@ const Form = (($) => {
             this.id = "";
             this.value = "";
             this.caption = "";
-            this.type = "";
+            this.type = "dropdown";
             this.iconClass = "";
             this.child = null;
             this.open = false;
@@ -38,7 +38,7 @@ const Form = (($) => {
                     main = target.create("div").attr("id", this.id);
                 }
                 else {
-                    main = $.create("div");
+                    main = $.create("div").attr("id", this.id);
                 }
                 this._create(main);
             }
@@ -92,7 +92,7 @@ const Form = (($) => {
                 page.text(this.text);
             }
             if (this.elements) {
-                this._addElements(main, this.elements);
+                this._addElements(page, this.elements);
             }
         }
         _load(main) {
@@ -114,8 +114,25 @@ const Form = (($) => {
                     case "tab":
                         page.append(this.createTab(info));
                         break;
+                    case "menu":
+                        page.append(this.createMenu(info));
+                        break;
+                    case "tag":
+                        page.append(this.createTag(info));
+                        break;
                 }
             }
+        }
+        createTag(info) {
+            let _page = $.create(info.tagName).addClass(["page", "container"]);
+            if (info.elements) {
+                this._addElements(_page, info.elements);
+            }
+            return _page;
+        }
+        createMenu(info) {
+            let _menu = new Menu(info);
+            return $(_menu.get());
         }
         createPage(info) {
             let _page = new Page(info);
@@ -282,6 +299,25 @@ const Form = (($) => {
                                 caption: "Lugar de Nacimiento",
                                 type: "text",
                             },
+                            {
+                                set: "menu",
+                                name: "modo",
+                                //id:"f_modo",
+                                caption: "",
+                                type: "accordion",
+                                subType: "system",
+                                className: ["sevian", "nav"],
+                                useIcon: true,
+                                tagLink: "button",
+                                items: [
+                                    {
+                                        caption: "Guardar",
+                                    },
+                                    {
+                                        caption: "Volver"
+                                    },
+                                ]
+                            },
                         ]
                     },
                     {
@@ -458,6 +494,59 @@ const Form = (($) => {
                                     },
                                 ]
                             }
+                        ]
+                    },
+                    {
+                        set: "field",
+                        name: "modo",
+                        id: "f_modo",
+                        caption: "Modo",
+                        type: "select",
+                    },
+                    {
+                        set: "menu",
+                        name: "modo",
+                        //id:"f_modo",
+                        caption: "",
+                        type: "accordion",
+                        subType: "system",
+                        className: ["sevian", "nav"],
+                        useIcon: true,
+                        tagLink: "button",
+                        items: [
+                            {
+                                caption: "Save",
+                            },
+                            {
+                                caption: "Restore"
+                            },
+                        ]
+                    },
+                    {
+                        set: "tag",
+                        tagName: "div",
+                        elements: [
+                            {
+                                set: "field",
+                                caption: "Profesion",
+                                type: "text",
+                                name: "prop",
+                                id: "f_prop",
+                            },
+                            {
+                                set: "field",
+                                caption: "Estudios",
+                                type: "text",
+                                name: "estudio",
+                                id: "f_estudio",
+                            },
+                            {
+                                set: "field",
+                                caption: "Estudios II",
+                                type: "text",
+                                name: "estudio2",
+                                id: "f_estudio2",
+                            },
                         ]
                     }
                 ]

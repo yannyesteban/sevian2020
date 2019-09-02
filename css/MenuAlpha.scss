@@ -199,6 +199,24 @@ $font-family: arial;
     }
 }
 
+
+.sg-menu.sevian{
+
+    >.menu{
+        text-align: center;
+        >.item{
+            display: inline-block;
+            .icon{
+                display: none;
+            }
+        
+            
+        }
+    }
+    .item{
+
+    }
+}
 .sg-menu.summer{
     width:350px;
 
