@@ -5,7 +5,7 @@ const Input = (($) => {
         id:string = "";
         name:string = "";
         type:string = "";
-        
+        value:string = "";
         _main:object = null;
         constructor(opt: any){
             
@@ -72,6 +72,7 @@ const Input = (($) => {
             }
             info.id = this.id;
             info.name = this.name;
+            info.value = this.value;
             this._main = $.create(info);
 
         }

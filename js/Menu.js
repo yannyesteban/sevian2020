@@ -23,6 +23,7 @@ const Menu = (function ($, Float) {
             this.check = null;
             this.useCheck = true;
             this.useIcon = true;
+            this.parentContext = this;
             this._isCheck = false;
             this._isItem = false;
             this._action = function (index) { };
@@ -56,10 +57,10 @@ const Menu = (function ($, Float) {
                 this._create(main);
             }
             if (this.action) {
-                this._action = $.bind(this.action, this, 'item');
+                this._action = $.bind(this.action, this.parentContext, 'item');
             }
             if (this.check) {
-                this._check = $.bind(this.check, this, 'item');
+                this._check = $.bind(this.check, this.parentContext, 'item');
             }
             main.ds("sgMenu", "menu");
             if (this.context) {
@@ -298,7 +299,7 @@ const Menu = (function ($, Float) {
                 link.on("click", (event) => { this.show(item); });
             }
             else if (info.action) {
-                let action = $.bind(info.action, this, "item");
+                let action = $.bind(info.action, this.parentContext, "item");
                 link.on("click", (event) => { action(item); });
             }
         }

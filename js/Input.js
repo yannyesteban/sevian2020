@@ -5,6 +5,7 @@ const Input = (($) => {
             this.id = "";
             this.name = "";
             this.type = "";
+            this.value = "";
             this._main = null;
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
@@ -63,6 +64,7 @@ const Input = (($) => {
             }
             info.id = this.id;
             info.name = this.name;
+            info.value = this.value;
             this._main = $.create(info);
         }
         _load(main) {

@@ -11,6 +11,7 @@ const Form = (($) => {
         value: any = "";
         caption:string = "";
         type:string = "dropdown";
+        className = "sevian";
         iconClass:string = "";
         child:any = null;
         open:boolean = false;
@@ -104,7 +105,7 @@ const Form = (($) => {
 
         _create(main:any){
             
-            this._main = main.addClass("sg-form");
+            this._main = main.addClass("sg-form").addClass(this.className);
 
             main.create({tagName:"div",className:"caption"})
             .add({tagName: "span", className: "icon" + this.iconClass})
@@ -171,6 +172,7 @@ const Form = (($) => {
           
         }
         createMenu(info:any){
+            info.parentContext = this;
             let _menu = new Menu(info);
             return $(_menu.get());
         }
@@ -316,6 +318,12 @@ $(window).on("load", function(){
             caption:"Form ONE",
             id:"form_one",
             elements:[
+                {
+                    set:"input",
+                    type:"text",
+                    id:"xy",
+                    value:"yanny esteban",
+                },
                 {
                     set:"field",
                     name:"cedula",
@@ -582,6 +590,9 @@ $(window).on("load", function(){
                     items:[
                         {
                             caption:"Save",
+                            action:function(){
+                                alert(this.className)
+                            }
                             //useCheck:true,
                         },
                         {

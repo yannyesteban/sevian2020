@@ -30,6 +30,7 @@ const Menu =
         useCheck:boolean = true;
         useIcon:boolean = true;
 
+        parentContext:any = this;
         _isCheck:boolean = false;
         _isItem:boolean = false;
 
@@ -93,10 +94,10 @@ const Menu =
                 this._create(main);
             }
             if(this.action){
-                this._action = $.bind(this.action, this, 'item');
+                this._action = $.bind(this.action, this.parentContext, 'item');
             }
             if(this.check){
-                this._check = $.bind(this.check, this, 'item');
+                this._check = $.bind(this.check, this.parentContext, 'item');
             }
             main.ds("sgMenu", "menu");
             
@@ -354,7 +355,7 @@ const Menu =
                 this.createMenu(item, info.items, true);
                 link.on("click", (event)=>{this.show(item)});
             }else if(info.action){
-                let action = $.bind(info.action, this, "item");
+                let action = $.bind(info.action, this.parentContext, "item");
                 link.on("click", (event)=>{action(item);});
             }
         }
