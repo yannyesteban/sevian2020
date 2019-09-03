@@ -24,9 +24,10 @@ $js = [
 	[
 		'file' 	=> "{$PATH}js/sgSevian.js",
 		'begin'	=> true],
-	[
+	
+	/*[
 		'file' 	=> "{$PATH}js/Sevian/Tab.js",
-		'begin'	=> true],
+		'begin'	=> true],*/
 	[
 		'file' 	=> "{$PATH}js/Sevian/Menu.js",
 		'begin'	=> true],
@@ -42,9 +43,9 @@ $js = [
 	[
 		'file' 	=> "{$PATH}js/Sevian/Input.js",
 		'begin'	=> true],
-	[
+	/*[
 		'file' 	=> "{$PATH}js/Sevian/Form.js",
-		'begin'	=> true],
+		'begin'	=> true],*/
 
 	/*[
 		'file' 	=> "{$PATH}js/Sevian/modulo1.js",
@@ -65,6 +66,13 @@ $js = [
 		'file' 	=> "{$PATH}js/Page.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
+
+
+	[
+		'file' 	=> "{$PATH}js/Menu.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+
 	[
 		'file' 	=> "{$PATH}js/Tab.js",
 		//'attrib' => [			'_type'=>'module'		]

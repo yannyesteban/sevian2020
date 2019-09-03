@@ -313,7 +313,7 @@ $(window).on("load", function(){
 
     Form.init();
 
-    if(true){
+    if(false){
         let p = new Form({
             caption:"Form ONE",
             id:"form_one",

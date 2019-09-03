@@ -11,8 +11,8 @@ class Menu extends \Sevian\Element{
 		public $config = [];
 		public $_menu = [];
     
-    protected $tMenus = "_sg_menus";
-    protected $tMenuItems = "_sg_menu_items";
+		protected $tMenus = "_sg_menus";
+		protected $tMenuItems = "_sg_menu_items";
 	
    
 		//private $_config = [];
@@ -134,7 +134,7 @@ class Menu extends \Sevian\Element{
 
 			$menu = new \Sevian\Menu($opt);
 			//$menu->class = "uva";
-
+			//print_r($opt);
 			$this->panel = $menu;
 	
 			return;
@@ -217,7 +217,7 @@ class Menu extends \Sevian\Element{
 			WHERE form = '$this->name'";
 
 		$result = $cn->execute($q);
-
+		print_r($result);
 		if($rs = $cn->getDataAssoc($result)){
 			if(isset($this->fields[$rs['field']])){
 				$this->fields[$rs['field']]->update($rs);
@@ -256,53 +256,88 @@ class Menu extends \Sevian\Element{
 
 			
 			$this->loadCfgItems();
-		//	print_r($this->_config);
+			//print_r($this->_config);
 		}
 
 	}
 
+
+	public function createItem(){
+
+	}
 	public function loadCfgItems(){
 		$cn = $this->cn;
 
 		$cn->query = "
 			SELECT * 
 			FROM $this->tMenuItems 
-			WHERE menu = '$this->name'";
+			WHERE menu = '$this->name' order by `order`";
         
             
        
 
 		$result = $cn->execute();
 		$opt = [];
-		while($rs = $cn->getDataAssoc($result)){
 
-			foreach($rs as $k => $v){
-			//	$this->$k = $v;
-			}
+		$items = [];
+		$json = [];
+		
+		while($rs = $cn->getDataAssoc($result)){
 			if($rs["action"]){
 				$action = "Sevian.action.send(".$rs["action"].");";
 			}else{
 				$action = "";
 			}
+
+			$index = $rs["index"];
+			$parent = $rs["parent"];
 			
+			$items[$index] = [
+				"caption" => $rs["title"],
+
+				"action" => $action,
+
+			];
+			
+
+			if($parent != ""){
+				if(!isset($items[$parent]["items"])){
+					$items[$parent]["items"] = [];
+				}
+				
+				$items[$parent]["items"][] = &$items[$index];
+			}else{
+				
+				$json[] = &$items[$index];
+			}
+
+
+			foreach($rs as $k => $v){
+			//	$this->$k = $v;
+			}
+			
+			
+			
+
+
 			$opt[] = [
 				"caption" => $rs["title"],
 				"index" => $rs["index"],
 				"parent" => $rs["parent"],
 				"action" => $action,
-				
-				
-
-
 
 			];
 			
 			
 
+
+
+			
 		
 		}
-		$this->_menu["items"] = $opt;
-	//	print_r($this->_menu);
+		$this->_menu["items"] = $json;
+		//print_r($items);
+		//print_r(json_encode($json, JSON_PRETTY_PRINT));
 
 	}
 	public function renderx(){
