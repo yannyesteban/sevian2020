@@ -1,4 +1,4 @@
-const Menu = 
+var Menu = 
 (function($, Float){
    
     class Menu{

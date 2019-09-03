@@ -290,8 +290,10 @@ class S{
 				self::$_info[$info->id]->isPanel = true;
 				// if this->mail panel then title = this->title
 				self::$_str->addPanel($info->id, $e->getPanel());
+				//print_r($e->config());
+				self::addJsPanel($e->config());
                 if($e instanceof \Sevian\JsPanelRequest){
-                    self::addJsPanel($e->getJsConfigPanel());
+                    //self::addJsPanel($e->getJsConfigPanel());
                 }
                 
 				
@@ -665,7 +667,7 @@ class S{
 		//$json = json_encode(self::$_mainPanels, JSON_PRETTY_PRINT);
 		//$script = "//Sevian.loadPanels($json)";
         $json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
-        $script = "Sevian.init($json)";
+        $script = "Sevian.action.initPanel($json)";
 		
 		$doc->appendScript($script, true);
 		

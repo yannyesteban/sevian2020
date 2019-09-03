@@ -7,6 +7,7 @@ class Element{
 	
 	public $id = false;
 	public $element = "default";
+	
 	public $name = "";
 	public $method = "";
 	public $eparams = [];
@@ -28,7 +29,10 @@ class Element{
 	protected $_config = [];
 	protected $_response = [];
     
-    protected $_jsElement = [];
+	protected $_jsElement = [];
+	protected $typeElement = "panel";
+	protected $info = "";
+	
 	
 	public function __construct($opt = []){
 
@@ -39,6 +43,14 @@ class Element{
 	}
 
 	public function config(){
+		
+		return new jsConfigPanel([
+            "panel"   => $this->id,
+            "type"    => $this->typeElement,
+			"option" => $this->info,
+			"debug" => "hola",
+            
+        ]);	
 
 	}
 	public function evalMethod(){

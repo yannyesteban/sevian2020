@@ -88,13 +88,14 @@ class Menu extends HTML{
     public $caption = "";
     public $items = [];
     public $target = false;
-
+    public $type = "menu";
+    public $typeElement = "menu";
     public function __construct($opt = ""){
 
         $this->infoMenu = new InfoMenu($opt);
 
-        if($this->infoMenu->target){
-            $this->id = $this->infoMenu->target;
+        if($this->infoMenu->id){
+            $this->id = $this->infoMenu->id;
         }
         if($opt["class"] ?? false !== false){
             $this->class = $opt["class"];
@@ -116,12 +117,19 @@ class Menu extends HTML{
     }
 
     public function getScript(){
+        return "";
         $json = json_encode($this->infoMenu, JSON_PRETTY_PRINT);
         //$this->script ="new Sevian.Menu($json);";
         $this->script ="new Menu($json);";
        
         $script = parent::getScript();
         return $script;
+    }
+    public function getType(){
+        return $this->typeElement;
+    }
+    public function getInfo(){
+        return $this->infoMenu;
     }
 }
 ?>

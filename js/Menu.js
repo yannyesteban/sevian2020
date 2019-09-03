@@ -1,4 +1,4 @@
-const Menu = (function ($, Float) {
+var Menu = (function ($, Float) {
     class Menu {
         constructor(opt) {
             /*

@@ -180,7 +180,17 @@ if(!Sevian){
 			}
 			
 		},
-		
+		initPanel: function(panels){
+			
+			for(var x of panels){
+				
+				if(window[x.type]){
+					
+					new window[x.type](x.option);
+				}	
+				
+			}
+		},
 		initPanels: function(panels){
 			for(x in panels){
 					
@@ -416,6 +426,7 @@ if(!Sevian){
 
 	
 	namespace.action = sevian;
+	
 	
 })(Sevian, _sgQuery, sgWindow);
 
