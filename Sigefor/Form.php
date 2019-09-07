@@ -53,8 +53,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	public $showCaption = true;
 	public $menus = [];
     
-    protected $tForms = "_sg_forms";
-	protected $tFormFields = "_sg_form_fields";
+    protected $tForms = "_sg_form";
+	protected $tFields = "_sg_fields";
 	
 	protected $tMenus = "_sg_menus";
     protected $tMenuItems = "_sg_menu_items";
@@ -144,7 +144,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 		$q = "
 			SELECT * 
-			FROM $this->tFormFields 
+			FROM $this->tFields 
 			WHERE form = '$this->name'";
 
 		$result = $cn->execute($q);
@@ -161,7 +161,30 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	private function createForm(){
 		
-		$f = new \Sevian\Form();
+		//$opt = $this->_form;
+
+		$opt = [
+			"caption"=>"Hola Mundo Form 2",
+
+		];
+
+		//print_r($this->_menu);
+		$opt["id"] = "sg_form_".$this->id;
+		$form = new \Sevian\HTML("div");
+
+		$form->id = "sg_form_".$this->id;
+		$this->typeElement = "Form";
+		$this->info = $opt;//$form->getInfo();
+
+		print_r($this->fields);
+		//$menu->class = "uva";
+		//print_r($opt);
+		$this->panel = $form;
+
+		return $form;
+
+
+		$f = new \Sevian\Form2();
 		if($this->showCaption){
 			$f->setCaption($this->title);
 		}

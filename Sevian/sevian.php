@@ -20,6 +20,7 @@ include 'Panel.php';
 include 'Input.php';
 include 'Page.php';
 include 'Form.php';
+include 'Form2.php';
 
 
 class S{

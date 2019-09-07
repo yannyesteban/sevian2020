@@ -18,7 +18,7 @@ body, html {
 .sg-form {
   border: 2px solid #424242;
   padding: 4px;
-  width: 800px;
+  width: 100%;
 }
 
 .sg-form > .head {

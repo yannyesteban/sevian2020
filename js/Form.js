@@ -1,5 +1,5 @@
 //import { Query as $} from './Query.js';
-const Form = (($) => {
+var Form = (($) => {
     class Form {
         constructor(opt) {
             this.target = "";
