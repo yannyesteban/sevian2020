@@ -1,4 +1,5 @@
-const Input = (($) => {
+var $I = {};
+var Input = (($) => {
     class Input {
         constructor(opt) {
             this.target = null;
@@ -6,6 +7,12 @@ const Input = (($) => {
             this.name = "";
             this.type = "";
             this.value = "";
+            this.className = "";
+            this.data = false;
+            this.propertys = false;
+            this.events = false;
+            this.childs = false;
+            this.parent = "";
             this._main = null;
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
@@ -73,5 +80,6 @@ const Input = (($) => {
             return this._main.get();
         }
     }
+    $I.std = Input;
     return Input;
 })(_sgQuery);

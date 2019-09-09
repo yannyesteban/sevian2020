@@ -131,9 +131,11 @@ var Form = (($) => {
         }
     
         _addElements(page:any, elements:any){
-            
-            for(let info of elements){
-                
+
+            for(let x in elements){
+
+                let info = elements[x];
+
                 switch(info.set){
                     case "input":
                         let input = new Input(info);
@@ -207,7 +209,7 @@ var Form = (($) => {
             return $(_tab.get());
         }
         createInput(info:any){
-            
+            return new $I["std"](info);
             return new Input(info)
         }
         createField(info:any){

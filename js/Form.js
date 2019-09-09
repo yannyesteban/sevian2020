@@ -100,7 +100,8 @@ var Form = (($) => {
             this._main = main.addClass("sg-page");
         }
         _addElements(page, elements) {
-            for (let info of elements) {
+            for (let x in elements) {
+                let info = elements[x];
                 switch (info.set) {
                     case "input":
                         let input = new Input(info);
@@ -159,6 +160,7 @@ var Form = (($) => {
             return $(_tab.get());
         }
         createInput(info) {
+            return new $I["std"](info);
             return new Input(info);
         }
         createField(info) {

@@ -1,4 +1,6 @@
-const Input = (($) => {  
+
+var $I = {};
+var Input = (($) => {  
       
     class Input{
         target:object = null;
@@ -6,6 +8,14 @@ const Input = (($) => {
         name:string = "";
         type:string = "";
         value:string = "";
+        className = "";
+        data:any = false;
+        propertys:any = false;
+        events:any = false;
+
+
+        childs:boolean = false;
+        parent:string = "";
         _main:object = null;
         constructor(opt: any){
             
@@ -85,6 +95,6 @@ const Input = (($) => {
         }
 
     }
-    
+    $I.std = Input;
     return Input;
 })(_sgQuery);

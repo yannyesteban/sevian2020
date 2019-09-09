@@ -2,17 +2,32 @@
 namespace Sevian\Sigefor;
 include 'ConfigMenu.php';
 
+class InfoInput{
+
+
+	public $control = "std";
+	public $type = "text";
+	public $id = "text";
+	public $name = "text";
+
+	public $value = false;
+	public $data = false;
+	public $events = false;
+	public $propertys = false;
+	public $config = false;
+}
 
 
 class InfoField{
+	public $set = 'field';
 	public $form = '';
 	public $field = '';
 	public $name = '';
 	public $method = '';
-	public $title = '';
+	public $caption = false;
 	public $class = '';
 	public $params = '';
-	public $input = ['input'=>'text'];
+	public $input = 'std';//['input'=>'text'];
 	public $config = false;
 	public $data = false;
 	public $init_value = '';
@@ -40,6 +55,11 @@ class InfoField{
 				$this->$k = $v;	
 			}
 		}
+
+		if($this->caption === false){
+			$this->caption = $this->name;
+		}
+		
 	}
 
 	public function update($opt = []){
@@ -125,9 +145,14 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			foreach($rs as $k => $v){
 				$this->$k = $v;
 			}
-
+			$info = [
+				
+				"caption"	=>	$this->title,
+				"className"	=>	$this->class,
+				
+			];
 			$this->_menu = (array)json_decode($this->params);
-			$this->_menu["caption"] = $this->_config["caption"]??$this->title;
+			$this->_menu["caption"] = $this->_config["caption"]??$this->caption;
 			$this->_menu["class"] = $this->_config["class"] ?? $this->class;
 
 
@@ -156,19 +181,21 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		
 		}
-
+		$this->_menu["elements"] = $this->fields;
 	}
 
+	private function createField($info){
+
+
+
+	}
 	private function createForm(){
 		
 		//$opt = $this->_form;
 
-		$opt = [
-			"caption"=>"Hola Mundo Form 2",
+		$opt =$this->_menu;
 
-		];
-
-		//print_r($this->_menu);
+		print_r($this->_menu);
 		$opt["id"] = "sg_form_".$this->id;
 		$form = new \Sevian\HTML("div");
 
@@ -176,7 +203,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$this->typeElement = "Form";
 		$this->info = $opt;//$form->getInfo();
 
-		print_r($this->fields);
+		//print_r($this->fields);
 		//$menu->class = "uva";
 		//print_r($opt);
 		$this->panel = $form;

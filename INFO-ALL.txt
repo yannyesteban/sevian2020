@@ -1,0 +1,40 @@
+
+
+field:
+
+id
+name
+caption
+className
+value
+mode_value
+data
+default
+input
+type
+parent
+childs
+rules
+events
+info
+
+config:{
+	cols:
+	rows:
+	events,
+	propertys
+	className
+
+}
+
+extra:{
+serial
+upper
+lower
+md5
+html
+sql_value:
+value:@qsd
+
+
+}
