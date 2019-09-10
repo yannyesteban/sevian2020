@@ -177,7 +177,7 @@ class Mysql extends DBase{
 			return false;
         }// end if
 		
-print_r(get_resource_type($this->result));
+
 		if(!$this->result->field_count){
 			return false;
 		}// end if
@@ -357,44 +357,39 @@ print_r(get_resource_type($this->result));
 				$info->tables[$t] = $t;
 				
 			}
-	
-			$field = new InfoField;
+				
+			$field = new InfoField();
+			$field->table = $t;
+			
+			$field->field = $f;
+			$field->name = $name;
+
+
+			$field->orgname = $v->orgname;
+			$field->orgtable = $v->orgtable;
+
+			$field->type = $v->type;
+			$field->mtype = $this->getMetaType($v->type);
+
+			$field->length = $v->length;
+			$field->decimals = $v->decimals;			
 		
-				
+			$field->default = $v->def;
+			$field->notNull = ($v->flags & 1)? true: false;
+		
+		
+			$field->key = ($v->flags & 2)? true: false;
+			$field->unique = ($v->flags & 4)? true: false;
+			$field->serial = ($v->flags & 512)? true: false;
+			$field->unsigned = ($v->flags & 32)? true: false;
+			$field->position = $i++;
+		
 			
-				
-				$field = new InfoField();
-				$field->table = $t;
-				
-				$field->field = $f;
-				$field->name = $name;
-
-
-				$field->orgname = $v->orgname;
-				$field->orgtable = $v->orgtable;
-
-				$field->type = $v->type;
-				$field->mtype = $this->getMetaType($v->type);
-
-				$field->length = $v->length;
-				$field->decimals = $v->decimals;			
+			if($field->key){
+				$info->keys[$name] = $f;
+			}
 			
-				$field->default = $v->def;
-				$field->notNull = ($v->flags & 1)? true: false;
-			
-			
-				$field->key = ($v->flags & 2)? true: false;
-				$field->unique = ($v->flags & 4)? true: false;
-				$field->serial = ($v->flags & 512)? true: false;
-				$field->unsigned = ($v->flags & 32)? true: false;
-				$field->position = $i++;
-			
-				
-				if($field->key){
-					$info->keys[$name] = $f;
-				}
-				
-				$info->fields[$name] = $field;
+			$info->fields[$name] = $field;
 			
 			
 		}
@@ -596,7 +591,7 @@ print_r(get_resource_type($this->result));
 			return C_ERROR_UPD_DEL_FK;
 			break;
 		default:
-			return $msg_error." N° de error: ".$nro_error;
+			return $msg_error." Nï¿½ de error: ".$nro_error;
 		}// end switch
 	
 	}// end class
