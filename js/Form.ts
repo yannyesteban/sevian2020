@@ -192,14 +192,14 @@ var Form = (($) => {
         }
 
         createTab(info:any){
-           // console.log(info);
+           
             let _tab = new Tab(info);
-            //let page = false;
+            
             if(info.tabs){
+                
                 for(let _info of info.tabs){
                     let page = _tab.add(_info);
                     if(_info.elements){
-                      
                         this._addElements(page, _info.elements);
                     }
 

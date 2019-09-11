@@ -208,17 +208,23 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		
 		}
-
+		$page = &$this->_menu["elements"];
 		foreach($this->fields as $k => $field){
 
 			if(isset($groups[$k])){
-				$this->_pages[$groups[$k]]['elements'][] = $field;
+				//$this->_pages[$groups[$k]]['elements'][] = $field;
+				if($groups[$k]){
+					//print_r($this->_pages[$groups[$k]]);
+					$page = &$this->_pages[$groups[$k]]['elements'];
+				}else{
+					$page = &$this->_menu["elements"];
+				}
+				
 
 
-			}else{
-				$this->_menu["elements"][] = $field;
 			}
 
+			$page[] = $field;
 			
 			//$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
 		}
@@ -226,7 +232,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		//$this->_menu["elements"] = $this->fields;
 		$this->_menu["elements"] = array_merge($this->_menu["elements"], $this->p["elements"]);
 
-		$this->_pages["page2"]["oo"]=111;
+		
 		//print_r($this->p);
 		//print_r($this->_pages);
 		print_r($this->_menu["elements"]);
@@ -236,13 +242,19 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$this->_pages[$info['name']] = $info;
 
 		if(isset($info['pages'])){
-			$this->createPages($info['pages']);
+			//$this->createPages($this->_pages[$info['name']]['elements'], $info['pages']);
 		}
 		return $this->_pages[$info['name']];
 	}
 
-	private function createTab($info){
-		
+	private function &createTab($info){
+		$this->_pages[$info['name']] = $info;
+		foreach($info['tabs'] as $k => $v){
+			
+			$this->_pages[$v['name']] = &$this->_pages[$info['name']]['tabs'][$k];
+		}
+
+		return $this->_pages[$info['name']];
 	}
 	private function createPages(&$cont, $pages){
 
@@ -251,14 +263,14 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			switch($info['set']){
 				case 'page':
 
-				$cont[] = &$this->createPage($info);
+					$cont[] = &$this->createPage($info);
 
 					break;
 				case 'container':
 					$this->createContainer($info);
 					break;
 				case 'tab':
-					$this->createTab($info);
+					$cont[] = &$this->createTab($info);
 					break;
 				case 'menu':
 					$this->createMenu($info);

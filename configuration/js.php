@@ -17,7 +17,7 @@ $js = [
 		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgDB.js",
-		'begin'	=> true],
+		'begin'	=> false],
 	[
 		'file' 	=> "{$PATH}js/sgInit.js",
 		'begin'	=> true],

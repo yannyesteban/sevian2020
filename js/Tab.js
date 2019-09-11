@@ -122,7 +122,7 @@ const Tab = (function ($) {
             this._menu.create("a")
                 .on("click", this._click(index))
                 .on("focus", this._click(index))
-                .text(opt.title || "")
+                .text(opt.caption || "")
                 .attr("href", "javascript:void(0);")
                 .ds("tabIndex", index);
             let body = this._page.create("div")
@@ -211,7 +211,7 @@ const Tab = (function ($) {
             onClose: "db('my index '+index);db('chaoooo'+this.value,'aqua','green')",
         });
         tab.add({
-            title: "tab001",
+            caption: "tab001",
             html: "hola mundo txt",
         });
         let tab2 = new Tab({
@@ -227,21 +227,21 @@ const Tab = (function ($) {
             },
             pages: [
                 {
-                    title: "tab001", html: "uno"
+                    caption: "tab001", html: "uno"
                 },
                 {
-                    title: "tab002", html: "que "
+                    caption: "tab002", html: "que "
                 },
                 {
-                    title: "tab003", html: "Opps",
+                    caption: "tab003", html: "Opps",
                 },
                 {
-                    title: "tab004", html: "Cuatro"
+                    caption: "tab004", html: "Cuatro"
                 },
             ],
         });
         tab2.add({
-            title: "tab0 x",
+            caption: "tab0 x",
             html: "hola ee mundo txt 100...",
             active: true,
         });

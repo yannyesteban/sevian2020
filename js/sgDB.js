@@ -2,13 +2,12 @@
 
 var db = false, hr = false;
 (function($){
-	$(window).on("load", function(){
-        _myDb();
-    })
-	_myDb = function(){
+	var linea = 0, div;
 	
-		var linea = 0;
-		var div = $.create("div");
+	
+	
+		
+		div = $.create("div");
 		div.prop("id","debug_1");
 		div.style({
 			width:"200px",
@@ -28,7 +27,7 @@ var db = false, hr = false;
 			this.innerHTML = "";
 		});
 		
-		
+
 		hr = db = function(msg, color, back, clear){
 
 			color = color || "black";
@@ -49,7 +48,7 @@ var db = false, hr = false;
 		
 		
 	
-	}
+	
 		
 	
 })(_sgQuery);

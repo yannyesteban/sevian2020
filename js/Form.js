@@ -145,9 +145,7 @@ var Form = (($) => {
             return $(_page.get());
         }
         createTab(info) {
-            // console.log(info);
             let _tab = new Tab(info);
-            //let page = false;
             if (info.tabs) {
                 for (let _info of info.tabs) {
                     let page = _tab.add(_info);
