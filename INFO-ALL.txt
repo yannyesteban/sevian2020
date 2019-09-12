@@ -27,7 +27,7 @@ config:{
 
 }
 
-extra:{
+onSave:{
 serial
 upper
 lower
@@ -38,3 +38,40 @@ value:@qsd
 
 
 }
+
+
+
+
+pages:[
+	{
+		set:"page",
+		name:"page1",
+		caption:"datos principales",
+		pages:[
+			{
+				set:"page",
+				name:"page1a",
+				caption:"datos laborales",
+				pages:[
+					{
+
+					}
+				]
+			}
+
+		]
+	},
+	{
+		set:"tab",
+		pages:[
+			{name:"tpage1",
+			caption:"hola",
+			},
+			{name:"tpage2",
+			caption:"hola 2",
+			},
+		]
+
+	}
+
+]

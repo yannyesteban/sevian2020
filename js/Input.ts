@@ -12,7 +12,7 @@ var Input = (($) => {
         data:any = false;
         propertys:any = false;
         events:any = false;
-
+        placeholder:string = "";
 
         childs:boolean = false;
         parent:string = "";
@@ -85,7 +85,14 @@ var Input = (($) => {
             info.value = this.value;
             this._main = $.create(info);
 
+            if(this.type === "select" || this.type === "multiple"){
+				this.createOptions(this.value, false);
+			}
+            this.setValue(this.value);
         }
+        setValue(value:any){
+			this.get().value = value;
+		}
         _load(main:any){
 
         }
@@ -93,6 +100,40 @@ var Input = (($) => {
         get(){
             return this._main.get();
         }
+
+        createOptions(value:any, parentValue:any){
+		
+			var i,
+				option,
+				vParent = [],
+				_ele = this.get();
+			
+			_ele.length = 0;
+			
+			if(this.parent){
+				var aux = (parentValue + "").split(",");
+				for(i = 0; i < aux.length; i++){
+					vParent[aux[i]] = true;
+				}
+			}
+	
+			if(this.placeholder){
+				option = document.createElement("OPTION");
+				option.value = "";
+				option.text = this.placeholder;
+				_ele.options.add(option);
+			}
+			
+			for (i in this.data){
+				if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
+					option = document.createElement("OPTION");
+					option.value = this.data[i][0];
+					option.text = this.data[i][1];
+					_ele.options.add(option);
+				}
+			}
+			
+		}
 
     }
     $I.std = Input;

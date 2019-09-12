@@ -2,6 +2,18 @@
 namespace Sevian\Sigefor;
 include 'ConfigMenu.php';
 
+
+class InfoPage{
+
+	public $type = "";
+	public $name = "";
+	public $config = [];
+	public $pages = [];
+	public $menu = "";
+
+
+}
+
 class InfoInput{
 
 
@@ -29,6 +41,7 @@ class InfoField{
 	public $class = '';
 	//public $params = '';
 	public $input = 'std';//['input'=>'text'];
+	public $type = 'text';//['input'=>'text'];
 	public $value = '';
 	
 	//public $init_value = '';
@@ -168,11 +181,13 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$_info["elements"] = [];
 		$this->p['elements'] = [];
 		if($this->pages){
-			$pages = json_decode(\Sevian\S::vars($this->pages), true);
+			$pages = json_decode(\Sevian\S::vars($this->pages));
 			$this->createPages($this->p['elements'], $pages);
 		}
-		$this->g = [];
-		if($this->pages){
+
+	
+		if($this->groups){
+			
 			$groups = json_decode(\Sevian\S::vars($this->groups), true);
 			
 		}
@@ -208,79 +223,109 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		
 		}
+		
 		$page = &$this->_menu["elements"];
+		
 		foreach($this->fields as $k => $field){
-
+			$field->id = "{$field->name}_f{$this->id}";
+			if($field->default){
+				$field->value = $field->default;
+			}
+			if($field->class){
+				$field->className = $field->class;
+			}
+			if($field->data){
+				$data = json_decode(\Sevian\S::vars($field->data));
+				$field->data = $this->getDataField($data);
+			}
 			if(isset($groups[$k])){
-				//$this->_pages[$groups[$k]]['elements'][] = $field;
 				if($groups[$k]){
-					//print_r($this->_pages[$groups[$k]]);
-					$page = &$this->_pages[$groups[$k]]['elements'];
+					$page = &$this->_pages[$groups[$k]]->elements;
 				}else{
 					$page = &$this->_menu["elements"];
 				}
-				
-
-
 			}
 
 			$page[] = $field;
-			
-			//$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
+		
 		}
 
-		//$this->_menu["elements"] = $this->fields;
 		$this->_menu["elements"] = array_merge($this->_menu["elements"], $this->p["elements"]);
-
 		
 		//print_r($this->p);
 		//print_r($this->_pages);
-		print_r($this->_menu["elements"]);
+		//print_r($this->_menu["elements"]);
 	}
 
-	private function &createPage($info){
-		$this->_pages[$info['name']] = $info;
+	
+	private function createPages(&$cont, $pages, $tab = false){
 
-		if(isset($info['pages'])){
-			//$this->createPages($this->_pages[$info['name']]['elements'], $info['pages']);
-		}
-		return $this->_pages[$info['name']];
-	}
+		foreach($pages as $page){
 
-	private function &createTab($info){
-		$this->_pages[$info['name']] = $info;
-		foreach($info['tabs'] as $k => $v){
-			
-			$this->_pages[$v['name']] = &$this->_pages[$info['name']]['tabs'][$k];
-		}
-
-		return $this->_pages[$info['name']];
-	}
-	private function createPages(&$cont, $pages){
-
-		foreach($pages as $info){
-
-			switch($info['set']){
-				case 'page':
-
-					$cont[] = &$this->createPage($info);
-
-					break;
-				case 'container':
-					$this->createContainer($info);
-					break;
-				case 'tab':
-					$cont[] = &$this->createTab($info);
-					break;
-				case 'menu':
-					$this->createMenu($info);
-					break;
-
+			$page->config->set = $page->type;
+			$this->_pages[$page->name] = $page->config;
+			$cont[] = &$this->_pages[$page->name];
+			if(isset($page->pages)){
+				$this->createPages($this->_pages[$page->name]->elements, $page->pages);
 			}
 
 
 		}
 
+	}
+
+	private function getDataField($info){
+		$data = [];
+		foreach($info as $_data){
+
+			switch(gettype( $_data)){
+				case "array":
+					$data = array_merge($data, $_data);
+					break;
+				case "string":
+					$data = array_merge($data, $this->getDataQuery($_data));
+					break;
+				case "object":
+					$data = array_merge($data, $this->getDataExtra($_data));
+					break;					
+			}
+
+		}
+		return $data;
+	}
+	private function getDataQuery($query){
+		$cn = $this->cn;
+
+		$result = $cn->execute($query);
+		$data = [];
+		while($rs = $cn->getDataRow($result)){
+			$data[] = [$rs[0], $rs[1], $rs[2]?? ''];
+		}
+
+		return $data;
+	}
+
+	private function getDataExtra($info){
+		$data = [];
+		if(isset($info->t)){
+
+			switch($info->t){
+				case 'for':
+				case 'range':
+					if($info->ini < $info->end){
+						for($i = $info->ini; $i < $info->end; $i = $i + abs($info->step)){
+							$data[] = [$i, $i, $info->parent?? ''];
+						}
+
+					}else{
+						for($i = $info->ini; $i > $info->end; $i = $i - abs($info->step)){
+							$data[] = [$i, $i, $info->parent?? ''];
+						}
+					}
+					break;
+			}
+		}
+		return $data;
 	}
 
 	private function createField($info){

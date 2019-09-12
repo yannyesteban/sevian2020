@@ -1,0 +1,48 @@
+[
+    
+    {
+        "type":"page",
+        "name":"page0",
+        "config":{
+            "caption":"Page Cero"
+        },
+        "pages":[
+            {
+                "type":"page",
+                "name":"page3",
+                "config":{
+                    "caption":"Page TRES"
+                }
+            }
+        ]
+    },
+    {
+		"type":"tab",
+		"name":"tab1",
+		"config":{
+			"className":"hola",
+			"onchange":""
+		},
+		"pages":[
+            {
+                "type":"tab_page",
+                "name":"page1",
+                
+                "config":{
+                    "caption":"tab UNO"
+                
+                }
+            },
+            {
+                "type":"tab_page",
+                "name":"page2",
+                
+                "config":{
+                    "caption":"tab DOS"
+                
+                }
+            }
+		]
+
+	}
+]

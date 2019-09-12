@@ -195,9 +195,9 @@ var Form = (($) => {
            
             let _tab = new Tab(info);
             
-            if(info.tabs){
+            if(info.elements){
                 
-                for(let _info of info.tabs){
+                for(let _info of info.elements){
                     let page = _tab.add(_info);
                     if(_info.elements){
                         this._addElements(page, _info.elements);
