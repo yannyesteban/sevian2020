@@ -98,6 +98,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	protected $_pages = [];
 
+	private $menu = '';
+
     public function __construct($opt = []){
 		
 		foreach($opt as $k => $v){
@@ -164,13 +166,20 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			foreach($rs as $k => $v){
 				$this->$k = $v;
 			}
+
+			$config = json_decode($this->params);
+
+			foreach($config as $k => $v){
+				$this->$k = $v;
+			}
+
 			$info = [
 				
 				"caption"	=>	$this->title,
 				"className"	=>	$this->class,
 				
 			];
-			$this->_menu = (array)json_decode($this->params);
+			$this->_menu = json_decode($this->params, true);
 			$this->_menu["caption"] = $this->_config["caption"]??$this->caption;
 			$this->_menu["class"] = $this->_config["class"] ?? $this->class;
 
@@ -251,7 +260,10 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		}
 
 		$this->_menu["elements"] = array_merge($this->_menu["elements"], $this->p["elements"]);
-		
+		$menu = $this->createMenu($this->menu);
+		$menu['set'] = 'menu';
+		$menu['name'] = 'menu';
+		$this->_menu["elements"][] = $menu;
 		//print_r($this->p);
 		//print_r($this->_pages);
 		//print_r($this->_menu["elements"]);
@@ -404,9 +416,110 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}// end function
 	
 	
-	private function createMenu($menu){
+	private function createMenu($name){
+		$cn = $this->cn;
 
-		
+		$cn->query = "
+			SELECT * 
+			FROM $this->tMenus 
+			WHERE menu = '$name'";
+        
+            
+       
+
+		$result = $cn->execute();
+		$config = new \stdClass;
+		if($rs = $cn->getDataAssoc($result)){
+
+			foreach($rs as $k => $v){
+				$config->$k = $v;
+			}
+
+			$menu = json_decode($config->config, true);
+
+			
+			$menu["caption"] = $this->_config["caption"]?? $config->title;
+			$menu["class"] = $this->_config["class"] ?? $config->class;
+
+
+			$cn->query = "
+			SELECT * 
+			FROM $this->tMenuItems 
+			WHERE menu = '$name' order by `order`";
+        
+            
+       
+
+			$result = $cn->execute();
+			$opt = [];
+
+			$items = [];
+			$json = [];
+			
+			while($rs = $cn->getDataAssoc($result)){
+				if($rs["action"]){
+					$action = "Sevian.action.send(".$rs["action"].");";
+				}else{
+					$action = "";
+				}
+
+				$index = $rs["index"];
+				$parent = $rs["parent"];
+				
+				$items[$index] = [
+					"caption" => $rs["title"],
+
+					"action" => $action,
+
+				];
+				
+
+				if($parent != ""){
+					if(!isset($items[$parent]["items"])){
+						$items[$parent]["items"] = [];
+					}
+					
+					$items[$parent]["items"][] = &$items[$index];
+				}else{
+					
+					$json[] = &$items[$index];
+				}
+
+
+				foreach($rs as $k => $v){
+				//	$this->$k = $v;
+				}
+				
+				
+				
+
+
+				$opt[] = [
+					"caption" => $rs["title"],
+					"index" => $rs["index"],
+					"parent" => $rs["parent"],
+					"action" => $action,
+
+				];
+				
+				
+
+
+
+				
+			
+			}
+
+
+
+			$menu["items"] = $json;
+
+
+
+			//print_r($menu);
+			return $menu;
+		}
+		return false;
 	}
 	public function getJsConfigPanel():\Sevian\jsConfigPanel{
         return new \Sevian\jsConfigPanel([

@@ -113,7 +113,7 @@ class Menu extends \Sevian\Element{
 				$this->$k = $v;
 			}
 
-			$this->_menu = (array)json_decode($this->config);
+			$this->_menu = json_decode($this->config, true);
 
 			
 			$this->_menu["caption"] = $this->_config["caption"]??$this->title;
