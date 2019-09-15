@@ -87,6 +87,15 @@ class InfoField{
 
 class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
+
+	private $mode = 'new';//'load'
+	private $render = 'form';//'list'
+
+
+	private $query = '';//'list'
+
+	//private $eparams = [];
+
 	public $showCaption = true;
 	public $menus = [];
     
@@ -121,15 +130,21 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
         
         switch($method){
-            case 'create':
+			case 'create':
+			case 'load':
+
+				//print_r($this->eparams);
+
+			case 'list':
+			case 'list_set':
+			case 'save':
+			case 'get_record':
 
                 
                 
-            case 'request':
+			case 'request':
+			
 				$this->_config();
-				
-
-				
 				$this->panel = $this->createForm();//$this->html;
 				
                 break;
@@ -204,6 +219,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 
 		$info = $this->cn->infoQuery($this->query);
+
+		//print_r($info);
+
+		$data = $this->getRecord($info, $this->eparams);
+
 		$fields = $info->fields;
 
 		foreach($fields as $k => $v){
@@ -239,6 +259,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$field->id = "{$field->name}_f{$this->id}";
 			if($field->default){
 				$field->value = $field->default;
+				
+				
+			}
+			if(isset($data[$k])){
+				$field->value = $data[$k];
 			}
 			if($field->class){
 				$field->className = $field->class;
@@ -521,6 +546,49 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		}
 		return false;
 	}
+
+
+	public function getRecord($info, $eparams){
+
+		$eparams = json_decode($eparams);
+		$cn = $this->cn;
+		//print_r($eparams);
+		$record = $eparams->record;
+		
+		$filter = '';
+		foreach($info->keys as $k => $v){
+			if(isset($record->$k)){
+				
+				if(isset($info->fields[$k])){
+					$table = $info->fields[$k]->orgtable;
+					
+					$filter = $table.".".$cn->addQuotes($k)."=".$cn->addSlashes($record->$k);
+				}
+
+
+			}
+			
+		}
+
+
+		$cn->query = $this->query." WHERE $filter;";
+        
+          
+       
+
+		$result = $cn->execute();
+		$data = [];
+		$i = 0;
+		if($rs = $cn->getDataRow($result)){
+			foreach($info->fields as $k => $v){
+				$data[$k] = $rs[$i++];
+			}
+			
+		}
+
+		return $data;
+	}
+	
 	public function getJsConfigPanel():\Sevian\jsConfigPanel{
         return new \Sevian\jsConfigPanel([
             "panel"   => $this->id,

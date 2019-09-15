@@ -1,0 +1,58 @@
+{
+    "cn":"sevian",
+    "mode":"update",
+    "fields":{
+        "cedula":{
+            "field":"cedula",
+            "mtype":"I",
+            "format":["uppercase","md5"],
+            "table":"persons",
+            "rules":{}
+
+        },
+        "cursos":{
+
+
+            "detail":{
+                "cn":"sevian",
+                "fields":{
+                    "cedula":{
+                        "mtype":"I",
+                        "linked":"cedula",
+                        "table":"cursos",
+                        "field":"cedula",
+                        "format":[],
+                        "rules":{}
+
+                    },
+                    "cursos":{
+                        "mtype":"S",
+                        
+                        "table":"cursos",
+                        "field":"curso",
+                        "format":[],
+                        "rules":{}
+                    }
+
+                    
+                }
+            }
+        }
+    },
+    "data":[
+
+        {
+            "cedula":"1111",
+            "nombre":"yanny",
+            "apellido":"esteban",
+            "cursos":[]
+        }
+
+    ],
+    "useTransaction":true,
+    "masterData":[]
+
+
+
+
+}
