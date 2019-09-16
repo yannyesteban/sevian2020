@@ -4,9 +4,46 @@
     "fields":{
         "cedula":{
             "field":"cedula",
+            "mtype":"C",
+            "format":["uppercase","md5"],
+            "table":"persons",
+            "notNull":false,
+            "rules":{}
+
+        },
+        "nombre":{
+            "field":"nombre",
+            "mtype":"C",
+            "format":["uppercase","md5"],
+            "table":"persons",
+            "notNull":false,
+            "rules":{}
+
+        },
+        "apellido":{
+            "field":"apellido",
+            "mtype":"C",
+            "format":["uppercase","md5"],
+            "table":"persons",
+            "notNull":false,
+            "rules":{}
+
+        },
+        "nacimiento":{
+            "field":"nacimiento",
+            "mtype":"D",
+            "format":["uppercase","md5"],
+            "table":"persons",
+            "notNull":false,
+            "rules":{}
+
+        },
+        "edad":{
+            "field":"edad",
             "mtype":"I",
             "format":["uppercase","md5"],
             "table":"persons",
+            "notNull":false,
             "rules":{}
 
         },
@@ -43,9 +80,27 @@
 
         {
             "cedula":"1111",
-            "nombre":"yanny",
-            "apellido":"esteban",
-            "cursos":[]
+            "nombre":"pepe",
+            "apellido":"cortisona",
+            "nacimiento":"2000-01-01",
+            "edad":50,
+            "cursos":[],
+            "__mode_":3,
+            "__record_":{
+                "cedula":"1111"
+            }
+        },
+        {
+            "cedula":"12474737",
+            "nombre":"Yanny",
+            "apellido":"Nuñez",
+            "nacimiento":"1975-10-24",
+            "edad":43,
+            "cursos":[],
+            "__mode_":2,
+            "__record_":{
+                "cedula":"12474737"
+            }
         }
 
     ],

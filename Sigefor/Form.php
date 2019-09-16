@@ -1,6 +1,7 @@
 <?php
 namespace Sevian\Sigefor;
 include 'ConfigMenu.php';
+include 'FormSave.php';
 
 
 class InfoPage{
@@ -122,6 +123,10 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
     public function evalMethod($method = false): bool{
 		
+
+
+		$f = new FormSave();
+
 
         if($method === false){
             $method = $this->method;
