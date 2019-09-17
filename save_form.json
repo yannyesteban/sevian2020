@@ -2,11 +2,21 @@
     "cn":"sevian",
     "mode":"update",
     "fields":{
+        "id":{
+            "field":"id",
+            "mtype":"S",
+           
+            "table":"persons2",
+            "notNull":true,
+            "rules":{},
+            "key": true
+
+        },
         "cedula":{
             "field":"cedula",
             "mtype":"C",
             "format":["uppercase","md5"],
-            "table":"persons",
+            "table":"persons2",
             "notNull":false,
             "rules":{}
 
@@ -15,7 +25,7 @@
             "field":"nombre",
             "mtype":"C",
             "format":["uppercase","md5"],
-            "table":"persons",
+            "table":"persons2",
             "notNull":false,
             "rules":{}
 
@@ -24,7 +34,7 @@
             "field":"apellido",
             "mtype":"C",
             "format":["uppercase","md5"],
-            "table":"persons",
+            "table":"persons2",
             "notNull":false,
             "rules":{}
 
@@ -33,7 +43,7 @@
             "field":"nacimiento",
             "mtype":"D",
             "format":["uppercase","md5"],
-            "table":"persons",
+            "table":"persons2",
             "notNull":false,
             "rules":{}
 
@@ -42,7 +52,7 @@
             "field":"edad",
             "mtype":"I",
             "format":["uppercase","md5"],
-            "table":"persons",
+            "table":"persons2",
             "notNull":false,
             "rules":{}
 
@@ -55,18 +65,26 @@
                 "fields":{
                     "cedula":{
                         "mtype":"I",
-                        "linked":"cedula",
-                        "table":"cursos",
+                        "master":"cedula",
+                        "table":"numeros",
                         "field":"cedula",
                         "format":[],
                         "rules":{}
 
                     },
-                    "cursos":{
+                    "id":{
                         "mtype":"S",
                         
-                        "table":"cursos",
-                        "field":"curso",
+                        "table":"numeros",
+                        "field":"id",
+                        "format":[],
+                        "rules":{}
+                    },
+                    "numero":{
+                        "mtype":"C",
+                        
+                        "table":"numeros",
+                        "field":"numero",
                         "format":[],
                         "rules":{}
                     }
@@ -79,18 +97,20 @@
     "data":[
 
         {
+            "id":"",
             "cedula":"1111",
             "nombre":"pepe",
             "apellido":"cortisona",
             "nacimiento":"2000-01-01",
             "edad":50,
             "cursos":[],
-            "__mode_":3,
+            "__mode_":1,
             "__record_":{
                 "cedula":"1111"
             }
         },
         {
+            "id":"1",
             "cedula":"12474737",
             "nombre":"Yanny",
             "apellido":"Nuñez",
@@ -99,7 +119,7 @@
             "cursos":[],
             "__mode_":2,
             "__record_":{
-                "cedula":"12474737"
+                "id":"15"
             }
         }
 
@@ -129,8 +149,8 @@
                 }
 
                 
-            },
-            "data":[];
+            }
+            
         }
 
 
