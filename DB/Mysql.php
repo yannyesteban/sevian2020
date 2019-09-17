@@ -26,6 +26,7 @@ class Mysql extends DBase{
 	public $lastId = false;
 	public $affectedRows = false;	
 	private $c = false;
+	
 	public function __construct($server='', $user='', $pass='', $database='', $port='', $charset='') {
 		
 		$this->connect($server, $user, $pass, $database, $port, $charset);		
@@ -36,28 +37,28 @@ class Mysql extends DBase{
 		
 		if ($server!=''){
 			$this->server = $server;
-        }// end if
+        }
 		if ($user!=''){
 			$this->user = $user;
-        }// end if
+        }
 		if ($pass!=''){
 			$this->pass = $pass;
-        }// end if
+        }
 		if ($dbase!=''){
 			$this->dbase = $dbase;
-        }// end if
+        }
 		if ($port!=''){
 			$this->port = $port;
-        }// end if
+        }
 		if ($charset!=''){
 			$this->charset = $charset;
-        }// end if
+        }
 	    $this->c = new \mysqli($this->server, $this->user, $this->pass, $this->dbase);
 		//$this->c->set_charset('latin1');
 		$this->c->set_charset($this->charset);
 		if (!$this->c->connect_errno){
 			$this->status = true;
-		}// end if		
+		}		
 		
 		
 	}
@@ -71,7 +72,7 @@ class Mysql extends DBase{
 
 		if ($query != ''){
 			$this->query = $query;
-        }// end if		
+        }		
 		
 		if($evalMeta){
 			$this->query = $this->metaFunctions($this->query);
@@ -115,31 +116,31 @@ class Mysql extends DBase{
 					$this->page = $this->pageCount;
 				}if($this->page <= 0){
 					$this->page = 1;
-				}// end if
+				}
 				$firstRecord = $this->pageLimit * ($this->page - 1);
 				$this->result = $this->c->query($this->query." LIMIT $firstRecord, $this->pageLimit");
 				$this->recordCount = $this->result->num_rows;
 				$this->fieldCount = $this->result->field_count;
-	        }// end if
+	        }
         }else{
 			
 			$this->affectedRows = $this->c->affected_rows;
 			$this->lastId = $this->c->insert_id;
 						
-        }// end if
+        }
 		
 		if($this->fieldCount){
 			return $this->result;	
 		}else{
 			return true;	
-		}// end if
+		}
 		return $this->result;		
-	}// end function
+	}
 	
 	public function free($result=''){
 		if ($result!=''){
 			$this->result = $result;
-        }// end if		
+        }		
 		return $this->result->free();
 	}
 	
@@ -147,26 +148,26 @@ class Mysql extends DBase{
    		
 		if ($result!=''){
 			$this->result = $result;
-        }// end if
+        }
 		if(!$this->result->field_count){
 			return false;
-		}// end if
+		}
 		return $this->result->fetch_row();		
 		
-	}// end function
+	}
 
 	public function getDataAll($result='', $resulttype=MYSQLI_ASSOC){
    		
 		if ($result!=''){
 			$this->result = $result;
-        }// end if
+        }
 		
 		if(!$this->result->field_count){
 			return false;
-		}// end if
+		}
 		return $this->result->fetch_all($resulttype);		
 		
-	}// end function
+	}
 
 	public function getData($result=''){
    		
@@ -175,37 +176,37 @@ class Mysql extends DBase{
 			$this->result = $result;
 		}else{
 			return false;
-        }// end if
+        }
 		
 
 		if(!$this->result->field_count){
 			return false;
-		}// end if
+		}
 		
 		return $this->result->fetch_array();
 			
 		
 				
 		
-	}// end function
+	}
 
 	public function getDataArray($result='', $resulttype=MYSQLI_BOTH){
    		
 		if ($result!=''){
 			$this->result = $result;
-        }// end if
+        }
 		if(!$this->result->field_count){
 			return false;
-		}// end if
+		}
 		return $this->result->fetch_array($resulttype);		
 		
-	}// end function
+	}
 	
 	public function getDataAssoc($result=''){
 
 		if ($result!=''){
 			$this->result = $result;
-        }// end if
+        }
 		//hr($this->query);
 		if($this->errno){
 			//hr($this->query);
@@ -216,7 +217,7 @@ class Mysql extends DBase{
 		
 			if(!$this->result->field_count){
 				return false;
-			}// end if
+			}
 			return $this->result->fetch_assoc();			
 			
 		
@@ -227,7 +228,7 @@ class Mysql extends DBase{
 		
 		return $this->c->insert_id;	
 
-	}// end function
+	}
 
 	public function fieldsName($result){
 
@@ -241,7 +242,6 @@ class Mysql extends DBase{
 		return $fields;
 	
 	}
-
 
 	public function infoTable($table){
 
@@ -282,7 +282,7 @@ class Mysql extends DBase{
 
 				if($field->key){
 					$info->keys[$f] = $f;
-				}// end if
+				}
 				
 				$info->fields[$pos++] = $field;
 				
@@ -397,46 +397,42 @@ class Mysql extends DBase{
 		return $info;		
 		
 	}
-	
 
     public function getTables($db=''){
 		if($db==''){
 			$db = $this->database;	
-		}// end if
+		}
 		$tables = array();
 		$result = $this->c->query("SHOW TABLES FROM $db");
 		while($rs = $result->fetch_row()){
 			$tables[] = $rs[0]; 
 		}// end while
 		return $tables;
-    }// end function
-    public function getFields($table){
+    }
+	
+	public function getFields($table){
 		$fields = array();
 		$result = $this->c->query("SHOW COLUMNS FROM $table");
 		while($rs = $result->fetch_row()){
 			$fields[] = $rs[0]; 
 		}// end while
 		return $fields;
-    }// end function
+    }
 
-	
-    public function begin(){
+	public function begin(){
 		$this->c->query("BEGIN");
 		
-    }// end function
+    }
 
-
-	//===========================================================
     public function rollback(){
 		$this->c->query("ROLLBACK");
 		
-    }// end function
-	//===========================================================
-    public function commit(){
+    }
+
+	public function commit(){
 		$this->c->query("COMMIT");
 		
-    }// end function
-
+    }
 
 	public function concat(){
 
@@ -457,10 +453,11 @@ class Mysql extends DBase{
 		$n=1;	
 		if($rs = $this->result->fetch_array()){
 			$n = $rs["n"];
-		}// end if		
+		}		
 		return $n;
-	}// end function
-	public function serialId($table, $field, $filters = array()){
+	}
+	
+	public function serialId($table, $field, $filters = []){
 		$len = strlen($pre)+1;
 		$_where = '';
 
@@ -481,10 +478,10 @@ class Mysql extends DBase{
 		$n=1;	
 		if($rs = pg_fetch_array($result)){
 			$n = $rs["n"];
-		}// end if
+		}
 		return $n;
 
-	}// end function
+	}
 
 	public function evalFilters($q, $search, $fields, $quantifier = "%"){
 		
@@ -498,20 +495,21 @@ class Mysql extends DBase{
 			$q = preg_replace ( "/(WHERE|HAVING)/i", "\\0 $str AND ", $q, 1);
 		}else{
 			$q = preg_replace ( "/(GROUP\s+BY|ORDER|LIMIT|$)/i", " WHERE $str "."\\0", $q, 1);
-		}// end if
+		}
 		return $q;
 		
 		
-	}// end function	
+	}	
 	
 	public function getRealType($q){
 		$exp = "/(\w+)(?:\((\d+)(?:,(\d+))?\))?/";
 		if(preg_match($exp,$q,$c)){
 			return $c;
 			
-		}// end if
+		}
 		return array();
-	}// end fucntion	
+	}	
+	
 	public function getMetaType($type){
 		
 		switch(strtolower($type)){
@@ -558,14 +556,13 @@ class Mysql extends DBase{
 		case "252"://BLOB
 			return "B"; 		
 		}// end switch
-	}// end function
-	
+	}
 	
 	public function addSlashes($string){
 
 		return $this->c->real_escape_string($string);
 		
-	}// end function
+	}
 
 	function metaError($errno){
 		switch ($errno){
@@ -594,7 +591,7 @@ class Mysql extends DBase{
 			return $msg_error." N� de error: ".$nro_error;
 		}// end switch
 	
-	}// end class
+	}
 	
 	static function metaCONCAT($arg){
 		return "CONCAT($arg)";
