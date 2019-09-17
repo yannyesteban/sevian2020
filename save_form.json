@@ -105,7 +105,37 @@
 
     ],
     "useTransaction":true,
-    "masterData":[]
+    "masterData":[],
+    "details":[
+        {
+            "cn":"sevian",
+            "fields":{
+                "cedula":{
+                    "mtype":"I",
+                    "linked":"cedula",
+                    "table":"cursos",
+                    "field":"cedula",
+                    "format":[],
+                    "rules":{}
+
+                },
+                "cursos":{
+                    "mtype":"S",
+                    
+                    "table":"cursos",
+                    "field":"curso",
+                    "format":[],
+                    "rules":{}
+                }
+
+                
+            },
+            "data":[];
+        }
+
+
+    ]
+
 
 
 
