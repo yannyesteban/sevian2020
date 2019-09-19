@@ -1,5 +1,5 @@
 {
-    "cn":"sevian",
+    "cn":"_default",
     "mode":"update",
     "tables":["persons2"],
     "fields":{
@@ -62,8 +62,9 @@
 
 
             "detail":{
-                "cn":"sevian",
+                "cn":"_default",
                 "tables":["numeros"],
+               
                 "fields":{
                     "cedula":{
                         "mtype":"I",
@@ -98,9 +99,9 @@
     },
     "data":[
         {
-            "id":"",
+            "id":"32",
             "cedula":"2222",
-            "nombre":"Juan Jose",
+            "nombre":"Juan Jose.",
             "apellido":"cortisona",
             "nacimiento":"2002-01-01",
             "edad":50,
@@ -112,12 +113,12 @@
             }],
             "__mode_":2,
             "__record_":{
-                "cedula":"2222"
+                "id":"2"
             }
         },
         {
             "id":"",
-            "cedula":"2244",
+            "cedula":"2245",
             "nombre":"pepe",
             "apellido":"cortisona",
             "nacimiento":"2000-01-01",
@@ -167,7 +168,7 @@
         }
 
     ],
-    "useTransaction":true,
+    "transaction":false,
     "masterData":[],
     "details":[
         {

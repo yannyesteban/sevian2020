@@ -124,10 +124,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
     public function evalMethod($method = false): bool{
 		
 
-
-		$f = new FormSave();
-
-
+		
+		//print_r($f->data);
         if($method === false){
             $method = $this->method;
         }
@@ -143,6 +141,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			case 'list':
 			case 'list_set':
 			case 'save':
+
+				/*$f = loadJson("save_form.json");
+				$save = 'Sevian\Sigefor\FormSave';
+				$save::send($f, $f->data, $f->masterData);
+				*/
 			case 'get_record':
 
                 
@@ -608,10 +611,10 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	
 }// end class
 function loadJson($path){
-		
+	return json_decode(file_get_contents($path, true));
 		
 		//$a= file_get_contents("json/mod_principal.json", true);
-		$_forms = json_decode(file_get_contents("json/mod_principal.json", true), true);
+		//$_forms = json_decode(file_get_contents("json/mod_principal.json", true), true);
 		
 		
 		
