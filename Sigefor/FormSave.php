@@ -58,124 +58,7 @@ class FormSave{
 				$this->$k = $v;
 			}
 		}
-		
-        $d1 = '
-        {
-            "cn":"sevian",
-            "mode":"update",
-            "fields":{
-                "cedula":{
-                    "field":"cedula",
-                    "mtype":"C",
-                    "format":["upper","md5"],
-                    "table":"persons",
-                    "notNull":false,
-                    "rules":{}
-        
-                },
-                "nombre":{
-                    "field":"nombre",
-                    "mtype":"C",
-                    "format":["lower","md5"],
-                    "table":"persons",
-                    "notNull":false,
-                    "rules":{}
-        
-                },
-                "apellido":{
-                    "field":"apellido",
-                    "mtype":"C",
-                    "format":["upper","md5"],
-                    "table":"persons",
-                    "notNull":false,
-                    "rules":{}
-        
-                },
-                "nacimiento":{
-                    "field":"nacimiento",
-                    "mtype":"D",
-                    "format":["upper","md5"],
-                    "table":"persons",
-                    "notNull":false,
-                    "rules":{}
-        
-                },
-                "edad":{
-                    "field":"edad",
-                    "mtype":"I",
-                    "format":["uppercase","md5"],
-                    "table":"persons",
-                    "notNull":false,
-                    "rules":{}
-        
-                },
-                "cursos":{
-        
-        
-                    "detail":{
-                        "cn":"sevian",
-                        "fields":{
-                            "cedula":{
-                                "mtype":"I",
-                                "linked":"cedula",
-                                "table":"cursos",
-                                "field":"cedula",
-                                "format":[],
-                                "rules":{}
-        
-                            },
-                            "cursos":{
-                                "mtype":"S",
-                                
-                                "table":"cursos",
-                                "field":"curso",
-                                "format":[],
-                                "rules":{}
-                            }
-        
-                            
-                        }
-                    }
-                }
-            },
-            "data":[
-        
-                {
-                    "cedula":"1112",
-                    "nombre":"pepe",
-                    "apellido":"cortisona",
-                    "nacimiento":"2000-01-01",
-                    "edad":50,
-                    "cursos":[],
-                    "__mode_":1,
-                    "__record_":{
-                        "cedula":"1111"
-                    }
-                },
-                {
-                    "cedula":"12474737",
-                    "nombre":"Yanny Esteban",
-                    "apellido":"Nuñez",
-                    "nacimiento":"1975-10-24",
-                    "edad":43,
-                    "cursos":[],
-                    "__mode_":2,
-                    "__record_":{
-                        "cedula":"12474737"
-                    }
-                }
-        
-            ],
-            "transaction":true,
-            "masterData":[]
-        
-        
-        
-        
-        }
-        
-        
-        ';
+
 
 
         $f = $this->loadJson("save_form.json");
@@ -189,7 +72,7 @@ class FormSave{
         //print_r($i);
         $this->info = $f;// = json_decode($d);
         //print_r($p);
-        $this->save( $this->info);
+        $this->save( $this->info, $this->info->data, $this->info->masterData);
 	}
 
     private function begin(){
@@ -210,14 +93,16 @@ class FormSave{
             }
         }
     }
-    public function save($info){
+    public function save($info, $data, $masterData = []){
 
-        $cn = $info->cn;
+        $cn = $this->cn;
         $this->begin();
         $this->error = false;
         $this->errno = 0;
-        foreach($info->data as $record){
-            $this->saveRecord($record, $info->masterData);
+        //$this->tables = $info->tables;
+        //$this->info = $info;
+        foreach($data as $record){
+            $this->saveRecord($info, $record, $masterData);
         }
 
         //$cn->commit();
@@ -238,26 +123,29 @@ class FormSave{
         $this->end($this->error);
         print_r($data);
     }
-    public function saveRecord($data, $dataMaster = false){
+    public function saveRecord($info, $data, $masterData){
 
         if($data->__mode_ <= 0){
             return false;
         }
 
-        $info = $this->info;
+        //$info = $this->info;
         $cn = $this->cn;
         $mode = $data->__mode_;
-        $record = &$data->__record_;
+        
+        $record = $data->__record_ ?? new \stdClass;
+        $tables = $info->tables;
+        //$masterData = $info->masterData;
 
-
-        foreach($this->tables as $table){
+        foreach($tables as $table){
+            hr($table,"red");
             $serial = '';
 
             $filter = new \stdClass;
             $q_where = '';
 
             if($record != ''){
-                if(count($this->tables ) == 1){
+                if(count($tables ) == 1){
                     foreach($record as $k => $v){
                         $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($k)."='".$cn->addSlashes($v)."'";    
                     }
@@ -274,26 +162,26 @@ class FormSave{
 
 
             foreach($info->fields as $k => $field){
-                
+               
                 $field = new InfoRecordField($field);
-                       
+              
                 if($field->aux or $field->table != $table or ($mode > 1 and !$field->update)){
                     continue;
                 }
-
+              
                 if(($field->mtype == 'S') and $field->notNull and $data->$k == '' and $mode == 1){
 						
                     $serial = $field->field;
                     continue;
                 }
 
-                $fieldName = $this->cn->addQuotes($field->field);
+                $fieldName = $cn->addQuotes($field->field);
                
                 if($field->sqlValue){
                     $fieldValue = $field->sqlValue;
                 }else{
-                    if($field->master){
-                        $value = $dataMaster->{$field->master};
+                    if($field->master and isset($masterData->{$field->master})){
+                        $value = $masterData->{$field->master};
                     }elseif($field->refValue){
                         $value = $data->{$field->refValue};
                     }elseif($field->serialize){
@@ -323,7 +211,7 @@ class FormSave{
                         $record->$k = $value;
                     }
 
-                    $fieldValue = $this->cn->addSlashes($value);
+                    $fieldValue = $cn->addSlashes($value);
 
                     if(($field->mtype != 'C' and $field->mtype != 'CH' and $field->mtype != 'B' or !$field->notNull) and $value == ''){
 						$fieldValue = 'null';
@@ -341,7 +229,8 @@ class FormSave{
 
                 
             }
-            $table = $this->cn->addQuotes($table);
+            $table = $cn->addQuotes($table);
+            $q = '';
             switch($mode){
                 case 1:
                     $q = "INSERT INTO $table (".implode(', ',$q_fields).') VALUES ('.implode(', ',$q_values).');';
@@ -354,29 +243,33 @@ class FormSave{
                     $q = "DELETE FROM $table WHERE $q_where;";
                     break;
             }// end switch
-            hr($q);
-            $result = $cn->execute($q);
+           
+            if($q){
+                hr($q);
+                $result = $cn->execute($q);
 
-            if($cn->error){
-                
-				$this->error = true;
-				$this->errno = $cn->errno;		
+                if($cn->error){
+                    
+                    $this->error = true;
+                    $this->errno = $cn->errno;		
+                }
+                if($serial){
+                    $lastId = $cn->getLastId();
+                    $data->$serial =  $lastId;
+                    $record->$serial = $lastId;
+                    //hr($cn->getLastId());
+                }
+                print_r($record);
             }
-            if($serial){
-                $lastId = $cn->getLastId();
-                $data->$serial =  $lastId;
-                $record->$serial = $lastId;
-                //hr($cn->getLastId());
-            }
-            print_r($record);
+            
         }
 
         foreach($info->fields as $k => $field){
 
             if(isset($field->detail)){
-                $field->data = $data->$k;
-                $this->save($field->detail);
-                hr($k);
+
+                $this->save($field->detail, $data->$k, $data);
+                
             }
         }
     }

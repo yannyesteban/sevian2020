@@ -1,6 +1,7 @@
 {
     "cn":"sevian",
     "mode":"update",
+    "tables":["persons2"],
     "fields":{
         "id":{
             "field":"id",
@@ -62,6 +63,7 @@
 
             "detail":{
                 "cn":"sevian",
+                "tables":["numeros"],
                 "fields":{
                     "cedula":{
                         "mtype":"I",
@@ -74,7 +76,7 @@
                     },
                     "id":{
                         "mtype":"S",
-                        
+                        "notNull":true,
                         "table":"numeros",
                         "field":"id",
                         "format":[],
@@ -95,15 +97,51 @@
         }
     },
     "data":[
-
         {
             "id":"",
-            "cedula":"1111",
+            "cedula":"2222",
+            "nombre":"Juan Jose",
+            "apellido":"cortisona",
+            "nacimiento":"2002-01-01",
+            "edad":50,
+            "cursos":[{
+                "id":"",
+                "cedula":"",
+                "numero":"uno",
+                "__mode_":1
+            }],
+            "__mode_":2,
+            "__record_":{
+                "cedula":"2222"
+            }
+        },
+        {
+            "id":"",
+            "cedula":"2244",
             "nombre":"pepe",
             "apellido":"cortisona",
             "nacimiento":"2000-01-01",
             "edad":50,
-            "cursos":[],
+            "cursos":[{
+                "id":"",
+                "cedula":"",
+                "numero":"uno",
+                "__mode_":1
+            },
+            {
+                "id":"",
+                "cedula":"",
+                "numero":"dos",
+                "__mode_":1
+            }
+            ,
+            {
+                "id":"",
+                "cedula":"",
+                "numero":"tres",
+                "__mode_":1
+            }
+            ],
             "__mode_":1,
             "__record_":{
                 "cedula":"1111"
@@ -112,14 +150,19 @@
         {
             "id":"1",
             "cedula":"12474737",
-            "nombre":"Yanny",
+            "nombre":"Yanny E",
             "apellido":"Nuñez",
             "nacimiento":"1975-10-24",
             "edad":43,
-            "cursos":[],
+            "cursos":[{
+                "id":"",
+                "cedula":"",
+                "numero":"uno",
+                "__mode_":1
+            }],
             "__mode_":2,
             "__record_":{
-                "id":"15"
+                "id":"1"
             }
         }
 
