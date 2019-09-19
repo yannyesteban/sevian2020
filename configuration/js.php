@@ -85,6 +85,10 @@ $js = [
 		'file' 	=> "{$PATH}js/Form.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
+	[
+		'file' 	=> "{$PATH}js/Grid.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
 ];
 
 Sevian\S::jsInit($js);
