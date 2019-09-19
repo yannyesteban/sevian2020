@@ -2,6 +2,21 @@
 
 namespace Sevian\Sigefor;
 
+class InfoRecord{
+    private $cn;
+    private $fields;
+    private $data;
+    private $query;
+    private $tables = ['persons2'];
+    private $transaction = false;
+    private $masterData = false;
+
+    private $error = false;
+    private $errno = 0;
+
+}
+
+
 class InfoRecordField{
     public $field = '';
     public $mtype = '';
