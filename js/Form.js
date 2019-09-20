@@ -71,7 +71,7 @@ var Form = (($) => {
                     this.create(x.id, { id: x });
                 }
                 else {
-                    new Page({ id: x });
+                    new Form({ id: x });
                 }
             }
         }

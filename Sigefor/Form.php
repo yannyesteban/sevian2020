@@ -139,6 +139,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				//print_r($this->eparams);
 
 			case 'list':
+				$this->createGrid();
+				break;
 			case 'list_set':
 			case 'save':
 
@@ -170,6 +172,63 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		return true;
 	}
 
+	private function loadConfig(){
+		$cn = $this->cn;
+
+		$cn->query = "
+			SELECT * 
+			FROM $this->tForms 
+			WHERE form = '$this->name'
+		";
+
+		$result = $cn->execute();
+
+		if($rs = $cn->getDataAssoc($result)){
+
+			foreach($rs as $k => $v){
+				$this->$k = $v;
+			}
+
+			$config = json_decode($this->params);
+			if($config){
+				foreach($config as $k => $v){
+					$this->$k = $v;
+				}
+			}
+
+		}
+
+		$info = $cn->infoQuery($this->query);
+		$fields = $info->fields;
+
+		foreach($fields as $k => $v){
+			$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
+		}
+
+		$cn->query = "
+			SELECT * 
+			FROM $this->tFields 
+			WHERE form = '$this->name'
+		";
+
+		$result = $cn->execute();
+		
+		while($rs = $cn->getDataAssoc($result)){
+			if(isset($this->fields[$rs['field']])){
+				$this->fields[$rs['field']]->update($rs);
+			}
+			if($rs['params']){
+				
+				$params = json_decode(\Sevian\S::vars($rs['params']));
+				foreach($params as $k => $v){
+					$this->fields[$rs['field']]->$k = $v;
+				}
+			}
+			
+		
+		}
+	}
+
     private function _config(){
 
 		$cn = $this->cn;
@@ -191,10 +250,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			}
 
 			$config = json_decode($this->params);
-
-			foreach($config as $k => $v){
-				$this->$k = $v;
+			if($config){
+				foreach($config as $k => $v){
+					$this->$k = $v;
+				}
 			}
+			
 
 			$info = [
 				
@@ -371,6 +432,24 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			}
 		}
 		return $data;
+	}
+
+	private function getDataGrid(){
+
+		$cn = $this->cn;
+
+		$cn->query = $this->query;
+		$cn->pagination = true;
+		$cn->pageLimit = 10;
+
+		$result = $cn->execute();
+
+		return $cn->getDataAll($result);
+
+		
+
+
+
 	}
 
 	private function createField($info){
@@ -555,7 +634,27 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		return false;
 	}
 
+	private function createGrid(){
+		
+		$this->loadConfig();
+		$data = $this->getDataGrid();
 
+		$grid = new \Sevian\HTML("div");
+		$grid->id = "sg_form_".$this->id;
+		$this->panel = $grid;
+		$opt = [
+			 'id' => $grid->id,
+			 'data'=>$data,
+			 'caption'=>$this->caption,
+
+		];
+
+		$this->typeElement = "Grid";
+		$this->info = $opt;//$form->getInfo();
+
+		//print_r($this->fields);
+
+	}
 	public function getRecord($info, $eparams){
 
 		$eparams = json_decode($eparams);

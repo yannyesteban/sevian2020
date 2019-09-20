@@ -175,5 +175,43 @@ $init2 = [
 ];
 
 
-Sevian\S::configInit($init2);
+$init3 = [
+	'theme'=>'sevian',
+	'title'=>'GTcomm v1.0',
+	'templateName' => 'main',
+	'elements' => [
+		[
+			'id'		=> 20,
+			'element'	=> 'sgUser',
+			'name'		=> '',
+			'method'	=> 'load',
+			'designMode'=> true,
+			'fixed'		=> true,
+		],
+		[
+			'id'		=> 21,
+			'element'	=> 'sgModule',
+			'name'		=> 'gt2',
+			'method'	=> 'load',
+			'designMode'=> true,
+			'fixed'		=> true,
+		],
+		[
+			'id'		=> 22,
+			'element'	=> 'sgStructure',
+			'name'		=> 'dos',
+			'method'	=> 'load',
+			'designMode'=> true,
+			'fixed'		=> true,
+		],
+	],
+	
+	'panels'=>[],
+	'sequences' => [],
+	'actions' => [],
+	'css' => [],
+	'js' => [],
+];
+
+Sevian\S::configInit($init3);
 

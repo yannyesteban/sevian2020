@@ -4,7 +4,7 @@ $themes = [
 	'sevian' => [
 		'css' => [
 			//$PATH.'sevian/css/Sevian.css',
-			$PATH.'sevian/css/login.css',
+			//$PATH.'sevian/css/login.css',
 			//'Main.css',
 			//'Window.css',
 			//'Menu.css',

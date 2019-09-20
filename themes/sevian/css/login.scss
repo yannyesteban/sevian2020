@@ -37,11 +37,11 @@ body, html{
 }
 
 .wrapper { 
-    display: none; 
+    display: grid; 
     grid-template-columns: repeat(3, 1fr); 
     //grid-template-rows:2fr;
     grid-auto-rows: auto; 
-    grid-column-gap: 10px;
+    grid-column-gap: 20px;
    grid-row-gap: 1em;
    height: 100%;
   } 

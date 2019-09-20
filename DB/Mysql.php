@@ -68,7 +68,7 @@ class Mysql extends DBase{
 		$this->c->close();	
 	}
 	
-	public function execute($query = "", $evalMeta = false){
+	public function execute($query = '', $evalMeta = false){
 
 		if ($query != ''){
 			$this->query = $query;
