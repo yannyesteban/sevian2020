@@ -27,6 +27,17 @@ var Input = (($) => {
 
             let main = (this.id)? $(this.id): false;
 
+
+            if(!main){
+                this._create(false);
+            }
+            let target = (this.target)? $(this.target): false;
+
+            if(target){
+                target.append(this._main);
+            }
+            return;
+
             if(main){
                 
                 if(main.ds("sgPage")){
@@ -43,7 +54,7 @@ var Input = (($) => {
                 let target = (this.target)? $(this.target): false;
 
                 if(target){
-                    main = target.create("div").attr("id", this.id);
+                    main = target.create("div");
                 }else{
                     main = $.create("div"); 
                 }
@@ -52,7 +63,7 @@ var Input = (($) => {
             }
         }
 
-        _create(main:any){
+        _create(target:any){
             let info = {};
             switch(this.type){
                 case "text":
@@ -80,14 +91,22 @@ var Input = (($) => {
                     info.type = "text";
 
             }
-            info.id = this.id;
-            info.name = this.name;
-            info.value = this.value;
+            if(this.id){
+                info.id = this.id;
+            }
+            if(this.name){
+                info.name = this.name;
+            }
+            if(this.value){
+                info.value = this.value;
+            }
+            
             this._main = $.create(info);
 
             if(this.type === "select" || this.type === "multiple"){
 				this.createOptions(this.value, false);
 			}
+
             this.setValue(this.value);
         }
         setValue(value:any){

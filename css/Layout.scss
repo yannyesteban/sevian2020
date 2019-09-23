@@ -33,7 +33,6 @@ html, body{
 .p2{
     background-color: rgb(236, 236, 236);
     overflow: auto;
-    display: flex;
     
 }
 .p3 {
@@ -55,11 +54,16 @@ html, body{
     
     background-color:#52565a;
 }
-
+form{
+  height: 100%;
+  overflow: auto;
+}
 .sg-grid{
   height: 100%;
-  border:2px solid #52565a;
+  //border:2px solid #52565a;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 .body{
     //height: 100%;

@@ -1,14 +1,24 @@
 var Grid = (($) => {
 
+    class InfoField{
+        name: any = "";
+        id:any = "";
+        input:object = {};
+
+
+
+    }
+
+
     class Grid{
-        target: any = "";;
-        name: any = "";;
+        target: any = "";
+        name: any = "";
         id:any = "";
         value: any = "";
         caption:string = "";
         className = "sevian";
         iconClass:string = "";
-        type:string = "view,select-one,select-multiple,edit-one,edit-all,edit-form";
+        type:string = "select-one";//"view,select-one,select-multiple,edit-one,edit-all,edit-form";
         option:any[] = [];
         data:any[] = [];
         paginator:any = {
@@ -20,8 +30,20 @@ var Grid = (($) => {
         searchControl:any = {
             type:"default,forfields",
         };
+        fields:any[] = []; 
         _main:object = null;
-       
+        
+        _select = (index:number)=>{return true};
+        _new = (index:number)=>{return true};
+        _edit = (index:number)=>{return true};
+        _delete = (index:number)=>{return true};
+
+        _search = (index:number)=>{return true};
+        _filter = (index:number)=>{return true};
+
+        _short = (index:number)=>{return true};
+        _changePage = (page:number)=>{return true};
+
         static _objs = [];
         static init(){
             let grids = $().queryAll(".sg-grid.sg-detect");
@@ -102,12 +124,35 @@ var Grid = (($) => {
             let body = main.create("div").addClass("body");
             let table = body.create("table");
             //table.create("caption").text("consulta");
+            let row = table.create("tr");
            
+            if(true){
+                let cell = row.create("td").text("#"); 
+            }
+
+            if(this.type == "select-one"){
+                let cell = row.create("td").create({tagName:"input",type:"radio", name:this.id+"_chk"}); 
+            }
+            
+            for(let x in this.fields){
+
+
+                let cell = row.create("td").text(this.fields[x].caption);
+            }
+            let index = 0;
             for(let record of this.data){
                 let row = table.create("tr");
-                for(let y in record){
-                    let cell = row.create("td").text(record[y]);
+                if(true){
+                    let cell = row.create("td").text(index + 1); 
                 }
+                if(this.type == "select-one"){
+                    let cell = row.create("td").create({tagName:"input",type:"radio", name:this.id+"_chk"}); 
+                }
+                for(let x in record){
+                    let cell = row.create("td");
+                    let input = new Input({target:cell, type:"text", name:this.fields[x].name+"_"+index, value:record[x]});
+                }
+                index++;
             }
 
 

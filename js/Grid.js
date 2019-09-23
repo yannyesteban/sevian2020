@@ -1,4 +1,11 @@
 var Grid = (($) => {
+    class InfoField {
+        constructor() {
+            this.name = "";
+            this.id = "";
+            this.input = {};
+        }
+    }
     class Grid {
         constructor(opt) {
             this.target = "";
@@ -8,7 +15,7 @@ var Grid = (($) => {
             this.caption = "";
             this.className = "sevian";
             this.iconClass = "";
-            this.type = "view,select-one,select-multiple,edit-one,edit-all,edit-form";
+            this.type = "select-one"; //"view,select-one,select-multiple,edit-one,edit-all,edit-form";
             this.option = [];
             this.data = [];
             this.paginator = {
@@ -19,7 +26,16 @@ var Grid = (($) => {
             this.searchControl = {
                 type: "default,forfields",
             };
+            this.fields = [];
             this._main = null;
+            this._select = (index) => { return true; };
+            this._new = (index) => { return true; };
+            this._edit = (index) => { return true; };
+            this._delete = (index) => { return true; };
+            this._search = (index) => { return true; };
+            this._filter = (index) => { return true; };
+            this._short = (index) => { return true; };
+            this._changePage = (page) => { return true; };
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
@@ -49,8 +65,6 @@ var Grid = (($) => {
             }
             main.ds("sgGrid", "grid").addClass(`grid-${this.type}`);
         }
-        ;
-        ;
         static init() {
             let grids = $().queryAll(".sg-grid.sg-detect");
             for (let x of grids) {
@@ -81,11 +95,30 @@ var Grid = (($) => {
             let body = main.create("div").addClass("body");
             let table = body.create("table");
             //table.create("caption").text("consulta");
+            let row = table.create("tr");
+            if (true) {
+                let cell = row.create("td").text("#");
+            }
+            if (this.type == "select-one") {
+                let cell = row.create("td").create({ tagName: "input", type: "radio", name: this.id + "_chk" });
+            }
+            for (let x in this.fields) {
+                let cell = row.create("td").text(this.fields[x].caption);
+            }
+            let index = 0;
             for (let record of this.data) {
                 let row = table.create("tr");
-                for (let y in record) {
-                    let cell = row.create("td").text(record[y]);
+                if (true) {
+                    let cell = row.create("td").text(index + 1);
                 }
+                if (this.type == "select-one") {
+                    let cell = row.create("td").create({ tagName: "input", type: "radio", name: this.id + "_chk" });
+                }
+                for (let x in record) {
+                    let cell = row.create("td");
+                    let input = new Input({ target: cell, type: "text", name: this.fields[x].name + "_" + index, value: record[x] });
+                }
+                index++;
             }
         }
         _load(main) {

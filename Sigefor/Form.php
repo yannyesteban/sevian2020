@@ -110,6 +110,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	private $menu = '';
 
+	private $infoQuery = false;
+
     public function __construct($opt = []){
 		
 		foreach($opt as $k => $v){
@@ -198,8 +200,10 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		}
 
-		$info = $cn->infoQuery($this->query);
-		$fields = $info->fields;
+		$this->infoQuery = $cn->infoQuery($this->query);
+
+		
+		$fields = $this->infoQuery->fields;
 
 		foreach($fields as $k => $v){
 			$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
@@ -440,11 +444,27 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$cn->query = $this->query;
 		$cn->pagination = true;
-		$cn->pageLimit = 10;
+		$cn->pageLimit = 20;
 
 		$result = $cn->execute();
+		$data = $cn->getDataAll($result);
 
-		return $cn->getDataAll($result);
+		$keys = $this->infoQuery->keys;
+		
+		foreach($data as $k => $record){
+			//print_r($record);
+			foreach($keys as $key){
+
+				$data[$k]['__record_']=[
+					$key=>$record[$key]
+				];
+				//hr($record['__record_']);
+			}
+
+
+		}
+		print_r($data);
+		return $data;
 
 		
 
@@ -642,10 +662,13 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$grid = new \Sevian\HTML("div");
 		$grid->id = "sg_form_".$this->id;
 		$this->panel = $grid;
+
+		
 		$opt = [
 			 'id' => $grid->id,
 			 'data'=>$data,
 			 'caption'=>$this->caption,
+			 'fields'=>$this->fields,
 
 		];
 
