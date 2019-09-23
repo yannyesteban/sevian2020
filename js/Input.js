@@ -1,5 +1,29 @@
 var $I = {};
 var Input = (($) => {
+    class I {
+        static get(_id) {
+            let main = $(_id);
+        }
+    }
+    class SGDate {
+        constructor() {
+            this.target = null;
+            this.id = "";
+            this.name = "";
+            this.type = "calendar"; //
+            this.value = "";
+            this.className = "";
+            this.data = false;
+            this.propertys = false;
+            this.events = false;
+            this.placeholder = "";
+            this.childs = false;
+            this.parent = "";
+            this._main = null;
+            this.status = "valid";
+            this.mode = "request";
+        }
+    }
     class Input {
         constructor(opt) {
             this.target = null;
@@ -15,40 +39,26 @@ var Input = (($) => {
             this.childs = false;
             this.parent = "";
             this._main = null;
+            this.status = "valid";
+            this.mode = "request";
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
                 }
             }
-            let main = (this.id) ? $(this.id) : false;
+            let main = this._main = (this.id) ? $(this.id) : false;
             if (!main) {
                 this._create(false);
             }
+            else {
+                if (main.ds("sgInput")) {
+                    return;
+                }
+            }
+            this._main.ds("sgInput", "input");
             let target = (this.target) ? $(this.target) : false;
             if (target) {
                 target.append(this._main);
-            }
-            return;
-            if (main) {
-                if (main.ds("sgPage")) {
-                    return;
-                }
-                if (main.hasClass("sg-page")) {
-                    this._load(main);
-                }
-                else {
-                    this._create(main);
-                }
-            }
-            else {
-                let target = (this.target) ? $(this.target) : false;
-                if (target) {
-                    main = target.create("div");
-                }
-                else {
-                    main = $.create("div");
-                }
-                this._create(main);
             }
         }
         _create(target) {
@@ -87,7 +97,7 @@ var Input = (($) => {
             if (this.value) {
                 info.value = this.value;
             }
-            this._main = $.create(info);
+            this._main = $.create(info).addClass("type-input");
             if (this.type === "select" || this.type === "multiple") {
                 this.createOptions(this.value, false);
             }
@@ -95,6 +105,9 @@ var Input = (($) => {
         }
         setValue(value) {
             this.get().value = value;
+        }
+        getValue() {
+            return this.get().value;
         }
         _load(main) {
         }

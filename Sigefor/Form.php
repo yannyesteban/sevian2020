@@ -228,8 +228,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 					$this->fields[$rs['field']]->$k = $v;
 				}
 			}
-			
-		
+
 		}
 	}
 
@@ -403,6 +402,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		}
 		return $data;
 	}
+	
 	private function getDataQuery($query){
 		$cn = $this->cn;
 
@@ -452,18 +452,22 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$keys = $this->infoQuery->keys;
 		
 		foreach($data as $k => $record){
-			//print_r($record);
+			
 			foreach($keys as $key){
 
 				$data[$k]['__record_']=[
 					$key=>$record[$key]
 				];
-				//hr($record['__record_']);
+				$data[$k]['__mode_'] = 2;
+				$data[$k]['__id_'] = $k + 1;
+				$this->gridKey[$k+1] = [
+					$key=>$record[$key]
+				];
 			}
 
 
 		}
-		print_r($data);
+		
 		return $data;
 
 		
@@ -473,10 +477,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 
 	private function createField($info){
-
-
-
 	}
+
 	private function createForm(){
 		
 		//$opt = $this->_form;

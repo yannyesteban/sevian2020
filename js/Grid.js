@@ -28,6 +28,7 @@ var Grid = (($) => {
             };
             this.fields = [];
             this._main = null;
+            this._mainForm = [];
             this._select = (index) => { return true; };
             this._new = (index) => { return true; };
             this._edit = (index) => { return true; };
@@ -93,7 +94,7 @@ var Grid = (($) => {
                 .add({ tagName: "span", className: "text", innerHTML: this.caption })
                 .add({ tagName: "span", className: "arrow" });
             let body = main.create("div").addClass("body");
-            let table = body.create("table");
+            let table = body.create("table").addClass("grid-table");
             //table.create("caption").text("consulta");
             let row = table.create("tr");
             if (true) {
@@ -112,21 +113,66 @@ var Grid = (($) => {
                     let cell = row.create("td").text(index + 1);
                 }
                 if (this.type == "select-one") {
-                    let cell = row.create("td").create({ tagName: "input", type: "radio", name: this.id + "_chk" });
+                    let cell = row.create("td").create({ tagName: "input", type: "radio", name: this.id + "_chk", value: index });
+                    cell.on("click", (event) => { this.getRecord((event.currentTarget.parentNode.parentNode)); });
+                }
+                for (let x in this.fields) {
+                    if (this.fields[x].input == "hidden") {
+                    }
+                    if (record[x]) {
+                    }
                 }
                 for (let x in record) {
-                    let cell = row.create("td");
-                    let input = new Input({ target: cell, type: "text", name: this.fields[x].name + "_" + index, value: record[x] });
+                    if (this.fields[x]) {
+                        let cell = row.create("td").ds("name", x).ds("index", index);
+                        let input = new Input({ target: cell, type: "text", name: this.fields[x].name + "_" + index, value: record[x] });
+                    }
                 }
+                row.ds("recordMode", record["__mode_"]);
+                row.ds("recordId", record["__id_"]);
                 index++;
+            }
+            if (1 == 1) {
+                let row = table.create("tr");
+                if (true) {
+                    let cell = row.create("td").text("&nbsp");
+                }
+                if (this.type == "select-one") {
+                    let cell = row.create("td").text("&nbsp");
+                }
+                let cols = 0;
+                for (let x in this.fields) {
+                    let cell = row.create("td").ds("name", x).ds("index", index);
+                    if (cols == 0) {
+                        this._mainForm["__mode_"] = new Input({ target: cell, type: "text", name: "__mode_", value: "0" });
+                        this._mainForm["__id_"] = new Input({ target: cell, type: "text", name: "__mode_", value: "1" });
+                    }
+                    this._mainForm[x] = new Input({ target: cell, type: "text", name: this.fields[x].name, value: "" });
+                    cols++;
+                }
+            }
+            let hiddenForm = body.create({ tagName: "div", style: "display:inline", className: "hidden-form" });
+            for (let x in this.fields) {
+                //let span = hiddenForm.create("span");
+                //this._mainForm[x] = new Input({target:span, type:"hidden", name:this.fields[x].name, value: ""});
             }
         }
         _load(main) {
-            this._main = main.addClass("sg-page");
+            this._main = main.addClass("sg-grid");
         }
         setRecord(index, params) {
         }
-        getrecord(index) {
+        getRecord(row) {
+            let cells = $(row).queryAll("[data-name]");
+            let form = $(row).query("input").form;
+            for (let cell of cells) {
+                // alert (cell.dataset.name)
+                let _input = $(cell).query("[data-sg-input]");
+                let input = new Input({ id: _input });
+                this._mainForm[cell.dataset.name].setValue(input.getValue());
+            }
+            this._mainForm["__mode_"].setValue($(row).ds("recordMode"));
+            this._mainForm["__id_"].setValue($(row).ds("recordId"));
         }
         setValue(index, params) {
         }

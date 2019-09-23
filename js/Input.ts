@@ -1,7 +1,35 @@
 
 var $I = {};
 var Input = (($) => {  
-      
+
+    class I{
+
+
+        static get(_id){
+            let main = $(_id);
+        }
+    }
+
+
+    class SGDate{
+        target:object = null;
+        id:string = "";
+        name:string = "";
+        type:string = "calendar";//
+        value:string = "";
+        className = "";
+        data:any = false;
+        propertys:any = false;
+        events:any = false;
+        placeholder:string = "";
+
+        childs:boolean = false;
+        parent:string = "";
+        _main:object = null;
+
+        status:string = "valid";
+        mode:string = "request";
+    }  
     class Input{
         target:object = null;
         id:string = "";
@@ -17,6 +45,9 @@ var Input = (($) => {
         childs:boolean = false;
         parent:string = "";
         _main:object = null;
+
+        status:string = "valid";
+        mode:string = "request";
         constructor(opt: any){
             
             for(var x in opt){
@@ -25,42 +56,28 @@ var Input = (($) => {
                 }
             }
 
-            let main = (this.id)? $(this.id): false;
+            let main = this._main = (this.id)? $(this.id): false;
 
 
             if(!main){
+
+                
                 this._create(false);
+            }else{
+                
+                if(main.ds("sgInput")){
+                    return;
+                }
             }
+
+            this._main.ds("sgInput", "input");
+
             let target = (this.target)? $(this.target): false;
 
             if(target){
                 target.append(this._main);
             }
-            return;
-
-            if(main){
-                
-                if(main.ds("sgPage")){
-                    return;
-                }
-    
-                if(main.hasClass("sg-page")){
-                    this._load(main);
-                }else{
-                    this._create(main);
-                }
-            }else{
-                
-                let target = (this.target)? $(this.target): false;
-
-                if(target){
-                    main = target.create("div");
-                }else{
-                    main = $.create("div"); 
-                }
-                
-                this._create(main);
-            }
+            
         }
 
         _create(target:any){
@@ -101,7 +118,7 @@ var Input = (($) => {
                 info.value = this.value;
             }
             
-            this._main = $.create(info);
+            this._main = $.create(info).addClass("type-input");
 
             if(this.type === "select" || this.type === "multiple"){
 				this.createOptions(this.value, false);
@@ -111,6 +128,10 @@ var Input = (($) => {
         }
         setValue(value:any){
 			this.get().value = value;
+        }
+        
+        getValue(){
+			return this.get().value;
 		}
         _load(main:any){
 
