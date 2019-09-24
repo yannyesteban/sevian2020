@@ -1,0 +1,43 @@
+{
+    "form":"",
+    "caption":"",
+    "class":"",
+    "query":"",
+    "filters":["name","personas.estado"],
+    "tables":[],
+    "pages":{},
+    "groups":{},
+    "type":"form,list,readonly",
+    "menu":"",
+    "grid":{
+        "caption":"",
+        "className":"",
+        "selectionMode":"one,multiple",
+        "editionMode":"bottom,one-line,all,use-form",
+        "allowNew":true,
+        "enumCol":"true",
+        "sortby":["uno", "dos"],
+        "filterBy":["name","age"],
+        "allowSearch":true,
+        "showPaginator":true,
+        "paginator":{
+            "page":3,
+            "pageSize":10,
+            "maxPages":5
+        },
+        "searchFields":[],
+        "fields":[],
+        "data":[],
+        "callEdit":[],
+        "callNew":[],
+        "callDelete":[],
+        "callSearch":[],
+        "callFilter":[],
+        "callOrder":[],
+        "callChangePage":[],
+        "callSave":[],
+        "groupColumn":{"name":"Name","age":"Ages"},
+        "menu":[]
+    }
+
+}
