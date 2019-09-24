@@ -33,12 +33,12 @@ const Tab = (function ($) {
                 }
             }
             else {
+                main = $.create("div").attr("id", this.id);
                 let target = (this.target) ? $(this.target) : false;
                 if (target) {
                     main = target.create("div").attr("id", this.id);
                 }
                 else {
-                    main = $.create("div").attr("id", this.id);
                 }
                 this._create(main);
             }
@@ -54,6 +54,10 @@ const Tab = (function ($) {
             }
             else {
                 this.setValue(this.value);
+            }
+            let target = (this.target) ? $(this.target) : false;
+            if (target) {
+                target.append(this._main);
             }
         }
         static init() {

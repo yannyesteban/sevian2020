@@ -3,7 +3,7 @@ const Tab = (function($){
     
 class Tab{
 
-    target: any = false;
+    target:any = false;
     id:any = 0;
 
     value:any = 0;
@@ -23,6 +23,7 @@ class Tab{
     _length:number = 0;
 
     static _objs = [];
+    
     static init(){
         let menus = $().queryAll(".sg-tab.sg-detect");
 
@@ -37,10 +38,12 @@ class Tab{
             }
         }
     }
+    
     static create(name, info:any){
         this._objs[name] = new Tab(info);
         return this._objs[name];
     }
+    
     static getObj(name){
         return this._objs[name];
     }
@@ -67,13 +70,14 @@ class Tab{
             }
 
         }else{
+             main = $.create("div").attr("id", this.id);
             
-            let target = (this.target)? $(this.target): false;
+             let target = (this.target)? $(this.target): false;
             
             if(target){
                 main = target.create("div").attr("id", this.id);
             }else{
-                main = $.create("div").attr("id", this.id); 
+                
             }
            
             this._create(main);
@@ -92,7 +96,12 @@ class Tab{
         }else{
            this.setValue(this.value); 
         } 
-        
+
+        let target = (this.target)? $(this.target): false;
+
+        if(target){
+            target.append(this._main);
+        }
         
     }
 
