@@ -1,0 +1,19 @@
+{
+    "name":"",
+    "caption":"",
+    "type":"input,hidden,calendar,listaset,grid",
+    "childs":true,
+    "parent":true,
+    "rules":[],
+    "className":"",
+    "input":{
+        "type":"text",
+        "placeholder":"",
+        "events":{
+            "click":""
+        }
+    }
+
+
+
+}
