@@ -1,17 +1,48 @@
 {
     "name":"",
     "caption":"",
-    "type":"input,hidden,calendar,listaset,grid",
-    "childs":true,
-    "parent":true,
+    "input":"default,input,hidden,calendar,listaset,grid",
+    "cell":"default,img,link,hidden",
+    "default":"4",
+    "modeValue":"default,fixed",
+    "data":[],
+    "info":"",
     "rules":[],
-    "className":"",
-    "input":{
+    "onsave":{
+        "format":["upper"],
+        "sqlValue":"max(@sss)",
+        "table":"",
+        "master":"",
+        "refValue":"brother_value",
+        "serialize":true,
+        "serializeFilters":[],
+        "expValue": "@x yanny esteban {=4+3}",
+        "aux":false,
+        "allowUpdate":true,
+        "useRules":true
+
+    },
+    "cellConfig":{
+        "type":"image,document,check",
+        "width":"",
+        "height":"",
+        "onCreate":"if('&color'=='red'){row.addClass('red');cell.addClass('red')}",
+        "events":{
+            "click":""
+        }
+    },
+    "inputConfig":{
         "type":"text",
         "placeholder":"",
         "events":{
             "click":""
-        }
+        },
+        "maxlength":4,
+        "size":4,
+        "childs":true,
+        "parent":true,
+        "rules":[],
+        "className":""
     }
 
 

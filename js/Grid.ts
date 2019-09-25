@@ -149,26 +149,32 @@ var Grid = (($) => {
                     let cell = row.create("td").create({tagName:"input",type:"radio", name:this.id+"_chk", value:index}); 
                     cell.on("click", (event)=>{this.getRecord((event.currentTarget.parentNode.parentNode));});
                 }
-
+                let hiddenFields = $.create({tagName:"div"});
+                let cellAux = false;
                 for(let x in this.fields){
-
+                    let value = record[x]?record[x]:"";
                     if(this.fields[x].input == "hidden"){
-                        
-                    }
-
-
-                    if(record[x]){
-
-                    }
-                }
-
-                for(let x in record){
-                    if(this.fields[x]){
+                       // hiddenFields.create()                        
+                    }else{
                         let cell = row.create("td").ds("name", x).ds("index", index);
-                        let input = new Input({target:cell, type:"text", name:this.fields[x].name+"_"+index, value:record[x]});
+                        let input = new Input({
+                            target: cell,
+                            type: "text", 
+                            name: this.fields[x].name+"_"+index,
+                            value: value});
+                        if(!cellAux){
+                            cellAux = cell;
+                        }
+
 
                     }
+                    
+
                 }
+                if(cellAux){
+                    cellAux.append(hiddenFields);
+                }
+                
                 row.ds("recordMode", record["__mode_"]);
                 row.ds("recordId", record["__id_"]);
                 index++;

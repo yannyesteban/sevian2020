@@ -166,7 +166,7 @@ class FormSave{
                     }elseif($field->refValue){
                         $value = $data->{$field->refValue};
                     }elseif($field->serialize){
-                        $value = $cn->serialId($table, $field->field, $field->serialize_filters);
+                        $value = $cn->serialId($table, $field->field, $field->serializeFilters);
                     }else{
                         $value = $data->$k;
                     }

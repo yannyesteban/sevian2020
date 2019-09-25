@@ -1,0 +1,40 @@
+{
+    "target":"",
+    "id":"form_uno",
+    "caption":"Formulario Uno",
+    "className":"sevian",
+    "valid":[],
+    "submit":"",
+    "setValue":"",
+    "getValue":"",
+    "reset":"",
+    "new":"",
+    "save":"",
+    "edit":"",
+    "delete":"",
+    "elements":[{
+        "type":"page",
+        "name":"page_one",
+        "config":{
+            "caption":"Pagina Uno"
+        },
+        "elements":[]
+    },
+    {
+        "type":"field",
+        "config":{
+            "input":"input",
+            "type":"text",
+            "caption":"Cedula",
+            "name":"cedula",
+            "value":"12474737",
+            "rules":[],
+            "events":[],
+            "parent":false,
+            "childs":false,
+            "data":[]
+        }
+    }
+
+]
+}
