@@ -3,10 +3,39 @@
 
 var Form = (($) => {
 
+    
+
+    
+    class Field{
+        caption:string = "";
+        input:string = "input";
+        config:object = {};
+        className:string = "";
+
+        _main:object = null;
+        _input:object = null;
+        _label:object = null;
+
+        constructor(){
+            let field = this._page.create("div").addClass("field");
+            field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption);
+            field.create("div").addClass("input").append(this.createInput(info).get());
+            return field;
+        }
+        _create(main:any){
+
+            main.addClass("field");
+            main.create("label").addClass("label").prop("htmlFor", config.id).text(config.caption);
+            main.create("div").addClass("input").append(this.createInput(info).get());
+        }
+    }
+
+
+
     class Form{
         
-        target: any = "";;
-        name: any = "";;
+        target: any = "";
+        name: any = "";
         id:any = "";
         value: any = "";
         caption:string = "";
@@ -16,6 +45,7 @@ var Form = (($) => {
 
         fields:any[] = [];
         pages:any[] = [];
+        menu:object = null;
 
         child:any = null;
         open:boolean = false;
@@ -37,7 +67,7 @@ var Form = (($) => {
                     continue;
                 }
                 if(x.id){
-                    this.create(x.id,{id:x});
+                    Form.create(x.id,{id:x});
                 }else{
                     new Form({id:x});
                 }
@@ -45,12 +75,12 @@ var Form = (($) => {
         }
 
         static create(name, info:any){
-            this._objs[name] = new Page(info);
-            return this._objs[name];
+            Form._objs[name] = new Page(info);
+            return Form._objs[name];
         }
 
         static get(name){
-            return this._objs[name];
+            return Form._objs[name];
         }
 
         constructor(opt: any){
@@ -135,6 +165,9 @@ var Form = (($) => {
                 //this._addElements(page, this.elements);
 
             }
+            if(this.menu){
+                page.append(this.createMenu(this.menu));
+            }
 
         }
 
@@ -151,7 +184,7 @@ var Form = (($) => {
             }else{
                 //return;
             }
-            this.createField(field.config);
+            this.createField(field.input, field.config);
         }
 
         addFields(fields){
@@ -271,13 +304,14 @@ var Form = (($) => {
             return $(_tab.get());
         }
         createInput(info:any){
+            //return I.create(info);
             return new $I["std"](info);
             return new Input(info)
         }
-        createField(info:any){
+        createField(input:string, info:any){
             let field = this._page.create("div").addClass("field");
             field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption);
-            field.create("div").addClass("input").append(this.createInput(info).get());
+            field.create("div").addClass("input").append(I.create(input, info).get());
             return field;
         }
         get(){

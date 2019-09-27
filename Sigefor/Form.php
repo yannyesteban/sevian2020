@@ -41,11 +41,11 @@ class InfoField{
 	public $caption = false;
 	public $class = '';
 	//public $params = '';
-	public $input = 'std';//['input'=>'text'];
-	public $inputType = 'text';//['input'=>'text'];
+	public $input = '';//['input'=>'text'];
+	public $inputType = '';//['input'=>'text'];
 	public $value = '';
 	
-	//public $init_value = '';
+	public $modeValue = '';
 	public $default = '';
 	public $data = false;
 	public $parent = false;
@@ -394,7 +394,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 			switch(gettype( $_data)){
 				case "array":
-					$data = array_merge($data, $_data);
+					$data[] = $_data;//array_merge($data, $_data);
 					break;
 				case "string":
 					$data = array_merge($data, $this->getDataQuery($_data));
@@ -485,41 +485,62 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 
 	private function createForm(){
+		
 		$this->loadConfig();
-		//$opt = $this->_form;
+		$values = $this->getRecord($this->infoQuery, $this->eparams);
+		
 		$fields = [];
 		$groups = json_decode(\Sevian\S::vars($this->groups));
 		
-		$page = "";
 		foreach($this->fields as $f){
+
+			$id = "{$f->name}_f{$this->id}";
+			$value = '';
+
+			if($f->modeValue == '1' or !$values){
+				$value = $f->default;
+			}else if(isset($values[$f->field])){
+				$value = $values[$f->field];
+			}
 
 			if(isset($groups->{$f->field})){
 				$page = $groups->{$f->field};
 			}
 
+			$data = false;
 			if($f->data){
-				$data = json_decode(\Sevian\S::vars($f->data));
-				$f->data = $this->getDataField($data);
+				$data = $this->getDataField(json_decode(\Sevian\S::vars($f->data)));
 			}
-				
-			if($f->inputConfig){
-				
-				$config = $f->inputConfig;//json_decode(\Sevian\S::vars($f->inputConfig));
-				
+			
+			$config = new \stdClass;
+			
+			if(!$f->input){
+				$this->getDefaultInput($this->infoQuery->fields[$f->field]->mtype, $input, $type);
 			}else{
-				$config = new \stdClass;
+				$input = $f->input;
+				$type = $f->inputType;
 			}
-			$config->type = $f->inputType;
+
+			$config->type = $type;
+			
+			$config->id = $id;
 			$config->name = $f->field;
 			$config->caption = $f->caption;
-			$config->data = $f->data;
+			$config->data = $data;
+			$config->value = $value;
+			$config->className = $config->className?? $f->class;
+			
+			if($f->inputConfig){
+				foreach($f->inputConfig as $k => $v){
+					$config->$k = $v;
+				}
 				
+			}
+
 			$fields[] = [
-				"input"	=> "input",
-				"page"	=> $page,
-				"config"=> (array)$config
-
-
+				'input'	=> $input,
+				'page'	=> $page,
+				'config'=> $config
 			];
 			
 		}
@@ -527,78 +548,25 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$pages = json_decode(\Sevian\S::vars($this->pages));
 
 		$info = [
-			"caption"=>$this->caption,
-			"className"=>$this->class,
-			"id"=>"sg_form_".$this->id,
-			"pages"=>$pages,
-			"fields"=>$fields
+			'caption'	=> $this->caption,
+			'className'	=> $this->class,
+			'id'		=> 'sg_form_'.$this->id,
+			'fields'	=> $fields,
+			'pages'		=> $pages,
+			'menu'		=> $this->createMenu($this->menu)
+			
 		];
 
-		//$opt =$this->_menu;
+		$form = new \Sevian\HTML('div');
 
-		//print_r($this->_menu);
-		//$opt["id"] = "sg_form_".$this->id;
-		$form = new \Sevian\HTML("div");
-
-		$form->id = "sg_form_".$this->id;
-		$this->typeElement = "Form";
+		$form->id = 'sg_form_'.$this->id;
+		$this->typeElement = 'Form';
 		$this->info = $info;//$form->getInfo();
 
-		//print_r($this->fields);
-		//$menu->class = "uva";
 		//print_r($info);
 		$this->panel = $form;
 
-		return $form;
-
-
-		$f = new \Sevian\Form2();
-		if($this->showCaption){
-			$f->setCaption($this->title);
-		}
-		
-		
-		foreach($this->fields as $k => $field){
-			
-			$input = new \Sevian\InfoInput([
-
-				'type'=>'text',
-				'name'=>$field->name,
-				'id'=>$field->name."_p{$this->id}",
-				'className'=>$field->class,
-				'events'=>$field->events,
-				'value'=>'',
-				'parent'=>$field->parent,
-				'childs'=>$field->childs,
-				'data'=>$field->data,
-				'masterData'=>$this->masterData ?? [],
-
-
-
-			]);
-			$field->input = $input;
-			$field->caption = $field->title;
-			$f->addField($field);
-			
-		}
-		loadJson("json/mod_principal.json");
-		$menu = (new ConfigMenu())->getConfig('login');
-		//$menu->getConfig('login');
-		$div = new \Sevian\HTML('div');
-		foreach($menu['items'] as $k => $v){
-			$buttom = new \Sevian\HTML('input');
-			$buttom->type = 'button';
-			$buttom->value = $v['caption'];
-			$div->appendChild($buttom);
-			
-		}
-		
-		
-		$f->addNav($div);
-		return $f;
-		//return $f->render();
-		
-	}// end function
+	}
 	
 	
 	private function createMenu($name){
@@ -625,6 +593,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 			$menu["caption"] = $this->_config["caption"]?? $config->title;
 			$menu["class"] = $this->_config["class"] ?? $config->class;
+			$menu['tagLink'] = 'button';
 
 
 			$cn->query = "
@@ -760,16 +729,17 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
        
 
 		$result = $cn->execute();
-		$data = [];
+		
 		$i = 0;
 		if($rs = $cn->getDataRow($result)){
+			$data = [];
 			foreach($info->fields as $k => $v){
 				$data[$k] = $rs[$i++];
 			}
-			
+			return $data;
 		}
-
-		return $data;
+		return false;
+		
 	}
 	
 	public function getJsConfigPanel():\Sevian\jsConfigPanel{
@@ -782,7 +752,23 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
     }
     public function getJsType(){
         
-    }
+	}
+	
+	private function getDefaultInput($meta, &$input, &$type){
+		$input = 'input';
+		switch($meta){
+			case 'I':
+			case 'C':
+			case 'D':
+			
+				$type = 'text';
+				break;
+			case 'B':
+				$type =  'textarea';
+				break;
+
+		}
+	}
 	
 }// end class
 function loadJson($path){

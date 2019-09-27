@@ -1,5 +1,25 @@
 //import { Query as $} from './Query.js';
 var Form = (($) => {
+    class Field {
+        constructor() {
+            this.caption = "";
+            this.input = "input";
+            this.config = {};
+            this.className = "";
+            this._main = null;
+            this._input = null;
+            this._label = null;
+            let field = this._page.create("div").addClass("field");
+            field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption);
+            field.create("div").addClass("input").append(this.createInput(info).get());
+            return field;
+        }
+        _create(main) {
+            main.addClass("field");
+            main.create("label").addClass("label").prop("htmlFor", config.id).text(config.caption);
+            main.create("div").addClass("input").append(this.createInput(info).get());
+        }
+    }
     class Form {
         constructor(opt) {
             this.target = "";
@@ -12,6 +32,7 @@ var Form = (($) => {
             this.iconClass = "";
             this.fields = [];
             this.pages = [];
+            this.menu = null;
             this.child = null;
             this.open = false;
             //text:string = "";
@@ -61,8 +82,6 @@ var Form = (($) => {
                 target.append(this._main);
             }
         }
-        ;
-        ;
         static init() {
             let pages = $().queryAll(".sg-form.sg-detect");
             for (let x of pages) {
@@ -70,7 +89,7 @@ var Form = (($) => {
                     continue;
                 }
                 if (x.id) {
-                    this.create(x.id, { id: x });
+                    Form.create(x.id, { id: x });
                 }
                 else {
                     new Form({ id: x });
@@ -78,11 +97,11 @@ var Form = (($) => {
             }
         }
         static create(name, info) {
-            this._objs[name] = new Page(info);
-            return this._objs[name];
+            Form._objs[name] = new Page(info);
+            return Form._objs[name];
         }
         static get(name) {
-            return this._objs[name];
+            return Form._objs[name];
         }
         _create(main) {
             this._main = main.addClass("sg-form").addClass(this.className);
@@ -105,6 +124,9 @@ var Form = (($) => {
             if (this.elements) {
                 //this._addElements(page, this.elements);
             }
+            if (this.menu) {
+                page.append(this.createMenu(this.menu));
+            }
         }
         _load(main) {
             this._main = main.addClass("sg-page");
@@ -118,7 +140,7 @@ var Form = (($) => {
             else {
                 //return;
             }
-            this.createField(field.config);
+            this.createField(field.input, field.config);
         }
         addFields(fields) {
             for (let field of fields) {
@@ -212,13 +234,14 @@ var Form = (($) => {
             return $(_tab.get());
         }
         createInput(info) {
+            //return I.create(info);
             return new $I["std"](info);
             return new Input(info);
         }
-        createField(info) {
+        createField(input, info) {
             let field = this._page.create("div").addClass("field");
             field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption);
-            field.create("div").addClass("input").append(this.createInput(info).get());
+            field.create("div").addClass("input").append(I.create(input, info).get());
             return field;
         }
         get() {

@@ -1,10 +1,14 @@
+class I {
+    static create(name, info) {
+        return new I._ele_[name](info);
+    }
+    static register(name, classInput) {
+        I._ele_[name] = classInput;
+    }
+}
+I._ele_ = [];
 var $I = {};
 var Input = (($) => {
-    class I {
-        static get(_id) {
-            let main = $(_id);
-        }
-    }
     class SGDate {
         constructor() {
             this.target = null;
@@ -98,7 +102,7 @@ var Input = (($) => {
             if (this.value) {
                 info.value = this.value;
             }
-            this._main = $.create(info).addClass("type-input");
+            this._main = $.create(info).addClass("type-input").addClass(this.className);
             for (var x in this.events) {
                 //let action = $.bind(this.events[x], this._main);
                 this._main.on(x, $.bind(this.events[x], this, "event"));
@@ -147,5 +151,6 @@ var Input = (($) => {
         }
     }
     $I.std = Input;
+    I.register("input", Input);
     return Input;
 })(_sgQuery);
