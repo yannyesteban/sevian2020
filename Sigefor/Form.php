@@ -42,7 +42,7 @@ class InfoField{
 	public $class = '';
 	//public $params = '';
 	public $input = 'std';//['input'=>'text'];
-	public $type = 'text';//['input'=>'text'];
+	public $inputType = 'text';//['input'=>'text'];
 	public $value = '';
 	
 	//public $init_value = '';
@@ -56,6 +56,7 @@ class InfoField{
 	public $info = false;
 	
 	public $config = false;
+	public $inputConfig = false;
 	public $onSave = false;
 	
 	//public $mtype = false;
@@ -137,8 +138,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
         switch($method){
 			case 'create':
 			case 'load':
-
-				//print_r($this->eparams);
+				$this->createForm();
+				break;
 
 			case 'list':
 				$this->createGrid();
@@ -156,8 +157,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
                 
 			case 'request':
 			
-				$this->_config();
-				$this->panel = $this->createForm();//$this->html;
+				$this->createForm();//$this->html;
 				
                 break;
             case 'delete':
@@ -210,7 +210,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		}
 
 		$cn->query = "
-			SELECT * 
+			SELECT 
+			field, alias, caption, input, input_type as \"inputType\", cell, cell_type as \"cellType\",
+			class, `default`, mode_value as \"modeValue\",data, params,method,rules,events,info 
 			FROM $this->tFields 
 			WHERE form = '$this->name'
 		";
@@ -279,7 +281,10 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		if($this->pages){
 			$pages = json_decode(\Sevian\S::vars($this->pages));
 			$this->createPages($this->p['elements'], $pages);
+
+			
 		}
+
 
 	
 		if($this->groups){
@@ -480,22 +485,68 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 
 	private function createForm(){
-		
+		$this->loadConfig();
 		//$opt = $this->_form;
+		$fields = [];
+		$groups = json_decode(\Sevian\S::vars($this->groups));
+		
+		$page = "";
+		foreach($this->fields as $f){
 
-		$opt =$this->_menu;
+			if(isset($groups->{$f->field})){
+				$page = $groups->{$f->field};
+			}
+
+			if($f->data){
+				$data = json_decode(\Sevian\S::vars($f->data));
+				$f->data = $this->getDataField($data);
+			}
+				
+			if($f->inputConfig){
+				
+				$config = $f->inputConfig;//json_decode(\Sevian\S::vars($f->inputConfig));
+				
+			}else{
+				$config = new \stdClass;
+			}
+			$config->type = $f->inputType;
+			$config->name = $f->field;
+			$config->caption = $f->caption;
+			$config->data = $f->data;
+				
+			$fields[] = [
+				"input"	=> "input",
+				"page"	=> $page,
+				"config"=> (array)$config
+
+
+			];
+			
+		}
+		
+		$pages = json_decode(\Sevian\S::vars($this->pages));
+
+		$info = [
+			"caption"=>$this->caption,
+			"className"=>$this->class,
+			"id"=>"sg_form_".$this->id,
+			"pages"=>$pages,
+			"fields"=>$fields
+		];
+
+		//$opt =$this->_menu;
 
 		//print_r($this->_menu);
-		$opt["id"] = "sg_form_".$this->id;
+		//$opt["id"] = "sg_form_".$this->id;
 		$form = new \Sevian\HTML("div");
 
 		$form->id = "sg_form_".$this->id;
 		$this->typeElement = "Form";
-		$this->info = $opt;//$form->getInfo();
+		$this->info = $info;//$form->getInfo();
 
 		//print_r($this->fields);
 		//$menu->class = "uva";
-		//print_r($opt);
+		//print_r($info);
 		$this->panel = $form;
 
 		return $form;

@@ -10,7 +10,7 @@ $css = array(
 	"{$PATH}css/sgWindow.css",
 	//"{$PATH}css/sgCalendar.css",
 	//"{$PATH}css/selectText.css",
-	//"{$PATH}css/sgTab.css",
+	"{$PATH}css/sgTab.css",
 	//"{$PATH}css/sgAjax.css",
 	//"{$PATH}css/grid.css",
 	//"{$PATH}css/DesignMenu.css",

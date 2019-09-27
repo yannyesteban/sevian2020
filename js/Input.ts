@@ -38,7 +38,8 @@ var Input = (($) => {
         value:string = "";
         className = "";
         data:any = false;
-        propertys:any = false;
+        propertys:object = {};
+        style:object = {};
         events:any = false;
         placeholder:string = "";
 
@@ -119,6 +120,15 @@ var Input = (($) => {
             }
             
             this._main = $.create(info).addClass("type-input");
+
+            for(var x in this.events){
+
+                //let action = $.bind(this.events[x], this._main);
+				this._main.on(x, $.bind(this.events[x], this, "event"));
+			}
+			
+			this._main.prop(this.propertys);
+			this._main.style(this.style);
 
             if(this.type === "select" || this.type === "multiple"){
 				this.createOptions(this.value, false);

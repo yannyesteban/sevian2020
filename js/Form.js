@@ -10,12 +10,16 @@ var Form = (($) => {
             this.type = "dropdown";
             this.className = "sevian";
             this.iconClass = "";
+            this.fields = [];
+            this.pages = [];
             this.child = null;
             this.open = false;
-            this.text = "";
+            //text:string = "";
             this.elements = [];
             this._main = null;
             this._page = null;
+            this._pg = [];
+            this._tab = null;
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
@@ -34,13 +38,7 @@ var Form = (($) => {
                 }
             }
             else {
-                let target = (this.target) ? $(this.target) : false;
-                if (target) {
-                    main = target.create("div").attr("id", this.id);
-                }
-                else {
-                    main = $.create("div").attr("id", this.id);
-                }
+                main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
             main.ds("sgForm", "form").addClass(`form-${this.type}`);
@@ -58,6 +56,10 @@ var Form = (($) => {
                 }
             }
             main.addClass(this.open ? "open" : "close");
+            let target = (this.target) ? $(this.target) : false;
+            if (target) {
+                target.append(this._main);
+            }
         }
         ;
         ;
@@ -89,15 +91,66 @@ var Form = (($) => {
                 .add({ tagName: "span", className: "text", innerHTML: this.caption })
                 .add({ tagName: "span", className: "arrow" });
             let page = this._page = main.create({ tagName: "div", className: "page" });
-            if (this.text) {
+            /*
+            if(this.text){
                 page.text(this.text);
             }
+            */
+            if (this.pages) {
+                this.addPages(this._page, this.pages);
+            }
+            if (this.fields) {
+                this.addFields(this.fields);
+            }
             if (this.elements) {
-                this._addElements(page, this.elements);
+                //this._addElements(page, this.elements);
             }
         }
         _load(main) {
             this._main = main.addClass("sg-page");
+        }
+        addField(field) {
+            if (field.page) {
+                if (this._pg[field.page]) {
+                    this._page = this._pg[field.page];
+                }
+            }
+            else {
+                //return;
+            }
+            this.createField(field.config);
+        }
+        addFields(fields) {
+            for (let field of fields) {
+                this.addField(field);
+            }
+        }
+        addPages(body, pages) {
+            for (let page of pages) {
+                switch (page.type) {
+                    case "page":
+                        let ele = new Page(page.config);
+                        this._pg[page.name] = ele.getPage();
+                        body.append(this._pg[page.name].get());
+                        break;
+                    case "tab":
+                        this._tab = new Tab(page.config);
+                        body.append(this._tab.get());
+                        this._pg[page.name] = false;
+                        break;
+                    case "tab_page":
+                        this._pg[page.name] = this._tab.add(page.config);
+                        this._tab.setValue(0);
+                        break;
+                    case "tag":
+                        let _page = this._pg[page.name] = $.create(page.config.tagName).addClass(["page", "container"]);
+                        body.append(_page.get());
+                        break;
+                }
+                if (page.pages) {
+                    this.addPages(this._pg[page.name], page.pages);
+                }
+            }
         }
         _addElements(page, elements) {
             for (let x in elements) {
@@ -138,6 +191,7 @@ var Form = (($) => {
             return $(_menu.get());
         }
         createPage(info) {
+            return new Page(info);
             let _page = new Page(info);
             if (info.elements) {
                 this._addElements(_page.getPage(), info.elements);

@@ -13,13 +13,19 @@ var Form = (($) => {
         type:string = "dropdown";
         className = "sevian";
         iconClass:string = "";
+
+        fields:any[] = [];
+        pages:any[] = [];
+
         child:any = null;
         open:boolean = false;
-        text:string = "";
+        //text:string = "";
         elements:object[] = [];
 
         _main:object = null;
         _page:object = null;
+        _pg:object = [];
+        _tab:object = null;
 
         static _objs = [];
 
@@ -70,14 +76,7 @@ var Form = (($) => {
                 }
     
             }else{
-                
-                let target = (this.target)? $(this.target): false;
-
-                if(target){
-                    main = target.create("div").attr("id", this.id);
-                }else{
-                    main = $.create("div").attr("id", this.id); 
-                }
+                main = $.create("div").attr("id", this.id);
                 
                 this._create(main);
             }
@@ -101,6 +100,11 @@ var Form = (($) => {
                 
             main.addClass(this.open? "open": "close");
 
+            let target = (this.target)? $(this.target): false;
+            if(target){
+                target.append(this._main);
+            }
+            
         }
 
         _create(main:any){
@@ -114,13 +118,21 @@ var Form = (($) => {
             .add({tagName: "span", className: "arrow"});
 
             let page = this._page = main.create({tagName:"div",className:"page"});
-            
+            /*
             if(this.text){
                 page.text(this.text);
             }
-
+            */
+            if(this.pages){
+                this.addPages(this._page, this.pages);
+               
+            }
+            if(this.fields){
+                this.addFields(this.fields);
+               
+            }
             if(this.elements){
-                this._addElements(page, this.elements);
+                //this._addElements(page, this.elements);
 
             }
 
@@ -129,7 +141,57 @@ var Form = (($) => {
         _load(main:any){
             this._main = main.addClass("sg-page");
         }
-    
+        
+        addField(field){
+            if(field.page){
+                
+                if(this._pg[field.page]){
+                    this._page = this._pg[field.page];
+                }
+            }else{
+                //return;
+            }
+            this.createField(field.config);
+        }
+
+        addFields(fields){
+            for(let field of fields){
+                this.addField(field);
+            }
+        }
+        addPages(body, pages:any){
+
+            for(let page of pages){
+               
+                switch(page.type){
+                    case "page":
+                        let ele = new Page(page.config);
+                        this._pg[page.name] = ele.getPage();
+                        body.append(this._pg[page.name].get());
+                        break;
+                    case "tab":
+                        this._tab = new Tab(page.config);
+                        body.append(this._tab.get());
+                        this._pg[page.name] = false;
+                        break;
+                    case "tab_page":
+                        this._pg[page.name] = this._tab.add(page.config);
+                        this._tab.setValue(0);
+                        break;
+                    case "tag":
+                        let _page = this._pg[page.name] = $.create(page.config.tagName).addClass(["page","container"]);
+                        body.append(_page.get());
+                        break;
+                }
+                
+                if(page.pages){
+                    this.addPages(this._pg[page.name], page.pages);
+                }
+                
+            }
+        }
+
+
         _addElements(page:any, elements:any){
 
             for(let x in elements){
@@ -179,7 +241,7 @@ var Form = (($) => {
             return $(_menu.get());
         }
         createPage(info:any){
-            
+            return new Page(info);
             let _page = new Page(info);
             
             if(info.elements){

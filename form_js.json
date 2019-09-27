@@ -12,6 +12,27 @@
     "save":"",
     "edit":"",
     "delete":"",
+    "fields":[{
+        "input":"input",
+        "page":"page1",
+        "config":{
+            "type":"text",
+            "name":"cedula",
+            "caption":"Cédula",
+            "value":"12474737",
+            "size":10
+        }
+    }],
+    "pages":[{
+        "type":"page",
+        "name":"page1",
+        "config":{
+            "caption":"Page ONE",
+            "className":"sevian"
+        },
+        "pages":[],
+        "menu":{}
+    }],
     "elements":[{
         "type":"page",
         "name":"page_one",

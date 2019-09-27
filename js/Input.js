@@ -33,7 +33,8 @@ var Input = (($) => {
             this.value = "";
             this.className = "";
             this.data = false;
-            this.propertys = false;
+            this.propertys = {};
+            this.style = {};
             this.events = false;
             this.placeholder = "";
             this.childs = false;
@@ -98,6 +99,12 @@ var Input = (($) => {
                 info.value = this.value;
             }
             this._main = $.create(info).addClass("type-input");
+            for (var x in this.events) {
+                //let action = $.bind(this.events[x], this._main);
+                this._main.on(x, $.bind(this.events[x], this, "event"));
+            }
+            this._main.prop(this.propertys);
+            this._main.style(this.style);
             if (this.type === "select" || this.type === "multiple") {
                 this.createOptions(this.value, false);
             }

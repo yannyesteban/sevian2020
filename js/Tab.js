@@ -34,12 +34,6 @@ const Tab = (function ($) {
             }
             else {
                 main = $.create("div").attr("id", this.id);
-                let target = (this.target) ? $(this.target) : false;
-                if (target) {
-                    main = target.create("div").attr("id", this.id);
-                }
-                else {
-                }
                 this._create(main);
             }
             if (this.onOpen) {

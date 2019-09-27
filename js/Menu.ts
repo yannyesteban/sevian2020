@@ -94,10 +94,10 @@ var Menu =
                 this._create(main);
             }
             if(this.action){
-                this._action = $.bind(this.action, this.parentContext, 'item');
+                this._action = $.bind(this.action, this.parentContext, "item");
             }
             if(this.check){
-                this._check = $.bind(this.check, this.parentContext, 'item');
+                this._check = $.bind(this.check, this.parentContext, "item");
             }
             main.ds("sgMenu", "menu");
             
