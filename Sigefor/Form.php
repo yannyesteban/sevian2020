@@ -133,14 +133,13 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
             $method = $this->method;
         }
 
-
+		$method = 'list';
         
         switch($method){
 			case 'create':
 			case 'load':
 				$this->createForm();
 				break;
-
 			case 'list':
 				$this->createGrid();
 				break;
@@ -481,8 +480,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	}
 
-	private function createField($info){
-	}
+	
 
 	private function createForm(){
 		
@@ -750,9 +748,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
             
         ]);
     }
-    public function getJsType(){
-        
-	}
+    public function getJsType(){}
 	
 	private function getDefaultInput($meta, &$input, &$type){
 		$input = 'input';

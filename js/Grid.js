@@ -16,8 +16,11 @@ var Grid = (($) => {
             this.className = "sevian";
             this.iconClass = "";
             this.type = "select-one"; //"view,select-one,select-multiple,edit-one,edit-all,edit-form";
+            this.ctrlSelect = "one"; //one,multiple,
+            this.showEnum = true;
             this.option = [];
             this.data = [];
+            this.actionButtons = ["edit", "delete"];
             this.paginator = {
                 page: 2,
                 pages: 20,
@@ -29,6 +32,8 @@ var Grid = (($) => {
             this.fields = [];
             this._main = null;
             this._mainForm = [];
+            this._table = null;
+            this._rowLength = 0;
             this._select = (index) => { return true; };
             this._new = (index) => { return true; };
             this._edit = (index) => { return true; };
@@ -94,7 +99,7 @@ var Grid = (($) => {
                 .add({ tagName: "span", className: "text", innerHTML: this.caption })
                 .add({ tagName: "span", className: "arrow" });
             let body = main.create("div").addClass("body");
-            let table = body.create("table").addClass("grid-table");
+            let table = this._table = body.create("table").addClass("grid-table");
             //table.create("caption").text("consulta");
             let row = table.create("tr");
             if (true) {
@@ -108,7 +113,7 @@ var Grid = (($) => {
             }
             let index = 0;
             for (let record of this.data) {
-                let row = table.create("tr");
+                let row = table.create("tr").addClass("body-row");
                 if (true) {
                     let cell = row.create("td").text(index + 1);
                 }
@@ -141,7 +146,7 @@ var Grid = (($) => {
                 }
                 row.ds("recordMode", record["__mode_"]);
                 row.ds("recordId", record["__id_"]);
-                index++;
+                this._rowLength = ++index;
             }
             if (1 == 1) {
                 let row = table.create("tr");
@@ -167,9 +172,42 @@ var Grid = (($) => {
                 //let span = hiddenForm.create("span");
                 //this._mainForm[x] = new Input({target:span, type:"hidden", name:this.fields[x].name, value: ""});
             }
+            let length = this._table.queryAll(".body-row").length;
+            db(length, "green");
         }
         _load(main) {
             this._main = main.addClass("sg-grid");
+        }
+        createRow(fields, data) {
+            let row = this._table.create("tr");
+            let hiddenInputs = $.create("span");
+            let cell = null, value = null;
+            if (this.showEnum) {
+                cell = row.create("td").text(this._rowLength);
+            }
+            if (this.ctrlSelect == "one" || this.ctrlSelect == "multiple") {
+                cell = row.create("td");
+                let ctrl = cell.create({
+                    tagName: "input",
+                    type: (this.ctrlSelect == "one") ? "radio" : "checkbox",
+                });
+            }
+            for (let x in fields) {
+                value = data[fields[x]];
+                if (fields[x].input == "hidden") {
+                    let hidden = I.create("input", { type: "hidden", value: value });
+                }
+                else {
+                    switch (fields[x].type) {
+                        case "select-one":
+                            cell = row.create("td").text(value);
+                            cell.append(I.create("input", { type: "hidden", value: value }));
+                            break;
+                    }
+                }
+            }
+        }
+        createCell(field) {
         }
         setRecord(index, params) {
         }
