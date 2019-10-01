@@ -18,8 +18,8 @@ var Grid = (($) => {
         caption:string = "";
         className = "sevian";
         iconClass:string = "";
-        type:string = "select-one";//"view,select-one,select-multiple,edit-one,edit-all,edit-form";
-        ctrlSelect = "one";//one,multiple,
+        type:string = "2";//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+        ctrlSelect:string = "one";//one,multiple,
         showEnum = true;
         option:any[] = [];
         data:any[] = [];
@@ -135,16 +135,45 @@ var Grid = (($) => {
                 let cell = row.create("td").text("#"); 
             }
 
-            if(this.type == "select-one"){
-                let cell = row.create("td").create({tagName:"input",type:"radio", name:this.id+"_chk"}); 
+            
+
+            if(this.ctrlSelect == "one" || this.ctrlSelect == "multiple"){
+                let cell = row.create("td");
+                let ctrl =  cell.create({
+                    tagName:"input",
+                    type:(this.ctrlSelect == "one")? "radio": "checkbox",
+                    name:this.id+"_chk"
+
+                });
             }
             
             for(let x in this.fields){
 
-
-                let cell = row.create("td").text(this.fields[x].caption);
+                if(this.fields[x].input == "hidden"){
+                    continue;
+                }
+                let cell = row.create("td").text(this.fields[x].config.caption);
             }
             let index = 0;
+            this._rowLength = 0;
+            
+            for(let record of this.data){
+                this.createRow(record);
+               
+            }
+            
+            let hiddenDiv = body.create("div");
+            let info = null, field = null;
+            for(let x in this.fields){
+                field = this.fields[x];
+
+                info = Object.assign({}, field.config);
+                info.type = "text";
+                hiddenDiv.append(I.create("input", info));
+                
+                
+            }
+            return;
             for(let record of this.data){
                 let row = table.create("tr").addClass("body-row");
                 if(true){
@@ -185,7 +214,7 @@ var Grid = (($) => {
                 this._rowLength = ++index;
             }
 
-            if(1==1){
+            if(1==2){
                 let row = table.create("tr");
                 if(true){
                     let cell = row.create("td").text("&nbsp"); 
@@ -230,35 +259,61 @@ var Grid = (($) => {
             this._main = main.addClass("sg-grid");
         }
 
-        createRow(fields:object, data){
+        createRow(data){
             let row = this._table.create("tr");
             let hiddenInputs = $.create("span");
             let cell = null, value = null;
 
 
             if(this.showEnum){
-                cell = row.create("td").text(this._rowLength);
+                cell = row.create("td").text(++this._rowLength);
             }
             if(this.ctrlSelect == "one" || this.ctrlSelect == "multiple"){
                 cell = row.create("td");
                 let ctrl =  cell.create({
                     tagName:"input",
                     type:(this.ctrlSelect == "one")? "radio": "checkbox",
+                    name:this.id+"_chk"
 
                 });
             }
-            for(let x in fields){
-                value = data[fields[x]];
-                if(fields[x].input == "hidden"){
+
+            let hiddenFields = $.create({tagName:"div", style:{cssText:"display:none;"}});
+
+            for(let x in this.fields){
+                let field = this.fields[x];
+                value = data[x];
+                
+                if(field.input == "hidden"){
                     let hidden = I.create("input",{type:"hidden", value:value});
+                    hiddenFields.append(hidden);
                 }else{
-                    switch(fields[x].type){
-                        case "select-one":
+                    let info = null;
+                    switch(this.type){
+                        case "default":
                             cell = row.create("td").text(value);
-                            cell.append(I.create("input", {type:"hidden", value:value}));
+                            info = Object.assign({}, field.config);
+                            info.type = "hidden";
+                            info.name = field.config.name+"_"+this._rowLength;
+                            info.value = value;
+                            cell.append(I.create("input", info));
                             break;
+                        case "2":
+                            cell = row.create("td").text(value);
+                            info = Object.assign({}, field.config);
+                            info.name = field.config.name+"_"+this._rowLength;
+                            info.value = value;
+                            cell.append(I.create(field.input, info));  
                     }
                 }
+               
+            }
+
+            if(cell){
+                hiddenFields.append(I.create("input", {type:"hidden", name: "__mode_", value: data["__mode_"]}));
+                hiddenFields.append(I.create("input", {type:"hidden", name: "__id_", value: data["__id_"]}));
+               
+                cell.append(hiddenFields);
             }
         }
 

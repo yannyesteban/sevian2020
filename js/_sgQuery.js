@@ -149,6 +149,9 @@ _sgObjet.prototype = {
 				
 			}else if(obj instanceof HTMLElement){
 				this.e.appendChild(obj);
+			}else if(typeof obj.get === "function"){
+				this.e.appendChild(obj.get());
+				return obj;
 			}else{
 				return this;	
 			}

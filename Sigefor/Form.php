@@ -677,25 +677,78 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	private function createGrid(){
 		
 		$this->loadConfig();
-		$data = $this->getDataGrid();
+		$dataGrid = $this->getDataGrid();
 
 		$grid = new \Sevian\HTML("div");
 		$grid->id = "sg_form_".$this->id;
 		$this->panel = $grid;
+		$fields = [];
+		
+		foreach($this->fields as $f){
 
+			$id = "{$f->name}_f{$this->id}";
+			$value = '';
+			/*
+			if($f->modeValue == '1' or !$values){
+				$value = $f->default;
+			}else if(isset($values[$f->field])){
+				//$value = $values[$f->field];
+			}
+			*/
+			if(isset($groups->{$f->field})){
+				$page = $groups->{$f->field};
+			}
+
+			$data = false;
+			if($f->data){
+				$data = $this->getDataField(json_decode(\Sevian\S::vars($f->data)));
+			}
+			
+			$config = new \stdClass;
+			
+			if(!$f->input){
+				$this->getDefaultInput($this->infoQuery->fields[$f->field]->mtype, $input, $type);
+			}else{
+				$input = $f->input;
+				$type = $f->inputType;
+			}
+
+			$config->type = $type;
+			
+			//$config->id = $id;
+			$config->name = $f->field;
+			$config->caption = $f->caption;
+			$config->data = $data;
+			//$config->value = $value;
+			$config->className = $config->className?? $f->class;
+			
+			if($f->inputConfig){
+				foreach($f->inputConfig as $k => $v){
+					$config->$k = $v;
+				}
+				
+			}
+
+			$fields[$f->name] = [
+				'input'	=> $input,
+				
+				'config'=> $config
+			];
+			
+		}
 		
 		$opt = [
 			 'id' => $grid->id,
-			 'data'=>$data,
+			 'data'=>$dataGrid,
 			 'caption'=>$this->caption,
-			 'fields'=>$this->fields,
+			 'fields'=>$fields,
 
 		];
 
 		$this->typeElement = "Grid";
 		$this->info = $opt;//$form->getInfo();
 
-		//print_r($this->fields);
+		//print_r($fields);
 
 	}
 	public function getRecord($info, $eparams){
