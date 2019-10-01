@@ -213,6 +213,7 @@ var Grid = (($) => {
                     type: (this.ctrlSelect == "one") ? "radio" : "checkbox",
                     name: this.id + "_chk"
                 });
+                ctrl.on("click", (event) => { this.getRecord((event.currentTarget.parentNode.parentNode)); });
             }
             let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
             for (let x in this.fields) {

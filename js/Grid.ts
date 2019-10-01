@@ -267,6 +267,7 @@ var Grid = (($) => {
 
             if(this.showEnum){
                 cell = row.create("td").text(++this._rowLength);
+                
             }
             if(this.ctrlSelect == "one" || this.ctrlSelect == "multiple"){
                 cell = row.create("td");
@@ -276,6 +277,7 @@ var Grid = (($) => {
                     name:this.id+"_chk"
 
                 });
+                ctrl.on("click", (event)=>{this.getRecord((event.currentTarget.parentNode.parentNode));});
             }
 
             let hiddenFields = $.create({tagName:"div", style:{cssText:"display:none;"}});
