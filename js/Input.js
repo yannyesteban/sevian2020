@@ -19,6 +19,7 @@ var Input = (($) => {
             this.className = "";
             this.data = false;
             this.propertys = false;
+            this.dataset = null;
             this.events = false;
             this.placeholder = "";
             this.childs = false;
@@ -38,6 +39,7 @@ var Input = (($) => {
             this.className = "";
             this.data = false;
             this.propertys = {};
+            this.dataset = null;
             this.style = {};
             this.events = false;
             this.placeholder = "";
@@ -112,6 +114,13 @@ var Input = (($) => {
             if (this.type === "select" || this.type === "multiple") {
                 this.createOptions(this.value, false);
             }
+            this._main.ds(this.dataset);
+            /*
+            if(this.dataset){
+                for(let x in this.dataset){
+                    this._main.ds(x, this.dataset[x]);
+                }
+            }*/
             this.setValue(this.value);
         }
         setValue(value) {
@@ -148,6 +157,15 @@ var Input = (($) => {
                     _ele.options.add(option);
                 }
             }
+        }
+        getName() {
+            return this._main.get().name;
+        }
+        getId() {
+            return this._main.get().id;
+        }
+        ds(prop, value) {
+            this._main.ds(prop, value);
         }
     }
     $I.std = Input;

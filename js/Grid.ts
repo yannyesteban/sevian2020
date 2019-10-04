@@ -18,8 +18,9 @@ var Grid = (($) => {
         caption:string = "";
         className = "sevian";
         iconClass:string = "";
-        type:string = "2";//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+        type:string = "default";//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
         ctrlSelect:string = "one";//one,multiple,
+        editMode:string = "none";//grid,one,inline,form,custom
         showEnum = true;
         option:any[] = [];
         data:any[] = [];
@@ -38,6 +39,8 @@ var Grid = (($) => {
         _mainForm:object[] = [];
         _table:object = null;
         _rowLength = 0;
+        _data_grid:object = null;
+        _check:object = null;
         _select = (index:number)=>{return true};
         _new = (index:number)=>{return true};
         _edit = (index:number)=>{return true};
@@ -139,10 +142,11 @@ var Grid = (($) => {
 
             if(this.ctrlSelect == "one" || this.ctrlSelect == "multiple"){
                 let cell = row.create("td");
-                let ctrl =  cell.create({
-                    tagName:"input",
-                    type:(this.ctrlSelect == "one")? "radio": "checkbox",
-                    name:this.id+"_chk"
+                let ctrl =  this._check = cell.create({
+                    tagName: "input",
+                    type: (this.ctrlSelect == "one")? "radio": "checkbox",
+                    name: this.id+"_chk",
+                    checked: (this.ctrlSelect == "one")? true: false,
 
                 });
             }
@@ -162,95 +166,31 @@ var Grid = (($) => {
                
             }
             
+            this.createEditRow({});
             let hiddenDiv = body.create("div");
+            this._data_grid = I.create("input", {type:"hidden", name:"__data_grid"});
+            hiddenDiv.append(this._data_grid);
+           return;
             let info = null, field = null;
             for(let x in this.fields){
                 field = this.fields[x];
 
                 info = Object.assign({}, field.config);
-                info.type = "text";
-                hiddenDiv.append(I.create("input", info));
+                if(field.input === "hidden"){
+                    info.input = "input";
+                    info.type = "hidden"; 
+                }else{
+                    info.input = field.input;
+                    info.type = field.config.type;
+                }
+                //
                 
+                this._mainForm[x] = I.create(info.input, info);
+                hiddenDiv.append(this._mainForm[x]);
                 
             }
-            return;
-            for(let record of this.data){
-                let row = table.create("tr").addClass("body-row");
-                if(true){
-                    let cell = row.create("td").text(index + 1); 
-                }
-                if(this.type == "select-one"){
-                    let cell = row.create("td").create({tagName:"input",type:"radio", name:this.id+"_chk", value:index}); 
-                    cell.on("click", (event)=>{this.getRecord((event.currentTarget.parentNode.parentNode));});
-                }
-                let hiddenFields = $.create({tagName:"div"});
-                let cellAux = false;
-                for(let x in this.fields){
-                    let value = record[x]?record[x]:"";
-                    if(this.fields[x].input == "hidden"){
-                       // hiddenFields.create()                        
-                    }else{
-                        let cell = row.create("td").ds("name", x).ds("index", index);
-                        let input = new Input({
-                            target: cell,
-                            type: "text", 
-                            name: this.fields[x].name+"_"+index,
-                            value: value});
-                        if(!cellAux){
-                            cellAux = cell;
-                        }
-
-
-                    }
-                    
-
-                }
-                if(cellAux){
-                    cellAux.append(hiddenFields);
-                }
-                
-                row.ds("recordMode", record["__mode_"]);
-                row.ds("recordId", record["__id_"]);
-                this._rowLength = ++index;
-            }
-
-            if(1==2){
-                let row = table.create("tr");
-                if(true){
-                    let cell = row.create("td").text("&nbsp"); 
-                }
-                if(this.type == "select-one"){
-                    let cell = row.create("td").text("&nbsp"); 
-                    
-                }
-                let cols = 0;
-                for(let x in this.fields){
-                    
-                    let cell = row.create("td").ds("name", x).ds("index", index);
-                    
-                    if(cols==0){
-                        this._mainForm["__mode_"] = new Input({target:cell, type:"text", name: "__mode_", value: "0"});
-                        this._mainForm["__id_"] = new Input({target:cell, type:"text", name: "__mode_", value: "1"});
-                    }
-
-                    this._mainForm[x] = new Input({target:cell, type:"text", name:this.fields[x].name, value:""});
-
-
-                    cols++;
-                }
-            }
-
-
-            let hiddenForm = body.create({tagName:"div",style:"display:inline",className:"hidden-form"});
-            for(let x in this.fields){
-                //let span = hiddenForm.create("span");
-                //this._mainForm[x] = new Input({target:span, type:"hidden", name:this.fields[x].name, value: ""});
-               
-            }
-            let length = this._table.queryAll(".body-row").length;
-            db (length, "green");
-
-
+            
+            
             
 
         }
@@ -260,20 +200,19 @@ var Grid = (($) => {
         }
 
         createRow(data){
-            let row = this._table.create("tr");
+            
+            let row = this._table.create("tr").addClass("body-row");
             let hiddenInputs = $.create("span");
             let cell = null, value = null;
 
-
             if(this.showEnum){
                 cell = row.create("td").text(++this._rowLength);
-                
             }
-            if(this.ctrlSelect == "one" || this.ctrlSelect == "multiple"){
+            if(this.ctrlSelect === "one" || this.ctrlSelect === "multiple"){
                 cell = row.create("td");
                 let ctrl =  cell.create({
                     tagName:"input",
-                    type:(this.ctrlSelect == "one")? "radio": "checkbox",
+                    type:(this.ctrlSelect === "one")? "radio": "checkbox",
                     name:this.id+"_chk"
 
                 });
@@ -286,39 +225,87 @@ var Grid = (($) => {
                 let field = this.fields[x];
                 value = data[x];
                 
-                if(field.input == "hidden"){
+                if(field.input === "hidden"){
                     let hidden = I.create("input",{type:"hidden", value:value});
                     hiddenFields.append(hidden);
                 }else{
                     let info = null;
                     switch(this.type){
                         case "default":
-                            cell = row.create("td").text(value);
+                            cell = row.create("td").ds("name", x).text(value);
                             info = Object.assign({}, field.config);
                             info.type = "hidden";
                             info.name = field.config.name+"_"+this._rowLength;
                             info.value = value;
+                            info.dataset = {"name": x};
                             cell.append(I.create("input", info));
                             break;
                         case "2":
-                            cell = row.create("td").text(value);
+                            cell = row.create("td").ds("name", x).text(value);
                             info = Object.assign({}, field.config);
                             info.name = field.config.name+"_"+this._rowLength;
                             info.value = value;
+                            info.dataset = {"name": x};
                             cell.append(I.create(field.input, info));  
+                            break;
                     }
                 }
                
             }
 
             if(cell){
-                hiddenFields.append(I.create("input", {type:"hidden", name: "__mode_", value: data["__mode_"]}));
-                hiddenFields.append(I.create("input", {type:"hidden", name: "__id_", value: data["__id_"]}));
+
+                hiddenFields.append(I.create("input", {type:"hidden", name: "__mode_"+"_"+this._rowLength, value: data["__mode_"], dataset:{name:"__mode_"}}));
+                hiddenFields.append(I.create("input", {type:"hidden", name: "__id_"+"_"+this._rowLength, value: data["__id_"], dataset:{name:"__id_"}}));
                
                 cell.append(hiddenFields);
             }
         }
 
+        createEditRow(data){
+
+            let row = this._table.create("tr").addClass("edit-row");
+            //let hiddenInputs = $.create("span");
+            let cell = null, value = null, info = null, input = "";
+
+            if(this.showEnum){
+                cell = row.create("td").text("");
+            }
+            
+            if(this.ctrlSelect === "one" || this.ctrlSelect === "multiple"){
+                cell = row.create("td");
+                cell.create("input").attr("type","button").on("click", ()=>{this.setNew()});
+            }
+
+            let hiddenFields = $.create({tagName:"div", style:{cssText:"display:none;"}});
+           
+            for(let x in this.fields){
+                let field = this.fields[x];
+                value = field.config.default;
+                info = Object.assign({}, field.config);
+
+                input = (field.input === "hidden")? "input": field.input;
+                info.type = (field.input === "hidden")? "hidden": field.config.type;
+                info.value = value;
+                info.dataset = {"name": x};
+                this._mainForm[x] = I.create(input, info);
+                
+                if(field.input == "hidden"){
+                    hiddenFields.append(this._mainForm[x]);
+                }else{
+                    cell = row.create("td").ds("name", x);
+                    cell.append(this._mainForm[x]);  
+                }
+               
+            }
+
+            if(cell){
+                hiddenFields.append(this._mainForm["__mode_"] = I.create("input", {type:"hidden", name: "__mode_", value: data["__mode_"], dataset:{name:"__mode_"}}));
+                hiddenFields.append(this._mainForm["__id_"] = I.create("input", {type:"hidden", name: "__id_", value: data["__id_"], dataset:{name:"__id_"}}));
+               
+                cell.append(hiddenFields);
+            }
+        }
         createCell(field){
 
             
@@ -329,21 +316,14 @@ var Grid = (($) => {
         }
 
         getRecord(row:any) {
-            let cells = $(row).queryAll("[data-name]");
-            let form = $(row).query("input").form;
             
-            for(let cell of cells){
-               // alert (cell.dataset.name)
-               let _input = $(cell).query("[data-sg-input]");
-               let input = new Input({id:_input});
-              
-               this._mainForm[cell.dataset.name].setValue(input.getValue());
-
-
+            let inputs = $(row).queryAll("[data-sg-input][data-name]");
                
+            for(let _input of inputs){
+                let input = new Input({id:_input});
+                this._mainForm[_input.dataset.name].setValue(input.getValue());
             }
-            this._mainForm["__mode_"].setValue($(row).ds("recordMode"));
-            this._mainForm["__id_"].setValue($(row).ds("recordId"));
+            this.getGrid();
 
         }
 
@@ -355,6 +335,38 @@ var Grid = (($) => {
             
         }
 
+        getGrid(){
+            let rows = this._main.queryAll(".body-row");
+            let str: string = "";
+            let data = [], i = 0;
+            for(let row of rows){
+                let inputs = $(row).queryAll("[data-sg-input][data-name]");
+                
+                data[i] = {}; 
+                for(let _input of inputs){
+                    let input = new Input({id:_input});
+                    data[i][_input.dataset.name] = input.getValue();
+                    
+                }
+                
+                i++;
+            }
+
+            this._data_grid.get().value = JSON.stringify(data);
+
+            
+        }
+
+        setNew(){
+            let value;
+            this._check.get().checked =  true;
+            for(let x in this.fields){
+
+                this._mainForm[x].setValue(this.fields[x].config.default);
+
+               
+            }
+        }
         valid(){
 
         }

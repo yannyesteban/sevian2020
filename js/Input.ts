@@ -23,6 +23,7 @@ var Input = (($) => {
         className = "";
         data:any = false;
         propertys:any = false;
+        dataset:object = null;
         events:any = false;
         placeholder:string = "";
 
@@ -42,6 +43,7 @@ var Input = (($) => {
         className = "";
         data:any = false;
         propertys:object = {};
+        dataset:object = null;
         style:object = {};
         events:any = false;
         placeholder:string = "";
@@ -74,7 +76,9 @@ var Input = (($) => {
                 }
             }
 
+            
             this._main.ds("sgInput", "input");
+
 
             let target = (this.target)? $(this.target): false;
 
@@ -135,8 +139,14 @@ var Input = (($) => {
 
             if(this.type === "select" || this.type === "multiple"){
 				this.createOptions(this.value, false);
-			}
-
+            }
+            this._main.ds(this.dataset);
+            /*
+            if(this.dataset){
+                for(let x in this.dataset){
+                    this._main.ds(x, this.dataset[x]);
+                }
+            }*/
             this.setValue(this.value);
         }
         setValue(value:any){
@@ -188,6 +198,15 @@ var Input = (($) => {
 			
 		}
 
+        getName(){
+            return this._main.get().name;
+        }
+        getId(){
+            return this._main.get().id;
+        }
+        ds(prop, value){
+            this._main.ds(prop, value);
+        }
     }
     $I.std = Input;
     I.register("input", Input);

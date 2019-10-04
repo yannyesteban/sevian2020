@@ -448,7 +448,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$cn->query = $this->query;
 		$cn->pagination = true;
-		$cn->pageLimit = 20;
+		$cn->pageLimit = 10;
 
 		$result = $cn->execute();
 		$data = $cn->getDataAll($result);
@@ -719,7 +719,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->name = $f->field;
 			$config->caption = $f->caption;
 			$config->data = $data;
-			//$config->value = $value;
+			$config->default = $f->default;
 			$config->className = $config->className?? $f->class;
 			
 			if($f->inputConfig){
