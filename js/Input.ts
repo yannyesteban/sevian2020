@@ -204,6 +204,11 @@ var Input = (($) => {
         getId(){
             return this._main.get().id;
         }
+        getText(){
+            if(this._main.get().type){
+                alert(8)
+            }
+        }
         ds(prop, value){
             this._main.ds(prop, value);
         }

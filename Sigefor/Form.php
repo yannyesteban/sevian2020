@@ -471,7 +471,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 
 		}
-		
+		$cn->pageLimit = false;
 		return $data;
 
 		

@@ -6,6 +6,28 @@ var Grid = (($) => {
             this.input = {};
         }
     }
+    class Paginator {
+        constructor(info) {
+            this.totalPages = 5;
+            this.page = 1;
+            this.className = "";
+            this._main = null;
+            this._main = $.create("div");
+            this._create(this._main);
+        }
+        get() {
+            return this._main.get();
+        }
+        _create(main) {
+            let _begin = main.create("span").text("|<");
+            let _prev = main.create("span").text("<");
+            for (let i = 1; i <= this.totalPages; i++) {
+                let _prev = main.create("span").text(i);
+            }
+            let _next = main.create("span").text(">");
+            let _end = main.create("span").text(">|");
+        }
+    }
     class Grid {
         constructor(opt) {
             this.target = "";
@@ -34,6 +56,9 @@ var Grid = (($) => {
             this._main = null;
             this._mainForm = [];
             this._table = null;
+            this._thead = null;
+            this._tbody = null;
+            this._tfoot = null;
             this._rowLength = 0;
             this._data_grid = null;
             this._check = null;
@@ -45,6 +70,7 @@ var Grid = (($) => {
             this._filter = (index) => { return true; };
             this._short = (index) => { return true; };
             this._changePage = (page) => { return true; };
+            this._fieldData = {};
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
@@ -96,6 +122,15 @@ var Grid = (($) => {
             return this._objs[name];
         }
         _create(main) {
+            let data = [];
+            for (let x in this.fields) {
+                if (data = this.fields[x].config.data) {
+                    this._fieldData[x] = {};
+                    for (let _data of data) {
+                        this._fieldData[x][_data[0]] = _data[1];
+                    }
+                }
+            }
             this._main = main.addClass("sg-grid").addClass(this.className);
             main.create({ tagName: "div", className: "caption" })
                 .add({ tagName: "span", className: "icon" + this.iconClass })
@@ -103,27 +138,27 @@ var Grid = (($) => {
                 .add({ tagName: "span", className: "arrow" });
             let body = main.create("div").addClass("body");
             let table = this._table = body.create("table").addClass("grid-table");
-            //table.create("caption").text("consulta");
-            let row = table.create("tr");
+            this._thead = table.create("thead");
+            this._tbody = table.create("tbody");
+            let row = this._thead.create("tr");
             if (true) {
-                let cell = row.create("td").text("#");
+                row.create("td").text("#");
             }
             if (this.ctrlSelect == "one" || this.ctrlSelect == "multiple") {
                 let cell = row.create("td");
-                let ctrl = this._check = cell.create({
+                this._check = cell.create({
                     tagName: "input",
                     type: (this.ctrlSelect == "one") ? "radio" : "checkbox",
                     name: this.id + "_chk",
                     checked: (this.ctrlSelect == "one") ? true : false,
-                });
+                }).on("onchange", () => { this.setNew(); });
             }
             for (let x in this.fields) {
                 if (this.fields[x].input == "hidden") {
                     continue;
                 }
-                let cell = row.create("td").text(this.fields[x].config.caption);
+                row.create("td").text(this.fields[x].config.caption);
             }
-            let index = 0;
             this._rowLength = 0;
             for (let record of this.data) {
                 this.createRow(record);
@@ -132,33 +167,19 @@ var Grid = (($) => {
             let hiddenDiv = body.create("div");
             this._data_grid = I.create("input", { type: "hidden", name: "__data_grid" });
             hiddenDiv.append(this._data_grid);
-            return;
-            let info = null, field = null;
-            for (let x in this.fields) {
-                field = this.fields[x];
-                info = Object.assign({}, field.config);
-                if (field.input === "hidden") {
-                    info.input = "input";
-                    info.type = "hidden";
-                }
-                else {
-                    info.input = field.input;
-                    info.type = field.config.type;
-                }
-                //
-                this._mainForm[x] = I.create(info.input, info);
-                hiddenDiv.append(this._mainForm[x]);
-            }
+            this._main.append(new Paginator({}));
         }
         _load(main) {
             this._main = main.addClass("sg-grid");
         }
         createRow(data) {
-            let row = this._table.create("tr").addClass("body-row");
-            let hiddenInputs = $.create("span");
-            let cell = null, value = null;
+            this._rowLength++;
+            let row = this._tbody.create("tr")
+                .addClass("body-row")
+                .ds("index", this._rowLength);
+            let cell = null, field = null, value = null, text = "", info = null, input = null, _input = null;
             if (this.showEnum) {
-                cell = row.create("td").text(++this._rowLength);
+                cell = row.create("td").text(this._rowLength);
             }
             if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
                 cell = row.create("td");
@@ -167,48 +188,50 @@ var Grid = (($) => {
                     type: (this.ctrlSelect === "one") ? "radio" : "checkbox",
                     name: this.id + "_chk"
                 });
-                ctrl.on("click", (event) => { this.getRecord((event.currentTarget.parentNode.parentNode)); });
+                ctrl.on("click", (event) => {
+                    this.getRecord((event.currentTarget.parentNode.parentNode));
+                });
             }
             let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
             for (let x in this.fields) {
-                let field = this.fields[x];
+                field = this.fields[x];
                 value = data[x];
-                if (field.input === "hidden") {
-                    let hidden = I.create("input", { type: "hidden", value: value });
-                    hiddenFields.append(hidden);
+                if (this._fieldData[x] && this._fieldData[x][value]) {
+                    text = this._fieldData[x][value];
                 }
                 else {
-                    let info = null;
-                    switch (this.type) {
-                        case "default":
-                            cell = row.create("td").ds("name", x).text(value);
-                            info = Object.assign({}, field.config);
-                            info.type = "hidden";
-                            info.name = field.config.name + "_" + this._rowLength;
-                            info.value = value;
-                            info.dataset = { "name": x };
-                            cell.append(I.create("input", info));
-                            break;
-                        case "2":
-                            cell = row.create("td").ds("name", x).text(value);
-                            info = Object.assign({}, field.config);
-                            info.name = field.config.name + "_" + this._rowLength;
-                            info.value = value;
-                            info.dataset = { "name": x };
-                            cell.append(I.create(field.input, info));
-                            break;
+                    text = value;
+                }
+                input = (field.input === "hidden" || this.type === "default") ? "input" : field.input;
+                info = Object.assign({}, field.config);
+                info.type = (field.input === "hidden" || this.type === "default") ? "hidden" : field.config.type;
+                info.name = field.config.name + "_" + this._rowLength;
+                info.value = value;
+                info.dataset = { "name": x };
+                _input = I.create("input", info);
+                if (field.input == "hidden") {
+                    hiddenFields.append(_input);
+                }
+                else {
+                    cell = row.create("td").ds("name", x);
+                    cell.append(_input);
+                    if (this.type === "default") {
+                        cell.create("span").addClass("text").text(text);
                     }
                 }
             }
             if (cell) {
                 hiddenFields.append(I.create("input", { type: "hidden", name: "__mode_" + "_" + this._rowLength, value: data["__mode_"], dataset: { name: "__mode_" } }));
                 hiddenFields.append(I.create("input", { type: "hidden", name: "__id_" + "_" + this._rowLength, value: data["__id_"], dataset: { name: "__id_" } }));
+                hiddenFields.append(I.create("input", { type: "hidden", name: "__index_" + "_" + this._rowLength, value: this._rowLength, dataset: { name: "__index_" } }));
                 cell.append(hiddenFields);
             }
         }
         createEditRow(data) {
-            let row = this._table.create("tr").addClass("edit-row");
-            //let hiddenInputs = $.create("span");
+            if (!this._tfoot) {
+                this._tfoot = this._table.create("tfoot");
+            }
+            let row = this._tfoot.create("tr").addClass("edit-row");
             let cell = null, value = null, info = null, input = "";
             if (this.showEnum) {
                 cell = row.create("td").text("");
@@ -216,6 +239,8 @@ var Grid = (($) => {
             if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
                 cell = row.create("td");
                 cell.create("input").attr("type", "button").on("click", () => { this.setNew(); });
+                cell.create("input").attr("type", "button").val("s").on("click", () => { this.save(); });
+                cell.create("input").attr("type", "button").val("I").on("click", () => { this.insert(); });
             }
             let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
             for (let x in this.fields) {
@@ -236,8 +261,9 @@ var Grid = (($) => {
                 }
             }
             if (cell) {
-                hiddenFields.append(this._mainForm["__mode_"] = I.create("input", { type: "hidden", name: "__mode_", value: data["__mode_"], dataset: { name: "__mode_" } }));
-                hiddenFields.append(this._mainForm["__id_"] = I.create("input", { type: "hidden", name: "__id_", value: data["__id_"], dataset: { name: "__id_" } }));
+                hiddenFields.append(this._mainForm["__mode_"] = I.create("input", { type: "hidden", name: "__mode_", value: "", dataset: { name: "__mode_" } }));
+                hiddenFields.append(this._mainForm["__id_"] = I.create("input", { type: "hidden", name: "__id_", value: "", dataset: { name: "__id_" } }));
+                hiddenFields.append(this._mainForm["__index_"] = I.create("input", { type: "hidden", name: "__index_", value: "", dataset: { name: "__id_" } }));
                 cell.append(hiddenFields);
             }
         }
@@ -255,7 +281,12 @@ var Grid = (($) => {
         }
         setValue(index, params) {
         }
-        getValue(index) {
+        getValue() {
+            let data = {};
+            for (let x in this._mainForm) {
+                data[x] = this._mainForm[x].getValue();
+            }
+            return data;
         }
         getGrid() {
             let rows = this._main.queryAll(".body-row");
@@ -273,10 +304,50 @@ var Grid = (($) => {
             this._data_grid.get().value = JSON.stringify(data);
         }
         setNew() {
-            let value;
             this._check.get().checked = true;
             for (let x in this.fields) {
                 this._mainForm[x].setValue(this.fields[x].config.default);
+            }
+            this._mainForm["__mode_"].setValue("1");
+            this._mainForm["__id_"].setValue("");
+            this._mainForm["__index_"].setValue("");
+        }
+        insert() {
+            let data = this.getValue();
+            this.createRow(data);
+        }
+        save() {
+            let data = {};
+            for (let x in this._mainForm) {
+                data[x] = this._mainForm[x].getValue();
+            }
+            this.saveAt(data["__index_"], data);
+            return data;
+        }
+        saveAt(index, data) {
+            let cells = this._main.queryAll(".body-row[data-index='" + index + "'] > [data-name]");
+            if (cells.length == 0) {
+                return false;
+            }
+            let _text, _input, input, name = "", value = "", text = "";
+            for (let cell of cells) {
+                value = data[cell.dataset.name];
+                name = cell.dataset.name;
+                if (this._fieldData[name] && this._fieldData[name][value]) {
+                    text = this._fieldData[name][value];
+                }
+                else {
+                    text = value;
+                }
+                _input = $(cell).query("[data-sg-input]");
+                if (_input && data[cell.dataset.name]) {
+                    input = I.create(_input.dataset.sgInput, { id: _input });
+                    input.setValue(value);
+                }
+                _text = $(cell).query(".text");
+                if (_text) {
+                    $(_text).text(text);
+                }
             }
         }
         valid() {
