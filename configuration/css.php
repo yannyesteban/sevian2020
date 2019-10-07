@@ -11,6 +11,7 @@ $css = array(
 	//"{$PATH}css/sgCalendar.css",
 	//"{$PATH}css/selectText.css",
 	"{$PATH}css/sgTab.css",
+	"{$PATH}css/Paginator.css",
 	//"{$PATH}css/sgAjax.css",
 	//"{$PATH}css/grid.css",
 	//"{$PATH}css/DesignMenu.css",

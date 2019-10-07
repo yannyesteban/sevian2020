@@ -239,6 +239,10 @@ var Form = (($) => {
             return new Input(info);
         }
         createField(input, info) {
+            if (input === "hidden") {
+                input = "input";
+                info.type = "hidden";
+            }
             let field = this._page.create("div").addClass("field");
             field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption);
             field.create("div").addClass("input").append(I.create(input, info).get());

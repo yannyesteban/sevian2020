@@ -113,28 +113,31 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	private $infoQuery = false;
 
-    public function __construct($opt = []){
+	private $page = 1;
+	private $totalPages = 0;
+	private $maxPages = 5;
+
+    public function __construct($info = []){
 		
-		foreach($opt as $k => $v){
+		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
 
-		
         
         $this->cn = \Sevian\Connection::get();
 	}
 
     public function evalMethod($method = false): bool{
 		
-
+		
 		
 		//print_r($f->data);
         if($method === false){
             $method = $this->method;
         }
 
-		$method = 'list';
-        
+		//$method = 'list';
+        //hr($this->method);
         switch($method){
 			case 'create':
 			case 'load':
@@ -447,10 +450,13 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$cn = $this->cn;
 
 		$cn->query = $this->query;
+		$cn->page = $this->eparams->page?? 1;
 		$cn->pagination = true;
-		$cn->pageLimit = 10;
+		$cn->pageLimit = $this->maxPages;
 
 		$result = $cn->execute();
+
+		$this->totalPages = $cn->pageCount;
 		$data = $cn->getDataAll($result);
 
 		$keys = $this->infoQuery->keys;
@@ -485,6 +491,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	private function createForm(){
 		
 		$this->loadConfig();
+
+		
 		$values = $this->getRecord($this->infoQuery, $this->eparams);
 		
 		$fields = [];
@@ -722,6 +730,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->default = $f->default;
 			$config->className = $config->className?? $f->class;
 			
+			
+
 			if($f->inputConfig){
 				foreach($f->inputConfig as $k => $v){
 					$config->$k = $v;
@@ -737,10 +747,20 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		}
 		
+		$paginator = [
+			'page'=> $this->eparams->page?? $this->page,
+			'totalPages'=>	$this->totalPages,
+			'maxPages'=>	$this->maxPages,
+		];
+		
 		$opt = [
 			 'id' => $grid->id,
-			 'data'=>$dataGrid,
+			 
 			 'caption'=>$this->caption,
+
+			 'paginator'=> $paginator,
+
+			 'data'=>$dataGrid,
 			 'fields'=>$fields,
 
 		];
@@ -751,11 +771,21 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		//print_r($fields);
 
 	}
-	public function getRecord($info, $eparams){
+	public function getRecord($info, $eparams = false){
 
-		$eparams = json_decode($eparams);
+		
+		if(!$eparams){
+			return false;
+		}
+
+		if(gettype ($eparams) !=='object'){
+			$eparams = json_decode($eparams);
+		}
+		if(!isset($eparams->record)){
+			return false;
+		}
+		
 		$cn = $this->cn;
-		//print_r($eparams);
 		$record = $eparams->record;
 		
 		$filter = '';
@@ -787,6 +817,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			foreach($info->fields as $k => $v){
 				$data[$k] = $rs[$i++];
 			}
+			
 			return $data;
 		}
 		return false;

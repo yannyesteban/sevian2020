@@ -217,7 +217,7 @@ class S{
 			self::$_pSigns = &self::$cfg['LISTEN_PANEL'];
 			self::$_commands = &self::$cfg['COMMANDS'];
 			self::$_actions = &self::$cfg['ACTIONS'];
-			self::evalElements();
+			//self::evalElements();
 		}
 		
 		
@@ -455,10 +455,8 @@ class S{
 		
 	}
 	public static function command($cmd){
-		
-		
-		
-		switch($cmd['t']){
+
+		switch($cmd->t){
 			case "vses":
 			
 				self::setSes(key($params), current($params));
@@ -522,7 +520,7 @@ class S{
 
 		if(isset(self::$req["__sg_params"]) and self::$req["__sg_params"] != ""){
 
-			self::sequence(json_decode(self::$req["__sg_params"], true));
+			self::sequence(json_decode(self::$req["__sg_params"]));
 			
 		}
 	}

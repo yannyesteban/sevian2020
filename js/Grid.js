@@ -8,24 +8,117 @@ var Grid = (($) => {
     }
     class Paginator {
         constructor(info) {
-            this.totalPages = 5;
-            this.page = 1;
+            this.classType = "paginator";
+            this.totalPages = 80;
+            this.maxPages = 8;
+            this.page = 2;
             this.className = "";
+            this.symbols = ["|&laquo;", "&laquo;", "&raquo;", "&raquo;|"];
+            this.change = (page) => { };
+            this._firstPage = 1;
             this._main = null;
-            this._main = $.create("div");
+            this._change = (page) => { };
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this._main = $.create("span").addClass("sg-paginator");
             this._create(this._main);
+            if (this.change) {
+                this._change = $.bind(this.change, this, "page");
+            }
         }
         get() {
             return this._main.get();
         }
         _create(main) {
-            let _begin = main.create("span").text("|<");
-            let _prev = main.create("span").text("<");
-            for (let i = 1; i <= this.totalPages; i++) {
-                let _prev = main.create("span").text(i);
+            let ini = this.maxPages * Math.floor((this.page - 1) / this.maxPages) + 1;
+            let end = ini + this.maxPages - 1;
+            main.create("a").prop("href", "javascript:void(0)").text(this.symbols[0]).addClass("page").on("click", () => this.setPage("b"));
+            main.create("a").prop("href", "javascript:void(0)").text(this.symbols[1]).addClass("page").on("click", () => this.setPage("p"));
+            let cell = null;
+            for (let i = ini; i <= end; i++) {
+                cell = main.create("a").prop("href", "javascript:void(0)").addClass("page");
+                if (i > this.totalPages) {
+                    cell.text("&nbsp").addClass("hidden").ds("number", 0);
+                }
+                else {
+                    cell.text(i).ds("number", i);
+                }
+                if (this.page == i) {
+                    cell.addClass("active");
+                }
+                cell.on("click", () => this.setPage(event.currentTarget.dataset.number));
             }
-            let _next = main.create("span").text(">");
-            let _end = main.create("span").text(">|");
+            main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[2]).on("click", () => this.setPage("n"));
+            main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[3]).on("click", () => this.setPage("e"));
+            if (this.totalPages > this.maxPages) {
+                let selectPage = main.create("select").on("onchange", (event) => this.setPage(event.currentTarget.value));
+                ;
+                let option = null;
+                for (let i = 1; i <= this.totalPages; i = i + this.maxPages) {
+                    option = $.create("option").get();
+                    option.text = i;
+                    option.value = i;
+                    if (i >= ini && i <= end) {
+                        option.selected = true;
+                    }
+                    else {
+                        option.selected = false;
+                    }
+                    selectPage.get().options.add(option);
+                }
+            }
+        }
+        updatePages() {
+            let cells = this._main.queryAll("[data-number]");
+            let page = this.maxPages * Math.floor((this.page - 1) / this.maxPages) + 1;
+            for (let cell of cells) {
+                $(cell).removeClass(["active", "hidden"]);
+                if (this.page == page) {
+                    $(cell).addClass("active");
+                }
+                if (page > this.totalPages) {
+                    $(cell).text("&nbsp").addClass("hidden").ds("number", 0);
+                }
+                else {
+                    $(cell).text(page).ds("number", page);
+                }
+                page++;
+            }
+            if (this.totalPages > this.maxPages) {
+                this._main.query("select").value = (Math.ceil(this.page / this.maxPages) - 1) * this.maxPages + 1;
+            }
+        }
+        setPage(page) {
+            if (page == this.page || page == 0) {
+                return false;
+            }
+            switch (page) {
+                case "b":
+                    this.page = 1;
+                    break;
+                case "e":
+                    this.page = this.totalPages;
+                    break;
+                case "p":
+                    this.page--;
+                    break;
+                case "n":
+                    this.page++;
+                    break;
+                default:
+                    this.page = page;
+            }
+            if (this.page < 1) {
+                this.page = 1;
+            }
+            if (this.page > this.totalPages) {
+                this.page = this.totalPages;
+            }
+            this.updatePages();
+            this.change(this.page);
         }
     }
     class Grid {
@@ -45,9 +138,10 @@ var Grid = (($) => {
             this.data = [];
             this.actionButtons = ["edit", "delete"];
             this.paginator = {
-                page: 2,
-                pages: 20,
+                page: 1,
+                totalPages: 20,
                 maxPage: 5,
+                change: (page) => { }
             };
             this.searchControl = {
                 type: "default,forfields",
@@ -167,7 +261,29 @@ var Grid = (($) => {
             let hiddenDiv = body.create("div");
             this._data_grid = I.create("input", { type: "hidden", name: "__data_grid" });
             hiddenDiv.append(this._data_grid);
-            this._main.append(new Paginator({}));
+            let pag = this.paginator;
+            pag.change = (page) => {
+                Sevian.action.send({
+                    async: false,
+                    panel: 2,
+                    valid: true,
+                    confirm_: 'seguro?',
+                    params: [
+                        { t: 'setMethod',
+                            id: 2,
+                            element: 'sgForm',
+                            method: 'list',
+                            name: 'personas',
+                            eparams: {
+                                record: { codpersona: 16386 },
+                                token: "yanny",
+                                page: page
+                            }
+                        }
+                    ]
+                });
+            };
+            this._main.append(new Paginator(pag));
         }
         _load(main) {
             this._main = main.addClass("sg-grid");
