@@ -688,6 +688,10 @@ class S{
 			'fragments'=>self::$_f
 			];
 
+
+
+			$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
+			$script = "Sevian.action.initPanel($json)";	
 		return json_encode($response, JSON_PRETTY_PRINT);
 		
 	}

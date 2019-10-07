@@ -180,8 +180,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$cn = $this->cn;
 
 		$cn->query = "
-			SELECT * 
-			FROM $this->tForms 
+			SELECT 
+			form, caption, class, query, params, method, pages, f.groups 
+			FROM $this->tForms as f
 			WHERE form = '$this->name'
 		";
 
@@ -685,10 +686,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	private function createGrid(){
 		
 		$this->loadConfig();
+		
 		$dataGrid = $this->getDataGrid();
 
 		$grid = new \Sevian\HTML("div");
 		$grid->id = "sg_form_".$this->id;
+		
 		$this->panel = $grid;
 		$fields = [];
 		

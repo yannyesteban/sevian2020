@@ -324,7 +324,7 @@ var Grid = (($) => {
 
                 Sevian.action.send(
                 {
-                    async: false,
+                    async: true,
                     panel:2,
                     valid:true,
                     confirm_: 'seguro?',
