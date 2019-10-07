@@ -128,7 +128,7 @@ class JsonStructure{
 	public function render(){
 		$j = [];
 		foreach($this->_ele as $id => $e){
-
+			
 			$form = new \Sevian\HTML('');
 			$form->add($e);
 			$form->add($this->configInputs([
@@ -148,7 +148,7 @@ class JsonStructure{
 			$css = $form->getCss();
 			$j[] = [
 				'id'=> $id,
-			'title'=> 'xxx',
+			'title'=> $e->title,
 			'html'=> $html,
 			'script'=> $script,
 			'css'=> $css,

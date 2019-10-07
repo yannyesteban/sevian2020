@@ -364,6 +364,8 @@ sgJson = {
 		if(opt.css){
 			$.appendStyle(opt.css);
 		}
+		document.title = opt.title;
+		
 	},
 
 	

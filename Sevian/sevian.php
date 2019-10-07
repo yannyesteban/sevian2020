@@ -161,7 +161,7 @@ class S{
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
 		
-
+		
 		if(!self::$onAjax){
 			self::$_str = new Structure();
 		}else{
@@ -685,13 +685,18 @@ class S{
 		
 		$response = [
 			'panels'=>$p,
+			'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
 			'fragments'=>self::$_f
 			];
 
 
 
-			$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
-			$script = "Sevian.action.initPanel($json)";	
+			//$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
+			//$script = "Sevian.action.initPanel($json)";	
+
+			//echo $script;exit;
+
+		//echo	$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
 		return json_encode($response, JSON_PRETTY_PRINT);
 		
 	}

@@ -45,9 +45,9 @@ class Element{
 	public function config(){
 		
 		return new jsConfigPanel([
-            "panel"   => $this->id,
-            "type"    => $this->typeElement,
-			"option" => $this->info,
+            "panel" => $this->id,
+            "type"	=> $this->typeElement,
+			"option"=> $this->info,
 			"debug" => "hola",
             
         ]);	
@@ -90,17 +90,21 @@ class Element{
 		
 		return $this->panel ;
 	}
+
+	public function getConfigPanel(){
+		return $this->_configPanel;
+	}
 	
 	public function request($method=false){
 		
 
 		return new iPanel([
-			'panel'=> $this->id,
-			'title'=> $this->title,
-			'html'=> $this->panel->html,
+			'panel'	=> $this->id,
+			'title'	=> $this->title,
+			'html'	=> $this->panel->html,
 			'script'=> $this->panel->script,
-			'css'=> $this->panel->css,
-			'class'=> 'xxx',
+			'css'	=> $this->panel->css,
+			'class'	=> 'yyy',
 		]);
 		
 	}

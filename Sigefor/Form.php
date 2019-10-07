@@ -692,7 +692,19 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$grid = new \Sevian\HTML("div");
 		$grid->id = "sg_form_".$this->id;
 		
-		$this->panel = $grid;
+		$p = new \Sevian\Panel();
+		$p->title = $this->caption;
+		$p->appendChild($grid);
+		//$p->script = "alert(111);";
+		//echo $p->render();
+		//$error = 'Always throw this error';
+		//$err = new Exception($error);
+		
+		//throw new \Exception('2 no está permitido como parámetro', 6);;
+		
+		
+		
+		$this->panel = $p;
 		$fields = [];
 		
 		foreach($this->fields as $f){
@@ -758,7 +770,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 		$opt = [
 			 'id' => $grid->id,
-			 
+			 'menu'		=> $this->createMenu($this->menu),
 			 'caption'=>$this->caption,
 
 			 'paginator'=> $paginator,
@@ -770,7 +782,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$this->typeElement = "Grid";
 		$this->info = $opt;//$form->getInfo();
-
+		//print_r($this->info);
 		//print_r($fields);
 
 	}

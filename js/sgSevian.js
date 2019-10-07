@@ -192,8 +192,9 @@ if(!Sevian){
 			}
 		},
 		initPanels: function(panels){
+
 			for(x in panels){
-					
+				
 				this.setPanel(panels[x].panel, panels[x].type, panels[x].opt);
 			}
 		},
@@ -212,6 +213,11 @@ if(!Sevian){
 					
 					sgJson.iPanel(p.panels[x]);
 				}
+			}
+
+			if(p.config){
+				
+				this.initPanel(p.config);
 			}
 			if(p.fragments){
 				for(var x in p.fragments){
@@ -309,9 +315,9 @@ if(!Sevian){
 		newPanel: function(panel){
 
 			_p[panel] = new _sgPanel({panel:panel});
-			_p[panel].setWindow();
+			//_p[panel].setWindow();
 			
-			this.win[panel] = _p[panel].getWindow();
+			//this.win[panel] = _p[panel].getWindow();
 			return _p[panel];
 		},
 		
@@ -336,7 +342,7 @@ if(!Sevian){
 			var panel = this.getPanel(opt.panel);
 			
 			if(opt.valid !== false && panel && panel.valid && !panel.valid(opt.valid)){
-				alert("valid");
+				//db ("error valid");
 				//return false;
 			}
 			
