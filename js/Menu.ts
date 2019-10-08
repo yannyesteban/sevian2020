@@ -342,6 +342,9 @@ var Menu =
                 .addClass("option")
                 .prop("href", info.url || "javascript:void(0)")
                 .ds("value", info.value || "");
+            if(this.tagLink == "button"){
+                link.prop("type", "button");
+            }    
 
             if(this.useCheck && (info.useCheck === true)){
                 let chk = link.create("input").attr("type","checkbox");

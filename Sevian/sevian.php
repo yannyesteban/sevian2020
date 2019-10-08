@@ -50,9 +50,9 @@ class S{
     // save all js Elements
     private static $_jsElement = [];
     // save all js main Elements
-    private static $_jsPanel = [];
-
-
+	private static $_jsPanel = [];
+	private static $_jsConfigPanel = [];
+	
 	private static $ins = false;
 	private static $onAjax = false;
 	
@@ -239,7 +239,7 @@ class S{
 		self::$_f = array_merge(self::$_f, $frag);
 	}
     
-    public static function getJsConfigPanel(){}
+    
 
     public static function addJsElement($opt){
 		self::$_jsElement = array_merge(self::$_jsElement, $opt);
@@ -252,11 +252,15 @@ class S{
     public static function addJsPanel($opt){
 		self::$_jsPanel[] = $opt;//array_merge(self::$_jsPanel, $opt);
 	}
-
+	public static function addJsConfigPanel($opt){
+		self::$_jsConfigPanel[] = $opt;//array_merge(self::$_jsPanel, $opt);
+	}
     public static function getJsPanel(){
 		return self::$_jsPanel;
 	}
-
+	public static function getJsConfigPanel(){
+		return self::$_jsConfigPanel;
+	}
     
 	public static function setElement($info, $update = false){
 
@@ -292,13 +296,18 @@ class S{
 				// if this->mail panel then title = this->title
 				self::$_str->addPanel($info->id, $e->getPanel());
 				//print_r($e->config());
-				self::addJsPanel($e->config());
+				//self::addJsPanel($e->config());
+				self::addJsPanel($e->configPanel());
                 if($e instanceof \Sevian\JsPanelRequest){
                     //self::addJsPanel($e->getJsConfigPanel());
                 }
-                
-				
+			
+			}else{
+				self::addJsConfigPanel($e->updatePanel());
 			}
+			//self::addJsPanel($e->configPanel());
+			
+			
             if($e instanceof \Sevian\JsElementRequest){
                 self::addJsElement($e->getJsElement());
             }
@@ -686,6 +695,7 @@ class S{
 		$response = [
 			'panels'=>$p,
 			'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			'update'=> self::getJsConfigPanel(),
 			'fragments'=>self::$_f
 			];
 

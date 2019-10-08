@@ -109,6 +109,7 @@ class jsConfigPanel{
     public $panel = '';
     public $type = '';
     public $option = [];
+	public $debug = false;
 
     public function __construct($opt = []){
 		foreach($opt as $k => $v){
@@ -118,6 +119,22 @@ class jsConfigPanel{
         }
 	}
 }
+
+class jsUpdatePanel{
+    
+    public $panel = '';
+    public $actions = [];
+	public $debug = false;
+	
+    public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+        }
+	}
+}
+
 class jsConfigElement{
     
     public $id = '';

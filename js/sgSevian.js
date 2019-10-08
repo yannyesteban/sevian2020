@@ -144,6 +144,8 @@ if(!Sevian){
 		SW: 0,
 		mainPanel: 4,
 		defaultFormMethod: "GET",
+
+		mPanel:[],
 		
 		
 		
@@ -180,17 +182,33 @@ if(!Sevian){
 			}
 			
 		},
-		initPanel: function(panels){
+		updatePanel(panels){
 			
-			for(var x of panels){
+			for(let x of panels){
 				
-				if(window[x.type]){
-					
-					new window[x.type](x.option);
-				}	
+				if(this.mPanel[x.panel]){
+					for(let y of x.actions){
+						if(y.property !== undefined){
+							this.mPanel[x.panel][y.prop] = y.value;
+						}
+						if(y.method !== undefined){
+							this.mPanel[x.panel][y.method](y.value);
+						}
+					}
+				}
+				
 				
 			}
+		}, 
+		initPanel: function(panels){
+			for(var x of panels){
+				if(window[x.type]){
+					this.mPanel[x.panel] = new window[x.type](x.option);
+				}	
+			}
+
 		},
+
 		initPanels: function(panels){
 
 			for(x in panels){
@@ -216,8 +234,10 @@ if(!Sevian){
 			}
 
 			if(p.config){
-				
 				this.initPanel(p.config);
+			}
+			if(p.update){
+				this.updatePanel(p.update);
 			}
 			if(p.fragments){
 				for(var x in p.fragments){

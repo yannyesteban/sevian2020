@@ -17,6 +17,7 @@ class Element{
 	public $title = "";
 
 	public $panel = false;
+	
 
 	protected $onDesing = true;
 	protected $onDebug = true;
@@ -41,18 +42,29 @@ class Element{
 		}
 
 	}
-
 	public function config(){
-		
+	}
+
+	public function configPanel(){
 		return new jsConfigPanel([
-            "panel" => $this->id,
-            "type"	=> $this->typeElement,
+			"panel" => $this->id,
+			"type"	=> $this->typeElement,
 			"option"=> $this->info,
 			"debug" => "hola",
-            
-        ]);	
-
+			
+		]);
 	}
+
+	public function updatePanel(){
+		return new jsUpdatePanel([
+			"panel" => $this->id,
+			"actions"=> $this->info,
+			"debug" => "hola",
+			
+		]);	
+	}
+
+
 	public function evalMethod(){
 		
 	}

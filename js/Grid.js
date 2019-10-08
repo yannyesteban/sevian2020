@@ -136,6 +136,7 @@ var Grid = (($) => {
             this.showEnum = true;
             this.option = [];
             this.data = [];
+            this.menu = null;
             this.actionButtons = ["edit", "delete"];
             this.paginator = {
                 page: 1,
@@ -284,6 +285,9 @@ var Grid = (($) => {
                 });
             };
             this._main.append(new Paginator(pag));
+            if (this.menu) {
+                this._main.append(this.createMenu(this.menu));
+            }
         }
         _load(main) {
             this._main = main.addClass("sg-grid");
@@ -466,7 +470,15 @@ var Grid = (($) => {
                 }
             }
         }
+        createMenu(info) {
+            info.parentContext = this;
+            let _menu = new Menu(info);
+            return $(_menu.get());
+        }
         valid() {
+        }
+        msg(mensaje) {
+            alert(mensaje);
         }
     }
     Grid._objs = [];

@@ -86,6 +86,7 @@ var Grid = (($) => {
                     selectPage.get().options.add(option);	
                 }
             }
+            
         }
 
         updatePages(){
@@ -157,6 +158,7 @@ var Grid = (($) => {
         showEnum = true;
         option:any[] = [];
         data:any[] = [];
+        menu:object = null;
         actionButtons:any[] = ["edit","delete"];
 
         paginator:object = {
@@ -230,6 +232,7 @@ var Grid = (($) => {
             if(main){
                 
                 if(main.ds("sgGrid")){
+                   
                     return;
                 }
     
@@ -348,6 +351,9 @@ var Grid = (($) => {
             }
             this._main.append(new Paginator(pag));
    
+            if(this.menu){
+                this._main.append(this.createMenu(this.menu));
+            }
         }
 
         _load(main:any){
@@ -578,9 +584,17 @@ var Grid = (($) => {
                 
             }
         }
-
+        createMenu(info:any){
+            info.parentContext = this;
+            let _menu = new Menu(info);
+            return $(_menu.get());
+        }
         valid(){
 
+        }
+
+        msg(mensaje){
+            alert(mensaje);
         }
     }
 

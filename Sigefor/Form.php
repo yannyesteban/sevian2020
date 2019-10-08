@@ -166,7 +166,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
                 break;
             case 'get_field_data':
                 break;
-                
+			case 'list_page':
+				$this->createGrid2();
+				break; 
                 
                 
         }
@@ -486,9 +488,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 
 	}
-
 	
-
 	private function createForm(){
 		
 		$this->loadConfig();
@@ -574,8 +574,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$this->panel = $form;
 
 	}
-	
-	
+		
 	private function createMenu($name){
 		$cn = $this->cn;
 
@@ -695,15 +694,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$p = new \Sevian\Panel();
 		$p->title = $this->caption;
 		$p->appendChild($grid);
-		//$p->script = "alert(111);";
-		//echo $p->render();
-		//$error = 'Always throw this error';
-		//$err = new Exception($error);
-		
-		//throw new \Exception('2 no está permitido como parámetro', 6);;
-		
-		
-		
+
 		$this->panel = $p;
 		$fields = [];
 		
@@ -711,13 +702,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 			$id = "{$f->name}_f{$this->id}";
 			$value = '';
-			/*
-			if($f->modeValue == '1' or !$values){
-				$value = $f->default;
-			}else if(isset($values[$f->field])){
-				//$value = $values[$f->field];
-			}
-			*/
+
 			if(isset($groups->{$f->field})){
 				$page = $groups->{$f->field};
 			}
@@ -744,8 +729,6 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->data = $data;
 			$config->default = $f->default;
 			$config->className = $config->className?? $f->class;
-			
-			
 
 			if($f->inputConfig){
 				foreach($f->inputConfig as $k => $v){
@@ -772,11 +755,99 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			 'id' => $grid->id,
 			 'menu'		=> $this->createMenu($this->menu),
 			 'caption'=>$this->caption,
-
 			 'paginator'=> $paginator,
-
 			 'data'=>$dataGrid,
 			 'fields'=>$fields,
+		];
+
+		$this->typeElement = "Grid";
+		$this->info = $opt;//$form->getInfo();
+		//print_r($this->info);
+		//print_r($fields);
+
+	}
+
+	private function createGrid2(){
+		
+		$this->loadConfig();
+		
+		$dataGrid = $this->getDataGrid();
+
+		//$this->panel = new \Sevian\HTML("");
+		$fields = [];
+		
+		foreach($this->fields as $f){
+
+			$id = "{$f->name}_f{$this->id}";
+			$value = '';
+
+			if(isset($groups->{$f->field})){
+				$page = $groups->{$f->field};
+			}
+
+			$data = false;
+			if($f->data){
+				$data = $this->getDataField(json_decode(\Sevian\S::vars($f->data)));
+			}
+			
+			$config = new \stdClass;
+			
+			if(!$f->input){
+				$this->getDefaultInput($this->infoQuery->fields[$f->field]->mtype, $input, $type);
+			}else{
+				$input = $f->input;
+				$type = $f->inputType;
+			}
+
+			$config->type = $type;
+			
+			//$config->id = $id;
+			$config->name = $f->field;
+			$config->caption = $f->caption;
+			$config->data = $data;
+			$config->default = $f->default;
+			$config->className = $config->className?? $f->class;
+
+			if($f->inputConfig){
+				foreach($f->inputConfig as $k => $v){
+					$config->$k = $v;
+				}
+				
+			}
+
+			$fields[$f->name] = [
+				'input'	=> $input,
+				
+				'config'=> $config
+			];
+			
+		}
+		
+		$paginator = [
+			'page'=> $this->eparams->page?? $this->page,
+			'totalPages'=>	$this->totalPages,
+			'maxPages'	=>	$this->maxPages,
+		];
+		
+		$opt_ = [
+			 'id' 		=> "sg_form_".$this->id,
+			 'menu'		=> $this->createMenu($this->menu),
+			 'caption'	=> $this->caption,
+			 'paginator'=> $paginator,
+			 'data'		=> $dataGrid,
+			 'fields'	=> $fields,
+		];
+
+
+		$opt[] = [
+			'method'  => 'msg',
+			'value' => 'Hola Yanny Esteban'
+
+		];
+
+		$opt[] = [
+			'method'  => 'msg',
+			'value' => 'Hola Yanny Esteban'
 
 		];
 
