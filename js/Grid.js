@@ -477,8 +477,9 @@ var Grid = (($) => {
         }
         valid() {
         }
-        msg(mensaje) {
-            alert(mensaje);
+        setCaption(text) {
+            let caption = this._main.query(".caption>.text");
+            caption.innerHTML = text;
         }
     }
     Grid._objs = [];

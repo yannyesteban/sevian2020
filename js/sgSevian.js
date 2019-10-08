@@ -192,7 +192,13 @@ if(!Sevian){
 							this.mPanel[x.panel][y.prop] = y.value;
 						}
 						if(y.method !== undefined){
-							this.mPanel[x.panel][y.method](y.value);
+
+							if(y.args !== undefined){
+								this.mPanel[x.panel][y.method](...y.args);
+							}else if(y.value !== undefined){
+								this.mPanel[x.panel][y.method](y.value);
+							}
+							
 						}
 					}
 				}

@@ -593,9 +593,13 @@ var Grid = (($) => {
 
         }
 
-        msg(mensaje){
-            alert(mensaje);
+        setCaption(text:string){
+            let caption = this._main.query(".caption>.text");
+            
+            caption.innerHTML = text;
+            
         }
+
     }
 
 

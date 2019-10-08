@@ -839,16 +839,21 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		];
 
 
-		$opt[] = [
+		$opt__[] = [
 			'method'  => 'msg',
 			'value' => 'Hola Yanny Esteban'
 
 		];
 
 		$opt[] = [
-			'method'  => 'msg',
-			'value' => 'Hola Yanny Esteban'
+			'method'  => 'setCaption',
+			'value' => 'Bienvenidos al GRID'
 
+
+		];
+		$opt_[] = [
+			'method'  => 'setCaption',
+			'args' => ['chao Yanny Esteban','Cambiando el Caption de nuevo']
 		];
 
 		$this->typeElement = "Grid";
