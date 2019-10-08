@@ -157,6 +157,7 @@ var Grid = (($) => {
             this._rowLength = 0;
             this._data_grid = null;
             this._check = null;
+            this.pag = null;
             this._select = (index) => { return true; };
             this._new = (index) => { return true; };
             this._edit = (index) => { return true; };
@@ -273,7 +274,7 @@ var Grid = (($) => {
                         { t: 'setMethod',
                             id: 2,
                             element: 'sgForm',
-                            method: 'list',
+                            method: 'list_page',
                             name: 'personas',
                             eparams: {
                                 record: { codpersona: 16386 },
@@ -284,7 +285,7 @@ var Grid = (($) => {
                     ]
                 });
             };
-            this._main.append(new Paginator(pag));
+            this._main.append(this.pag = new Paginator(pag));
             if (this.menu) {
                 this._main.append(this.createMenu(this.menu));
             }
@@ -423,6 +424,14 @@ var Grid = (($) => {
             }
             this._data_grid.get().value = JSON.stringify(data);
         }
+        setData(data) {
+            this.data = data;
+            this._rowLength = 0;
+            this._tbody.text("");
+            for (let record of this.data) {
+                this.createRow(record);
+            }
+        }
         setNew() {
             this._check.get().checked = true;
             for (let x in this.fields) {
@@ -480,6 +489,9 @@ var Grid = (($) => {
         setCaption(text) {
             let caption = this._main.query(".caption>.text");
             caption.innerHTML = text;
+        }
+        setPage(page) {
+            this.pag.setPage(page);
         }
     }
     Grid._objs = [];

@@ -33,6 +33,8 @@ class Element{
 	protected $_jsElement = [];
 	protected $typeElement = "panel";
 	protected $info = "";
+
+	protected $_configInput = false;
 	
 	
 	public function __construct($opt = []){
@@ -141,6 +143,10 @@ class Element{
 
 		return $this->_jsElement;
 
+	}
+
+	public function configInput(){
+		return $this->_configInput;
 	}
 }
 

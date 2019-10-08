@@ -153,6 +153,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				$save = 'Sevian\Sigefor\FormSave';
 				$save::send($f, $f->data, $f->masterData);
 				*/
+				$this->save();
+				break;
 			case 'get_record':
 
                 
@@ -570,8 +572,21 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$this->typeElement = 'Form';
 		$this->info = $info;//$form->getInfo();
 
+		$input = $form->add("input");
+		$input->type = "text";
+		$input->name = "__mode_";
+		$input->value = "2";
+
+		$input = $form->add("input");
+		$input->type = "text";
+		$input->name = "__id_";
+		$input->value = "1";
 		//print_r($info);
 		$this->panel = $form;
+
+		if(isset($this->eparams->record)){
+			\Sevian\S::setSes("f_id",$this->eparams->record );
+		}
 
 	}
 		
@@ -847,7 +862,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$opt[] = [
 			'method'  => 'setCaption',
-			'value' => 'Bienvenidos al GRID'
+			'value' => 'Bienvenidos al GRID #'.$this->eparams->page
 
 
 		];
@@ -855,12 +870,42 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			'method'  => 'setCaption',
 			'args' => ['chao Yanny Esteban','Cambiando el Caption de nuevo']
 		];
+		$opt[] = [
+			'method'  => 'setData',
+			'value' => $dataGrid
+		];
 
+		$opt[] = [
+			'method'  => 'setPage',
+			'value' => $this->eparams->page?? $this->page
+		];
 		$this->typeElement = "Grid";
 		$this->info = $opt;//$form->getInfo();
 		//print_r($this->info);
 		//print_r($fields);
 
+	}
+
+	private function save(){
+		$this->loadConfig();
+
+		$_data = (object)\Sevian\S::getVReq();
+		$_data->__record_ = \Sevian\S::getSes("f_id");
+		//hr(\Sevian\S::getSes("f_id"));
+		$info = [
+			'cn'=> '_default',
+			'mode'=> 'update',
+			'tables'=> ['personas'],
+			'fields'=> $this->infoQuery->fields,
+			'data' => [$_data]
+
+		];
+		//print_r($info);exit;
+		$save = 'Sevian\Sigefor\FormSave';
+		$info = (object)$info;
+
+
+		$save::send($info, $info->data, []);
 	}
 	public function getRecord($info, $eparams = false){
 

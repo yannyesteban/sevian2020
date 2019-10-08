@@ -183,6 +183,8 @@ var Grid = (($) => {
         _rowLength = 0;
         _data_grid:object = null;
         _check:object = null;
+
+        pag:object = null;
         _select = (index:number)=>{return true};
         _new = (index:number)=>{return true};
         _edit = (index:number)=>{return true};
@@ -335,7 +337,7 @@ var Grid = (($) => {
                         {t:'setMethod',
                             id:2,
                             element:'sgForm',
-                            method:'list',
+                            method:'list_page',
                             name:'personas',
                             eparams:{
                                 record:{codpersona:16386},
@@ -349,7 +351,7 @@ var Grid = (($) => {
 
 
             }
-            this._main.append(new Paginator(pag));
+            this._main.append(this.pag = new Paginator(pag));
    
             if(this.menu){
                 this._main.append(this.createMenu(this.menu));
@@ -527,6 +529,16 @@ var Grid = (($) => {
 
             this._data_grid.get().value = JSON.stringify(data);
         }
+        setData(data){
+            this.data = data;
+            this._rowLength = 0;
+            this._tbody.text("");
+            
+            for(let record of this.data){
+                this.createRow(record);
+            } 
+        }
+        
 
         setNew(){
             
@@ -598,6 +610,10 @@ var Grid = (($) => {
             
             caption.innerHTML = text;
             
+        }
+
+        setPage(page:number){
+            this.pag.setPage(page);
         }
 
     }

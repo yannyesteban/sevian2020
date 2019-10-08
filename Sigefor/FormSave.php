@@ -105,7 +105,7 @@ class FormSave{
     }
     
     private static function saveRecord($info, $data, $masterData){
-
+        //print_r($info->fields);
         if($data->__mode_ <= 0){
             return false;
         }
@@ -226,7 +226,7 @@ class FormSave{
             }// end switch
            
             if($q){
-                hr($q);
+                //hr($q);
                 $result = $cn->execute($q);
 
                 if($cn->error){
