@@ -1,0 +1,29 @@
+setMethod:
+
+	element:form,
+	name:personas,
+	method:load,
+	eparams:{
+		recordId:defaultRecord,(4)(cedula=12474737)
+	
+	
+	
+	
+	}
+	
+	
+	
+	
+	
+	load
+	load_from
+	
+	load => eparam:{
+		id:4
+	}
+	
+	load_from => recordFrom:{
+		codpersona:@cod_x,
+		cedula:#cedula_x
+	
+	}
