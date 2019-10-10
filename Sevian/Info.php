@@ -70,10 +70,18 @@ class InfoElement{
 	public $debugMode = false;
 	public $designMode = false;
 	public $fixed = false;
+
+	public $evalSigns = false;
 	
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
+
+				if($k === 'eparams' and gettype($v) !== 'object'){
+					$this->$k = \json_decode($v);
+					continue;
+				}
+
 				$this->$k = $v;
 			}
 			
@@ -91,6 +99,8 @@ class InfoPanel{
 	public $debugMode = false;
 	public $designMode = false;
 	public $fixed = false;
+
+	public $evalSigns = false;
 	
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){

@@ -588,6 +588,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			\Sevian\S::setSes("f_id",$this->eparams->record );
 		}
 
+
 	}
 		
 	private function createMenu($name){
@@ -779,6 +780,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$this->info = $opt;//$form->getInfo();
 		//print_r($this->info);
 		//print_r($fields);
+		//hr($this->eparams, "red");
+		//$this->eparams->token = "juan";
 
 	}
 

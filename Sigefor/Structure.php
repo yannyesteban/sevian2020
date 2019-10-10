@@ -83,14 +83,18 @@ class Structure extends \Sevian\Element implements \Sevian\PanelsAdmin, \Sevian\
 
             
             $cn->query = "
-                SELECT * 
-                FROM $this->tStrEle 
+                SELECT 
+                    id, element, name, method,
+                    eparams, type, class, debug, design
+                    
+                FROM $this->tStrEle as s
                 WHERE structure = '$this->name'";
 
                 
             $result = $cn->execute();
 		
-		    while($rs = $cn->getDataAssoc($result)){
+		    if($rs = $cn->getDataAssoc($result)){
+                $rs['eparams'] = \Sevian\S::vars($rs['eparams']);
                 $this->infoPanels[] = new \Sevian\InfoElement($rs);
             }
 

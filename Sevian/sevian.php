@@ -193,6 +193,7 @@ class S{
 			
 
 			foreach(self::$panels as $k => $p){
+				hr(8888);
 				self::setPanel(new InfoPanel($p));
 			}
 
@@ -235,6 +236,69 @@ class S{
 
 	}
 
+	public static function setElement($info, $update = false){
+
+		if(isset(self::$_clsElement[$info->element])){
+
+			
+			self::$_info[$info->id] = $info;
+			$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
+			
+			$e->config();
+			$e->getSequenceBefore();
+			$e->evalMethod();
+			$e->getSequenceAfter();
+
+			self::addFrament($e->getResponse());
+
+			if($e instanceof \Sevian\TemplateAdmin){
+				if($html = $e->getTemplate()){
+					self::setTemplate($html);
+				}elseif($e->getThemeTemplate()){
+					self::$templateName = $e->getThemeTemplate();
+				}
+			}
+
+			if($e instanceof \Sevian\PanelsAdmin){
+				$panels = $e->getPanels();
+				foreach($panels as $k => $p){
+					
+					self::setElement($p);
+				}
+			}
+
+			if($e->panel){
+				$info->update = true;
+				self::$_p[$info->id] = true;
+				self::$_info[$info->id]->isPanel = true;
+				// if this->main panel then title = this->title
+				self::$_str->addPanel($info->id, $e->getPanel());
+				//print_r($e->config());
+				//self::addJsPanel($e->config());
+				self::addJsPanel($e->configPanel());
+                if($e instanceof \Sevian\JsPanelRequest){
+                    //self::addJsPanel($e->getJsConfigPanel());
+                }
+			
+			}else{
+				self::addJsConfigPanel($e->updatePanel());
+			}
+			//self::addJsPanel($e->configPanel());
+			
+			
+            if($e instanceof \Sevian\JsElementRequest){
+                self::addJsElement($e->getJsElement());
+            }
+			
+			
+
+		}
+
+		
+		
+	}
+
+
 	public static function addFrament($frag){
 		self::$_f = array_merge(self::$_f, $frag);
 	}
@@ -262,64 +326,7 @@ class S{
 		return self::$_jsConfigPanel;
 	}
     
-	public static function setElement($info, $update = false){
-
-		if(isset(self::$_clsElement[$info->element])){
-			self::$_info[$info->id] = $info;
-			$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
-			
-			$e->config();
-			$e->getSequenceBefore();
-			$e->evalMethod();
-			$e->getSequenceAfter();
-
-			self::addFrament($e->getResponse());
-
-			if($e instanceof \Sevian\TemplateAdmin){
-				if($html = $e->getTemplate()){
-					self::setTemplate($html);
-				}elseif($e->getThemeTemplate()){
-					self::$templateName = $e->getThemeTemplate();
-				}
-			}
-
-			if($e instanceof \Sevian\PanelsAdmin){
-				$panels = $e->getPanels();
-				foreach($panels as $k => $p){
-					self::setElement($p);
-				}
-			}
-
-			if($e->panel){
-				self::$_p[$info->id] = true;
-				self::$_info[$info->id]->isPanel = true;
-				// if this->mail panel then title = this->title
-				self::$_str->addPanel($info->id, $e->getPanel());
-				//print_r($e->config());
-				//self::addJsPanel($e->config());
-				self::addJsPanel($e->configPanel());
-                if($e instanceof \Sevian\JsPanelRequest){
-                    //self::addJsPanel($e->getJsConfigPanel());
-                }
-			
-			}else{
-				self::addJsConfigPanel($e->updatePanel());
-			}
-			//self::addJsPanel($e->configPanel());
-			
-			
-            if($e instanceof \Sevian\JsElementRequest){
-                self::addJsElement($e->getJsElement());
-            }
-			
-
-
-		}
-
-		
-		
-	}
-
+	
 
 	public static function iMethod($params){
 
@@ -387,11 +394,7 @@ class S{
 
 
 
-	public static function init($opt = []){
-
-	
-		
-	}
+	public static function init($opt = []){}
 	public static function inputsLoad($inputs){
 		foreach($inputs as $k => $v){
 			self::addClassInput($k, $v);
@@ -493,7 +496,7 @@ class S{
 				
 				break;
 			case "iMethod":
-				self::iMethod($params);
+				self::iMethod($cmd);
 				break;
 			case "signs":
 				$this->evalSigns($params);
@@ -710,10 +713,7 @@ class S{
 		return json_encode($response, JSON_PRETTY_PRINT);
 		
 	}
-	public static function evalElement($info){
-		
-
-	}
+	public static function evalElement($info){}
 	
 	public static function evalElements(){
 
