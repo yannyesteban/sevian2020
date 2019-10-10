@@ -1,3 +1,42 @@
+{
+	"async": true,
+	"panel": 4,
+	"params":[
+		{
+			"t":"iMethod",
+			"id":2,
+			"method": "select_record",
+			"eparams": {
+				"save_in":"xxx",
+				"default_is": "__record_id",
+				"save_in_ses": "registor"
+			}
+		},
+		{
+			"t":"iMethod",
+			"id":5,
+			"method": "load",
+			"eparams": {
+				"save_in":"xxx",
+				"default_is": "__record_id",
+				"save_in_ses": "registor"
+			}
+		}
+
+	]
+
+
+}
+	
+
+		
+	
+
+
+
+
+set
+
 setMethod:
 
 	element:form,
