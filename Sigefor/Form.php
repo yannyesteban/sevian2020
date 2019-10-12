@@ -113,7 +113,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	private $infoQuery = false;
 
+
 	private $page = 1;
+	private $searchFor = false;
 	private $totalPages = 0;
 	private $maxPages = 5;
 
@@ -127,14 +129,25 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
         $this->cn = \Sevian\Connection::get();
 	}
 
+	public function config(){
+		if(!isset($this->pVars["num"])){
+			$this->pVars["num"] = 0;
+		}
+		$this->pVars["num"]++;	
+	}
+
     public function evalMethod($method = false): bool{
-		
-		
-		
-		//print_r($f->data);
-        if($method === false){
+		if($method === false){
             $method = $this->method;
         }
+		if(!$this->async){
+			if($this->method == "list_page"){
+				$method = "list";
+			}
+		}	
+		
+		
+        
 
 		//$method = 'list';
         //hr($this->method);
@@ -154,6 +167,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				$save::send($f, $f->data, $f->masterData);
 				*/
 				$this->save();
+				break;
+			case 'select_record':
+				$id = \Sevian\S::getReq('__id_');
+
+				$this->gVars["record_id"] = $this->pVars['records'][$id]??false;
 				break;
 			case 'get_record':
 
@@ -450,9 +468,13 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		return $data;
 	}
 
-	private function getDataGrid(){
+	private function getDataGrid($search = ''){
 
 		$cn = $this->cn;
+
+		if($search !='' and $this->searchFor){
+			$this->query = $cn->evalFilters($this->query, $search, $this->searchFor);
+		}
 
 		$cn->query = $this->query;
 		$cn->page = $this->eparams->page?? 1;
@@ -465,7 +487,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$data = $cn->getDataAll($result);
 
 		$keys = $this->infoQuery->keys;
-		
+		$i = 0;
+		$this->pVars["records"] = []; 
 		foreach($data as $k => $record){
 			
 			foreach($keys as $key){
@@ -478,6 +501,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				$this->gridKey[$k+1] = [
 					$key=>$record[$key]
 				];
+
+				$this->pVars["records"][$k + 1] = (object)$data[$k]['__record_'];
 			}
 
 
@@ -495,8 +520,19 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 		$this->loadConfig();
 
+		$record = false;
+		if(isset($this->eparams->record)){
+			$record = $this->eparams->record;
+		}elseif(isset($this->eparams->recordId)){
+			$index = $this->eparams->recordId;
+			if($index == '0'){
+				$record = $this->gVars['record_id'];
+			}else{
+				$record = $this->pVars[$index]?? false;
+			}
+		}
 		
-		$values = $this->getRecord($this->infoQuery, $this->eparams);
+		$values = $this->getRecord($this->infoQuery, $record);
 		
 		$fields = [];
 		$groups = json_decode(\Sevian\S::vars($this->groups));
@@ -699,10 +735,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 
 	private function createGrid(){
+
 		
+		$q = $this->eparams->q?? '';
 		$this->loadConfig();
 		
-		$dataGrid = $this->getDataGrid();
+		$dataGrid = $this->getDataGrid($q);
 
 		$grid = new \Sevian\HTML("div");
 		$grid->id = "sg_form_".$this->id;
@@ -768,12 +806,37 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		];
 		
 		$opt = [
-			 'id' => $grid->id,
-			 'menu'		=> $this->createMenu($this->menu),
-			 'caption'=>$this->caption,
-			 'paginator'=> $paginator,
-			 'data'=>$dataGrid,
-			 'fields'=>$fields,
+			 'id' 			=> $grid->id,
+			 'menu'			=> $this->createMenu($this->menu),
+			 'caption'		=> $this->caption,
+			 'paginator'	=> $paginator,
+			 'data'			=> $dataGrid,
+			 'fields'		=> $fields,
+			 'searchValue'	=> $q,
+			 'search'		=>"
+			 Sevian.action.send(
+                {
+                    async: false,
+                    panel:2,
+                    valid:true,
+                    confirm_: 'seguro?',
+                    params:	[
+                        {t:'setMethod',
+                            id:2,
+                            element:'sgForm',
+                            method:'list',
+                            name:'personas',
+                            eparams:{
+                               
+                                token:'search',
+                                q:q
+                            }
+                        }
+                        
+                    ]
+                });
+				 
+			 "
 		];
 
 		$this->typeElement = "Grid";
@@ -788,8 +851,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	private function createGrid2(){
 		
 		$this->loadConfig();
+		$q = $this->eparams->q?? '';
 		
-		$dataGrid = $this->getDataGrid();
+		$dataGrid = $this->getDataGrid($q);
 
 		//$this->panel = new \Sevian\HTML("");
 		$fields = [];
@@ -862,10 +926,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			'value' => 'Hola Yanny Esteban'
 
 		];
+		
 
+		
 		$opt[] = [
 			'method'  => 'setCaption',
-			'value' => 'Bienvenidos al GRID #'.$this->eparams->page
+			'value' => "Bienvenidos  al GRID #".$this->eparams->page
 
 
 		];
@@ -910,43 +976,24 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$save::send($info, $info->data, []);
 	}
-	public function getRecord($info, $eparams = false){
-
+	public function getRecord($info, $record){
 		
-		if(!$eparams){
+		if(!$record){
 			return false;
 		}
-
-		if(gettype ($eparams) !=='object'){
-			$eparams = json_decode($eparams);
-		}
-		if(!isset($eparams->record)){
-			return false;
-		}
-		
 		$cn = $this->cn;
-		$record = $eparams->record;
-		
 		$filter = '';
 		foreach($info->keys as $k => $v){
+			
 			if(isset($record->$k)){
-				
 				if(isset($info->fields[$k])){
 					$table = $info->fields[$k]->orgtable;
-					
-					$filter = $table.".".$cn->addQuotes($k)."=".$cn->addSlashes($record->$k);
+					$filter = $table.'.'.$cn->addQuotes($k).'='.$cn->addSlashes($record->$k);
 				}
-
-
 			}
-			
 		}
 
-
 		$cn->query = $this->query." WHERE $filter;";
-        
-          
-       
 
 		$result = $cn->execute();
 		
@@ -956,7 +1003,6 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			foreach($info->fields as $k => $v){
 				$data[$k] = $rs[$i++];
 			}
-			
 			return $data;
 		}
 		return false;

@@ -71,7 +71,12 @@ class S{
 	
 	
 	private static $_info = [];// se guarda la informacion de cada panel ;
-	
+	private static $_panels = [];
+
+
+	private static $_pVars = [];// variables de sesion para cada panel
+	private static $_gVars = [];// variables de sesion del modulo
+
 	private static $_infoClasses = [];
 	private static $_infoInputs = [];
 	private static $_pSigns = [];
@@ -183,15 +188,17 @@ class S{
 			self::$cfg['STR_PANELS'] = &self::$_strPanels;
 
 			self::$_str->sw = self::$cfg['SW'];
-
+			foreach(self::$_info as $info){
+				$info->update = false;
+			}
 			if(!self::$onAjax){
 				foreach(self::$_init->elements as $k => $e){
-				
+					
 					self::setElement($e);
 				}
 			}
 			
-
+			
 			foreach(self::$panels as $k => $p){
 				hr(8888);
 				self::setPanel(new InfoPanel($p));
@@ -202,6 +209,10 @@ class S{
 			self::$cfg['COMMANDS'] = &self::$_commands;
 			self::$cfg['ACTIONS'] = &self::$_actions;
 			self::$cfg['INFO'] = &self::$_info;
+			self::$cfg['PANELS'] = &self::$_panels;
+
+			self::$cfg['P_VARS'] = &self::$_pVars;
+			self::$cfg['G_VARS'] = &self::$_gVars;
 		}else{
 			
 			self::$cfg['INIT'] = false;
@@ -210,6 +221,8 @@ class S{
 			self::$_str->sw = self::$cfg['SW'];
 			
 			self::$_info = &self::$cfg['INFO'];
+			self::$_panels = &self::$cfg['PANELS'];
+
 			self::$_template = &self::$cfg['TEMPLATE'];
 			self::$_strPanels = &self::$cfg['STR_PANELS'];
 			
@@ -218,19 +231,19 @@ class S{
 			self::$_pSigns = &self::$cfg['LISTEN_PANEL'];
 			self::$_commands = &self::$cfg['COMMANDS'];
 			self::$_actions = &self::$cfg['ACTIONS'];
+			
+			self::$_pVars = &self::$cfg['P_VARS'];
+			self::$_gVars = &self::$cfg['G_VARS'];
+			
 			//self::evalElements();
+			foreach(self::$_panels as $info){
+				$info->update = false;
+			}
 		}
 		
 		
 
-		foreach(self::$_info as $info){
-			$info->update = false;
-		}
 		
-		
-		
-		
-
 		
 
 
@@ -239,11 +252,17 @@ class S{
 	public static function setElement($info, $update = false){
 
 		if(isset(self::$_clsElement[$info->element])){
-
+			$info->async = self::$onAjax;
 			
 			self::$_info[$info->id] = $info;
 			$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
 			
+			if(!isset(self::$_pVars[$info->id])){
+				self::$_pVars[$info->id] = [];
+			}
+			$e->pVars = &self::$_pVars[$info->id];
+			$e->gVars = &self::$_gVars;
+
 			$e->config();
 			$e->getSequenceBefore();
 			$e->evalMethod();
@@ -268,7 +287,8 @@ class S{
 			}
 
 			if($e->panel){
-				$info->update = true;
+				self::$_panels[$info->id] = new InfoElement($info);
+				self::$_panels[$info->id]->update = true;
 				self::$_p[$info->id] = true;
 				self::$_info[$info->id]->isPanel = true;
 				// if this->main panel then title = this->title
@@ -721,8 +741,10 @@ class S{
 		if(self::$onAjax){
 			return true;
 		}
-		foreach(self::$_info as $id => $info){
-			if($info->isPanel){
+		foreach(self::$_panels as $id => $info){
+			
+			if(!$info->update){
+				//hr($id,"yellow","red");
 				self::setElement($info);
 			}
 			
@@ -761,7 +783,7 @@ class S{
 		//3.-
 		self::evalParams();
 		//4.-
-		//self::evalElements();
+		self::evalElements();
 		//5.-
 
 		if(self::$onAjax){
@@ -781,6 +803,7 @@ class S{
 		] ;
 	}
 }
+
 
 
 

@@ -133,7 +133,9 @@ var Grid = (($) => {
             this.type = "default"; //"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
             this.ctrlSelect = "one"; //one,multiple,
             this.editMode = "none"; //grid,one,inline,form,custom
+            this.searchValue = '';
             this.showEnum = true;
+            this.allowSearch = true;
             this.option = [];
             this.data = [];
             this.menu = null;
@@ -194,6 +196,9 @@ var Grid = (($) => {
                 }
                 this._create(main);
             }
+            if (opt.search) {
+                this._search = $.bind(opt.search, this, "q");
+            }
             main.ds("sgGrid", "grid").addClass(`grid-${this.type}`);
         }
         static init() {
@@ -232,6 +237,22 @@ var Grid = (($) => {
                 .add({ tagName: "span", className: "icon" + this.iconClass })
                 .add({ tagName: "span", className: "text", innerHTML: this.caption })
                 .add({ tagName: "span", className: "arrow" });
+            let _search = main.create("div").addClass("grid-search");
+            let q = _search.create("input").attr("type", "search").attr("name", "q").attr("placeholder", "search")
+                .addClass("search").val(this.searchValue)
+                .on("keyup", (event) => {
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    // Trigger the button element with a click
+                    this._search(q.val());
+                }
+            });
+            ;
+            _search.create("input").attr("type", "button").val("go").addClass("btn-search")
+                .on("click", (event) => { this._search(q.val()); });
+            ;
             let body = main.create("div").addClass("body");
             let table = this._table = body.create("table").addClass("grid-table");
             this._thead = table.create("thead");
@@ -247,7 +268,7 @@ var Grid = (($) => {
                     type: (this.ctrlSelect == "one") ? "radio" : "checkbox",
                     name: this.id + "_chk",
                     checked: (this.ctrlSelect == "one") ? true : false,
-                }).on("onchange", () => { this.setNew(); });
+                }).on("change", () => { this.setNew(); });
             }
             for (let x in this.fields) {
                 if (this.fields[x].input == "hidden") {
@@ -277,9 +298,9 @@ var Grid = (($) => {
                             method: 'list_page',
                             name: 'personas',
                             eparams: {
-                                record: { codpersona: 16386 },
-                                token: "yanny",
-                                page: page
+                                token: "jimenez",
+                                page: page,
+                                q: this.getSearchValue(),
                             }
                         }
                     ]
@@ -440,6 +461,10 @@ var Grid = (($) => {
             this._mainForm["__mode_"].setValue("1");
             this._mainForm["__id_"].setValue("");
             this._mainForm["__index_"].setValue("");
+        }
+        getSearchValue() {
+            let input = this._main.query("input.search");
+            return input.value;
         }
         insert() {
             let data = this.getValue();
