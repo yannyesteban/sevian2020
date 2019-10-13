@@ -42,7 +42,7 @@ class InfoParam{
 	public $element = '';
 	public $name = '';
 	public $method = '';
-	public $eparams = [];
+	public $eparams = false;
 	public $async = false;
 	public $update = false;
 	public $debugMode = false;
@@ -63,7 +63,7 @@ class InfoElement{
 	public $element = '';
 	public $name = '';
 	public $method = '';
-	public $eparams = [];
+	public $eparams = false;
 	public $async = false;
 	public $update = false;
     public $isPanel = false;

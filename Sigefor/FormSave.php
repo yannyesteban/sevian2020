@@ -8,6 +8,7 @@ class InfoRecord{
     public $tables = [];
     public $transaction = false;
     public $masterData = false;
+    public $records = [];
 
     public $error = false;
     public $errno = 0;
@@ -114,7 +115,7 @@ class FormSave{
         $cn = self::$cn;
         $mode = $data->__mode_;
         
-        $record = $data->__record_ ?? new \stdClass;
+        $record = $data->__record_?? $info->records[$data->__id_?? 0]?? new \stdClass;
         $tables = $info->tables;
         
 

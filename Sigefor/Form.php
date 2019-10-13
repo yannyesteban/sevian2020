@@ -522,13 +522,26 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$record = false;
 		if(isset($this->eparams->record)){
+			
 			$record = $this->eparams->record;
 		}elseif(isset($this->eparams->recordId)){
 			$index = $this->eparams->recordId;
 			if($index == '0'){
-				$record = $this->gVars['record_id'];
+
+				if(isset($this->gVars['record_id'])){
+					
+					$record = $this->gVars['record_id'];
+				}else{
+					
+					$__id_ = \Sevian\S::getReq("__id_");
+					
+					$record = $this->pVars['records'][$__id_]?? false;
+				}
+				
+				
+				
 			}else{
-				$record = $this->pVars[$index]?? false;
+				$record = $this->pVars['records'][$index]?? false;
 			}
 		}
 		
@@ -541,7 +554,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 			$id = "{$f->name}_f{$this->id}";
 			$value = '';
-
+			$page = '';
 			if($f->modeValue == '1' or !$values){
 				$value = $f->default;
 			}else if(isset($values[$f->field])){
@@ -591,6 +604,27 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		}
 		
 		$pages = json_decode(\Sevian\S::vars($this->pages));
+		$fields[] = [
+			'input'	=> 'input',
+			'page'	=> '',
+			'config'=> [
+				'type'=>'text',
+				"name"=>'__mode_',
+				'value'=>'2'
+			]
+			
+		];
+		$fields[] = [
+			'input'	=> 'input',
+			'page'	=> '',
+			'config'=> [
+				'type'=>'text',
+				"name"=>'__id_',
+				'value'=>'1'
+			]
+			
+		];
+
 
 		$info = [
 			'caption'	=> $this->caption,
@@ -607,7 +641,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$form->id = 'sg_form_'.$this->id;
 		$this->typeElement = 'Form';
 		$this->info = $info;//$form->getInfo();
-
+		/*
 		$input = $form->add("input");
 		$input->type = "text";
 		$input->name = "__mode_";
@@ -617,6 +651,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$input->type = "text";
 		$input->name = "__id_";
 		$input->value = "1";
+
+		*/
 		//print_r($info);
 		$this->panel = $form;
 
@@ -697,20 +733,15 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 					$json[] = &$items[$index];
 				}
 
-
-				foreach($rs as $k => $v){
-				//	$this->$k = $v;
-				}
-				
 				
 				
 
 
 				$opt[] = [
-					"caption" => $rs["title"],
-					"index" => $rs["index"],
-					"parent" => $rs["parent"],
-					"action" => $action,
+					"caption" 	=> $rs["title"],
+					"index" 	=> $rs["index"],
+					"parent"	=> $rs["parent"],
+					"action" 	=> $action,
 
 				];
 				
@@ -962,11 +993,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$_data->__record_ = \Sevian\S::getSes("f_id");
 		//hr(\Sevian\S::getSes("f_id"));
 		$info = [
-			'cn'=> '_default',
-			'mode'=> 'update',
-			'tables'=> ['personas'],
-			'fields'=> $this->infoQuery->fields,
-			'data' => [$_data]
+			'cn'		=> '_default',
+			'mode'		=> 'update',
+			'tables'	=> ['personas'],
+			'fields'	=> $this->infoQuery->fields,
+			'data' 		=> [$_data],
+			'records'	=> $this->pVars['records']
 
 		];
 		//print_r($info);exit;
@@ -992,7 +1024,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				}
 			}
 		}
-
+		$this->pVars["records"][1] = $record;
 		$cn->query = $this->query." WHERE $filter;";
 
 		$result = $cn->execute();

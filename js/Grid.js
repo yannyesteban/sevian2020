@@ -79,7 +79,7 @@ var Grid = (($) => {
                 if (this.page == page) {
                     $(cell).addClass("active");
                 }
-                if (page > this.totalPages) {
+                if (page < 1 || page > this.totalPages) {
                     $(cell).text("&nbsp").addClass("hidden").ds("number", 0);
                 }
                 else {
