@@ -34,7 +34,7 @@ var Grid = (($) => {
             this._create(this._main);
 
             if(this.change){
-                this._change = $.bind(this.change, this, "page");  
+                this._change = $.bind(this.change, this, "page");
             }
             
         }
@@ -139,7 +139,7 @@ var Grid = (($) => {
             }
             this.updatePages();
 
-            this.change(this.page);
+            this._change(this.page);
             
         }
 
@@ -350,36 +350,11 @@ var Grid = (($) => {
             this._data_grid = I.create("input", {type:"hidden", name:"__data_grid"});
             hiddenDiv.append(this._data_grid);
             let pag = this.paginator;
-
-            pag.change = (page)=>{
-
-                Sevian.action.send(
-                {
-                    async: true,
-                    panel:2,
-                    valid:true,
-                    confirm_: 'seguro?',
-                    params:	[
-                        {t:'setMethod',
-                            id:2,
-                            element:'sgForm',
-                            method:'list_page',
-                            name:'personas',
-                            eparams:{
-                               
-                                token:"jimenez",
-                                page:page,
-                                q:this.getSearchValue(),
-                                
-                               
-                            }
-                        }
-                        
-                    ]
-                });
+            pag.change = $.bind(pag.change, this, "page");
+            
 
 
-            }
+        
             this._main.append(this.pag = new Paginator(pag));
    
             if(this.menu){

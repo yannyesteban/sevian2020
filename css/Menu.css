@@ -170,6 +170,26 @@
   transition-property: all;
 }
 
+.sg-menu.horizontal .caption {
+  display: none;
+}
+
+.sg-menu.horizontal .menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.sg-menu.horizontal .item button {
+  border: 0px;
+}
+
+.sg-menu.horizontal .item .icon {
+  display: none;
+}
+
 .sg-menu.horizontal li {
   display: inline-block !important;
 }

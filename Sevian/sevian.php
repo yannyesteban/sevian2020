@@ -252,6 +252,11 @@ class S{
 	public static function setElement($info, $update = false){
 
 		if(isset(self::$_clsElement[$info->element])){
+			if($info->id == 0){
+				$info->id = self::getReq("__sg_panel");
+				hr($info->id);
+			}
+			
 			$info->async = self::$onAjax;
 			
 			self::$_info[$info->id] = $info;
@@ -281,7 +286,7 @@ class S{
 			if($e instanceof \Sevian\PanelsAdmin){
 				$panels = $e->getPanels();
 				foreach($panels as $k => $p){
-					
+	
 					self::setElement($p);
 				}
 			}
@@ -583,22 +588,7 @@ class S{
 	}
 	
 
-	
-	private static function configInputs($_vconfig){
-		$div = new HTML('');
-		
-		foreach($_vconfig as $k => $v){
-			$input = $div->add([
-				'tagName'	=>	'input',
-				'type'		=>	'hidden',
-				'name'		=>	$k,
-				'value'		=>	$v
-			]);
-		}
-	
-		return $div;
-		
-	}
+
 	public static function getFragment(){
 		return self::$_fragments;
 		

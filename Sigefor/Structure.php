@@ -93,7 +93,7 @@ class Structure extends \Sevian\Element implements \Sevian\PanelsAdmin, \Sevian\
                 
             $result = $cn->execute();
 		
-		    if($rs = $cn->getDataAssoc($result)){
+		    while($rs = $cn->getDataAssoc($result)){
                 $rs['eparams'] = \Sevian\S::vars($rs['eparams']);
                 $this->infoPanels[] = new \Sevian\InfoElement($rs);
             }

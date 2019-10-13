@@ -130,13 +130,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 
 	public function config(){
-		if(!isset($this->pVars["num"])){
-			$this->pVars["num"] = 0;
-		}
-		$this->pVars["num"]++;	
+
+		
 	}
 
     public function evalMethod($method = false): bool{
+		
 		if($method === false){
             $method = $this->method;
         }
@@ -146,7 +145,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			}
 		}	
 		
-		
+		//hr($this->id."....".$method);
         
 
 		//$method = 'list';
@@ -517,7 +516,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 	
 	private function createForm(){
-		
+	
 		$this->loadConfig();
 
 		$record = false;
@@ -834,7 +833,32 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			'page'=> $this->eparams->page?? $this->page,
 			'totalPages'=>	$this->totalPages,
 			'maxPages'=>	$this->maxPages,
+			'change'=>"Sevian.action.send(
+				{
+					async: true,
+					panel:$this->id,
+					valid:true,
+					confirm_: 'seguro?',
+					params:	[
+						{t:'setMethod',
+							id:$this->id,
+							element:'sgForm',
+							method:'list_page',
+							name:'$this->name',
+							eparams:{
+
+								page:page,
+								q:this.getSearchValue(),
+								
+							   
+							}
+						}
+						
+					]
+				});"
 		];
+
+		
 		
 		$opt = [
 			 'id' 			=> $grid->id,
@@ -848,15 +872,15 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			 Sevian.action.send(
                 {
                     async: false,
-                    panel:2,
+                    panel:$this->id,
                     valid:true,
                     confirm_: 'seguro?',
                     params:	[
                         {t:'setMethod',
-                            id:2,
+                            id:$this->id,
                             element:'sgForm',
                             method:'list',
-                            name:'personas',
+                            name:'$this->name',
                             eparams:{
                                
                                 token:'search',

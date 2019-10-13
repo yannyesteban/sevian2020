@@ -41,7 +41,8 @@ html, body{
     background-color: rgb(180, 75, 145);
 }
 .p4{
-    background-color: rgb(40, 78, 78);
+    background-color: rgb(214, 214, 214);
+    overflow: auto;
 }
 .p7 {
     grid-column: 1 / 4;
@@ -124,4 +125,30 @@ table{
 .six {
   grid-column: 3;
   grid-row: 4;
+}
+
+
+.sg-menu.horizontal{
+	.caption{
+		display:none;
+	}
+	.menu{
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.item{
+		button{
+			//border:0px;
+		}
+		
+		//display: inline-block!important;
+		.icon{
+			display:none;
+		}
+	}
+	
+	li{
+		display: inline-block!important;
+	}
+	
 }
