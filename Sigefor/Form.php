@@ -829,6 +829,27 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		}
 		
+		\Sevian\S::action(new \Sevian\InfoAction([
+
+			"async"=>false,
+			"panel"=>4,
+			"confirm"=>"hola?",
+			"action"=> new \Sevian\InfoActionParams([
+				"t"=>"setPanel",
+				"id"=>$this->id,
+				"element"=>"form",
+				"name"=>$this->name,
+				"method"=>"page",
+				"eparams" => "
+				
+				
+				"
+
+				
+				
+			])
+		]));
+
 		$paginator = [
 			'page'=> $this->eparams->page?? $this->page,
 			'totalPages'=>	$this->totalPages,

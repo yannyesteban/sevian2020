@@ -155,6 +155,36 @@ class InfoInit{
 		}
 	}
 }
+class InfoActionParams{
+	public $t = '';
+	public $id = '0';
+	public $element = '';
+	public $method = '';
+	public $name = '';
+	public $eparams = '';
+	public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+		}
+	}
+}
 
+class InfoAction{
+	
+	public $async = false;
+	public $panel = '0';
+	public $valid = false;
+	public $confirm = '';
+	public $actions = [];
+	public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+		}
+	}
+}
 
 ?>

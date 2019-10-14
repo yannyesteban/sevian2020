@@ -4,7 +4,7 @@
 namespace Sevian;
 
 
-class InfoAction{
+class InfoAction1{
 	
 	public $async = false;
 	public $panel = false;

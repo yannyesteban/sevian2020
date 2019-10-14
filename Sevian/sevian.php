@@ -792,6 +792,14 @@ class S{
 			"opt"=>$main
 		] ;
 	}
+
+	public static function action($info){
+
+		$json = json_encode($info = new InfoAction($info));
+		hr($json);
+		return "Sevian.action.send($json)";
+
+	}
 }
 
 
