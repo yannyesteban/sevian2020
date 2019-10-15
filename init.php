@@ -177,7 +177,7 @@ $init2 = [
 
 $init3 = [
 	'theme'=>'sevian',
-	'title'=>'GTcomm v1.0',
+	'title'=>'GTcomm v1.0.0',
 	'templateName' => 'main',
 	'elements' => [
 		[
@@ -199,7 +199,7 @@ $init3 = [
 		[
 			'id'		=> 22,
 			'element'	=> 'sgStructure',
-			'name'		=> 'dos',
+			'name'		=> 'tres',
 			'method'	=> 'load',
 			'designMode'=> true,
 			'fixed'		=> true,

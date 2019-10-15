@@ -796,7 +796,7 @@ class S{
 	public static function action($info){
 
 		$json = json_encode($info = new InfoAction($info));
-		hr($json);
+		//hr($json);
 		return "Sevian.action.send($json)";
 
 	}

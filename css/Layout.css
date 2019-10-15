@@ -27,7 +27,7 @@ html, body {
   border: 2px solid #d9480f;
 }
 
-.p1 {
+.layout .p1 {
   -ms-grid-column: 1;
   grid-column: 1;
   -ms-grid-row: 3;
@@ -36,12 +36,12 @@ html, body {
   background-color: blueviolet;
 }
 
-.p2 {
+.layout .p2 {
   background-color: #ececec;
   overflow: auto;
 }
 
-.p3 {
+.layout .p3 {
   -ms-grid-column: 1;
   -ms-grid-column-span: 3;
   grid-column: 1 / 4;
@@ -50,12 +50,12 @@ html, body {
   background-color: #b44b91;
 }
 
-.p4 {
+.layout .p4 {
   background-color: #d6d6d6;
   overflow: auto;
 }
 
-.p7 {
+.layout .p7 {
   -ms-grid-column: 1;
   -ms-grid-column-span: 3;
   grid-column: 1 / 4;
@@ -64,7 +64,7 @@ html, body {
   border: 2px solid #104581;
 }
 
-.p8 {
+.layout .p8 {
   -ms-grid-column: 1;
   -ms-grid-column-span: 3;
   grid-column: 1 / 4;
@@ -182,5 +182,93 @@ table tr td {
 
 .sg-menu.horizontal li {
   display: inline-block !important;
+}
+
+.gtcomm {
+  height: 100%;
+  overflow: auto;
+  grid-gap: 0px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 190px (1fr)[4];
+      grid-template-columns: 190px repeat(4, 1fr);
+  -ms-grid-rows: 30px 30px auto 30px 30px;
+      grid-template-rows: 30px 30px auto 30px 30px;
+}
+
+.gtcomm .p1 {
+  -ms-grid-column: 1;
+  grid-column: 1;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 5;
+  grid-row: 1 / 6;
+  background-color: #272727;
+}
+
+.gtcomm .p2 {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 4;
+  grid-column: 2 / 6;
+  -ms-grid-row: 1;
+  grid-row: 1;
+  background-color: #979797;
+  overflow: auto;
+}
+
+.gtcomm .p3 {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 4;
+  grid-column: 2 / 6;
+  -ms-grid-row: 2;
+  grid-row: 2;
+  background-color: #3a3a3a;
+}
+
+.gtcomm .p4 {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 2;
+  grid-column: 2 / 4;
+  -ms-grid-row: 3;
+  grid-row: 3;
+  background-color: #bbbbbb;
+  overflow: auto;
+}
+
+.gtcomm .p5 {
+  -ms-grid-column: 4;
+  -ms-grid-column-span: 1;
+  grid-column: 4 / 5;
+  -ms-grid-row: 3;
+  grid-row: 3;
+  background-color: #cacaca;
+  overflow: auto;
+}
+
+.gtcomm .p6 {
+  -ms-grid-column: 5;
+  -ms-grid-column-span: 1;
+  grid-column: 5 / 6;
+  -ms-grid-row: 3;
+  grid-row: 3;
+  background-color: #706f6f;
+  overflow: auto;
+}
+
+.gtcomm .p7 {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 4;
+  grid-column: 2 / 6;
+  -ms-grid-row: 4;
+  grid-row: 4;
+  background-color: #f0f0f0;
+}
+
+.gtcomm .p8 {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 4;
+  grid-column: 2 / 6;
+  -ms-grid-row: 5;
+  grid-row: 5;
+  background-color: #b3b3b3;
 }
 /*# sourceMappingURL=Layout.css.map */
