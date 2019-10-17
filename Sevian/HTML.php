@@ -52,15 +52,15 @@ class HTML{
 	
 	public $__init = array();
 
-	public function __construct($opt = ""){
+	public function __construct($info = ""){
 		
-		if(is_array($opt)){
-			foreach($opt as $k => $v){
+		if(is_array($info)){
+			foreach($info as $k => $v){
 				$this->$k = $v;	
 			}// next			
 			
 		}else{
-			$this->tagName = $opt;
+			$this->tagName = $info;
 			
 		}// end if
 

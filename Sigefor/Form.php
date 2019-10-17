@@ -202,7 +202,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$cn->query = "
 			SELECT 
-			form, caption, class, query, params, method, pages, f.groups 
+			form, caption, class, query, params, method, pages, f.groups,
+			caption as title
 			FROM $this->tForms as f
 			WHERE form = '$this->name'
 		";
@@ -635,9 +636,10 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		];
 
-		$form = new \Sevian\HTML('div');
+		$form = new \Sevian\Panel('div');
 
 		$form->id = 'sg_form_'.$this->id;
+		$form->title = $this->caption;
 		$this->typeElement = 'Form';
 		$this->info = $info;//$form->getInfo();
 		/*

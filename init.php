@@ -179,6 +179,7 @@ $init3 = [
 	'theme'=>'sevian',
 	'title'=>'GTcomm v1.0.0',
 	'templateName' => 'main',
+	'defaultPanel' => 4,
 	'elements' => [
 		[
 			'id'		=> 20,

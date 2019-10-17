@@ -39,6 +39,10 @@ var S = (($) => {
             return $().query("form[data-sg-type='panel'][data-sg-panel='" + id + "']");
         }
         static send(info) {
+            let panel = info.panel;
+            if (panel <= "0") {
+                panel = this.defaultPanel;
+            }
             let dataForm = null;
             let params = "";
             if (info.params) {
@@ -114,6 +118,14 @@ var S = (($) => {
             if (p.panels) {
                 for (var x in p.panels) {
                     sgJson.iPanel(p.panels[x]);
+                    if (this._w[p.panels[x].id]) {
+                        this._w[p.panels[x].id].setCaption(p.panels[x].title);
+                    }
+                    else {
+                        if (this.defaultPanel == p.panels[x].id) {
+                            document.title = p.panels[x].title;
+                        }
+                    }
                 }
             }
             if (p.config) {
@@ -181,5 +193,6 @@ var S = (($) => {
     }
     Sevian._e = [];
     Sevian._w = [];
+    Sevian.defaultPanel = 0;
     return Sevian;
 })(_sgQuery);

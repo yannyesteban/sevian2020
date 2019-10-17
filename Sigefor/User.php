@@ -27,6 +27,7 @@ class User extends \Sevian\Element{
     private $_user = 'pepe';
     private $_pass = '123';
     private $_error = 0;
+    private $_roles = 0;
 
     protected $tUsers = "_sg_users";
     protected $tGroups = "_sg_groups";
@@ -41,10 +42,18 @@ class User extends \Sevian\Element{
     }
 
     public function evalMethod($method = ""){
-        $this->dbConfig();
+        
 
-        switch($method){
+        switch($this->method){
             case "login":
+                if(\Sevian\S::getReq('user')){
+                    $this->_user = \Sevian\S::getReq('user');
+                }
+                if(\Sevian\S::getReq('pass')){
+                    $this->_pass = \Sevian\S::getReq('pass');
+                    
+                }
+                $this->dbConfig();
                 break;
             case "load":
                 break;
@@ -56,11 +65,12 @@ class User extends \Sevian\Element{
 
 		$cn = $this->cn;
         $security = 'md5';
+        $user = $cn->addSlashes($this->_user);
 		$cn->query = "
 			SELECT * 
 			FROM $this->tUsers 
-			WHERE user = '$this->_user'";
-
+			WHERE user = '$user'";
+        //hr($cn->query);
 		$result = $cn->execute();
         $auth = false;
         
@@ -89,7 +99,32 @@ class User extends \Sevian\Element{
             // user not found
 		    $this->_error = 1;
         }
-       
+        if($this->_error === 0){
+            $this->_roles = $this->dbRoles();
+           
+        }
         // hr( $this->_error);
+    }
+    private function dbRoles(){
+
+		$cn = $this->cn;
+        $security = 'md5';
+        $user = $cn->addSlashes($this->_user);
+		$cn->query = "
+			SELECT * 
+			FROM $this->tGroUsr 
+			WHERE user = '$user'";
+
+		$result = $cn->execute();
+        $roles = [];
+        
+		while($rs = $cn->getDataAssoc($result)){
+            $roles[] = $rs['group'];
+        }
+        return $roles;
+        
+    }
+    public function getRoles(){
+        return $this->_roles;
     }
 }// end class

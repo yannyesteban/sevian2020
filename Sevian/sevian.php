@@ -34,6 +34,8 @@ class S{
 	
 	public static $elements = [];
 	public static $panels = [];
+
+	public static $defaultPanel = 4;
 	
 	public static $cfg = [];
 	
@@ -150,7 +152,7 @@ class S{
 	}
 	public static function sessionInit(){
 		
-		
+		sleep(1);
 		if(isset($_REQUEST['__sg_ins'])){
 			self::$ins = $_REQUEST['__sg_ins'];
 		}else{
@@ -254,7 +256,8 @@ class S{
 		if(isset(self::$_clsElement[$info->element])){
 			if($info->id == 0){
 				$info->id = self::getReq("__sg_panel");
-				hr($info->id);
+			}else if($info->id <= "-1"){
+				$info->id = self::$defaultPanel;
 			}
 			
 			$info->async = self::$onAjax;
@@ -689,7 +692,7 @@ class S{
 		//$script = "//Sevian.loadPanels($json)";
         $json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
 		$script = "Sevian.action.initPanel($json)";
-		$script = "S.init($json)";
+		$script = "S.defaultPanel= '".self::$defaultPanel."';S.init($json)";
 		
 		$doc->appendScript($script, true);
 		

@@ -150,11 +150,11 @@ class JsonStructure{
 			$css = $form->getCss();
 			$j[] = [
 				'id'=> $id,
-			'title'=> $e->title,
-			'html'=> $html,
-			'script'=> $script,
-			'css'=> $css,
-			'class'=> 'xxx',
+				'title'=> $e->title,
+				'html'=> $html,
+				'script'=> $script,
+				'css'=> $css,
+				'class'=> 'xyz',
 			];
 		}
 		return $j;
