@@ -645,7 +645,7 @@ var Grid = (($) => {
         let g = new Grid(info);
 
         
-     };
+     }
 
 
      return  Grid;

@@ -4,13 +4,14 @@ var S = (($) => {
 		caption: "",
 		x: "center",
 		y: "middle",
-		width: "auto",
-		height: "auto",
+		width: "500px",
+		height: "500px",
 		mode: "custom"
 	};
     class Sevian{
 
-        static _e:object[] = [];
+		static _e:object[] = [];
+		static _w:object[] = [];
 
         static init(info:object[]){
             for(var x of info){
@@ -40,18 +41,12 @@ var S = (($) => {
 		}
 
         static getForm(id:number){
-            return $().query("[data-sg-panel='"+id+"'],[data-type='panel']");
+            return $().query("form[data-sg-type='panel'][data-sg-panel='"+id+"']");
         }
         
         static send(info:object){
             
 
-
-            
-
-            
-
-         
             let dataForm = null;
             let params = "";
 
@@ -65,15 +60,21 @@ var S = (($) => {
             
             var f = this.getForm(info.panel);
 
-            if(f){
-                
+            if(!f){
+                f = this.addPanel(info.panel);
             }
+			if(info.window){
+				if(!this._w[info.panel]){
+					this._w[info.panel] = this.createWindow(info.window);
+				}
 
-            let w = this.createWindow({
-
-                caption:"hola"
-            });
-            w.setBody(f2.get());
+			}
+            if(this._w[info.panel]){
+				this._w[info.panel].setBody(f);
+				this._w[info.panel].show({mode:"max"});
+				
+			}
+            
 
             if(f){
 				
@@ -113,7 +114,7 @@ var S = (($) => {
 					onError: function(xhr){
 
 					},
-					waitLayer_:{
+					waitLayer:{
 						class: "wait",
 						target: f,
 						message: false,
@@ -177,16 +178,38 @@ var S = (($) => {
         
         static addPanel(id:number){
 
-            return $("#form_p1").create({
+            let form = $().create({
                 'tagName': 'form',
                 'action':'',
                 'name':`form_p${id}`,
                 'id':`form_p${id}`,
                 'method': 'GET',
-                'data-sg-panel': id,
-                'data-sg-type': 'panel',
                 'enctype': 'multipart/form-data'         
-            });
+			}).ds("sgPanel", id).ds("sgType", "panel");
+			form.create({
+				"tagName":"input",
+				"type":"text",
+				"name":"__sg_async"
+			});
+			
+			form.create({
+				"tagName":"input",
+				"type":"text",
+				"name":"__sg_params"
+			});
+			form.create({
+				"tagName":"input",
+				"type":"text",
+				"name":"__sg_sw"
+			});
+			form.create({
+				"tagName":"input",
+				"type":"text",
+				"name":"__sg_sw2"
+			});
+			
+
+			return form.get();
            
         }
     }

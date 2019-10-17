@@ -516,7 +516,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 	
 	private function createForm(){
-	
+
 		$this->loadConfig();
 
 		$record = false;
