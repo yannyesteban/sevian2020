@@ -688,7 +688,8 @@ class S{
 		//$json = json_encode(self::$_mainPanels, JSON_PRETTY_PRINT);
 		//$script = "//Sevian.loadPanels($json)";
         $json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
-        $script = "Sevian.action.initPanel($json)";
+		$script = "Sevian.action.initPanel($json)";
+		$script = "S.init($json)";
 		
 		$doc->appendScript($script, true);
 		

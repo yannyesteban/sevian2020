@@ -19,12 +19,14 @@ class Structure extends HTML{
 	public function addPanel($id, $e){
 
 		$form = new HTML([
-			'tagName'	=> 'form',
-			'action'	=> '',
-			'name'		=> "form_p{$id}",
-			'id'		=> "form_p{$id}",
-			'method'	=> 'GET',
-			'enctype'	=> 'multipart/form-data'
+			'tagName'		=> 'form',
+			'action'		=> '',
+			'name'			=> "form_p{$id}",
+			'id'			=> "form_p{$id}",
+			'method'		=> 'GET',
+			'data-sg-panel'	=> $id,
+			'data-sg-type'	=> 'panel',
+			'enctype'		=> 'multipart/form-data'
 			]);
 			
 		$form->add($e);

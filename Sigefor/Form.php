@@ -604,7 +604,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 		$pages = json_decode(\Sevian\S::vars($this->pages));
 		$fields[] = [
-			'input'	=> 'input',
+			'input'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
 				'type'=>'text',
@@ -614,7 +614,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		];
 		$fields[] = [
-			'input'	=> 'input',
+			'input'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
 				'type'=>'text',

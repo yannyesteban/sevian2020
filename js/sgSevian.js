@@ -208,6 +208,7 @@ if(!Sevian){
 		}, 
 		initPanel: function(panels){
 			for(var x of panels){
+				
 				if(window[x.type]){
 					this.mPanel[x.panel] = new window[x.type](x.option);
 				}	
