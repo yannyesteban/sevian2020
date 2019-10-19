@@ -7,6 +7,10 @@ $js = [
 		'file' 	=> "{$PATH}js/_sgQuery.js",
 		'begin'	=> true],
 	[
+		'file' 	=> "{$PATH}js/Window.js",
+		//'attrib' => ['type'=>'module']
+	],	
+	[
 		'file' 	=> "{$PATH}js/sgAjax.js",
 		'begin'	=> true],
 	[
@@ -89,6 +93,7 @@ $js = [
 		'file' 	=> "{$PATH}js/Grid.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
+	
 ];
 
 Sevian\S::jsInit($js);

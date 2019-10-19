@@ -152,7 +152,7 @@ class S{
 	}
 	public static function sessionInit(){
 		
-		sleep(1);
+	
 		if(isset($_REQUEST['__sg_ins'])){
 			self::$ins = $_REQUEST['__sg_ins'];
 		}else{

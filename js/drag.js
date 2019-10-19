@@ -650,7 +650,7 @@ var _sgFloat, _sgDrag;
 
 
 	
-};// end object	
+	};// end object	
 	
 	_sgFloat = float;
 	_sgDrag = drag;

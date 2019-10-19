@@ -777,7 +777,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$grid = new \Sevian\HTML("div");
 		$grid->id = "sg_form_".$this->id;
 		
-		$p = new \Sevian\Panel();
+		$p = new \Sevian\Panel("div");
 		$p->title = $this->caption;
 		$p->appendChild($grid);
 

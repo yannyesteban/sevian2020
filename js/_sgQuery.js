@@ -1,5 +1,15 @@
 // JavaScript Document
+/*
+// Add "focus" and "highlighted" classes, and then remove them
+var box = document.querySelector(".box");
+box.classList.add("focus", "highlighted");
+box.classList.remove("focus", "highlighted");
 
+https://tobiasahlin.com/blog/move-from-jquery-to-vanilla-javascript/
+
+
+
+*/
 var _sg = {
 
 	_on: function(obj, _event, _function){
