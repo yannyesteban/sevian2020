@@ -44,19 +44,23 @@ var Win = (($) => {
             e.style.zIndex = getIndex();
         }
         static getXY(e) {
-            let cW = document.documentElement.clientWidth, cH = document.documentElement.clientHeight, sT = document.documentElement.scrollTop, sL = document.documentElement.scrollLeft, width = e.offsetWidth, height = e.offsetHeight, rect = e.getBoundingClientRect();
+            let cW = document.documentElement.clientWidth, cH = document.documentElement.clientHeight, sT = document.documentElement.scrollTop, sL = document.documentElement.scrollLeft, rect = e.getBoundingClientRect();
             return {
                 left: rect.left,
                 top: rect.top,
-                width: width,
-                height: height,
+                width: rect.width,
+                height: rect.height,
                 cW: cW, cH: cH, sT: sT, sL: sL
             };
         }
         static showElem(opt) {
-            let e = opt.e, left = opt.left || 0, top = opt.top || 0, z = (opt.z !== undefined) ? opt.z : undefined;
-            e.style.top = top + "px";
-            e.style.left = left + "px";
+            let e = opt.e, left = opt.left, top = opt.top, z = (opt.z !== undefined) ? opt.z : undefined;
+            if (top !== null) {
+                e.style.top = top + "px";
+            }
+            if (left !== null) {
+                e.style.left = left + "px";
+            }
             if (z !== undefined) {
                 if (z > 0) {
                     e.style.zIndex = z;
@@ -68,11 +72,9 @@ var Win = (($) => {
             return { e: e, left: left, top: top, z: z };
         }
         static show(opt) {
-            let e = opt.e, xx = (opt.left === undefined) ? "center" : opt.left, yy = (opt.top === undefined) ? "middle" : opt.top, z = opt.z || undefined, deltaX = opt.deltaX || 0, deltaY = opt.deltaY || 0, left = false, top = false, c = {};
-            if (typeof xx !== "number" || yy !== "number") {
-                c = this.getXY(e);
-            }
-            if (typeof xx !== "number") {
+            let e = opt.e, xx = (opt.left === undefined) ? null : opt.left, yy = (opt.top === undefined) ? null : opt.top, z = opt.z || undefined, deltaX = opt.deltaX || 0, deltaY = opt.deltaY || 0, left = null, top = null;
+            let c = this.getXY(opt.e);
+            if (typeof xx === "string") {
                 switch (xx) {
                     case "center":
                         left = c.sL + (c.cW - c.width) / 2;
@@ -91,7 +93,7 @@ var Win = (($) => {
             else {
                 left = xx;
             }
-            if (typeof yy !== "number") {
+            if (typeof yy === "string") {
                 switch (yy) {
                     case "middle":
                         top = c.sT + (c.cH - c.height) / 2;
@@ -110,7 +112,13 @@ var Win = (($) => {
             else {
                 top = yy;
             }
-            return this.showElem({ e: e, left: left + (deltaX || 0), top: top + (deltaY || 0), z: z });
+            if (left !== null) {
+                left + (deltaX || 0);
+            }
+            if (top !== null) {
+                top + (deltaY || 0);
+            }
+            return this.showElem({ e: e, left: left, top: top, z: z });
         }
         static showMenu(opt) {
             let e = opt.e, ref = opt.ref, xx = opt.left || "", yy = opt.top || "", deltaX = opt.deltaX || 0, deltaY = opt.deltaY || 0, z = (opt.z !== undefined) ? opt.z : undefined, left = null, top = null, c = this.getXY(ref), fixed = (e.style.position === "fixed"), width = e.offsetWidth, height = e.offsetHeight, cW = c.cW, cH = c.cH, sL = c.sL, sT = c.sT;
@@ -385,7 +393,9 @@ var Win = (($) => {
             this.main.style.left = this.posX + "px";
             this.main.style.top = this.posY + "px";
             if (this.info.onmove && this.info.onmove(this.posX, this.posY, left, top)) {
-                this.restart();
+                this.sX = this.main.offsetLeft;
+                this.sY = this.main.offsetTop;
+                //this.restart();
             }
         }
         static release(left, top, iniX, iniY) {
@@ -421,27 +431,37 @@ var Win = (($) => {
                 this.cW = document.documentElement.clientWidth;
                 this.cH = document.documentElement.clientHeight;
                 let _info = Float.getXY(main);
+                this.width = _info.width;
+                let st = window.getComputedStyle(main, null);
+                let minWidth = parseFloat(st.minWidth) || 0;
+                let minHeight = parseFloat(st.minHeight) || 0;
                 this.sX = _info.left;
                 this.sY = _info.top;
-                /*mH = sY + sgFloat.getXY(_main).height;
-    */
+                this.maxLeft = _info.left + main.clientWidth - minWidth;
+                this.maxTop = _info.top + main.clientHeight - minHeight;
                 this.maxWidth = info.maxWidth || 500;
-                this.minWidth = info.minWidth || 30;
+                this.minWidth = info.minWidth || (_info.width - main.clientWidth + minWidth);
                 this.maxHeight = info.maxHeight || 500;
-                this.minHeight = info.minHeight || 30;
+                this.minHeight = info.minHeight || (_info.height - main.clientHeight + minHeight);
                 if (this.info.onstart) {
                     this.info.onstart({ left: info.left, top: info.top, width: this.xA, height: this.yA });
                 }
             };
         }
         static capture(_left, _top, iniX, iniY, offsetLeft, offsetTop) {
-            if (_left < 0 || _left > this.cW) {
-                return;
+            if (_left < 0) {
+                _left = 0;
             }
-            if (_top < 0 || _top > this.cH) {
-                return;
+            else if (_left > this.cW) {
+                _left = this.cW;
             }
-            var dx = (_left - iniX), dy = (_top - iniY), W = null, H = null, top = null, left = null, delta = null;
+            if (_top < 0) {
+                _top = 0;
+            }
+            else if (_top > this.cH) {
+                _top = this.cH;
+            }
+            let dx = (_left - iniX), dy = (_top - iniY), W = null, H = null, top = null, left = null;
             switch (this.mode) {
                 case "t":
                     top = this.sY + dy;
@@ -458,12 +478,6 @@ var Win = (($) => {
                     H = this.yA + _top - iniY;
                     break;
                 case "lt":
-                    //_main.style.left = (left - offsetLeft)+"px";
-                    //_main.style.top = (top - offsetTop) + "px";
-                    //_main.style.left = left+"px";
-                    //_main.style.top = top + "px" ;	
-                    //_main.style.left = (sX + dx)+ "px";
-                    //_main.style.top = (sY + dy) + "px";
                     left = this.sX + dx;
                     top = this.sY + dy;
                     W = this.xA - dx;
@@ -484,37 +498,28 @@ var Win = (($) => {
                     H = this.yA + _top - iniY;
                     break;
             }
-            /*
-                    if(W > maxWidth){
-                        W = maxWidth;
-                    }else if(W < minWidth){
-                        W = minWidth;
-                    }
-            
-                    if(H > maxHeight){
-                        H = maxHeight;
-                    }else if(W < minHeight){
-                        H = minHeight;
-                    }
-            
-                */
-            /**/
-            if (W !== null && W <= 0) {
-                return;
-            }
-            if (H !== null && H <= 0) {
-                return;
-            }
             if (W !== null) {
+                if (W < this.minWidth) {
+                    W = this.minWidth;
+                }
                 this.main.style.width = W + "px";
             }
             if (H !== null) {
+                if (H < this.minHeight) {
+                    H = this.minHeight;
+                }
                 this.main.style.height = H + "px";
             }
             if (left !== null) {
+                if (left > this.maxLeft) {
+                    left = this.maxLeft;
+                }
                 this.main.style.left = left + "px";
             }
             if (top !== null) {
+                if (top > this.maxTop) {
+                    top = this.maxTop;
+                }
                 this.main.style.top = top + "px";
             }
             if (this.info.onresize) {
@@ -567,33 +572,27 @@ var Win = (($) => {
         }
         ;
     }
-    Resize.main = null;
-    Resize.info = {};
-    Resize.mode = null;
-    Resize.xA = null;
-    Resize.yA = null;
-    Resize.sX = null;
-    Resize.sY = null;
-    Resize.cW = null;
-    Resize.cH = null;
-    Resize.maxWidth = 800;
-    Resize.minWidth = 200;
-    Resize.maxHeight = 800;
-    Resize.minHeight = 200;
     class Win {
         constructor() {
         }
     }
-    $(window).on("load", function () {
-        let div = $().create("div").addClass("drag2");
-        let div2 = $().create("div").addClass("drag2");
-        Float.init(div.get());
-        Float.show({ e: div.get(), left: "center", top: "middle" });
-        Move.init({ main: div.get(), hand: div.get() });
+    $(window).on("load_", function () {
+        //let div = $().create("div").addClass("drag2");
+        let div2 = $().create("div").addClass("drag4");
+        //Float.init(div.get());
+        //Float.show({e:div.get(), left:"center",top:"top"});
+        //Move.init({main:div.get(),hand:div.get()});
         Float.init(div2.get());
         Resize.init({ main: div2.get() });
         Float.show({ e: div2.get(), left: "center", top: "middle" });
+        //$().create("div").addClass("drag3");
         //Move.init({main:div2.get(),hand:div2.get()});
+        $().create("div").addClass("drag5");
+        let main5 = $().create("div").addClass("drag6");
+        Float.init({ main: main5.get() });
+        Float.getXY(main5.get());
+        let e7 = $().create("div").addClass("drag7");
+        Move.init({ main: e7.get(), hand: e7.get() });
     });
     $(window).on("load_", function () {
         let div = $().create("div").addClass("drag");
@@ -634,5 +633,162 @@ var Win = (($) => {
         db(document.defaultView.getComputedStyle(div.get()).gridTemplateColumns);
     });
     return { Window: Win, Float: Float, Resize: Resize, Move: Move };
+})(_sgQuery);
+var W = (($) => {
+    class W {
+        constructor(info) {
+            this.id = null;
+            this.caption = "";
+            this.className = null;
+            this.iconClass = "";
+            this.mode = "custom";
+            this.buttons = ["min", "auto", "max", "close"];
+            this.width = null;
+            this.height = null;
+            this.child = null;
+            this._main = null;
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            let main = (this.id) ? $(this.id) : false;
+            if (main) {
+                if (main.ds("sgWin")) {
+                    return;
+                }
+                if (main.hasClass("sg-win")) {
+                    this._load(main);
+                }
+                else {
+                    this._create(main);
+                }
+            }
+            else {
+                main = $("").create("div");
+                this._create(main);
+            }
+            $(main.query(".win-btn.min")).on("click", () => this.setMode("min"));
+            $(main.query(".win-btn.auto")).on("click", () => this.setMode("auto"));
+            $(main.query(".win-btn.max")).on("click", () => this.setMode("max"));
+            $(main.query(".win-btn.close")).on("click", () => this.setVisible(false));
+            $(main.query(".caption")).on("dblclick", () => {
+                if (this.mode === "max") {
+                    this.setMode("auto");
+                }
+                else {
+                    this.setMode("max");
+                }
+            });
+            this.setSize(this.width, this.height);
+            this.setMode(this.mode);
+            Win.Float.init(main.get());
+            Win.Float.show({ e: main.get(), left: "center", top: "middle" });
+            Win.Resize.init({
+                main: main.get(),
+                onstart: () => main.addClass("resizing"),
+                onrelease: () => main.removeClass("resizing"),
+                onresize: () => this.setMode("custom")
+            });
+        }
+        _create(main) {
+            this._main = main.addClass("sgWin");
+            if (this.className) {
+                main.addClass(this.className);
+            }
+            let caption = main.create("div").addClass("caption");
+            caption.create("span").addClass("icon").addClass(this.iconClass || "");
+            caption.create("span").addClass(["text"]).text(this.caption);
+            caption.create("span").addClass(["win-btn", "min"]).text("");
+            caption.create("span").addClass(["win-btn", "auto"]).text("");
+            caption.create("span").addClass(["win-btn", "max"]).text("");
+            caption.create("span").addClass(["win-btn", "close"]).text("");
+            Win.Move.init({
+                main: main.get(),
+                hand: caption.get(),
+                onstart: () => main.addClass("moving"),
+                onrelease: () => main.removeClass("moving"),
+                onmove: (posX, posY, eX, eY) => {
+                    if (this.mode === "max") {
+                        let w = main.get().offsetWidth;
+                        this.setMode("auto");
+                        let w2 = main.get().offsetWidth;
+                        main.get().style.left = (eX - (w2 * (eX - posX) / w)) + "px";
+                        return true;
+                    }
+                }
+            });
+            let body = main.create("div").addClass("body");
+            if (this.child) {
+                body.append(this.child);
+            }
+        }
+        getBody() {
+            return $(this._main.query(".body"));
+        }
+        setCaption(text) {
+            let caption = this._main.query(".caption > .text");
+            caption.innerHTML = text;
+        }
+        setMode(mode) {
+            this._main.ds("sgMode", mode);
+            this._main.removeClass(this.mode);
+            this._main.addClass(mode);
+            this.mode = mode;
+        }
+        setVisible(value) {
+            if (value) {
+                this._main.removeClass("hidden");
+                this._main.addClass("visible");
+            }
+            else {
+                this._main.removeClass("visible");
+                this._main.addClass("hidden");
+            }
+        }
+        show(info = null) {
+            if (info !== null) {
+                info.e = this._main.get();
+                Win.Float.show(info);
+            }
+            this.setVisible(true);
+        }
+        setSize(width = null, height = null) {
+            if (width !== null || height !== null) {
+                this.setMode("custom");
+            }
+            if (width !== null) {
+                this._main.get().style.width = width;
+                this.getBody().get().style.width = "auto";
+            }
+            if (height !== null) {
+                this._main.get().style.height = height;
+                this.getBody().get().style.height = "auto";
+            }
+        }
+    }
+    $(window).on("load", () => {
+        let div = $("").create("div").text("hola");
+        let ww = new W({
+            caption: "ventana Alpha",
+            child: div,
+            width: "400px",
+            height: "600px",
+        });
+        // ww.setCaption("jejejeje")
+        ww.setSize("200px", "200px");
+        ww.show({
+            top: "middle",
+            left: "center"
+        });
+        let btn = $("#form_p4").create("input").attr("type", "button").val("show");
+        btn.on("click", () => {
+            //ww.setSize("200px","600px");
+            ww.show({
+                top: "middle",
+                left: "center"
+            });
+        });
+    });
 })(_sgQuery);
 //alert(Win.Float.token)

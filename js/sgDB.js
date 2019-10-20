@@ -41,7 +41,7 @@ var db = false, hr = false;
 			_div.text(linea +".- "+ msg);
 
 			div.insertFirst(_div);
-			win.show({});
+			//win.show({});
 
 		}
 		

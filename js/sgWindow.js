@@ -160,7 +160,8 @@ var sgWindow;
 			});
 			
 			if(this.resizable){
-				sgDragDrop.resize({
+				Win.Resize.init({
+				//sgDragDrop.resize({
 					main: main.get(),
 					
 					onstart: function(){
@@ -183,8 +184,8 @@ var sgWindow;
 				if(!this.hand){
 					this.hand = this._header || this._body;
 				}
-				
-				sgDragDrop.move({
+				Win.Move.init({
+				//sgDragDrop.move({
 					main: this._main.get(), 
 					hand: this.hand.get(),
 					

@@ -492,7 +492,7 @@ var Grid = (($) => {
         valid() {
         }
         setCaption(text) {
-            let caption = this._main.query(".caption>.text");
+            let caption = this._main.query(".caption > .text");
             caption.innerHTML = text;
         }
         setPage(page) {

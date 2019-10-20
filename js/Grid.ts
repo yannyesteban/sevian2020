@@ -615,7 +615,7 @@ var Grid = (($) => {
         }
 
         setCaption(text:string){
-            let caption = this._main.query(".caption>.text");
+            let caption = this._main.query(".caption > .text");
             
             caption.innerHTML = text;
             

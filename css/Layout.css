@@ -338,9 +338,251 @@ div[data-sg-type=sg-ajax]:not(.isie) {
       -ms-user-select: none;
           user-select: none;
   position: absolute;
+  width: 100pt;
+  height: 100px;
+  background-color: #f5e663;
+  border: 10px solid #802929;
+}
+
+.drag4 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: absolute;
   width: 100px;
   height: 100px;
   background-color: #f5e663;
-  border: 10px solid rgba(136, 136, 136, 0.5);
+  border: 10px solid #757373;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.drag3 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: absolute;
+  top: 100px;
+  left: 300px;
+  width: 60pt;
+  height: 100px;
+  background-color: #f5e663;
+  border: 2px solid #853939;
+}
+
+.drag5 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: absolute;
+  top: 100px;
+  left: 0px;
+  width: 100px;
+  height: 100px;
+  background-color: #08998d;
+  border: 10px solid #00676e;
+}
+
+.drag6 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: absolute;
+  top: 205px;
+  left: 0px;
+  width: 110px;
+  height: 100px;
+  background-color: #08998d;
+  border: 10px solid #00676e;
+}
+
+.drag7 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: absolute;
+  top: 205px;
+  left: 9px;
+  width: 92px;
+  height: 100px;
+  background-color: #15d3c3;
+  border: 0px solid #00676e;
+  min-width: 30px;
+}
+
+.sgWin {
+  position: fixed;
+  min-width: 160px;
+  min-height: 40px;
+  background-color: #24c408;
+  border: 2px solid chartreuse;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.sgWin.hidden {
+  visibility: hidden;
+}
+
+.sgWin > .caption {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  background-color: #002e2e;
+  height: 40px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  color: white;
+}
+
+.sgWin > .caption > .icon {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  border: 2px solid white;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  pointer-events: none;
+  margin-left: 4px;
+}
+
+.sgWin > .caption > .text {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  padding-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sgWin > .caption > .win-btn {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  background-image: url(../images/win_icons.png?i=18);
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.sgWin > .caption > .win-btn.min {
+  background-position: 0px -20px;
+}
+
+.sgWin > .caption > .win-btn.min:HOVER {
+  background-position: 0px -240px;
+}
+
+.sgWin > .caption > .win-btn.max {
+  background-position: -40px -20px;
+}
+
+.sgWin > .caption > .win-btn.max:HOVER {
+  background-position: -40px -240px;
+}
+
+.sgWin > .caption > .win-btn.auto {
+  background-position: -20px -20px;
+}
+
+.sgWin > .caption > .win-btn.auto:HOVER {
+  background-position: -20px -240px;
+}
+
+.sgWin > .caption > .win-btn.close {
+  margin-right: 4px;
+  background-position: -60px -20px;
+}
+
+.sgWin > .caption > .win-btn.close:HOVER {
+  background-position: -60px -240px;
+}
+
+.sgWin > .body {
+  overflow: auto !important;
+}
+
+.sgWin.min {
+  height: auto !important;
+  max-width: 160px !important;
+}
+
+.sgWin.min > .caption > .win-btn.min {
+  display: none;
+}
+
+.sgWin.min > .body {
+  -webkit-box-flex: 0 !important;
+      -ms-flex: 0 0 0px !important;
+          flex: 0 0 0px !important;
+  height: 0px;
+}
+
+.sgWin.auto {
+  height: auto !important;
+  width: auto !important;
+}
+
+.sgWin.auto > .caption > .win-btn.auto {
+  display: none;
+}
+
+.sgWin.auto > .body {
+  height: auto !important;
+  width: auto !important;
+}
+
+.sgWin.max {
+  width: calc(100% - 20px) !important;
+  height: calc(100% - 20px) !important;
+  top: 10px !important;
+  left: 10px !important;
+}
+
+.sgWin.max > .caption > .win-btn.max {
+  display: none;
+}
+
+.sgWin.close {
+  visibility: hidden;
+}
+
+.sgWin.moving {
+  border-color: #15753a;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.sgWin.resizing {
+  border-color: #1ed2c9;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.sgWin .rs.rb {
+  border-radius: 5px;
+  height: 0px !important;
+  width: 0px !important;
+  border: 4px solid green;
 }
 /*# sourceMappingURL=Layout.css.map */
