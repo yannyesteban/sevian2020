@@ -643,10 +643,17 @@ var W = (($) => {
             this.iconClass = "";
             this.mode = "custom";
             this.buttons = ["min", "auto", "max", "close"];
+            this.autoClose = false;
+            this.visible = false;
+            this.delay = 500;
             this.width = null;
             this.height = null;
+            this.left = null;
+            this.top = null;
             this.child = null;
             this._main = null;
+            this._active = false;
+            this._timer = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -667,6 +674,25 @@ var W = (($) => {
             else {
                 main = $("").create("div");
                 this._create(main);
+            }
+            if (this.autoClose) {
+                $().on("click", () => {
+                    if (this._active === true || this._active === null) {
+                        if (this._active === null) {
+                            this._active = false;
+                        }
+                        return;
+                    }
+                    this.setVisible(false);
+                });
+                main.on("mouseover", (event) => {
+                    this._active = true;
+                    this.resetTimer();
+                });
+                main.on("mouseout", (event) => {
+                    this._active = false;
+                    this.setTimer();
+                });
             }
             $(main.query(".win-btn.min")).on("click", () => this.setMode("min"));
             $(main.query(".win-btn.auto")).on("click", () => this.setMode("auto"));
@@ -690,9 +716,16 @@ var W = (($) => {
                 onrelease: () => main.removeClass("resizing"),
                 onresize: () => this.setMode("custom")
             });
+            if (this.visible) {
+                this.show({
+                    left: this.left,
+                    top: this.top
+                });
+                this._active = false;
+            }
         }
         _create(main) {
-            this._main = main.addClass("sgWin");
+            this._main = main.addClass(["sgWin", "hidden"]);
             if (this.className) {
                 main.addClass(this.className);
             }
@@ -737,13 +770,16 @@ var W = (($) => {
             this.mode = mode;
         }
         setVisible(value) {
+            this._active = null;
             if (value) {
                 this._main.removeClass("hidden");
                 this._main.addClass("visible");
+                this.setTimer();
             }
             else {
                 this._main.removeClass("visible");
                 this._main.addClass("hidden");
+                this.resetTimer();
             }
         }
         show(info = null) {
@@ -766,6 +802,17 @@ var W = (($) => {
                 this.getBody().get().style.height = "auto";
             }
         }
+        resetTimer() {
+            if (this._timer) {
+                clearTimeout(this._timer);
+            }
+        }
+        setTimer() {
+            if (this.autoClose && this.delay > 0) {
+                this.resetTimer();
+                this._timer = setTimeout(() => this.setVisible(false), this.delay);
+            }
+        }
     }
     $(window).on("load", () => {
         let div = $("").create("div").text("hola");
@@ -774,13 +821,16 @@ var W = (($) => {
             child: div,
             width: "400px",
             height: "600px",
+            left: "center",
+            top: "top"
         });
         // ww.setCaption("jejejeje")
-        ww.setSize("200px", "200px");
+        /*ww.setSize("200px","200px");
         ww.show({
-            top: "middle",
-            left: "center"
-        });
+            top:"middle",
+              left:"center"
+          });
+          */
         let btn = $("#form_p4").create("input").attr("type", "button").val("show");
         btn.on("click", () => {
             //ww.setSize("200px","600px");
