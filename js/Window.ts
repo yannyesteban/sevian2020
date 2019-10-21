@@ -1,4 +1,4 @@
-var Win = (($) => {
+var Float = (($) => {
     
     class InfoElem {
         e = false;
@@ -69,7 +69,7 @@ var Win = (($) => {
 		}
 
 
-		static showElem(opt:InfoElem){
+		static showElem(opt:any){
 			
 			let 
 				e = opt.e,
@@ -96,7 +96,7 @@ var Win = (($) => {
 
 		}
 
-		static show(opt:InfoElem){
+		static show(opt:any){
 			
 			let 
 				e = opt.e,
@@ -861,22 +861,41 @@ e.on("click",(e)=>{
     db (document.defaultView.getComputedStyle(div.get()).gridTemplateColumns)
     };
 
-    return {Window:Win, Float:Float, Resize:Resize, Move:Move};
+    return {Window:Win, Float:Float, Resize:Resize, Move:Move, Window:null};
 })(_sgQuery);
 
 
-var W = (($) => {
+Float.Window = (($) => {
+
+
+    var _last = false;
+	
+	var setActive = function(w){
+		if(_last){
+			_last.setActive(false);
+			_last.active = false;
+			_last._main.removeClass("active");
+			
+		}
+		w.setActive(true);
+		_last = w;
+	}
+
     class W{
         id:any = null;
         caption:string = "";
-        className:any = null;
+        className:any = "sevian";
         iconClass:string = "";
-
+        visible:boolean = false;
         mode:string = "custom";
 
         buttons:string[] = ["min","auto","max","close"];
+
+        resizable:boolean = true;
+        draggable:boolean = true;
+
         autoClose:boolean = false;
-        visible:boolean = false;
+        
         delay:number = 500;
         width:string = null;
         height:string = null;
@@ -887,6 +906,7 @@ var W = (($) => {
         child:object = null;
         _main:object = null;
         _active:boolean = false;
+        active:boolean = null;
         _timer:number = null;
         constructor(info: any){
 
@@ -917,6 +937,56 @@ var W = (($) => {
                 this._create(main);
 
             }
+            
+            $(main.query(".win-btn.close")).on("click", () => this.setVisible(false));
+            main.on("mousedown", () => setActive(this));
+
+            Float.Float.init(main.get());
+            
+            Float.Float.show({
+                e: main.get(),
+                left: this.left,
+                top: this.top
+            });
+            if(this.draggable){
+                
+                Float.Move.init({
+                    main:main.get(),
+                    hand:main.query(".caption"),
+                    onstart:() => main.addClass("moving"),
+                    onrelease:() => main.removeClass("moving"),
+                    onmove:(posX, posY, eX, eY) => {
+                        if(this.mode === "max") {
+                            let w = main.get().offsetWidth;
+                            this.setMode("auto");
+                            let w2 = main.get().offsetWidth;
+                            main.get().style.left = (eX - (w2 * (eX - posX) /w)) + "px";
+                            return true;
+                        }
+                    }
+                });
+            }
+
+            if(this.resizable){
+                Float.Resize.init({
+                    main:main.get(),
+                    onstart: ()=> main.addClass("resizing"),
+                    onrelease: ()=> main.removeClass("resizing"),
+                    onresize:()=>this.setMode("custom")
+                });
+
+                $(main.query(".win-btn.min")).on("click", () => this.setMode("min"));
+                $(main.query(".win-btn.auto")).on("click", () => this.setMode("auto"));
+                $(main.query(".win-btn.max")).on("click", () => this.setMode("max"));
+
+                $(main.query(".caption")).on("dblclick", () => {
+                    if(this.mode === "max"){
+                        this.setMode("auto"); 
+                    }else{
+                        this.setMode("max"); 
+                    }
+                });
+            }
 
             if(this.autoClose){
                 
@@ -942,34 +1012,11 @@ var W = (($) => {
                     this.setTimer();
                 });
             }
-            $(main.query(".win-btn.min")).on("click", ()=>this.setMode("min"));
-            $(main.query(".win-btn.auto")).on("click", ()=>this.setMode("auto"));
-            $(main.query(".win-btn.max")).on("click", ()=>this.setMode("max"));
-            $(main.query(".win-btn.close")).on("click", ()=>this.setVisible(false));
-
-            $(main.query(".caption")).on("dblclick", ()=>{
-                if(this.mode === "max"){
-                    this.setMode("auto"); 
-                }else{
-                    this.setMode("max"); 
-                }
-            });
-            
 
             this.setSize(this.width, this.height);
 
             this.setMode(this.mode);
 
-            Win.Float.init(main.get());
-            Win.Float.show({e:main.get(), left:"center",top:"middle"});
-            Win.Resize.init({
-                main:main.get(),
-                onstart: ()=> main.addClass("resizing"),
-                onrelease: ()=> main.removeClass("resizing"),
-                onresize:()=>this.setMode("custom")
-            
-            });
-            
             if(this.visible){
                 this.show({
                     left:this.left,
@@ -981,34 +1028,23 @@ var W = (($) => {
         }
 
         _create(main:any){
+            
             this._main = main.addClass(["sgWin", "hidden"]);
             if(this.className){
 				main.addClass(this.className);
 			}
+            
             let caption = main.create("div").addClass("caption");
             caption.create("span").addClass("icon").addClass(this.iconClass || "");
             caption.create("span").addClass(["text"]).text(this.caption);
-
-            caption.create("span").addClass(["win-btn", "min"]).text("");
-            caption.create("span").addClass(["win-btn", "auto"]).text("");
-            caption.create("span").addClass(["win-btn", "max"]).text("");
-            caption.create("span").addClass(["win-btn", "close"]).text("");
             
-            Win.Move.init({
-                main:main.get(),
-                hand:caption.get(),
-                onstart: () => main.addClass("moving"),
-                onrelease: () => main.removeClass("moving"),
-                onmove: (posX, posY, eX, eY) => {
-                    if(this.mode === "max") {
-                        let w = main.get().offsetWidth;
-                        this.setMode("auto");
-                        let w2 = main.get().offsetWidth;
-                        main.get().style.left = (eX - (w2 * (eX - posX) /w)) + "px";
-                        return true;
-                    }
-                }
-            });
+            if(this.resizable){
+                caption.create("span").addClass(["win-btn", "min"]).text("");
+                caption.create("span").addClass(["win-btn", "auto"]).text("");
+                caption.create("span").addClass(["win-btn", "max"]).text("");
+            }
+            
+            caption.create("span").addClass(["win-btn", "close"]).text("");
 
             let body = main.create("div").addClass("body");
             if(this.child){
@@ -1016,6 +1052,11 @@ var W = (($) => {
             }
             
         }
+
+        setBody(e){
+            $(this._main.query(".body")).append(e);
+        }
+
         getBody(){
             
             return $(this._main.query(".body"));
@@ -1036,6 +1077,7 @@ var W = (($) => {
         setVisible(value){
            
             this._active = null;
+            this.visible = value;
             if(value){
                 
                 this._main.removeClass("hidden");
@@ -1048,13 +1090,28 @@ var W = (($) => {
                 this.resetTimer();
             }
         }
+        getVisible(){
+            return this.visible;
+        }
 
+        setActive(value){
+            this.active = value;
+            if(value){
+                this._main.addClass("active");
+            }else{
+                this._main.removeClass("active");
+            }
+        }
         show(info = null){
             if(info !== null){
                 info.e = this._main.get();
-                Win.Float.show(info);
+                Float.Float.show(info);
             }
+            
+            Float.Float.setIndex(this._main.get());
             this.setVisible(true);
+            setActive(this);
+            
         }
 
         
@@ -1074,6 +1131,7 @@ var W = (($) => {
             }
 
         }
+
         resetTimer(){
 			if(this._timer){
 				clearTimeout(this._timer);
@@ -1095,8 +1153,8 @@ var W = (($) => {
         let ww = new W({
             caption:"ventana Alpha",
             child:div,
-            width:"400px",
-            height:"600px",
+            width:"450px",
+            height:"300px",
             left:"center",
             top:"top"
         });
@@ -1115,8 +1173,10 @@ var W = (($) => {
               top:"middle",
                 left:"center"
             });
-        })
-    }
+            db (1)
+        });
+    });
+    return W;
 })(_sgQuery);
 
 //alert(Win.Float.token)

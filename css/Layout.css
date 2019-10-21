@@ -416,11 +416,32 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 }
 
 .sgWin {
+  background-color: #e7e7e7;
+  border: 2px solid #d4d3d3;
+}
+
+.sgWin > .caption {
+  background-color: #083770;
+  background: -webkit-gradient(linear, left top, left bottom, from(#e2e2e2), color-stop(50%, #dbdbdb), color-stop(51%, #d1d1d1), to(#fefefe));
+  background: linear-gradient(to bottom, #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%);
+  color: #727272;
+}
+
+.sgWin > .caption > .icon {
+  border: 0px solid white;
+}
+
+.sgWin .rs.rb {
+  border-radius: 5px;
+  height: 0px !important;
+  width: 0px !important;
+  border: 5px solid #e06f06;
+}
+
+.sgWin.sevian {
   position: fixed;
   min-width: 160px;
   min-height: 40px;
-  background-color: #24c408;
-  border: 2px solid chartreuse;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -430,15 +451,14 @@ div[data-sg-type=sg-ajax]:not(.isie) {
           flex-direction: column;
 }
 
-.sgWin.hidden {
+.sgWin.sevian.hidden {
   visibility: hidden;
 }
 
-.sgWin > .caption {
+.sgWin.sevian > .caption {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  background-color: #002e2e;
   height: 40px;
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -446,14 +466,13 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  color: white;
+  cursor: default;
 }
 
-.sgWin > .caption > .icon {
+.sgWin.sevian > .caption > .icon {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  border: 2px solid white;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -461,7 +480,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   margin-left: 4px;
 }
 
-.sgWin > .caption > .text {
+.sgWin.sevian > .caption > .text {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
@@ -471,7 +490,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   text-overflow: ellipsis;
 }
 
-.sgWin > .caption > .win-btn {
+.sgWin.sevian > .caption > .win-btn {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
@@ -481,108 +500,99 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   display: inline-block;
 }
 
-.sgWin > .caption > .win-btn.min {
+.sgWin.sevian > .caption > .win-btn.min {
   background-position: 0px -20px;
 }
 
-.sgWin > .caption > .win-btn.min:HOVER {
+.sgWin.sevian > .caption > .win-btn.min:HOVER {
   background-position: 0px -240px;
 }
 
-.sgWin > .caption > .win-btn.max {
+.sgWin.sevian > .caption > .win-btn.max {
   background-position: -40px -20px;
 }
 
-.sgWin > .caption > .win-btn.max:HOVER {
+.sgWin.sevian > .caption > .win-btn.max:HOVER {
   background-position: -40px -240px;
 }
 
-.sgWin > .caption > .win-btn.auto {
+.sgWin.sevian > .caption > .win-btn.auto {
   background-position: -20px -20px;
 }
 
-.sgWin > .caption > .win-btn.auto:HOVER {
+.sgWin.sevian > .caption > .win-btn.auto:HOVER {
   background-position: -20px -240px;
 }
 
-.sgWin > .caption > .win-btn.close {
+.sgWin.sevian > .caption > .win-btn.close {
   margin-right: 4px;
   background-position: -60px -20px;
 }
 
-.sgWin > .caption > .win-btn.close:HOVER {
+.sgWin.sevian > .caption > .win-btn.close:HOVER {
   background-position: -60px -240px;
 }
 
-.sgWin > .body {
+.sgWin.sevian > .body {
   overflow: auto !important;
 }
 
-.sgWin.min {
+.sgWin.sevian.min {
   height: auto !important;
   max-width: 160px !important;
 }
 
-.sgWin.min > .caption > .win-btn.min {
+.sgWin.sevian.min > .caption > .win-btn.min {
   display: none;
 }
 
-.sgWin.min > .body {
+.sgWin.sevian.min > .body {
   -webkit-box-flex: 0 !important;
       -ms-flex: 0 0 0px !important;
           flex: 0 0 0px !important;
   height: 0px;
 }
 
-.sgWin.auto {
+.sgWin.sevian.auto {
   height: auto !important;
   width: auto !important;
 }
 
-.sgWin.auto > .caption > .win-btn.auto {
+.sgWin.sevian.auto > .caption > .win-btn.auto {
   display: none;
 }
 
-.sgWin.auto > .body {
+.sgWin.sevian.auto > .body {
   height: auto !important;
   width: auto !important;
 }
 
-.sgWin.max {
+.sgWin.sevian.max {
   width: calc(100% - 20px) !important;
   height: calc(100% - 20px) !important;
   top: 10px !important;
   left: 10px !important;
 }
 
-.sgWin.max > .caption > .win-btn.max {
+.sgWin.sevian.max > .caption > .win-btn.max {
   display: none;
 }
 
-.sgWin.close {
+.sgWin.sevian.close {
   visibility: hidden;
 }
 
-.sgWin.moving {
-  border-color: #15753a;
+.sgWin.sevian.moving {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
 }
 
-.sgWin.resizing {
-  border-color: #1ed2c9;
+.sgWin.sevian.resizing {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-}
-
-.sgWin .rs.rb {
-  border-radius: 5px;
-  height: 0px !important;
-  width: 0px !important;
-  border: 4px solid green;
 }
 /*# sourceMappingURL=Layout.css.map */

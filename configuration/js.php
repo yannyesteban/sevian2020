@@ -57,12 +57,12 @@ $js = [
 		'attrib' => [
 			'type'=>'module'
 		]],*/
-	[
+	/*[
 		'file' 	=> "{$PATH}js/Sevian/proyecto.js",
 		'begin'	=> false,
 		'attrib' => [
 			'type'=>'module'
-		]],
+		]],*/
 	[
 		'file' 	=> "{$PATH}js/Sevian.js",
 		'begin'	=> false],

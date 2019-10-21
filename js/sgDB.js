@@ -2,53 +2,47 @@
 
 var db = false, hr = false;
 (function($){
-	var linea = 0, div;
-	
-	
-	
+	let linea = 0, div, win = null;
 		
-		div = $.create("div");
-		div.prop("id","debug_1");
-		div.style({
-			width:"200px",
+	div = $.create("div");
+	div.prop("id","debug_1")
+	.style({width:"200px"})
+	.on("dblclick",function(){
+		linea = 0;
+		this.innerHTML = "";
+	});
 
-		});
-		//div.text("bienvenidos");
-		var win = new sgWindow({
-			visible:true,
-			caption:"Debug: Console",
-			child:div,
-			x:"right",
-			y:"top",
-		})	
+	hr = db = (msg, color, back, clear) => {
 
-		div.on("dblclick",function(){
-			linea = 0;
-			this.innerHTML = "";
-		});
-		
+		color = color || "black";
+		back = back || "";
 
-		hr = db = function(msg, color, back, clear){
+		linea++;
 
-			color = color || "black";
-			back = back || "";
+		var _div = $.create("div");
 
-			linea++;
+		_div.style({color: color, backgroundColor:back});
+		_div.text(linea +".- "+ msg);
 
-			var _div = $.create("div");
-
-			_div.style({color: color, backgroundColor:back});
-			_div.text(linea +".- "+ msg);
-
-			div.insertFirst(_div);
-			//win.show({});
-
+		div.insertFirst(_div);
+		if(win){
+			if(!win.getVisible()){
+				win.show({});
+			}
+			
 		}
 		
-		
-		
+
+	};
+
+	win = new Float.Window({
+		visible:true,
+		caption:"Debug: Console",
+		child:div,
+		left:"right",
+		top:"top",
+	});
+
 	
-	
-		
 	
 })(_sgQuery);

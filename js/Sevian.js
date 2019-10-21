@@ -2,10 +2,10 @@ var S = (($) => {
     let _winOptions = {
         visible: true,
         caption: "",
-        x: "center",
-        y: "middle",
-        width: "500px",
-        height: "500px",
+        left: "center",
+        top: "middle",
+        //width: "500px",
+        //height: "500px",
         mode: "custom"
     };
     class Sevian {
@@ -64,7 +64,7 @@ var S = (($) => {
             }
             if (this._w[info.panel]) {
                 this._w[info.panel].setBody(f);
-                this._w[info.panel].show({ mode: "max" });
+                this._w[info.panel].show({ left: "center", top: "middle" });
             }
             if (f) {
                 if (f.__sg_sw.value === f.__sg_sw2.value) {
@@ -156,7 +156,9 @@ var S = (($) => {
             }
         }
         static createWindow(info) {
-            let _win = new sgWindow(info || _winOptions);
+            info.left = "center";
+            info.top = "middle";
+            let _win = new Float.Window(info || _winOptions);
             return _win;
         }
         static addPanel(id) {
