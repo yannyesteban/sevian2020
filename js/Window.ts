@@ -49,7 +49,7 @@ var Float = (($) => {
 		}
 			
 		static getXY(e){
-			
+		
 			let 
 				cW = document.documentElement.clientWidth,
 				cH = document.documentElement.clientHeight,
@@ -162,7 +162,7 @@ var Float = (($) => {
 			
 			let 
 				e = opt.e,
-				ref = opt.ref,
+				context = opt.context,
 				xx = opt.left || "",
 				yy = opt.top || "",
 				deltaX = opt.deltaX || 0,
@@ -172,7 +172,7 @@ var Float = (($) => {
 				
 				left:any = null,
 				top:any = null,
-				c = this.getXY(ref),
+				c = this.getXY(context),
 			
 				fixed = (e.style.position === "fixed"),
 				width = e.offsetWidth,
@@ -253,7 +253,7 @@ var Float = (($) => {
 
 			let 
 				e = opt.e,
-				ref = opt.ref,
+				context = opt.context,
 				xx = opt.left || "",
 				yy = opt.top || "",
 				deltaX = opt.deltaX || 0,
@@ -262,7 +262,7 @@ var Float = (($) => {
 				
 				left:any = null,
 				top:any = null,
-				c = this.getXY(ref),
+				c = this.getXY(context),
 				
 				width = e.offsetWidth,
 				height = e.offsetHeight,
@@ -334,6 +334,18 @@ var Float = (($) => {
 		}	
 
 		static center(e){
+			e.style.position = "fixed";
+			e.style.top = "50%";
+			e.style.left = "50%";
+			e.style.transform = "translate(-50%, -50%)";
+			
+        }
+        
+        static floatCenter(e){
+            let 
+            cW = document.documentElement.clientWidth,
+            cH = document.documentElement.clientHeight
+            let rect = e.getBoundingClientRect();
 			e.style.position = "fixed";
 			e.style.top = "50%";
 			e.style.left = "50%";
@@ -765,7 +777,7 @@ var Float = (($) => {
                 
                 Drag.init({
                     main:k[i],
-                    ref:main,
+                    context:main,
                     onstart: this.start(main, opt, rs[i]),
                     oncapture: this.capture,
                     onrelease: this.release
@@ -861,7 +873,7 @@ e.on("click",(e)=>{
     db (document.defaultView.getComputedStyle(div.get()).gridTemplateColumns)
     };
 
-    return {Window:Win, Float:Float, Resize:Resize, Move:Move, Window:null};
+    return {Window: Win, Float: Float, Resize: Resize, Move: Move, Window: null, Popup: null};
 })(_sgQuery);
 
 
@@ -1105,7 +1117,12 @@ Float.Window = (($) => {
         show(info = null){
             if(info !== null){
                 info.e = this._main.get();
-                Float.Float.show(info);
+                
+                if(info.context){
+                    Float.Float.showMenu(info);
+                }else{
+                    Float.Float.show(info);
+                }
             }
             
             Float.Float.setIndex(this._main.get());
@@ -1146,8 +1163,18 @@ Float.Window = (($) => {
 		}
 
     }
-
+    
     $(window).on("load", ()=>{
+
+        
+        
+        let div2 = $().create("div").addClass("drag4").on("resize",()=>db (888));
+        let div3 = $().create("div").addClass("drag4a");
+        //Float.init(div.get());
+        //Float.show({e:div.get(), left:"center",top:"top"});
+        //Move.init({main:div.get(),hand:div.get()});
+
+        Float.Float.init(div2.get());
 
         let div = $("").create("div").text("hola");
         let ww = new W({
@@ -1169,6 +1196,12 @@ Float.Window = (($) => {
     
         btn.on("click",()=>{
             //ww.setSize("200px","600px");
+
+            
+                div2.get().innerHTML += ("hola ")
+    
+                return;
+            
             ww.show({
               top:"middle",
                 left:"center"
@@ -1179,4 +1212,219 @@ Float.Window = (($) => {
     return W;
 })(_sgQuery);
 
-//alert(Win.Float.token)
+
+Float.Popup = (($) => {
+
+    
+
+
+
+    
+    class Popup{
+
+        id:any = null;
+        target:any = null;
+        className:any = null;
+        draggable:boolean = null;
+        autoClose:boolean = true;
+		modeTip:boolean = true;
+        delay:number = 3000;
+        visible:boolean = false;
+
+
+        width:any = "400px";
+		height:any = "400px";
+
+        child:any = null;
+
+        left:any = "";
+        top:any = "";
+
+        _main:any = null;
+        _active:boolean = false;
+		_timer:number = null;
+        constructor(info){
+            for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+            let main = (this.id)? $(this.id): false;
+            if(main){
+                
+                if(main.ds("sgPopup")){
+                    return;
+                }
+
+                if(main.hasClass("sg-popup")){
+                    this._load(main);
+                }else{
+                   
+                    this._create(main);
+                }
+
+            }else{
+                
+                main = $("").create("div");
+                this._create(main);
+
+            }
+
+
+            if(this.autoClose){
+                
+                $().on("mousedown", (event) => {
+                    
+                    if(this.modeTip){
+                        this.hide();
+                        return;
+                    }
+                      
+                    if(this._active === true || this._active === null){
+                        if(this._active === null){
+                            this._active = false;
+                        }
+                        return;	
+                    }
+                    this.hide();			
+                });
+                
+                main.on("mouseover", (event) => {
+                    this._active = true;
+                    this.resetTimer();
+                });
+        
+                main.on("mouseout", (event) => {
+                    this._active = false;
+                    this.setTimer();
+                });
+                this._main = main;
+            }
+            
+            if(this.visible){
+                this.show();
+            }
+        }
+
+        _create(main){
+
+
+            if(this.child){db (884444)
+                main.append(this.child);
+            }
+            main.addClass("sgPopup");
+            Float.Float.init(main.get());
+        }
+        _load(main){
+
+        }
+
+        setBody(e){
+            this._main.append(e);
+        }
+
+        getBody(){
+
+        }
+
+        setVisible(value){
+            this._active = null;
+            this.visible = value;
+            if(value){
+                
+                this._main.removeClass("hidden");
+                this._main.addClass("visible");
+                this.setTimer();
+                
+            }else{
+                this._main.removeClass("visible");
+                this._main.addClass("hidden");
+                this.resetTimer();
+            }
+        }
+
+        show(info = null){
+            if(info !== null){
+
+                
+                info.e = this._main.get();
+                if(info.context){
+                    Float.Float.showMenu(info);
+                }else{
+                    Float.Float.show(info);
+                }
+                
+                
+            }
+            
+            Float.Float.setIndex(this._main.get());
+            this.setVisible(true);
+            
+            
+        }
+
+        hide(){
+            if(!this.visible){
+                return false;	
+            }
+            this.setVisible(false);
+        }
+
+        resetTimer(){
+            if(this._timer){
+				clearTimeout(this._timer);
+			}
+        }
+
+        setTimer(){
+            if(this.autoClose && this.delay > 0){
+				this.resetTimer();
+				this._timer = setTimeout(() => this.setVisible(false), this.delay);				
+			}
+        }
+
+        setMenu(e, info){
+            $(e).on("click", (event) =>{
+                event.preventDefault();
+                event.returnValue = false;
+                event.cancelBubble = true;
+                this.show(info);
+            });
+        }
+    }
+
+
+    $(window).on("load", ()=>{
+let div = $("").create("div").addClass("popup").text("Help?");
+
+        let popup = new Float.Popup({child:div});
+        
+        
+        let div2 = $("#form_p4").create("input").attr("type","button").val("Help?");
+        
+        popup.setMenu(div2.get(), {context:$.query(".drag4"), left:"right", top:"middle"} );
+
+        return;
+        .on("click", (event) => {
+            event.preventDefault();
+            event.returnValue = false;
+            event.cancelBubble = true;
+            popup.show({
+                context:div2.get(),
+                left:"left",
+                top:"top"
+            })
+
+        });
+        
+        popup.show({
+            left:"left",
+            top:"top"
+        })
+        
+
+    }
+    return Popup;
+
+})(_sgQuery);

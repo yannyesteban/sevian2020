@@ -121,7 +121,7 @@ var Float = (($) => {
             return this.showElem({ e: e, left: left, top: top, z: z });
         }
         static showMenu(opt) {
-            let e = opt.e, ref = opt.ref, xx = opt.left || "", yy = opt.top || "", deltaX = opt.deltaX || 0, deltaY = opt.deltaY || 0, z = (opt.z !== undefined) ? opt.z : undefined, left = null, top = null, c = this.getXY(ref), fixed = (e.style.position === "fixed"), width = e.offsetWidth, height = e.offsetHeight, cW = c.cW, cH = c.cH, sL = c.sL, sT = c.sT;
+            let e = opt.e, context = opt.context, xx = opt.left || "", yy = opt.top || "", deltaX = opt.deltaX || 0, deltaY = opt.deltaY || 0, z = (opt.z !== undefined) ? opt.z : undefined, left = null, top = null, c = this.getXY(context), fixed = (e.style.position === "fixed"), width = e.offsetWidth, height = e.offsetHeight, cW = c.cW, cH = c.cH, sL = c.sL, sT = c.sT;
             switch (xx) {
                 case "center":
                     left = c.left + c.width / 2 - width / 2;
@@ -181,7 +181,7 @@ var Float = (($) => {
             return this.showElem({ e: e, left: left, top: top, z: z });
         }
         static dropDown(opt) {
-            let e = opt.e, ref = opt.ref, xx = opt.left || "", yy = opt.top || "", deltaX = opt.deltaX || 0, deltaY = opt.deltaY || 0, z = (opt.z !== undefined) ? opt.z : undefined, left = null, top = null, c = this.getXY(ref), width = e.offsetWidth, height = e.offsetHeight, cW = c.cW, cH = c.cH, sL = c.sL, sT = c.sT;
+            let e = opt.e, context = opt.context, xx = opt.left || "", yy = opt.top || "", deltaX = opt.deltaX || 0, deltaY = opt.deltaY || 0, z = (opt.z !== undefined) ? opt.z : undefined, left = null, top = null, c = this.getXY(context), width = e.offsetWidth, height = e.offsetHeight, cW = c.cW, cH = c.cH, sL = c.sL, sT = c.sT;
             switch (xx) {
                 case "center":
                     left = c.left + c.width / 2;
@@ -234,6 +234,14 @@ var Float = (($) => {
             return this.showElem({ e: e, left: left, top: top, z: z });
         }
         static center(e) {
+            e.style.position = "fixed";
+            e.style.top = "50%";
+            e.style.left = "50%";
+            e.style.transform = "translate(-50%, -50%)";
+        }
+        static floatCenter(e) {
+            let cW = document.documentElement.clientWidth, cH = document.documentElement.clientHeight;
+            let rect = e.getBoundingClientRect();
             e.style.position = "fixed";
             e.style.top = "50%";
             e.style.left = "50%";
@@ -562,7 +570,7 @@ var Float = (($) => {
                 lt.style.margin = margin[i];
                 Drag.init({
                     main: k[i],
-                    ref: main,
+                    context: main,
                     onstart: this.start(main, opt, rs[i]),
                     oncapture: this.capture,
                     onrelease: this.release
@@ -632,7 +640,7 @@ var Float = (($) => {
         });
         db(document.defaultView.getComputedStyle(div.get()).gridTemplateColumns);
     });
-    return { Window: Win, Float: Float, Resize: Resize, Move: Move, Window: null };
+    return { Window: Win, Float: Float, Resize: Resize, Move: Move, Window: null, Popup: null };
 })(_sgQuery);
 Float.Window = (($) => {
     var _last = false;
@@ -825,7 +833,12 @@ Float.Window = (($) => {
         show(info = null) {
             if (info !== null) {
                 info.e = this._main.get();
-                Float.Float.show(info);
+                if (info.context) {
+                    Float.Float.showMenu(info);
+                }
+                else {
+                    Float.Float.show(info);
+                }
             }
             Float.Float.setIndex(this._main.get());
             this.setVisible(true);
@@ -857,6 +870,12 @@ Float.Window = (($) => {
         }
     }
     $(window).on("load", () => {
+        let div2 = $().create("div").addClass("drag4").on("resize", () => db(888));
+        let div3 = $().create("div").addClass("drag4a");
+        //Float.init(div.get());
+        //Float.show({e:div.get(), left:"center",top:"top"});
+        //Move.init({main:div.get(),hand:div.get()});
+        Float.Float.init(div2.get());
         let div = $("").create("div").text("hola");
         let ww = new W({
             caption: "ventana Alpha",
@@ -876,6 +895,8 @@ Float.Window = (($) => {
         let btn = $("#form_p4").create("input").attr("type", "button").val("show");
         btn.on("click", () => {
             //ww.setSize("200px","600px");
+            div2.get().innerHTML += ("hola ");
+            return;
             ww.show({
                 top: "middle",
                 left: "center"
@@ -885,4 +906,162 @@ Float.Window = (($) => {
     });
     return W;
 })(_sgQuery);
-//alert(Win.Float.token)
+Float.Popup = (($) => {
+    class Popup {
+        constructor(info) {
+            this.id = null;
+            this.target = null;
+            this.className = null;
+            this.draggable = null;
+            this.autoClose = true;
+            this.modeTip = true;
+            this.delay = 3000;
+            this.visible = false;
+            this.width = "400px";
+            this.height = "400px";
+            this.child = null;
+            this.left = "";
+            this.top = "";
+            this._main = null;
+            this._active = false;
+            this._timer = null;
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            let main = (this.id) ? $(this.id) : false;
+            if (main) {
+                if (main.ds("sgPopup")) {
+                    return;
+                }
+                if (main.hasClass("sg-popup")) {
+                    this._load(main);
+                }
+                else {
+                    this._create(main);
+                }
+            }
+            else {
+                main = $("").create("div");
+                this._create(main);
+            }
+            if (this.autoClose) {
+                $().on("mousedown", (event) => {
+                    if (this.modeTip) {
+                        this.hide();
+                        return;
+                    }
+                    if (this._active === true || this._active === null) {
+                        if (this._active === null) {
+                            this._active = false;
+                        }
+                        return;
+                    }
+                    this.hide();
+                });
+                main.on("mouseover", (event) => {
+                    this._active = true;
+                    this.resetTimer();
+                });
+                main.on("mouseout", (event) => {
+                    this._active = false;
+                    this.setTimer();
+                });
+                this._main = main;
+            }
+            if (this.visible) {
+                this.show();
+            }
+        }
+        _create(main) {
+            if (this.child) {
+                db(884444);
+                main.append(this.child);
+            }
+            main.addClass("sgPopup");
+            Float.Float.init(main.get());
+        }
+        _load(main) {
+        }
+        setBody(e) {
+            this._main.append(e);
+        }
+        getBody() {
+        }
+        setVisible(value) {
+            this._active = null;
+            this.visible = value;
+            if (value) {
+                this._main.removeClass("hidden");
+                this._main.addClass("visible");
+                this.setTimer();
+            }
+            else {
+                this._main.removeClass("visible");
+                this._main.addClass("hidden");
+                this.resetTimer();
+            }
+        }
+        show(info = null) {
+            if (info !== null) {
+                info.e = this._main.get();
+                if (info.context) {
+                    Float.Float.showMenu(info);
+                }
+                else {
+                    Float.Float.show(info);
+                }
+            }
+            Float.Float.setIndex(this._main.get());
+            this.setVisible(true);
+        }
+        hide() {
+            if (!this.visible) {
+                return false;
+            }
+            this.setVisible(false);
+        }
+        resetTimer() {
+            if (this._timer) {
+                clearTimeout(this._timer);
+            }
+        }
+        setTimer() {
+            if (this.autoClose && this.delay > 0) {
+                this.resetTimer();
+                this._timer = setTimeout(() => this.setVisible(false), this.delay);
+            }
+        }
+        setMenu(e, info) {
+            $(e).on("click", (event) => {
+                event.preventDefault();
+                event.returnValue = false;
+                event.cancelBubble = true;
+                this.show(info);
+            });
+        }
+    }
+    $(window).on("load", () => {
+        let div = $("").create("div").addClass("popup").text("Help?");
+        let popup = new Float.Popup({ child: div });
+        let div2 = $("#form_p4").create("input").attr("type", "button").val("Help?");
+        popup.setMenu(div2.get(), { context: $.query(".drag4"), left: "right", top: "middle" });
+        return;
+        on("click", (event) => {
+            event.preventDefault();
+            event.returnValue = false;
+            event.cancelBubble = true;
+            popup.show({
+                context: div2.get(),
+                left: "left",
+                top: "top"
+            });
+        });
+        popup.show({
+            left: "left",
+            top: "top"
+        });
+    });
+    return Popup;
+})(_sgQuery);
