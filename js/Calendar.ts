@@ -184,7 +184,7 @@ var Calendar = (($) => {
 
             let info = infoDate(year, month, day);
 
-            var day_one = 1;
+            var day_one = 2;
 			var day1 = info.dayOne;
 			day1 = (day1 +((7-day_one)%7))%7;
 
@@ -228,7 +228,7 @@ var Calendar = (($) => {
             target:div,
             date:{
                 year:2019,
-                month:12,
+                month:5,
                 day:15
             }
 
