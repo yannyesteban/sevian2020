@@ -515,12 +515,49 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 }
 
 .sg-calendar {
-  background-color: #d9480f;
-  border: 1px solid red;
-  display: inline-block;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-color: white;
+  color: #686868;
+  width: 100%;
+  min-width: 280px;
+  max-width: 320px;
+  height: 100%;
+  font-family: tahoma;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.sg-calendar > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+.sg-calendar > table {
+  width: 100%;
+}
+.sg-calendar > table thead {
+  background-color: darkgray;
+  color: #ededed;
+  text-align: center;
+  font-weight: bold;
+}
+.sg-calendar .m-bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 .sg-calendar .m-bar > * {
-  background-color: gainsboro;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  background-color: #ebebeb;
   display: inline-block;
   _border: 1px solid #bbbbbb;
   margin: 1px;
@@ -529,11 +566,135 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   line-height: 2em;
   cursor: pointer;
 }
+.sg-calendar .m-bar > *:hover {
+  background-color: #a00000;
+  color: white;
+}
+.sg-calendar .y-bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
 .sg-calendar .y-bar > * {
-  display: inline-block;
+  background-color: #e6e6e6;
+  margin: 1px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
   border: 1px solid #f4f4f4;
   text-align: center;
   font-size: 8pt;
   line-height: 2em;
   cursor: pointer;
+}
+.sg-calendar .y-bar > *:hover {
+  background-color: #0070a0;
+  color: white;
+}
+.sg-calendar .c-bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  vertical-align: middle;
+}
+.sg-calendar .c-bar * {
+  font-size: 9pt;
+  text-align: center;
+}
+.sg-calendar .c-bar > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  line-height: 1.5em;
+  background-color: #d6d6d6;
+  padding: 4px;
+  color: #6e6e6e;
+}
+.sg-calendar .c-bar > *:HOVER {
+  background-color: #747474;
+  color: white;
+}
+.sg-calendar .c-bar > * .p-month:hover, .sg-calendar .c-bar > * .n-month:hover, .sg-calendar .c-bar > * .p-year:hover, .sg-calendar .c-bar > * .n-year:hover {
+  color: #a8eeee;
+}
+.sg-calendar .c-bar .c-month {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.sg-calendar .c-bar .c-month > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+.sg-calendar .c-bar .c-month select {
+  width: 100px;
+}
+.sg-calendar .c-bar .c-year {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.sg-calendar .c-bar .c-year > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+.sg-calendar .grid {
+  background-color: #ededed;
+  font-size: 9pt;
+  width: 100%;
+}
+.sg-calendar .grid td {
+  text-align: center;
+  height: 20px;
+  font-size: 8pt;
+}
+.sg-calendar .grid .week {
+  background-color: #e5e5e5;
+}
+.sg-calendar .grid .week:hover {
+  background-color: #ad0505;
+  color: white;
+}
+.sg-calendar .grid .m-prev {
+  background-color: white;
+}
+.sg-calendar .grid .m-next {
+  background-color: white;
+}
+.sg-calendar .grid .today {
+  color: #e2e2e2;
+  background-color: #0070a0;
+}
+.sg-calendar .grid .m-now.active {
+  color: white;
+  background-color: #f3a600;
+}
+.sg-calendar .grid .m-prev.active {
+  color: white;
+  background-color: #db4e0d;
+}
+.sg-calendar .grid .m-next.active {
+  color: white;
+  background-color: #ff8800;
+}
+.sg-calendar .today {
+  font-size: 10pt;
+  padding: 4px;
+  text-align: center;
+  margin: 1px;
+  cursor: pointer;
+  color: #686868;
+  background-color: #dbdbdb;
+}
+.sg-calendar .today:hover {
+  background-color: #1986d4;
+  color: white;
 }

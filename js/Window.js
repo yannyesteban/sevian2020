@@ -869,7 +869,7 @@ Float.Window = (($) => {
             }
         }
     }
-    $(window).on("load", () => {
+    $(window).on("load_", () => {
         let div2 = $().create("div").addClass("drag4").on("resize", () => db(888));
         let div3 = $().create("div").addClass("drag4a");
         //Float.init(div.get());
@@ -1042,7 +1042,7 @@ Float.Popup = (($) => {
             });
         }
     }
-    $(window).on("load", () => {
+    $(window).on("load_", () => {
         let div = $("").create("div").addClass("popup").text("Help?");
         let popup = new Float.Popup({ child: div });
         let div2 = $("#form_p4").create("input").attr("type", "button").val("Help?");

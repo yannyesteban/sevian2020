@@ -1164,7 +1164,7 @@ Float.Window = (($) => {
 
     }
     
-    $(window).on("load", ()=>{
+    $(window).on("load_", ()=>{
 
         
         
@@ -1395,7 +1395,7 @@ Float.Popup = (($) => {
     }
 
 
-    $(window).on("load", ()=>{
+    $(window).on("load_", ()=>{
 let div = $("").create("div").addClass("popup").text("Help?");
 
         let popup = new Float.Popup({child:div});

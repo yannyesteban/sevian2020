@@ -26,7 +26,7 @@ var Calendar = (($) => {
 		}
     
     }
-
+    
     let infoDate = function(y, m, d){
 		
 		return {
@@ -40,7 +40,44 @@ var Calendar = (($) => {
 		
 		
     };
-    
+    let fillz = function(value){
+		value = "0"+ value; 
+		return value.substr(value.length - 2);
+	};
+    let evalFormat = function(date, query){
+
+        let y = date.getFullYear();
+        let m = date.getMonth() ;
+        let d = date.getDate();
+
+		if(!y || !m || !d ){
+			return "";
+		}
+		/*
+		y = y *1;
+		m = m *1;
+		d = d *1;
+		*/
+		query = query.replace(/%yy/g, y);
+		//query = query.replace(/\byy\b/g,year);
+		query = query.replace(/%mm/g, fillz(m));
+		query = query.replace(/%m/g, m);
+		query = query.replace(/%dd/g, fillz(d));
+		query = query.replace(/%d/g, d);
+
+		query = query.replace(/%M/g, nameMonths[2][m]);
+		query = query.replace(/%MM/g, nameMonths[1][m]);
+
+		let day = date.getDay();
+		
+		query = query.replace(/%D/g, nameDays[3][day]);
+		query = query.replace(/%DD/g, nameDays[2][day]);
+		query = query.replace(/%DDD/g, nameDays[1][day]);
+
+		query = query.replace(/%ww/g, weekDate(y, m, d));
+		
+		return query;	
+	};
     let nameMonths = [
 		["E","F","M","A","M","J","J","A","S","O","N","D"],
 		["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],
@@ -61,8 +98,12 @@ var Calendar = (($) => {
         id:any = null;
         target:any = null;
 
-        date:object = {};
-        today:object = {};
+        year:number = null;
+        month:number = null;
+        day:number = null;
+
+        date:Date = null;
+        today:Date = null;
         className:any = null; 
 
         beginDay:number = 0;
@@ -73,9 +114,14 @@ var Calendar = (($) => {
         showBarMonth:boolean = true;
 		showBarYear:boolean = true;
 		showBarControl:boolean = true;
-		showBarToday:boolean = true;
+        showBarToday:boolean = true;
+        showWeek:boolean = true; 
+
+        stringToday:string = "Hoy es: %D %dd de %M de %yy";
+		popupTitle:string = "%d/%m/%yy";
 
         _main:object = null;
+        _date:object = null;
         nameMonths:any[] = nameMonths;
         nameDays:any[] = nameDays;
         weekTitle:any[] = weekTitle;
@@ -88,13 +134,15 @@ var Calendar = (($) => {
                 }
             }
 
-            var today = new Date();
-            this.today = {
-                y: today.getFullYear(),
-                m: today.getMonth() + 1,
-                d: today.getDate(),
-                isHoly: false,
-            };
+            this.today = new Date();
+            
+            if(!this.year || !this.month  || !this.day){
+                this.date = new Date();
+            }else{
+                this.date = new Date(this.year, this.month - 1, this.day);
+            }
+            
+            
 
             let main = this._main = (this.id)? $(this.id) : false;
             if(main){
@@ -123,6 +171,7 @@ var Calendar = (($) => {
 
             }
 
+            this.setCal(this.date);
 
         }
 
@@ -131,38 +180,55 @@ var Calendar = (($) => {
             main.addClass("sg-calendar").id(this.id);
             let i:number = null;
 
-            let mBar = main.create("div").addClass("m-bar");
-            for(i=0; i < 12; i++){
-                mBar.create("span").text(this.nameMonths[1][i]).ds("month", (i+1));
-            }
             let yBar = main.create("div").addClass("y-bar");
             for(i=0; i < 5; i++){
-                yBar.create("span").text(i).ds("index", (i+1));
+                yBar.create("span").ds("index", (i))
+                .on("click", (event) => {
+                    if(event.currentTarget.dataset.index == 2){
+                        
+                    }else{
+                        this.addYear(event.currentTarget.dataset.index-2);
+                    }
+                    
+                });
             }
+
+            let mBar = main.create("div").addClass("m-bar");
+            for(i=0; i < 12; i++){
+                mBar.create("span").text(this.nameMonths[1][i]).ds("month", (i+1))
+                .on("click", this._setMonth(i+1));
+            }
+            
 
             let cBar = main.create("div").addClass("c-bar");
 
-            let cMonth = main.create("div").addClass("c-month");
-            cMonth.create("span").text("&laquo;");
-            let select = cMonth.create("select");
+            let cMonth = cBar.create("div").addClass("c-month");
+            cMonth.create("span").addClass("p-month").text("&laquo;")
+            .on("click", ()=>this.addMonth(-1));;
+            let select = cMonth.create("select").addClass("m-select")
+            .on("change", (event) => this.setMonth(event.currentTarget.value));
             for(i = 1; i <= 12; i++){
 				select.create("option").prop({
 					value: i,
-					text: this.nameMonths[2][i]
+					text: this.nameMonths[2][i-1]
 				});
 			}
-            cMonth.create("span").text("&raquo;");
+            cMonth.create("span").addClass("n-month").text("--&raquo;")
+            .on("click", ()=>this.addMonth(1));
 
-            let cYear = main.create("div").addClass("c-year");
-            cYear.create("span").text("&laquo;");
-            let select2 = cYear.create("select");
-            for(i = 1950; i <= 2040; i++){
+            let cYear = cBar.create("div").addClass("c-year");
+            cYear.create("span").addClass("p-year").text("&laquo;")
+            .on("click", () => this.addYear(-1));
+            let select2 = cYear.create("select").addClass("y-select")
+            .on("change", (event) => this.setYear(event.currentTarget.value));
+            for(i = this.today.getUTCFullYear() + 20; i >= this.today.getUTCFullYear() - 100; i--){
 				select2.create("option").prop({
 					value: i,
 					text: i
 				});
 			}
-            cYear.create("span").text("&raquo;");
+            cYear.create("span").addClass("n-year").text("&raquo;")
+            .on("click", ()=>this.addYear(1));
 
 
             let table = main.create("table");
@@ -170,51 +236,260 @@ var Calendar = (($) => {
             let tr = table.create("thead").create("tr");
             tr.create("td").text(weekTitle[0][1]);
             for(i=0; i < 7; i++){
-                tr.create("td").text(this.nameDays[2][(i + this.beginDay) % 7]);
+                tr.create("td").addClass("m-title").text(this.nameDays[2][(i + this.beginDay) % 7]);
             }
             table.create("tbody").addClass("grid");
 
-            this.grid(this.date.year, this.date.month, this.date.day);
+            let bToday = main.create("div").addClass("today").text(evalFormat(this.today, this.stringToday))
+            .on("click", () => this.setCal(this.today));
+            //this.stringToday = "Hoy es: %D %dd de %M de %yy";
+            //this.popupTitle = "%d/%m/%yy";
+            this.grid(this.date);
         }
         _load(main:any){
 
         }
 
-        grid(year, month, day){
+        grid(pDate){
 
-            let info = infoDate(year, month, day);
-
-            var day_one = 2;
-			var day1 = info.dayOne;
-			day1 = (day1 +((7-day_one)%7))%7;
-
-            let prev = new Date(year, month -1, 1); 
+            let info = infoDate(pDate.getFullYear(), pDate.getMonth()+1, pDate.getDate());
+            let day1 = info.dayOne;
+            let days = info.days;
+            let dayFirst: number = null;
+            let date = new Date();
+            let today = {
+                year: date.getFullYear(),
+                month: date.getMonth() + 1,
+                day: date.getDate(),
+            };
+            let prev = new Date(pDate.getFullYear(), pDate.getMonth(), 1);
+            day1 = (day1 +((7 - this.beginDay) % 7)) % 7;
 
             prev.setDate(prev.getDate() - ((day1 == 0)? 7: day1));
+            let next = new Date(pDate.getFullYear(), pDate.getMonth()+1, 1); 
+            let prevDate = prev.getDate();
+            
+            if(day1 === 0){
+				dayFirst = 7;
+			}else{
+				dayFirst = day1;
+            }
+            
+            let _week: number = null;
+            let week = weekDate(prev.getFullYear(), prev.getMonth()+1, prev.getDate());
+            
+            if(pDate.getMonth() + 1 == 1){
+                _week = weekDate(pDate.getFullYear(), pDate.getMonth() + 1, 1);
+                if(dayFirst == 7 || _week != 1){
+                    _week = week;
+                    week = 1;
+                }else {
+                    _week = null;
+                    week = 1;
+                }
+            }
+            
 
-            let date = new Date(year, month -1, day); 
-            let next = new Date(year, month, 1); 
+            let ini = 0, end = 42, cell:object = null, _day = 1, _nextDay = 1;
+            let _info:object = {year: null, month:null, day:null};
+            let classDay:string = null;
 
-            console.log(info)
-
-            db (prev+" <hr>"+date+" <hr>"+next,"red")
-
-            let grid = $(this._main.query(".grid"));
-            grid.text("");
-
+            let grid = $(this._main.query(".grid")).text("");
             let tr = null;
-            for(let i=0;i<31;i++){
+            for(let i = ini; i < end; i++){
                 
                 if(i % 7 == 0){
                     tr = grid.create("tr");
-
+                    if(this.showWeek){
+                        if(_week !== null){
+                            tr.create("td").addClass("week").text(_week);
+                            _week = null; 
+                        }else{
+                            tr.create("td").addClass("week").text(week++);
+                        }
+                    }
                 }
 
-                tr.create("td").text(i);
+                cell = tr.create("td");
+
+                if(i < dayFirst){
+                    _info = {
+                        year: prev.getFullYear(),
+						month: prev.getMonth()+1,
+						day: prevDate++
+                    }
+                    classDay = "m-prev";
+                }else if(_day <= days){
+                    _info = {
+                        year: info.date.getFullYear(),
+						month: info.date.getMonth()+1,
+						day: _day++
+                    }
+                    classDay = "m-now";
+                }else{
+                    _info = {
+                        year: next.getFullYear(),
+						month: next.getMonth()+1,
+						day: _nextDay++
+                    }
+                    classDay = "m-next";
+                }
+
+                cell.text(_info.day).addClass(classDay).on("click",this._setValue(_info)); 
+
+                if(_info.year == today.year && _info.month == today.month && _info.day == today.day){
+                    cell.addClass("today");
+                }
+                if(_info.year == pDate.getFullYear() && _info.month == pDate.getMonth()+1 && _info.day == pDate.getDate()){
+                    cell.addClass("active");
+                }
+            }
+        }
+        
+		_validRules(date){
+            return true;
+			var value = false;
+			
+			if(this._enable && !this.isIn(date, this._enable)){
+				return false;
+			}else if(this._disable && this.isIn(date, this._disable)){
+				return false;
+			}
+			if(this.disableHoly && date.isHoly){
+				return false;
+			}
+			if(this.range.from && sgDate.date(date) < sgDate.date(this.range.from)){
+				return false;
+			}
+			if(this.range.to && sgDate.date(date) > sgDate.date(this.range.to)){
+				return false;
+			}
+			if(this.disableDays[date.day]){
+				return false;
+			}
+			return true;
+        }
+
+        setMonth(month:number){
+            let date = new Date(this.date.getFullYear(), month - 1, 1);
+            this.setCal(date);
+        }
+        setYear(year:number){
+            let date = new Date(year, this.date.getMonth(), 1);
+            this.setCal(date);
+            
+        }
+        addMonth(delta:number){
+            
+            let date = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+            date.setMonth(date.getMonth() + delta);
+            this.setCal(date);
+  
+        }
+        addYear(delta:number){
+            
+            let date = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+            date.setFullYear(date.getFullYear() + delta);
+            this.setCal(date);
+            
+        }
+        setCal(date){
+
+            console.log(date)
+            let month = date.getMonth() + 1;
+            let years = this._main.queryAll(".y-bar > [data-index]");
+            if(years){
+                years.forEach((item, index)=>{
+                    if(index<2){
+                        $(item).text("&laquo; " + (date.getFullYear()-2+index));
+                    }else if(index>2){
+                        $(item).text((date.getFullYear()-2+index) + " &raquo;");
+                    }else{
+                        $(item).text((date.getFullYear()-2+index)); 
+                    }
+                    
+                });
+            }
+            
+            let item = this._main.query(".m-bar > .active[data-month]");
+            if(item){
+                $(item).removeClass("active");
+            }
+            item = this._main.query(".m-bar > [data-month='" + (month) + "']");
+
+            if(item){
+                $(item).addClass("active");
+            }
+
+            item = this._main.query(".c-month > .p-month");
+            if(item){
+                $(item).text("&laquo; " + this.nameMonths[1][(month == 1)? 11: month - 2]);
+            }
+            item = this._main.query(".c-month > .n-month");
+            if(item){db (month+2)
+                $(item).text(this.nameMonths[1][(month)%12] + " &raquo;");
+            }
+
+            let select = this._main.query(".m-select");
+            if(select){
+                select.value = month;
+            }
+            select = this._main.query(".y-select");
+            if(select){
+                select.value = date.getFullYear();
+            }
+
+            this.grid(date);
+            this.setValue(date);
+
+        }
+		setValue(date){
+
+            this.date = date;
+            return;
+			
+			if(this._validRules(date)){
+                
+				this.date.year = date.year;
+				this.date.month = date.month;
+				this.date.day = date.day;
+				//this.onselectday(date);	
+			}
+			
+        }
+        getValue(){
+			
+			return {
+				year: this.date.year,
+				month: this.date.month,
+				dday: this.date.day,
+				
+			};
+		}
+        _setValue(date){
+			
+			
+			return (event) => {
+               
+                let active = $(this._main.query(".grid .active"));
+                if(active){
+                    active.removeClass("active")
+                }
+                $(event.currentTarget).addClass("active");
+				this.setValue(new Date(date.year, date.month - 1, date.day));
+			};
+        }
+        _setMonth(month:number){
+            return ()=>{
+                this.setMonth(month);
             }
         }
 
-
+        _setYear(year:number){
+            return ()=>{
+                this.setYear(year);
+            }
+        }
 
 
     }
@@ -226,11 +501,12 @@ var Calendar = (($) => {
         let cal = new Calendar({
             id:"cal1",
             target:div,
-            date:{
+            
+            
                 year:2019,
-                month:5,
-                day:15
-            }
+                month:10,
+                day:24
+            
 
         });
 
