@@ -823,7 +823,7 @@ var Float = (($) => {
 
         let e7 = $().create("div").addClass("drag7");
         Move.init({main:e7.get(),hand:e7.get()});
-    };
+    });
 
     $(window).on("load_", function(){
 
@@ -837,41 +837,41 @@ var Float = (($) => {
         let e = div.create("div").addClass("e").text("e");
 
 
-a.on("click",(e)=>{
+        a.on("click",(e)=>{
             let rect = a.get().getBoundingClientRect();
            // db (a.get())
             //a.get().style.flex = "0 0 "+(a.get().offsetWidth-5)+"px";
-        db (a.get().offsetWidth)
-        let _a = (a.get().offsetWidth+5)+"px";
-        let _b = (b.get().offsetWidth-5)+"px";
+            db (a.get().offsetWidth)
+            let _a = (a.get().offsetWidth+5)+"px";
+            let _b = (b.get().offsetWidth-5)+"px";
 
-        div.get().style.gridTemplateColumns = `${_a} ${_b} auto`;
-});
-b.on("click",(e)=>{
-    let rect = a.get().getBoundingClientRect();
-    let _a = (a.get().offsetWidth-5)+"px";
-    let _b = (b.get().offsetWidth+5)+"px";
-    div.get().style.gridTemplateColumns = `${_a} ${_b} auto`;
-});
-d.on("click",(e)=>{
-    let rect = a.get().getBoundingClientRect();
-    let _a = (a.get().offsetHeight+1)+"px";
-    let _b = (d.get().offsetHeight-1)+"px";
-    div.get().style.gridTemplateRows = `${_a} auto`;
-});
-e.on("click",(e)=>{
-    let xx= document.defaultView.getComputedStyle(div.get());
-    
-    db (xx.gridTemplateRows)
-    let rect = a.get().getBoundingClientRect();
-    let _a = (a.get().offsetHeight-1)+"px";
-    let _b = (d.get().offsetHeight+1)+"px";
-    div.get().style.gridTemplateRows = `${_a} auto`;
-});
+            div.get().style.gridTemplateColumns = `${_a} ${_b} auto`;
+        });
+        b.on("click",(e)=>{
+            let rect = a.get().getBoundingClientRect();
+            let _a = (a.get().offsetWidth-5)+"px";
+            let _b = (b.get().offsetWidth+5)+"px";
+            div.get().style.gridTemplateColumns = `${_a} ${_b} auto`;
+        });
+        d.on("click",(e)=>{
+            let rect = a.get().getBoundingClientRect();
+            let _a = (a.get().offsetHeight+1)+"px";
+            let _b = (d.get().offsetHeight-1)+"px";
+            div.get().style.gridTemplateRows = `${_a} auto`;
+        });
+        e.on("click",(e)=>{
+            let xx= document.defaultView.getComputedStyle(div.get());
+            
+            db (xx.gridTemplateRows)
+            let rect = a.get().getBoundingClientRect();
+            let _a = (a.get().offsetHeight-1)+"px";
+            let _b = (d.get().offsetHeight+1)+"px";
+            div.get().style.gridTemplateRows = `${_a} auto`;
+        });
 
     
-    db (document.defaultView.getComputedStyle(div.get()).gridTemplateColumns)
-    };
+    db (document.defaultView.getComputedStyle(div.get()).gridTemplateColumns);
+    });
 
     return {Window: Win, Float: Float, Resize: Resize, Move: Move, Window: null, Popup: null};
 })(_sgQuery);
@@ -1411,22 +1411,7 @@ let div = $("").create("div").addClass("popup").text("Help?");
         popup.setMenu(div2.get(), {context:$.query(".drag4"), left:"right", top:"middle"} );
 
         return;
-        .on("click", (event) => {
-            event.preventDefault();
-            event.returnValue = false;
-            event.cancelBubble = true;
-            popup.show({
-                context:div2.get(),
-                left:"left",
-                top:"top"
-            })
-
-        });
         
-        popup.show({
-            left:"left",
-            top:"top"
-        })
         
 
     }

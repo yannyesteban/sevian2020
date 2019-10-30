@@ -861,11 +861,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			'page'=> $this->eparams->page?? $this->page,
 			'totalPages'=>	$this->totalPages,
 			'maxPages'=>	$this->maxPages,
-			'change'=>"Sevian.action.send(
+			'change'=>"S.send(
 				{
 					async: true,
 					panel:$this->id,
-					valid:true,
+					valid:false,
 					confirm_: 'seguro?',
 					params:	[
 						{t:'setMethod',
@@ -897,11 +897,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			 'fields'		=> $fields,
 			 'searchValue'	=> $q,
 			 'search'		=>"
-			 Sevian.action.send(
+			 S.send(
                 {
                     async: false,
                     panel:$this->id,
-                    valid:true,
+                    valid:false,
                     confirm_: 'seguro?',
                     params:	[
                         {t:'setMethod',

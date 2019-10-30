@@ -500,18 +500,5 @@ var Grid = (($) => {
         }
     }
     Grid._objs = [];
-    $(window).on("load", function () {
-        return;
-        let info = {
-            target: "",
-            id: "",
-            caption: "",
-            className: "",
-            type: "",
-            fields: [{}],
-            data: [{}]
-        };
-        let g = new Grid(info);
-    });
     return Grid;
 })(_sgQuery);

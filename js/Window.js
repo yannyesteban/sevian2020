@@ -1053,20 +1053,6 @@ Float.Popup = (($) => {
         let div2 = $("#form_p4").create("input").attr("type", "button").val("Help?");
         popup.setMenu(div2.get(), { context: $.query(".drag4"), left: "right", top: "middle" });
         return;
-        on("click", (event) => {
-            event.preventDefault();
-            event.returnValue = false;
-            event.cancelBubble = true;
-            popup.show({
-                context: div2.get(),
-                left: "left",
-                top: "top"
-            });
-        });
-        popup.show({
-            left: "left",
-            top: "top"
-        });
     });
     return Popup;
 })(_sgQuery);
