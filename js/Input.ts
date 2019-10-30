@@ -348,9 +348,9 @@ var InputDate = (($) => {
 
             this.setValue(this.value);
             
-            let div2 = $.create("div").text("Calendario");
+            let div2 = $.create("div");
             let p = this.picker = new sgDate.Picker({
-                id:this.id+"_calendar",
+                id_:this.id+"_calendar",
                 target:div2,
                 onselectday: (date)=>{
                    

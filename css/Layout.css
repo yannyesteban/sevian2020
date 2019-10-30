@@ -377,6 +377,8 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.75);
+          box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.75);
 }
 .sgWin.sevian.hidden {
   visibility: hidden;

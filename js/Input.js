@@ -275,9 +275,9 @@ var InputDate = (($) => {
             this._main.ds("sgInput", "date");
             this._main.ds("sgType", this.type);
             this.setValue(this.value);
-            let div2 = $.create("div").text("Calendario");
+            let div2 = $.create("div");
             let p = this.picker = new sgDate.Picker({
-                id: this.id + "_calendar",
+                id_: this.id + "_calendar",
                 target: div2,
                 onselectday: (date) => {
                     auxTxt.val(sgDate.evalFormat(date, this.outFormat));
