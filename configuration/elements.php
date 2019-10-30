@@ -53,7 +53,12 @@ $cls_elements = [
 	'sgArticle' 		=> [
 		'file' 	=> 'Sigefor/Article.php',
 		'class' => '\Sevian\Sigefor\Article'],
-
+	'sgMap' 		=> [
+		'file' 	=> 'Sigefor/Map.php',
+		'class' => '\Sevian\Sigefor\Map'],		
+	'gtControlDevice' 		=> [
+		'file' 	=> 'gt/ControlDevice.php',
+		'class' => '\Sevian\GT\ControlDevice'],
 	];
 
 Sevian\S::elementsLoad($cls_elements);

@@ -108,7 +108,23 @@ $js = [
 		'file' 	=> "{$PATH}js/Sevian/Valid.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
-	
+/*
+	[
+		'file_'=>"http://maps.google.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&libraries=drawing",
+		'file'=>"https://maps.googleapis.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&callback=initMap",
+		'begin'	=> false
+	],
+	[
+		'file' 	=> "{$PATH}js/Map.js",
+		'begin'	=> false
+		//'attrib' => [			'_type'=>'module'		]
+	],
+*/
+	[
+		'file' 	=> "{$PATH}gt/js/ControlDevice.js",
+		
+		//'attrib' => [			'_type'=>'module'		]
+	],
 ];
 
 Sevian\S::jsInit($js);

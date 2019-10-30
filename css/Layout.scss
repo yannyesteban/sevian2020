@@ -189,6 +189,9 @@ $alpha: 0;
       grid-column: 2 / 6;
       grid-row: 2;
       background-color: rgba(58, 58, 58, 1);
+      >*{
+        display: inline-block;
+      }
   }
   .p4{
       grid-column: 2 / 4;
@@ -993,4 +996,107 @@ $delta_y_h: -240px;
       }
     }
   }
+}
+
+
+.sg-map{
+  height: 100%;
+
+}
+
+.gt-control-p1{
+  display: flex;
+  flex-direction: row;
+  >*{
+    flex: 1 1 auto;
+  }
+}
+.gtcomm{
+  .p4{
+    //border:4px solid blue;
+   // overflow: hidden !important;
+   //height: 100%;
+
+    >form{
+      //border:4px solid blueviolet;
+      //overflow: auto;
+      //height: 100%;
+    }
+  }
+}
+
+.gt-control-device{
+
+  //border:4px solid rgb(183, 192, 62);
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  >.sg-form{
+    flex:0 1 auto;
+    //border:4px solid rgb(76, 82, 114)!important;
+    margin:2px;
+    padding:2px;
+
+    >.caption{
+      display:none;
+    }
+    >.page{
+      display: flex;
+      flex-wrap: wrap;
+      >.field{
+        display: flex;
+        align-items: center;
+        >.input{
+          margin-left: 4px;
+        }
+      }
+      
+    }
+  }
+  >.sg-tab{
+    flex:1 1 auto;
+    height: 100%;
+    margin:2px;
+  }
+
+  >*{
+    
+  }
+
+}
+
+.gt-control-p1{
+
+  >*{
+    overflow: auto;
+  }
+  .sg-menu{
+    font-size:8pt;
+    padding: 4px;
+    margin: 5px;
+    border: 2px solid rgb(218, 218, 218);
+    background-color: #f0f0f0;
+    
+    max-width: 200px;
+    .item{
+     border-bottom:1px solid red;
+      background-color: #a00000;
+      padding:2px;
+      >.option{
+        text-decoration: none;
+        color:white;
+        >.text{
+          padding-left: 4px;
+        }
+        
+      }
+      &:hover{
+        background-color: rgb(70, 70, 70);
+      }
+    }
+    
+  }
+  
+
 }

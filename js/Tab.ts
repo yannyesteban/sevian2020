@@ -253,6 +253,17 @@ class Tab{
     getMode(){
         return this.mode;	
     }
+
+    getPage(index:number){
+
+        let page = this._main.query(".tab-body > [data-tab-index='"+index+"']");
+
+        if(page){
+
+            return $(page); 
+        }
+        return false;	
+    }
     
 }
 

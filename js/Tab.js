@@ -192,6 +192,13 @@ const Tab = (function ($) {
         getMode() {
             return this.mode;
         }
+        getPage(index) {
+            let page = this._main.query(".tab-body > [data-tab-index='" + index + "']");
+            if (page) {
+                return $(page);
+            }
+            return false;
+        }
     }
     Tab._objs = [];
     $(window).on("load", function () {
