@@ -149,7 +149,7 @@ class Menu extends \Sevian\Element{
 		
 		while($rs = $cn->getDataAssoc($result)){
 			if($rs["action"]){
-				$action = "Sevian.action.send(".$rs["action"].");";
+				$action = "Sevian.send(".$rs["action"].");";
 				$action = "S.send(".$rs["action"].");";
 			}else{
 				$action = "";

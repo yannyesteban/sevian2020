@@ -13,15 +13,19 @@ $js = [
 	[
 		'file' 	=> "{$PATH}js/sgAjax.js",
 		'begin'	=> true],
+	/*
 	[
 		'file' 	=> "{$PATH}js/drag.js",
 		'begin'	=> true],
-	[
+		*/
+	/*[
 		'file' 	=> "{$PATH}js/sgWindow.js",
 		'begin'	=> true],
+	*/
 	[
 		'file' 	=> "{$PATH}js/sgDB.js",
 		'begin'	=> false],
+	/*
 	[
 		'file' 	=> "{$PATH}js/sgInit.js",
 		'begin'	=> true],
@@ -29,25 +33,28 @@ $js = [
 		'file' 	=> "{$PATH}js/sgSevian.js",
 		'begin'	=> true],
 	
-	/*[
+	[
 		'file' 	=> "{$PATH}js/Sevian/Tab.js",
 		'begin'	=> true],*/
+	/*
 	[
 		'file' 	=> "{$PATH}js/Sevian/Menu.js",
 		'begin'	=> true],
+	
 	[
 		'file' 	=> "{$PATH}js/Sevian/DesignMenu.js",
 		'begin'	=> true],
-	/*[
+	[
 		'file' 	=> "{$PATH}js/Sevian/Upload.js",
-		'begin'	=> true],*/
+		'begin'	=> true],
 	[
 		'file' 	=> "{$PATH}js/sgCalendar.js",
 		'begin'	=> true],
-	[
+	*/
+	/*[
 		'file' 	=> "{$PATH}js/Sevian/Input.js",
 		'begin'	=> true],
-	/*[
+	[
 		'file' 	=> "{$PATH}js/Sevian/Form.js",
 		'begin'	=> true],*/
 
@@ -95,6 +102,10 @@ $js = [
 	],
 	[
 		'file' 	=> "{$PATH}js/Calendar.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
+		'file' 	=> "{$PATH}js/Sevian/Valid.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	

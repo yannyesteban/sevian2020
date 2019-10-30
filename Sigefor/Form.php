@@ -587,7 +587,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->data = $data;
 			$config->value = $value;
 			$config->className = $config->className?? $f->class;
+			$rules = json_decode($f->rules);
+			if($rules != null){
+				$config->rules = json_decode($f->rules);
+			}
 			
+
 			if($f->inputConfig){
 				foreach($f->inputConfig as $k => $v){
 					$config->$k = $v;
@@ -707,7 +712,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 			while($rs = $cn->getDataAssoc($result)){
 				if($rs["action"]){
-					$action = "Sevian.action.send(".$rs["action"].");";
+					$action = "S.send(".$rs["action"].");";
 				}else{
 					$action = "";
 				}
@@ -1103,9 +1108,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		switch($meta){
 			case 'I':
 			case 'C':
-			case 'D':
-			
 				$type = 'text';
+				break;
+			case 'D':
+				$input = 'date';
+				$type = 'calendar';
 				break;
 			case 'B':
 				$type =  'textarea';

@@ -18,11 +18,7 @@
 
 .sg-cal{
 	
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
+
 	user-select: none;
 	
 	background-color: rgba(255,255,255,1.00);
@@ -324,4 +320,17 @@
 			color: white;
 		}
 	}
+}
+
+
+.sg-popup1{
+	position: absolute;
+	margin: 4px;
+	padding: 4px;
+	min-width: 160px;
+	min-height: 60px;
+	box-shadow: 5px 5px 5px
+	rgba(132, 132, 132, 0.5);
+	_border: 2px solid gray;
+	border-radius: 4px;
 }

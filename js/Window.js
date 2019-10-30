@@ -665,7 +665,7 @@ Float.Window = (($) => {
             this.resizable = true;
             this.draggable = true;
             this.autoClose = false;
-            this.delay = 500;
+            this.delay = 3000;
             this.width = null;
             this.height = null;
             this.left = null;
@@ -973,16 +973,21 @@ Float.Popup = (($) => {
             if (this.visible) {
                 this.show();
             }
+            else {
+                this.setVisible(false);
+            }
         }
         _create(main) {
             if (this.child) {
-                db(884444);
                 main.append(this.child);
             }
-            main.addClass("sgPopup");
+            main.addClass("sg-popup");
             Float.Float.init(main.get());
         }
         _load(main) {
+        }
+        getMain() {
+            return this._main;
         }
         setBody(e) {
             this._main.append(e);

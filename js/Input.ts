@@ -47,6 +47,7 @@ var Input = (($) => {
         style:object = {};
         events:any = false;
         placeholder:string = "";
+        rules:object = null;
 
         childs:boolean = false;
         parent:string = "";
@@ -77,7 +78,7 @@ var Input = (($) => {
             }
 
             
-            this._main.ds("sgInput", "input");
+            
 
 
             let target = (this.target)? $(this.target): false;
@@ -141,6 +142,10 @@ var Input = (($) => {
 				this.createOptions(this.value, false);
             }
             this._main.ds(this.dataset);
+
+            this._main.ds("sgName", this.name);
+            this._main.ds("sgInput", "input");
+            this._main.ds("sgType", this.type);
             /*
             if(this.dataset){
                 for(let x in this.dataset){
@@ -212,8 +217,232 @@ var Input = (($) => {
         ds(prop, value){
             this._main.ds(prop, value);
         }
+        focus(){
+            this._main.get().focus();
+            
+        }
+        select(){
+            this._main.get().select();
+        }
     }
     $I.std = Input;
     I.register("input", Input);
     return Input;
+})(_sgQuery);
+
+
+var InputDate = (($) => {
+    class InputCalendar{
+        target:object = null;
+        id:string = "";
+        name:string = "";
+        type:string = "calendar";
+        value:string = "";
+        className = "";
+        data:any = false;
+        propertys:object = {};
+        dataset:object = null;
+        style:object = {};
+        events:any = false;
+        placeholder:string = "";
+
+        outFormat:string = "%d/%m/%yy";
+        format:string = "%yy-%mm-%dd";
+
+        childs:boolean = false;
+        parent:string = "";
+        _main:object = null;
+        _input:object = null;
+        status:string = "valid";
+        mode:string = "request";
+        constructor(opt: any){
+            
+            for(var x in opt){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = opt[x];
+                }
+            }
+
+            let main = this._main = (this.id)? $(this.id): false;
+
+
+            if(!main){
+
+                
+                this._create(false);
+            }else{
+                
+                if(main.ds("sgInput")){
+                    return;
+                }
+            }
+
+            
+           
+
+
+            let target = (this.target)? $(this.target): false;
+
+            if(target){
+                target.append(this._main);
+            }
+            
+        }
+
+        _create(target:any){
+            let info = {};
+
+            let main = this._main = $.create("div").addClass("input-calendar");
+            switch(this.type){
+                case "text":
+                    info.tagName = "input";
+                    info.type = "hidden";
+                    break;
+                case "calendar":
+                    info.tagName = "input";
+                    info.type = "hidden";
+                    break;
+                case "hidden":
+                default:
+                    info.tagName = "input";
+                    info.type = "hidden";
+
+            }
+            if(this.id){
+                info.id = this.id;
+            }
+            if(this.name){
+                info.name = this.name;
+            }
+            if(this.value){
+                info.value = this.value;
+            }
+            let input = this._input = main.create(info).addClass("type-input").addClass(this.className);
+
+            let auxTxt = main.create({tagName: "input", type: "text", value: "", name:this.name+"_aux"})
+            .on("change", (event)=>{
+                
+                let date = sgDate.dateFrom(event.currentTarget.value, this.outFormat);
+                
+                if(date){
+                    input.val(sgDate.evalFormat(date, this.format)); 
+                }else{
+                    input.val(event.currentTarget.value);
+                }
+                
+
+            }).addClass("type-input-out");
+
+            for(var x in this.events){
+				auxTxt.on(x, $.bind(this.events[x], this, "event"));
+			}
+			
+			auxTxt.prop(this.propertys);
+			auxTxt.style(this.style);
+
+            this._main.ds(this.dataset);
+            
+            this._main.ds("sgName", this.name);
+            this._main.ds("sgInput", "date");
+            this._main.ds("sgType", this.type);
+
+            this.setValue(this.value);
+            
+            let div2 = $.create("div").text("Calendario");
+            let p = this.picker = new sgDate.Picker({
+                id:this.id+"_calendar",
+                target:div2,
+                onselectday: (date)=>{
+                   
+                    auxTxt.val(sgDate.evalFormat(date, this.outFormat));
+                    input.val(sgDate.evalFormat(date, this.format));
+                    this.hide();
+                }
+            });
+           
+
+            let btn = main.create({tagName: "button", type: "button", innerHTML: "&raquo;"})
+            .on("click", (event)=>{
+
+                
+                let date = sgDate.dateFrom(input.val(), "%yy-%mm-%dd");
+
+                p.setCal(date || new Date());
+                p.show({context:event.currentTarget});
+                
+            });
+        }
+        hide(){
+            this.picker.hide();
+        }
+        setValue(value:any){
+
+            
+            let date = sgDate.dateFrom(value, this.format);
+            let auxTxt = $(this._main.query(".type-input-out"));
+            let value2 = "";
+            if(date){
+                value2 = sgDate.evalFormat(date, this.outFormat);
+            }else{
+                value = "";
+            }
+
+            this._input.val(value);
+
+            if(auxTxt){
+                auxTxt.val(value2);
+            }
+			
+        }
+        
+        getValue(){
+            let elem = this._main.query(".type-input");
+            if(elem){
+                return elem.value;
+            } 
+            return "";
+            
+		}
+        _load(main:any){
+
+        }
+
+        get(){
+            return this._main.get();
+        }
+
+        
+        getName(){
+            return this._main.get().name;
+        }
+        getId(){
+            return this._main.get().id;
+        }
+        getText(){
+            if(this._main.get().type){
+                alert(8)
+            }
+        }
+        ds(prop, value){
+            this._main.ds(prop, value);
+        }
+        focus(){
+            let elem = this._main.query(".type-input-out");
+            if(elem){
+                elem.focus();
+            }
+            
+        }
+        select(){
+            let elem = this._main.query(".type-input-out");
+            if(elem){
+                elem.select();
+            }
+            
+        }
+    }
+
+
+    I.register("date", InputCalendar);
+    return InputCalendar;
 })(_sgQuery);

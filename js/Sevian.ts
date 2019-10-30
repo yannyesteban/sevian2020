@@ -47,10 +47,23 @@ var S = (($) => {
         
         static send(info:object){
 			
+
+			if(info.confirm && !confirm(info.confirm)){
+				return false;
+			}
+
 			let panel = info.panel;
+			
+
+
 
 			if(panel <= "0"){
 				panel = this.defaultPanel;
+			}
+
+			if(info.valid !== false && panel && this._e[panel].valid && !this._e[panel].valid()){
+				db ("error valid");
+				return false;
 			}
 
             let dataForm = null;

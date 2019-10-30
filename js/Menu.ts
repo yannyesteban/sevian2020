@@ -580,4 +580,4 @@ db ("info. target "+Info.target, "blue");
     };
 
     return Menu;
-})(_sgQuery, _sgFloat);
+})(_sgQuery, false);

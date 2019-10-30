@@ -7,16 +7,12 @@ if(!Sevian){
 
 var Valid = false;
 (function(namespace, $){
-	var re = false,
-		matchArray = false,
-		aux = false,
-		date = false,
-		_pattern = false;
 	
-	var trim = function(value){
+	let trim = function(value){
 		
-		re = /^\s+/i;
-		matchArray = re.exec(value);
+		let re = /^\s+/i;
+		let matchArray = re.exec(value);
+		
 		if (matchArray){
 			value = value.replace(re, "");
 		}
@@ -29,19 +25,19 @@ var Valid = false;
 		return value;
 	};
 	
-	var empty = function(value){
-		re = /.+/;
-		matchArray = re.exec(value);
+	let empty = function(value){
+		let re = /.+/;
+		let matchArray = re.exec(value);
 		if (matchArray){
 			return false;
 		}
 		return true;
 	};
-	var evalExp = function(pattern, value){
+	let evalExp = function(pattern, value){
 		if (!empty(value)){
 			
-			re = new RegExp(pattern, "gi");
-			matchArray = re.exec(value);
+			let re = new RegExp(pattern, "gi");
+			let matchArray = re.exec(value);
 
 			if (matchArray){
 				return true;
@@ -52,51 +48,15 @@ var Valid = false;
 		return true;
 	};
 	
-	var getDateFrom = function(query, pattern){
-		
-		aux = {};
-		date = / /;
-		
-		_pattern = pattern.replace(/\bd{1,2}\b/g,"([0-9]{1,2})");
-		_pattern = _pattern.replace(/\bm{1,2}\b/g,"[0-9]{1,2}");
-		_pattern = _pattern.replace(/\by{1,2}\b/g,"[0-9]{4}");
-		date.compile(_pattern);
-
-		if((matchArray = date.exec(query))){
-			aux.day = matchArray[1];
-		}
-	
-		_pattern = pattern.replace(/\bd{1,2}\b/g,"[0-9]{1,2}");
-		_pattern = _pattern.replace(/\bm{1,2}\b/g,"([0-9]{1,2})");
-		_pattern = _pattern.replace(/\by{1,2}\b/g,"[0-9]{4}");
-		date.compile(_pattern);
-
-		if((matchArray = date.exec(query))){
-			aux.month = matchArray[1];
-		}
-
-		_pattern = pattern.replace(/\bd{1,2}\b/g,"[0-9]{1,2}");
-		_pattern = _pattern.replace(/\bm{1,2}\b/g,"[0-9]{1,2}");
-		_pattern = _pattern.replace(/\by{1,2}\b/g,"([0-9]{4})");
-		date.compile(_pattern);
-		if((matchArray = date.exec(query))){
-			aux.year = matchArray[1];
-		}
-
-		return aux;
-		
-	};
-	
-	var evalDate = function(value, pattern){
+	let evalDate = function(value, pattern){
 		
 		if(trim(value) === ""){
 			return true;
 		}
 		
-		var aux = sgDate.dateFrom(value, pattern);
-		var date = new Date(aux.year, aux.month - 1, aux.day);
+		let aux = sgDate.dateFrom(value, pattern);
 
-		if(aux.year !== date.getFullYear() || aux.month !== (date.getMonth() + 1) || aux.day !== date.getDate()){
+		if(!aux){
 			return false;
 		}else{
 			return true;
@@ -112,7 +72,7 @@ var Valid = false;
 			this.msg = msg[lang];
 		},
 		evalMsg: function(key, rules, value, title){
-			var msg = "";
+			let msg = "";
 			
 			if(rules[key].msg){
 				msg = rules[key].msg;
@@ -130,7 +90,7 @@ var Valid = false;
 		},
 		
 		send: function(rules, value, title, masterData){
-			var error = false, rule = false, key = false;
+			let error = false, rule = false, key = false;
 			for(key in rules){
 				rule = rules[key];	
 				error = false;
@@ -225,7 +185,7 @@ var Valid = false;
 		
 	};
 
-	var valid_msg = [];
+	let valid_msg = [];
 	valid_msg.spa = {
 		"required": "El campo {=title} es obligatorio",
 		"alpha"			:"El campo {=title} solo debe tener caracteres alfabéticos",

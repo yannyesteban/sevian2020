@@ -242,10 +242,16 @@ var Form = (($) => {
             if (input === "hidden") {
                 input = "input";
                 info.type = "hidden";
+                this._main.append(I.create(input, info));
+                return false;
             }
             let field = this._page.create("div").addClass("field");
-            field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption);
-            field.create("div").addClass("input").append(I.create(input, info).get());
+            let ind = "";
+            if (info.rules && info.rules.required) {
+                ind = "<span class='ind'>*</span>";
+            }
+            field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption + ind);
+            field.create("div").addClass("input").append(I.create(input, info));
             return field;
         }
         get() {
@@ -283,6 +289,48 @@ var Form = (($) => {
                     this._main.removeClass("open").addClass("close");
                 }
             }
+        }
+        getInputs() {
+            let inputs = {};
+            let elem = null, e = null;
+            let elems = this._main.queryAll("[data-sg-input]");
+            for (e of elems) {
+                elem = $(e);
+                inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"), { id: elem });
+            }
+            return inputs;
+        }
+        getValue() {
+            let inputs = this.getInputs();
+            let data = [];
+            let name = null;
+            for (name in inputs) {
+                data[name] = inputs[name].getValue();
+            }
+            return data;
+        }
+        valid() {
+            let inputs = this.getInputs();
+            let data = [];
+            let name = null;
+            let rules = null, config = null;
+            for (name in inputs) {
+                data[name] = inputs[name].getValue();
+            }
+            for (let field of this.fields) {
+                config = field.config;
+                rules = config.rules;
+                if (rules) {
+                    let msg = Sevian.Valid.send(rules, inputs[config.name].getValue(), config.caption, data);
+                    if (msg) {
+                        alert(msg);
+                        inputs[config.name].focus();
+                        inputs[config.name].select();
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
     Form._objs = [];

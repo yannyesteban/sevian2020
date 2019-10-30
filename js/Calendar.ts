@@ -1,6 +1,9 @@
-var Calendar = (($) => {
+var sgDate = {Calendar:null, Picker:null, evalFormat: null, dateFrom: null};
+
+sgDate.Calendar = (($) => {
     let _daysXMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
-    
+    let _holy = [];
+
     let daysXMonth = function(y, m){
 		if(m === 2){
 			return 28 + (((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0))? 1: 0);
@@ -44,10 +47,65 @@ var Calendar = (($) => {
 		value = "0"+ value; 
 		return value.substr(value.length - 2);
 	};
-    let evalFormat = function(date, query){
+    
+    sgDate.dateFrom = function(query, pattern){
+		let 
+			aux = {},
+			date = / /,
+			pattern_ = null,
+			result = null;
+		
+		pattern_ = pattern.replace(/%dd/g,"([0-9]{1,2})");
+		pattern_ = pattern_.replace(/%mm/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%yy/g,"[0-9]{4}");
+		
+		pattern_ = pattern_.replace(/%d/g,"([0-9]{1,2})");
+		pattern_ = pattern_.replace(/%m/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%y/g,"[0-9]{4}");
+
+		date.compile(pattern_);
+		if((result = date.exec(query))){
+			aux.day = result[1] *1;
+		}else{
+			return false;
+		}
+	
+		pattern_ = pattern.replace(/%dd/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%mm/g,"([0-9]{1,2})");
+		pattern_ = pattern_.replace(/%yy/g,"[0-9]{4}");
+		pattern_ = pattern_.replace(/%d/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%m/g,"([0-9]{1,2})");
+		pattern_ = pattern_.replace(/%y/g,"[0-9]{4}");
+
+		date.compile(pattern_);
+		if((result = date.exec(query))){
+			aux.month = result[1] *1;
+		}else{
+			return false;
+		}
+		pattern_ = pattern.replace(/%dd/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%mm/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%yy/g,"([0-9]{4})");
+		
+		pattern_ = pattern_.replace(/%d/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%m/g,"[0-9]{1,2}");
+		pattern_ = pattern_.replace(/%y/g,"([0-9]{4})");
+
+		date.compile(pattern_);
+		if((result = date.exec(query))){
+			aux.year = result[1] *1;
+		}else{
+			return false;
+		}
+
+		return new Date(aux.year, aux.month-1, aux.day);
+	};
+    
+    
+    let evalFormat = sgDate.evalFormat = function(date, query){
 
         let y = date.getFullYear();
-        let m = date.getMonth() ;
+        let m = date.getMonth() + 1;
         let d = date.getDate();
 
 		if(!y || !m || !d ){
@@ -65,8 +123,8 @@ var Calendar = (($) => {
 		query = query.replace(/%dd/g, fillz(d));
 		query = query.replace(/%d/g, d);
 
-		query = query.replace(/%M/g, nameMonths[2][m]);
-		query = query.replace(/%MM/g, nameMonths[1][m]);
+		query = query.replace(/%M/g, nameMonths[2][m - 1]);
+		query = query.replace(/%MM/g, nameMonths[1][m - 1]);
 
 		let day = date.getDay();
 		
@@ -91,6 +149,60 @@ var Calendar = (($) => {
 		["Domingo","Lunes","Martes","Mi&eacute;rcoles","Jueves","Viernes","S&aacute;bado"]		
     ];
     
+
+    let indexHoly = function(data){
+			
+        var holy = [], y, m, d, x, info;
+        
+        for(x in data){
+            y = data[x][0];
+            m = data[x][1];
+            d = data[x][2];
+            info = data[x][3] || "";
+            
+            if(!holy[y]){
+                holy[y] = [];
+            }
+                            
+            if(!holy[y][m]){
+                holy[y][m] = [];
+            }
+
+            holy[y][m][d] = info;
+            
+        }
+        return holy;
+    }
+    
+    let setHoly = function(data){
+        _holy = indexHoly(data);
+        
+    }
+    
+    let isHolyFrom = function(holy, date){
+
+
+        let y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+        if(holy[y]){
+            if(holy[y][m] && holy[y][m][d]){
+                return holy[y][m][d];
+            }
+        }
+        if(holy[0] && holy[0][m] && holy[0][m][d]){
+            return holy[0][m][d];
+        }
+        return false;
+    }
+    
+    let isHoly = function(date:Date){
+
+
+        
+        return isHolyFrom(_holy, date);
+       
+    }
+
+
     let weekTitle = [["S", "Sem"]];
 
     class Calendar{
@@ -98,10 +210,7 @@ var Calendar = (($) => {
         id:any = null;
         target:any = null;
 
-        year:number = null;
-        month:number = null;
-        day:number = null;
-
+        
         date:Date = null;
         today:Date = null;
         className:any = null; 
@@ -120,8 +229,12 @@ var Calendar = (($) => {
         stringToday:string = "Hoy es: %D %dd de %M de %yy";
 		popupTitle:string = "%d/%m/%yy";
 
+        onselectday = (date) => {};
+		onselectweek = (week:number) => {};
+
         _main:object = null;
         _date:object = null;
+        _popup:object = null
         nameMonths:any[] = nameMonths;
         nameDays:any[] = nameDays;
         weekTitle:any[] = weekTitle;
@@ -136,13 +249,11 @@ var Calendar = (($) => {
 
             this.today = new Date();
             
-            if(!this.year || !this.month  || !this.day){
+            if(!this.date){
                 this.date = new Date();
-            }else{
-                this.date = new Date(this.year, this.month - 1, this.day);
+           
             }
-            
-            
+           
 
             let main = this._main = (this.id)? $(this.id) : false;
             if(main){
@@ -171,6 +282,14 @@ var Calendar = (($) => {
 
             }
 
+            if(this.onselectday){
+                this.onselectday = $.bind(this.onselectday, this, "date");
+            }
+            if(this.onselectweek){
+                this.onselectweek = $.bind(this.onselectweek, this, "week");
+            }
+
+            
             this.setCal(this.date);
 
         }
@@ -206,7 +325,12 @@ var Calendar = (($) => {
             cMonth.create("span").addClass("p-month").text("&laquo;")
             .on("click", ()=>this.addMonth(-1));;
             let select = cMonth.create("select").addClass("m-select")
-            .on("change", (event) => this.setMonth(event.currentTarget.value));
+            .on("change", (event) => this.setMonth(event.currentTarget.value))
+            .on("click", (event)=>{
+                event.preventDefault();
+				event.returnValue = false;
+				event.cancelBubble = true;
+            });
             for(i = 1; i <= 12; i++){
 				select.create("option").prop({
 					value: i,
@@ -220,7 +344,13 @@ var Calendar = (($) => {
             cYear.create("span").addClass("p-year").text("&laquo;")
             .on("click", () => this.addYear(-1));
             let select2 = cYear.create("select").addClass("y-select")
-            .on("change", (event) => this.setYear(event.currentTarget.value));
+            .on("change", (event) => this.setYear(event.currentTarget.value))
+            .on("click", (event)=>{
+                event.preventDefault();
+				event.returnValue = false;
+				event.cancelBubble = true;
+            });
+           
             for(i = this.today.getUTCFullYear() + 20; i >= this.today.getUTCFullYear() - 100; i--){
 				select2.create("option").prop({
 					value: i,
@@ -231,7 +361,7 @@ var Calendar = (($) => {
             .on("click", ()=>this.addYear(1));
 
 
-            let table = main.create("table");
+            let table = main.create("table").addClass("calendar");
 
             let tr = table.create("thead").create("tr");
             tr.create("td").text(weekTitle[0][1]);
@@ -240,11 +370,12 @@ var Calendar = (($) => {
             }
             table.create("tbody").addClass("grid");
 
-            let bToday = main.create("div").addClass("today").text(evalFormat(this.today, this.stringToday))
+            let bToday = main.create("div").addClass("t-bar").text(evalFormat(this.today, this.stringToday))
             .on("click", () => this.setCal(this.today));
             //this.stringToday = "Hoy es: %D %dd de %M de %yy";
             //this.popupTitle = "%d/%m/%yy";
-            this.grid(this.date);
+            //this.grid(this.date);
+            this.popupNote();
         }
         _load(main:any){
 
@@ -296,6 +427,8 @@ var Calendar = (($) => {
 
             let grid = $(this._main.query(".grid")).text("");
             let tr = null;
+
+            
             for(let i = ini; i < end; i++){
                 
                 if(i % 7 == 0){
@@ -310,7 +443,7 @@ var Calendar = (($) => {
                     }
                 }
 
-                cell = tr.create("td");
+                cell = tr.create("td").addClass("day");
 
                 if(i < dayFirst){
                     _info = {
@@ -335,14 +468,29 @@ var Calendar = (($) => {
                     classDay = "m-next";
                 }
 
-                cell.text(_info.day).addClass(classDay).on("click",this._setValue(_info)); 
+                let _date = new Date(_info.year, _info.month-1, _info.day);
 
+                cell.text(_info.day).addClass(classDay).on("click",this._setValue(_date)); 
+                
                 if(_info.year == today.year && _info.month == today.month && _info.day == today.day){
                     cell.addClass("today");
                 }
                 if(_info.year == pDate.getFullYear() && _info.month == pDate.getMonth()+1 && _info.day == pDate.getDate()){
                     cell.addClass("active");
                 }
+                
+                if(this.showHolyday){
+					holy = isHoly(_date);
+				
+					if(holy){
+						cell.attr("title", holy);
+						if(this.showHolyInfo){
+							this.setNote(cell, _date, holy);
+						}
+						
+					}
+				}
+                //this.setNote(cell, date, info, "");
             }
         }
         
@@ -395,17 +543,17 @@ var Calendar = (($) => {
         }
         setCal(date){
 
-            console.log(date)
+            
             let month = date.getMonth() + 1;
             let years = this._main.queryAll(".y-bar > [data-index]");
             if(years){
                 years.forEach((item, index)=>{
-                    if(index<2){
+                    if(index < 2){
                         $(item).text("&laquo; " + (date.getFullYear()-2+index));
                     }else if(index>2){
-                        $(item).text((date.getFullYear()-2+index) + " &raquo;");
+                        $(item).text((date.getFullYear() -2 + index) + " &raquo;");
                     }else{
-                        $(item).text((date.getFullYear()-2+index)); 
+                        $(item).text((date.getFullYear() -2 + index)); 
                     }
                     
                 });
@@ -426,7 +574,7 @@ var Calendar = (($) => {
                 $(item).text("&laquo; " + this.nameMonths[1][(month == 1)? 11: month - 2]);
             }
             item = this._main.query(".c-month > .n-month");
-            if(item){db (month+2)
+            if(item){
                 $(item).text(this.nameMonths[1][(month)%12] + " &raquo;");
             }
 
@@ -446,6 +594,7 @@ var Calendar = (($) => {
 		setValue(date){
 
             this.date = date;
+            
             return;
 			
 			if(this._validRules(date)){
@@ -459,14 +608,64 @@ var Calendar = (($) => {
         }
         getValue(){
 			
-			return {
-				year: this.date.year,
-				month: this.date.month,
-				dday: this.date.day,
-				
-			};
+			return this.date;
+        }
+        popupNote(){
+
+            let div = $.create("div").addClass("cal-note");
+			this._pNoteTitle = div.create("div").text("hola").addClass("note-title");
+			this._pNoteBody = div.create("div").text("hola2").addClass("note-body");
+			this._popup = new Float.Popup({visible:false, target:this._main, className:"sg-cal-popup"});
+			this._popup.setBody(div);	
+            
+            //this._popup.show({left:"left", top:"top"});
 		}
-        _setValue(date){
+        setNote(cell:any, date:Date, info:any, type:any){
+
+            //type = "note"            
+			cell.style().position = "relative";
+			var tip = cell.create("div");
+			tip.addClass("sgcal-"+(type || "ind"));
+			tip.style({
+                position:"absolute",
+
+                
+
+            });
+
+
+            
+			tip.on("click", (event) => {
+				event.preventDefault();
+				event.returnValue = false;
+				event.cancelBubble = true;
+				
+				this._pNoteTitle.text(evalFormat(date, this.popupTitle));
+				this._pNoteBody.text(info);
+				//ME.popup.setBody(info);
+				//this.popup.getMain().get().className = (type || "holy");
+				this._popup.show({context:cell.get(), left:"front", top:"middle"});
+				
+			});
+        }
+
+        isHoly(date:Date){
+			if(this._holy){
+				var info = isHolyFrom(this._holy, date);
+				if(info){
+					return info;	
+				}
+			}
+			return isHoly(date) || "";
+		}
+		
+		setHoly(data){
+		
+			this.holy = data;
+			this._holy = sgDate.indexHoly(data);
+		
+		}
+        _setValue(date:Date){
 			
 			
 			return (event) => {
@@ -476,7 +675,8 @@ var Calendar = (($) => {
                     active.removeClass("active")
                 }
                 $(event.currentTarget).addClass("active");
-				this.setValue(new Date(date.year, date.month - 1, date.day));
+                this.setValue(date);
+                this.onselectday(date);	
 			};
         }
         _setMonth(month:number){
@@ -494,8 +694,40 @@ var Calendar = (($) => {
 
     }
 
+    class Picker extends Calendar {
+        _win:object = null
+        constructor(info:any){
+            
+            super(info);
 
+            this._win = new Float.Window({
+                caption:"Calendar",
+                visible:false,
+                //width:"450px",
+                height:"auto",
+                left:"center",
+                top:"middle",
+                child:this._main,
+                autoClose:true,
+                delay:0,
+                className:["sevian", "cal-picker"]
+            });
+
+            
+        }
+        show(info){
+            this._win.show({context: info.context});  
+        }
+
+        hide(){
+            this._win.setVisible(false);
+        };
+    }
+    sgDate.Picker = Picker;
     $(window).on("load", ()=>{
+        let msg = Sevian.Valid.send({required:{}},"","hola",[]);
+
+        return;
         let div = $("#form_p4").create("div").text("Calendario");
 
         let cal = new Calendar({
@@ -509,8 +741,47 @@ var Calendar = (($) => {
             
 
         });
+        let div2 = $("#form_p1").create("div").text("Calendario");
+        let p = new Picker({
+            id:"cal2",
+            target:div2,
+            onselectday:'db (date,"red","pink");this.hide();'
+        })
 
-    }
+        $("#form_p2").create({tagName:"input", type:"button", value:"Cal"})
+        .on("click", (event)=>{
+            p.show({context:event.currentTarget})
+        });
+
+        
+
+    });
+    let holy = [
+
+
+		[0,1,1,"Año Nuevo"],
+		[0,4,19,"Declaración de la Independencia"],
+		[0,5,1,"Día del Trabajador"],
+		[0,6,24,"Batalla de Carabobo"],
+		[0,7,5,"Firma del Acta de Independencia"],
+		[0,7,24,"Natalicio del Libertador Simón Bolívar"],
+		[0,10,12,"Día de la Resitencia Indigena"],
+		[0,12,24,"Víspera de Navidad"],
+		[0,12,25,"Navidad"],
+		[0,12,31,"Fin de Año"],
+
+		[2017,4,13,"Jueves Santo"],
+		[2017,4,14,"Viernes Santo"],
+
+		[2017,2,27,"Lunes de Carnaval"],
+		[2017,2,28,"Martes de Carnaval"],
+
+
+
+
+	];
+	setHoly(holy);
+
 
 
     return Calendar;

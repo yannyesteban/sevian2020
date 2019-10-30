@@ -492,4 +492,4 @@ var Menu = (function ($, Float) {
         });
     };
     return Menu;
-})(_sgQuery, _sgFloat);
+})(_sgQuery, false);

@@ -908,7 +908,7 @@ Float.Window = (($) => {
 
         autoClose:boolean = false;
         
-        delay:number = 500;
+        delay:number = 3000;
         width:string = null;
         height:string = null;
         
@@ -1304,22 +1304,27 @@ Float.Popup = (($) => {
             
             if(this.visible){
                 this.show();
+            }else{
+                this.setVisible(false);
             }
         }
 
         _create(main){
 
 
-            if(this.child){db (884444)
+            if(this.child){
                 main.append(this.child);
             }
-            main.addClass("sgPopup");
+            main.addClass("sg-popup");
             Float.Float.init(main.get());
         }
         _load(main){
 
         }
 
+        getMain(){
+            return this._main;
+        }
         setBody(e){
             this._main.append(e);
         }
