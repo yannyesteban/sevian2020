@@ -41,6 +41,7 @@ var Form = (($) => {
             this._page = null;
             this._pg = [];
             this._tab = null;
+            this._inputs = [];
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
@@ -242,7 +243,8 @@ var Form = (($) => {
             if (input === "hidden") {
                 input = "input";
                 info.type = "hidden";
-                this._main.append(I.create(input, info));
+                this._inputs[info.name] = I.create(input, info);
+                this._main.append(this._inputs[info.name]);
                 return false;
             }
             let field = this._page.create("div").addClass("field");
@@ -250,8 +252,14 @@ var Form = (($) => {
             if (info.rules && info.rules.required) {
                 ind = "<span class='ind'>*</span>";
             }
+            if (info.childs) {
+                info.evalChilds = (event) => {
+                    this.evalChilds(info.name);
+                };
+            }
+            this._inputs[info.name] = I.create(input, info);
             field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption + ind);
-            field.create("div").addClass("input").append(I.create(input, info));
+            field.create("div").addClass("input").append(this._inputs[info.name]);
             return field;
         }
         get() {
@@ -308,6 +316,33 @@ var Form = (($) => {
                 data[name] = inputs[name].getValue();
             }
             return data;
+        }
+        evalChilds(parent) {
+            let input = this._inputs[parent];
+            for (let i in this._inputs) {
+                if (this._inputs[i].parent === parent) {
+                    this._inputs[i].createOptions(input.getValue());
+                    if (this._inputs[i].hasChilds()) {
+                        db(this._inputs[i].getName());
+                        this.evalChilds(this._inputs[i].getName());
+                    }
+                }
+            }
+            return;
+            let inputx = null, e = null, elem = null, value = null;
+            e = this._main.query(`[data-sg-name='${parent}']`);
+            elem = $(e);
+            input = I.create(elem.ds("sgInput"), { id: elem, parent: parent });
+            value = input.getValue();
+            let elems = this._main.queryAll(`[data-sg-input][data-parent='${parent}']`);
+            for (e of elems) {
+                elem = $(e);
+                input = I.create(elem.ds("sgInput"), { id: elem, parent: parent });
+                input.createOptions(value);
+                if (input.hasChilds()) {
+                    this.evalChilds(input.getName());
+                }
+            }
         }
         valid() {
             let inputs = this.getInputs();

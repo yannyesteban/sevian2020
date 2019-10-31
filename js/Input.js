@@ -49,6 +49,7 @@ var Input = (($) => {
             this._main = null;
             this.status = "valid";
             this.mode = "request";
+            this.evalChilds = () => { };
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
@@ -109,15 +110,24 @@ var Input = (($) => {
                 //let action = $.bind(this.events[x], this._main);
                 this._main.on(x, $.bind(this.events[x], this, "event"));
             }
+            if (this.childs) {
+                this._main.on("change", $.bind(this.evalChilds, this, "event"));
+            }
             this._main.prop(this.propertys);
             this._main.style(this.style);
             if (this.type === "select" || this.type === "multiple") {
-                this.createOptions(this.value, false);
+                this.createOptions(false);
             }
             this._main.ds(this.dataset);
             this._main.ds("sgName", this.name);
             this._main.ds("sgInput", "input");
             this._main.ds("sgType", this.type);
+            if (this.parent) {
+                this._main.ds("parent", this.parent);
+            }
+            if (this.childs) {
+                this._main.ds("childs", "childs");
+            }
             /*
             if(this.dataset){
                 for(let x in this.dataset){
@@ -137,11 +147,24 @@ var Input = (($) => {
         get() {
             return this._main.get();
         }
-        createOptions(value, parentValue) {
-            var i, option, vParent = [], _ele = this.get();
+        hasChilds() {
+            if (this._main.ds("childs")) {
+                return true;
+            }
+            return false;
+        }
+        createOptions(parentValue) {
+            if (!this.data) {
+                let data = this._main.queryAll("option");
+                this.data = [];
+                data.forEach((e) => {
+                    this.data.push([e.value, e.text, e.dataset.parentValue]);
+                });
+            }
+            let i, option, vParent = [], _ele = this.get();
             _ele.length = 0;
             if (this.parent) {
-                var aux = (parentValue + "").split(",");
+                let aux = (parentValue + "").split(",");
                 for (i = 0; i < aux.length; i++) {
                     vParent[aux[i]] = true;
                 }
@@ -153,13 +176,27 @@ var Input = (($) => {
                 _ele.options.add(option);
             }
             for (i in this.data) {
+                option = document.createElement("OPTION");
+                option.value = this.data[i][0];
+                option.text = this.data[i][1];
+                option.dataset.parentValue = this.data[i][2] || "";
                 if (vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*") {
+                }
+                else {
+                    option.style.display = "none";
+                }
+                _ele.options.add(option);
+            }
+            /*for (i in this.data){
+                if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
                     option = document.createElement("OPTION");
                     option.value = this.data[i][0];
                     option.text = this.data[i][1];
                     _ele.options.add(option);
                 }
-            }
+            }*/
+        }
+        evalOptions(parentValue) {
         }
         getName() {
             return this._main.get().name;

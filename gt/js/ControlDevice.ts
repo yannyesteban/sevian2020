@@ -4,7 +4,11 @@ var ControlDevice = (($) => {
     class ControlDevice{
         id:any = null;
         cmdData:any = null;
+        clientData:any = null;
         paramForm:any = null;
+        accountData:any = null;
+        deviceData:any = null;
+
         constructor(info:object){
             
             for(var x in info){
@@ -52,26 +56,35 @@ var ControlDevice = (($) => {
                     {
                         input: "input",
                         config: {
-                            type:"text",
+                            type:"select",
                             name:"client_id",
-                            caption:"Cliente"
+                            caption:"Cliente",
+                            data:this.clientData,
+                            childs: true
                         }
                     },
                     {
                         input: "input",
                         config: {
-                            type:"text",
+                            type:"select",
                             name:"count_id",
-                            caption:"Cuenta"
+                            caption:"Cuenta",
+                            data: this.accountData,
+                            parent:"client_id",
+                            childs: true
                         }
                     }
                     ,
                     {
                         input: "input",
                         config: {
-                            type:"text",
+                            type:"select",
                             name:"device_id",
-                            caption:"Device"
+                            caption:"Device",
+                            parent:"count_id",
+
+
+                            data: this.deviceData
                         }
                     }
 

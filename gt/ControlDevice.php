@@ -48,8 +48,12 @@ class ControlDevice extends \Sevian\Element{
         
         $q = "SELECT id, command FROM devices_commands where version_id=1";
 
-        $data = $this->getDataField([$q]);
-        
+		$data = $this->getDataField([$q]);
+		
+		$clientData = $this->getDataField([['','. seleccione',''], "SELECT id, client FROM clients ORDER BY client;"]);
+		$accountData = $this->getDataField([['','. seleccione',''], "SELECT id, name, client_id FROM accounts a ORDER BY name;"]);
+		$deviceData = $this->getDataField([['','. seleccione',''], "SELECT codvehiculo, concat('veh - ', codvehiculo) as v, coddato  FROM cuenta_vehiculos order by coddato, codvehiculo;"]);
+		
         $formsFields = $this->formParams(1);
 
         $forms = [
@@ -61,7 +65,10 @@ class ControlDevice extends \Sevian\Element{
         $info = [
             "id"=>$form->id,
             "cmdData"=> $data,
-            'paramForm'=>$forms
+			'paramForm'=> $forms,
+			'clientData' => $clientData,
+			'accountData' => $accountData,
+			'deviceData' => $deviceData
 
         ];
         $this->typeElement = 'ControlDevice';

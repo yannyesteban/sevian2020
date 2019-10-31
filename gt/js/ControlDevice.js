@@ -3,7 +3,10 @@ var ControlDevice = (($) => {
         constructor(info) {
             this.id = null;
             this.cmdData = null;
+            this.clientData = null;
             this.paramForm = null;
+            this.accountData = null;
+            this.deviceData = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -36,25 +39,32 @@ var ControlDevice = (($) => {
                     {
                         input: "input",
                         config: {
-                            type: "text",
+                            type: "select",
                             name: "client_id",
-                            caption: "Cliente"
+                            caption: "Cliente",
+                            data: this.clientData,
+                            childs: true
                         }
                     },
                     {
                         input: "input",
                         config: {
-                            type: "text",
+                            type: "select",
                             name: "count_id",
-                            caption: "Cuenta"
+                            caption: "Cuenta",
+                            data: this.accountData,
+                            parent: "client_id",
+                            childs: true
                         }
                     },
                     {
                         input: "input",
                         config: {
-                            type: "text",
+                            type: "select",
                             name: "device_id",
-                            caption: "Device"
+                            caption: "Device",
+                            parent: "count_id",
+                            data: this.deviceData
                         }
                     }
                 ]
