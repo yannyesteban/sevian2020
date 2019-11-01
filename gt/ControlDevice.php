@@ -28,11 +28,24 @@ class ControlDevice extends \Sevian\Element{
         }
 
         switch($method){
+
+			case 'load_cmd':
+				$var = $this->eparams->cmd;
+				$f = new \Sevian\iFragment([
+					'targetId'=>'sg_form_5',
+					'html'=>$var,
+					'script'=>""
+
+				]);
+				//$this->addFragment($f);
+				$this->loadParamsForm($this->eparams->cmd, $this->eparams->cmdId);
+				break;
 			case 'create':
             case 'load':
             default:
 				$this->create();
-                break;
+				break;
+				
         }
 
         return true;
@@ -46,7 +59,7 @@ class ControlDevice extends \Sevian\Element{
         $this->panel = $form;
         
         
-        $q = "SELECT id, command FROM devices_commands where version_id=1";
+        $q = "SELECT id, command FROM devices_commands where version_id=1 ORDER  BY command DESC";
 
 		$data = $this->getDataField([$q]);
 		
@@ -63,7 +76,8 @@ class ControlDevice extends \Sevian\Element{
         ];
 
         $info = [
-            "id"=>$form->id,
+			"id"=>$form->id,
+			'panel'=>$this->id,
             "cmdData"=> $data,
 			'paramForm'=> $forms,
 			'clientData' => $clientData,
@@ -73,22 +87,91 @@ class ControlDevice extends \Sevian\Element{
         ];
         $this->typeElement = 'ControlDevice';
         $this->info = $info;//$form->getInfo();
-    }
+	}
+	
+	private function loadParamsForm($cmd, $cmdId){
+
+		$formsFields = $this->formParams($cmdId);
+
+        $forms = [
+            'caption'=> "COMMAND: $cmd",
+            
+            'fields'=> $formsFields
+        ];
+
+		$opt[] = [
+			'method'  => 'loadCmdForm',
+			'value' => $forms
+		];
+		$this->typeElement = "ControlDevice";
+		$this->info = $opt;//$form->getInfo();
+	}
 
     private function formParams($commandId){
-        $cn = $this->cn;
-        $cn->query = "SELECT * FROM devices_comm_params where command_id = 1 order by `order`;";
+		$cn = $this->cn;
+		
+		$cn->query = "SELECT param_id, v.value, v.title, p.param, c.command, type_value
+			FROM devices_params_value as v
+			INNER JOIN devices_comm_params as p ON p.id = param_id
+			INNER JOIN devices_commands as c ON c.id = command_id WHERE c.id = '$commandId'
+		";
+		$result = $cn->execute();
+		$dataFields = [];
+		
+		while($rs = $cn->getDataAssoc($result)){
+
+			$id = $rs['param_id'];
+
+			if(!isset($dataFields[$id])){
+				$dataFields[$id] = [];
+			}
+			$dataFields[$id][] = [$rs['value'],$rs['title'] ?? $rs['value'],0];
+			
+
+
+        }
+
+        $cn->query = "SELECT * FROM devices_comm_params where command_id = '$commandId' order by `order`;";
         
         $result = $cn->execute();
-        $fields = [];
+		$fields = [];
+		
+		$fields[] = [
+			"input"=>'input',
+			"config"=>[
+				"type"=>"text",
+				"name"=>"param_pass",
+				"caption"=> 'pass'
+			]
+
+		];
+		$fields[] = [
+			"input"=>'input',
+			"config"=>[
+				"type"=>"text",
+				"name"=>"param_tag",
+				"caption"=> 'tag'
+			]
+
+		];
+
         while($rs = $cn->getDataAssoc($result)){
 
+			$input = 'input';
+			$type = 'text';
+			$data = [];
+			if(isset($dataFields[$rs['id']])){
+				$input = 'multi';
+				$type = 'select';
+				$data = $dataFields[$rs['id']];
+			}
 			$fields[] = [
-                "input"=>'input',
+                "input"=>$input,
                 "config"=>[
-                    "type"=>"text",
+                    "type"=>$type,
                     "name"=>"param_".$rs["id"],
-                    "caption"=>$rs["param"]
+					"caption"=>$rs["param"],
+					'data' => $data 
                 ]
 
             ];

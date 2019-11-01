@@ -114,12 +114,13 @@ $js = [
 		'file'=>"https://maps.googleapis.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&callback=initMap",
 		'begin'	=> false
 	],
+	*/
 	[
 		'file' 	=> "{$PATH}js/Map.js",
 		'begin'	=> false
 		//'attrib' => [			'_type'=>'module'		]
 	],
-*/
+
 	[
 		'file' 	=> "{$PATH}gt/js/ControlDevice.js",
 		

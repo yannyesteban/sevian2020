@@ -2,6 +2,7 @@ var ControlDevice = (($) => {
 
     
     class ControlDevice{
+        panel:number = null;
         id:any = null;
         cmdData:any = null;
         clientData:any = null;
@@ -114,14 +115,37 @@ var ControlDevice = (($) => {
                 ]
             });
 
-            let page = tab.getPage(0);
-            page.addClass("gt-control-p1");
+
+
+            let page = this._page0 = tab.getPage(0);
+            page.id(this.id + "_tpage_0").addClass("gt-control-p1");
             //let bar3 = page.create("div");
             let items = [];
+
+            let act = {
+                async : true,
+                panel: this.panel,
+                params:[{
+                    t:"setMethod",
+                    id: this.panel,
+                    element:'gtControlDevice',
+                    method:"load_cmd",
+                    eparams:{
+                        cmd:"",
+                        cmdId:""
+                    }
+                }]
+
+            };
             for(let x in this.cmdData){
                 items.push({
                     caption: this.cmdData[x][1],
-                    action: "db('"+this.cmdData[x][1]+"')"
+                    action_: "db('"+this.cmdData[x][1]+"')",
+                    action: () => {
+                        act.params[0].eparams.cmd = this.cmdData[x][1];
+                        act.params[0].eparams.cmdId = this.cmdData[x][0];
+                        S.send(act);
+                    }
                 })
             }
 
@@ -130,10 +154,20 @@ var ControlDevice = (($) => {
             
             // page = tab.getPage(0);
             this.paramForm.target = page;
+            this.paramForm.id= this.id+"_form_1";
             let f2 = new Form(this.paramForm);
 
         }
         _load(main:any){}
+
+        loadCmdForm(f){
+            $(this.id+"_form_1").get().parentNode.removeChild($(this.id+"_form_1").get());
+            //this._page0
+            //$(this.id+"_form_1").text("");
+            f.target =this._page0;
+            f.id = this.id+"_form_1";
+            let f2 = new Form(f);
+        }
     }
     
     return ControlDevice;

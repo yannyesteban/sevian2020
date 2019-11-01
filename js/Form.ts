@@ -307,6 +307,7 @@ var Form = (($) => {
         }
         createInput(info:any){
             //return I.create(info);
+            alert (no)
             return new $I["std"](info);
             return new Input(info)
         }
