@@ -1,0 +1,8 @@
+﻿SELECT value, c.command, param, p.type, type_value
+
+FROM devices_commands as c
+INNER JOIN devices_comm_params as p ON p.command_id = c.id
+LEFT JOIN devices_params_value as v ON v.param_id = p.id
+
+
+WHERE version_id = 1

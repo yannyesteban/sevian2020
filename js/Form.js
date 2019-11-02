@@ -316,7 +316,6 @@ var Form = (($) => {
             let data = [];
             for (let name in this._inputs) {
                 data[name] = this._inputs[name].getValue();
-                db(data[name], "pink", "purple");
             }
             return data;
             /*

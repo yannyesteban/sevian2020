@@ -547,7 +547,7 @@ var Multi = (($) => {
             let main = this._main = (this.id)? $(this.id): false;
 
             if(!main){
-                db (this.name)
+               
                 this._create(false);
             }else{
                 
@@ -659,7 +659,10 @@ var Multi = (($) => {
 
             if(this.type === "radio"){
                 let input = this._main.query(`input[name='${this.name}']:checked`);
-                return input.value;
+                if(input){
+                    return input.value;
+                }
+                
             }else{
                 let inputs = this._main.queryAll(`input[name='${this.name}']:checked`);
                 if(inputs){
@@ -667,7 +670,7 @@ var Multi = (($) => {
                 }
             }
             
-            return false;
+            return "";
         }
         
         _load(main:any){

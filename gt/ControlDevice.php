@@ -68,7 +68,7 @@ class ControlDevice extends \Sevian\Element{
         $this->panel = $form;
         
         
-        $q = "SELECT id, command FROM devices_commands where version_id=1 ORDER BY command";
+        $q = "SELECT id, command FROM devices_commands where version_id=1 ORDER BY 1";
 
 		$data = $this->getDataField([$q]);
 		
@@ -177,7 +177,7 @@ class ControlDevice extends \Sevian\Element{
 				$input = 'multi';
 				
 				$data = $dataFields[$rs['id']];
-				if($rs['type_value'] == '1'){
+				if($rs['type_value'] != '2'){
 					$type = 'radio';
 				}else{
 					$type = 'checkbox';
