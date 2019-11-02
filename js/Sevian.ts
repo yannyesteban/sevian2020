@@ -87,12 +87,14 @@ var S = (($) => {
 					this._w[info.panel] = this.createWindow(info.window);
 				}
 
+				if(this._w[info.panel]){
+					this._w[info.panel].setBody(f);
+					this._w[info.panel].show({left:"center",top:"middle"});
+					
+				}
+
 			}
-            if(this._w[info.panel]){
-				this._w[info.panel].setBody(f);
-				this._w[info.panel].show({left:"center",top:"middle"});
 				
-			}
             
 
             if(f){

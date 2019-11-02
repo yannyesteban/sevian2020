@@ -1,5 +1,33 @@
 /* Scss Document */
-.sg-tab {
+.sg-tab > .menu > .tab-menu {
+  display: inline-block;
+  background-color: #6f6f6f;
+  text-decoration: none;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis "...";
+  max-width: 90px;
+  min-width: 70px;
+  -webkit-box-sizing: padding-box;
+          box-sizing: padding-box;
+  border-radius: 4px 12px 0px 0px;
+  margin: 0px 2px 0px 0px;
+  padding: 4px 10px 4px 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.sg-tab > .menu > .tab-menu.tab-active {
+  background-color: red;
+}
+.sg-tab > .body > .tab-body:not(.tab-active) {
+  display: none !important;
+}
+
+.sg-tab_ {
   margin: 0x;
   border: 1px solid #b6b6b6;
   width: 100%;
@@ -14,7 +42,7 @@
           flex-direction: column;
   overflow: auto;
 }
-.sg-tab > .tab-menu {
+.sg-tab_ > .tab-menu {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
@@ -33,7 +61,7 @@
       flex-wrap: wrap;
   font-size: 9pt;
 }
-.sg-tab > .tab-menu > * {
+.sg-tab_ > .tab-menu > * {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis "...";
@@ -57,10 +85,10 @@
   /* Likely future */
   border-radius: 4px 12px 0px 0px;
 }
-.sg-tab > .tab-menu > *.tab-active {
+.sg-tab_ > .tab-menu > *.tab-active {
   background-color: #cc530d;
 }
-.sg-tab > .tab-body {
+.sg-tab_ > .tab-body {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
@@ -71,20 +99,20 @@
   display: -ms-flexbox;
   display: flex;
 }
-.sg-tab > .tab-body > div {
+.sg-tab_ > .tab-body > div {
   border: 4px solid red;
 }
-.sg-tab > .tab-body > div:not(.tab-active) {
+.sg-tab_ > .tab-body > div:not(.tab-active) {
   display: none;
 }
-.sg-tab > .tab-body > div.tab-active {
+.sg-tab_ > .tab-body > div.tab-active {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   overflow: auto;
   border: 4px solid red;
 }
-.sg-tab > .tab-body > div.tab-active > * {
+.sg-tab_ > .tab-body > div.tab-active > * {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;

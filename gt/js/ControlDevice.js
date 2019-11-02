@@ -122,6 +122,26 @@ var ControlDevice = (($) => {
             this.paramForm.target = page;
             this.paramForm.id = this.id + "_form_1";
             let f2 = new Form(this.paramForm);
+            /*
+            this.nav = [
+                ["uno"], ["dos"]
+            ]
+            items = [];
+            for(let x in this.nav){
+                items.push({
+                    caption: this.nav[x][0],
+                    
+                    action: () => {
+                        //act.params[0].eparams.cmd = this.nav[x][1];
+                        
+                        //S.send(act);
+                    }
+                })
+            }
+
+
+            let menu2 = new Menu({caption:"", target:page, items: items});
+            */
         }
         _load(main) { }
         loadCmdForm(f) {

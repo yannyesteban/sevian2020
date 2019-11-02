@@ -81,8 +81,8 @@ const Tab = (function ($) {
         _load(main) {
             this._main = main.addClass(this.className).addClass("sg-tab");
             let tab_parts = main.childs();
-            this._menu = $(tab_parts[0]).addClass("tab-menu");
-            this._page = $(tab_parts[1]).addClass("tab-body");
+            this._menu = $(tab_parts[0]).addClass("menu");
+            this._page = $(tab_parts[1]).addClass("body");
             let mItem = this._menu.get().children;
             let pItem = this._page.get().children;
             for (let i = 0; i < mItem.length; i++) {
@@ -98,14 +98,14 @@ const Tab = (function ($) {
             }
         }
         _create(main) {
-            this._main = main.addClass("sg-tab");
+            this._main = main.addClass(this.className).addClass("sg-tab");
             this._menu = main.create({
                 "tagName": "div",
-                "className": "tab-menu"
+                "className": "menu"
             });
             this._page = main.create({
                 "tagName": "div",
-                "className": "tab-body"
+                "className": "body"
             });
             if (this.pages) {
                 for (var x in this.pages) {
@@ -117,13 +117,13 @@ const Tab = (function ($) {
         }
         add(opt, pos = false) {
             let index = this._menu.get().children.length;
-            this._menu.create("a")
+            this._menu.create("a").addClass("tab-menu")
                 .on("click", this._click(index))
                 .on("focus", this._click(index))
                 .text(opt.caption || "")
                 .attr("href", "javascript:void(0);")
                 .ds("tabIndex", index);
-            let body = this._page.create("div")
+            let body = this._page.create("div").addClass("tab-body")
                 .ds("tabIndex", index);
             if (opt.child) {
                 body.append(opt.child);
@@ -193,7 +193,7 @@ const Tab = (function ($) {
             return this.mode;
         }
         getPage(index) {
-            let page = this._main.query(".tab-body > [data-tab-index='" + index + "']");
+            let page = this._main.query(".body > [data-tab-index='" + index + "']");
             if (page) {
                 return $(page);
             }

@@ -126,7 +126,7 @@ var Form = (($) => {
                 //this._addElements(page, this.elements);
             }
             if (this.menu) {
-                page.append(this.createMenu(this.menu));
+                main.append(this.createMenu(this.menu));
             }
         }
         _load(main) {
@@ -302,21 +302,34 @@ var Form = (($) => {
         getInputs() {
             let inputs = {};
             let elem = null, e = null;
-            let elems = this._main.queryAll("[data-sg-input]");
+            let elems = this._main.queryAll("[data-sg-input][data-sg-name]");
             for (e of elems) {
                 elem = $(e);
-                inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"), { id: elem });
+                db(elem.ds("sgName"), "green");
+                inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"), {
+                    id: elem, name: elem.ds("sgName"), type: elem.ds("sgInput")
+                });
             }
             return inputs;
         }
         getValue() {
+            let data = [];
+            for (let name in this._inputs) {
+                data[name] = this._inputs[name].getValue();
+                db(data[name], "pink", "purple");
+            }
+            return data;
+            /*
             let inputs = this.getInputs();
             let data = [];
             let name = null;
-            for (name in inputs) {
+            
+            for(name in inputs){
                 data[name] = inputs[name].getValue();
             }
+
             return data;
+            */
         }
         evalChilds(parent) {
             let input = this._inputs[parent];
@@ -324,8 +337,7 @@ var Form = (($) => {
                 if (this._inputs[i].parent === parent) {
                     this._inputs[i].createOptions(input.getValue());
                     if (this._inputs[i].hasChilds()) {
-                        db(this._inputs[i].getName());
-                        this.evalChilds(this._inputs[i].getName());
+                        this.evalChilds(i);
                     }
                 }
             }

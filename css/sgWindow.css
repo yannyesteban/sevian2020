@@ -15,7 +15,6 @@
     opacity: 1;
   }
 }
-
 @-webkit-keyframes w-hidden {
   0% {
     visibility: visible;
@@ -26,7 +25,6 @@
     opacity: 0;
   }
 }
-
 @keyframes w-hidden {
   0% {
     visibility: visible;
@@ -37,12 +35,10 @@
     opacity: 0;
   }
 }
-
 .sgPopup.visible {
   -webkit-animation: 0.5s w-visible ease-in forwards;
           animation: 0.5s w-visible ease-in forwards;
 }
-
 .sgPopup.hidden {
   -webkit-animation: 0.2s w-hidden ease-out backwards;
           animation: 0.2s w-hidden ease-out backwards;
@@ -86,27 +82,22 @@
       -ms-flex-pack: center;
           justify-content: center;
 }
-
 .sgWindow.active {
   -webkit-box-sizing: padding-box;
           box-sizing: padding-box;
   border-color: red;
 }
-
 .sgWindow.visible {
   -webkit-animation: 0.5s w-visible ease-in forwards;
           animation: 0.5s w-visible ease-in forwards;
 }
-
 .sgWindow.hidden {
   -webkit-animation: 0.2s w-hidden ease-out backwards;
           animation: 0.2s w-hidden ease-out backwards;
 }
-
 .sgWindow.min {
   max-width: 80px;
 }
-
 .sgWindow.resize, .sgWindow.move {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -114,17 +105,14 @@
   -ms-user-select: none;
   user-select: none;
 }
-
 .sgWindow > .header {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
 }
-
 .sgWindow > .header img {
   height: 20px;
 }
-
 .sgWindow > .body {
   position: relative;
   -webkit-box-flex: 1;
@@ -132,17 +120,15 @@
           flex: 1 1 auto;
   overflow: auto;
 }
-
 .sgWindow .rs.rb {
   background-color: #ab0c0f !important;
   border-radius: 5px;
   /*
-			height: 0px!important;
-			width: 0px!important;
-			border: 4px solid green;
-			*/
+  height: 0px!important;
+  width: 0px!important;
+  border: 4px solid green;
+  */
 }
-
 .sgWindow > .header {
   _background-color: black;
   background: -webkit-gradient(linear, left top, left bottom, from(#4a0303), to(#a50c00));
@@ -165,14 +151,12 @@
   user-select: none;
   cursor: default;
 }
-
 .sgWindow > .header .icon {
   min-width: 20px;
   height: 20px;
   _border: 1px solid white;
   pointer-events: none;
 }
-
 .sgWindow > .header .caption {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
@@ -184,7 +168,6 @@
   text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-
 .sgWindow > .header div[class^=btn] {
   border: 0px solid red;
   _background-size: 20px 20px;
@@ -195,36 +178,27 @@
   background-image: url(../images/win_icons.png?i=18);
   margin: 1px;
 }
-
 .sgWindow > .header div.btn_min {
   background-position: 0px -20px;
 }
-
 .sgWindow > .header div.btn_min:HOVER {
   background-position: 0px -240px;
 }
-
 .sgWindow > .header div.btn_auto {
   background-position: -20px -20px;
 }
-
 .sgWindow > .header div.btn_auto:HOVER {
   background-position: -20px -240px;
 }
-
 .sgWindow > .header div.btn_max {
   background-position: -40px -20px;
 }
-
 .sgWindow > .header div.btn_max:HOVER {
   background-position: -40px -240px;
 }
-
 .sgWindow > .header div.btn_close {
   background-position: -60px -20px;
 }
-
 .sgWindow > .header div.btn_close:HOVER {
   background-position: -60px -240px;
 }
-/*# sourceMappingURL=sgWindow.css.map */

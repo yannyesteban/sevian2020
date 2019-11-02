@@ -38,7 +38,16 @@ class ControlDevice extends \Sevian\Element{
 
 				]);
 				//$this->addFragment($f);
-				$this->loadParamsForm($this->eparams->cmd, $this->eparams->cmdId);
+				;
+
+				$this->typeElement = "ControlDevice";
+				$form = $this->loadParamsForm($this->eparams->cmd, $this->eparams->cmdId);//$form->getInfo();
+				
+				$this->info = [[
+					'method'  => 'loadCmdForm',
+					'value' => $form
+				]];
+				
 				break;
 			case 'create':
             case 'load':
@@ -59,7 +68,7 @@ class ControlDevice extends \Sevian\Element{
         $this->panel = $form;
         
         
-        $q = "SELECT id, command FROM devices_commands where version_id=1 ORDER  BY command DESC";
+        $q = "SELECT id, command FROM devices_commands where version_id=1 ORDER BY command";
 
 		$data = $this->getDataField([$q]);
 		
@@ -67,19 +76,13 @@ class ControlDevice extends \Sevian\Element{
 		$accountData = $this->getDataField([['','. seleccione',''], "SELECT id, name, client_id FROM accounts a ORDER BY name;"]);
 		$deviceData = $this->getDataField([['','. seleccione',''], "SELECT codvehiculo, concat('veh - ', codvehiculo) as v, coddato  FROM cuenta_vehiculos order by coddato, codvehiculo;"]);
 		
-        $formsFields = $this->formParams(1);
 
-        $forms = [
-            'caption'=>'uncfg',
-            
-            'fields'=> $formsFields
-        ];
 
         $info = [
 			"id"=>$form->id,
 			'panel'=>$this->id,
             "cmdData"=> $data,
-			'paramForm'=> $forms,
+			'paramForm'=> $this->loadParamsForm('xxx', "5"),
 			'clientData' => $clientData,
 			'accountData' => $accountData,
 			'deviceData' => $deviceData
@@ -93,18 +96,27 @@ class ControlDevice extends \Sevian\Element{
 
 		$formsFields = $this->formParams($cmdId);
 
-        $forms = [
+		$menu = [
+			'caption'=>'',
+			'tagLink'=>'button',
+			'className'=>'navigator',
+			'items'=>[
+				['caption'=>'save', 'action'=>"let data = this.getValue(); for(let x in data){db (data[x], 'red');}"],
+				['caption'=>'get'],
+				['caption'=>'send']
+			]
+
+			];
+
+        $form = [
             'caption'=> "COMMAND: $cmd",
             
-            'fields'=> $formsFields
+			'fields'=> $formsFields,
+			'menu'=>$menu
         ];
 
-		$opt[] = [
-			'method'  => 'loadCmdForm',
-			'value' => $forms
-		];
-		$this->typeElement = "ControlDevice";
-		$this->info = $opt;//$form->getInfo();
+		
+		return $form;
 	}
 
     private function formParams($commandId){
@@ -160,18 +172,29 @@ class ControlDevice extends \Sevian\Element{
 			$input = 'input';
 			$type = 'text';
 			$data = [];
+			$doValues = false;
 			if(isset($dataFields[$rs['id']])){
 				$input = 'multi';
-				$type = 'select';
+				
 				$data = $dataFields[$rs['id']];
+				if($rs['type_value'] == '1'){
+					$type = 'radio';
+				}else{
+					$type = 'checkbox';
+					$doValues = 'let sum = 0; for(let x of inputs){sum += +x.value;} return sum;';
+				}
+
 			}
+
 			$fields[] = [
                 "input"=>$input,
                 "config"=>[
                     "type"=>$type,
                     "name"=>"param_".$rs["id"],
 					"caption"=>$rs["param"],
-					'data' => $data 
+					'data' => $data,
+					'id' => "param_".$rs["id"].'_'.$this->id,
+					'doValues' => $doValues
                 ]
 
             ];

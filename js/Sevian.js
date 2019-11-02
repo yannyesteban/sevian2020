@@ -68,10 +68,10 @@ var S = (($) => {
                 if (!this._w[info.panel]) {
                     this._w[info.panel] = this.createWindow(info.window);
                 }
-            }
-            if (this._w[info.panel]) {
-                this._w[info.panel].setBody(f);
-                this._w[info.panel].show({ left: "center", top: "middle" });
+                if (this._w[info.panel]) {
+                    this._w[info.panel].setBody(f);
+                    this._w[info.panel].show({ left: "center", top: "middle" });
+                }
             }
             if (f) {
                 if (f.__sg_sw.value === f.__sg_sw2.value) {

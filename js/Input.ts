@@ -534,27 +534,30 @@ var Multi = (($) => {
         mode:string = "request";
 
         evalChilds:any = () => {};
+        doValues:Function = (inputs:any) => {return "";}; 
 
-        constructor(opt: any){
+        constructor(info: any){
             
-            for(var x in opt){
+            for(var x in info){
                 if(this.hasOwnProperty(x)) {
-                    this[x] = opt[x];
+                    this[x] = info[x];
                 }
             }
 
             let main = this._main = (this.id)? $(this.id): false;
 
             if(!main){
-                
+                db (this.name)
                 this._create(false);
             }else{
                 
                 if(main.ds("sgInput")){
-                    return;
+                    //return;
                 }
             }
-
+            if(info.doValues){
+                this.doValues = $.bind(info.doValues, this, "inputs");
+            }
             
             
 
@@ -569,30 +572,14 @@ var Multi = (($) => {
 
         _create(target:any){
             let info = {};
+
+            
             switch(this.type){
-                case "text":
-                case "password":
-                case "hidden":
-                case "button":
-                case "submit":
-                case "color":
-                case "range":	
-                    info.tagName = "input";
-                    info.type = this.type;
-                    break;
-                case "select":
-                    info.tagName = this.type;
-                    break;
-                case "multiple":
-                    info.tagName = "select";
-                    this.propertys.multiple = "multiple";
-                    break;
-                case "textarea":
-                    info.tagName = this.type;
-                    break;
-                default:
-                    info.tagName = "input";
-                    info.type = "text";
+                case "radio":
+
+                case "check":
+                    
+                
 
             }
             if(this.id){
@@ -606,7 +593,9 @@ var Multi = (($) => {
             }
             
             this._main = $.create("div").addClass("input-multi").addClass("type-input").addClass(this.className);
-
+            this._main.ds("sgName", this.name);
+            this._main.ds("sgInput", "multi");
+            this._main.ds("sgType", this.type);
             this.createInputs(this.data);
             return;
 
@@ -667,13 +656,20 @@ var Multi = (($) => {
         }
         
         getValue(){
-            let input = this._main.query(`input[name='${this.name}']:checked`);
 
-            if(input){
+            if(this.type === "radio"){
+                let input = this._main.query(`input[name='${this.name}']:checked`);
                 return input.value;
+            }else{
+                let inputs = this._main.queryAll(`input[name='${this.name}']:checked`);
+                if(inputs){
+                    return this.doValues(inputs);
+                }
             }
+            
             return false;
-		}
+        }
+        
         _load(main:any){
 
         }
@@ -690,14 +686,20 @@ var Multi = (($) => {
         }
 
         createInputs(data){
-            data.forEach((d) => {
+            data.forEach((d, index) => {
                 let div = this._main.create("span");
-                this._input = div.create({tagName:"input", type: "radio", name: this.name, id:this.id+"_"+d[0], value:d[0]})
+              
+                this._input = div.create(
+                    {tagName:"input",
+                    type: this.type,
+                    name: this.name + ((this.type === "check")?"_" + index: ""),
+                    id:this.id + "_" + index,
+                    value:d[0]})
                 .on("click", (event) => {
                     
                 })
                 ;
-                div.create({tagName:"label", htmlFor:this.id+"_"+d[0]}).text(d[1]);
+                div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
             });
             
 

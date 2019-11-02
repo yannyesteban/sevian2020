@@ -274,9 +274,14 @@ _sgObjet.prototype = {
 		}
 		
 		return this;		
+	
+	},
+	toggleClass: function(className){
+		this.e.classList.toggle(className);
+		return this;
+			
 		
 	},
-	
     hasClass: function(className){
         return this.e.classList.contains(className);
     },

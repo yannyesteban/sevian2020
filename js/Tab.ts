@@ -107,8 +107,8 @@ class Tab{
         this._main = main.addClass(this.className).addClass("sg-tab");
         let tab_parts = main.childs();
 
-        this._menu = $(tab_parts[0]).addClass("tab-menu");
-        this._page = $(tab_parts[1]).addClass("tab-body");
+        this._menu = $(tab_parts[0]).addClass("menu");
+        this._page = $(tab_parts[1]).addClass("body");
         
         let mItem = this._menu.get().children;
         let pItem = this._page.get().children;
@@ -131,15 +131,15 @@ class Tab{
     }
 
     _create(main:any){
-        this._main = main.addClass("sg-tab");
+        this._main = main.addClass(this.className).addClass("sg-tab");
 
         this._menu = main.create({
             "tagName": "div",
-            "className": "tab-menu"
+            "className": "menu"
         });
         this._page = main.create({
             "tagName": "div",
-            "className": "tab-body"
+            "className": "body"
         });
 
         if(this.pages){
@@ -156,7 +156,7 @@ class Tab{
         
         let index = this._menu.get().children.length;
 
-        this._menu.create("a")
+        this._menu.create("a").addClass("tab-menu")
             .on("click", this._click(index))
             .on("focus", this._click(index))
             
@@ -164,7 +164,7 @@ class Tab{
             .attr("href", "javascript:void(0);")
             .ds("tabIndex", index);
 
-        let body = this._page.create("div")
+        let body = this._page.create("div").addClass("tab-body")
             .ds("tabIndex", index);
 
         if(opt.child){
@@ -256,7 +256,7 @@ class Tab{
 
     getPage(index:number){
 
-        let page = this._main.query(".tab-body > [data-tab-index='"+index+"']");
+        let page = this._main.query(".body > [data-tab-index='"+index+"']");
 
         if(page){
 
