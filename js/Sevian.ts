@@ -1,4 +1,5 @@
 var S = (($) => {
+	
     let _winOptions = {
 		visible: true,
 		caption: "",

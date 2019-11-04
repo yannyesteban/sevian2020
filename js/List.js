@@ -1,5 +1,8 @@
 var List = (($) => {
     let acute = function (str) {
+        if (str === undefined) {
+            return false;
+        }
         str = str.toLowerCase();
         str = str.replace(/á/gi, "a");
         str = str.replace(/é/gi, "e");
@@ -15,8 +18,10 @@ var List = (($) => {
             this.target = null;
             this.className = null;
             this.data = [];
+            this.value = null;
             this.input = null;
             this._main = null;
+            this._active = false;
             this._index = -1;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -47,26 +52,34 @@ var List = (($) => {
             });
             main.on("click", event => {
                 if (event.target.classList.contains("option")) {
-                    this.input.val(this.data[event.target.dataset.value].text);
-                    //this.setValue(event.target.dataset.value);
+                    this._index = event.target.dataset.value;
+                    this.selectValue(event.target.dataset.value);
                 }
             });
+            $().on("mousedown", (event) => {
+                if (this._main.get().contains(event.target)) {
+                    return false;
+                }
+                this.active(false);
+            });
+            $(document).on("blur", (event) => {
+                this.active(false);
+            });
             this.setInput(this.input);
-            this.setInput(main);
             let target = (this.target) ? $(this.target) : false;
             if (target) {
                 target.append(this._main);
             }
         }
         _create(main) {
-            this._main = main.addClass("list-menu").addClass(this.className);
+            this._main = main.addClass("list-menu").addClass(this.className).addClass("close");
+            ;
+            Float.Float.init(main.get());
         }
         _load(main) {
         }
         get() {
             return this_main;
-        }
-        add(info) {
         }
         setText(index) {
             let item = this._main.query(`.option[data-index='${index}']`);
@@ -74,15 +87,29 @@ var List = (($) => {
                 this.input.val(this.data[$(item).ds("value")].text);
             }
         }
+        selectValue(index) {
+            let item = this._main.query(`.option[data-index='${index}']`);
+            if (item) {
+                this.input.val(this.data[$(item).ds("value")].text);
+                alert(8);
+                this.setValue(this.data[$(item).ds("value")].value);
+            }
+            this.active(false);
+        }
         setData(data) {
+            this.data = data;
         }
         setValue(value) {
+            if (value !== this.value) {
+                this.value = value;
+                this.input.fire("change");
+            }
         }
         getValue() {
+            return this.value;
         }
         setFilter(filter, showAll = false) {
-            db("filter", "red");
-            this.filter = filter;
+            //this.filter = filter;
             this._main.text("");
             this._index = -1;
             let item = null;
@@ -101,10 +128,38 @@ var List = (($) => {
             if (value !== null) {
                 this.setIndex(value);
             }
+            if (filter === "") {
+                this._main.get().scrollTop = "0px";
+            }
+        }
+        active(value) {
+            if (this._active === value) {
+                return;
+            }
+            this._active = value;
+            if (value) {
+                this._main.addClass("active");
+                this.show();
+            }
+            else {
+                this._main.removeClass("active");
+                this.hide();
+            }
+        }
+        getActive() {
+            return this._active;
         }
         show() {
+            this._main.removeClass("close");
+            Float.Float.showMenu({
+                context: this.input.get(),
+                e: this._main.get(),
+                left: "left",
+                top: "down"
+            });
         }
         hide() {
+            this._main.addClass("close");
         }
         move(step) {
             this.setIndex(this._index + step);
@@ -125,42 +180,53 @@ var List = (($) => {
                 item.removeClass("active");
             }
             $(items[index]).addClass("active");
-            var offsetTop = items[index].offsetTop;
-            var height = items[index].clientHeight;
+            let offsetTop = items[index].offsetTop;
+            let height = items[index].offsetHeight;
             let popup = this._main.get();
             if (offsetTop <= popup.scrollTop) {
                 popup.scrollTop = offsetTop;
             }
-            else if (offsetTop + height >= popup.clientHeight + popup.scrollTop) {
-                popup.scrollTop = offsetTop + height - popup.clientHeight;
+            else if (offsetTop + height >= popup.offsetHeight + popup.scrollTop) {
+                popup.scrollTop = offsetTop + height - popup.offsetHeight;
             }
             this._index = index;
         }
         setInput(input) {
-            input.on("keyup", (event) => {
+            input.on("keyup", event => {
                 this._keyUp(event);
-            }).on("keydown", (event) => {
+            }).on("keydown", event => {
                 this._keyDown(event);
             }).on("focus", event => {
                 this.setFilter(event.currentTarget.value, true);
+                this.active(true);
+            }).on("click", event => {
+                this.active(true);
+            }).on("change", event => {
+                if (this.data[this._index] === undefined || event.currentTarget.value !== this.data[this._index].text) {
+                    this._index = -1;
+                    this.value = null;
+                    event.currentTarget.value = "";
+                }
             });
         }
         _keyUp(event) {
-            if (event.keyCode !== 13 && event.keyCode !== 38 && event.keyCode !== 40 && event.keyCode !== 9) {
+            if (event.keyCode !== 13
+                && event.keyCode !== 37
+                && event.keyCode !== 39
+                && event.keyCode !== 38 && event.keyCode !== 40 && event.keyCode !== 9) {
+                this.active(true);
                 this.setFilter(event.currentTarget.value);
             }
         }
         _keyDown(event) {
             switch (event.keyCode) {
-                case 13: //enter
-                    this.setText(this._index);
-                    break;
                 case 9: //tab
-                    //this.hide();
+                    this.active(false);
+                    break;
+                case 13: //enter
+                    this.selectValue(this._index);
                     break;
                 case 27: //escape
-                    //e.returnValue = false;
-                    //e.cancelBubble = true;
                     break;
                 case 38: //up arrow 
                     this.move(-1);
@@ -169,6 +235,7 @@ var List = (($) => {
                     this.move(1);
                     break;
                 default:
+                    this.active(true);
                     break;
             } // end switch
         }

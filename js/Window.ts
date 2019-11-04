@@ -211,10 +211,10 @@ var Float = (($) => {
 					top = c.top;
 					break;	
 				case "bottom":
-					top = c.top  + c.height - height;
+					top = c.top + c.height - height;
 					break;
 				case "down":
-					top = c.top  + c.height;
+					top = c.top + c.height;
 					break;
 				case "up":
 					top = c.top - height;

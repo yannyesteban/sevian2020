@@ -1,6 +1,6 @@
 var ControlDevice = (($) => {
 
-    
+
     class ControlDevice{
         panel:number = null;
         id:any = null;
