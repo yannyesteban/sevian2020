@@ -21,7 +21,7 @@ var Form = (($) => {
         }
     }
     class Form {
-        constructor(opt) {
+        constructor(info) {
             this.target = "";
             this.name = "";
             this.id = "";
@@ -42,9 +42,9 @@ var Form = (($) => {
             this._pg = [];
             this._tab = null;
             this._inputs = [];
-            for (var x in opt) {
+            for (var x in info) {
                 if (this.hasOwnProperty(x)) {
-                    this[x] = opt[x];
+                    this[x] = info[x];
                 }
             }
             let main = (this.id) ? $(this.id) : false;
@@ -305,7 +305,6 @@ var Form = (($) => {
             let elems = this._main.queryAll("[data-sg-input][data-sg-name]");
             for (e of elems) {
                 elem = $(e);
-                db(elem.ds("sgName"), "green");
                 inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"), {
                     id: elem, name: elem.ds("sgName"), type: elem.ds("sgInput")
                 });

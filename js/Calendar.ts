@@ -592,20 +592,9 @@ sgDate.Calendar = (($) => {
 
         }
 		setValue(date){
-
             this.date = date;
-            
-            return;
-			
-			if(this._validRules(date)){
-                
-				this.date.year = date.year;
-				this.date.month = date.month;
-				this.date.day = date.day;
-				//this.onselectday(date);	
-			}
-			
         }
+
         getValue(){
 			
 			return this.date;

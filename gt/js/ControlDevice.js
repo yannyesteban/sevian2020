@@ -42,9 +42,21 @@ var ControlDevice = (($) => {
                         config: {
                             type: "select",
                             name: "client_id",
-                            caption: "Cliente",
+                            caption: "mCliente",
                             data: this.clientData,
-                            childs: true
+                            childs: true,
+                            value: '9'
+                        }
+                    },
+                    {
+                        input: "list",
+                        config: {
+                            type: "colorXX",
+                            name: "client_id2",
+                            caption: "mCliente",
+                            data: this.clientData,
+                            childs: true,
+                            value: '9'
                         }
                     },
                     {
@@ -52,19 +64,23 @@ var ControlDevice = (($) => {
                         config: {
                             type: "select",
                             name: "count_id",
-                            caption: "Cuenta",
+                            caption: "Cuenta...",
                             data: this.accountData,
                             parent: "client_id",
-                            childs: true
+                            childs: true,
+                            parentValue: 9,
+                            value: '22',
+                            propertys: {}
                         }
                     },
                     {
-                        input: "input",
+                        input: "multi",
                         config: {
-                            type: "select",
+                            type: "radio",
                             name: "device_id",
                             caption: "Device",
                             parent: "count_id",
+                            parentValue: '22',
                             data: this.deviceData
                         }
                     }

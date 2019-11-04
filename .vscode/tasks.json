@@ -22,6 +22,15 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "gt/js/tsconfig.json",
+            "option": "watch",
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
+            "group": "build"
         }
     ]
 }

@@ -1061,6 +1061,9 @@ form {
 
 .input-multi {
   border: 1px solid #cecece;
+  max-height: 200px;
+  min-width: 200px;
+  overflow: auto;
 }
 .input-multi > span {
   display: -webkit-box;
@@ -1096,4 +1099,29 @@ form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+
+.list-menu {
+  position: relative;
+  border: 1px solid #757373;
+  max-height: 200px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  overflow: auto;
+}
+.list-menu .option {
+  text-transform: uppercase;
+  padding: 0px;
+  line-height: 1.5em;
+  margin: 2px;
+}
+.list-menu .option.active {
+  background-color: red;
+  color: white;
+}
+.list-menu > .list-popup {
+  background-color: white;
+  border: 1px solid #757373;
 }

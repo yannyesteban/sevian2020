@@ -105,6 +105,11 @@ $js = [
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
+		'file' 	=> "{$PATH}js/List.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+
+	[
 		'file' 	=> "{$PATH}js/Sevian/Valid.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],

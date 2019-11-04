@@ -84,11 +84,11 @@ var Form = (($) => {
             return Form._objs[name];
         }
 
-        constructor(opt: any){
+        constructor(info: any){
             
-            for(var x in opt){
+            for(var x in info){
                 if(this.hasOwnProperty(x)) {
-                    this[x] = opt[x];
+                    this[x] = info[x];
                 }
             }
 
@@ -391,7 +391,7 @@ var Form = (($) => {
             for(e of elems){
                 
                 elem = $(e);
-                db (elem.ds("sgName"),"green")
+                
                 
                 inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"),{
                     id:elem, name:elem.ds("sgName"),type:elem.ds("sgInput")

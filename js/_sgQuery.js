@@ -166,11 +166,12 @@ _sgObjet.prototype = {
 				return this;	
 			}
 			
-		}else if(document.querySelector(obj)){
+		}/*else if(document.querySelector(obj)){
+			this.append("error");
 			obj = document.querySelector(obj);
 			this.e.innerHTML = document.querySelector(obj);
 			
-		}else{
+		}*/else{
 			
 			this.e.innerHTML += obj;
 			return this;
@@ -448,7 +449,10 @@ _sgQuery.byId= function(id){
 	return false;
 	
 };
-
+_sgQuery.text = function(text){
+	
+	return _sgQuery(document.createTextNode(text));
+}
 _sgQuery.create= function(opt){
 	var e;
 	if(typeof(opt) === "object"){

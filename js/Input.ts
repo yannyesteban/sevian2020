@@ -10,30 +10,7 @@ class I{
 
 var $I = {};
 var Input = (($) => {  
-
-    
-
-
-    class SGDate{
-        target:object = null;
-        id:string = "";
-        name:string = "";
-        type:string = "calendar";//
-        value:string = "";
-        className = "";
-        data:any = false;
-        propertys:any = false;
-        dataset:object = null;
-        events:any = false;
-        placeholder:string = "";
-
-        childs:boolean = false;
-        parent:string = "";
-        _main:object = null;
-
-        status:string = "valid";
-        mode:string = "request";
-    }  
+ 
     class Input{
         target:object = null;
         id:string = "";
@@ -51,6 +28,7 @@ var Input = (($) => {
 
         childs:boolean = false;
         parent:string = "";
+        parentValue:any = null;
 
         _main:object = null;
 
@@ -59,11 +37,11 @@ var Input = (($) => {
 
         evalChilds:any = () => {};
 
-        constructor(opt: any){
+        constructor(info: any){
             
-            for(var x in opt){
+            for(var x in info){
                 if(this.hasOwnProperty(x)) {
-                    this[x] = opt[x];
+                    this[x] = info[x];
                 }
             }
 
@@ -78,10 +56,6 @@ var Input = (($) => {
                     return;
                 }
             }
-
-            
-            
-
 
             let target = (this.target)? $(this.target): false;
 
@@ -106,10 +80,6 @@ var Input = (($) => {
                     break;
                 case "select":
                     info.tagName = this.type;
-                    break;
-                case "multiple":
-                    info.tagName = "select";
-                    this.propertys.multiple = "multiple";
                     break;
                 case "textarea":
                     info.tagName = this.type;
@@ -146,7 +116,7 @@ var Input = (($) => {
 			this._main.style(this.style);
 
             if(this.type === "select" || this.type === "multiple"){
-				this.createOptions(false);
+				this.createOptions(this.parentValue);
             }
             this._main.ds(this.dataset);
 
@@ -159,12 +129,7 @@ var Input = (($) => {
             if(this.childs){
                 this._main.ds("childs", "childs");
             }
-            /*
-            if(this.dataset){
-                for(let x in this.dataset){
-                    this._main.ds(x, this.dataset[x]);
-                }
-            }*/
+            
             this.setValue(this.value);
         }
         setValue(value:any){
@@ -172,8 +137,9 @@ var Input = (($) => {
         }
         
         getValue(){
-			return this.get().value;
+            return this.get().value;
 		}
+
         _load(main:any){
 
         }
@@ -190,29 +156,13 @@ var Input = (($) => {
         }
         createOptions(parentValue:any){
             
-            if(!this.data){
-
-                let data = this._main.queryAll("option");
-
-                this.data = [];
-                data.forEach((e)=>{
-                    
-                    this.data.push([e.value, e.text, e.dataset.parentValue]);
-
-
-                });
-
-
-                
-                
-            }
+            
 
 			let i,
 				option,
-				vParent = [],
-				_ele = this.get();
+				vParent = [];
 			
-			_ele.length = 0;
+                this._main.get().length = 0;
 			
 			if(this.parent){
                 let aux = (parentValue + "").split(",");
@@ -227,32 +177,17 @@ var Input = (($) => {
 				option = document.createElement("OPTION");
 				option.value = "";
 				option.text = this.placeholder;
-				_ele.options.add(option);
+				this._main.get().options.add(option);
             }
             
-            /*
-			for (i in this.data){
-                option = document.createElement("OPTION");
-                option.value = this.data[i][0];
-                option.text = this.data[i][1];
-                option.dataset.parentValue = this.data[i][2] || "";
-               
-                
 
+			for (i in this.data){
 				if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
                     
-                }else{
-                   
-                   option.style.display = "none";
-                }
-                _ele.options.add(option);
-			}*/
-			for (i in this.data){
-				if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
 					option = document.createElement("OPTION");
 					option.value = this.data[i][0];
 					option.text = this.data[i][1];
-					_ele.options.add(option);
+					this._main.get().options.add(option);
 				}
 			}
 			
@@ -284,7 +219,7 @@ var Input = (($) => {
             this._main.get().select();
         }
     }
-    $I.std = Input;
+    
     I.register("input", Input);
     return Input;
 })(_sgQuery);
@@ -527,14 +462,21 @@ var Multi = (($) => {
 
         childs:boolean = false;
         parent:string = "";
-
+        parentValue:any = "";
         _main:object = null;
-
+        _input:object = null;
         status:string = "valid";
         mode:string = "request";
 
         evalChilds:any = () => {};
-        doValues:Function = (inputs:any) => {return "";}; 
+        doValues:Function = (inputs:any) => {
+            let value = "";
+            inputs.forEach((e)=>{
+                value += ((value !== "")? ",": "") + e.value;
+            });
+            
+            return value;
+        }; 
 
         constructor(info: any){
             
@@ -573,15 +515,15 @@ var Multi = (($) => {
         _create(target:any){
             let info = {};
 
-            
             switch(this.type){
                 case "radio":
-
                 case "check":
-                    
-                
-
+                    break;
+                default:
+                    this.type = "radio";
+                    break;
             }
+
             if(this.id){
                 info.id = this.id;
             }
@@ -593,56 +535,26 @@ var Multi = (($) => {
             }
             
             this._main = $.create("div").addClass("input-multi").addClass("type-input").addClass(this.className);
+            if(this.type === "checkbox"){
+                this._input = this._main.create({tagName:"input", type: "text", name: this.name});
+            }
+            
+            this._main.ds(this.dataset);
             this._main.ds("sgName", this.name);
             this._main.ds("sgInput", "multi");
             this._main.ds("sgType", this.type);
-            this.createInputs(this.data);
-            return;
 
-            if(this.data){
-                
-                info.tagName = 'input';
-                info.type = "radio";
-                this._main = $.create(info).addClass("type-input").addClass(this.className);
-            }
-
-            this._main = $.create("div").addClass("type-input").addClass(this.className);
-
-            for(var x in this.events){
-
-                //let action = $.bind(this.events[x], this._main);
-				this._main.on(x, $.bind(this.events[x], this, "event"));
-			}
-            
-            if(this.childs){
-                
-                this._main.on("change", $.bind(this.evalChilds, this, "event")); 
-            }
-
-			this._main.prop(this.propertys);
-			this._main.style(this.style);
-
-            if(this.type === "select" || this.type === "multiple"){
-				//this.createOptions(false);
-            }
-            this._main.ds(this.dataset);
-
-            this._main.ds("sgName", this.name);
-            this._main.ds("sgInput", "input");
-            this._main.ds("sgType", this.type);
             if(this.parent){
                 this._main.ds("parent", this.parent);
             }
             if(this.childs){
                 this._main.ds("childs", "childs");
             }
-            /*
-            if(this.dataset){
-                for(let x in this.dataset){
-                    this._main.ds(x, this.dataset[x]);
-                }
-            }*/
+            
+            this.createOptions(this.parentValue);
+            
             this.setValue(this.value);
+           
         }
         setValue(value:any){
 
@@ -658,13 +570,15 @@ var Multi = (($) => {
         getValue(){
 
             if(this.type === "radio"){
-                let input = this._main.query(`input[name='${this.name}']:checked`);
+                let input = this._main.query("input.option:checked");
+                
                 if(input){
+                
                     return input.value;
                 }
                 
             }else{
-                let inputs = this._main.queryAll(`input[name='${this.name}']:checked`);
+                let inputs = this._main.queryAll("input.option:checked");
                 if(inputs){
                     return this.doValues(inputs);
                 }
@@ -672,6 +586,8 @@ var Multi = (($) => {
             
             return "";
         }
+
+        
         
         _load(main:any){
 
@@ -697,6 +613,7 @@ var Multi = (($) => {
                     type: this.type,
                     name: this.name + ((this.type === "check")?"_" + index: ""),
                     id:this.id + "_" + index,
+                    className: "option",
                     value:d[0]})
                 .on("click", (event) => {
                     
@@ -707,73 +624,57 @@ var Multi = (($) => {
             
 
         }
-        createOptions(parentValue:any){
+
+        _setPropertys(){
+
+            let inputs = this._main.queryAll("input.option");
+            inputs.forEach((e, index) => {
+                for(var x in this.events){
+                    $(e).on(x, $.bind(this.events[x], this, "event"));
+                }
+                if(this.childs){
+                
+                    $(e).on("change", $.bind(this.evalChilds, this, "event")); 
+                }
+                
+            });
             
-            if(!this.data){
 
-                let data = this._main.queryAll("option");
-
-                this.data = [];
-                data.forEach((e)=>{
-                    
-                    this.data.push([e.value, e.text, e.dataset.parentValue]);
-
-
-                });
-
-
-                
-                
-            }
+        }
+        createOptions(parentValue:any){
 
 			let i,
-				option,
-				vParent = [],
-				_ele = this.get();
-			
-			_ele.length = 0;
+				vParent = {};
 			
 			if(this.parent){
                 let aux = (parentValue + "").split(",");
-                
-                
 				for(i = 0; i < aux.length; i++){
 					vParent[aux[i]] = true;
 				}
 			}
 	
-			if(this.placeholder){
-				option = document.createElement("OPTION");
-				option.value = "";
-				option.text = this.placeholder;
-				_ele.options.add(option);
-            }
+            let inputs = this._main.queryAll("span");
+            inputs.forEach((e)=>{
+                e.parentNode.removeChild(e);
+            });
             
-            /*
-			for (i in this.data){
-                option = document.createElement("OPTION");
-                option.value = this.data[i][0];
-                option.text = this.data[i][1];
-                option.dataset.parentValue = this.data[i][2] || "";
-               
-                
-
-				if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
+            this.data.forEach((d, index) => {
+                if(vParent[d[2]] || !this.parent || d[2] === "*"){
+                    let div = this._main.create("span");
+                    this._input = div.create(
+                        {tagName:"input",
+                        type: this.type,
+                        name: this.name + ((this.type === "check")?"_" + index: ""),
+                        id:this.id + "_" + index,
+                        className: "option",
+                        value:d[0]});
                     
-                }else{
-                   
-                   option.style.display = "none";
+                        div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
                 }
-                _ele.options.add(option);
-			}*/
-			for (i in this.data){
-				if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
-					option = document.createElement("OPTION");
-					option.value = this.data[i][0];
-					option.text = this.data[i][1];
-					_ele.options.add(option);
-				}
-			}
+                
+            });
+
+            this._setPropertys();
 			
         }
         

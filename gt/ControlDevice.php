@@ -73,8 +73,8 @@ class ControlDevice extends \Sevian\Element{
 		$data = $this->getDataField([$q]);
 		
 		$clientData = $this->getDataField([['','. seleccione',''], "SELECT id, client FROM clients ORDER BY client;"]);
-		$accountData = $this->getDataField([['','. seleccione',''], "SELECT id, name, client_id FROM accounts a ORDER BY name;"]);
-		$deviceData = $this->getDataField([['','. seleccione',''], "SELECT codvehiculo, concat('veh - ', codvehiculo) as v, coddato  FROM cuenta_vehiculos order by coddato, codvehiculo;"]);
+		$accountData = $this->getDataField([['','. seleccione','*'], "SELECT id, name, client_id FROM accounts a ORDER BY name;"]);
+		$deviceData = $this->getDataField([['','. seleccione','*'], "SELECT codvehiculo, concat('veh - ', codvehiculo) as v, coddato  FROM cuenta_vehiculos order by coddato, codvehiculo;"]);
 		
 
 
@@ -101,7 +101,7 @@ class ControlDevice extends \Sevian\Element{
 			'tagLink'=>'button',
 			'className'=>'navigator',
 			'items'=>[
-				['caption'=>'save', 'action'=>"let data = this.getValue(); for(let x in data){db (data[x], 'red');}"],
+				['caption'=>'save', 'action'=>"let data = this.getValue(); for(let x in data){db ('value: '+data[x], 'red');}"],
 				['caption'=>'get'],
 				['caption'=>'send']
 			]
@@ -148,12 +148,13 @@ class ControlDevice extends \Sevian\Element{
         $result = $cn->execute();
 		$fields = [];
 		
+		
 		$fields[] = [
 			"input"=>'input',
 			"config"=>[
 				"type"=>"text",
-				"name"=>"param_pass",
-				"caption"=> 'pass'
+				"name"=>"param_tag",
+				"caption"=> 'tag'
 			]
 
 		];
@@ -161,8 +162,8 @@ class ControlDevice extends \Sevian\Element{
 			"input"=>'input',
 			"config"=>[
 				"type"=>"text",
-				"name"=>"param_tag",
-				"caption"=> 'tag'
+				"name"=>"param_pass",
+				"caption"=> 'pass'
 			]
 
 		];
@@ -173,6 +174,7 @@ class ControlDevice extends \Sevian\Element{
 			$type = 'text';
 			$data = [];
 			$doValues = false;
+			$events = false;
 			if(isset($dataFields[$rs['id']])){
 				$input = 'multi';
 				
@@ -182,6 +184,7 @@ class ControlDevice extends \Sevian\Element{
 				}else{
 					$type = 'checkbox';
 					$doValues = 'let sum = 0; for(let x of inputs){sum += +x.value;} return sum;';
+					$events = ["change" => "db (event.currentTarget.value,'red')"];
 				}
 
 			}
@@ -194,7 +197,8 @@ class ControlDevice extends \Sevian\Element{
 					"caption"=>$rs["param"],
 					'data' => $data,
 					'id' => "param_".$rs["id"].'_'.$this->id,
-					'doValues' => $doValues
+					'doValues' => $doValues,
+					'events' => $events
                 ]
 
             ];
