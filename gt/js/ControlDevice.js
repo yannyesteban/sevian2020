@@ -40,7 +40,7 @@ var ControlDevice = (($) => {
                     {
                         input: "input",
                         config: {
-                            type: "select",
+                            type: "text",
                             name: "client_id",
                             caption: "mCliente",
                             data: this.clientData,

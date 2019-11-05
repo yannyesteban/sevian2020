@@ -1,6 +1,7 @@
-
 var List = (($) => {  
+
     let acute = function(str){
+
         if(str === undefined){
             return false;
         }
@@ -24,9 +25,9 @@ var List = (($) => {
         value:any = null;
         input:object = null;
         _main:object = null;
-        _active:boolean = false;
+        _active:boolean = null;
         _index:number = -1;
-        
+        _error:boolean = false;
         constructor(info:any){
             
             for(var x in info){
@@ -66,12 +67,14 @@ var List = (($) => {
             main.on("click", event => {
                 if(event.target.classList.contains("option")){
                     this._index = event.target.dataset.value;
-                    this.selectValue(event.target.dataset.value);
+                    this.select(event.target.dataset.value);
                 }
+            }).on("contextmenu", event => {
+                event.preventDefault();
             });
 
             $().on("mousedown", (event) => {
-                if(this._main.get().contains(event.target)){
+                if(this._main.get().contains(event.target)  || this.input.get().contains(event.target)){
                     return false;
                 }
 
@@ -79,7 +82,7 @@ var List = (($) => {
             });
 
             $(document).on("blur", (event) => {
-               this.active(false);
+                this.active(false);
             });
 
             this.setInput(this.input);
@@ -91,7 +94,7 @@ var List = (($) => {
         }
 
         _create(main:any){
-            this._main = main.addClass("list-menu").addClass(this.className).addClass("close");;
+            this._main = main.addClass("list-menu").addClass(this.className);
             Float.Float.init(main.get())
         }
 
@@ -109,19 +112,15 @@ var List = (($) => {
                 this.input.val(this.data[$(item).ds("value")].text);
             }
         }
-
-        selectValue(index){
-            let item = this._main.query(`.option[data-index='${index}']`);
-            if(item){
-
-                this.input.val(this.data[$(item).ds("value")].text);
-
-                alert(8)
-                this.setValue(this.data[$(item).ds("value")].value);
-                
+        select(index){
+            if(this.data[index]){
+                this._error = false;
+                this.input.val(this.data[index].text);
+                this.setValue(this.data[index].value);
+                this.active(false);
             }
-            this.active(false);
         }
+        
         
         setData(data){
             this.data = data;
@@ -141,20 +140,17 @@ var List = (($) => {
         }
 
         setFilter(filter, showAll:boolean = false){
-           
-            //this.filter = filter;
             this._main.text("");
 
-
+            this._error = true;
             this._index = -1;
             
-            let item:any = null;
             let index = 0, value:number = null;
             this.data.forEach((d, i)=>{
 
                 if(showAll || filter === "" || acute(d.text).indexOf(acute(filter)) >= 0){
 					
-                    item = this._main.create("div")
+                    this._main.create("div")
                     .ds("value", i)
                     .ds("index", index).addClass("option").append(d.item);
 
@@ -168,6 +164,8 @@ var List = (($) => {
 
             if(value !== null){
                 this.setIndex(value);
+            }else{
+                this.setIndex(0);
             }
            
             if(filter === ""){
@@ -177,19 +175,18 @@ var List = (($) => {
         }
 
         active(value){
-
             if(this._active === value){
                 return;
             }
 
             this._active = value;
-
+            //this._main.toggleClass("active");
+            //db ("toggle")
+            //return ;
             if(value){
                 this._main.addClass("active");
-                this.show();
             }else{
                 this._main.removeClass("active");
-                this.hide();
             }
 
         }
@@ -199,7 +196,7 @@ var List = (($) => {
         }
 
         show(){
-           this._main.removeClass("close");
+           
            Float.Float.showMenu({
                 context:this.input.get(),
                 e:this._main.get(),
@@ -209,7 +206,7 @@ var List = (($) => {
         }
 
         hide(){
-            this._main.addClass("close");
+            //this._main.addClass("close");
         }
         
         move(step){
@@ -229,13 +226,15 @@ var List = (($) => {
             }else if(index >= items.length - 1){
                 index = items.length - 1;
             }
-
+            this._index = index;
             let item = $(this._main.query(".option.active"));
 
             if(item){
                 item.removeClass("active");
             }
-
+            if(!items[index]){
+                return;
+            }
             $(items[index]).addClass("active");
 
             let offsetTop = items[index].offsetTop;
@@ -248,7 +247,7 @@ var List = (($) => {
 				popup.scrollTop = offsetTop + height - popup.offsetHeight;
             }
 
-            this._index = index;
+           
 
         }
 
@@ -258,25 +257,48 @@ var List = (($) => {
             }).on("keydown", event => {
                 this._keyDown(event);
             }).on("focus", event => {
+                //db ("focus")
+                //this.setFilter(event.currentTarget.value, true);
+                //this.active(true);
+            }).on("mousedown", event => {
+                
                 this.setFilter(event.currentTarget.value, true);
                 this.active(true);
-            }).on("click", event => {
-                this.active(true);
             }).on("change", event => {
-                if(this.data[this._index] === undefined || event.currentTarget.value !== this.data[this._index].text){
+                
+                if(this._error){
                     this._index = -1;
                     this.value = null;
                     event.currentTarget.value = "";
                 }
-            });
+            }).on("contextmenu", event => {
+                this.active(false);
+            }).on("paste", e => {
+                let paste = (event.clipboardData || window.clipboardData).getData('text');
+                this.setFilter(paste);
+                this.active(true);
+               
+            }).on("drop", event => {
+
+				event.preventDefault();
+				event.currentTarget.value = event.dataTransfer.getData('text/plain');
+				this.setFilter(event.currentTarget.value);
+                this.active(true);
+			});
         }
         _keyUp(event){
+            
+            
             if(event.keyCode !== 13 
-                && event.keyCode !== 37
-                && event.keyCode !== 39
+                && event.keyCode !== 16
+                && event.keyCode !== 17
+                //&& event.keyCode !== 37
+                //&& event.keyCode !== 39
                 && event.keyCode !== 38 && event.keyCode !== 40 && event.keyCode !== 9){
+                    
                 this.active(true);
                 this.setFilter(event.currentTarget.value);
+                
             }
         }
 
@@ -284,10 +306,20 @@ var List = (($) => {
 
             switch (event.keyCode){
                 case 9://tab
+                    
 					this.active(false);
                     break;
                 case 13://enter
-                    this.selectValue(this._index);
+                    if(this._active){
+                        let item = this._main.query(`.option[data-index='${this._index}']`);
+                        if(item){
+                            this.select($(item).ds("value"));
+                        } 
+                    }else{
+                        this.active(true);
+                        this.setFilter(event.currentTarget.value, true);
+                    }
+                    
                     break; 
 				case 27://escape
 					break;
@@ -298,7 +330,7 @@ var List = (($) => {
 					this.move(1);
 					break;
 				default:
-                    this.active(true);
+                    //this.active(true);
 					break;
 				}// end switch
         }
@@ -538,7 +570,7 @@ var List = (($) => {
             switch (event.keyCode){
                 case 13://enter
                     break; 
-                    case 9://tab
+                case 9://tab
 					//this.hide();
 					break;
 				case 27://escape
