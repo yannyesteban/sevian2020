@@ -64,7 +64,7 @@ var Menu = (function ($, Float) {
             }
             main.ds("sgMenu", "menu");
             if (this.context) {
-                let context = $(this.context).on("click", () => {
+                let context = $(this.context).on("click", event => {
                     main.style({
                         position: "absolute",
                         visibility: "visible",
@@ -81,7 +81,7 @@ var Menu = (function ($, Float) {
                     position: "absolute",
                     visibility: "hidden",
                 });
-                $().on("mousedown", (event) => {
+                $().on("mousedown", event => {
                     if (main.ds("active") == "0") {
                         main.style({
                             position: "absolute",
@@ -89,7 +89,7 @@ var Menu = (function ($, Float) {
                         });
                     }
                 });
-                $().on("click", (event) => {
+                $().on("click", event => {
                     if (main.ds("active") == "1" && !this._isCheck && this._isItem) {
                         main.style({
                             position: "absolute",
@@ -99,18 +99,18 @@ var Menu = (function ($, Float) {
                 });
             }
             main.ds("active", "0")
-                .on("mouseenter", (event) => {
+                .on("mouseenter", event => {
                 main.ds("active", "1");
             })
-                .on("mouseleave", (event) => {
+                .on("mouseleave", event => {
                 main.ds("active", "0");
             });
-            $().on("mousedown", (event) => {
+            $().on("mousedown", event => {
                 if (main.ds("active") == "0") {
                     this.closeAll();
                 }
             });
-            $().on("click", (event) => {
+            $().on("click", event => {
                 if (main.ds("active") == "1" && !this._isCheck && this._isItem) {
                     this.closeAll();
                 }

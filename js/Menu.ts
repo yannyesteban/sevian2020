@@ -107,6 +107,7 @@ var Menu =
                         position:"absolute",
                         visibility:"visible",
                     });
+                    
                     Float.showMenu({
                         ref:context.get(),
                         e:main.get(),
