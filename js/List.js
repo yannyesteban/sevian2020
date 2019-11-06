@@ -14,12 +14,14 @@ var List = (($) => {
     };
     class ListMenu {
         constructor(info) {
+            this.name = "";
             this.id = "";
             this.target = null;
             this.className = null;
             this.data = [];
             this.value = null;
             this.input = null;
+            this.onactive = value => { return value; };
             this._main = null;
             this._active = null;
             this._index = -1;
@@ -45,6 +47,9 @@ var List = (($) => {
                 main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
+            if (info.onactive) {
+                this.onactive = $.bind(info.onactive, this, "value");
+            }
             main.ds("sgListMenu", "list-menu");
             main.on("mousemove", event => {
                 if (event.target.classList.contains("option")) {
@@ -59,13 +64,13 @@ var List = (($) => {
             }).on("contextmenu", event => {
                 event.preventDefault();
             });
-            $().on("mousedown", (event) => {
+            $().on("mousedown", event => {
                 if (this._main.get().contains(event.target) || this.input.get().contains(event.target)) {
                     return false;
                 }
                 this.active(false);
             });
-            $(document).on("blur", (event) => {
+            $(document).on("blur", event => {
                 this.active(false);
             });
             this.setInput(this.input);
@@ -73,38 +78,55 @@ var List = (($) => {
             if (target) {
                 target.append(this._main);
             }
+            if (this.value) {
+                this.setValue(this.value);
+            }
         }
         _create(main) {
             this._main = main.addClass("list-menu").addClass(this.className);
-            Float.Float.init(main.get());
         }
         _load(main) {
         }
         get() {
-            return this_main;
-        }
-        setText(index) {
-            let item = this._main.query(`.option[data-index='${index}']`);
-            if (item) {
-                this.input.val(this.data[$(item).ds("value")].text);
-            }
+            return this._main;
         }
         select(index) {
             if (this.data[index]) {
                 this._error = false;
                 this.input.val(this.data[index].text);
-                this.setValue(this.data[index].value);
+                //this.setValue(this.data[index].value);
+                if (this.data[index].text !== this.value) {
+                    this.value = this.data[index].value;
+                    this.input.fire("change");
+                }
                 this.active(false);
             }
         }
         setData(data) {
             this.data = data;
         }
-        setValue(value) {
-            if (value !== this.value) {
-                this.value = value;
-                this.input.fire("change");
+        setText(value) {
+            for (let e of this.data) {
+                if (acute(e.text) == acute(value)) {
+                    this.input.val(e.text);
+                    this.value = e.value;
+                }
             }
+        }
+        setValue(value) {
+            let error = true;
+            for (let e of this.data) {
+                if (e.value == value) {
+                    this.input.val(e.text);
+                    this.value = e.value;
+                    error = false;
+                }
+            }
+            if (error) {
+                this.input.val("");
+                this.value = "";
+            }
+            //this.input.fire("change");
         }
         getValue() {
             return this.value;
@@ -140,29 +162,16 @@ var List = (($) => {
                 return;
             }
             this._active = value;
-            //this._main.toggleClass("active");
-            //db ("toggle")
-            //return ;
             if (value) {
                 this._main.addClass("active");
             }
             else {
                 this._main.removeClass("active");
             }
+            this.onactive(value);
         }
         getActive() {
             return this._active;
-        }
-        show() {
-            Float.Float.showMenu({
-                context: this.input.get(),
-                e: this._main.get(),
-                left: "left",
-                top: "down"
-            });
-        }
-        hide() {
-            //this._main.addClass("close");
         }
         move(step) {
             this.setIndex(this._index + step);
@@ -202,10 +211,6 @@ var List = (($) => {
                 this._keyUp(event);
             }).on("keydown", event => {
                 this._keyDown(event);
-            }).on("focus", event => {
-                //db ("focus")
-                //this.setFilter(event.currentTarget.value, true);
-                //this.active(true);
             }).on("mousedown", event => {
                 this.setFilter(event.currentTarget.value, true);
                 this.active(true);
@@ -217,7 +222,7 @@ var List = (($) => {
                 }
             }).on("contextmenu", event => {
                 this.active(false);
-            }).on("paste", e => {
+            }).on("paste", event => {
                 let paste = (event.clipboardData || window.clipboardData).getData('text');
                 this.setFilter(paste);
                 this.active(true);
@@ -232,11 +237,9 @@ var List = (($) => {
             if (event.keyCode !== 13
                 && event.keyCode !== 16
                 && event.keyCode !== 17
-                //&& event.keyCode !== 37
-                //&& event.keyCode !== 39
                 && event.keyCode !== 38 && event.keyCode !== 40 && event.keyCode !== 9) {
-                this.active(true);
                 this.setFilter(event.currentTarget.value);
+                this.active(true);
             }
         }
         _keyDown(event) {
@@ -252,8 +255,8 @@ var List = (($) => {
                         }
                     }
                     else {
-                        this.active(true);
                         this.setFilter(event.currentTarget.value, true);
+                        this.active(true);
                     }
                     break;
                 case 27: //escape
@@ -265,7 +268,6 @@ var List = (($) => {
                     this.move(1);
                     break;
                 default:
-                    //this.active(true);
                     break;
             } // end switch
         }
@@ -322,25 +324,34 @@ var List = (($) => {
                 info.name = this.name;
             }
             if (this.value) {
-                info.value = this.value;
+                // info.value = this.value;
             }
+            //info.value=31321;
             info.tagName = "input";
-            info.type = "text";
-            this.value = "";
+            info.type = "hidden";
             this._main = $.create("div").addClass("type-input").addClass("sg-input-list").addClass(this.className);
-            this._input = this._main.create(info);
+            Float.Float.init(this._main.get());
+            this.input = this._main.create(info);
+            this._input = this._main.create({
+                tagName: "input",
+                type: "text",
+                autocomplete: "off",
+                placeholder: this.placeholder,
+            });
             let data = [];
+            let _data = null;
             if (this.parent) {
                 this.data.forEach((d) => {
                     if (!data[d[2]]) {
-                        data[d[2]] = {};
+                        data[d[2]] = [];
                     }
-                    data[d[0]] = {
+                    data[d[2]].push({
                         value: d[0],
                         text: d[1],
                         item: d[1]
-                    };
+                    });
                 });
+                _data = data[this.parentValue] || [];
             }
             else {
                 data[0] = [];
@@ -351,18 +362,37 @@ var List = (($) => {
                         item: d[1]
                     });
                 });
+                _data = data[0];
             }
+            this._data = data;
             this.menu = new ListMenu({
-                input: this._input.prop("autocomplete", "off"),
-                data: data[0],
-                target: this._main
+                name: this.name,
+                input: this._input,
+                data: _data,
+                target: this._main,
+                value: this.value,
+                onactive: (value) => {
+                    if (value) {
+                        this.menu.get().get().style.minWidth = this._input.get().offsetWidth + "px";
+                        Float.Float.showMenu({
+                            e: this.menu.get().get(),
+                            context: this._input.get(),
+                            left: "left",
+                            top: "down"
+                        });
+                    }
+                },
+            });
+            this._input.on("change", event => {
+                this.input.val(this.menu.getValue());
             });
             for (var x in this.events) {
                 //let action = $.bind(this.events[x], this._main);
                 this._input.on(x, $.bind(this.events[x], this, "event"));
             }
             if (this.childs) {
-                this._main.on("change", $.bind(this.evalChilds, this, "event"));
+                this._main.ds("childs", "childs");
+                this._input.on("change", $.bind(this.evalChilds, this, "event"));
             }
             this._input.prop(this.propertys);
             this._input.style(this.style);
@@ -376,16 +406,14 @@ var List = (($) => {
             if (this.parent) {
                 this._main.ds("parent", this.parent);
             }
-            if (this.childs) {
-                this._main.ds("childs", "childs");
-            }
             this.setValue(this.value);
         }
         setValue(value) {
-            this._input.get().value = value;
+            this.menu.setValue(value);
+            this.input.get().value = this.menu.getValue();
         }
         getValue() {
-            return this._input.get().value;
+            return this.menu.getValue(); //this._input.get().value;
         }
         _load(main) {
         }
@@ -398,23 +426,9 @@ var List = (($) => {
             }
             return false;
         }
-        createOptions(parentValue) {
-            let i, option, vParent = [];
-            this._main.get().length = 0;
-            if (this.parent) {
-                let aux = (parentValue + "").split(",");
-                for (i = 0; i < aux.length; i++) {
-                    vParent[aux[i]] = true;
-                }
-            }
-            if (this.placeholder) {
-            }
-            let e = this._popup = this._main.create("div").addClass("list-popup");
-            for (i in this.data) {
-                if (vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*") {
-                    e.create("div").addClass("option").ds("value", this.data[i][0]).text(this.data[i][1]);
-                }
-            }
+        createOptions(parentValue, name) {
+            this.menu.setData(this._data[parentValue] || []);
+            this.menu.setValue("");
         }
         evalOptions(parentValue) {
         }
@@ -433,76 +447,10 @@ var List = (($) => {
             this._main.ds(prop, value);
         }
         focus() {
-            this._main.get().focus();
+            this.input.get().focus();
         }
         select() {
-            this._main.get().select();
-        }
-        _keyUp(event) {
-            if (event.keyCode !== 38 && event.keyCode !== 40 && event.keyCode !== 9) {
-                this._evalText(event.currentTarget.value);
-            }
-        }
-        _keyDown(event) {
-            switch (event.keyCode) {
-                case 13: //enter
-                    break;
-                case 9: //tab
-                    //this.hide();
-                    break;
-                case 27: //escape
-                    //e.returnValue = false;
-                    //e.cancelBubble = true;
-                    break;
-                case 38: //up arrow 
-                    this.move(-1);
-                    break;
-                case 40: //down arrow
-                    this.move(1);
-                    break;
-                default:
-                    break;
-            } // end switch
-        }
-        _setFilter(filter) {
-            this._index = -1;
-            let cont = $(this._main.query(".list-popup"));
-            cont.text("");
-            let item = null;
-            for (var x in this.data) {
-                let text = this.data[x][1];
-                if (filter === "" || acute(text).indexOf(acute(filter)) >= 0) {
-                    item = cont.create("div").addClass("option").text(this.data[x][1]);
-                }
-            }
-        }
-        move(step) {
-            this._index += step;
-            let items = this._main.queryAll(".list-popup > .option");
-            if (this._index < 0) {
-                this._index = 0;
-            }
-            if (this._index >= items.length - 1) {
-                this._index = items.length - 1;
-            }
-            let item = $(this._main.query(".list-popup > .option.active"));
-            if (item) {
-                item.removeClass("active");
-            }
-            $(items[this._index]).addClass("active");
-            var offsetTop = items[this._index].offsetTop;
-            var height = items[this._index].clientHeight;
-            db(offsetTop + "..." + height);
-            //option.style.color = "white";
-            //option.style.backgroundColor = "rgba(167,8,8,1.00)";
-            let popup = this._popup.get();
-            //popup.style.position = "relative";
-            if (offsetTop <= popup.scrollTop) {
-                popup.scrollTop = offsetTop;
-            }
-            else if (offsetTop + height >= popup.clientHeight + popup.scrollTop) {
-                popup.scrollTop = offsetTop + height - popup.clientHeight;
-            }
+            this.input.get().select();
         }
     }
     I.register("list", List);

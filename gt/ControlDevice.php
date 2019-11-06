@@ -72,7 +72,7 @@ class ControlDevice extends \Sevian\Element{
 
 		$data = $this->getDataField([$q]);
 		
-		$clientData = $this->getDataField([['','. seleccione',''], "SELECT id, client FROM clients ORDER BY client;"]);
+		$clientData = $this->getDataField([['','. seleccione',''], "SELECT id, client FROM clients ORDER BY 2;"]);
 		$accountData = $this->getDataField([['','. seleccione','*'], "SELECT id, name, client_id FROM accounts a ORDER BY name;"]);
 		$deviceData = $this->getDataField([['','. seleccione','*'], "SELECT codvehiculo, concat('veh - ', codvehiculo) as v, coddato  FROM cuenta_vehiculos order by coddato, codvehiculo;"]);
 		

@@ -333,7 +333,7 @@ var Form = (($) => {
             let input = this._inputs[parent];
             for (let i in this._inputs) {
                 if (this._inputs[i].parent === parent) {
-                    this._inputs[i].createOptions(input.getValue());
+                    this._inputs[i].createOptions(input.getValue(), i);
                     if (this._inputs[i].hasChilds()) {
                         this.evalChilds(i);
                     }

@@ -1101,13 +1101,17 @@ form {
   display: flex;
 }
 
+.sg-input-list input {
+  width: 90%;
+}
+
 .list-menu {
   position: absolute;
   border: 1px solid #bbbbbb;
   color: #838383;
   max-height: 15em;
   min-height: 2px;
-  min-width: 30px;
+  min-width: 50px;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -1120,9 +1124,6 @@ form {
 .list-menu:not(.active) {
   visibility: hidden;
 }
-.list-menu.close {
-  visibility: hidden;
-}
 .list-menu .option {
   text-transform: uppercase;
   padding: 2px;
@@ -1131,8 +1132,4 @@ form {
 .list-menu .option.active {
   background-color: #0051ff;
   color: white;
-}
-.list-menu > .list-popup {
-  background-color: white;
-  border: 1px solid #757373;
 }

@@ -6,7 +6,7 @@ var db = false, hr = false;
 		
 	div = $.create("div");
 	div.prop("id","debug_1")
-	.style({width:"200px"})
+	.style({minWidth:"200px"})
 	.on("dblclick",function(){
 		linea = 0;
 		this.innerHTML = "";

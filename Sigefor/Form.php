@@ -517,7 +517,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 	
 	private function createForm(){
-
+		
+		
 		$this->loadConfig();
 
 		$record = false;
@@ -550,15 +551,17 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		$fields = [];
 		$groups = json_decode(\Sevian\S::vars($this->groups));
 		
+		
+
 		foreach($this->fields as $f){
 
 			$id = "{$f->name}_f{$this->id}";
 			$value = '';
 			$page = '';
 			if($f->modeValue == '1' or !$values){
-				$value = $f->default;
+				$f->value = $f->default;
 			}else if(isset($values[$f->field])){
-				$value = $values[$f->field];
+				$f->value = $values[$f->field];
 			}
 
 			if(isset($groups->{$f->field})){
@@ -585,9 +588,16 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->name = $f->field;
 			$config->caption = $f->caption;
 			$config->data = $data;
-			$config->value = $value;
-			$config->className = $config->className?? $f->class;
+			$config->value = $f->value?? '';
+			$config->className = $config->className?? $f->class?? '';
 			$rules = json_decode($f->rules);
+			$config->childs = $f->childs;
+			//$config->placeholder = $f->placehoder;
+			if($f->parent){
+				$config->parent = $f->parent;
+				$config->parentValue = $this->fields[$f->parent]->value?? '';
+			}
+
 			if($rules != null){
 				$config->rules = json_decode($f->rules);
 			}

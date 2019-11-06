@@ -38,49 +38,39 @@ var ControlDevice = (($) => {
                 target: main,
                 fields: [
                     {
-                        input: "input",
+                        input: "list",
                         config: {
                             type: "text",
                             name: "client_id",
-                            caption: "mCliente",
+                            caption: "Cliente",
                             data: this.clientData,
                             childs: true,
-                            value: '9'
+                            value: 86
                         }
                     },
                     {
                         input: "list",
                         config: {
-                            type: "colorXX",
-                            name: "client_id2",
-                            caption: "mCliente",
-                            data: this.clientData,
-                            childs: true,
-                            value: '9'
-                        }
-                    },
-                    {
-                        input: "input",
-                        config: {
-                            type: "select",
+                            type: "text",
                             name: "count_id",
-                            caption: "Cuenta...",
+                            caption: "Cuenta",
                             data: this.accountData,
                             parent: "client_id",
                             childs: true,
-                            parentValue: 9,
-                            value: '22',
+                            parentValue: 86,
+                            value: 103,
                             propertys: {}
                         }
                     },
                     {
-                        input: "multi",
+                        input: "list",
                         config: {
-                            type: "radio",
+                            type: "text",
                             name: "device_id",
                             caption: "Device",
                             parent: "count_id",
-                            parentValue: '22',
+                            parentValue: '103',
+                            value: 2109,
                             data: this.deviceData
                         }
                     }

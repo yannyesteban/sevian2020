@@ -108,7 +108,7 @@ var Input = (($) => {
 			}
             
             if(this.childs){
-                
+                this._main.ds("childs", "childs");
                 this._main.on("change", $.bind(this.evalChilds, this, "event")); 
             }
 
@@ -126,9 +126,7 @@ var Input = (($) => {
             if(this.parent){
                 this._main.ds("parent", this.parent);
             }
-            if(this.childs){
-                this._main.ds("childs", "childs");
-            }
+           
             
             this.setValue(this.value);
         }

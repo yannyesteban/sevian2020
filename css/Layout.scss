@@ -1223,7 +1223,11 @@ form{
     
   }
 }
-
+.sg-input-list{
+  input{
+    width: 90%;
+  }
+}
 
 .list-menu{
   position: absolute;
@@ -1231,41 +1235,25 @@ form{
   color: #838383;
   max-height: 15em;
   min-height: 2px;
-  min-width: 30px;
+  min-width: 50px;
+  
   user-select: none;
   background-color: #ffffff;
-
   overflow: auto;
   padding: 0px;
   font-size: 9pt;
 
+  
   &:not(.active){
     visibility: hidden;
-  }
-  &.close {
-    visibility: hidden;
-    
   }
   .option{
     text-transform: uppercase;
     padding: 2px;
     line-height: 1.5em;
-    
   }
   .option.active{
     background-color: rgb(0, 81, 255);
     color:white;
   }
-
-  >.list-popup{
-    
-    background-color: white;
-    
-
-
-    //position: absolute;
-    border: 1px solid rgb(117, 115, 115);
-    
-  }
-
 }
