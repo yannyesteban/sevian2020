@@ -102,7 +102,7 @@ var Menu =
             main.ds("sgMenu", "menu");
             
             if(this.context){
-                let context = $(this.context).on("click", ()=>{
+                let context = $(this.context).on("click", event => {
                     main.style({
                         position:"absolute",
                         visibility:"visible",
@@ -122,7 +122,7 @@ var Menu =
                     visibility:"hidden",
                 });
 
-                $().on("mousedown", (event:Event)=>{
+                $().on("mousedown", event => {
                     if(main.ds("active") == "0"){
                         main.style({
                             position:"absolute",
@@ -130,7 +130,7 @@ var Menu =
                         });
                     }
                 });
-                $().on("click", (event:Event)=>{
+                $().on("click", event => {
                     if(main.ds("active") == "1" && !this._isCheck && this._isItem){
                         main.style({
                             position:"absolute",
@@ -142,20 +142,20 @@ var Menu =
             }
            
             main.ds("active", "0")
-            .on("mouseenter", (event:Event)=>{
+            .on("mouseenter", event => {
                 main.ds("active", "1");
             })
-            .on("mouseleave", (event:Event)=>{
+            .on("mouseleave", event => {
                 main.ds("active", "0");
             })
 
-            $().on("mousedown", (event:Event)=>{
+            $().on("mousedown", event => {
                 if(main.ds("active") == "0"){
                     this.closeAll();
                 }
             });
             
-            $().on("click", (event:Event)=>{
+            $().on("click", event => {
                 if(main.ds("active") == "1" && !this._isCheck && this._isItem){
                     this.closeAll();
                 }
@@ -184,7 +184,7 @@ var Menu =
             
             items = main.queryAll("input[type='checkbox']");
             for(x of items){
-                let chk = $(x).on("mouseenter", ()=>{
+                let chk = $(x).on("mouseenter", () => {
                     this._isCheck = true;
                 })
                 .on("mouseleave", ()=>{

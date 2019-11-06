@@ -40,7 +40,7 @@ class InfoField{
 	//public $method = '';
 	public $caption = false;
 	public $class = '';
-	//public $params = '';
+	public $placeholder = '';
 	public $input = '';//['input'=>'text'];
 	public $inputType = '';//['input'=>'text'];
 	public $value = '';
@@ -592,7 +592,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->className = $config->className?? $f->class?? '';
 			$rules = json_decode($f->rules);
 			$config->childs = $f->childs;
-			//$config->placeholder = $f->placehoder;
+			
+			$config->placeholder = $f->placeholder;
 			if($f->parent){
 				$config->parent = $f->parent;
 				$config->parentValue = $this->fields[$f->parent]->value?? '';

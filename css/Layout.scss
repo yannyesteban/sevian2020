@@ -1230,13 +1230,13 @@ form{
 }
 
 .list-menu{
-  position: absolute;
+  position: fixed;
   border: 1px solid rgb(187, 187, 187);
   color: #838383;
   max-height: 15em;
   min-height: 2px;
   min-width: 50px;
-  
+  width:auto;
   user-select: none;
   background-color: #ffffff;
   overflow: auto;
