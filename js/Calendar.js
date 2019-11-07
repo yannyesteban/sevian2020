@@ -490,7 +490,11 @@ sgDate.Calendar = (($) => {
             tip.style({
                 position: "absolute",
             });
-            tip.on("click", (event) => {
+            tip.on("mousedown", (event) => {
+                event.preventDefault();
+                event.returnValue = false;
+                event.cancelBubble = true;
+            }).on("click", (event) => {
                 event.preventDefault();
                 event.returnValue = false;
                 event.cancelBubble = true;

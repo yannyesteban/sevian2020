@@ -527,7 +527,7 @@ class S{
 				self::iMethod($cmd);
 				break;
 			case "signs":
-				$this->evalSigns($params);
+				self::evalSigns($params);
 				break;
 			default:
 				break;
@@ -557,6 +557,7 @@ class S{
 		]';
 		//self::$req["__sg_params"] = $aux;
 		
+
 
 		if(isset(self::$req["__sg_params"]) and self::$req["__sg_params"] != ""){
 
