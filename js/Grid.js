@@ -253,6 +253,12 @@ var Grid = (($) => {
             _search.create("input").attr("type", "button").val("go").addClass("btn-search")
                 .on("click", (event) => { this._search(q.val()); });
             ;
+            if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
+                let _auxMenu = main.create("div").addClass("grid-aux-menu");
+                _auxMenu.create("button").attr("type", "button").text("+").on("click", () => { this.setNew(); });
+                _auxMenu.create("button").attr("type", "button").text("&#215;").on("click", () => { this.insert(); });
+                _auxMenu.create("button").attr("type", "button").text("s").on("click", () => { this.save(); });
+            }
             let body = main.create("div").addClass("body");
             let table = this._table = body.create("table").addClass("grid-table");
             this._thead = table.create("thead");
@@ -358,12 +364,7 @@ var Grid = (($) => {
             if (this.showEnum) {
                 cell = row.create("td").text("");
             }
-            if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
-                cell = row.create("td");
-                cell.create("input").attr("type", "button").on("click", () => { this.setNew(); });
-                cell.create("input").attr("type", "button").val("s").on("click", () => { this.save(); });
-                cell.create("input").attr("type", "button").val("I").on("click", () => { this.insert(); });
-            }
+            cell = row.create("td").text("");
             let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
             for (let x in this.fields) {
                 let field = this.fields[x];
