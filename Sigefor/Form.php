@@ -649,7 +649,8 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			'id'		=> 'sg_form_'.$this->id,
 			'fields'	=> $fields,
 			'pages'		=> $pages,
-			'menu'		=> $this->createMenu($this->menu)
+			'menu'		=> $this->createMenu($this->menu),
+			'className' => ($this->mode == '1')? 'mode-insert': 'mode-update'
 			
 		];
 
@@ -699,7 +700,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			foreach($rs as $k => $v){
 				$config->$k = $v;
 			}
-
+			//\Sevian\S::vars($config->config)
 			$menu = json_decode($config->config, true);
 
 			
@@ -723,10 +724,15 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$json = [];
 			
 			while($rs = $cn->getDataAssoc($result)){
+
+
 				if($rs["action"]){
-					$action = "S.send(".$rs["action"].");";
+					$rs['action'] = \Sevian\S::varParam($rs['action'], (array)$this);
+					$rs['action'] = \Sevian\S::vars($rs['action']);
+					$action = "S.send(".$rs['action'].");";
+					
 				}else{
-					$action = "";
+					$action = '';
 				}
 
 				$index = $rs["index"];

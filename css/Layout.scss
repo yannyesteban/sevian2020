@@ -1270,6 +1270,10 @@ form{
   border-radius: 5px;
   box-shadow: 6px 7px 5px -4px rgba(0,0,0,0.71);
   user-select: none;
+  visibility:hidden;
+
+  visibility:visible;
+  opacity:1;
 
   >.caption{
     color:white;
@@ -1282,6 +1286,20 @@ form{
   }
 
   &.hidden{
-    visibility: hidden;
+    
+    visibility:hidden;
+  opacity:0;
+  transition:visibility 0.9s linear,opacity 0.9s linear;
+  }
+}
+
+.sg-form{
+  &.mode-insert{
+    border-color: rgb(133, 168, 177);
+    
+  }
+  &.mode-update{
+    border-color: rgb(51, 163, 51);
+   
   }
 }

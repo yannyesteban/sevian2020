@@ -47,7 +47,6 @@ var S = (($) => {
                 panel = this.defaultPanel;
             }
             if (info.valid !== false && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()) {
-                db("error valid");
                 return false;
             }
             let dataForm = null;

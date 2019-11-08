@@ -120,12 +120,12 @@ var List = (($) => {
         }
         
         select(index){
-
             if(this.data[index]){
                 this._error = false;
                 this.input.val(this.data[index].text);
                 //this.setValue(this.data[index].value);
                 if(this.data[index].text !== this.value){
+                    
                     this.value = this.data[index].value;
                     this.input.fire("change");
                 }
@@ -134,14 +134,11 @@ var List = (($) => {
         }
         
         setData(data){
-
-            
-            
             this.data = data;
         }
         
         setText(value:any){
-                
+
             for(let e of this.data){
                 if(acute(e.text) == acute(value)){
                     
@@ -153,19 +150,24 @@ var List = (($) => {
         }
         
         setValue(value:any){
+
             let error = true;    
             for(let e of this.data){
                 if(e.value == value){
                     
                     this.input.val(e.text);
+                    
                     this.value = e.value;
                     error = false;
                 }
             }
+            
             if(error){
                 
                 this.input.val("");
                 this.value = "";
+
+               
             }
             //this.input.fire("change");
             
@@ -284,7 +286,7 @@ var List = (($) => {
             }).on("change", event => {
                 if(this._error){
                     this._index = -1;
-                    this.value = null;
+                    this.value = "";
                     event.currentTarget.value = "";
                 }
             }).on("contextmenu", event => {
@@ -422,7 +424,7 @@ var List = (($) => {
 
            
 
-            this._main = $.create("div").addClass("type-input").addClass("sg-input-list").addClass(this.className);
+            this._main = $.create("div").addClass("type-input").addClass("sg-input").addClass(this.className);
             Float.Float.init(this._main.get());
             
             this.input = this._main.create(info);
@@ -521,7 +523,7 @@ var List = (($) => {
             this._main.ds(this.dataset);
 
             this._main.ds("sgName", this.name);
-            this._main.ds("sgInput", "input");
+            this._main.ds("sgInput", "list");
             this._main.ds("sgType", this.type);
             if(this.parent){
                 this._main.ds("parent", this.parent);
@@ -582,11 +584,11 @@ var List = (($) => {
             this._main.ds(prop, value);
         }
         focus(){
-            this.input.get().focus();
+            this._input.get().focus();
             
         }
         select(){
-            this.input.get().select();
+            this._input.get().select();
         }
 
         

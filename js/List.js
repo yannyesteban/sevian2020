@@ -217,7 +217,7 @@ var List = (($) => {
             }).on("change", event => {
                 if (this._error) {
                     this._index = -1;
-                    this.value = null;
+                    this.value = "";
                     event.currentTarget.value = "";
                 }
             }).on("contextmenu", event => {
@@ -329,7 +329,7 @@ var List = (($) => {
             //info.value=31321;
             info.tagName = "input";
             info.type = "hidden";
-            this._main = $.create("div").addClass("type-input").addClass("sg-input-list").addClass(this.className);
+            this._main = $.create("div").addClass("type-input").addClass("sg-input").addClass(this.className);
             Float.Float.init(this._main.get());
             this.input = this._main.create(info);
             this._input = this._main.create({
@@ -401,7 +401,7 @@ var List = (($) => {
             }
             this._main.ds(this.dataset);
             this._main.ds("sgName", this.name);
-            this._main.ds("sgInput", "input");
+            this._main.ds("sgInput", "list");
             this._main.ds("sgType", this.type);
             if (this.parent) {
                 this._main.ds("parent", this.parent);
@@ -447,10 +447,10 @@ var List = (($) => {
             this._main.ds(prop, value);
         }
         focus() {
-            this.input.get().focus();
+            this._input.get().focus();
         }
         select() {
-            this.input.get().select();
+            this._input.get().select();
         }
     }
     I.register("list", List);

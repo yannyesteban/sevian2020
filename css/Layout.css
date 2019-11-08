@@ -1150,6 +1150,9 @@ form {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  visibility: hidden;
+  visibility: visible;
+  opacity: 1;
 }
 .sg-message-box > .caption {
   color: white;
@@ -1162,4 +1165,14 @@ form {
 }
 .sg-message-box.hidden {
   visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0.9s linear, opacity 0.9s linear;
+  transition: visibility 0.9s linear, opacity 0.9s linear;
+}
+
+.sg-form.mode-insert {
+  border-color: #85a8b1;
+}
+.sg-form.mode-update {
+  border-color: #33a333;
 }

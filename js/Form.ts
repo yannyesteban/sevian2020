@@ -392,9 +392,11 @@ var Form = (($) => {
                 
                 elem = $(e);
                 
-                
+                db (elem.ds("sgInput"), "green")
                 inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"),{
-                    id:elem, name:elem.ds("sgName"),type:elem.ds("sgInput")
+                    id: elem,
+                    name: elem.ds("sgName"),
+                    type: elem.ds("sgInput")
                 });
             }
 
@@ -462,18 +464,14 @@ var Form = (($) => {
 
         }
         valid(){
-            let inputs = this.getInputs();
-            let data = [];
-            let name = null;
+            let data = this.getValue();
             let rules = null, config = null;
-            
-            for(name in inputs){
-                data[name] = inputs[name].getValue();
-            }
+            let inputs = this._inputs;
 
             for(let field of this.fields){
                 config = field.config;
                 rules = config.rules;
+
                 if(rules){
                     let msg = Sevian.Valid.send(rules, inputs[config.name].getValue(), config.caption, data);
                     if(msg){
@@ -484,11 +482,8 @@ var Form = (($) => {
                     }
                 }
                 
-                
             }
             return true;
-
-            
         }
     }
 

@@ -465,23 +465,33 @@ class S{
 	public static function commandsLoad($inputs){
 		
 	}
-	public static function vars($q){
+	public static function vars($q, $default = false){
 		return Tool::vars($q, [
 			[
 				'token' 	=> '@',
 				'data' 		=> self::$ses,
-				'default' 	=> false
+				'default' 	=> $default
 			],
 			[
 				'token'		=> '\#',
 				'data' 		=> self::$req,
-				'default' 	=> false
+				'default' 	=> $default
 			],
 			[
 				'token' 	=> '&EX_',
 				'data' 		=> self::$exp,
-				'default' 	=> false
+				'default' 	=> $default
 			],
+		]);
+	}
+
+	public static function varParam($q, $data, $default = false){
+		return Tool::vars($q, [
+			[
+				'token' 	=> '&P_',
+				'data' 		=> $data,
+				'default' 	=> $default
+			]
 		]);
 	}
 

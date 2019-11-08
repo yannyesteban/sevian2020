@@ -305,8 +305,11 @@ var Form = (($) => {
             let elems = this._main.queryAll("[data-sg-input][data-sg-name]");
             for (e of elems) {
                 elem = $(e);
+                db(elem.ds("sgInput"), "green");
                 inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"), {
-                    id: elem, name: elem.ds("sgName"), type: elem.ds("sgInput")
+                    id: elem,
+                    name: elem.ds("sgName"),
+                    type: elem.ds("sgInput")
                 });
             }
             return inputs;
@@ -356,13 +359,9 @@ var Form = (($) => {
             }
         }
         valid() {
-            let inputs = this.getInputs();
-            let data = [];
-            let name = null;
+            let data = this.getValue();
             let rules = null, config = null;
-            for (name in inputs) {
-                data[name] = inputs[name].getValue();
-            }
+            let inputs = this._inputs;
             for (let field of this.fields) {
                 config = field.config;
                 rules = config.rules;
