@@ -253,12 +253,23 @@ class S{
 
 	public static function setElement($info, $update = false){
 
-		if(isset(self::$_clsElement[$info->element])){
-			if($info->id == 0){
-				$info->id = self::getReq("__sg_panel");
-			}else if($info->id <= "-1"){
-				$info->id = self::$defaultPanel;
+		if($info->id == 0){
+			$info->id = self::getReq("__sg_panel");
+		}else if($info->id <= "-1"){
+			$info->id = self::$defaultPanel;
+		}
+		
+		if(isset(self::$_info[$info->id])){
+			if(!$info->element){
+				$info->element = self::$_info[$info->id]->element;
 			}
+
+			if(!$info->name){
+				$info->name = self::$_info[$info->id]->name;
+			}
+		}
+		
+		if(isset(self::$_clsElement[$info->element])){
 			
 			$info->async = self::$onAjax;
 			
@@ -518,7 +529,6 @@ class S{
 				//self::setPanel(new InfoParam($params), true);
 				break;
 			case "setMethod":
-				
 				self::setElement(new InfoElement($cmd), true);
 				//self::evalMethod($params);
 				
@@ -693,8 +703,18 @@ class S{
 		//$script = "//Sevian.loadPanels($json)";
         $json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
 		$script = "Sevian.action.initPanel($json)";
-		$script = "S.defaultPanel= '".self::$defaultPanel."';S.init($json)";
+		$script = "S.defaultPanel= '".self::$defaultPanel."';S.init($json);";
 		
+
+
+		$response = [
+			//'panels'=>$p,
+			//'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			//'update'=> self::getJsConfigPanel(),
+			'fragments'=>self::$_f
+			];
+		$json = json_encode($response, JSON_PRETTY_PRINT);	
+		$script .= "S.requestPanel($json)";	
 		$doc->appendScript($script, true);
 		
 		return $doc->render();

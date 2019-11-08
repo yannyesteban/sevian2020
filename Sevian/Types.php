@@ -88,10 +88,16 @@ class iObjectData{
 }
 
 class iMessage{
-    public $token = '';
-	public $message = '';
-    public $time = 0;
+	public $token = '';
+	public $caption = '';
+	public $text = '';
+	public $className = '';
+    public $delay = 3000;
 	public $mode = '';
+
+	public $left = 'center';
+	public $top = 'top';
+
 
     public function __construct($opt = []){
 		foreach($opt as $k => $v){

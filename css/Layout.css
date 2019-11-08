@@ -1134,3 +1134,32 @@ form {
   background-color: #0051ff;
   color: white;
 }
+
+.sg-message-box {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  margin: 20px;
+  padding: 10px;
+  background-color: #0071ce;
+  border: 0px solid #ec8484;
+  border-radius: 5px;
+  -webkit-box-shadow: 6px 7px 5px -4px rgba(0, 0, 0, 0.71);
+          box-shadow: 6px 7px 5px -4px rgba(0, 0, 0, 0.71);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.sg-message-box > .caption {
+  color: white;
+  text-align: right;
+  border-bottom: 2px solid white;
+}
+.sg-message-box > .text {
+  color: aqua;
+  padding: 4px;
+}
+.sg-message-box.hidden {
+  visibility: hidden;
+}

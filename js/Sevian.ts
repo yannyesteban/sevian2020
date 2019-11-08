@@ -14,8 +14,10 @@ var S = (($) => {
 		static _e:object[] = [];
 		static _w:object[] = [];
 		static defaultPanel:any = 0;
-
-        static init(info:object[]){
+		
+		static msg:object = null;
+		
+		static init(info:object[]){
             for(var x of info){
                 if(window[x.type]){
                     this._e[x.panel] = new window[x.type](x.option);
@@ -193,6 +195,10 @@ var S = (($) => {
 							sgJson.iFragment(p.fragments[x]);
 							break;
 						case "message":
+							if(!this.msg){
+								this.msg = new Float.Message(p.fragments[x]);
+							}
+							this.msg.show({})
 							break;
 					}
 				}

@@ -1257,3 +1257,31 @@ form{
     color:white;
   }
 }
+
+.sg-message-box{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  margin: 20px;
+  padding: 10px;
+  background-color: #0071ce;
+  border: 0px solid rgb(236, 132, 132);
+  
+  border-radius: 5px;
+  box-shadow: 6px 7px 5px -4px rgba(0,0,0,0.71);
+  user-select: none;
+
+  >.caption{
+    color:white;
+    text-align: right;
+    border-bottom: 2px solid rgb(255, 255, 255) ;
+  }
+  >.text{
+    color:aqua;
+    padding: 4px;;
+  }
+
+  &.hidden{
+    visibility: hidden;
+  }
+}

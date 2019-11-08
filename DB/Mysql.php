@@ -149,7 +149,7 @@ class Mysql extends DBase{
 		if ($result!=''){
 			$this->result = $result;
         }
-		if(!$this->result->field_count){
+		if(!$this->result->field_count){hr ($this->query);
 			return false;
 		}
 		return $this->result->fetch_row();		

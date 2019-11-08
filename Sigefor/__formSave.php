@@ -1,139 +1,92 @@
 <?php
-namespace Sevian\Sigefor;
 
-class InfoRecord{
-    public $cn ="";
-    public $fields;
-    public $query;
-    public $tables = [];
-    public $transaction = false;
-    public $masterData = false;
-    public $records = [];
 
-    public $error = false;
-    public $errno = 0;
+class _FormSave{
+    private $cn;
+    private $fields;
+    private $data;
+    private $query;
+    private $tables = ['persons2'];
+    private $transaction = false;
+    private $masterData = false;
 
-    public function __construct($opt = []){
+    private $error = false;
+    private $errno = 0;
+
+
+
+    public function __construct($info = []){
 		
-		foreach($opt as $k => $v){
+		foreach($info as $k => $v){
 			if(property_exists($this, $k)){
 				$this->$k = $v;
 			}
 		}
-		
+
+
+
+        $f = $this->loadJson("save_form.json");
+       // print_r($f);
+        $this->cn = \Sevian\Connection::get();
+
+        $i = $this->cn->infoQuery("select * from persons2");
+        //print_r($i);
+
+        //$i = $this->cn->infoTable("persons");
+        //print_r($i);
+        $this->info = $f;// = json_decode($d);
+        //print_r($p);
+        $this->save( $this->info, $this->info->data, $this->info->masterData);
 	}
 
-}
-
-
-class InfoRecordField{
-    public $field = '';
-    public $mtype = '';
-    public $format = [];
-    public $table = '';
-    public $notNull = false;
-    public $rules = [];
-    
-    public $sqlValue = false;
-    public $refValue = false;
-	public $master = false;
-	public $expValue = 'Numero {=value} &name @cedula';
-    
-    public $serialize = false;
-    public $serializeFilters = []; 
-    public $aux = false;
-    public $update = true;
-    public $key = false;
-    public $serial = '';
-
-    public $setSes = false;
-	public $setReq = false;
-    public $setExp = false;
-    
-    public function __construct($opt = []){
-		
-		foreach($opt as $k => $v){
-			if(property_exists($this, $k)){
-				$this->$k = $v;
-			}
-		}
-		
-		
-	}
-}
-
-
-class FormSave{
-    private static $cn;
-    private static $transaction = false;
-    private static $error = false;
-    private static $errno = 0;
-
-    private static $dict = null;
-
-    private static $result = [];
-
-    private static function begin(){
-        if(self::$transaction){
-            self::$cn->begin();
+    private function begin(){
+        if($this->transaction){
+            $this->cn->begin();
         }
     }
 
-    private static function end($error){
+    private function end($error){
             
-        if(self::$transaction){
+        if($this->transaction){
             if(!$error){
-                self::$cn->commit();
+                $this->cn->commit();
                 
             }else{
-                self::$cn->rollback();
+                $this->cn->rollback();
                 
             }
         }
     }
+    public function save($info, $data, $masterData = []){
 
-
-    public static function setDictRecords(&$record){
-        self::$dict = &$record;
-    }
-    public static function send($info, $data, $masterData = []){
-        if(!$info instanceof InfoRecord){
-            $info = new InfoRecord($info);
-        }
-        
-        if($info->cn){
-            self::$cn = \Sevian\Connection::get($info->cn);  
-        }
-        self::$transaction = $info->transaction;
-        self::begin();
-
-        self::$error = false;
-        self::$errno = 0;
+        $cn = $this->cn;
+        $this->begin();
+        $this->error = false;
+        $this->errno = 0;
         
         foreach($data as $record){
-            self::$result[] = self::saveRecord($info, $record, $masterData);
+            $this->saveRecord($info, $record, $masterData);
         }
+
         
-        self::end(self::$error);
+        $this->end($this->error);
         
-        return self::$result;
     }
     
-    private static function saveRecord($info, $data, $masterData){
-        
+    public function saveRecord($info, $data, $masterData){
+
         if($data->__mode_ <= 0){
             return false;
         }
 
-        $cn = self::$cn;
+        //$info = $this->info;
+        $cn = $this->cn;
         $mode = $data->__mode_;
         
-        $record = $data->__record_?? self::$dict[$data->__id_]?? new \stdClass;
-
-        $recordIni = clone $record;
-
+        $record = $data->__record_ ?? new \stdClass;
         $tables = $info->tables;
-        $result = new \stdClass;
+        //$masterData = $info->masterData;
+
         foreach($tables as $table){
            
             $serial = '';
@@ -141,7 +94,7 @@ class FormSave{
             $filter = new \stdClass;
             $q_where = '';
 
-            if($record != '' and $mode != '1'){
+            if($record != ''){
                 if(count($tables ) == 1){
                     foreach($record as $k => $v){
                         $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($k)."='".$cn->addSlashes($v)."'";    
@@ -166,7 +119,7 @@ class FormSave{
                     continue;
                 }
               
-                if(($field->serial) and $field->notNull and $data->$k == '' and $mode == 1){
+                if(($field->mtype == 'S') and $field->notNull and $data->$k == '' and $mode == 1){
 						
                     $serial = $field->field;
                     continue;
@@ -182,7 +135,7 @@ class FormSave{
                     }elseif($field->refValue){
                         $value = $data->{$field->refValue};
                     }elseif($field->serialize){
-                        $value = $cn->serialId($table, $field->field, $field->serializeFilters);
+                        $value = $cn->serialId($table, $field->field, $field->serialize_filters);
                     }else{
                         $value = $data->$k;
                     }
@@ -239,42 +192,25 @@ class FormSave{
                 case 6:
                     $q = "DELETE FROM $table WHERE $q_where;";
                     break;
-            }
-            
-            $q_error = false;
-            $q_errno = 0;
-            
+            }// end switch
+           
             if($q){
-                //hr($q);
-                $cn->execute($q);
+                hr($q);
+                $result = $cn->execute($q);
 
                 if($cn->error){
-                    self::$error = true;
-                    self::$errno = $q_errno = $cn->errno;
-                    $q_error = $cn->error;		
+                    
+                    $this->error = true;
+                    $this->errno = $cn->errno;		
                 }
-                
                 if($serial){
                     $lastId = $cn->getLastId();
                     $data->$serial =  $lastId;
                     $record->$serial = $lastId;
+                    //hr($cn->getLastId());
                 }
+                
             }
-            
-            if($q_error){
-                $record = $recordIni;
-                self::$dict[$data->__id_] = $recordIni;
-            }
-
-            $result->record = $record;
-
-            $result->q[] = [
-                'table' => $table,
-                'query' => $q,
-                'record'=> $record,
-                'error' => $q_error,
-                'errno' => $q_errno
-            ];
             
         }
 
@@ -282,15 +218,19 @@ class FormSave{
 
             if(isset($field->detail)){
 
-                self::send($field->detail, $data->$k, $data);
+                $this->save($field->detail, $data->$k, $data);
                 
             }
         }
-
-
-        
-        $result->error = self::$error;
-        return $result;
     }
-    
+
+    public function loadJson($path){
+		
+		
+		//$a= file_get_contents("json/mod_principal.json", true);
+		return json_decode(file_get_contents($path, true));
+		
+		
+		
+	}
 }

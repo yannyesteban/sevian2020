@@ -873,7 +873,7 @@ var Float = (($) => {
     db (document.defaultView.getComputedStyle(div.get()).gridTemplateColumns);
     });
 
-    return {Window: Win, Float: Float, Resize: Resize, Move: Move, Window: null, Popup: null};
+    return {Window: Win, Float: Float, Resize: Resize, Move: Move, Window: null, Popup: null, Message: null};
 })(_sgQuery);
 
 
@@ -1243,6 +1243,7 @@ Float.Popup = (($) => {
         _main:any = null;
         _active:boolean = false;
 		_timer:number = null;
+        
         constructor(info){
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
@@ -1270,7 +1271,7 @@ Float.Popup = (($) => {
                 this._create(main);
 
             }
-
+          
 
             if(this.autoClose){
                 
@@ -1299,9 +1300,9 @@ Float.Popup = (($) => {
                     this._active = false;
                     this.setTimer();
                 });
-                this._main = main;
+                
             }
-            
+            this._main = main;
             if(this.visible){
                 this.show();
             }else{
@@ -1310,12 +1311,12 @@ Float.Popup = (($) => {
         }
 
         _create(main){
-
+            main.addClass("sg-popup").addClass(this.className);
 
             if(this.child){
                 main.append(this.child);
             }
-            main.addClass("sg-popup");
+            
             Float.Float.init(main.get());
         }
         _load(main){
@@ -1350,10 +1351,16 @@ Float.Popup = (($) => {
         }
 
         show(info = null){
+
+           
             if(info !== null){
 
                 
                 info.e = this._main.get();
+
+                info.left = info.left || this.left;
+                info.top = info.top || this.top;
+
                 if(info.context){
                     Float.Float.showMenu(info);
                 }else{
@@ -1399,7 +1406,53 @@ Float.Popup = (($) => {
         }
     }
 
+    class Message extends Popup{
+        caption:string = null;
+        text:any = null; 
+        constructor(info){
+            
+            super(info);
 
+            for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+            this.setCaption(this.caption);
+            this.setText(this.text);
+        }
+
+        _create(main:any){
+            //Popup._create(main);
+            main.addClass("sg-message-box").addClass(this.className);
+
+            if(this.child){
+                main.append(this.child);
+            }
+            
+            Float.Float.init(main.get());
+            main.create("div").addClass("caption");
+            main.create("div").addClass("text");
+
+        }
+
+        setCaption(caption:any){
+            this.caption  = caption;
+            let elem = this._main.query(".caption");
+            if(elem){
+                $(elem).text(caption);
+            }
+        }
+        setText(text:any){
+            this.text  = text;
+            let elem = this._main.query(".text");
+            if(elem){
+                $(elem).text(text);
+            }
+        }
+    }
+    Float.Message = Message;
     $(window).on("load_", ()=>{
 let div = $("").create("div").addClass("popup").text("Help?");
 

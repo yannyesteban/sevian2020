@@ -90,7 +90,7 @@ class InfoField{
 class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 
-	private $mode = 'new';//'load'
+	private $mode = '1';//'update'
 	private $render = 'form';//'list'
 
 
@@ -152,7 +152,10 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
         //hr($this->method);
         switch($method){
 			case 'create':
+				$this->mode = '1';
 			case 'load':
+				$this->mode = '2';
+			case 'request':
 				$this->createForm();
 				break;
 			case 'list':
@@ -176,9 +179,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
                 
                 
-			case 'request':
 			
-				$this->createForm();//$this->html;
 				
                 break;
             case 'delete':
@@ -621,12 +622,12 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 		$pages = json_decode(\Sevian\S::vars($this->pages));
 		$fields[] = [
-			'input'	=> 'hidden',
+			'input'	=> 'input',
 			'page'	=> '',
 			'config'=> [
 				'type'=>'text',
 				"name"=>'__mode_',
-				'value'=>'2'
+				'value'=>$this->mode
 			]
 			
 		];
@@ -1052,24 +1053,42 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	private function save(){
 		$this->loadConfig();
 
+		//print_r($this->infoQuery);
 		$_data = (object)\Sevian\S::getVReq();
-		$_data->__record_ = \Sevian\S::getSes("f_id");
-		//hr(\Sevian\S::getSes("f_id"));
-		$info = [
+		//$_data->__record_ = \Sevian\S::getSes("f_id");
+		
+		$info = new InfoRecord([
 			'cn'		=> '_default',
 			'mode'		=> 'update',
-			'tables'	=> ['personas'],
+			'tables'	=> $this->infoQuery->tables,
 			'fields'	=> $this->infoQuery->fields,
 			'data' 		=> [$_data],
-			'records'	=> $this->pVars['records']
+		]);
 
-		];
-		//print_r($info);exit;
 		$save = 'Sevian\Sigefor\FormSave';
-		$info = (object)$info;
+		$save::setDictRecords($this->pVars['records']);
+		$result = $save::send($info, [$_data], []);
+		
 
+		foreach($result as $k => $v){
 
-		$save::send($info, $info->data, []);
+			if(!$v->error){
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>$this->caption,
+					'text'=>'Record was saved!!!'
+				]));
+			}else{
+				//print_r($result);
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>'Error '.$this->caption,
+					'text'=>"Record wasn't saved!!!"
+				]));
+
+			}
+
+		}
+		
+		
 	}
 	public function getRecord($info, $record){
 		
@@ -1083,7 +1102,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			if(isset($record->$k)){
 				if(isset($info->fields[$k])){
 					$table = $info->fields[$k]->orgtable;
-					$filter = $table.'.'.$cn->addQuotes($k).'='.$cn->addSlashes($record->$k);
+					$filter = $table.'.'.$cn->addQuotes($k)."='".$cn->addSlashes($record->$k)."'";
 				}
 			}
 		}

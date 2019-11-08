@@ -602,8 +602,8 @@ sgDate.Calendar = (($) => {
         popupNote(){
 
             let div = $.create("div").addClass("cal-note");
-			this._pNoteTitle = div.create("div").text("hola").addClass("note-title");
-			this._pNoteBody = div.create("div").text("hola2").addClass("note-body");
+			this._pNoteTitle = div.create("div").addClass("note-title");
+			this._pNoteBody = div.create("div").addClass("note-body");
 			this._popup = new Float.Popup({visible:false, target:this._main, className:"sg-cal-popup"});
 			this._popup.setBody(div);	
             
