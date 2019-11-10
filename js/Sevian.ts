@@ -63,6 +63,10 @@ var S = (($) => {
 				return false;
 			}
 
+			if(panel && this._e[panel] && this._e[panel].onsubmit && !this._e[panel].onsubmit()){
+				return false;
+			}
+
 			let dataForm = null;
             let params = "";
 
@@ -150,7 +154,7 @@ var S = (($) => {
         }
 
         static requestPanel(p){
-
+			
 			if(p.panels){
 				for(var x in p.panels){
 					sgJson.iPanel(p.panels[x]);
@@ -192,8 +196,18 @@ var S = (($) => {
 							}
 							this.msg.show({})
 							break;
+							
 					}
 				}
+			}
+
+			if(p.debug){
+
+				for(let msg of p.debug){
+					db (msg);
+				}
+				
+				
 			}
         }
         static createWindow(info){

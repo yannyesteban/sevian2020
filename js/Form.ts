@@ -306,10 +306,9 @@ var Form = (($) => {
             return $(_tab.get());
         }
         createInput(info:any){
-            //return I.create(info);
-            alert (no)
-            return new $I["std"](info);
-            return new Input(info)
+            this._inputs[info.name] = I.create(input, info)
+            return this._inputs[info.name];
+           
         }
         createField(input:string, info:any){
             
@@ -329,7 +328,11 @@ var Form = (($) => {
             if(info.rules && info.rules.required){
                 ind = "<span class='ind'>*</span>";
             }
-
+            if(info.parent){
+                info.getParentValue = () =>{
+                    return this.getInput(info.parent).getValue();
+                }
+            }
             if(info.childs){
                 
                 info.evalChilds = (event)=>{
@@ -380,7 +383,11 @@ var Form = (($) => {
                 }
             }
         }
-
+        getInput(name){
+            
+            return this._inputs[name];
+        }
+        
         getInputs(){
             let inputs = {};
             
@@ -467,13 +474,14 @@ var Form = (($) => {
             let data = this.getValue();
             let rules = null, config = null;
             let inputs = this._inputs;
+            let msg = null;
 
             for(let field of this.fields){
                 config = field.config;
                 rules = config.rules;
 
                 if(rules){
-                    let msg = Sevian.Valid.send(rules, inputs[config.name].getValue(), config.caption, data);
+                    msg = Sevian.Valid.send(rules, inputs[config.name].getValue(), config.caption, data);
                     if(msg){
                         alert(msg);
                         inputs[config.name].focus();

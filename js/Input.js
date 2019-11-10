@@ -15,7 +15,9 @@ var Input = (($) => {
             this.id = "";
             this.name = "";
             this.type = "";
+            this.caption = "";
             this.value = "";
+            this.default = "";
             this.className = "";
             this.data = false;
             this.propertys = {};
@@ -28,9 +30,11 @@ var Input = (($) => {
             this.parent = "";
             this.parentValue = null;
             this._main = null;
+            this._input = null;
             this.status = "valid";
             this.mode = "request";
             this.evalChilds = () => { };
+            this.getParentValue = () => { };
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -82,7 +86,7 @@ var Input = (($) => {
             if (this.value) {
                 info.value = this.value;
             }
-            this._main = $.create(info).addClass("type-input").addClass(this.className);
+            this._input = this._main = $.create(info).addClass("type-input").addClass(this.className);
             for (var x in this.events) {
                 //let action = $.bind(this.events[x], this._main);
                 this._main.on(x, $.bind(this.events[x], this, "event"));
@@ -106,7 +110,13 @@ var Input = (($) => {
             this.setValue(this.value);
         }
         setValue(value) {
-            this.get().value = value;
+            if (this.parent) {
+                let parentValue = this.getParentValue();
+                if (parentValue != this.parentValue) {
+                    this.createOptions(parentValue);
+                }
+            }
+            this._input.val(value);
         }
         getValue() {
             return this.get().value;
@@ -115,6 +125,9 @@ var Input = (($) => {
         }
         get() {
             return this._main.get();
+        }
+        main() {
+            return this._main;
         }
         hasChilds() {
             if (this._main.ds("childs")) {
@@ -168,6 +181,9 @@ var Input = (($) => {
         select() {
             this._main.get().select();
         }
+        reset() {
+            this.setValue(this.default);
+        }
     }
     I.register("input", Input);
     return Input;
@@ -179,7 +195,9 @@ var InputDate = (($) => {
             this.id = "";
             this.name = "";
             this.type = "calendar";
+            this.caption = "";
             this.value = "";
+            this.default = "";
             this.className = "";
             this.data = false;
             this.propertys = {};
@@ -308,6 +326,9 @@ var InputDate = (($) => {
         get() {
             return this._main.get();
         }
+        main() {
+            return this._main;
+        }
         getName() {
             return this._main.get().name;
         }
@@ -334,6 +355,9 @@ var InputDate = (($) => {
                 elem.select();
             }
         }
+        reset() {
+            this.setValue(this.default);
+        }
     }
     I.register("date", InputCalendar);
     return InputCalendar;
@@ -345,7 +369,9 @@ var Multi = (($) => {
             this.id = "";
             this.name = "";
             this.type = "";
+            this.caption = "";
             this.value = "";
+            this.default = "";
             this.className = "";
             this.data = false;
             this.propertys = {};
@@ -362,6 +388,7 @@ var Multi = (($) => {
             this.status = "valid";
             this.mode = "request";
             this.evalChilds = () => { };
+            this.getParentValue = () => { };
             this.doValues = (inputs) => {
                 let value = "";
                 inputs.forEach((e) => {
@@ -454,6 +481,9 @@ var Multi = (($) => {
         get() {
             return this._main.get();
         }
+        main() {
+            return this._main;
+        }
         hasChilds() {
             if (this._main.ds("childs")) {
                 return true;
@@ -532,6 +562,9 @@ var Multi = (($) => {
         }
         select() {
             this._main.get().select();
+        }
+        reset() {
+            this.setValue(this.default);
         }
     }
     I.register("multi", Multi);

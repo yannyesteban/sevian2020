@@ -11,7 +11,29 @@ html, body{
 body{
   //background-image: url("../../wallpapers/2019-02.jpg");
 }
+.debug-object{
+  padding-left: 4px;
+  background-color: white;
+  border:1px solid rgb(73, 73, 73);
+  font-size: 10pt;
+  max-height: 15em;
+  overflow: auto;
+  span:nth-child(1){
+    display: inline-block;
+    //width: 30%;
+    color:rgb(136, 136, 136);
+  }
+  span:nth-child(2){
+    padding-left: 10px;
+    display: inline-block;
+    color:rgb(59, 59, 59);
+  }
+  >div:nth-child(2n){
+    background-color: rgba(0, 0, 0, 0.06);
+  }
 
+
+}
 .layout {
     display: grid;
     grid-gap: 4px;
@@ -955,6 +977,12 @@ $delta_y_h: -240px;
            &:nth-child(2n){
             
             background-color: rgb(233, 233, 233);
+           }
+
+           &.active td{
+             >[data-name]:not(.zone-edit), > .text:not(.zone-edit){
+               display: none;
+             }
            }
         }
       }

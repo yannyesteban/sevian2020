@@ -49,6 +49,9 @@ var S = (($) => {
             if (info.valid !== false && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()) {
                 return false;
             }
+            if (panel && this._e[panel] && this._e[panel].onsubmit && !this._e[panel].onsubmit()) {
+                return false;
+            }
             let dataForm = null;
             let params = "";
             if (info.params) {
@@ -162,6 +165,11 @@ var S = (($) => {
                             this.msg.show({});
                             break;
                     }
+                }
+            }
+            if (p.debug) {
+                for (let msg of p.debug) {
+                    db(msg);
                 }
             }
         }

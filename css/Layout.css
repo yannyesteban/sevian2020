@@ -9,6 +9,27 @@ html, body {
   height: 100%;
 }
 
+.debug-object {
+  padding-left: 4px;
+  background-color: white;
+  border: 1px solid #494949;
+  font-size: 10pt;
+  max-height: 15em;
+  overflow: auto;
+}
+.debug-object span:nth-child(1) {
+  display: inline-block;
+  color: #888888;
+}
+.debug-object span:nth-child(2) {
+  padding-left: 10px;
+  display: inline-block;
+  color: #3b3b3b;
+}
+.debug-object > div:nth-child(2n) {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
 .layout {
   display: grid;
   grid-gap: 4px;
@@ -879,6 +900,9 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 }
 .sg-grid > .body > .grid-table > tbody > tr:nth-child(2n) {
   background-color: #e9e9e9;
+}
+.sg-grid > .body > .grid-table > tbody > tr.active td > [data-name]:not(.zone-edit), .sg-grid > .body > .grid-table > tbody > tr.active td > .text:not(.zone-edit) {
+  display: none;
 }
 .sg-grid > .sg-menu {
   background-color: #e4e4e4;

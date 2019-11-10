@@ -93,6 +93,9 @@ class S{
 	
 	private static $lastAction = false;
 	private static $lamda = false;
+
+	private static $_db = [];
+
 	public static function setSes($key, $value){
 		self::$ses[$key] = $value;
 	}
@@ -170,6 +173,8 @@ class S{
 		
 		
 		if(!self::$onAjax){
+
+			//self::db(self::$req);
 			self::$_str = new Structure();
 		}else{
 			
@@ -363,6 +368,13 @@ class S{
 	}
 	public static function getJsConfigPanel(){
 		return self::$_jsConfigPanel;
+	}
+
+	public static function db($db){
+		self::$_db[] = $db;
+	}
+	public static function getDB($frag){
+		return self::$_db;
 	}
     
 	
@@ -721,7 +733,8 @@ class S{
 			//'panels'=>$p,
 			//'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
 			//'update'=> self::getJsConfigPanel(),
-			'fragments'=>self::$_f
+			'fragments'=>self::$_f,
+			'debug'=>self::$_db
 			];
 		$json = json_encode($response, JSON_PRETTY_PRINT);	
 		$script .= "S.requestPanel($json)";	
@@ -741,10 +754,11 @@ class S{
 		//echo json_encode(self::$_f, JSON_PRETTY_PRINT);
 		
 		$response = [
-			'panels'=>$p,
-			'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
-			'update'=> self::getJsConfigPanel(),
-			'fragments'=>self::$_f
+			'panels'	=> $p,
+			'config'	=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			'update'	=> self::getJsConfigPanel(),
+			'fragments'	=> self::$_f,
+			'debug'		=> self::$_db
 			];
 
 

@@ -355,7 +355,9 @@ var List = (($) => {
         id:string = "";
         name:string = "";
         type:string = "";
+        caption:string = "";
         value:string = "";
+        default:string = "";
         className = "";
         data:any = false;
 
@@ -377,6 +379,7 @@ var List = (($) => {
         mode:string = "request";
 
         evalChilds:any = () => {};
+        getParentValue:any = () => {};
 
         constructor(info: any){
             
@@ -533,30 +536,44 @@ var List = (($) => {
             this.setValue(this.value);
         }
         setValue(value:any){
+
+            if(this.parent){
+                let parentValue = this.getParentValue();
+                if(parentValue != this.parentValue){
+                    this.createOptions(parentValue);
+                }
+                
+            }
+    
             this.menu.setValue(value);
-			this.input.get().value = this.menu.getValue();
+            this.input.get().value = this.menu.getValue();
+            //this._input.fire("change")
+            
         }
         
         getValue(){
             
             return this.menu.getValue();//this._input.get().value;
 		}
-
+        
         _load(main:any){
 
         }
 
+        main(){
+            return this._main;
+        }
         get(){
             return this._main.get();
         }
-
+        
         hasChilds(){
             if(this._main.ds("childs")){
                 return true;
             }
             return false;
         }
-        createOptions(parentValue:any, name){
+        createOptions(parentValue:any){
             
             this.menu.setData(this._data[parentValue] || []);
             this.menu.setValue("");
@@ -591,7 +608,9 @@ var List = (($) => {
             this._input.get().select();
         }
 
-        
+        reset(){
+            this.setValue(this.default);
+        }
     }
     
     I.register("list", List);

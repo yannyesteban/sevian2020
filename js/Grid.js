@@ -1,4 +1,92 @@
 var Grid = (($) => {
+    class Form {
+        constructor() {
+            this._inputs = [];
+        }
+        createInput(input, info) {
+            if (info.parent) {
+                info.getParentValue = () => {
+                    return this.getInput(info.parent).getValue();
+                };
+            }
+            if (info.childs) {
+                info.evalChilds = () => {
+                    this.evalChilds(info.name);
+                };
+            }
+            this._inputs[info.name] = I.create(input, info);
+            return this._inputs[info.name];
+        }
+        getValue() {
+            let data = {};
+            for (let name in this._inputs) {
+                if (!this._inputs[name].dataName) {
+                    data[name] = this._inputs[name].getValue();
+                }
+                else {
+                    data[this._inputs[name].dataName] = this._inputs[name].getValue();
+                }
+            }
+            return data;
+        }
+        setValue(data) {
+            for (let name in this._inputs) {
+                if (this._inputs[name].parent) {
+                    // this._inputs[name].createOptions(this._inputs[this._inputs[name].parent].getValue());
+                }
+                if (!this._inputs[name].dataName) {
+                    this._inputs[name].setValue(data[name]);
+                }
+                else {
+                    this._inputs[name].setValue(data[this._inputs[name].dataName]);
+                }
+            }
+            return this;
+        }
+        reset() {
+            for (let name in this._inputs) {
+                this._inputs[name].reset();
+            }
+        }
+        evalChilds(parent) {
+            let input = this._inputs[parent];
+            for (let i in this._inputs) {
+                if (this._inputs[i].parent === parent) {
+                    this._inputs[i].createOptions(input.getValue(), i);
+                    if (this._inputs[i].hasChilds()) {
+                        this.evalChilds(i);
+                    }
+                }
+            }
+        }
+        getInput(name) {
+            return this._inputs[name];
+        }
+        getInputs() {
+            return this._inputs;
+        }
+        valid() {
+            let data = this.getValue();
+            let rules = null, config = null;
+            let inputs = this._inputs;
+            let msg = null;
+            for (let name in this._inputs) {
+                let input = this._inputs[name];
+                config = input.config;
+                rules = input.rules;
+                if (rules) {
+                    msg = Sevian.Valid.send(rules, input.getValue(), input.caption, data);
+                    if (msg) {
+                        alert(msg);
+                        input.focus();
+                        input.select();
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
     class InfoField {
         constructor() {
             this.name = "";
@@ -151,11 +239,12 @@ var Grid = (($) => {
             };
             this.fields = [];
             this._main = null;
-            this._mainForm = [];
+            this._mainForm = null;
             this._table = null;
             this._thead = null;
             this._tbody = null;
             this._tfoot = null;
+            this._forms = [];
             this._rowLength = 0;
             this._data_grid = null;
             this._check = null;
@@ -288,8 +377,7 @@ var Grid = (($) => {
             }
             this.createEditRow({});
             let hiddenDiv = body.create("div");
-            this._data_grid = I.create("input", { type: "hidden", name: "__data_grid" });
-            hiddenDiv.append(this._data_grid);
+            this._data_grid = hiddenDiv.create({ tagName: "textarea", name: "__data_grid" });
             let pag = this.paginator;
             pag.change = $.bind(pag.change, this, "page");
             this._main.append(this.pag = new Paginator(pag));
@@ -301,6 +389,63 @@ var Grid = (($) => {
             this._main = main.addClass("sg-grid");
         }
         createRow(data) {
+            let row = this._tbody.create("tr")
+                .addClass("body-row")
+                .ds("index", this._rowLength);
+            let cell = null, field = null, value = null, text = "", info = null, input = null, _input = null;
+            if (this.showEnum) {
+                cell = row.create("td").text(this._rowLength + 1);
+            }
+            if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
+                cell = row.create("td");
+                let ctrl = cell.create({
+                    tagName: "input",
+                    type: (this.ctrlSelect === "one") ? "radio" : "checkbox",
+                    name: this.id + "_chk",
+                    value: this._rowLength,
+                });
+                ctrl.on("click", event => {
+                    this.getRecord(event.currentTarget.value);
+                });
+            }
+            let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
+            let f = this._forms[this._rowLength] = new Form;
+            for (let x in this.fields) {
+                field = this.fields[x];
+                value = data[x];
+                if (this._fieldData[x] && this._fieldData[x][value]) {
+                    text = this._fieldData[x][value];
+                }
+                else {
+                    text = value;
+                }
+                input = (field.input === "hidden" || this.type === "default") ? "input" : field.input;
+                info = Object.assign({}, field.config);
+                info.type = field.config.type;
+                info.name = field.config.name + "_" + this._rowLength;
+                info.value = value;
+                if (field.config.parent) {
+                    info.parent = field.config.parent + "_" + this._rowLength;
+                    info.parentValue = f.getInput(info.parent).getValue();
+                }
+                info.dataset = { "name": x };
+                _input = f.createInput(field.input, info);
+                _input.dataName = x;
+                if (field.input == "hidden") {
+                    hiddenFields.append(_input);
+                }
+                else {
+                    cell = row.create("td").ds("name", x);
+                    cell.append(f.getInput(info.name));
+                }
+            }
+            if (cell) {
+                hiddenFields.append(f.createInput("input", { type: "hidden", name: "__index_" + "_" + this._rowLength, value: this._rowLength, dataset: { name: "__index_" } }));
+                cell.append(hiddenFields);
+            }
+            this._rowLength++;
+        }
+        createRowORG(data) {
             this._rowLength++;
             let row = this._tbody.create("tr")
                 .addClass("body-row")
@@ -343,6 +488,7 @@ var Grid = (($) => {
                 else {
                     cell = row.create("td").ds("name", x);
                     cell.append(_input);
+                    cell.create("div").addClass("zone-edit");
                     if (this.type === "default") {
                         cell.create("span").addClass("text").text(text);
                     }
@@ -366,27 +512,29 @@ var Grid = (($) => {
             }
             cell = row.create("td").text("");
             let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
+            this._mainForm = new Form();
             for (let x in this.fields) {
                 let field = this.fields[x];
                 value = field.config.default;
                 info = Object.assign({}, field.config);
                 input = (field.input === "hidden") ? "input" : field.input;
                 info.type = (field.input === "hidden") ? "hidden" : field.config.type;
-                info.value = value;
+                //info.value = value;
                 info.dataset = { "name": x };
-                this._mainForm[x] = I.create(input, info);
+                this._mainForm.createInput(input, info); //I.create(input, info);
                 if (field.input == "hidden") {
-                    hiddenFields.append(this._mainForm[x]);
+                    hiddenFields.append(this._mainForm.getInput(x));
                 }
                 else {
                     cell = row.create("td").ds("name", x);
-                    cell.append(this._mainForm[x]);
+                    cell.append(this._mainForm.getInput(x));
                 }
             }
+            this._mainForm.reset();
             if (cell) {
-                hiddenFields.append(this._mainForm["__mode_"] = I.create("input", { type: "hidden", name: "__mode_", value: "", dataset: { name: "__mode_" } }));
-                hiddenFields.append(this._mainForm["__id_"] = I.create("input", { type: "hidden", name: "__id_", value: "", dataset: { name: "__id_" } }));
-                hiddenFields.append(this._mainForm["__index_"] = I.create("input", { type: "hidden", name: "__index_", value: "", dataset: { name: "__id_" } }));
+                hiddenFields.append(this._mainForm.createInput("input", { type: "hidden", name: "__mode_", value: "1", dataset: { name: "__mode_" } }));
+                hiddenFields.append(this._mainForm.createInput("input", { type: "hidden", name: "__id_", value: "", dataset: { name: "__id_" } }));
+                hiddenFields.append(this._mainForm.createInput("input", { type: "hidden", name: "__index_", value: "", dataset: { name: "__id_" } }));
                 cell.append(hiddenFields);
             }
         }
@@ -394,37 +542,49 @@ var Grid = (($) => {
         }
         setRecord(index, params) {
         }
-        getRecord(row) {
+        getRecord(index) {
+            let rows = this._tbody.queryAll(".body-row.active");
+            rows.forEach(row => {
+                $(row).removeClass("active");
+            });
+            let row = this._tbody.query(`.body-row[data-index='${index}']`);
+            //let inputs = $(row).addClass("active").queryAll("td[data-name]");
+            this._mainForm.setValue(this._forms[index].getValue());
+            return;
+            for (let _input of inputs) {
+                let context = $(_input).query(".zone-edit");
+                let input = $(_input).query("[data-sg-input][data-name]");
+                this._mainForm.getInput(_input.dataset.name).setValue();
+                $(context).append(this._mainForm.getInput(_input.dataset.name).main());
+                //$(_input).text(this._mainForm.getInput(_input.dataset.name));
+                //let input = I.create("input", {id:_input});
+                //this._mainForm.getInput(_input.dataset.name).setValue(input.getValue());
+            }
+            //this.getGrid();
+        }
+        getRecordORG(row) {
             let inputs = $(row).queryAll("[data-sg-input][data-name]");
             for (let _input of inputs) {
-                let input = new Input({ id: _input });
-                this._mainForm[_input.dataset.name].setValue(input.getValue());
+                let input = I.create("input", { id: _input });
+                this._mainForm.getInput(_input.dataset.name).setValue(input.getValue());
             }
             this.getGrid();
         }
         setValue(index, params) {
         }
         getValue() {
-            let data = {};
-            for (let x in this._mainForm) {
-                data[x] = this._mainForm[x].getValue();
+            return this._mainForm.getValue();
+        }
+        getGrid() {
+            let data = [], i = 0;
+            for (let f of this._forms) {
+                data.push(this._forms[0].getValue());
             }
             return data;
         }
-        getGrid() {
-            let rows = this._main.queryAll(".body-row");
-            let str = "";
-            let data = [], i = 0;
-            for (let row of rows) {
-                let inputs = $(row).queryAll("[data-sg-input][data-name]");
-                data[i] = {};
-                for (let _input of inputs) {
-                    let input = new Input({ id: _input });
-                    data[i][_input.dataset.name] = input.getValue();
-                }
-                i++;
-            }
-            this._data_grid.get().value = JSON.stringify(data);
+        onsubmit() {
+            this._data_grid.val(JSON.stringify(this.getGrid()));
+            return true;
         }
         setData(data) {
             this.data = data;
@@ -436,12 +596,14 @@ var Grid = (($) => {
         }
         setNew() {
             this._check.get().checked = true;
-            for (let x in this.fields) {
-                this._mainForm[x].setValue(this.fields[x].config.default);
-            }
-            this._mainForm["__mode_"].setValue("1");
-            this._mainForm["__id_"].setValue("");
-            this._mainForm["__index_"].setValue("");
+            this._mainForm.reset();
+            /*
+                        for(let x in this.fields){
+                            this._mainForm[x].setValue(this.fields[x].config.default);
+                        }*/
+            this._mainForm.getInput("__mode_").setValue("1");
+            this._mainForm.getInput("__id_").setValue("");
+            this._mainForm.getInput("__index_").setValue("");
         }
         getSearchValue() {
             let input = this._main.query("input.search");
@@ -453,10 +615,16 @@ var Grid = (($) => {
         }
         save() {
             let data = {};
-            for (let x in this._mainForm) {
-                data[x] = this._mainForm[x].getValue();
+            if (this._mainForm.valid()) {
+                data = this._mainForm.getValue();
+                if (data["__mode_"] == '1' && data["__index_"] === '') {
+                    this.createRow(data);
+                    this.setNew();
+                }
+                else {
+                    this.saveAt(data["__index_"], data);
+                }
             }
-            this.saveAt(data["__index_"], data);
             return data;
         }
         saveAt(index, data) {

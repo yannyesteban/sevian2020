@@ -278,7 +278,9 @@ var List = (($) => {
             this.id = "";
             this.name = "";
             this.type = "";
+            this.caption = "";
             this.value = "";
+            this.default = "";
             this.className = "";
             this.data = false;
             this.propertys = {};
@@ -296,6 +298,7 @@ var List = (($) => {
             this.status = "valid";
             this.mode = "request";
             this.evalChilds = () => { };
+            this.getParentValue = () => { };
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -409,13 +412,23 @@ var List = (($) => {
             this.setValue(this.value);
         }
         setValue(value) {
+            if (this.parent) {
+                let parentValue = this.getParentValue();
+                if (parentValue != this.parentValue) {
+                    this.createOptions(parentValue);
+                }
+            }
             this.menu.setValue(value);
             this.input.get().value = this.menu.getValue();
+            //this._input.fire("change")
         }
         getValue() {
             return this.menu.getValue(); //this._input.get().value;
         }
         _load(main) {
+        }
+        main() {
+            return this._main;
         }
         get() {
             return this._main.get();
@@ -426,7 +439,7 @@ var List = (($) => {
             }
             return false;
         }
-        createOptions(parentValue, name) {
+        createOptions(parentValue) {
             this.menu.setData(this._data[parentValue] || []);
             this.menu.setValue("");
         }
@@ -451,6 +464,9 @@ var List = (($) => {
         }
         select() {
             this._input.get().select();
+        }
+        reset() {
+            this.setValue(this.default);
         }
     }
     I.register("list", List);

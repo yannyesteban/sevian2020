@@ -591,7 +591,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->data = $data;
 			$config->value = $f->value?? '';
 			$config->className = $config->className?? $f->class?? '';
-			$rules = json_decode($f->rules);
+			//$rules = json_decode($f->rules);
 			$config->childs = $f->childs;
 			
 			$config->placeholder = $f->placeholder;
@@ -600,7 +600,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				$config->parentValue = $this->fields[$f->parent]->value?? '';
 			}
 
-			if($rules != null){
+			if($f->rules != null){
 				$config->rules = json_decode($f->rules);
 			}
 			
@@ -837,7 +837,22 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config->caption = $f->caption;
 			$config->data = $data;
 			$config->default = $f->default;
-			$config->className = $config->className?? $f->class;
+			$config->className = $config->className?? $f->class?? '';
+			//$rules = json_decode($f->rules);
+			$config->childs = $f->childs;
+			
+			$config->placeholder = $f->placeholder;
+			if($f->parent){
+				$config->parent = $f->parent;
+				$config->parentValue = $this->fields[$f->parent]->value?? '';
+			}
+
+			if($f->rules != null){
+				$config->rules = json_decode($f->rules);
+			}
+			
+
+			
 
 			if($f->inputConfig){
 				foreach($f->inputConfig as $k => $v){
@@ -854,6 +869,29 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 		}
 		
+		$fields['__mode_'] = [
+			'input'	=> 'input',
+			'page'	=> '',
+			'config'=> [
+				'type'=>'text',
+				'name'=>'__mode_',
+				'default'=>'1',
+				'value'=>''
+			]
+			
+		];
+		$fields['__id_'] = [
+			'input'	=> 'input',
+			'page'	=> '',
+			'config'=> [
+				'type'=>'text',
+				'name'=>'__id_',
+				'default'=>'',
+				'value'=>''
+			]
+			
+		];
+
 		\Sevian\S::action(new \Sevian\InfoAction([
 
 			"async"=>false,

@@ -16,7 +16,9 @@ var Input = (($) => {
         id:string = "";
         name:string = "";
         type:string = "";
+        caption:string = "";
         value:string = "";
+        default:string = "";
         className = "";
         data:any = false;
         propertys:object = {};
@@ -31,11 +33,13 @@ var Input = (($) => {
         parentValue:any = null;
 
         _main:object = null;
+        _input:object = null;
 
         status:string = "valid";
         mode:string = "request";
 
         evalChilds:any = () => {};
+        getParentValue: any = () => {};
 
         constructor(info: any){
             
@@ -99,7 +103,7 @@ var Input = (($) => {
                 info.value = this.value;
             }
             
-            this._main = $.create(info).addClass("type-input").addClass(this.className);
+            this._input = this._main = $.create(info).addClass("type-input").addClass(this.className);
 
             for(var x in this.events){
 
@@ -131,7 +135,15 @@ var Input = (($) => {
             this.setValue(this.value);
         }
         setValue(value:any){
-			this.get().value = value;
+
+            if(this.parent){
+                let parentValue = this.getParentValue();
+
+                if(parentValue != this.parentValue){
+                    this.createOptions(parentValue);
+                }
+            }
+			this._input.val(value);
         }
         
         getValue(){
@@ -143,7 +155,12 @@ var Input = (($) => {
         }
 
         get(){
+            
             return this._main.get();
+        }
+        main(){
+            
+            return this._main;
         }
 
         hasChilds(){
@@ -216,6 +233,10 @@ var Input = (($) => {
         select(){
             this._main.get().select();
         }
+
+        reset(){
+            this.setValue(this.default);
+        }
     }
     
     I.register("input", Input);
@@ -230,7 +251,9 @@ var InputDate = (($) => {
         id:string = "";
         name:string = "";
         type:string = "calendar";
+        caption:string = "";
         value:string = "";
+        default:string = "";
         className = "";
         data:any = false;
         propertys:object = {};
@@ -403,7 +426,9 @@ var InputDate = (($) => {
         get(){
             return this._main.get();
         }
-
+        main(){
+            return this._main;
+        }
         
         getName(){
             return this._main.get().name;
@@ -433,6 +458,9 @@ var InputDate = (($) => {
             }
             
         }
+        reset(){
+            this.setValue(this.default);
+        }
     }
 
 
@@ -448,7 +476,9 @@ var Multi = (($) => {
         id:string = "";
         name:string = "";
         type:string = "";
+        caption:string = "";
         value:string = "";
+        default:string = "";
         className = "";
         data:any = false;
         propertys:object = {};
@@ -467,6 +497,7 @@ var Multi = (($) => {
         mode:string = "request";
 
         evalChilds:any = () => {};
+        getParentValue: any = () => {};
         doValues:Function = (inputs:any) => {
             let value = "";
             inputs.forEach((e)=>{
@@ -594,7 +625,9 @@ var Multi = (($) => {
         get(){
             return this._main.get();
         }
-
+        main(){
+            return this._main;
+        }
         hasChilds(){
             if(this._main.ds("childs")){
                 return true;
@@ -700,6 +733,10 @@ var Multi = (($) => {
         }
         select(){
             this._main.get().select();
+        }
+
+        reset(){
+            this.setValue(this.default);
         }
     }
     
