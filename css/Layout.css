@@ -904,6 +904,9 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 .sg-grid > .body > .grid-table > tbody > tr.active td > [data-name]:not(.zone-edit), .sg-grid > .body > .grid-table > tbody > tr.active td > .text:not(.zone-edit) {
   display: none;
 }
+.sg-grid > .body > .grid-table > tbody > tr.delete > td[data-name] {
+  visibility: hidden;
+}
 .sg-grid > .sg-menu {
   background-color: #e4e4e4;
   padding: 4px;
@@ -922,6 +925,9 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 .sg-grid > .sg-menu .option:hover {
   background-color: #cf4404;
   color: #d8d7d7;
+}
+.sg-grid.type-edit.record-edit .edit-row td {
+  visibility: hidden;
 }
 
 .sg-map {
@@ -1199,4 +1205,18 @@ form {
 }
 .sg-form.mode-update {
   border-color: #33a333;
+}
+
+.input-info div {
+  border: 1px solid #a5a5a5;
+  display: inline-block;
+  font-size: 8pt;
+  line-height: 1.8em;
+  min-width: 2em;
+  padding-left: 2px;
+}
+.input-info div:empty::before {
+  content: "-";
+  font-style: italic;
+  color: #999;
 }

@@ -243,6 +243,160 @@ var Input = (($) => {
     return Input;
 })(_sgQuery);
 
+var Hidden = (($) => {  
+ 
+    class Hidden{
+        target:object = null;
+        id:string = "";
+        name:string = "";
+        type:string = "hidden";
+        caption:string = "";
+        value:string = "";
+        default:string = "";
+        className = "";
+        data:any = false;
+        propertys:object = {};
+        dataset:object = null;
+        style:object = {};
+        events:any = false;
+        placeholder:string = "";
+        rules:object = null;
+
+        childs:boolean = false;
+        parent:string = "";
+        parentValue:any = null;
+
+        _main:object = null;
+        _input:object = null;
+
+        status:string = "valid";
+        mode:string = "request";
+
+        evalChilds:any = () => {};
+        getParentValue: any = () => {};
+
+        constructor(info: any){
+            
+            for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+            let main = this._main = (this.id)? $(this.id): false;
+
+            if(!main){
+                
+                this._create(false);
+            }else{
+                
+                if(main.ds("sgInput")){
+                    return;
+                }
+            }
+
+            let target = (this.target)? $(this.target): false;
+
+            if(target){
+                target.append(this._main);
+            }
+            
+        }
+
+        _create(target:any){
+            let info = {};
+            
+            info.tagName = "input";
+            info.type = "hidden";
+            if(this.id){
+                info.id = this.id;
+            }
+            if(this.name){
+                info.name = this.name;
+            }
+            if(this.value){
+                info.value = this.value;
+            }
+            
+            this._input = this._main = $.create(info).addClass("type-input").addClass(this.className);
+
+
+			this._main.prop(this.propertys);
+			this._main.style(this.style);
+
+            this._main.ds(this.dataset);
+
+            this._main.ds("sgName", this.name);
+            this._main.ds("sgInput", "input");
+            this._main.ds("sgType", this.type);
+           
+            
+            this.setValue(this.value);
+        }
+        setValue(value:any){
+            this._input.val(value);
+            return this;
+        }
+        
+        getValue(){
+            return this.get().value;
+		}
+
+        _load(main:any){
+
+        }
+
+        get(){
+            
+            return this._main.get();
+        }
+        main(){
+            
+            return this._main;
+        }
+
+        hasChilds(){
+            return false;
+        }
+        
+        createOptions(parentValue:any){
+			
+        }
+        
+        evalOptions(parentValue:any){
+
+        }
+
+        getName(){
+            return this._main.get().name;
+        }
+        getId(){
+            return this._main.get().id;
+        }
+        getText(){
+            if(this._main.get().type){
+                alert(8)
+            }
+        }
+        ds(prop, value){
+            this._main.ds(prop, value);
+        }
+        focus(){
+            this._main.get().focus();
+            
+        }
+        select(){
+            this._main.get().select();
+        }
+
+        reset(){
+            this.setValue(this.default);
+        }
+    }
+    
+    I.register("hidden", Hidden);
+    return Hidden;
+})(_sgQuery);
 
 var InputDate = (($) => {
     
@@ -466,6 +620,224 @@ var InputDate = (($) => {
 
     I.register("date", InputCalendar);
     return InputCalendar;
+})(_sgQuery);
+
+var InputInfo = (($) => {  
+ 
+    class InputInfo{
+        target:object = null;
+        id:string = "";
+        name:string = "";
+        type:string = "";
+        caption:string = "";
+        value:string = "";
+        default:string = "";
+        className = "";
+        data:any = false;
+        propertys:object = {};
+        dataset:object = null;
+        style:object = {};
+        events:any = false;
+        placeholder:string = "";
+        rules:object = null;
+
+        childs:boolean = false;
+        parent:string = "";
+        parentValue:any = null;
+
+        _main:object = null;
+        _input:object = null;
+
+        status:string = "valid";
+        mode:string = "request";
+
+        _data:object = null;
+        evalChilds:any = () => {};
+        getParentValue: any = () => {};
+
+        constructor(info: any){
+            
+            for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+            let main = this._main = (this.id)? $(this.id): false;
+
+            if(!main){
+                
+                this._create(false);
+            }else{
+                
+                if(main.ds("sgInput")){
+                    return;
+                }
+            }
+
+            let target = (this.target)? $(this.target): false;
+
+            if(target){
+                target.append(this._main);
+            }
+            
+        }
+
+        _create(target:any){
+            let info = {};
+            
+            info.tagName = "input";
+            info.type = "hidden";
+            if(this.id){
+                info.id = this.id;
+            }
+            if(this.name){
+                info.name = this.name;
+            }
+            if(this.value){
+                info.value = this.value;
+            }
+            
+            this._main = $.create("div").addClass("input-info").addClass(this.className);
+            this._input = this._main.create(info);
+            this._text = this._main.create("div").addClass("text");
+
+            for(var x in this.events){
+				this._main.on(x, $.bind(this.events[x], this, "event"));
+			}
+            
+            if(this.childs){
+                this._main.ds("childs", "childs");
+                this._input.on("change", $.bind(this.evalChilds, this, "event")); 
+            }
+
+			this._main.prop(this.propertys);
+			this._main.style(this.style);
+
+            if(this.data){
+				this.createOptions(this.parentValue);
+            }
+            this._main.ds(this.dataset);
+
+            this._main.ds("sgName", this.name);
+            this._main.ds("sgInput", "inputInfo");
+            this._main.ds("sgType", "default");
+            if(this.parent){
+                this._main.ds("parent", this.parent);
+            }
+           
+            
+            this.setValue(this.value);
+        }
+        setValue(value:any){
+
+
+            if(this.parent){
+                let parentValue = this.getParentValue();
+
+                if(parentValue != this.parentValue){
+                    this.createOptions(parentValue);
+                }
+            }
+
+            if(this._data){
+                if(this._data[value]){
+                    this._text.text(this._data[value]);
+                    this._input.val(value);
+                }else{
+                    this._text.text("");
+                    this._input.val("");
+                }
+            }else{
+                this._text.text(value);
+                this._input.val(value);
+            }
+
+            
+            
+        }
+        
+        getValue(){
+            return this._input.val();
+		}
+
+        _load(main:any){
+
+        }
+
+        get(){
+            
+            return this._main.get();
+        }
+        main(){
+            
+            return this._main;
+        }
+
+        hasChilds(){
+            if(this._main.ds("childs")){
+                return true;
+            }
+            return false;
+        }
+        createOptions(parentValue:any){
+            
+            this._data = {};
+
+			let i,
+				option,
+				vParent = [];
+			
+			if(this.parent){
+                let aux = (parentValue + "").split(",");
+                
+                for(i = 0; i < aux.length; i++){
+					vParent[aux[i]] = true;
+				}
+			}
+
+			for (i in this.data){
+                
+                if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
+                    this._data[this.data[i][0]] = this.data[i][1];
+				}
+			}
+			
+        }
+        
+        evalOptions(parentValue:any){
+
+        }
+
+        getName(){
+            return this._main.get().name;
+        }
+        getId(){
+            return this._main.get().id;
+        }
+        getText(){
+            if(this._main.get().type){
+                alert(8)
+            }
+        }
+        ds(prop, value){
+            this._main.ds(prop, value);
+        }
+        focus(){
+            this._main.get().focus();
+            
+        }
+        select(){
+            this._input.get().select();
+        }
+
+        reset(){
+            this.setValue(this.default);
+        }
+    }
+    
+    I.register("inputInfo", InputInfo);
+    return InputInfo;
 })(_sgQuery);
 
 var Multi = (($) => {

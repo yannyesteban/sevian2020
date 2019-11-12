@@ -870,22 +870,24 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		}
 		
 		$fields['__mode_'] = [
-			'input'	=> 'input',
+			'input'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
 				'type'=>'text',
 				'name'=>'__mode_',
+				'caption'=>'__mode_',
 				'default'=>'1',
 				'value'=>''
 			]
 			
 		];
 		$fields['__id_'] = [
-			'input'	=> 'input',
+			'input'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
 				'type'=>'text',
 				'name'=>'__id_',
+				'caption'=>'__id_',
 				'default'=>'',
 				'value'=>''
 			]
@@ -952,6 +954,18 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			 'data'			=> $dataGrid,
 			 'fields'		=> $fields,
 			 'searchValue'	=> $q,
+
+			 'optionText' => [
+				"new"		=> "+",
+				"edit"		=> "/",
+				"delete"	=> "&#215;",
+				"save"		=> "guardar",
+				"search"	=> "...buscar",
+				"search_go"	=> "ir",
+				"delete_confirm"=>"seguro que desea eliminar el registro?",
+				"select_record"=>"debe elejir un registro, por favor!"
+			 	],
+
 			 'search'		=>"
 			 S.send(
                 {

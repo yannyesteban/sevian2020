@@ -984,6 +984,13 @@ $delta_y_h: -240px;
                display: none;
              }
            }
+
+           &.delete{
+             >td[data-name]{
+                visibility: hidden;
+             }
+             
+           }
         }
       }
       
@@ -1006,6 +1013,17 @@ $delta_y_h: -240px;
         color: #d8d7d7;
         
       }
+    }
+  }
+
+  &.type-edit{
+    &.record-edit{
+      .edit-row{
+        td{
+          visibility: hidden;
+        }
+      }
+
     }
   }
 }
@@ -1329,5 +1347,20 @@ form{
   &.mode-update{
     border-color: rgb(51, 163, 51);
    
+  }
+}
+
+
+
+.input-info div{
+  border:1px solid rgb(165, 165, 165);
+  display: inline-block;
+  font-size: 8pt;
+  line-height: 1.8em;
+  min-width: 2em;
+  padding-left: 2px;
+
+  &:empty::before {
+    content: '-'; font-style: italic; color: #999; 
   }
 }
