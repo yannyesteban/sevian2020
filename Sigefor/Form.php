@@ -59,6 +59,8 @@ class InfoField{
 	public $inputConfig = false;
 	public $onSave = false;
 	
+	public $subform = false;
+
 	//public $mtype = false;
 	//public $key = false;
 	//public $serial = false;
@@ -86,6 +88,57 @@ class InfoField{
 	}
 
 }
+
+
+class SubForm{
+
+	private $type = "";
+	private $table = "";
+	private $master = "";
+	private $detail = "";
+	private $setOrder = "";
+
+	public function __construct($info = []){
+		
+		foreach($info as $k => $v){
+			$this->$k = $v;
+		}
+
+        
+        $this->cn = \Sevian\Connection::get();
+	}
+
+	private function getListValue(){
+
+
+		$cn = $this->cn;
+
+		$where = "";
+		foreach($this->master as $key => $value){
+			$where .= (($where != '')? " AND ":"")."$key = '".$cn->addslashes($value)."'";
+		}
+		$query = "SELECT $this->detail FROM $this->table
+
+		WHERE $where ";
+		//hr($query);
+		$result = $cn->execute($query);
+
+		$data = [];
+		while($rs = $cn->getDataRow($result)){
+			$data[] = $rs[0];
+		}
+		
+		return ($data);
+	}
+
+	public function getValue(){
+		if($this->type == 'list'){
+			return $this->getListValue();
+		}
+
+	}
+}
+
 
 class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
@@ -583,6 +636,17 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			
 			$config = new \stdClass;
 			
+			if($f->subform){
+				$s = [
+					"type"=>"list",
+					"table"=>"test_edo",
+					"master"=>["id"=>"1"],
+					"detail"=>"codestado",
+				];
+				$sf = new SubForm($s);
+				$f->value = $sf->getValue();
+			}
+
 			if(!$f->input){
 				$this->getDefaultInput($this->infoQuery->fields[$f->field]->mtype, $input, $type);
 			}else{

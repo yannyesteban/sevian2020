@@ -865,6 +865,7 @@ var Multi = (($) => {
         parentValue:any = "";
         _main:object = null;
         _input:object = null;
+        _value:object = null;
         status:string = "valid";
         mode:string = "request";
 
@@ -959,12 +960,33 @@ var Multi = (($) => {
         }
         setValue(value:any){
 
-            let input = this._main.query(`input[value='${value}']`);
-           
-            if(input){
-               
-                input.checked = true;
+            this.value = value;
+
+
+            if(Array.isArray(value)){
+                let data = [];
+                value.forEach((v) => {
+                    data[v] = v;
+                });
+
+                let input = this._main.queryAll("input.option");
+
+                input.forEach((input) => {
+                    if(data[input.value] !== undefined){
+                        input.checked = true;
+                    }else{
+                        input.checked = false;
+                    }
+                });
+
             }
+            
+            if(Array.isArray(value)){
+                this._input.val(JSON.stringify(value));
+            }else{
+                //this._input.val(value);
+            }
+            
             return false;
         }
         
@@ -1011,10 +1033,10 @@ var Multi = (($) => {
             data.forEach((d, index) => {
                 let div = this._main.create("span");
               
-                this._input = div.create(
+                div.create(
                     {tagName:"input",
                     type: this.type,
-                    name: this.name + ((this.type === "check")?"_" + index: ""),
+                    name: this.name + ((this.type === "checkbox")?"_" + index: ""),
                     id:this.id + "_" + index,
                     className: "option",
                     value:d[0]})
@@ -1064,10 +1086,10 @@ var Multi = (($) => {
             this.data.forEach((d, index) => {
                 if(vParent[d[2]] || !this.parent || d[2] === "*"){
                     let div = this._main.create("span");
-                    this._input = div.create(
+                    div.create(
                         {tagName:"input",
                         type: this.type,
-                        name: this.name + ((this.type === "check")?"_" + index: ""),
+                        name: this.name + ((this.type === "checkbox")?"_" + index: ""),
                         id:this.id + "_" + index,
                         className: "option",
                         value:d[0]});
