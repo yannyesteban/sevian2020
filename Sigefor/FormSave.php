@@ -120,7 +120,7 @@ class FormSave{
     }
     
     private static function saveRecord($info, $data, $masterData){
-        
+
         if($data->__mode_ <= 0){
             return false;
         }
@@ -135,7 +135,11 @@ class FormSave{
         $tables = $info->tables;
         $result = new \stdClass;
         foreach($tables as $table){
-           
+            
+            if($table == ''){
+                continue;
+            }
+            
             $serial = '';
 
             $filter = new \stdClass;
@@ -162,7 +166,7 @@ class FormSave{
                
                 $field = new InfoRecordField($field);
               
-                if($field->aux or $field->table != $table or ($mode > 1 and !$field->update)){
+                if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->update)){
                     continue;
                 }
               

@@ -918,7 +918,7 @@ var Multi = (($) => {
 
             switch(this.type){
                 case "radio":
-                case "check":
+                case "checkbox":
                     break;
                 default:
                     this.type = "radio";

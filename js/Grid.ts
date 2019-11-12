@@ -517,7 +517,7 @@ var Grid = (($) => {
             
             this.createEditRow({});
             let hiddenDiv = body.create("div");
-            this._data_grid = hiddenDiv.create({tagName:"input", type:"hidden", name:"__data_grid"});
+            this._data_grid = hiddenDiv.create({tagName:"input", type:"hidden", name:"__data_"});
             let pag = this.paginator;
             pag.change = $.bind(pag.change, this, "page");
             

@@ -164,11 +164,18 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			case 'list_set':
 			case 'save':
 
+				
 				/*$f = loadJson("save_form.json");
 				$save = 'Sevian\Sigefor\FormSave';
 				$save::send($f, $f->data, $f->masterData);
 				*/
-				$this->save();
+
+				if(\Sevian\S::getReq('__data_')){
+					$this->saveGrid();
+				}else{
+					$this->save();
+				}
+				
 				break;
 			case 'select_record':
 				$id = \Sevian\S::getReq('__id_');
@@ -1108,11 +1115,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	}
 
-	private function save(){
+	private function _save($data){
 		$this->loadConfig();
 
 		//print_r($this->infoQuery);
-		$_data = (object)\Sevian\S::getVReq();
+		//$_data = (object)\Sevian\S::getVReq();
 		//$_data->__record_ = \Sevian\S::getSes("f_id");
 		
 		$info = new InfoRecord([
@@ -1120,17 +1127,18 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			'mode'		=> 'update',
 			'tables'	=> $this->infoQuery->tables,
 			'fields'	=> $this->infoQuery->fields,
-			'data' 		=> [$_data],
+			'data' 		=> $data,
 		]);
 
 		$save = 'Sevian\Sigefor\FormSave';
 		$save::setDictRecords($this->pVars['records']);
-		$result = $save::send($info, [$_data], []);
+		$result = $save::send($info, $data, []);
 		
 
 		foreach($result as $k => $v){
 
 			if(!$v->error){
+				//print_r($result);
 				$this->addFragment(new \Sevian\iMessage([
 					'caption'=>$this->caption,
 					'text'=>'Record was saved!!!'
@@ -1145,9 +1153,36 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			}
 
 		}
-		
-		
 	}
+
+	private function save(){
+		$this->loadConfig();
+
+		$_data = (object)\Sevian\S::getVReq();
+		//print_r([$_data]);
+		$this->_save([$_data]);
+	}
+	
+	private function saveGrid(){
+
+		$aux = json_decode(\Sevian\S::getReq('__data_'));
+		$dataForDelete = [];
+		$data = [];
+
+		foreach($aux as $_data){
+
+			if($_data->__mode_ == '3'){
+				$dataForDelete[] = $_data;
+			}else{
+				$data[] = $_data;
+			}
+
+		}
+
+		$_data = array_merge($dataForDelete, $data);
+		$this->_save($_data);
+	}
+	
 	public function getRecord($info, $record){
 		
 		if(!$record){
