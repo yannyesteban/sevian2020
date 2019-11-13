@@ -93,6 +93,10 @@ $js = [
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
+		'file' 	=> "{$PATH}js/FormDetail.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
 		'file' 	=> "{$PATH}js/Form.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
