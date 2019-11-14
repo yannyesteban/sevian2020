@@ -36,6 +36,7 @@ class Element{
 
 	protected $_configInput = false;
 	
+	protected $_vPanel = [];
 	
 	public function __construct($opt = []){
 
@@ -147,6 +148,19 @@ class Element{
 
 	public function configInput(){
 		return $this->_configInput;
+	}
+
+	public function setVPanel(&$var){
+		$this->_vPanel = &$var;
+	}
+	public function &getVPanel(){
+		return $this->_vPanel;
+	}
+	public function setSes($key, $value){
+		$this->_vPanel[$key] = $value;
+	}
+	public function &getSes($key){
+		return $this->_vPanel[$key];
 	}
 }
 

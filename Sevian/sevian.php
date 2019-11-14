@@ -221,7 +221,6 @@ class S{
 			self::$cfg['P_VARS'] = &self::$_pVars;
 			self::$cfg['G_VARS'] = &self::$_gVars;
 		}else{
-			
 			self::$cfg['INIT'] = false;
 			
 			self::$cfg['SW'] = (self::$cfg['SW'] == '1')? '0': '1';
@@ -285,6 +284,8 @@ class S{
 				self::$_pVars[$info->id] = [];
 			}
 			$e->pVars = &self::$_pVars[$info->id];
+
+			$e->setVPanel(self::$_pVars[$info->id]);
 			$e->gVars = &self::$_gVars;
 
 			$e->config();
@@ -501,6 +502,16 @@ class S{
 		return Tool::vars($q, [
 			[
 				'token' 	=> '&P_',
+				'data' 		=> $data,
+				'default' 	=> $default
+			]
+		]);
+	}
+
+	public static function varCustom($q, $data, $token, $default = false){
+		return Tool::vars($q, [
+			[
+				'token' 	=> $token,
 				'data' 		=> $data,
 				'default' 	=> $default
 			]

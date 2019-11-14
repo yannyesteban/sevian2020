@@ -38,6 +38,8 @@ class InfoField{
 	public $field = '';
 	public $name = '';
 	//public $method = '';
+
+	public $params = '';
 	public $caption = false;
 	public $class = '';
 	public $placeholder = '';
@@ -98,6 +100,8 @@ class SubForm{
 	private $detail = "";
 	private $setOrder = "";
 
+	public $dataRecord = [];
+
 	public function __construct($info = []){
 		
 		foreach($info as $k => $v){
@@ -110,24 +114,36 @@ class SubForm{
 
 	private function getListValue(){
 
-
 		$cn = $this->cn;
 
 		$where = "";
 		foreach($this->master as $key => $value){
 			$where .= (($where != '')? " AND ":"")."$key = '".$cn->addslashes($value)."'";
 		}
-		$query = "SELECT $this->detail FROM $this->table
+		$query = "SELECT * FROM $this->table
 
 		WHERE $where ";
 		//hr($query);
 		$result = $cn->execute($query);
 
 		$data = [];
-		while($rs = $cn->getDataRow($result)){
-			$data[] = $rs[0];
-		}
 		
+		
+
+		$length = count($this->dataRecord);
+		$index = $length;
+		while($rs = $cn->getData($result)){
+
+			$this->dataRecord[$index] = (object)[
+				"id"=>$rs["id"],
+				"$this->detail"=>$rs[$this->detail]
+			];
+			$data[] = [
+				$this->detail 	=> $rs[$this->detail],
+				"__mode_"		=> 4,
+				"__id_"		=> $index++];
+		}
+		//hr($this->dataRecord,"red");
 		return ($data);
 	}
 
@@ -185,8 +201,34 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	public function config(){
 
 		
-	}
 
+		if(!$this->getSes("_rec")){
+			hr("error");
+			$this->setSes("_rec", []);
+
+			$this->_rId = &$this->getSes("_rec");
+			//$this->_rId["ddd"] = "eee";
+			$this->_rId_n = 0;
+
+			//print_r($this->_vPanel);exit;
+		}else{
+			
+			$this->_rId = $this->getSes("_rec");
+			$this->_rId_n = count($this->_rId);
+			//hr($this->_rId, "white","purple");
+		}
+	}
+	private function resetRId(){
+		$this->_rId = [];
+		$this->_rId_n = 0;
+		$this->_rId = &$this->getSes("_rec");
+	}
+	private function addRId($record){
+		$this->_rId[$this->_rId_n++] = $record;
+	}
+	private function getRId($id){
+		return $this->_rId[$id]?? false;
+	}
     public function evalMethod($method = false): bool{
 		
 		if($method === false){
@@ -232,8 +274,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				break;
 			case 'select_record':
 				$id = \Sevian\S::getReq('__id_');
-
-				$this->gVars["record_id"] = $this->pVars['records'][$id]??false;
+hr($id,"red");
+				//$this->gVars["record_id"] = $this->pVars['records'][$id]??false;
+				$this->gVars["record_id"] = $this->getRId($id);
 				break;
 			case 'get_record':
 
@@ -251,7 +294,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				break; 
                 
                 
-        }
+		}
+		
+		//hr($this->getSes("_rec"),"purple");
+		//hr($this->_rId, "pink","purple");
+		//print_r($this->_vPanel);
         return true;	
     }
 	public function getMain(){
@@ -549,7 +596,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		$keys = $this->infoQuery->keys;
 		$i = 0;
-		$this->pVars["records"] = []; 
+		//$this->pVars["records"] = []; 
+
+		$this->resetRId();
 		foreach($data as $k => $record){
 			
 			foreach($keys as $key){
@@ -558,12 +607,14 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 					$key=>$record[$key]
 				];
 				$data[$k]['__mode_'] = 2;
-				$data[$k]['__id_'] = $k + 1;
+				$data[$k]['__id_'] = $k;
 				$this->gridKey[$k+1] = [
 					$key=>$record[$key]
 				];
 
-				$this->pVars["records"][$k + 1] = (object)$data[$k]['__record_'];
+				//$this->pVars["records"][$k + 1] = (object)$data[$k]['__record_'];
+			
+				$this->addRId((object)$data[$k]['__record_']);
 			}
 
 
@@ -596,14 +647,17 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				}else{
 					
 					$__id_ = \Sevian\S::getReq("__id_");
-					
-					$record = $this->pVars['records'][$__id_]?? false;
+					hr($this->_rId,"orange");
+					hr($this->getRId($__id_),"red");
+					//$record = $this->pVars['records'][$__id_]?? false;
+					$record = $this->getRId($__id_);
 				}
 				
 				
 				
 			}else{
-				$record = $this->pVars['records'][$index]?? false;
+				//$record = $this->pVars['records'][$index]?? false;
+				$record = $this->getRId($index);
 			}
 		}
 		
@@ -615,6 +669,18 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 
 		foreach($this->fields as $f){
+
+			if($f->params){
+				//hr($f->params);
+
+				$params = \Sevian\S::varCustom($f->params, $values, '&');
+				$params = json_decode(\Sevian\S::vars($params));
+
+				foreach($params as $k => $v){
+					$f->$k = $v;
+				}
+			}
+
 
 			$id = "{$f->name}_f{$this->id}";
 			$value = '';
@@ -637,14 +703,34 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 			$config = new \stdClass;
 			
 			if($f->subform){
-				$s = [
+				//if(!isset($this->pVars["records"])
+				//print_r($this->getSes("_rec"));
+
+				hr($f->subform->master, "red", "pink");
+				
+
+				
+
+				$s = (object)[
 					"type"=>"list",
-					"table"=>"test_edo",
-					"master"=>["id"=>"1"],
-					"detail"=>"codestado",
+					"table"=>$f->subform->table,
+					"master"=>$f->subform->master,
+					"detail"=>$f->subform->detail,
+					//"dataRecord" =>  &$this->getSes("_rec")
 				];
+
+				
 				$sf = new SubForm($s);
+				$sf->dataRecord =  &$this->getSes("_rec");
+				
 				$f->value = $sf->getValue();
+				print_r($this->getSes("_rec"));
+				$config->subForm = [
+					//"data"=>$f->value,
+					"type"=>"list",
+					"detail"=>"codestado",
+					"master"=>["id"=>"1"],
+				];
 			}
 
 			if(!$f->input){
@@ -1181,8 +1267,18 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 	private function _save($data){
 		$this->loadConfig();
+		//hr($this->pVars['records']);
+		//hr(\Sevian\S::getSes("f_id"));
+		//print_r($this->fields);
 
-		//print_r($this->infoQuery);
+		foreach($this->fields as $k => $v){
+			if($v->subform){
+
+				$infoQuery = $this->cn->infoQuery("SELECT * FROM test_edo");
+				$this->infoQuery->fields[$k]->detail = $infoQuery;
+				$infoQuery->fields["id"]->master = 'id';
+			}
+		}
 		//$_data = (object)\Sevian\S::getVReq();
 		//$_data->__record_ = \Sevian\S::getSes("f_id");
 		
@@ -1195,9 +1291,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		]);
 
 		$save = 'Sevian\Sigefor\FormSave';
-		$save::setDictRecords($this->pVars['records']);
-		$result = $save::send($info, $data, []);
+		//$save::setDictRecords($this->pVars['records']);
+		$save::setDictRecords($this->getSes("_rec"));
 		
+		$result = $save::send($info, $data, []);
+		//hr($this->pVars['records'],"red");
 
 		foreach($result as $k => $v){
 
@@ -1263,7 +1361,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				}
 			}
 		}
-		$this->pVars["records"][1] = $record;
+		//$this->pVars["records"][1] = $record;
+		$this->resetRId();
+		$this->addRId($record);
 		$cn->query = $this->query." WHERE $filter;";
 
 		$result = $cn->execute();

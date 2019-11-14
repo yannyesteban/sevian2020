@@ -9,20 +9,18 @@ class InfoRecord{
     public $transaction = false;
     public $masterData = false;
     public $records = [];
-
     public $error = false;
     public $errno = 0;
 
     public function __construct($opt = []){
 		
-		foreach($opt as $k => $v){
-			if(property_exists($this, $k)){
+        foreach($opt as $k => $v){
+        
+            if(property_exists($this, $k)){
 				$this->$k = $v;
 			}
 		}
-		
 	}
-
 }
 
 
@@ -53,6 +51,7 @@ class InfoRecordField{
     public function __construct($opt = []){
 		
 		foreach($opt as $k => $v){
+          
 			if(property_exists($this, $k)){
 				$this->$k = $v;
 			}
@@ -97,6 +96,7 @@ class FormSave{
         self::$dict = &$record;
     }
     public static function send($info, $data, $masterData = []){
+      
         if(!$info instanceof InfoRecord){
             $info = new InfoRecord($info);
         }
@@ -109,7 +109,7 @@ class FormSave{
 
         self::$error = false;
         self::$errno = 0;
-        
+       
         foreach($data as $record){
             self::$result[] = self::saveRecord($info, $record, $masterData);
         }
@@ -141,29 +141,28 @@ class FormSave{
             }
             
             $serial = '';
-
             $filter = new \stdClass;
             $q_where = '';
 
             if($record != '' and $mode != '1'){
+                
                 if(count($tables ) == 1){
+                    
                     foreach($record as $k => $v){
                         $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($k)."='".$cn->addSlashes($v)."'";    
                     }
                 }else{
+                    
                     foreach($record as $k => $v){
-                        if(isset($info->fields->$k) and $info->fields->$k->table == $table){
-                            $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($info->fields->$k->field)."='".$cn->addSlashes($v)."'";    
+                        
+                        if(isset($info->fields[$k]) and $info->fields[$k]->table == $table){
+                            $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($info->fields[$k]->field)."='".$cn->addSlashes($v)."'";    
                         }
-
                     }
                 }
-                
             }
-
-
+hr("mode: $mode ". $q_where, "red");
             foreach($info->fields as $k => $field){
-               
                 $field = new InfoRecordField($field);
               
                 if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->update)){
@@ -171,7 +170,6 @@ class FormSave{
                 }
               
                 if(($field->serial) and $field->notNull and $data->$k == '' and $mode == 1){
-						
                     $serial = $field->field;
                     continue;
                 }
@@ -181,8 +179,11 @@ class FormSave{
                 if($field->sqlValue){
                     $fieldValue = $field->sqlValue;
                 }else{
+
                     if($field->master and isset($masterData->{$field->master})){
+
                         $value = $masterData->{$field->master};
+                        hr( $value,"green");
                     }elseif($field->refValue){
                         $value = $data->{$field->refValue};
                     }elseif($field->serialize){
@@ -227,7 +228,9 @@ class FormSave{
                 }elseif($mode == 2){
                     $q_set[] = $fieldName."=".$fieldValue;
                 }
+                $data->$k = $value;
 
+                
                 
             }
             $table = $cn->addQuotes($table);
@@ -249,7 +252,7 @@ class FormSave{
             $q_errno = 0;
             
             if($q){
-                //hr($q);
+                hr($q);
                 $cn->execute($q);
 
                 if($cn->error){
@@ -285,9 +288,11 @@ class FormSave{
         foreach($info->fields as $k => $field){
 
             if(isset($field->detail)){
-
-                self::send($field->detail, $data->$k, $data);
                 
+                if(is_string($data->$k)){
+                    $data->$k = \json_decode($data->$k);
+                }
+                self::send($field->detail, $data->$k, $data);
             }
         }
 
