@@ -993,12 +993,12 @@ var Multi = (($) => {
                 this.check(this._form.getList());
             }
             if (Array.isArray(value)) {
-                this._input.val(JSON.stringify(value));
+                value = JSON.stringify(value);
             }
-            else {
-                //this._input.val(value);
+            if (this._input) {
+                this._input.val(value);
             }
-            return false;
+            return this;
         }
         getValue() {
             return this._input.val();

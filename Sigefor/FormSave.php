@@ -161,7 +161,7 @@ class FormSave{
                     }
                 }
             }
-hr("mode: $mode ". $q_where, "red");
+            //hr("mode: $mode ". $q_where, "red");
             foreach($info->fields as $k => $field){
                 $field = new InfoRecordField($field);
               
@@ -181,9 +181,7 @@ hr("mode: $mode ". $q_where, "red");
                 }else{
 
                     if($field->master and isset($masterData->{$field->master})){
-
                         $value = $masterData->{$field->master};
-                        hr( $value,"green");
                     }elseif($field->refValue){
                         $value = $data->{$field->refValue};
                     }elseif($field->serialize){
@@ -240,6 +238,7 @@ hr("mode: $mode ". $q_where, "red");
                     $q = "INSERT INTO $table (".implode(', ',$q_fields).') VALUES ('.implode(', ',$q_values).');';
                     break;
                 case 2:
+                
                     $q = "UPDATE $table SET ". implode(', ', $q_set). " WHERE $q_where;";
                     break;
                 case 3:
@@ -251,8 +250,8 @@ hr("mode: $mode ". $q_where, "red");
             $q_error = false;
             $q_errno = 0;
             
-            if($q){
-                hr($q);
+            if($q and $mode <=3){
+                //hr($q);
                 $cn->execute($q);
 
                 if($cn->error){
@@ -292,7 +291,10 @@ hr("mode: $mode ". $q_where, "red");
                 if(is_string($data->$k)){
                     $data->$k = \json_decode($data->$k);
                 }
-                self::send($field->detail, $data->$k, $data);
+                if($data->$k){
+                   self::send($field->detail, $data->$k, $data); 
+                }
+                
             }
         }
 

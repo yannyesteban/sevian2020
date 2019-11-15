@@ -8,6 +8,7 @@ var FormDetail = (($) => {
         private detail:string = null;
 
         private _cache:object = {};
+        
         constructor(info:object){
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
@@ -25,7 +26,21 @@ var FormDetail = (($) => {
         }
 
         setValue(value){
+
+            if(typeof value === "string"){
+                value = JSON.parse(value);
+            }
+
             this.data = value;
+        }
+
+        getValue(){
+
+            if(typeof this.data === "object"){
+                return JSON.parse(this.data);
+            }
+
+            return this.data = this.data;
         }
 
         addRow(index, data){

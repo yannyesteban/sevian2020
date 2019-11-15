@@ -19,7 +19,16 @@ var FormDetail = (($) => {
             }
         }
         setValue(value) {
+            if (typeof value === "string") {
+                value = JSON.parse(value);
+            }
             this.data = value;
+        }
+        getValue() {
+            if (typeof this.data === "object") {
+                return JSON.parse(this.data);
+            }
+            return this.data = this.data;
         }
         addRow(index, data) {
         }

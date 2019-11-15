@@ -190,6 +190,10 @@ var Form = (($) => {
         }
 
         addFields(fields){
+            for(let x in fields){
+                this.addField(fields[x]);
+            }
+            return;
             for(let field of fields){
                 this.addField(field);
             }
@@ -476,8 +480,8 @@ var Form = (($) => {
             let inputs = this._inputs;
             let msg = null;
 
-            for(let field of this.fields){
-                config = field.config;
+            for(let x of this.fields){
+                config = this.fields[x].config;
                 rules = config.rules;
 
                 if(rules){

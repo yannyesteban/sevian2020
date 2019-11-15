@@ -144,6 +144,10 @@ var Form = (($) => {
             this.createField(field.input, field.config);
         }
         addFields(fields) {
+            for (let x in fields) {
+                this.addField(fields[x]);
+            }
+            return;
             for (let field of fields) {
                 this.addField(field);
             }
@@ -369,8 +373,8 @@ var Form = (($) => {
             let rules = null, config = null;
             let inputs = this._inputs;
             let msg = null;
-            for (let field of this.fields) {
-                config = field.config;
+            for (let x of this.fields) {
+                config = this.fields[x].config;
                 rules = config.rules;
                 if (rules) {
                     msg = Sevian.Valid.send(rules, inputs[config.name].getValue(), config.caption, data);

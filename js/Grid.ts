@@ -274,7 +274,7 @@ var Grid = (($) => {
         caption:string = "";
         className = "sevian";
         iconClass:string = "";
-        type:string = "default";//"edit";//"default";//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+        type:string = "edit";//{"edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
         ctrlSelect:string = "one";//one,multiple,
         editMode:string = "multi";//simple,grid,one,inline,form,custom
 
@@ -498,7 +498,7 @@ var Grid = (($) => {
                 input: "hidden",
                 config:{
                     type:"hidden",
-                    name:"__index_"
+                    name:"__index_",
                 }
             }
             for(let x in this.fields){
@@ -582,6 +582,7 @@ var Grid = (($) => {
                     text = value;
                 }
 
+                
                 input = (field.input === "hidden" || this.type === "default")? "input": field.input;
                 
 
@@ -596,6 +597,7 @@ var Grid = (($) => {
                 }
                 
                 info.dataset = {"name": x};
+                
                 _input = f.createInput(input, info);
                 _input.dataName = x;
                 if(field.input == "hidden"){
@@ -911,23 +913,22 @@ var Grid = (($) => {
             let data = {};
 
             if(this._mainForm.valid()){
-               
-                data = this._mainForm.getValue();
                 
+                data = this._mainForm.getValue();
+
                 if(data["__mode_"] == '1' && data["__index_"] === ''){
                     this.createRow(data);
-                    this.setNew();
+                    //this.setNew();
                 }else{
                     this.saveAt(data["__index_"], data);
                 }
-                
             }
 
             return data;
         }
 
         saveAt(index, data){
-            
+
             if(this.type === "default"){
                 let value = null;
                 let cells = this._tbody.queryAll(`.body-row[data-index='${index}'] td[data-name]`);

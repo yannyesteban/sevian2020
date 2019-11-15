@@ -218,7 +218,7 @@ var Grid = (($) => {
             this.caption = "";
             this.className = "sevian";
             this.iconClass = "";
-            this.type = "default"; //"edit";//"default";//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+            this.type = "edit"; //{"edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
             this.ctrlSelect = "one"; //one,multiple,
             this.editMode = "multi"; //simple,grid,one,inline,form,custom
             this.actionButton = false;
@@ -397,7 +397,7 @@ var Grid = (($) => {
                 input: "hidden",
                 config: {
                     type: "hidden",
-                    name: "__index_"
+                    name: "__index_",
                 }
             };
             for (let x in this.fields) {
@@ -718,7 +718,7 @@ var Grid = (($) => {
                 data = this._mainForm.getValue();
                 if (data["__mode_"] == '1' && data["__index_"] === '') {
                     this.createRow(data);
-                    this.setNew();
+                    //this.setNew();
                 }
                 else {
                     this.saveAt(data["__index_"], data);

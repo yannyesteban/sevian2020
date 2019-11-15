@@ -94,7 +94,7 @@ class InfoField{
 
 class SubForm{
 
-	private $type = "";
+	private $type = "list";
 	private $table = "";
 	private $master = "";
 	private $detail = "";
@@ -202,18 +202,18 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 
 		
 
-		if(!$this->getSes("_rec")){
+		if(!$this->getSes('_rec')){
 			hr("error");
-			$this->setSes("_rec", []);
+			$this->setSes('_rec', []);
 
-			$this->_rId = &$this->getSes("_rec");
+			$this->_rId = &$this->getSes('_rec');
 			//$this->_rId["ddd"] = "eee";
 			$this->_rId_n = 0;
 
 			//print_r($this->_vPanel);exit;
 		}else{
 			
-			$this->_rId = $this->getSes("_rec");
+			$this->_rId = $this->getSes('_rec');
 			$this->_rId_n = count($this->_rId);
 			//hr($this->_rId, "white","purple");
 		}
@@ -221,7 +221,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	private function resetRId(){
 		$this->_rId = [];
 		$this->_rId_n = 0;
-		$this->_rId = &$this->getSes("_rec");
+		$this->_rId = &$this->getSes('_rec');
 	}
 	private function addRId($record){
 		$this->_rId[$this->_rId_n++] = $record;
@@ -296,7 +296,7 @@ hr($id,"red");
                 
 		}
 		
-		//hr($this->getSes("_rec"),"purple");
+		//hr($this->getSes('_rec'),"purple");
 		//hr($this->_rId, "pink","purple");
 		//print_r($this->_vPanel);
         return true;	
@@ -614,11 +614,35 @@ hr($id,"red");
 
 				//$this->pVars["records"][$k + 1] = (object)$data[$k]['__record_'];
 			
-				$this->addRId((object)$data[$k]['__record_']);
+				$this->addRId((object)[
+					$key=>$record[$key]
+				]);
 			}
 
+			foreach($this->fields as $f){
+				if($f->subform){
+					if($f->params){
+						$params = \Sevian\S::varCustom($f->params, $record, '&');
+						$params = json_decode(\Sevian\S::vars($params));
+		
+						foreach($params as $kk => $v){
+							$f->$kk = $v;
+						}
+					}
+					$sf = new SubForm($f->subform);
+					$sf->dataRecord =  &$this->getSes('_rec');
+					
+					
+					$data[$k][$f->field] = $sf->getValue();
+					
+				}
+			}
+			
 
 		}
+
+		//print_r($data);exit;
+
 		$cn->pageLimit = false;
 		return $data;
 
@@ -628,6 +652,120 @@ hr($id,"red");
 
 	}
 	
+	private function createFields($values){
+		$fields = [];
+		$groups = json_decode(\Sevian\S::vars($this->groups));
+		
+		foreach($this->fields as $f){
+			
+			if($f->params){
+				$params = \Sevian\S::varCustom($f->params, $values, '&');
+				$params = json_decode(\Sevian\S::vars($params));
+
+				foreach($params as $k => $v){
+					$f->$k = $v;
+				}
+			}
+
+			//$id = "{$f->name}_f{$this->id}";
+			$value = '';
+			$page = '';
+			if($f->modeValue == '1' or !$values){
+				$f->value = $f->default;
+			}else if(isset($values[$f->field])){
+				$f->value = $values[$f->field];
+			}
+
+			if(isset($groups->{$f->field})){
+				$page = $groups->{$f->field};
+			}
+
+			$data = false;
+			if($f->data){
+				$data = $this->getDataField(json_decode(\Sevian\S::vars($f->data)));
+			}
+			
+			$config = new \stdClass;
+			
+			if($f->subform){
+				
+				$sf = new SubForm($f->subform);
+				$sf->dataRecord =  &$this->getSes('_rec');
+				
+				$f->value = $sf->getValue();
+
+				$config->subForm = [
+					"type"=>"list",
+					"detail"=>$f->subform->detail,
+				];
+			}
+
+			if(!$f->input){
+				$this->getDefaultInput($this->infoQuery->fields[$f->field]->mtype, $input, $type);
+			}else{
+				$input = $f->input;
+				$type = $f->inputType;
+			}
+
+			$config->type = $type;
+			
+			//$config->id = $id;
+			$config->name = $f->field;
+			$config->caption = $f->caption;
+			$config->data = $data;
+			$config->value = $f->value?? '';
+			$config->className = $config->className?? $f->class?? '';
+			$config->childs = $f->childs;
+			
+			$config->placeholder = $f->placeholder;
+			if($f->parent){
+				$config->parent = $f->parent;
+				$config->parentValue = $this->fields[$f->parent]->value?? '';
+			}
+
+			if($f->rules != null){
+				$config->rules = json_decode($f->rules);
+			}
+
+			if($f->inputConfig){
+				foreach($f->inputConfig as $k => $v){
+					$config->$k = $v;
+				}
+			}
+
+			$fields[$f->name] = [
+				'input'	=> $input,
+				'page'	=> $page,
+				'config'=> $config
+			];
+			
+		}
+
+		$fields['__mode_'] = [
+			'input'	=> 'input',
+			'page'	=> '',
+			'config'=> [
+				'type'	=> 'text',
+				"name"	=> '__mode_',
+				'value'	=> $this->mode,
+				'default'=> '1'
+			]
+			
+		];
+		$fields['__id_'] = [
+			'input'	=> 'hidden',
+			'page'	=> '',
+			'config'=> [
+				'type'	=> 'text',
+				"name"	=> '__id_',
+				'value'	=> '1'
+			]
+			
+		];
+		
+		return $fields;
+	}
+
 	private function createForm(){
 		
 		
@@ -665,8 +803,8 @@ hr($id,"red");
 		
 		$fields = [];
 		$groups = json_decode(\Sevian\S::vars($this->groups));
-		
-		
+		$pages = json_decode(\Sevian\S::vars($this->pages));
+		/*
 
 		foreach($this->fields as $f){
 
@@ -703,33 +841,28 @@ hr($id,"red");
 			$config = new \stdClass;
 			
 			if($f->subform){
-				//if(!isset($this->pVars["records"])
-				//print_r($this->getSes("_rec"));
-
-				hr($f->subform->master, "red", "pink");
 				
-
 				
-
+				
 				$s = (object)[
 					"type"=>"list",
 					"table"=>$f->subform->table,
 					"master"=>$f->subform->master,
 					"detail"=>$f->subform->detail,
-					//"dataRecord" =>  &$this->getSes("_rec")
+					//"dataRecord" =>  &$this->getSes('_rec')
 				];
 
 				
-				$sf = new SubForm($s);
-				$sf->dataRecord =  &$this->getSes("_rec");
+				$sf = new SubForm($f->subform);
+				$sf->dataRecord =  &$this->getSes('_rec');
 				
 				$f->value = $sf->getValue();
-				print_r($this->getSes("_rec"));
+				print_r($this->getSes('_rec'));
 				$config->subForm = [
 					//"data"=>$f->value,
 					"type"=>"list",
-					"detail"=>"codestado",
-					"master"=>["id"=>"1"],
+					"detail"=>$f->subform->detail,
+					//"master"=>["id"=>"1"],
 				];
 			}
 
@@ -777,7 +910,7 @@ hr($id,"red");
 			
 		}
 		
-		$pages = json_decode(\Sevian\S::vars($this->pages));
+		
 		$fields[] = [
 			'input'	=> 'input',
 			'page'	=> '',
@@ -798,13 +931,13 @@ hr($id,"red");
 			]
 			
 		];
-
+		*/
 
 		$info = [
 			'caption'	=> $this->caption,
 			'className'	=> $this->class,
 			'id'		=> 'sg_form_'.$this->id,
-			'fields'	=> $fields,
+			'fields'	=> $this->createFields($values),
 			'pages'		=> $pages,
 			'menu'		=> $this->createMenu($this->menu),
 			'className' => ($this->mode == '1')? 'mode-insert': 'mode-update'
@@ -1050,7 +1183,7 @@ hr($id,"red");
 			]
 			
 		];
-
+		
 		\Sevian\S::action(new \Sevian\InfoAction([
 
 			"async"=>false,
@@ -1101,7 +1234,7 @@ hr($id,"red");
 				});"
 		];
 
-		
+		//print_r($this->createFields([]));exit;
 		
 		$opt = [
 			 'id' 			=> $grid->id,
@@ -1109,7 +1242,7 @@ hr($id,"red");
 			 'caption'		=> $this->caption,
 			 'paginator'	=> $paginator,
 			 'data'			=> $dataGrid,
-			 'fields'		=> $fields,
+			 'fields'		=> $this->createFields([]),
 			 'searchValue'	=> $q,
 
 			 'optionText' => [
@@ -1267,6 +1400,7 @@ hr($id,"red");
 
 	private function _save($data){
 		$this->loadConfig();
+		//print_r($data);exit;
 		//hr($this->pVars['records']);
 		//hr(\Sevian\S::getSes("f_id"));
 		//print_r($this->fields);
@@ -1292,7 +1426,7 @@ hr($id,"red");
 
 		$save = 'Sevian\Sigefor\FormSave';
 		//$save::setDictRecords($this->pVars['records']);
-		$save::setDictRecords($this->getSes("_rec"));
+		$save::setDictRecords($this->getSes('_rec'));
 		
 		$result = $save::send($info, $data, []);
 		//hr($this->pVars['records'],"red");
@@ -1348,7 +1482,7 @@ hr($id,"red");
 	public function getRecord($info, $record){
 		
 		if(!$record){
-			return false;
+			return [];
 		}
 		$cn = $this->cn;
 		$filter = '';

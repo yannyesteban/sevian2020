@@ -1247,14 +1247,13 @@ var Multi = (($) => {
             }
             
             this.createOptions(this.parentValue);
-           
+
             if(this.subForm){
-                
+
                 this._form = new FormDetail(this.subForm);
-                
                 this._form.setValue(this.value);
             }
-
+            
             this.setValue(this.value);
             
            
@@ -1289,7 +1288,6 @@ var Multi = (($) => {
         }
         
         setValue(value:any){
-
             this.value = value;
 
             if(this._form){
@@ -1297,20 +1295,19 @@ var Multi = (($) => {
             }
             
             if(Array.isArray(value)){
-                this._input.val(JSON.stringify(value));
-            }else{
-                //this._input.val(value);
+                value = JSON.stringify(value);
             }
-            
-            return false;
+
+            if(this._input){
+                this._input.val(value);
+            }
+
+            return this;
         }
         
         getValue(){
-
             return this._input.val();
         }
-
-        
         
         _load(main:any){
 
