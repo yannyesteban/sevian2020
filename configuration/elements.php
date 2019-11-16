@@ -59,6 +59,10 @@ $cls_elements = [
 	'gtControlDevice' 		=> [
 		'file' 	=> 'gt/ControlDevice.php',
 		'class' => '\Sevian\GT\ControlDevice'],
+	
+	'gtMenuDevice' 		=> [
+		'file' 	=> 'gt/MenuDevice.php',
+		'class' => '\Sevian\GT\MenuDevice'],
 	];
 
 Sevian\S::elementsLoad($cls_elements);

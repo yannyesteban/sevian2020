@@ -177,11 +177,6 @@ class Menu extends \Sevian\Element{
 				$json[] = &$items[$index];
 			}
 
-
-			foreach($rs as $k => $v){
-			//	$this->$k = $v;
-			}
-			
 			
 			
 
