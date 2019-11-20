@@ -14,7 +14,7 @@ $css = array(
 	"{$PATH}css/Paginator.css",
 	//"{$PATH}css/sgAjax.css",
 	//"{$PATH}css/grid.css",
-	//"{$PATH}css/DesignMenu.css",
+	"{$PATH}css/DesignMenu.css",
 	//"{$PATH}css/Form.css",
 	//"{$PATH}css/MenuAlpha.css",
 

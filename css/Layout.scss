@@ -1364,3 +1364,20 @@ form{
     content: '-'; font-style: italic; color: #999; 
   }
 }
+
+
+.x-menu{
+  background-color: white;
+
+  border:2px solid rgb(202, 202, 202);
+  margin:6px;
+  &:empty{
+    background-color: #e98ed2;
+    min-height: 1em;
+  }
+  >.item:hover{
+    background-color: #0696c1;
+    color:white;
+    //margin:5px;
+  }
+}

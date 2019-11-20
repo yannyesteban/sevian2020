@@ -66,7 +66,7 @@ class MenuDevice extends \Sevian\Element{
     private function create(){
 		$form = new \Sevian\Panel('div');
 		
-		$form->innerHTML ="hola";
+		//$form->innerHTML ="hola";
         //$form->text = "control-device";
         $form->id = "gt_menu_".$this->id;
         
@@ -75,6 +75,8 @@ class MenuDevice extends \Sevian\Element{
         
 		$this->load();
 		$this->_menu["id"] = $form->id;
+
+		$form->add("div")->id = "design";
 
         $info = [
 			"id"=>$form->id,

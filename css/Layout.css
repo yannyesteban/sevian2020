@@ -1219,3 +1219,17 @@ form {
   font-style: italic;
   color: #999;
 }
+
+.x-menu {
+  background-color: white;
+  border: 2px solid #cacaca;
+  margin: 6px;
+}
+.x-menu:empty {
+  background-color: #e98ed2;
+  min-height: 1em;
+}
+.x-menu > .item:hover {
+  background-color: #0696c1;
+  color: white;
+}
