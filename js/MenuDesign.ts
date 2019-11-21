@@ -1,83 +1,54 @@
 var MenuDesign = (($) => {
 
-	const suma = (a, b)=>{
-		return a+b;
-
-
-	}
-
-	const suma3 = (c)=>{
-		return (n) => suma(c,n);
-	}
-
-	const suma5 = (n)=>{
-		return (a) => a+n;
-	}
-
-	let fr = suma3(10);
-	//console.log(fr(2));
-	const curry  = function(fn) {
-
-		
-		console.log (fn.length)
-
-		return function(){
-			return fn()
+	class Functor{
+		__value:any = null;
+		constructor(value){
+			this.__value = value;
 		}
-		//console.log(fn.arguments.length)
-		//console.log(fn.arguments.shift())
-		//
+		static of(value){
+			return new Functor(value);
+		}
+		isNothing(){
+			return (this.__value === null || this.__value === undefined);	
+		}
+		map(fn){
+			return this.isNothing()? Functor.of(null): Functor.of(fn(this.__value));
+		}
+		join() {
+			if (!(this.__value instanceof Functor)) {
+				return this.__value;
+			}
+			return this.__value.join();
+		 }
 	}
 
-	curry(suma);
+	class PFTool{
 
-    const compose = (fn, ...funcs) => {
-		return (...args) => {
-		  return funcs.reduce((acc, func) => func(acc), fn(...args))
+		static curry(fn, ...args) {
+			return (...args2) => {
+				args = args.concat(args2);
+	
+				if(args.length >= fn.length){
+				
+					return fn(...args);
+				}
+				
+				return curry(fn, ...args);
+			};
 		}
-	  }
-	  
 
-
-	  let s2 = compose((a)=>{
-		  //console.log(1)
-		return  a+10000
-		}, (a)=>{
-			//console.log(2)
-		return 	a+100
-		});
-
-			//console.log (s2(1), "red")
-	  
+		static compose(fn, ...funcs) {
 		
-			const generate = (fn, dependency = LazyIterable, descriptor) => {
-		return Object.create(
-		  Object.assign({ [Symbol.iterator]: fn }, dependency),
-		  descriptor
-		)
-	  }
-	  
-	  
+			return (...args) => {
+		
+				return funcs.reduce((acc, func) => func(acc), fn(...args));
+			};
+		}
 
-    const Mu = (param) => {
-        
-        return ({[param]:name}:any) => {
-            console.log(name)
-        }
-    }
+	}
 
-    const My2 = function({name, edad}){
-        alert(name+" - "+edad)
-    };
+	
 
-    let My = Mu("edad");
-    const p = {
-        name:"yanny",
-        apellido:"nuñez",
-        edad: 24
-    };
-
-    //My(p)
 
 
     let sItem = {
