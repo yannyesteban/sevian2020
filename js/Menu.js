@@ -1,3 +1,9 @@
+/*
+var ev = new Event("look", {"bubbles":true, "cancelable":false});
+document.dispatchEvent(ev);
+
+
+*/
 var Menu = (function ($, Float) {
     class Menu {
         constructor(opt) {

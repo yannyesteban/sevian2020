@@ -1,41 +1,4 @@
 var MenuDesign = (($) => {
-    class Functor {
-        constructor(value) {
-            this.__value = null;
-            this.__value = value;
-        }
-        static of(value) {
-            return new Functor(value);
-        }
-        isNothing() {
-            return (this.__value === null || this.__value === undefined);
-        }
-        map(fn) {
-            return this.isNothing() ? Functor.of(null) : Functor.of(fn(this.__value));
-        }
-        join() {
-            if (!(this.__value instanceof Functor)) {
-                return this.__value;
-            }
-            return this.__value.join();
-        }
-    }
-    class PFTool {
-        static curry(fn, ...args) {
-            return (...args2) => {
-                args = args.concat(args2);
-                if (args.length >= fn.length) {
-                    return fn(...args);
-                }
-                return curry(fn, ...args);
-            };
-        }
-        static compose(fn, ...funcs) {
-            return (...args) => {
-                return funcs.reduce((acc, func) => func(acc), fn(...args));
-            };
-        }
-    }
     let sItem = {
         caption: "",
         id: "",
@@ -62,43 +25,24 @@ var MenuDesign = (($) => {
                     this[x] = info[x];
                 }
             }
-            const rangeIterator = (from, to = Infinity, step = 1) => ({
-                [Symbol.iterator]: function () {
-                    let done = false;
-                    let value = 0;
-                    return {
-                        next() {
-                            value = from;
-                            done = from > to;
-                            from = !done ? from + step : value;
-                            return { done: done, value: value };
-                        }
-                    };
-                }
-            });
-            console.log([Symbol.iterator]);
-            const iterator = rangeIterator(0, 4)[Symbol.iterator]();
-            iterator.next(); // { done: false, value: 0 }
-            iterator.next(); // { done: false, value: 1 }
-            iterator.next(); // { done: false, value: 2 }
-            iterator.next(); // { done: false, value: 3 }
-            iterator.next(); // { done: false, value: 4 }
-            console.log(iterator.next()); // { done: true, value: 5}
-            const compose = (...fns) => fns.reduceRight((prevFn, nextFn) => (...args) => nextFn(prevFn(...args)), value => value);
-            let s = compose((a) => {
-                console.log(111);
-                return a + 10000;
-            }, (a) => {
-                console.log(2222);
-                return a + 100;
-            });
-            db(s(1), "red");
             this._main = $(this.id);
             let m = $(this.id).create("div").addClass("x-menu");
             m.create("div").addClass("item").text("uno");
             m.create("div").addClass("item").text("dos");
             m.create("div").addClass("item").text("tres");
             m.create("div").addClass("item").text("cuatro");
+            let nodo = `
+					<ul class="x-menu">
+						<li class="item"><div class="title">Titluo 1</div><ul class="x-menu"></ul></li>
+						<li class="item"><div class="title">Titluo 2</div><ul class="x-menu"></ul></li>
+						<li class="item"><div class="title">Titluo 3</div><ul class="x-menu"></ul></li>
+						<li class="item"><div class="title">Titluo 4</div><ul class="x-menu"></ul></li>
+						<li class="item"><div class="title">Titluo 5</div><ul class="x-menu"></ul></li>
+					</ul>
+
+				
+				`;
+            this._main.append(nodo);
             let m2 = $(this.id).create("div").addClass("x-menu");
             m2.create("div").addClass("item").text("cinco");
             m2.create("div").addClass("item").text("seis");
@@ -108,29 +52,67 @@ var MenuDesign = (($) => {
             this._main.queryAll(".x-menu>.item").forEach((e) => {
                 e.draggable = true;
                 $(e).on("dragstart", (event) => {
-                    db(event.target.innerHTML);
+                    db("ok");
                     event.dataTransfer.setData("text/plain", null);
+                })
+                    .on("dragover", (event) => {
                 });
             });
-            $()
+            this._main.queryAll(".x-menu .title").forEach((e) => {
+                //e.draggable = false;
+                db(e.innerHTML, "green");
+                $(e).on("dragstart", (event) => {
+                    //event.cancelBubble = true;
+                    event.preventDefault();
+                });
+            });
+            $(this.id)
                 .on("dragstart", event => {
-                db(2);
                 item = event.target;
             })
+                .on("dragend", function (event) {
+            })
                 .on("dragover", function (event) {
-                // prevent default to allow drop
                 event.preventDefault();
             })
+                .on("drag", event => {
+                //db ("drag")
+            })
+                .on("dragleave", event => { })
+                .on("scroll", event => { })
                 .on("drop", (event) => {
-                db(event.target.className);
+                let contType = ["closed", "open", ""];
                 event.preventDefault();
+                if (event.target.parentNode === item.parentNode) {
+                    //db (88888)
+                }
+                else {
+                    //db ("outtttt")
+                }
+                let item2 = item.cloneNode(true);
+                let x = item.compareDocumentPosition(item2);
+                db(x, "blue");
                 if (event.target.className == "x-menu") {
-                    event.target.style.backgroundColor = "rgb(100,1,123)";
                     $(event.target).append(item);
                 }
                 else if (event.target.className == "item") {
-                    $(event.target.parentNode).append(item);
+                    var rect = event.target.getBoundingClientRect();
+                    var diff = event.clientY - rect.top;
+                    if (diff > rect.height / 2) {
+                        event.target.parentNode.insertBefore(item, event.target.nextSibling);
+                    }
+                    else {
+                        event.target.parentNode.insertBefore(item, event.target);
+                    }
                 }
+            });
+            var ev = new Event("evalcss", { "bubbles": true, "cancelable": false });
+            let d = this._main.create("button").attr("type", "button").on("evalcss", (event) => {
+                event.target.innerHTML = 'que horror';
+            });
+            this._main.create("button").attr("type", "button").text("ok").on("click", (event) => {
+                //var ev = new Event("evalcss", {"bubbles":true, "cancelable":false});
+                d.get().dispatchEvent(ev);
             });
             return;
             let _items = [

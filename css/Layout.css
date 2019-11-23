@@ -1225,11 +1225,19 @@ form {
   border: 2px solid #cacaca;
   margin: 6px;
 }
+.x-menu .title {
+  display: inline;
+  background-color: lightgoldenrodyellow;
+}
 .x-menu:empty {
   background-color: #e98ed2;
   min-height: 1em;
 }
+.x-menu > .item {
+  min-height: 3em;
+  border: 1px solid red;
+}
 .x-menu > .item:hover {
   background-color: #0696c1;
-  color: white;
+  color: #d6d6d6;
 }

@@ -1371,13 +1371,25 @@ form{
 
   border:2px solid rgb(202, 202, 202);
   margin:6px;
+
+
+  .title{
+    display: inline;
+    background-color: lightgoldenrodyellow;
+    //user-select: none;
+    //pointer-events: none;
+  }
   &:empty{
     background-color: #e98ed2;
     min-height: 1em;
   }
+  >.item{
+    min-height: 3em;
+    border:1px solid red;
+  }
   >.item:hover{
     background-color: #0696c1;
-    color:white;
+    color:rgb(214, 214, 214);
     //margin:5px;
   }
 }
