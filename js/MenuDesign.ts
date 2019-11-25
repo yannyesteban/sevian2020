@@ -1,6 +1,11 @@
 var MenuDesign = (($) => {
 
-
+	const captureItem = function(item){
+		return function(e){
+			item = e;
+			return e;
+		}
+	}  
 	
 
 
