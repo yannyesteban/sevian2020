@@ -1,3 +1,61 @@
+let iii=0;
+
+class Zord {
+	static of(...values) {
+	  const This = this[Symbol.species];
+	  return new This(...values);
+	}
+  
+	static get [Symbol.species]() {
+	  return this;
+	}
+  
+	constructor(...values) {
+	  this._values = values
+	}
+  
+	map(actor=(x) => x) {
+		
+	  const This = this.constructor[Symbol.species];
+	  return new This(...this._values.map(actor));
+	}
+  
+	flatMap(actor=(x) => x) {
+	  const This = this.constructor[Symbol.species];
+		
+	  //We need to flatten the result array, as it can result in [ val1, [val2], [val3] ]
+	  const result = [].concat.apply([], this._values.map(value => {
+		//Here we check if we need lift/unwrap from a inner Zord
+		if (value instanceof This) {
+			
+		  return value._values.map(actor);
+		}
+		else return actor(value);
+	  }));
+  
+	  return This.of(...result); //We make sure to always return a new instance
+	}
+  }
+  class CustomZord extends Zord {
+	finalAtack(){
+	  this.flatMap(ranger => console.log(`${ranger} ready!`));
+	  console.log("Slice, slice, turns around ... BOOM! (epic explosion in background)");
+	}
+  }
+  
+  const megaDragonZord = CustomZord.of(
+	"green",CustomZord.of(CustomZord.of("purple")),
+	CustomZord.of("red"),
+	CustomZord.of("blue"),
+	CustomZord.of("yellow"),
+	CustomZord.of("pink"),
+	CustomZord.of("black")
+  );
+  
+  megaDragonZord
+	.flatMap(color => `${color} ranger`) // Put the complete name on them, e.g. "red ranger"
+	.finalAtack();
+
 var MenuDesign = (($) => {
 
 	const captureItem = function(item){
