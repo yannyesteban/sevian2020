@@ -1,4 +1,11 @@
 let iii = 0;
+const NumberBox = number => ({
+    applyFunction: fn => NumberBox(fn(number)),
+    value: number,
+});
+console.log(NumberBox(5)
+    .applyFunction(v => v * 2)
+    .applyFunction(v => v + 1).value); // 11
 class Zord {
     static of(...values) {
         const This = this[Symbol.species];
