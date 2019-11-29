@@ -1221,9 +1221,26 @@ form {
 }
 
 .x-menu {
-  background-color: white;
   border: 2px solid #cacaca;
   margin: 6px;
+}
+.x-menu .handler {
+  position: absolute;
+  border: 2px solid rgba(206, 22, 22, 0.5);
+  width: 100%;
+  visibility: hidden;
+}
+.x-menu > .item.over-top > .handler {
+  visibility: visible;
+  top: 0px;
+}
+.x-menu > .item.over-bottom > .handler {
+  visibility: visible;
+  bottom: 0px;
+}
+.x-menu > .item {
+  position: relative;
+  background-color: #cccccc;
 }
 .x-menu .title {
   display: inline;
@@ -1235,9 +1252,5 @@ form {
 }
 .x-menu > .item {
   min-height: 3em;
-  border: 1px solid red;
-}
-.x-menu > .item:hover {
-  background-color: #0696c1;
-  color: #d6d6d6;
+  border: 1px solid #4b17da;
 }

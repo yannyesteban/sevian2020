@@ -86,7 +86,7 @@ class MenuDevice extends \Sevian\Element{
 
 
         ];
-        $this->typeElement = 'MenuDesign';
+        $this->typeElement = 'Sorter';
 		$this->info = $info;//$form->getInfo();
 		
 	}

@@ -1367,12 +1367,39 @@ form{
 
 
 .x-menu{
-  background-color: white;
+  .handler{
+    position: absolute;
+    border:2px solid rgba(206, 22, 22, 0.5);
+    width: 100%;
+    visibility: hidden;
+    //bottom:0px;
+  }
+  >.item{
+
+    &.over-top{
+      >.handler{
+        visibility: visible;
+        top:0px;
+      }
+    }
+    &.over-bottom{
+      >.handler{
+        visibility: visible;
+        bottom:0px;
+      }
+    }
+  }
+
+
+ 
 
   border:2px solid rgb(202, 202, 202);
   margin:6px;
-
-
+  >.item{
+    position: relative;
+    background-color: rgb(204, 204, 204);
+  }
+  
   .title{
     display: inline;
     background-color: lightgoldenrodyellow;
@@ -1385,11 +1412,11 @@ form{
   }
   >.item{
     min-height: 3em;
-    border:1px solid red;
+    border:1px solid rgb(75, 23, 218);
   }
   >.item:hover{
-    background-color: #0696c1;
-    color:rgb(214, 214, 214);
+    //background-color: #0696c1;
+    //color:rgb(214, 214, 214);
     //margin:5px;
   }
 }

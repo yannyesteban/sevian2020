@@ -358,6 +358,10 @@ _sgObjet.prototype = {
 		}
 		return false;
 	},
+	children:function(){
+		return Array.from(this.e.children);
+	},
+	
 	childs:function(){
 		var ch = this.e.childNodes;
 		var childs = [];
@@ -372,6 +376,11 @@ _sgObjet.prototype = {
 		return childs;
 	},
 	
+	contains: function(elem){
+
+		return this.e.contains(elem);
+	},
+
 	on: function(_event, _function){
 		_sg.on(this.e, _event, _function);
 		return this;

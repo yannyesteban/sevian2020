@@ -1,4 +1,329 @@
-let iii=0;
+var Sorter = (($) => {
+
+
+	class ContainerSorted {
+		container:any = null;
+		classContainer:string = "x-menu";
+		classItem:string = "item";
+		transfer:object = {item:null, info:null};
+
+		contexts:any[] = [];
+
+		_item = null;
+
+		drag = (event) => {};
+		dragend = (event) => {};
+		dragenter = (event) => {};
+		dragleave = (event) => {};
+		dragover = (event) => {};
+		dragstart = (event) => {};
+		drop = (event) => {};
+
+		constructor(main:any, info:any = {}){
+
+			for(let x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+			const dropOn = object => (event) => {
+				event.preventDefault();
+				event.stopPropagation();
+				let item = object.item;
+				let context = object.contexts;
+				
+				let target = $(event.target);
+				let allow = false;
+				if (event.target.classList.contains(this.classContainer)) {
+
+					for(let e of object.contexts){
+						if(event.target == e.get() || e.contains(event.target) ){
+							allow = true;
+							break;
+						}
+					}
+
+					if(allow && !item.contains(event.target)){
+						$(event.target).append(item);
+					}
+					
+				}else if(event.target.classList.contains(this.classItem)){
+
+					for(let e of object.contexts){
+						if(event.target.parentNode == e.get() || e.contains(event.target.parentNode)){
+							allow = true;
+							break;
+						}
+					}
+					
+					if(allow && !item.contains(event.target.parentNode)){
+						var rect = event.target.getBoundingClientRect();
+						var diff = event.clientY - rect.top;
+						
+						if(diff > rect.height / 2){
+							event.target.parentNode.insertBefore(item, event.target.nextSibling);
+						}else{
+							event.target.parentNode.insertBefore(item, event.target);
+						}
+						
+					}
+					$(event.target).removeClass("over-top").removeClass("over-bottom");
+				}
+			}
+
+			const startOn = object => event => {
+				event.stopPropagation();
+				object.item = event.target;
+				object.contexts = this.contexts;
+				
+			}
+			
+			const dragOverOn = object => event => {
+				
+				event.preventDefault();
+				event.stopPropagation();
+
+				if(event.target.classList.contains(this.classItem)){
+					
+					var rect = event.target.getBoundingClientRect();
+					var diff = event.clientY - rect.top;
+
+					if(diff > rect.height / 2){
+						$(event.target)
+						.removeClass("over-top")
+						.addClass("over-bottom");
+					}else{
+						
+
+						$(event.target)
+						.removeClass("over-bottom")
+						.addClass("over-top");
+					}
+				}
+			};
+
+			const dragDropDefault = event => {event.preventDefault();event.stopPropagation();};
+
+			const dragLeave = event => {
+				event.preventDefault();
+				main.queryAll(".over-top, .over-bottom").forEach(e => {
+					$(e).removeClass("over-top").removeClass("over-bottom");	
+				})
+				
+			};
+			
+			main
+			.on("dragstart", startOn(this.transfer))
+			.on("dragover", dragDropDefault)
+			.on("dragleave", dragLeave)
+			.on("drop", dropOn(this.transfer))
+			.on("dragover", dragOverOn(this.transfer))
+			
+			let children = main.children();///main.get().children;
+			let i;
+			for (i = 0; i < children.length; i++) {
+				$(children[i]).attr("draggable", "true").on("dragstart", (event)=>{
+					event.dataTransfer.setData("text/plain", null);
+				}).create("div").addClass("handler");
+			}
+
+			
+
+
+		}
+
+	}
+
+
+	class Sorter{
+
+		id:any = null;
+		target:any = null;
+
+		_main:object = null;
+
+		constructor(info:any){
+
+
+			
+			for(let x in info){
+				
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+           
+            let main = (this.id)? $(this.id): false;
+            
+            if(main){
+                
+                if(main.ds("sgSorter")){
+                    return;
+                }
+
+                if(main.hasClass("sg-sorter")){
+                    this._load(main);
+                }else{
+                    this._create(main);
+                }
+
+            }else{
+                
+                let target = (this.target)? $(this.target): false;
+                if(target){
+                    main = target.create("div").attr("id", this.id);
+                }else{
+                    main = $.create("div").attr("id", this.id); 
+                    
+                }
+                this._create(main);
+            }
+		}
+
+		_create(main:object){
+
+			let transfer = {item:null, contexts: null, info:null};
+
+			this._main = main;
+
+			let contexts = [main];
+
+			//let item = main.create("div").text("uno");
+			//main.create("div").text("dos");
+			//main.create("div").text("tres");
+
+			let nodo = `
+			<ul class="x-menu" id="x">
+				<li class="item"><div class="title">Titluo 1</div><ul class="x-menu"></ul></li>
+				<li class="item"><div class="title">Titluo 2</div><ul class="x-menu"></ul></li>
+				<li class="item"><div class="title">Titluo 3</div><ul class="x-menu"></ul></li>
+				<li class="item"><div class="title">Titluo 4</div><ul class="x-menu"></ul></li>
+				<li class="item"><div class="title">Titluo 5</div><ul class="x-menu"></ul></li>
+			</ul>
+
+		
+		`;
+	this._main.append(nodo);
+	nodo = `
+			<ul class="x-menu" id="y">
+				<li class="item"><div class="title">Titluo 1</div><ul class="x-menu">
+				<li class="item">Blue</li>
+				<li class="item">Red</li>
+				</ul></li>
+				<li class="item"><div class="title">Titluo 2</div><ul class="x-menu"></ul></li>
+				<li class="item"><div class="title">Titluo 3</div><ul class="x-menu"></ul></li>
+				<li class="item"><div class="title">Titluo 4</div><ul class="x-menu"></ul></li>
+				<li class="item"><div class="title">Titluo 5</div><ul class="x-menu"></ul></li>
+			</ul>
+
+		
+		`;
+	this._main.append(nodo);
+	new ContainerSorted($("#y"), {transfer, contexts: [$("#x"), $("#y")]});
+	new ContainerSorted($("#x"), {transfer, contexts: [$("#x"), $("#y")]});
+
+	$("#x").queryAll(".x-menu").forEach(e => {
+		new ContainerSorted($(e), {transfer, contexts: [$("#x"), $("#y")]});
+	});
+	$("#y").queryAll(".x-menu").forEach(e => {
+		new ContainerSorted($(e), {transfer, contexts: [$("#x"), $("#y")]});
+	});
+return;
+
+			["uno","dos","tres","cuatro"].map((item)=>{
+
+				main.create("div").addClass("item").text(item);
+			})
+			
+			let v = $(this._main.get().parentNode).id("alpha").create("div").addClass("x-menu").text("hola");
+			
+			contexts.push(v);
+			["Cinco","Seis","Siete","Ocho"].map((item)=>{
+
+				v.create("div").addClass("item").text(item);
+			})
+
+			new ContainerSorted(v, {transfer, contexts});
+
+			let z = $(this._main.get().parentNode).id("betha").create("div").addClass("x-menu").text("hola");
+			["Alpha","Beta","Gamma","titha"].map((item)=>{
+
+				z.create("div").addClass("item").text(item);
+			})
+			//contexts.push(z);
+			new ContainerSorted(z, {transfer, contexts: [z]});
+
+			
+
+			const _addClass = (e,className) =>{$(e).addClass(className)};
+			const _addEvent = (e, event, fn) => {$(e).on(event, fn)};
+
+			const curry = PFTool.curry;
+			
+			const addClass = curry(_addClass);
+			const addEvent = curry(_addEvent);
+
+			const clss = addClass(main);
+			clss("x-menu");
+			const on = addEvent(main);
+			let objItem = {
+				item: null,
+				info: null,
+				classContainer: "x-menu",
+				classItem: "item",
+			};
+			let menuc = new ContainerSorted(main, {transfer, contexts});
+			return
+			
+			const dropOn = object => (event) => {
+				event.preventDefault();
+				
+				let item = object.item;
+				
+				if ( event.target.className == object.classContainer) {
+					$(event.target).append(item)
+				}else if(event.target.className == object.classItem){
+					var rect = event.target.getBoundingClientRect();
+					var diff = event.clientY - rect.top;
+					if(diff > rect.height / 2){
+						event.target.parentNode.insertBefore(item, event.target.nextSibling);
+					}else{
+						event.target.parentNode.insertBefore(item, event.target);
+					}
+				}
+			}
+
+			const startOn = object => {
+				
+				return (event)=>{
+					object.item = event.target;
+				}
+			};
+
+			const dragDropDefault = event => {event.preventDefault()};
+			
+			main
+			.on("dragstart", startOn(objItem))
+			.on("dragover", dragDropDefault)
+			.on("drop", dropOn(objItem));
+
+
+		}
+
+	}
+
+
+
+	$(window).on("load", function(){
+		//let sorter = new Sorter({});
+		 
+ 
+ 
+		
+	 });
+	 return Sorter;
+})(_sgQuery);
 
 const NumberBox = number => ({
 	applyFunction: fn => NumberBox(fn(number)),
@@ -109,6 +434,7 @@ var MenuDesign = (($) => {
 
         constructor(info:object){
             for(var x in info){
+				alert(x)
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
                 }

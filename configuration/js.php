@@ -117,7 +117,10 @@ $js = [
 		'file' 	=> "{$PATH}js/Sevian/Valid.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
-
+	[
+		'file' 	=> "{$PATH}js/Monads.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
 	[
 		'file' 	=> "{$PATH}js/MenuDesign.js",
 		//'attrib' => [			'_type'=>'module'		]
