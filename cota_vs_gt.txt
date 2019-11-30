@@ -1,0 +1,3 @@
+update vehicles
+inner join cuenta_vehiculos as c on c.codvehiculo = vehicles.id
+set account_id = coddato , device_id = codequipo

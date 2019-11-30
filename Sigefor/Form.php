@@ -203,7 +203,6 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 		
 
 		if(!$this->getSes('_rec')){
-			hr("error");
 			$this->setSes('_rec', []);
 
 			$this->_rId = &$this->getSes('_rec');
@@ -587,7 +586,7 @@ hr($id,"red");
 		$cn->query = $this->query;
 		$cn->page = $this->eparams->page?? 1;
 		$cn->pagination = true;
-		$cn->pageLimit = $this->maxPages;
+		$cn->pageLimit = 25;//$this->maxPages;
 
 		$result = $cn->execute();
 
@@ -1090,11 +1089,11 @@ hr($id,"red");
 		$grid = new \Sevian\HTML("div");
 		$grid->id = "sg_form_".$this->id;
 		
-		$p = new \Sevian\Panel("div");
-		$p->title = $this->caption;
-		$p->appendChild($grid);
+		//$p = new \Sevian\Panel("div");
+		//$p->title = $this->caption;
+		//$p->appendChild($grid);
 
-		$this->panel = $p;
+		$this->panel = $grid;
 		$fields = [];
 		
 		foreach($this->fields as $f){
@@ -1372,7 +1371,7 @@ hr($id,"red");
 		
 
 		
-		$opt[] = [
+		$opt_[] = [
 			'method'  => 'setCaption',
 			'value' => "Bienvenidos  al GRID #".$this->eparams->page
 

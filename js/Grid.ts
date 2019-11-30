@@ -133,7 +133,7 @@ var Grid = (($) => {
     class Paginator{
         
         classType = "paginator";
-        totalPages:number = 80;
+        totalPages:number = 6;
         maxPages:number = 8;
         page:number = 2;
         className:string = "";
@@ -274,9 +274,9 @@ var Grid = (($) => {
         caption:string = "";
         className = "sevian";
         iconClass:string = "";
-        type:string = "edit";//{"edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+        type:string = "default";//{"edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
         ctrlSelect:string = "one";//one,multiple,
-        editMode:string = "multi";//simple,grid,one,inline,form,custom
+        editMode:string = "simple";//"multi";//simple,grid,one,inline,form,custom
 
         actionButton:boolean = false;
         deleteButton:boolean = false;
@@ -445,26 +445,27 @@ var Grid = (($) => {
                 .on("click", (event)=>{this._search(q.val())});;
 
 
-            if(this.ctrlSelect === "one" || this.ctrlSelect === "multiple"){
-                let _auxMenu = main.create("div").addClass("grid-aux-menu");
-                
-                _auxMenu.create("button").attr("type", "button").text(this.optionText.new).on("click", ()=>{this.setNew()});
-                _auxMenu.create("button").attr("type", "button").text(this.optionText.delete).on("click", ()=>{
-                    let index = this.getIndex();
-
-                    if(index === null || index === false || index < 0 ||  index >= this._rowLength){
-                        alert(this.optionText.select_record);
-                        return;
-                    }
-
-                    if(confirm(this.optionText.delete_confirm)){
-                        this.delete(this.getIndex());
-                    }
+            if(this.type !== "default")    
+                if(this.ctrlSelect === "one" || this.ctrlSelect === "multiple"){
+                    let _auxMenu = main.create("div").addClass("grid-aux-menu");
                     
-                });
-                _auxMenu.create("button").attr("type", "button").text(this.optionText.save).on("click", ()=>{this.save()});
+                    _auxMenu.create("button").attr("type", "button").text(this.optionText.new).on("click", ()=>{this.setNew()});
+                    _auxMenu.create("button").attr("type", "button").text(this.optionText.delete).on("click", ()=>{
+                        let index = this.getIndex();
 
-            }
+                        if(index === null || index === false || index < 0 ||  index >= this._rowLength){
+                            alert(this.optionText.select_record);
+                            return;
+                        }
+
+                        if(confirm(this.optionText.delete_confirm)){
+                            this.delete(this.getIndex());
+                        }
+                        
+                    });
+                    _auxMenu.create("button").attr("type", "button").text(this.optionText.save).on("click", ()=>{this.save()});
+
+                }
 
             let body = main.create("div").addClass("body");
             let table = this._table = body.create("table").addClass("grid-table");
@@ -514,17 +515,19 @@ var Grid = (($) => {
             for(let record of this.data){
                 this.createRow(record);
             }
+            if(this.editMode !== "simple"){
+                this.createEditRow({});
+            }
             
-            this.createEditRow({});
             let hiddenDiv = body.create("div");
             this._data_grid = hiddenDiv.create({tagName:"input", type:"hidden", name:"__data_"});
             let pag = this.paginator;
             pag.change = $.bind(pag.change, this, "page");
             
 
-
+            let menuPag = this._main.create("div").addClass("nav-paginator");
         
-            this._main.append(this.pag = new Paginator(pag));
+            menuPag.append(this.pag = new Paginator(pag));
    
             if(this.menu){
                 this._main.append(this.createMenu(this.menu));

@@ -15,6 +15,7 @@ var Menu =
         type in ("accordion", "popup")
         */
         type:string = "accordion";
+        name:string = null;
         
         /*
         subType to popup {"default", "system"};
@@ -256,6 +257,10 @@ var Menu =
             
             .addClass(`menu-${this.getType()}`)
             .addClass(`menu-${this.getSubType()}`);
+
+            if(this.name){
+                this._main.ds("menuName", this.name);
+            }
             if(this.caption){
                 main.create({
                     tagName:"div",

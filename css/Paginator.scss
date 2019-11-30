@@ -1,13 +1,14 @@
 .sg-paginator{
-    margin-left:auto;
-    margin-right:auto;
-    
-    border:2px solid rgb(245, 243, 243);
+    //margin-left:auto;
+    //margin-right:auto;
+    //border:2px solid rgb(245, 243, 243);
+    padding: 4px;
     user-select: none;
     font-family: 'Courier New', Courier, monospace;
     font-size: 9pt;
     display: flex ;
     flex-wrap: wrap;
+   justify-content: center;
     .page{
         width:30px;
         display: inline-block;

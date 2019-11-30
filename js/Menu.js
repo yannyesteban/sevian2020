@@ -11,6 +11,7 @@ var Menu = (function ($, Float) {
             type in ("accordion", "popup")
             */
             this.type = "accordion";
+            this.name = null;
             /*
             subType to popup {"default", "system"};
             subType to accordion {"default", "one", "any"};
@@ -215,6 +216,9 @@ var Menu = (function ($, Float) {
                 .addClass(this.useIcon ? "w-icon" : "n-icon")
                 .addClass(`menu-${this.getType()}`)
                 .addClass(`menu-${this.getSubType()}`);
+            if (this.name) {
+                this._main.ds("menuName", this.name);
+            }
             if (this.caption) {
                 main.create({
                     tagName: "div",

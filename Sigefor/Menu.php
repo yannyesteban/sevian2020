@@ -68,6 +68,7 @@ class Menu extends \Sevian\Element{
 		$menu = new MM();
 		$menu->caption = $this->caption;
 		$menu->type = $this->type;
+		$menu->name = $this->name;
 
 
 	}
@@ -79,6 +80,7 @@ class Menu extends \Sevian\Element{
 		$opt = $this->_menu;
 		//print_r($this->_menu);
 		$opt["id"] = "sg_menu_".$this->id;
+		$opt["name"] = $this->name;
 		$menu = new \Sevian\Menu($opt);
 
 		$this->typeElement = "Menu";
