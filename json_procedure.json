@@ -1,0 +1,13 @@
+[
+	{
+		type:"q",
+		q:"select a from xxx"
+	},
+	{
+		type:"master",
+		q:"select a from xxx",
+		detail:["select * .."]
+	}
+
+
+]
