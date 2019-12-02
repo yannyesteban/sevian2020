@@ -2,6 +2,90 @@
 namespace Sevian;
 class Tool{
 	
+	static function if($q){
+		
+
+
+		$pcre_regex = '
+		/
+		(?(DEFINE)
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+		   (?<boolean>   true | false | null )
+		   (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
+		   (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
+		   (?<pair>      \s* (?&string) \s* : (?&json)  )
+		   (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
+		   (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
+		)
+		\A (?&json) \Z
+		/six';
+
+		$pcre_regex = '
+		/
+		(?(DEFINE)
+			(?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+		   (?<if>@if\((\w+)\)\{((?&string) | (?&number))\}\{((?&string) | (?&number))\}?)
+		)
+		(?&if)
+		/six';
+
+		$q1 = 'yan @if(uno){4565}{46465}';
+	  if(preg_grep($pcre_regex, $q1, $c)){
+		print_r($c);
+
+	
+		return"";
+	}else{
+		
+		hr("Error: ".$q);
+		//throw new Exception($q);
+		//return array();	
+		
+	}// end if
+return;
+
+		hr($q);
+		$c = "xx";
+		$exp ='
+		{
+		
+		
+			if(\(.+)\){}{"dos"}
+
+		}isx';
+
+		$exp_ = '
+		{(
+		(?:if\s*+:(?P<cond>(?P<sc>[^;"\']*+(?:"(?:[^"]*+(?:(?<=\\\)"[^"]*+)*+)" | \'(?:[^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'))*+[^;"\']*+|(?P>sc));
+			\s*then\s*:((?1)+)(?:\s*+else\s*+:((?1)+)?)\s*+endif\s*+;)
+		|
+		(?:if\s*+:((?P>cond);)\s*+then\s*+:((?1))(?:\s*+else\s*+:((?1)))?)
+		|case;(when:((?P>cond));do:((?1)+))(
+			(?:when:(?P>cond);do:(?1)+)*)(?:default:((?1)+))?endcase
+		#|(?:for:[^;"\':]+;((?1)+)next)
+		#|(?:while:((?P>cond);)((?1)+)wend)
+		#|(?:do:((?1)+)while((?P>cond);))
+		#|
+		|
+		#OLD: 
+		#((\w+)\s*+:\s*+(?:"([^"]*+(?:(?<=\\\)"[^"]*+)*+)"|\'([^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'|([^;"\':]+))\s*;)
+		#NEW: 
+		 ((\w+)\s*+:\s*+(?:"([^"]*+(?:(?<=\\\)"[^"]*+)*+)"|\'([^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'|([^;"\':]*))\s*;)
+		)}isx';
+		if(preg_match_all($exp, $q, $c)){
+			//print_r($c);
+			return $c;
+		}else{
+			
+			hr("Error: ".$q);
+			//throw new Exception($q);
+			//return array();	
+			
+		}// end if
+	}
+
+
 	static function extract($q){
 		
 		$exp = '

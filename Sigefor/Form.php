@@ -316,14 +316,15 @@ hr($id,"red");
 		";
 
 		$result = $cn->execute();
-
+		//print_r(\Sevian\S::getVReq());
+		
 		if($rs = $cn->getDataAssoc($result)){
 
 			foreach($rs as $k => $v){
 				$this->$k = $v;
 			}
-
-			$config = json_decode($this->params);
+			$params = \Sevian\S::vars($this->params);
+			$config = json_decode($params);
 			if($config){
 				foreach($config as $k => $v){
 					$this->$k = $v;

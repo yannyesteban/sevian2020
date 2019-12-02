@@ -164,13 +164,13 @@ class S{
 
 		session_name(self::$ins);
 		session_start();
-		
+
 		self::$cfg = &$_SESSION;
 		self::$req = &$_REQUEST;
 		
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
-		
+		\Sevian\S::setSes("nombre1", "f-2000");
 		
 		if(!self::$onAjax){
 
@@ -184,7 +184,6 @@ class S{
 		self::$_str->ins = self::$ins;
 
 		if(!isset(self::$cfg['INIT'])){
-			
 			self::$cfg['INIT'] = true;
 			self::$cfg['SW'] = 1;
 			self::$cfg['INFO'] = [];
@@ -220,6 +219,7 @@ class S{
 
 			self::$cfg['P_VARS'] = &self::$_pVars;
 			self::$cfg['G_VARS'] = &self::$_gVars;
+
 		}else{
 			self::$cfg['INIT'] = false;
 			
@@ -248,7 +248,7 @@ class S{
 		}
 		
 		
-
+		
 		
 		
 

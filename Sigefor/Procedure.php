@@ -35,6 +35,21 @@ class Procedure extends \Sevian\Element{
     public function evalMethod($method = ""){
         $this->dbConfig();
 
+        $x = '
+            [
+
+                {"a":"54", "b":if(4>5){"uno"}{"dos"}}
+
+            ]
+        
+        
+        ';
+        
+        $c = \Sevian\Tool::if($x);
+
+        //hr($c);
+
+exit;
         switch($method){
             case "login":
                 break;
@@ -51,12 +66,73 @@ class Procedure extends \Sevian\Element{
 		$cn->query = "
 			SELECT * 
 			FROM $this->tProcedures 
-			WHERE module = '$this->name'";
+			WHERE `procedure` = '$this->name'";
 
-		$result = $cn->execute();
+        $result = $cn->execute();
 		
 		if($rs = $cn->getDataAssoc($result)){
-			$this->info = new ModuloInfo($rs);
-		}
+            $commands = json_decode($rs["commands"]);
+            foreach($commands as $cmd){
+                $this->commands($cmd);
+            }
+			
+        }
+
+    }
+
+
+    private function commands($cmd){
+
+        switch($cmd->cmd){
+            case "vses":
+
+                foreach($cmd->value as $k => $v){
+                    \Sevian\S::setSes($k, \Sevian\S::vars($v));
+                }
+                break;
+            case "vreq":
+                foreach($cmd->value as $k => $v){
+                    \Sevian\S::setReq($k, \Sevian\S::vars($v));
+                }
+                break;
+                case "vexp":
+                    foreach($cmd->value as $k => $v){
+                        \Sevian\S::setReq($k, \Sevian\S::vars($v));
+                    }
+                    break;    
+            case "master-q":
+                break;
+            case "q":
+                if(is_array($cmd->value)){
+                    foreach($cmd->value as $q){
+                      $this->evalQuery($q);  
+                    }
+                }else{
+                    $this->evalQuery($cmd->value);
+                }
+                
+                break;
+        }
+
+        //$params = json_decode(\Sevian\S::vars($rs['params']));
+        //$params = \Sevian\S::varCustom($f->params, $record, '&');
+    }
+
+
+    public function evalQuery($q){
+        $cn = $this->cn;
+		$cn->query = \Sevian\S::vars($q);
+
+        $var = &\Sevian\S::getVSes();
+        $result = $cn->execute();
+        if($cn->fieldCount){
+            if($rs = $cn->getDataAssoc($result)){
+                $var = array_merge(\Sevian\S::getVSes(), $rs); 
+
+            }
+        }else{
+
+        }
+        
     }
 }// end class
