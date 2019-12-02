@@ -3,7 +3,38 @@ namespace Sevian;
 class Tool{
 	
 	static function if($q){
+
+		$exp = '
+		/
+		(?(DEFINE)
+		(?<x>([^"]*("[^"]*")*)[^"]*)
+			(?<pp>) \([^()]*\)
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+		   (?<boolean>   true | false | null )
+		   (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
+		   (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
+		   (?<pair>      \s* (?&string) \s* : (?&json)  )
+		   (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
+		   (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
+		)
+		@if\((.+)\)
 		
+		/six';
+
+		$q = 'yanny @if(a=(7777)))';
+
+		if(preg_match($exp, $q, $c)){
+
+			print_r($c);
+		}else{
+			hr("error", "red");
+		}
+		exit;
+
+//		preg_match('/(foo)(bar)(baz)/', 'foobarbaz', $matches, PREG_OFFSET_CAPTURE);
+//print_r($matches);
+
+//exit;
 
 
 		$pcre_regex = '
@@ -27,11 +58,11 @@ class Tool{
 		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
 		   (?<if>@if\((\w+)\)\{((?&string) | (?&number))\}\{((?&string) | (?&number))\}?)
 		)
-		(?&if)
+		((?&if))
 		/six';
-
+$c= "yanny";
 		$q1 = 'yan @if(uno){4565}{46465}';
-	  if(preg_grep($pcre_regex, $q1, $c)){
+	  if(preg_match($pcre_regex, $q1, $c)){
 		print_r($c);
 
 	
