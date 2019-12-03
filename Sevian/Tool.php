@@ -7,25 +7,63 @@ class Tool{
 		$exp = '
 		/
 		(?(DEFINE)
-		(?<x>([^"]*("[^"]*")*)[^"]*)
-			(?<pp>) \([^()]*\)
-		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
-		   (?<boolean>   true | false | null )
-		   (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
-		   (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
-		   (?<pair>      \s* (?&string) \s* : (?&json)  )
-		   (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
-		   (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
-		)
-		@if\((.+)\)
+			(?<pp> \( (?: (?>[^()]+) | (?&exp) )* \) )
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (?:\.\d+)? (?:[eE] [+-]? \d+)? )    
+		   #(?<boolean>   true | false | null )
+		   (?<string>    " (?:[^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
+		   #(?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
+		   #(?<pair>      \s* (?&string) \s* : (?&json)  )
+		   #(?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
+		   #(?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
 		
+		   (?<xw> ([^()"])*)
+			(?<ya> yanny)
+			(?<es> esteban)
+			(?<exp> (?:(?&string) | (?&number) | \s* | (?&pp) | (?&xw) )* )
+
+			(?<cond>) @if\((?&exp)\){((?&number))}
+		
+		)
+		
+		(
+		 @if\(( (?&exp)  )\)\{((?&exp)*+|(?R)*+)\}(?>\{((?R))\})*+
+		)
+		
+
 		/six';
 
-		$q = 'yanny @if(a=(7777)))';
+		$q = '@if(3>1){ @if(5>6){"k"} }{ @if(4>2){"k"} }';
+		//$q='@if("465" 465 (999)){(4654 + 0()}';
+		//$q = 'yanny @if(u==4 + ((3+8a) + (7*3)) ){"hola"}{"adios"}';
+
+
+		$m = function($exp, $q){
+
+			if()
+			return $a+$b;
+		};
+
+		hr($m(8,9));
 
 		if(preg_match($exp, $q, $c)){
 
 			print_r($c);
+			if(preg_match_all($exp, $q, $c)){
+
+				//print_r($c);
+			}
+
+return;
+			$q = preg_replace_callback ($exp, function($c){
+				$f = "\$a = ".$c[12];
+				if($f){
+					hr("s= ".$c[12]);
+				}
+				print_r($c);
+				return $c[13];
+
+			}, $q);
+			hr($q);
 		}else{
 			hr("error", "red");
 		}
