@@ -1,17 +1,45 @@
 <?php
 namespace Sevian;
+
+
+
 class Tool{
 	
-	static function if($q){
+	static function evalIf($exp, $q, $then, $else) {
+	
+		eval("\$v = $q;");
+		
+	
+		if($v){
+			$qq = $then;
+		}else{
+			$qq = $else;
+		}
+	
+		if(preg_match($exp, $qq, $c)){
+	
+			$result = preg_replace_callback ($exp, function($c) use($exp){
+	
+				if($c['cc']){
+					return Tool::evalIf($exp,$c['cc'],$c['then'],$c['else']??false);
+				}
+			},$qq);
+			return $result;
+		}else{
+			return $qq;
+		}
+		
+	}
 
 
-
+	static function evalExp($q){
 
 		$exp = '
 		/
 		(?(DEFINE)
 			(?<pp> \( (?: (?>[^()]+) | (?&exp) )* \) )
 			(?<pc> \{ (?: (?>[^{}]+) | (?&exp) )* \} )
+			#	(?<pc> )
 		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (?:\.\d+)? (?:[eE] [+-]? \d+)? )    
 		   #(?<boolean>   true | false | null )
 		   (?<string>    " (?:[^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
@@ -20,7 +48,7 @@ class Tool{
 		   #(?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
 		   #(?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
 		
-		   (?<xw> ([^()"])*)
+		   (?<xw> ([^(){}"])*)
 			
 			(?<exp> (?:(?&string) | (?&number) | \s* | (?&pp)| (?&pc) | (?&xw) )* )
 
@@ -39,48 +67,32 @@ class Tool{
 
 			
 			
-			(?:if\(((?&exp))\)\{((?&exp))\}\{((?&exp))\}) 
-			|
-			(?:if\(((?&exp))\)\{((?&exp))\}) 
+			(?:\$if\((?<cc>(?&exp))\)\{(?<then>(?&exp))\}(\{(?<else>(?&exp))\})?) 
+			#|
+			#(?:if\((?<cc2>(?&exp))\)\{(?<then2>(?&exp))\}) 
 		)
 		
 
 		/six';
 
-		$q = '@if(3>1){ @if(5>6){"k"} }{ @if(4>2){@if(9>1){"zz"}} }';
-		$q = '@if(3>1){"alpha"}{"betha"}';
-		$q = "if(33>12){if(8>3){alpha}}{else}";
+		//$q = '@if(3>1){ @if(5>6){"k"} }{ @if(4>2){@if(9>1){"zz"}} }';
+		//$q = '@if(3>1){"alpha"}{"betha"}';
+		//$q = 'k=if(33>112){if(8>3){alpha}}{if(8>3){"gamma"}{"thita"}}, m:if(2>10){"yes"}{{a:"ll"}}';
+		//$q = 'if(8>3){"gamma"}{"thita"}';
 		//$q = "case(3>2 + 5){when(1){aaa}when(2){bbb}when(3){ccc}}";
 		//$q='@if("465" 465 (999)){(4654 + 0()}';
 		//$q = 'yanny @if(u==4 + ((3+8a) + (7*3)) ){"hola"}{"adios"}';
-		if(preg_match_all($exp, $q, $c)){
 
-			print_r($c);
-		}
-
-		$m = function($exp, $q, $then, $else){
-			eval("\$v = $q;");
-			hr($v);
-			if($q){
-				//return $m($exp,$c[13]);
-			}else{
-
-			}	
-			
-			//return $a+$b;
-		};
-		
 		if(preg_match($exp, $q, $c)){
-			$q = preg_replace_callback ($exp, function($c) use($m, $exp){
-
-				if($c[12]){
-					return $m($exp,$c[12],$c[13],$c[14]);
+			$q = preg_replace_callback ($exp, function($c) use($exp){
+				if($c['cc']){
+					return Tool::evalIf($exp,$c['cc'],$c['then'],$c['else']??'');
 				}
+				
 			},$q);
-
 		}
 
-		return;
+		return $q;
 
 		
 
@@ -95,7 +107,7 @@ class Tool{
 				print_r($c);
 			}
 
-return;
+				return;
 			$q = preg_replace_callback ($exp, function($c){
 				$f = "\$a = ".$c[12];
 				if($f){

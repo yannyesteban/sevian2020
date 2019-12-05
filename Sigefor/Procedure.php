@@ -38,18 +38,18 @@ class Procedure extends \Sevian\Element{
         $x = '
             [
 
-                {"a":"54", "b":if(4>5){"uno"}{"dos"}}
+                {"a":"54", "b":$if(4>5){"uno"}{"dos"}}
 
             ]
         
         
         ';
         
-        $c = \Sevian\Tool::if($x);
+        $c = \Sevian\Tool::evalExp($x);
 
         //hr($c);
 
-exit;
+        //exit;
         switch($method){
             case "login":
                 break;
@@ -82,22 +82,22 @@ exit;
 
 
     private function commands($cmd){
-
+        
         switch($cmd->cmd){
             case "vses":
 
                 foreach($cmd->value as $k => $v){
-                    \Sevian\S::setSes($k, \Sevian\S::vars($v));
+                    \Sevian\S::setSes($k, \Sevian\S::evalExp($v));
                 }
                 break;
             case "vreq":
                 foreach($cmd->value as $k => $v){
-                    \Sevian\S::setReq($k, \Sevian\S::vars($v));
+                    \Sevian\S::setReq($k, \Sevian\S::evalExp($v));
                 }
                 break;
                 case "vexp":
                     foreach($cmd->value as $k => $v){
-                        \Sevian\S::setReq($k, \Sevian\S::vars($v));
+                        \Sevian\S::setReq($k, \Sevian\S::evalExp($v));
                     }
                     break;    
             case "master-q":
@@ -121,7 +121,7 @@ exit;
 
     public function evalQuery($q){
         $cn = $this->cn;
-		$cn->query = \Sevian\S::vars($q);
+		$cn->query = \Sevian\S::evalExp($q);
 
         $var = &\Sevian\S::getVSes();
         $result = $cn->execute();

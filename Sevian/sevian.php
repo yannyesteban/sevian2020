@@ -478,6 +478,13 @@ class S{
 	public static function commandsLoad($inputs){
 		
 	}
+
+	public static function evalExp($q){
+
+
+		return Tool::evalExp(self::vars($q));
+		
+	}
 	public static function vars($q, $default = false){
 		return Tool::vars($q, [
 			[
