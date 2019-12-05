@@ -4,10 +4,14 @@ class Tool{
 	
 	static function if($q){
 
+
+
+
 		$exp = '
 		/
 		(?(DEFINE)
 			(?<pp> \( (?: (?>[^()]+) | (?&exp) )* \) )
+			(?<pc> \{ (?: (?>[^{}]+) | (?&exp) )* \} )
 		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (?:\.\d+)? (?:[eE] [+-]? \d+)? )    
 		   #(?<boolean>   true | false | null )
 		   (?<string>    " (?:[^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
@@ -17,40 +21,78 @@ class Tool{
 		   #(?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
 		
 		   (?<xw> ([^()"])*)
-			(?<ya> yanny)
-			(?<es> esteban)
-			(?<exp> (?:(?&string) | (?&number) | \s* | (?&pp) | (?&xw) )* )
+			
+			(?<exp> (?:(?&string) | (?&number) | \s* | (?&pp)| (?&pc) | (?&xw) )* )
 
-			(?<cond>) @if\((?&exp)\){((?&number))}
+			#(?<cond>) @if\((?&exp)\){((?&number))}
+
+			(?<if> @if\((?&exp)\)\{((?R))\}(?>\{((?R))\})*+ )
 		
 		)
 		
 		(
-		 @if\(( (?&exp)  )\)\{((?&exp)*+|(?R)*+)\}(?>\{((?R))\})*+
+		# @if\(( (?&exp)  )\)\{((?&exp)*+|(?R)*+)\}(?>\{((?R))\})*+
+
+			#(?:if\((?&exp)\)\{((?&exp))\}\{((?&exp))\})
+			#|(?:if\(xx\)\{((?&exp))\}) 
+			#(case\(((?&exp))\)\{(?=)(when\((\d+)\)\{(\w+)\})+\})
+
+			
+			
+			(?:if\(((?&exp))\)\{((?&exp))\}\{((?&exp))\}) 
+			|
+			(?:if\(((?&exp))\)\{((?&exp))\}) 
 		)
 		
 
 		/six';
 
-		$q = '@if(3>1){ @if(5>6){"k"} }{ @if(4>2){"k"} }';
+		$q = '@if(3>1){ @if(5>6){"k"} }{ @if(4>2){@if(9>1){"zz"}} }';
+		$q = '@if(3>1){"alpha"}{"betha"}';
+		$q = "if(33>12){if(8>3){alpha}}{else}";
+		//$q = "case(3>2 + 5){when(1){aaa}when(2){bbb}when(3){ccc}}";
 		//$q='@if("465" 465 (999)){(4654 + 0()}';
 		//$q = 'yanny @if(u==4 + ((3+8a) + (7*3)) ){"hola"}{"adios"}';
+		if(preg_match_all($exp, $q, $c)){
 
+			print_r($c);
+		}
 
-		$m = function($exp, $q){
+		$m = function($exp, $q, $then, $else){
+			eval("\$v = $q;");
+			hr($v);
+			if($q){
+				//return $m($exp,$c[13]);
+			}else{
 
-			if()
-			return $a+$b;
+			}	
+			
+			//return $a+$b;
 		};
+		
+		if(preg_match($exp, $q, $c)){
+			$q = preg_replace_callback ($exp, function($c) use($m, $exp){
 
-		hr($m(8,9));
+				if($c[12]){
+					return $m($exp,$c[12],$c[13],$c[14]);
+				}
+			},$q);
+
+		}
+
+		return;
+
+		
+
+
+		//hr($m(8,9));
 
 		if(preg_match($exp, $q, $c)){
 
-			print_r($c);
+			//print_r($c);
 			if(preg_match_all($exp, $q, $c)){
 
-				//print_r($c);
+				print_r($c);
 			}
 
 return;
