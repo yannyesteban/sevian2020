@@ -1,6 +1,11 @@
 <?php
 namespace Sevian;
 
+class InfoUser{
+	public $user = "";
+	public $roles = [];
+}
+
 class InfoWindow{
 	public $caption = false;
 	public $mode = 'custom';

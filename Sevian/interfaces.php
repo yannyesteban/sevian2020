@@ -5,8 +5,9 @@ namespace Sevian;
 
 interface UserAdmin{
 
-    public function login();
+    //public function login();
 
+    public function getUserInfo();
 
 }
 

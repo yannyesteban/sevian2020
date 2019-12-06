@@ -20,7 +20,7 @@ class UserInfo{
 	}
 }
 
-class User extends \Sevian\Element{
+class User extends \Sevian\Element implements \Sevian\UserAdmin{
 
 
     protected $auth = false;
@@ -126,5 +126,12 @@ class User extends \Sevian\Element{
     }
     public function getRoles(){
         return $this->_roles;
+    }
+
+    public function getUserInfo(){
+        $info = new \Sevian\InfoUser;
+        $info->user = $this->_user;
+        $info->roles = $this->getRoles();
+        return $info;
     }
 }// end class

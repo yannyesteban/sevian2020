@@ -294,6 +294,11 @@ class S{
 			$e->getSequenceAfter();
 
 			self::addFrament($e->getResponse());
+			if($e instanceof \Sevian\UserAdmin){
+				//hr(9898988);
+
+			}
+
 
 			if($e instanceof \Sevian\TemplateAdmin){
 				if($html = $e->getTemplate()){
@@ -554,13 +559,13 @@ class S{
 				
 				break;			
 			case "vexp":
-				$this->_setVars($this->exp, $params);
+				//$this->_setVars($this->exp, $params);
 				break;	
 			case "vreq":
-				$this->_setVars($this->req, $params);
+				//$this->_setVars($this->req, $params);
 				break;
 			case "set_params":
-				$this->params = array_merge($this->params, $this->cmd->get_param($value));
+				//$this->params = array_merge($this->params, $this->cmd->get_param($value));
 				break;
 			case "setPanel":
 
