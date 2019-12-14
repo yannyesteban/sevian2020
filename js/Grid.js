@@ -218,18 +218,19 @@ var Grid = (($) => {
             this.caption = "";
             this.className = "sevian";
             this.iconClass = "";
-            this.type = "default"; //{"edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
-            this.ctrlSelect = "one"; //one,multiple,
+            this.type = "default"; //{"select","edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+            this.selectMode = ""; //one,multiple,
             this.editMode = "simple"; //"multi";//simple,grid,one,inline,form,custom
             this.actionButton = false;
             this.deleteButton = false;
             this.searchValue = '';
-            this.showEnum = true;
+            this.showEnum = false;
             this.allowSearch = true;
             this.option = [];
             this.data = [];
             this.menu = null;
             this.actionButtons = ["edit", "delete"];
+            this.action = null;
             this.optionText = {
                 new: "+",
                 edit: "edit",
@@ -269,6 +270,7 @@ var Grid = (($) => {
             this._filter = (index) => { return true; };
             this._short = (index) => { return true; };
             this._changePage = (page) => { return true; };
+            this._action = (index) => { return true; };
             this._fieldData = {};
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
@@ -325,6 +327,9 @@ var Grid = (($) => {
         }
         _create(main) {
             let data = [];
+            if (this.action) {
+                this._action = $.bind(this.action, this.parentContext, "index");
+            }
             for (let x in this.fields) {
                 if (data = this.fields[x].config.data) {
                     this._fieldData[x] = {};
@@ -356,7 +361,7 @@ var Grid = (($) => {
                 .on("click", (event) => { this._search(q.val()); });
             ;
             if (this.type !== "default")
-                if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
+                if (this.selectMode === "one" || this.selectMode === "multiple") {
                     let _auxMenu = main.create("div").addClass("grid-aux-menu");
                     _auxMenu.create("button").attr("type", "button").text(this.optionText.new).on("click", () => { this.setNew(); });
                     _auxMenu.create("button").attr("type", "button").text(this.optionText.delete).on("click", () => {
@@ -376,16 +381,16 @@ var Grid = (($) => {
             this._thead = table.create("thead");
             this._tbody = table.create("tbody");
             let row = this._thead.create("tr");
-            if (true) {
+            if (this.showEnum) {
                 row.create("td").text("#");
             }
-            if (this.ctrlSelect == "one" || this.ctrlSelect == "multiple") {
+            if (this.selectMode == "one" || this.selectMode == "multiple") {
                 let cell = row.create("td");
                 this._check = cell.create({
                     tagName: "input",
-                    type: (this.ctrlSelect == "one") ? "radio" : "checkbox",
+                    type: (this.selectMode == "one") ? "radio" : "checkbox",
                     name: this.id + "_chk",
-                    checked: (this.ctrlSelect == "one") ? true : false,
+                    checked: (this.selectMode == "one") ? true : false,
                 }).on("change", () => { this.setNew(); });
             }
             if (this.actionButton) {
@@ -411,6 +416,9 @@ var Grid = (($) => {
             for (let record of this.data) {
                 this.createRow(record);
             }
+            if (this.type !== "edit") {
+                this.createEditRow2({});
+            }
             if (this.editMode !== "simple") {
                 this.createEditRow({});
             }
@@ -431,17 +439,29 @@ var Grid = (($) => {
             let row = this._tbody.create("tr")
                 .addClass("body-row")
                 .ds("index", this._rowLength);
+            if (this._action) {
+                row.on("click", (event) => {
+                    if (event.target.classList.contains("cell-select-input")) {
+                        this.getRecord(event.target.value);
+                        return false;
+                    }
+                    this.getRecord(event.currentTarget.dataset.index);
+                    this._action(event.currentTarget.dataset.index);
+                    db(event.currentTarget.dataset.index);
+                });
+            }
             let cell = null, field = null, value = null, text = "", info = null, input = null, _input = null, type = null;
             if (this.showEnum) {
                 cell = row.create("td").text(this._rowLength + 1);
             }
-            if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
+            if (this.selectMode === "one" || this.selectMode === "multiple") {
                 cell = row.create("td");
                 let ctrl = cell.create({
                     tagName: "input",
-                    type: (this.ctrlSelect === "one") ? "radio" : "checkbox",
+                    type: (this.selectMode === "one") ? "radio" : "checkbox",
                     name: this.id + "_chk",
                     value: this._rowLength,
+                    className: "cell-select-input"
                 });
                 ctrl.on("click", event => {
                     this.getRecord(event.currentTarget.value);
@@ -477,6 +497,9 @@ var Grid = (($) => {
                 info.dataset = { "name": x };
                 _input = f.createInput(input, info);
                 _input.dataName = x;
+                //alert(field.config.cell)
+                if (field.cell) {
+                }
                 if (field.input == "hidden") {
                     hiddenFields.append(_input);
                 }
@@ -504,11 +527,11 @@ var Grid = (($) => {
             if (this.showEnum) {
                 cell = row.create("td").text(this._rowLength);
             }
-            if (this.ctrlSelect === "one" || this.ctrlSelect === "multiple") {
+            if (this.selectMode === "one" || this.selectMode === "multiple") {
                 cell = row.create("td");
                 let ctrl = cell.create({
                     tagName: "input",
-                    type: (this.ctrlSelect === "one") ? "radio" : "checkbox",
+                    type: (this.selectMode === "one") ? "radio" : "checkbox",
                     name: this.id + "_chk"
                 });
                 ctrl.on("click", (event) => {
@@ -594,6 +617,21 @@ var Grid = (($) => {
                 cell.append(hiddenFields);
             }
         }
+        createEditRow2(data) {
+            let info = null;
+            let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
+            this._mainForm = new Form();
+            for (let x in this.fields) {
+                let field = this.fields[x];
+                info = Object.assign({}, field.config);
+                info.dataset = { "name": x };
+                info.type = "hidden";
+                this._mainForm.createInput("input", info);
+                hiddenFields.append(this._mainForm.getInput(x));
+            }
+            this._mainForm.reset();
+            this._main.append(hiddenFields);
+        }
         createCell(field) {
         }
         setRecord(index, params) {
@@ -653,7 +691,7 @@ var Grid = (($) => {
         }
         getIndex() {
             let index = null;
-            if (this.ctrlSelect == "one") {
+            if (this.selectMode == "one") {
                 let check = this._tbody.query(".body-row >td>input:checked");
                 if (check) {
                     index = check.value;

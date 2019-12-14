@@ -326,7 +326,7 @@ var Menu = (function ($, Float) {
                 this._closeBrothers(item);
                 item.removeClass("close");
                 item.addClass("open");
-                Float.setIndex(menu.get());
+                //Float.setIndex(menu.get());
                 if ((this.subType === "dropdown") && !$(item.get().parentNode).hasClass("submenu")) {
                     Float.showMenu({
                         ref: item.get(), e: menu.get(),

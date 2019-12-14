@@ -127,9 +127,9 @@ $js = [
 	],
 
 	[
-		'file'=>"http://maps.google.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&libraries=drawing",
-		'file_'=>"https://maps.googleapis.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&callback=initMap",
-		'begin'	=> false
+		'file_'=>"http://maps.google.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&libraries=drawing",
+		'file'=>"https://maps.googleapis.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&callback=initMap",
+		'begin'	=> false,'file_'=>''
 	],
 	
 	[

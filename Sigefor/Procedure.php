@@ -47,7 +47,7 @@ class Procedure extends \Sevian\Element{
         
         $c = \Sevian\Tool::evalExp($x);
 
-        //hr($c);
+       //hr($c);
 
         //exit;
         switch($method){
@@ -69,12 +69,15 @@ class Procedure extends \Sevian\Element{
 			WHERE `procedure` = '$this->name'";
 
         $result = $cn->execute();
-		
+		//hr ($cn->query);
 		if($rs = $cn->getDataAssoc($result)){
             $commands = json_decode($rs["commands"]);
-            foreach($commands as $cmd){
-                $this->commands($cmd);
+            if($commands){
+                foreach($commands as $cmd){
+                    $this->commands($cmd);
+                } 
             }
+            
 			
         }
 
@@ -121,8 +124,12 @@ class Procedure extends \Sevian\Element{
 
     public function evalQuery($q){
         $cn = $this->cn;
-		$cn->query = \Sevian\S::evalExp($q);
 
+
+        $q = \Sevian\S::vars($q);
+
+		$cn->query = \Sevian\S::evalExp($q);
+        //hr($q);
         $var = &\Sevian\S::getVSes();
         $result = $cn->execute();
         if($cn->fieldCount){
@@ -133,6 +140,6 @@ class Procedure extends \Sevian\Element{
         }else{
 
         }
-        
+        //print_r($var) ;
     }
 }// end class

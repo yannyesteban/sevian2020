@@ -45,6 +45,8 @@ class InfoField{
 	public $placeholder = '';
 	public $input = '';//['input'=>'text'];
 	public $inputType = '';//['input'=>'text'];
+	public $cell = 'xxx';//['input'=>'text'];
+	public $cellType = '';//['input'=>'text'];
 	public $value = '';
 	
 	public $modeValue = '';
@@ -186,7 +188,9 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	private $page = 1;
 	private $searchFor = false;
 	private $totalPages = 0;
-	private $maxPages = 5;
+	private $maxPages = 4;
+
+	private $action = null;
 
     public function __construct($info = []){
 		
@@ -273,9 +277,11 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 				break;
 			case 'select_record':
 				$id = \Sevian\S::getReq('__id_');
-hr($id,"red");
+				//print_r(\Sevian\S::getReq("__id_"));
 				//$this->gVars["record_id"] = $this->pVars['records'][$id]??false;
 				$this->gVars["record_id"] = $this->getRId($id);
+
+				//hr($this->gVars["record_id"]);
 				break;
 			case 'get_record':
 
@@ -316,7 +322,7 @@ hr($id,"red");
 		";
 
 		$result = $cn->execute();
-		//print_r(\Sevian\S::getVReq());
+		//print_r(\Sevian\S::getVSes());
 		
 		if($rs = $cn->getDataAssoc($result)){
 
@@ -330,9 +336,10 @@ hr($id,"red");
 					$this->$k = $v;
 				}
 			}
+			$this->query = \Sevian\S::vars($this->query);
 
 		}
-
+		//hr($this->query);
 		$this->infoQuery = $cn->infoQuery($this->query);
 
 		
@@ -708,7 +715,7 @@ hr($id,"red");
 			}
 
 			$config->type = $type;
-			
+			$config->cell = $f->cell;
 			//$config->id = $id;
 			$config->name = $f->field;
 			$config->caption = $f->caption;
@@ -742,10 +749,11 @@ hr($id,"red");
 		}
 
 		$fields['__mode_'] = [
-			'input'	=> 'input',
+			'input'	=> 'hidden',
+			'cell'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
-				'type'	=> 'text',
+				'type'	=> 'hidden',
 				"name"	=> '__mode_',
 				'value'	=> $this->mode,
 				'default'=> '1'
@@ -754,6 +762,7 @@ hr($id,"red");
 		];
 		$fields['__id_'] = [
 			'input'	=> 'hidden',
+			'cell'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
 				'type'	=> 'text',
@@ -1163,7 +1172,7 @@ hr($id,"red");
 			'input'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
-				'type'=>'text',
+				'type'=>'hidden',
 				'name'=>'__mode_',
 				'caption'=>'__mode_',
 				'default'=>'1',
@@ -1175,7 +1184,7 @@ hr($id,"red");
 			'input'	=> 'hidden',
 			'page'	=> '',
 			'config'=> [
-				'type'=>'text',
+				'type'=>'hidden',
 				'name'=>'__id_',
 				'caption'=>'__id_',
 				'default'=>'',
@@ -1236,6 +1245,12 @@ hr($id,"red");
 
 		//print_r($this->createFields([]));exit;
 		
+		if($this->action){
+			$_action = "S.send(".json_encode($this->action).")";
+		}else{
+			$_action = "";
+		}
+
 		$opt = [
 			 'id' 			=> $grid->id,
 			 'menu'			=> $this->createMenu($this->menu),
@@ -1243,6 +1258,7 @@ hr($id,"red");
 			 'paginator'	=> $paginator,
 			 'data'			=> $dataGrid,
 			 'fields'		=> $this->createFields([]),
+			 'action'		=> $_action,
 			 'searchValue'	=> $q,
 
 			 'optionText' => [

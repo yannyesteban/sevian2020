@@ -10,6 +10,19 @@ var S = (($) => {
     };
     class Sevian {
         static init(info) {
+            if (!this.bandera) {
+                this.bandera = true;
+                let ww = new Float.Window({
+                    caption: "Cota",
+                    child: $("win1"),
+                    //width:"450px",
+                    //height:"300px",
+                    left: "center",
+                    top: "top",
+                    visible: true,
+                    mode: "max"
+                });
+            }
             for (var x of info) {
                 if (window[x.type]) {
                     this._e[x.panel] = new window[x.type](x.option);
@@ -215,5 +228,6 @@ var S = (($) => {
     Sevian._w = [];
     Sevian.defaultPanel = 0;
     Sevian.msg = null;
+    Sevian.bandera = false;
     return Sevian;
 })(_sgQuery);

@@ -118,9 +118,6 @@ var Grid = (($) => {
         }
     }
 
-
-
-
     class InfoField{
         name: any = "";
         id:any = "";
@@ -274,8 +271,8 @@ var Grid = (($) => {
         caption:string = "";
         className = "sevian";
         iconClass:string = "";
-        type:string = "default";//{"edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
-        ctrlSelect:string = "one";//one,multiple,
+        type:string = "default";//{"select","edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+        selectMode:string = "";//one,multiple,
         editMode:string = "simple";//"multi";//simple,grid,one,inline,form,custom
 
         actionButton:boolean = false;
@@ -283,12 +280,14 @@ var Grid = (($) => {
 
         searchValue:string = '';
 
-        showEnum = true;
+        showEnum = false;
         allowSearch = true;
         option:any[] = [];
         data:any[] = [];
         menu:object = null;
         actionButtons:any[] = ["edit","delete"];
+
+        action:any = null;
 
         optionText:object = {
             new:"+",
@@ -337,6 +336,8 @@ var Grid = (($) => {
 
         _short = (index:number)=>{return true};
         _changePage = (page:number)=>{return true};
+
+        _action = (index:number)=>{return true};
 
         _fieldData:object = {};
         static _objs = [];
@@ -409,6 +410,13 @@ var Grid = (($) => {
         _create(main:any){
             let data = [];
             
+
+
+            
+            if(this.action){
+                
+                this._action = $.bind(this.action, this.parentContext, "index");
+            }
             for(let x in this.fields){
                 if(data = this.fields[x].config.data){
                     this._fieldData[x] = {};
@@ -446,7 +454,7 @@ var Grid = (($) => {
 
 
             if(this.type !== "default")    
-                if(this.ctrlSelect === "one" || this.ctrlSelect === "multiple"){
+                if(this.selectMode === "one" || this.selectMode === "multiple"){
                     let _auxMenu = main.create("div").addClass("grid-aux-menu");
                     
                     _auxMenu.create("button").attr("type", "button").text(this.optionText.new).on("click", ()=>{this.setNew()});
@@ -475,17 +483,17 @@ var Grid = (($) => {
             
             let row = this._thead.create("tr");
            
-            if(true){
+            if(this.showEnum){
                 row.create("td").text("#"); 
             }
 
-            if(this.ctrlSelect == "one" || this.ctrlSelect == "multiple"){
+            if(this.selectMode == "one" || this.selectMode == "multiple"){
                 let cell = row.create("td");
                 this._check = cell.create({
                     tagName: "input",
-                    type: (this.ctrlSelect == "one")? "radio": "checkbox",
+                    type: (this.selectMode == "one")? "radio": "checkbox",
                     name: this.id+"_chk",
-                    checked: (this.ctrlSelect == "one")? true: false,
+                    checked: (this.selectMode == "one")? true: false,
 
                 }).on("change", ()=>{this.setNew()});
             }
@@ -495,6 +503,8 @@ var Grid = (($) => {
             if(this.deleteButton){
                 row.create("td").text("&nbsp;");
             }
+
+            
             this.fields["__index_"] = {
                 input: "hidden",
                 config:{
@@ -515,6 +525,12 @@ var Grid = (($) => {
             for(let record of this.data){
                 this.createRow(record);
             }
+
+            if(this.type !== "edit"){
+               
+                this.createEditRow2({});
+            }
+
             if(this.editMode !== "simple"){
                 this.createEditRow({});
             }
@@ -544,6 +560,24 @@ var Grid = (($) => {
                 .addClass("body-row")
                 .ds("index", this._rowLength);
             
+            
+            if(this._action){
+                
+                row.on("click", (event)=>{
+
+                    if(event.target.classList.contains("cell-select-input")){
+                        
+                        this.getRecord(event.target.value);
+                        return false;
+                    }
+                    this.getRecord(event.currentTarget.dataset.index);
+                    this._action(event.currentTarget.dataset.index);
+                    db (event.currentTarget.dataset.index)
+                    
+                });
+
+            }
+            
             let cell = null, 
                 field = null, value = null, text = "", 
                 info = null, input = null,_input = null, type = null;
@@ -551,13 +585,14 @@ var Grid = (($) => {
             if(this.showEnum){
                 cell = row.create("td").text(this._rowLength + 1);
             }
-            if(this.ctrlSelect === "one" || this.ctrlSelect === "multiple"){
+            if(this.selectMode === "one" || this.selectMode === "multiple"){
                 cell = row.create("td");
                 let ctrl =  cell.create({
                     tagName: "input",
-                    type: (this.ctrlSelect === "one")? "radio": "checkbox",
+                    type: (this.selectMode === "one")? "radio": "checkbox",
                     name: this.id + "_chk",
                     value: this._rowLength,
+                    className: "cell-select-input"
 
                 });
                 ctrl.on("click", event => {
@@ -584,7 +619,7 @@ var Grid = (($) => {
                 }else{
                     text = value;
                 }
-
+                
                 
                 input = (field.input === "hidden" || this.type === "default")? "input": field.input;
                 
@@ -603,6 +638,10 @@ var Grid = (($) => {
                 
                 _input = f.createInput(input, info);
                 _input.dataName = x;
+                //alert(field.config.cell)
+                if(field.cell){
+                    
+                }
                 if(field.input == "hidden"){
                     hiddenFields.append(_input);
                 }else{
@@ -637,11 +676,11 @@ var Grid = (($) => {
             if(this.showEnum){
                 cell = row.create("td").text(this._rowLength);
             }
-            if(this.ctrlSelect === "one" || this.ctrlSelect === "multiple"){
+            if(this.selectMode === "one" || this.selectMode === "multiple"){
                 cell = row.create("td");
                 let ctrl =  cell.create({
                     tagName: "input",
-                    type: (this.ctrlSelect === "one")? "radio": "checkbox",
+                    type: (this.selectMode === "one")? "radio": "checkbox",
                     name: this.id + "_chk"
 
                 });
@@ -746,6 +785,28 @@ var Grid = (($) => {
             }
             
         }
+
+        createEditRow2(data){
+            
+            let info = null;
+            
+            let hiddenFields = $.create({tagName:"div", style:{cssText:"display:none;"}});
+            this._mainForm = new Form();
+
+            for(let x in this.fields){
+                let field = this.fields[x];
+                info = Object.assign({}, field.config);
+                info.dataset = {"name": x};
+                info.type = "hidden";
+                this._mainForm.createInput("input", info);
+                hiddenFields.append(this._mainForm.getInput(x));
+            }
+
+            this._mainForm.reset();
+            this._main.append(hiddenFields);
+        }
+
+
         createCell(field){
 
             
@@ -838,7 +899,7 @@ var Grid = (($) => {
         
         getIndex(){
             let index = null;
-            if(this.ctrlSelect == "one"){
+            if(this.selectMode == "one"){
                 let check = this._tbody.query(".body-row >td>input:checked");
                 if(check){
                     index = check.value;

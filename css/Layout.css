@@ -1268,8 +1268,9 @@ form {
   height: 100%;
   overflow: auto;
   grid-gap: 0px;
+  text-transform: uppercase;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 36px 36px auto 36px;
+  grid-template-rows: 36px 36px 1fr 1fr 36px;
   background-color: #52565a;
 }
 .gt-cota > * {
@@ -1292,14 +1293,17 @@ form {
 .gt-cota .p3 {
   grid-row: 2;
   grid-column: 3/4;
+  background-color: #31be25;
 }
 .gt-cota .p5 {
   grid-row: 2;
   grid-column: 4/5;
+  background-color: #b7be49;
 }
 .gt-cota .p4 {
-  grid-row: 3;
+  grid-row: 3/5;
   grid-column: 1/3;
+  background-color: #926565;
 }
 .gt-cota .p6 {
   grid-row: 3;
@@ -1311,16 +1315,36 @@ form {
 }
 .gt-cota .p8 {
   grid-row: 4;
-  grid-column: 1/3;
-  background-color: #008d81;
+  grid-column: 3/4;
+  background-color: #50187e;
 }
 .gt-cota .p9 {
-  grid-row: 4;
+  grid-row: 5;
   grid-column: 3/4;
   background-color: #008d81;
 }
 .gt-cota .p10 {
   grid-row: 4;
   grid-column: 4/5;
-  background-color: #008d81;
+  background-color: #eb6ac4;
+}
+
+.subwin {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+.subwin > :nth-child(2) {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+.subwin > :nth-child(1) {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 200px;
+          flex: 0 0 200px;
 }

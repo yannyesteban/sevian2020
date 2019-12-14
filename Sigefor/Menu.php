@@ -100,7 +100,7 @@ class Menu extends \Sevian\Element{
 		$cn = $this->cn;
 
 		$cn->query = "
-			SELECT * 
+			SELECT menu, title,class, params, config, datetime
 			FROM $this->tMenus 
 			WHERE menu = '$this->name'";
         

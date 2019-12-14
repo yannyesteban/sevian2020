@@ -16,8 +16,25 @@ var S = (($) => {
 		static defaultPanel:any = 0;
 		
 		static msg:object = null;
-		
+		static bandera = false;
 		static init(info:object[]){
+
+			if(!this.bandera){
+				this.bandera = true;
+				let ww = new Float.Window({
+					caption:"Cota",
+					child:$("win1"),
+					//width:"450px",
+					//height:"300px",
+					left:"center",
+					top:"top",
+					visible:true,
+					mode:"max"
+				});
+			}
+			
+
+
             for(var x of info){
                 if(window[x.type]){
                     this._e[x.panel] = new window[x.type](x.option);

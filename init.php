@@ -182,6 +182,14 @@ $init3 = [
 	'defaultPanel' => 4,
 	'elements' => [
 		[
+			'id'		=> 4,
+			'element'	=> 'procedure',
+			'name'		=> 'cota_init',
+			'method'	=> 'load',
+			'designMode'=> true,
+			'fixed'		=> true,
+		],
+		[
 			'id'		=> 20,
 			'element'	=> 'sgUser',
 			'name'		=> '',

@@ -1,0 +1,24 @@
+"form":{
+
+    "query":"select ",
+    "caption":"form 1",
+    "gridQuery":"",
+    "gridForm":"",
+    "groups":"",
+    "tabs":"",
+    "searchBy":["personas.id,personas.nombre"],
+    "maxPages":5,
+    "maxRecords":10,
+    "menu":"mainMenu",
+    "menus":{"load":"xx","list":"menu1","request":"menu2"},
+    "gridType":"selection",
+    "selectionType":"simple",
+
+    "grid":{
+        "type":"selection/edition",
+        "typeSelection":"simple,multiple,none"
+    }
+
+
+
+}

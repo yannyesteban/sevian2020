@@ -3,7 +3,7 @@
 $PATH = "";
 
 $css = array(
-	//"{$PATH}css/Menu.css",
+	"{$PATH}css/Menu.css",
 	
 	//"{$PATH}css/sgMenu.css",
 	"{$PATH}css/Layout.css",
