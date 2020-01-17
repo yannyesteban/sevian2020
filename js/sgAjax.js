@@ -1,5 +1,51 @@
 // JavaScript Document
 
+
+
+
+var mySocket    = null;
+var serverUrl   = 'ws://127.0.0.1:8083';  //  wss: is ws: but using SSL.
+var oWebSocket  = window.WebSocket || window.MozWebSocket;
+if (oWebSocket) {
+    mySocket = new oWebSocket (serverUrl);
+    if (mySocket) {
+        console.log (mySocket);
+        mySocket.onopen     = onSocketOpen;
+        mySocket.onclose    = onSocketClose;
+        mySocket.onmessage  = onSocketMessage;
+        mySocket.onerror    = onSocketError;
+
+        setTimeout (closeSocket, 8083);  //  Be polite and free socket when done.
+    }
+}
+
+function onSocketOpen (evt) {
+    console.log ("Socket is now open.");
+    mySocket.send ("Hello from my first live web socket!");
+}
+
+function onSocketClose (evt) {
+    console.log ("Socket is now closed.");
+}
+
+function onSocketMessage (evt) {
+    console.log ("Recieved from socket: ", evt.data);
+}
+
+function onSocketError (evt) {
+    console.log ("Error with/from socket!:");
+    console.log (evt);
+}
+
+function closeSocket () {
+    if (mySocket.readyState !== mySocket.CLOSED) {
+        console.log ("Closing socket from our end (timer).");
+        mySocket.close ();
+    }
+    else
+        console.log ("Socket was already closed (timer).");
+}
+
 var sgAjax = false, sgFragment = false;
 var SgAjax = (function($){
 	var index = 0;
