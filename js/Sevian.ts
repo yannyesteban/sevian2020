@@ -1,5 +1,24 @@
 var S = (($) => {
 	
+	interface  InfoParam {
+		async: boolean,
+		panel:number,
+		valid:boolean,
+		confirm:string,
+		params: object,
+		//onsubmit:()=>void,
+		window:{
+			name:"",
+			show:true,
+			mode:"",
+			title:"Basic Menu",
+			set:{
+				width:"400px",
+				height:"600px;"
+			}
+		}
+	};
+
     let _winOptions = {
 		visible: true,
 		caption: "",
@@ -16,26 +35,18 @@ var S = (($) => {
 		static defaultPanel:any = 0;
 		
 		static msg:object = null;
-		static bandera = false;
-		static init(info:object[]){
+		
 
-			if(!this.bandera){
-				this.bandera = true;
-				let ww = new Float.Window({
-					caption:"Cota",
-					child:$("win1"),
-					//width:"450px",
-					//height:"300px",
-					left:"center",
-					top:"top",
-					visible:true,
-					mode:"max"
-				});
+		static winInit(info:any){
+			for(let win of info){
+				
+				this._w[win.name] = new Float.Window(win);	
 			}
+		}
+		static init(info:object[]){
 			
-
-
             for(var x of info){
+				
                 if(window[x.type]){
                     this._e[x.panel] = new window[x.type](x.option);
                 }	
@@ -65,7 +76,24 @@ var S = (($) => {
             return $().query("form[data-sg-type='panel'][data-sg-panel='"+id+"']");
         }
         
-        static send(info:object){
+        static send(info:InfoParam){
+
+			if(info.window && info.window.name){
+				let win = this._w[info.window.name];
+				win.setCaption(info.window.name);
+				if(info.window.show === true){
+					win.show();
+					
+				}else if(info.window.show === false){
+					win.setVisible(false);
+				}else if(info.window.show){
+					win.show(info.window.show);
+				}
+				
+				
+				
+			}
+
 
 			if(info.confirm && !confirm(info.confirm)){
 				return false;
@@ -73,7 +101,7 @@ var S = (($) => {
 
 			let panel = info.panel;
 			
-			if(panel <= "0"){
+			if(panel <= 0){
 				panel = this.defaultPanel;
 			}
 			if(info.valid !== false && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()){

@@ -1,6 +1,6 @@
 <?php
 
-$PATH = MAIN_PATH;
+$PATH = "";
 
 $css = array(
 	"{$PATH}css/Menu.css",

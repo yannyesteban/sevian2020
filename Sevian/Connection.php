@@ -1,9 +1,9 @@
 <?php
 namespace Sevian;
 	
-include 'DB/DBase.php';
-include 'DB/Mysql.php';
-include 'DB/Postgres.php';
+include MAIN_PATH.'DB/DBase.php';
+include MAIN_PATH.'DB/Mysql.php';
+include MAIN_PATH.'DB/Postgres.php';
 
 class Info{
 	

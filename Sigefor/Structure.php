@@ -8,6 +8,7 @@ class StructureInfo{
     public $class;
     public $main_panel;
     public $params = [];
+    public $wins = [];
     
 
     public function __construct($opt = []){
@@ -19,17 +20,23 @@ class StructureInfo{
 	}
 
 }
-class Structure extends \Sevian\Element implements \Sevian\PanelsAdmin, \Sevian\TemplateAdmin{
+class Structure 
+    extends \Sevian\Element 
+    implements  \Sevian\WindowsAdmin,
+                \Sevian\PanelsAdmin,
+                \Sevian\TemplateAdmin{
     // public static $cn;
     
-    protected $tStructures = "_sg_structures";
-    protected $tStrEle = "_sg_str_ele";
-    protected $tTemplates = "_sg_templates";
+    private $tStructures = "_sg_structures";
+    private $tStrEle = "_sg_str_ele";
+    private $tTemplates = "_sg_templates";
 
     protected $info;
     protected $infoPanels = [];
     protected $template_html = "";
     protected $themeTemplate = "";
+
+    private $_wins = [];
 
     public function __construct($opt = []){
 		
@@ -64,6 +71,10 @@ class Structure extends \Sevian\Element implements \Sevian\PanelsAdmin, \Sevian\
 		if($rs = $cn->getDataAssoc($result)){
             $this->info = new StructureInfo($rs);
             
+
+            $wins = \Sevian\S::vars($this->info->wins);
+            $this->_wins = json_decode($wins);
+
             if($template = $this->info->template){
                 $cn->query = "
                     SELECT * 
@@ -113,6 +124,9 @@ class Structure extends \Sevian\Element implements \Sevian\PanelsAdmin, \Sevian\
     }
     public function getPanels(){
         return $this->infoPanels;
+    }
 
+    public function getWindows(){
+        return $this->_wins;
     }
 }// end class

@@ -769,6 +769,8 @@ Float.Window = (($) => {
                 this._active = false;
             }
         }
+        _load(main) {
+        }
         _create(main) {
             this._main = main.addClass(["sgWin", "hidden"]);
             if (this.className) {
@@ -785,7 +787,8 @@ Float.Window = (($) => {
             caption.create("span").addClass(["win-btn", "close"]).text("");
             let body = main.create("div").addClass("body");
             if (this.child) {
-                body.append(this.child);
+                let child = $(this.child);
+                body.append(child);
             }
         }
         setBody(e) {

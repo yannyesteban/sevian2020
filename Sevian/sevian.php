@@ -34,6 +34,7 @@ class S{
 	
 	public static $elements = [];
 	public static $panels = [];
+	public static $windows = [];// not using
 
 	public static $defaultPanel = 4;
 	
@@ -74,6 +75,7 @@ class S{
 	
 	private static $_info = [];// se guarda la informacion de cada panel ;
 	private static $_panels = [];
+	private static $_windows = [];
 
 
 	private static $_pVars = [];// variables de sesion para cada panel
@@ -216,6 +218,7 @@ class S{
 			self::$cfg['ACTIONS'] = &self::$_actions;
 			self::$cfg['INFO'] = &self::$_info;
 			self::$cfg['PANELS'] = &self::$_panels;
+			self::$cfg['WINDOWS'] = &self::$_windows;
 
 			self::$cfg['P_VARS'] = &self::$_pVars;
 			self::$cfg['G_VARS'] = &self::$_gVars;
@@ -228,6 +231,7 @@ class S{
 			
 			self::$_info = &self::$cfg['INFO'];
 			self::$_panels = &self::$cfg['PANELS'];
+			self::$_windows = &self::$cfg['WINDOWS'];
 
 			self::$_template = &self::$cfg['TEMPLATE'];
 			self::$_strPanels = &self::$cfg['STR_PANELS'];
@@ -247,13 +251,11 @@ class S{
 			}
 		}
 		
-		
-		
-		
-		
-
 
 	}
+
+
+
 
 	public static function setElement($info, $update = false){
 
@@ -306,6 +308,14 @@ class S{
 				}elseif($e->getThemeTemplate()){
 					self::$templateName = $e->getThemeTemplate();
 				}
+			}
+
+			if($e instanceof \Sevian\WindowsAdmin){
+				$windows = $e->getWindows();
+				if($windows){
+					self::$_windows = $windows;
+				}
+				
 			}
 
 			if($e instanceof \Sevian\PanelsAdmin){
@@ -689,6 +699,7 @@ class S{
 			unset(self::$_pSigns[$panel]);
 		}
 	}
+	
 	public static function htmlDoc(){
 		global $sevian;
 		
@@ -746,12 +757,12 @@ class S{
 		//hr(self::$_mainPanels, "green");
 		//$json = json_encode(self::$_mainPanels, JSON_PRETTY_PRINT);
 		//$script = "//Sevian.loadPanels($json)";
-        $json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
-		$script = "Sevian.action.initPanel($json)";
-		$script = "S.defaultPanel= '".self::$defaultPanel."';S.init($json);";
+		$win = json_encode(self::$_windows, JSON_PRETTY_PRINT);
+		$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
 		
-
-
+		$script = "Sevian.action.initPanel($json)";
+		$script = "S.defaultPanel= '".self::$defaultPanel."';S.winInit($win);S.init($json);";
+		
 		$response = [
 			//'panels'=>$p,
 			//'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),

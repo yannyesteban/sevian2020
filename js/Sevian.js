@@ -1,4 +1,5 @@
 var S = (($) => {
+    ;
     let _winOptions = {
         visible: true,
         caption: "",
@@ -9,20 +10,12 @@ var S = (($) => {
         mode: "custom"
     };
     class Sevian {
-        static init(info) {
-            if (!this.bandera) {
-                this.bandera = true;
-                let ww = new Float.Window({
-                    caption: "Cota",
-                    child: $("win1"),
-                    //width:"450px",
-                    //height:"300px",
-                    left: "center",
-                    top: "top",
-                    visible: true,
-                    mode: "max"
-                });
+        static winInit(info) {
+            for (let win of info) {
+                this._w[win.name] = new Float.Window(win);
             }
+        }
+        static init(info) {
             for (var x of info) {
                 if (window[x.type]) {
                     this._e[x.panel] = new window[x.type](x.option);
@@ -52,11 +45,24 @@ var S = (($) => {
             return $().query("form[data-sg-type='panel'][data-sg-panel='" + id + "']");
         }
         static send(info) {
+            if (info.window && info.window.name) {
+                let win = this._w[info.window.name];
+                win.setCaption(info.window.name);
+                if (info.window.show === true) {
+                    win.show();
+                }
+                else if (info.window.show === false) {
+                    win.setVisible(false);
+                }
+                else if (info.window.show) {
+                    win.show(info.window.show);
+                }
+            }
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
             }
             let panel = info.panel;
-            if (panel <= "0") {
+            if (panel <= 0) {
                 panel = this.defaultPanel;
             }
             if (info.valid !== false && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()) {
@@ -228,6 +234,5 @@ var S = (($) => {
     Sevian._w = [];
     Sevian.defaultPanel = 0;
     Sevian.msg = null;
-    Sevian.bandera = false;
     return Sevian;
 })(_sgQuery);

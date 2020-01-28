@@ -177,7 +177,7 @@ $init2 = [
 
 $init3 = [
 	'theme'=>'sevian',
-	'title'=>'GTcomm v1.0.0',
+	'title'=>'GTcomm v0.0.1',
 	'templateName' => 'main',
 	'defaultPanel' => 4,
 	'elements' => [

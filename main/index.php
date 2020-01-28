@@ -1,6 +1,6 @@
 <?php
 
-define("MAIN_PATH", "");
+define("MAIN_PATH", "../");
 
 
 include MAIN_PATH.'Sevian/functions.php';
@@ -17,6 +17,5 @@ include MAIN_PATH.'configuration/commands.php';
 include MAIN_PATH.'configuration/css.php';
 include MAIN_PATH.'configuration/js.php';
 include 'init.php';
-
 /* test */
 echo Sevian\S::render();

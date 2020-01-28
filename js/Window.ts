@@ -1038,7 +1038,10 @@ Float.Window = (($) => {
             }
 
         }
+        _load(main:any){
 
+
+        }
         _create(main:any){
             
             this._main = main.addClass(["sgWin", "hidden"]);
@@ -1060,7 +1063,8 @@ Float.Window = (($) => {
 
             let body = main.create("div").addClass("body");
             if(this.child){
-                body.append(this.child);
+                let child = $(this.child);
+                body.append(child);
             }
             
         }

@@ -19,6 +19,11 @@ interface TemplateAdmin{
 
 }
 
+interface WindowsAdmin{
+    public function getWindows();
+
+}
+
 interface PanelsAdmin{
     public function getPanels();
 

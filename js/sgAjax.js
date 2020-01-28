@@ -2,7 +2,7 @@
 
 
 
-
+/*
 var mySocket    = null;
 var serverUrl   = 'ws://127.0.0.1:8083';  //  wss: is ws: but using SSL.
 var oWebSocket  = window.WebSocket || window.MozWebSocket;
@@ -18,7 +18,7 @@ if (oWebSocket) {
         setTimeout (closeSocket, 8083);  //  Be polite and free socket when done.
     }
 }
-
+*/
 function onSocketOpen (evt) {
     console.log ("Socket is now open.");
     mySocket.send ("Hello from my first live web socket!");
