@@ -47,7 +47,12 @@ var S = (($) => {
         static send(info) {
             if (info.window && info.window.name) {
                 let win = this._w[info.window.name];
-                win.setCaption(info.window.name);
+                if (info.window.caption) {
+                    win.setCaption(info.window.caption);
+                }
+                if (info.window.mode) {
+                    win.setMode(info.window.mode);
+                }
                 if (info.window.show === true) {
                     win.show();
                 }
@@ -57,6 +62,9 @@ var S = (($) => {
                 else if (info.window.show) {
                     win.show(info.window.show);
                 }
+            }
+            if (info.panel === undefined) {
+                return false;
             }
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
@@ -81,17 +89,17 @@ var S = (($) => {
                     params = info.params;
                 }
             }
-            var f = this.getForm(info.panel);
+            var f = this.getForm(panel);
             if (!f) {
-                f = this.addPanel(info.panel);
+                f = this.addPanel(panel);
             }
             if (info.window) {
-                if (!this._w[info.panel]) {
-                    this._w[info.panel] = this.createWindow(info.window);
+                if (!this._w[panel]) {
+                    this._w[panel] = this.createWindow(info.window);
                 }
-                if (this._w[info.panel]) {
-                    this._w[info.panel].setBody(f);
-                    this._w[info.panel].show({ left: "center", top: "middle" });
+                if (this._w[panel]) {
+                    this._w[panel].setBody(f);
+                    this._w[panel].show({ left: "center", top: "middle" });
                 }
             }
             if (f) {
@@ -109,7 +117,7 @@ var S = (($) => {
             }
             else {
                 dataForm = new FormData();
-                dataForm.append("__sg_panel", info.panel);
+                dataForm.append("__sg_panel", panel);
                 dataForm.append("__sg_ins", info.INS);
                 dataForm.append("__sg_sw", info.SW);
                 dataForm.append("__sg_params", params);
