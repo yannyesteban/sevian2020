@@ -1,6 +1,7 @@
 <?php
 
 define("MAIN_PATH", "../");
+define("SG_PATH_IMAGES", "../images/");
 
 
 include MAIN_PATH.'Sevian/functions.php';

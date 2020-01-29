@@ -58,6 +58,12 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
             case "load":
                 break;
 
+            case "menu":
+                
+                $this->menuLogin();
+            
+                break;    
+
         }
     }
 
@@ -133,5 +139,54 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
         $info->user = $this->_user;
         $info->roles = $this->getRoles();
         return $info;
+    }
+
+    private function menuLogin(){
+        $div = new \Sevian\Panel('div');
+        $div->class = "user-menu";
+        $img = $div->add("img");
+        $img->src = SG_PATH_IMAGES."login_red.png";
+/*{
+	async: true,
+	panel:51,
+	valid:false,
+	confirm_: 'seguro?',
+	params:	[
+		{t:'setMethod',
+			id:0,
+			element:'sgForm',
+			method:'list',
+			name:'products',
+      
+		}
+
+	]
+} */
+        $opt = [
+            "async"=>true,
+            "panel"=>13,
+            "params"=>[
+                [
+                    "t"=>"setMethod",
+                    "id"=>13,
+                    "element"=>'sgForm',
+                    'method'=>'request',
+                    'name'=>'gtlogin'
+                ]
+            ],
+            'window'=>[
+                'mode'=>'auto',
+                'caption'=>'hello',
+                'show'=>true,
+                'width'=>'600px',
+                'height'=>'400px'
+
+            ]
+                
+        ];
+        $json = json_encode($opt, JSON_PRETTY_PRINT);
+        $div->onclick = "S.send($json);";	
+
+        $this->panel = $div;
     }
 }// end class

@@ -19,7 +19,7 @@ $init = [
 		[
 			'id'		=> 21,
 			'element'	=> 'sgModule',
-			'name'		=> 'gt2',
+			'name'		=> 'gt2020',
 			'method'	=> 'load',
 			'designMode'=> true,
 			'fixed'		=> true,
@@ -27,7 +27,7 @@ $init = [
 		[
 			'id'		=> 22,
 			'element'	=> 'sgStructure',
-			'name'		=> 'tres',
+			'name'		=> 'gt2020',
 			'method'	=> 'load',
 			'designMode'=> true,
 			'fixed'		=> true,

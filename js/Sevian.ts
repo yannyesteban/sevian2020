@@ -77,10 +77,44 @@ var S = (($) => {
         }
         
         static send(info:InfoParam){
+			
+			if(info.confirm && !confirm(info.confirm)){
+				return false;
+			}
 
-			if(info.window && info.window.name){
-				let win = this._w[info.window.name];
+			let panel;
+			
+			if(info.panel === undefined || panel <= 0){
+				panel = this.defaultPanel;
+			}else{
+				panel = info.panel;
+			}
+
+			var f = this.getForm(panel);
+
+            if(!f){
 				
+                f = this.addPanel(panel);
+            }
+
+			if(info.window ){
+				let win;
+
+				if(info.window.name && this._w[info.window.name]){
+					win = this._w[info.window.name];
+
+				}else if(this._w[info.panel]){
+					win = this._w[info.panel];
+				}else if(info.window.name){
+					win = this._w[info.window.name] = this.createWindow(info.window);
+					this._w[info.window.name].setBody(f);
+					//this._w[info.window.name].show({left:"center",top:"middle"});
+				
+				}else{
+					win = this._w[panel] = this.createWindow(info.window);
+					this._w[panel].setBody(f);
+					//this._w[panel].show({left:"center",top:"middle"});
+				}
 				if(info.window.caption){
 					win.setCaption(info.window.caption);
 				}
@@ -94,21 +128,11 @@ var S = (($) => {
 				}else if(info.window.show){
 					win.show(info.window.show);
 				}
+
+				
 			}
 
-			if(info.panel === undefined){
-				return false;
-			}
-
-			if(info.confirm && !confirm(info.confirm)){
-				return false;
-			}
-
-			let panel = info.panel;
 			
-			if(panel <= 0){
-				panel = this.defaultPanel;
-			}
 			if(info.valid !== false && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()){
 				return false;
 			}
@@ -128,20 +152,18 @@ var S = (($) => {
 				}
             }
             
-            var f = this.getForm(panel);
-
-            if(!f){
-				
-                f = this.addPanel(panel);
-            }
+            
 			if(info.window){
+				
 				if(!this._w[panel]){
-					this._w[panel] = this.createWindow(info.window);
+					//this._w[panel] = this.createWindow(info.window);
+					//this._w[panel].setBody(f);
+					//this._w[panel].show({left:"center",top:"middle"});
 				}
 
 				if(this._w[panel]){
-					this._w[panel].setBody(f);
-					this._w[panel].show({left:"center",top:"middle"});
+					//this._w[panel].setBody(f);
+					//this._w[panel].show({left:"center",top:"middle"});
 					
 				}
 
@@ -211,6 +233,8 @@ var S = (($) => {
 					sgJson.iPanel(p.panels[x]);
 					if(this._w[p.panels[x].id]){
 						this._w[p.panels[x].id].setCaption(p.panels[x].title);
+						
+						this._w[p.panels[x].id].show();
 					}else{
 						if(this.defaultPanel == p.panels[x].id){
 							document.title = p.panels[x].title;

@@ -92,7 +92,7 @@ var db = false, hr = false;
 		visible:true,
 		caption:"Debug: Console",
 		child:div,
-		left:"right",
+		left:"center",
 		top:"top",
 	});
 

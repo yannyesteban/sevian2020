@@ -1,3 +1,17 @@
+@font-face {
+  font-family: Hemihead;
+  src: url(../../../fonts/HEMIHEAD.TTF);
+  
+}
+
+@font-face {
+  font-family: airstrike;
+  src: url(../fonts/airstrike.ttf);
+ // font-weight: bold;
+  
+  
+}
+
 * {
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
@@ -419,6 +433,8 @@ $delta_y_h: -240px;
 
 .sgWin.sevian{
   position: fixed;
+  //width: fit-content;
+  //box-sizing: border-box;
   min-width: 160px;
   min-height: 40px;
   max-height: 100%;
@@ -430,7 +446,7 @@ $delta_y_h: -240px;
   &.hidden{
     visibility: hidden;
     //display: none;
-    *{
+    >.body>*{
       //visibility: hidden;
       display: none;
     }
@@ -1533,4 +1549,57 @@ form{
   }
 
 
+}
+
+.gtlogo {
+  >.text{
+    color:rgb(255, 231, 231);
+    font-family: airstrike;
+    font-size: 30pt;
+    
+  }
+  >.img{
+
+  }
+  
+}
+
+.gt-login{
+
+  display: grid;
+  height: 100%;
+  overflow: auto;
+  grid-gap: 20px;
+  text-transform: uppercase;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 36px 36px 1fr 1fr 36px;
+  background-image: url(../images/wallpaper/2020-001.png);
+
+  .p1 {
+    grid-row: 1;  
+    grid-column: 1 / 5;
+    //background-image: url(../images/wallpaper/2020-006.jpg);
+    background-color: rgba(128, 128, 128, 0.62);
+    background-position: center center;
+    background-size: 100% 100%;
+    //border: 10px solid white;
+    //margin-left: 20px;
+    //opacity: 0.6;
+    text-align: right;
+  }
+
+  .p3 {
+    grid-row: 2;  
+    grid-column: 4 / 5;
+
+    //background-color: rgb(128, 128, 128);
+  }
+}
+
+
+.user-menu{
+  img{
+    width: 20px;
+    margin:5px;
+  }
 }
