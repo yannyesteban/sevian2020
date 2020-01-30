@@ -94,14 +94,14 @@ class ControlDevice extends \Sevian\Element{
 	
 	private function loadParamsForm($cmd, $cmdId){
 
-		$formsFields = $this->formParams($cmdId);
+		$formsFields = $this->formParams($cmd, $cmdId);
 
 		$menu = [
 			'caption'=>'',
 			'tagLink'=>'button',
 			'className'=>'navigator',
 			'items'=>[
-				['caption'=>'save', 'action'=>"let data = this.getValue(); for(let x in data){db ('value: '+data[x], 'red');}"],
+				['caption'=>'save', 'action'=>"this.sendCMD();//let data = this.getValue(); for(let x in data){db ('value: '+data[x], 'red');}"],
 				['caption'=>'get'],
 				['caption'=>'send']
 			]
@@ -119,7 +119,7 @@ class ControlDevice extends \Sevian\Element{
 		return $form;
 	}
 
-    private function formParams($commandId){
+    private function formParams($cmd, $commandId){
 		$cn = $this->cn;
 		
 		$cn->query = "SELECT param_id, v.value, v.title, p.param, c.command, type_value
@@ -133,6 +133,7 @@ class ControlDevice extends \Sevian\Element{
 		while($rs = $cn->getDataAssoc($result)){
 
 			$id = $rs['param_id'];
+			
 
 			if(!isset($dataFields[$id])){
 				$dataFields[$id] = [];
@@ -149,7 +150,7 @@ class ControlDevice extends \Sevian\Element{
 		$fields = [];
 		
 		
-		$fields[] = [
+		$fields['param_tag'] = [
 			"input"=>'input',
 			"config"=>[
 				"type"=>"text",
@@ -158,12 +159,23 @@ class ControlDevice extends \Sevian\Element{
 			]
 
 		];
-		$fields[] = [
+		$fields['param_pass'] = [
 			"input"=>'input',
 			"config"=>[
 				"type"=>"text",
 				"name"=>"param_pass",
 				"caption"=> 'pass'
+			]
+
+		];
+
+		$fields['param_name'] = [
+			"input"=>'input',
+			"config"=>[
+				"type"=>"text",
+				"name"=>"param_name",
+				"caption"=> 'Name',
+				"value"=>$cmd
 			]
 
 		];
@@ -189,7 +201,7 @@ class ControlDevice extends \Sevian\Element{
 
 			}
 
-			$fields[] = [
+			$fields['param_'.$rs['id']] = [
                 "input"=>$input,
                 "config"=>[
                     "type"=>$type,

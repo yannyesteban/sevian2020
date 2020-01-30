@@ -24,9 +24,9 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
 
 
     protected $auth = false;
-    private $_user = 'pepe';
-    private $_pass = '123';
-    private $_error = 0;
+    private $_user = '';
+    private $_pass = '';
+    private $_error = 1;
     private $_roles = 0;
 
     protected $tUsers = "_sg_users";
@@ -80,8 +80,8 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
 		$result = $cn->execute();
         $auth = false;
         
-		if($rs = $cn->getDataAssoc($result)){
-
+		if(($rs = $cn->getDataAssoc($result)) and $user != ''){
+           
             if($rs['pass'] === $security($this->_pass)){
 
                 if($rs['status'] != 1){
@@ -109,7 +109,7 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
             $this->_roles = $this->dbRoles();
            
         }
-        // hr( $this->_error);
+        //hr( $this->_error);
     }
     private function dbRoles(){
 
@@ -164,11 +164,11 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
 } */
         $opt = [
             "async"=>true,
-            "panel"=>13,
+            "panel"=>4,
             "params"=>[
                 [
                     "t"=>"setMethod",
-                    "id"=>13,
+                    "id"=>4,
                     "element"=>'sgForm',
                     'method'=>'request',
                     'name'=>'gtlogin'

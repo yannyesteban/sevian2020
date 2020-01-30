@@ -1,4 +1,33 @@
 var ControlDevice = (($) => {
+    class GTSocket {
+        constructor(info) {
+            this.url = null;
+            this.socket = null;
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.url = "ws://127.0.0.1:3310"; //= new WebSocket();
+        }
+        connect() {
+            this.socket = new WebSocket(this.url);
+            this.socket.onopen = this.onopen;
+            this.socket.onmessage = this.onmessage;
+        }
+        disconnect() {
+        }
+        send(msg) {
+            this.socket.send(msg);
+        }
+        onopen(event) {
+            db("on OPEN");
+        }
+        onmessage(event) {
+            var server_message = event.data;
+            db(server_message);
+        }
+    }
     class ControlDevice {
         constructor(info) {
             this.panel = null;
@@ -8,11 +37,14 @@ var ControlDevice = (($) => {
             this.paramForm = null;
             this.accountData = null;
             this.deviceData = null;
+            this.socket = null;
+            this.form = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
                 }
             }
+            this.socket = new GTSocket({});
             let main = (this.id) ? $(this.id) : false;
             if (main) {
                 if (main.ds("gtControlDevice")) {
@@ -73,9 +105,14 @@ var ControlDevice = (($) => {
                             value: 2109,
                             data: this.deviceData
                         }
-                    }
+                    },
                 ]
             });
+            let d = $().create("input").attr("type", "button").val("connect");
+            d.on("click", (event) => {
+                this.socket.connect();
+            });
+            f.add(d);
             //let bar2 = main.create("div");
             let tab = new Tab({
                 target: main,
@@ -156,7 +193,13 @@ var ControlDevice = (($) => {
             //$(this.id+"_form_1").text("");
             f.target = this._page0;
             f.id = this.id + "_form_1";
+            f.parentContext = this;
             let f2 = new Form(f);
+            this.form = f2;
+        }
+        sendCMD() {
+            let value = this.form.getInput("param_tag").getValue();
+            this.socket.send(value);
         }
     }
     return ControlDevice;

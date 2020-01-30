@@ -58,6 +58,8 @@ var Form = (($) => {
         _tab:object = null;
         _inputs:object[] = [];
 
+        parentContext:any = null;
+
         static _objs = [];
 
         static init(){
@@ -275,7 +277,7 @@ var Form = (($) => {
           
         }
         createMenu(info:any){
-            info.parentContext = this;
+            info.parentContext = this.getContext();
             let _menu = new Menu(info);
             return $(_menu.get());
         }
@@ -480,7 +482,7 @@ var Form = (($) => {
             let inputs = this._inputs;
             let msg = null;
 
-            for(let x of this.fields){
+            for(let x in this.fields){
                 config = this.fields[x].config;
                 rules = config.rules;
 
@@ -496,6 +498,18 @@ var Form = (($) => {
                 
             }
             return true;
+        }
+
+        setContext(context){
+            this.parentContext = context;
+        }
+
+        getContext(){
+            if(this.parentContext){
+                return this.parentContext;
+            }
+            return this;
+            
         }
     }
 

@@ -1306,7 +1306,28 @@ var Multi = (($) => {
         }
         
         getValue(){
-            return this._input.val();
+            //return this._main.val();
+            
+
+            if(this.type === "radio"){
+                let input = this._main.query("input.option:checked");
+                if(input){
+                    return input.value;
+                }
+                return undefined;
+            }else{
+                let input = this._main.queryAll("input.option:checked");
+                if(input){
+                    let str = "";
+                    input.forEach((i) => {
+                        str = ((str != "")? ",":"") + i.value;
+                    });
+                    return str;
+                }
+            }
+
+            return "";
+
         }
         
         _load(main:any){

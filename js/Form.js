@@ -42,6 +42,7 @@ var Form = (($) => {
             this._pg = [];
             this._tab = null;
             this._inputs = [];
+            this.parentContext = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -213,7 +214,7 @@ var Form = (($) => {
             return _page;
         }
         createMenu(info) {
-            info.parentContext = this;
+            info.parentContext = this.getContext();
             let _menu = new Menu(info);
             return $(_menu.get());
         }
@@ -373,7 +374,7 @@ var Form = (($) => {
             let rules = null, config = null;
             let inputs = this._inputs;
             let msg = null;
-            for (let x of this.fields) {
+            for (let x in this.fields) {
                 config = this.fields[x].config;
                 rules = config.rules;
                 if (rules) {
@@ -387,6 +388,15 @@ var Form = (($) => {
                 }
             }
             return true;
+        }
+        setContext(context) {
+            this.parentContext = context;
+        }
+        getContext() {
+            if (this.parentContext) {
+                return this.parentContext;
+            }
+            return this;
         }
     }
     Form._objs = [];
