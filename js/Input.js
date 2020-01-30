@@ -173,7 +173,7 @@ var Input = (($) => {
             }
         }
         ds(prop, value) {
-            this._main.ds(prop, value);
+            return this._main.ds(prop, value);
         }
         focus() {
             this._main.get().focus();
@@ -290,7 +290,7 @@ var Hidden = (($) => {
             }
         }
         ds(prop, value) {
-            this._main.ds(prop, value);
+            return this._main.ds(prop, value);
         }
         focus() {
             this._main.get().focus();
@@ -458,7 +458,7 @@ var InputDate = (($) => {
             }
         }
         ds(prop, value) {
-            this._main.ds(prop, value);
+            return this._main.ds(prop, value);
         }
         focus() {
             let elem = this._main.query(".type-input-out");
@@ -631,7 +631,7 @@ var InputInfo = (($) => {
             }
         }
         ds(prop, value) {
-            this._main.ds(prop, value);
+            return this._main.ds(prop, value);
         }
         focus() {
             this._main.get().focus();
@@ -858,7 +858,7 @@ var Multi = (($) => {
             }
         }
         ds(prop, value) {
-            this._main.ds(prop, value);
+            return this._main.ds(prop, value);
         }
         focus() {
             this._main.get().focus();
@@ -1102,7 +1102,7 @@ var Multi = (($) => {
             }
         }
         ds(prop, value) {
-            this._main.ds(prop, value);
+            return this._main.ds(prop, value);
         }
         focus() {
             this._main.get().focus();

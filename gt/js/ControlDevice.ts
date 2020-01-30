@@ -249,8 +249,18 @@ var ControlDevice = (($) => {
         }
 
         sendCMD(){
-            let value = this.form.getInput("param_tag").getValue();
-            this.socket.send(value)
+            let inputs = this.form.getInputs();
+            let str = "$WP+"+this.form.getInput("param_name").getValue()+"="+inputs["param_pass"].getValue();
+            for(let i in inputs){
+                if(inputs[i].ds("cmd")){
+                    db (i,"red")
+                   str += ","+inputs[i].getValue(); 
+                }
+                
+            }
+            db (str, "blue")
+            //let value = this.form.getInput("param_tag").getValue();
+            //this.socket.send(str);
         }
     }
     

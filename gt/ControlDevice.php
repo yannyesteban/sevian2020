@@ -164,7 +164,8 @@ class ControlDevice extends \Sevian\Element{
 			"config"=>[
 				"type"=>"text",
 				"name"=>"param_pass",
-				"caption"=> 'pass'
+				"caption"=> 'pass',
+				"value"=>"0000"
 			]
 
 		];
@@ -210,7 +211,8 @@ class ControlDevice extends \Sevian\Element{
 					'data' => $data,
 					'id' => "param_".$rs["id"].'_'.$this->id,
 					'doValues' => $doValues,
-					'events' => $events
+					'events' => $events,
+					'dataset'=>["cmd"=>"param_".$rs["id"]]
                 ]
 
             ];
