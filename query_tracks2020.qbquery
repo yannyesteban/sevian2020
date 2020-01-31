@@ -1,0 +1,13 @@
+﻿SELECT device_cod, device_id, date_time, longitude, latitude, speed, heading, altitude
+satellite, event_id, input_status, mileage, voltage_level_i1, voltage_level_i2, voltage_output, output_status, time
+FROM tracking t;
+
+
+
+insert into tracking (device_cod, device_id, date_time, longitude, latitude, speed, heading, altitude,
+satellite, event_id, input_status, mileage, voltage_level_i1, voltage_level_i2, voltage_output, output_status, time)
+
+
+select codequipo, 	id_equipo, 	fecha_hora, 	longitud, 	latitud, 	velocidad, 	heading, 	altitud,
+ 	satelites, 	event_id ,	input ,	millas, 	analog_input_1, 	analog_input_2, 	analog_output, 	output,
+    	fh_server FROM tracks

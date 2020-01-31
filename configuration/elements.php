@@ -148,6 +148,10 @@ $cls_elements = [
 				'begin'	=> false
 			],
 			[
+				'file' 	=> MAIN_PATH.'lib/LeafletMap.js',
+				'begin'=> false
+			],
+			[
 				'file' 	=> MAIN_PATH.'js/Map.js',
 				'begin'=> false
 			]
