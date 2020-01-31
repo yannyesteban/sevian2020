@@ -126,12 +126,19 @@ class S{
 		return self::$exp;
 	}
 	public static function jsInit($js = []){
-		self::$_js = $js;
-	}
-	public static function cssInit($css = []){
-		self::$_css = $css;
+		self::$_js = array_merge(self::$_js, $js);
 	}
 
+	public static function addJs($js = []){
+		self::$_js = array_merge(self::$_js, $js);
+	}
+
+	public static function cssInit($css = []){
+		self::$_css = array_merge(self::$_css, $css);
+	}
+	public static function addCss($css = []){
+		self::$_css = array_merge(self::$_css, $css);
+	}
 	public static function setRole($role){
 
 	}
@@ -476,8 +483,22 @@ class S{
 	}
 
 	public static function elementsLoad($elements){
+
+		
+
 		foreach($elements as $name => $info){
-			self::setClassElement($name, $info);
+			if($info['enable']){
+				self::setClassElement($name, $info);
+
+				if($info['js']??false){
+					self::addJs($info['js']);
+				}
+				if($info['css']??false){
+					self::addCss($info['css']);
+				}
+			}
+			
+			
 		}
 	}
 
@@ -712,6 +733,7 @@ class S{
 		foreach(self::$_css as $v){
 			$doc->appendCssSheet($v);
 		}
+		
 		foreach(self::$_js as $k=> $v){
 			$doc->appendScriptDoc($v['file'], $v['begin']??true, $v['attrib']??[]);
 		}

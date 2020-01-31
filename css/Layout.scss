@@ -1061,6 +1061,10 @@ $delta_y_h: -240px;
 .sg-map{
   height: 100%;
 
+  .leaflet-control-attribution.leaflet-control{
+    display:none;
+  }
+
 }
 
 

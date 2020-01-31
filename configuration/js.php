@@ -132,12 +132,13 @@ $js = [
 		'begin'	=> false,'file_'=>''
 	],
 	*/
+	/*
 	[
 		'file' 	=> "{$PATH}js/Map.js",
 		'begin'	=> false
 		//'attrib' => [			'_type'=>'module'		]
 	],
-
+*/
 	[
 		'file' 	=> "{$PATH}gt/js/ControlDevice.js",
 		

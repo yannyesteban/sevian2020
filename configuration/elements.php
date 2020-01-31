@@ -3,66 +3,172 @@
 $cls_elements = [
 	'sgUser' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/User.php',
-		'class' => '\Sigefor\User'],
+		'class' => '\Sigefor\User',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
+		
 	'sgModule' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Module.php',
-		'class' => '\Sigefor\Module'],
+		'class' => '\Sigefor\Module',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'sgStructure' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Structure.php',
-		'class' => '\Sigefor\Structure'],
+		'class' => '\Sigefor\Structure',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'ajax' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Ajax.php',
-		'class' => '\Sigefor\Ajax'],
+		'class' => '\Sigefor\Ajax',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	
 	'form' => [
 		'file' 	=> MAIN_PATH.'Sevian/SgForm.php',
-		'class' => 'SgForm'],
+		'class' => 'SgForm',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'menux' 		=> [
 		'file' 	=> MAIN_PATH.'Sevian/SgMenu.php',
-		'class' => 'SgMenu'],
+		'class' => 'SgMenu',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'fragment' 	=> [
 		'file' 	=> MAIN_PATH.'Sevian/ssFragment.php',
-		'class' => 'ssFragment'],
+		'class' => 'ssFragment',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'procedure' => [
 		'file' 	=> MAIN_PATH.'Sigefor/Procedure.php',
-		'class' => 'Sigefor\Procedure'],
+		'class' => 'Sigefor\Procedure',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'sgForm' 	=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Form.php',
-		'class' => 'Sevian\Sigefor\Form'],
+		'class' => 'Sevian\Sigefor\Form',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'ImagesDir' => [
 		'file' 	=> MAIN_PATH.'Sevian/ImagesDir.php',
-		'class' => 'Sevian\ImagesDir'],
+		'class' => 'Sevian\ImagesDir',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'menuX' 	=> [
 		'file' 	=> MAIN_PATH.'Sevian/mMenu.php',
-		'class' => 'Sevian\mMenu'],
+		'class' => 'Sevian\mMenu',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'menuD' 	=> [
 		'file' 	=> MAIN_PATH.'Sigefor/DesignMenu.php',
-		'class' => '\DesignMenu'],
+		'class' => '\DesignMenu',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'menu' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Menu.php',
-		'class' => '\Sevian\Sigefor\Menu'],		
+		'class' => '\Sevian\Sigefor\Menu',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],		
 	'test4' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Menu.php',
-		'class' => '\Sevian\Sigefor\Test4'],	
+		'class' => '\Sevian\Sigefor\Test4',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],	
 	'test55' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Menu.php',
-		'class' => '\Sevian\Sigefor\Test5'],
+		'class' => '\Sevian\Sigefor\Test5',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'test5' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Article.php',
-		'class' => '\Sevian\Sigefor\Article'],
+		'class' => '\Sevian\Sigefor\Article',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'sgArticle' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Article.php',
-		'class' => '\Sevian\Sigefor\Article'],
+		'class' => '\Sevian\Sigefor\Article',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	'sgMap' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Map.php',
-		'class' => '\Sevian\Sigefor\Map'],		
+		'class' => '\Sevian\Sigefor\Map',
+		'enable' => false,
+		'js'=>[
+			[
+				'file'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&callback=initMap',
+				'begin'	=> false
+			],
+			[
+				'file' 	=> MAIN_PATH.'js/Map.js',
+				'begin'=> false
+			]
+		],
+		'css'=>[]
+	],
+	'sgMap' 		=> [
+		'file' 	=> MAIN_PATH.'Sigefor/Map.php',
+		'class' => '\Sevian\Sigefor\Map',
+		'enable' => true,
+		'js'=>[
+			[
+				'file'=>'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
+				'begin'	=> false
+			],
+			[
+				'file' 	=> MAIN_PATH.'js/Map.js',
+				'begin'=> false
+			]
+		],
+		'css'=>['https://unpkg.com/leaflet@1.6.0/dist/leaflet.css']
+	],
 	'gtControlDevice' 		=> [
 		'file' 	=> MAIN_PATH.'gt/ControlDevice.php',
-		'class' => '\Sevian\GT\ControlDevice'],
+		'class' => '\Sevian\GT\ControlDevice',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	
 	'gtMenuDevice' 		=> [
 		'file' 	=> MAIN_PATH.'gt/MenuDevice.php',
-		'class' => '\Sevian\GT\MenuDevice'],
+		'class' => '\Sevian\GT\MenuDevice',
+		'enable' => true,
+		'js'=>[],
+		'css'=>[]
+	],
 	];
 
 Sevian\S::elementsLoad($cls_elements);

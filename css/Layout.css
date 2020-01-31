@@ -949,6 +949,9 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 .sg-map {
   height: 100%;
 }
+.sg-map .leaflet-control-attribution.leaflet-control {
+  display: none;
+}
 
 form {
   height: 100%;
