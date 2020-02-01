@@ -1,0 +1,16 @@
+update equipos as e
+inner join
+(select max(fecha_hora) as xxx, codequipo from tracks_2020 group by codequipo)
+
+ as t on e.codequipo = t.codequipo
+set last_track = xxx
+
+
+
+SELECT * FROM cuenta_vehiculos c;
+
+
+insert into units (id, device_id, vehicle_id, account_id, contract_start)
+
+select codequipo, codequipo, codvehiculo, coddato, fecha_instalacion from cuenta_vehiculos
+where codequipo is not null
