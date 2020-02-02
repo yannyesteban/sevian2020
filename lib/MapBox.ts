@@ -42,7 +42,7 @@
 }());
 
 
-var LeatfletMap = (($) => {
+var MapBox = (($) => {
 
     class Rule{
 
@@ -62,13 +62,14 @@ var LeatfletMap = (($) => {
     class Mark{
         map:object = null;
         icon="";
-        width:string="";
-        heigt:string="";
+        width:string="30px";
+        heigt:string="30px";
         src:string = "";
         visible:boolean = true;
 
         lat:number = 0;
         lng:number = 0;
+        heading:number = 0;
 
         popupInfo:string = "";
 
@@ -79,6 +80,22 @@ var LeatfletMap = (($) => {
                 }
             }
 
+            var markerHeight = 50, markerRadius = 10, linearOffset = 25;
+            var popupOffsets = {
+                'top': [0, 0],
+                'top-left': [0,0],
+                'top-right': [0,0],
+                'bottom': [0, -markerHeight],
+                'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                'left': [markerRadius, (markerHeight - markerRadius) * -1],
+                'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+                };
+               var popup = new mapboxgl.Popup({ className: 'my-class'})
+                 //.setLngLat(e.lngLat)
+                 .setHTML(this.popupInfo)
+                 .setMaxWidth("300px")
+                 ;//.addTo(map);
             var greenIcon = L.icon({
                 iconUrl: '../images/vehiculo_0000.png',
                 //shadowUrl: 'leaf-shadow.png',
@@ -90,12 +107,19 @@ var LeatfletMap = (($) => {
                 popupAnchor:  [0, -25/2] // point from which the popup should open relative to the iconAnchor
             });
 
-            let M = L.marker([this.lat, this.lng], {icon: greenIcon})
-            
-            .bindPopup(this.popupInfo)
-            .addTo(this.map);
+            var el = document.createElement('img');
+            el.className = 'marker';
+            el.src = '../images/vehiculo_0000.png';
+            el.style.width = this.width;
+            el.style.height = this.height;
 
-            M.setIconAngle(45);
+            let M = new mapboxgl.Marker(el)
+            
+            //.bindPopup(this.popupInfo)
+            .setLngLat([this.lng, this.lat])
+            .addTo(this.map);
+M.setPopup(popup);
+            M.setRotation(this.heading);
         }
 
         setLatLng(lat:number, lng:number){
@@ -172,17 +196,17 @@ var LeatfletMap = (($) => {
             });
         }
         _create(main){
-            //https://www.endpoint.com/blog/2019/03/23/switching-google-maps-leaflet
-            main.addClass("leatflet-map")
-            this.map = L.map(this.id).setView(this.latlng, 13);
+            main.addClass("leatflet-map");
+            mapboxgl.accessToken = 'pk.eyJ1IjoieWFubnkyNCIsImEiOiJjazYxZnM5dzMwMzk1M21xbjUyOHVmdjV0In0.4ifqDgs5_PqZd58N1DcVaQ';
+            let map = this.map = new mapboxgl.Map({
+            container: this.id,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            zoom: 10,
+            center: this.latlng
+            });
 
-            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox/streets-v11'
-            }).addTo(this.map);
+
+            
         }
         _load(main){
 
@@ -197,7 +221,7 @@ var LeatfletMap = (($) => {
         }
 
         addMark(name:string, info:object){
-            info.map = this.map;db (info.lat);
+            info.map = this.map;
             this.marks[name] = new Mark(info);
         }
 

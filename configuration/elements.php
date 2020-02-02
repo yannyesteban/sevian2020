@@ -152,11 +152,22 @@ $cls_elements = [
 				'begin'=> false
 			],
 			[
+				'file'=>'https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js',
+				'begin'	=> true
+			],
+			[
+				'file' 	=> MAIN_PATH.'lib/MapBox.js',
+				'begin'=> false
+			],
+			[
 				'file' 	=> MAIN_PATH.'js/Map.js',
 				'begin'=> false
 			]
 		],
-		'css'=>['https://unpkg.com/leaflet@1.6.0/dist/leaflet.css']
+		'css'=>[
+			'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
+			'https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css'
+		]
 	],
 	'gtControlDevice' 		=> [
 		'file' 	=> MAIN_PATH.'gt/ControlDevice.php',

@@ -1,9 +1,23 @@
 var sgMap = (($) => {
+    function evalHTML(html, data) {
+        function auxf(str, p, p2, offset, s) {
+            return data[p2];
+        }
+        for (let x in data) {
+            let regex = new RegExp('\(\{=(' + x + ')\})', 'gi');
+            html = html.replace(regex, auxf);
+        }
+        return html;
+    }
+    function replacer(str, p1, offset, s) {
+        return " <<" + p1 + ">> ";
+    }
     class Map {
         constructor(info) {
             this.id = null;
             this.map = null;
-            this.device = null;
+            this.devices = [];
+            this.tracking = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -39,7 +53,31 @@ var sgMap = (($) => {
             });
         }
         _create(main) {
-            this.map = new LeatfletMap({ id: this.id });
+            //this.map = new LeatfletMap({id:this.id});
+            this.map = new MapBox({ id: this.id });
+            //return;
+            var html = `<div class="wecar_info">
+           <div>{=vehicle_name}</div>
+           <div>{=device_name}</div>
+           <div>{=brand}: {=model}<br>{=plate}, {=color} </div>
+       
+           <div>{=latitude}, {=longitude}</div>
+       
+           <div>Velocidad: {=speed}</div>
+       
+       </div>`;
+            let popup = "";
+            for (let x in this.tracking) {
+                popup = evalHTML(html, this.devices[x]);
+                popup = evalHTML(popup, this.tracking[x]);
+                this.map.addMark(x, {
+                    lat: this.tracking[x].latitude,
+                    lng: this.tracking[x].longitude,
+                    heading: this.tracking[x].heading,
+                    popupInfo: popup
+                });
+                //db (this.devices[x].device_name, "red");
+            }
         }
         _load(main) { }
     }

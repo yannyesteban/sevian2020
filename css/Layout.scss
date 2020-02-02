@@ -1065,6 +1065,11 @@ $delta_y_h: -240px;
     display:none;
   }
 
+  .mapboxgl-ctrl-bottom-right,
+  .mapboxgl-ctrl-bottom-left{
+    display:none;
+  }
+
 }
 
 
@@ -1650,3 +1655,18 @@ form{
     }
   }
 }
+
+
+.wecar_info{
+
+  background-color: rgb(247, 247, 247);
+  padding: 4px;
+}
+
+
+#menu {
+  position: absolute;
+  background: #fff;
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+  }

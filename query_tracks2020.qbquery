@@ -1,4 +1,22 @@
-﻿SELECT device_cod, device_id, date_time, longitude, latitude, speed, heading, altitude
+﻿1.8.3.1 PRIMARY KEY and UNIQUE Index ConstraintsNormally, errors occur for data-change statements (such as INSERT or UPDATE) that would violateprimary-key, unique-key, or foreign-key constraints. If you are using a transactional storage enginesuch as InnoDB, MySQL automatically rolls back the statement. If you are using a nontransactionalstorage engine, MySQL stops processing the statement at the row for which the error occurred andleaves any remaining rows unprocessed.
+MySQL supports an IGNORE keyword for INSERT, UPDATE
+
+mysql> SELECT * FROM pet WHERE REGEXP_LIKE(name, '^b');
++--------+--------+---------+------+------------+------------+
+| name | owner | species | sex | birth | death |
++--------+--------+---------+------+------------+------------+
+| Buffy | Harold | dog | f | 1989-05-13 | NULL |
+| Bowser | Diane | dog | m | 1979-08-31 | 1995-07-29 |
++--------+--------+---------+------+------------+------------+
+To force a regular expression comparison to be case sensitive, use a case-sensitive collation, or
+use the BINARY keyword to make one of the strings a binary string, or specify the c match-control
+character. Each of these queries matches only lowercase b at the beginning of a name:
+SELECT * FROM pet WHERE REGEXP_LIKE(name, '^b' COLLATE utf8mb4_0900_as_cs);
+SELECT * FROM pet WHERE REGEXP_LIKE(name, BINARY '^b');
+
+
+
+SELECT device_cod, device_id, date_time, longitude, latitude, speed, heading, altitude
 satellite, event_id, input_status, mileage, voltage_level_i1, voltage_level_i2, voltage_output, output_status, time
 FROM tracking t;
 
