@@ -156,6 +156,10 @@ $cls_elements = [
 				'begin'	=> true
 			],
 			[
+				'file'=>'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v0.10.1/mapbox-gl-language.js',
+				'begin'	=> true
+			],
+			[
 				'file' 	=> MAIN_PATH.'lib/MapBox.js',
 				'begin'=> false
 			],

@@ -950,12 +950,14 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   height: 100%;
 }
 .sg-map .leaflet-control-attribution.leaflet-control, .leatflet-map .leaflet-control-attribution.leaflet-control {
-  display: none;
+  z-index: 0 !important;
+  pointer-events: none;
 }
 .sg-map .mapboxgl-ctrl-bottom-right,
 .sg-map .mapboxgl-ctrl-bottom-left, .leatflet-map .mapboxgl-ctrl-bottom-right,
 .leatflet-map .mapboxgl-ctrl-bottom-left {
-  display: none;
+  z-index: 0 !important;
+  pointer-events: none;
 }
 
 form {

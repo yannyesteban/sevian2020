@@ -1062,12 +1062,16 @@ $delta_y_h: -240px;
   height: 100%;
 
   .leaflet-control-attribution.leaflet-control{
-    display:none;
+    //display:none;
+    z-index: 0 !important;
+    pointer-events: none;
   }
 
   .mapboxgl-ctrl-bottom-right,
   .mapboxgl-ctrl-bottom-left{
-    display:none;
+    //display:none;
+    z-index: 0 !important;
+    pointer-events: none;
   }
 
 }
