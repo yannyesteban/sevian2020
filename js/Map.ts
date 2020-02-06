@@ -23,6 +23,10 @@ var sgMap = (($) => {
     class Map{
         id:any = null;
         map:any = null;
+
+        clients:any = [];
+        accounts:any = [];
+
         devices:object[] = [];
         tracking:object[] = [];
 
@@ -71,9 +75,60 @@ var sgMap = (($) => {
 
         }
         _create(main:any){
+
+            main.addClass("map-main");
+            let mapMenu = main.create("div").addClass("map-menu");
+            let mapItems = main.create("div").addClass("map-items");
+            let mapBody = main.create("div").addClass("map-body").id(`${this.id}_map`);
            //this.map = new LeatfletMap({id:this.id});
-           this.map = new MapBox({id:this.id});
            //return;
+           let items = [];
+
+           let i = 0;
+           let infoMenu = [];
+            for(let x in this.clients){
+                infoMenu[this.clients[x].id] = {
+                    id: this.clients[x].id,
+                    caption:this.clients[x].client,
+                    items:[], 
+                };    
+            }
+
+            
+            for(let x in this.accounts){
+                infoMenu[this.accounts[x].client_id].items[this.accounts[x].id] = {
+                    id: this.accounts[x].id,
+                    caption:this.accounts[x].account,
+                    items:[],  
+                };
+            }
+
+           for(let x in this.devices){
+
+            infoMenu[this.devices[x].client_id].items[this.devices[x].account_id].items[this.devices[x].unit_id] = {
+                id: this.devices[x].unit_id,
+                caption:this.devices[x].vehicle_name,
+                action:()=>{
+                    db (this.tracking[x].latitude);
+
+                    this.map.flyTo(this.tracking[x].latitude*1,
+                        this.tracking[x].longitude*1);
+                }
+                
+            };
+            
+
+
+           }
+
+           let menu = new Menu({
+               caption:"Devices", 
+               autoClose: false,
+               target:mapItems, items: infoMenu});
+
+           //return;
+           this.map = new MapBox({id:`${this.id}_map`});
+           
            
            var html = `<div class="wecar_info">
            <div>{=vehicle_name}</div>

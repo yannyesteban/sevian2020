@@ -1061,6 +1061,8 @@ $delta_y_h: -240px;
 .sg-map, .leatflet-map{
   height: 100%;
 
+  
+
   .leaflet-control-attribution.leaflet-control{
     //display:none;
     z-index: 0 !important;
@@ -1673,4 +1675,48 @@ form{
   background: #fff;
   padding: 10px;
   font-family: 'Open Sans', sans-serif;
+  }
+
+
+  .map-main{
+    display: grid;
+    height: 100%;
+    overflow: auto;
+    grid-gap: 2px;
+    text-transform: uppercase;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 36px 1fr;
+
+    .map-menu{
+     
+      grid-row: 1;  
+      grid-column: 1 / 3;
+    
+      border:2px solid red;
+      height: 100%;
+    }
+    .map-items{
+
+      grid-row: 2;  
+      grid-column: 1 / 2;
+      border:2px solid rgb(81, 163, 64);
+      height: 100%;
+    }
+    .map-body{
+
+      grid-row: 2;  
+      grid-column: 2/ 3;
+      border:2px solid rgb(175, 108, 108);
+      height: 100%;
+    }
+
+  }
+
+
+  .sg-menu{
+
+      span.text{
+        font-size: 8px;;
+      }
+
   }

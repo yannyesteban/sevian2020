@@ -138,8 +138,9 @@ M.setPopup(popup);
 
         }
 
-        flyTo(value:number){
+        flyTo(lat, lng){
 
+                
         }
 
 
@@ -198,7 +199,7 @@ M.setPopup(popup);
         _create(main){
 
 
-            main.addClass("leatflet-map");
+            //main.addClass("leatflet-map");
             mapboxgl.accessToken = 'pk.eyJ1IjoieWFubnkyNCIsImEiOiJjazYxZnM5dzMwMzk1M21xbjUyOHVmdjV0In0.4ifqDgs5_PqZd58N1DcVaQ';
             let map = this.map = new mapboxgl.Map({
             container: this.id,
@@ -222,8 +223,16 @@ M.setPopup(popup);
 
         }
 
-        flyTo(opt:object){
+        flyTo(lat, lng){
 
+            this.map.flyTo({
+                center: [lng, lat],
+                zoom: 16,
+                speed: 3.0,
+                curve: 1,
+                easing(t) {
+                  return t;
+                });
         }
 
         addMark(name:string, info:object){

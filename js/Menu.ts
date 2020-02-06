@@ -32,6 +32,8 @@ var Menu =
 
         context:object = null;
 
+        autoClose:boolean = true;
+
         _menu:object = null;
         _main:object = null;
         
@@ -159,18 +161,20 @@ var Menu =
             .on("mouseleave", event => {
                 main.ds("active", "0");
             })
-
-            $().on("mousedown", event => {
-                if(main.ds("active") == "0"){
-                    this.closeAll();
-                }
-            });
+            if(this.autoClose){
+                $().on("mousedown", event => {
+                    if(main.ds("active") == "0"){
+                        this.closeAll();
+                    }
+                });
+                
+                $().on("click", event => {
+                    if( main.ds("active") == "1" && !this._isCheck && this._isItem){
+                        this.closeAll();
+                    }
+                });
+            }
             
-            $().on("click", event => {
-                if(main.ds("active") == "1" && !this._isCheck && this._isItem){
-                    this.closeAll();
-                }
-            });
            
             let items = main.queryAll(".submenu");
             if(this.type === "popup"){

@@ -24,6 +24,7 @@ var Menu = (function ($, Float) {
             this.className = "";
             this.items = [];
             this.context = null;
+            this.autoClose = true;
             this._menu = null;
             this._main = null;
             this.action = null;
@@ -112,16 +113,18 @@ var Menu = (function ($, Float) {
                 .on("mouseleave", event => {
                 main.ds("active", "0");
             });
-            $().on("mousedown", event => {
-                if (main.ds("active") == "0") {
-                    this.closeAll();
-                }
-            });
-            $().on("click", event => {
-                if (main.ds("active") == "1" && !this._isCheck && this._isItem) {
-                    this.closeAll();
-                }
-            });
+            if (this.autoClose) {
+                $().on("mousedown", event => {
+                    if (main.ds("active") == "0") {
+                        this.closeAll();
+                    }
+                });
+                $().on("click", event => {
+                    if (main.ds("active") == "1" && !this._isCheck && this._isItem) {
+                        this.closeAll();
+                    }
+                });
+            }
             let items = main.queryAll(".submenu");
             if (this.type === "popup") {
                 for (x of items) {
