@@ -1,4 +1,41 @@
 var sgMap = (($) => {
+    class Events {
+        constructor(info) {
+            this.win = null;
+            this.data = [];
+            this.units = [];
+            this.main = null;
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.main = $().create("div").addClass("win-events");
+            this.win = new Float.Window({
+                visible: true,
+                caption: "Events",
+                child: this.main,
+                left: "right",
+                top: "top",
+                width: "300px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"]
+            });
+            this.loadData(this.data);
+        }
+        loadData(data) {
+            let acc = new Accordion({ target: this.main });
+            this.data.forEach((e) => {
+                let line = $.create("ul").addClass("line").text("33");
+                acc.add({
+                    caption: this.units[e.unit_id].vehicle_name,
+                    child: line,
+                });
+                //line.text(this.units[e.unit_id].vehicle_name);
+            });
+        }
+    }
     function evalHTML(html, data) {
         function auxf(str, p, p2, offset, s) {
             return data[p2];
@@ -18,8 +55,9 @@ var sgMap = (($) => {
             this.map = null;
             this.clients = [];
             this.accounts = [];
-            this.devices = [];
+            this.units = [];
             this.tracking = [];
+            this.events = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -71,6 +109,10 @@ var sgMap = (($) => {
                     items: [],
                 };
             }
+            let ev = new Events({
+                data: this.events,
+                units: this.units,
+            });
             for (let x in this.accounts) {
                 infoMenu[this.accounts[x].client_id].items[this.accounts[x].id] = {
                     id: this.accounts[x].id,
@@ -78,10 +120,10 @@ var sgMap = (($) => {
                     items: [],
                 };
             }
-            for (let x in this.devices) {
-                infoMenu[this.devices[x].client_id].items[this.devices[x].account_id].items[this.devices[x].unit_id] = {
-                    id: this.devices[x].unit_id,
-                    caption: this.devices[x].vehicle_name,
+            for (let x in this.units) {
+                infoMenu[this.units[x].client_id].items[this.units[x].account_id].items[this.units[x].unit_id] = {
+                    id: this.units[x].unit_id,
+                    caption: this.units[x].vehicle_name,
                     action: () => {
                         db(this.tracking[x].latitude);
                         this.map.flyTo(this.tracking[x].latitude * 1, this.tracking[x].longitude * 1);
@@ -93,18 +135,18 @@ var sgMap = (($) => {
                 autoClose: false,
                 target: mapItems, items: infoMenu
             });
-            //return;
+            return;
             this.map = new MapBox({ id: `${this.id}_map` });
             var html = `<div class="wecar_info">
-           <div>{=vehicle_name}</div>
-           <div>{=device_name}</div>
-           <div>{=brand}: {=model}<br>{=plate}, {=color} </div>
-       
-           <div>{=latitude}, {=longitude}</div>
-       
-           <div>Velocidad: {=speed}</div>
-       
-       </div>`;
+                <div>{=vehicle_name}</div>
+                <div>{=device_name}</div>
+                <div>{=brand}: {=model}<br>{=plate}, {=color} </div>
+            
+                <div>{=latitude}, {=longitude}</div>
+            
+                <div>Velocidad: {=speed}</div>
+            
+            </div>`;
             let popup = "";
             for (let x in this.tracking) {
                 popup = evalHTML(html, this.devices[x]);

@@ -69,8 +69,9 @@ class Map extends \Sevian\Element{
 
         $clients = $this->loadClients();
         $accounts = $this->loadAccounts();
-        $devices = $this->loadDevices();
+        //$devices = $this->loadDevices();
         $tracking = $this->loadTracking();
+        //$events = $this->loadAlarmsEvents();
 
         
 
@@ -86,8 +87,9 @@ class Map extends \Sevian\Element{
             "id"        => $form->id,
             "clients"=>$clients,
             "accounts"=>$accounts,
-            "devices"   => $devices,
-            "tracking"  => $tracking
+            "units"   => $this->loadDevices(),
+            "tracking"  => $tracking,
+            "events"  => $this->loadAlarmsEvents()
 
         ];
 
@@ -270,7 +272,7 @@ class Map extends \Sevian\Element{
     }
 
 
-private function loadTracking(){
+    private function loadTracking(){
         $cn = $this->cn;
 		
         $cn->query = "
@@ -295,6 +297,35 @@ private function loadTracking(){
         return $data;
     }
 
+
+    private function loadAlarmsEvents(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT
+
+        t.date_time,
+        t.unit_id, longitude, latitude, heading, event_id, input_status, output_status,
+
+        IFNULL(t.date_time, NOW()) AS delay,
+        al.name as alarm, al.type
+
+        FROM alarms_events as ae
+        INNER JOIN alarms as al ON al.id = ae.alarm_id
+        INNER JOIN tracking as t ON t.id = ae.tracking_id
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
 }
 
 

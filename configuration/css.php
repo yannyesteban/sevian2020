@@ -3,11 +3,14 @@
 $PATH = MAIN_PATH;
 
 $css = array(
+
+	"{$PATH}css/Window.css",
+
 	"{$PATH}css/Menu.css",
 	
 	//"{$PATH}css/sgMenu.css",
 	"{$PATH}css/Layout.css",
-	"{$PATH}css/sgWindow.css",
+	//"{$PATH}css/sgWindow.css",
 	//"{$PATH}css/sgCalendar.css",
 	//"{$PATH}css/selectText.css",
 	"{$PATH}css/sgTab.css",

@@ -1,5 +1,49 @@
 var sgMap = (($) => {
    
+
+    class Events{
+        win:any = null;
+        data:any[] = [];
+        units:any[] = [];
+        main:any = null;
+        constructor(info){
+            for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+            this.main = $().create("div").addClass("win-events");
+            this.win = new Float.Window({
+                visible:true,
+                caption:"Events",
+                child:this.main,
+                left:"right",
+                top:"top",
+                width: "300px",
+                height: "300px",
+                mode:"auto",
+                className:["sevian"]
+            });
+            this.loadData(this.data);
+        }
+
+        loadData(data){
+
+            let acc = new Accordion({target:this.main});
+            this.data.forEach((e)=>{
+
+                let line = $.create("ul").addClass("line").text("33");
+                acc.add({
+                    caption:this.units[e.unit_id].vehicle_name,
+                    child:line,
+                });
+                //line.text(this.units[e.unit_id].vehicle_name);
+
+            })
+        }
+    }
+
     function evalHTML(html, data){
 
         function auxf(str, p, p2, offset, s){
@@ -27,8 +71,9 @@ var sgMap = (($) => {
         clients:any = [];
         accounts:any = [];
 
-        devices:object[] = [];
+        units:object[] = [];
         tracking:object[] = [];
+        events:object[] = [];
 
         constructor(info:object){
             
@@ -93,7 +138,10 @@ var sgMap = (($) => {
                     items:[], 
                 };    
             }
-
+            let ev = new Events({
+                data:this.events,
+                units: this.units,
+            });
             
             for(let x in this.accounts){
                 infoMenu[this.accounts[x].client_id].items[this.accounts[x].id] = {
@@ -103,11 +151,11 @@ var sgMap = (($) => {
                 };
             }
 
-           for(let x in this.devices){
+           for(let x in this.units){
 
-            infoMenu[this.devices[x].client_id].items[this.devices[x].account_id].items[this.devices[x].unit_id] = {
-                id: this.devices[x].unit_id,
-                caption:this.devices[x].vehicle_name,
+            infoMenu[this.units[x].client_id].items[this.units[x].account_id].items[this.units[x].unit_id] = {
+                id: this.units[x].unit_id,
+                caption:this.units[x].vehicle_name,
                 action:()=>{
                     db (this.tracking[x].latitude);
 
@@ -124,22 +172,23 @@ var sgMap = (($) => {
            let menu = new Menu({
                caption:"Devices", 
                autoClose: false,
-               target:mapItems, items: infoMenu});
+               target:mapItems,items: infoMenu});
 
-           //return;
+           return;
            this.map = new MapBox({id:`${this.id}_map`});
            
            
+       
            var html = `<div class="wecar_info">
-           <div>{=vehicle_name}</div>
-           <div>{=device_name}</div>
-           <div>{=brand}: {=model}<br>{=plate}, {=color} </div>
-       
-           <div>{=latitude}, {=longitude}</div>
-       
-           <div>Velocidad: {=speed}</div>
-       
-       </div>`;
+                <div>{=vehicle_name}</div>
+                <div>{=device_name}</div>
+                <div>{=brand}: {=model}<br>{=plate}, {=color} </div>
+            
+                <div>{=latitude}, {=longitude}</div>
+            
+                <div>Velocidad: {=speed}</div>
+            
+            </div>`;
 
             let popup = "";
             
@@ -159,6 +208,7 @@ var sgMap = (($) => {
                 //db (this.devices[x].device_name, "red");
             }
            
+            
             
         }
         _load(main:any){}

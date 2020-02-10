@@ -400,175 +400,7 @@ div[data-sg-type=sg-ajax]{
 
 
 }
-$delta_y: -20px;
-$delta_y_h: -240px;
 
-
-.sgWin{
-  background-color: rgb(231, 231, 231);
-  border: 2px solid rgb(212, 211, 211);
-  >.caption{
-    background-color: rgb(8, 55, 112);
-    
-    background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
-
-    color: rgb(114, 114, 114);
-    >.icon{
-      border: 0px solid white;
-    }
-  }
-  &.moving{
-    //border-color: rgb(21, 117, 58);
-  }
-  &.resizing{
-   // border-color: rgb(30, 210, 201);
-  }
-  .rs.rb {
-    border-radius: 5px;
-    height: 0px !important;
-    width: 0px !important;
-    border: 5px solid rgb(224, 111, 6);
-  }
-}
-
-.sgWin.sevian{
-  position: fixed;
-  //width: fit-content;
-  //box-sizing: border-box;
-  min-width: 160px;
-  min-height: 40px;
-  max-height: 100%;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 5px 6px 12px -4px rgba(0,0,0,0.75);
-
-  &.hidden{
-    visibility: hidden;
-    //display: none;
-    >.body>*{
-      //visibility: hidden;
-      display: none;
-    }
-  }
-  >.caption{
-    flex: 0 0 auto;
-    
-    height: 40px;
-    align-items: center;
-    display: flex;
-
-    
-    cursor: default;
-
-    >.icon{
-      flex:0 0 auto;
-      
-      width: 20px;
-      height: 20px;
-      display: inline-block;
-      pointer-events: none;
-      margin-left: 4px;
-    }
-    >.text{
-      flex:1 1 auto;
-      padding-left: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
- 
-    >.win-btn{
-      flex:0 0 auto;
-      background-image: url(../images/win_icons.png?i=18);
-      width: 20px;
-      height: 20px;
-      display: inline-block;
-  
-      &.min{
-        background-position: 0px $delta_y;	
-        &:HOVER{
-          background-position: -0px $delta_y_h;	
-        }
-      }
-      &.max{
-        background-position: -40px $delta_y;	
-        &:HOVER{
-          background-position: -40px $delta_y_h;	
-        }
-      }
-      &.auto{
-        background-position: -20px $delta_y;	
-        &:HOVER{
-          background-position: -20px $delta_y_h;	
-        }
-      }
-      &.close{
-        margin-right: 4px;
-        background-position: -60px $delta_y;	
-        &:HOVER{
-          background-position: -60px $delta_y_h;	
-        }
-      }
-    }
-  }
-
-  >.body{
-    overflow: auto !important;
-  }
-  
-  &.min{
-    height: auto !important;
-    max-width: 160px !important;
-    >.caption{
-      >.win-btn.min{
-        display: none;
-      }
-    }
-    >.body{
-      flex: 0 0 0px !important;
-      height: 0px;
-    }
-  }
-  &.auto{
-    height: auto!important;
-    width: auto !important;
-    >.caption{
-      >.win-btn.auto{
-        display: none;
-      }
-    }
-    >.body{
-      height: auto !important;
-      width: auto !important;
-    }
-  }
-
-  &.max{
-    width:calc(100% - 20px) !important;
-    height: calc(100% - 20px)!important;
-    top: 10px !important;
-    left: 10px !important;
-    >.caption{
-      >.win-btn.max{
-        display: none;
-      }
-    }
-  }
-  &.close{
-    visibility: hidden;
-  }
-  &.moving{
-
-    user-select: none;
-  }
-  &.resizing{
-
-    user-select: none;
-  }
-
-  
-}
 
 
 
@@ -1684,30 +1516,35 @@ form{
     overflow: auto;
     grid-gap: 2px;
     text-transform: uppercase;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 200px 200px 1fr;
     grid-template-rows: 36px 1fr;
 
     .map-menu{
      
       grid-row: 1;  
-      grid-column: 1 / 3;
+      grid-column: 1 / 5;
     
       border:2px solid red;
       height: 100%;
+      
     }
     .map-items{
-
+      //margin:10px;
       grid-row: 2;  
       grid-column: 1 / 2;
       border:2px solid rgb(81, 163, 64);
       height: 100%;
+      overflow: auto;
+      z-index: 2;
+      background-color: rgba(116, 116, 116, 0.562);
     }
     .map-body{
 
       grid-row: 2;  
-      grid-column: 2/ 3;
+      grid-column: 1 / 5;
       border:2px solid rgb(175, 108, 108);
       height: 100%;
+      z-index: 1;
     }
 
   }
@@ -1719,4 +1556,14 @@ form{
         font-size: 8px;;
       }
 
+  }
+  
+
+  .win-events{
+    height: 100%;
+    width:100%;
+    color:white;
+    font-size: 0.6em;
+    padding: 4px;
+    text-transform: uppercase;
   }

@@ -89,6 +89,10 @@ $js = [
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
+		'file' 	=> "{$PATH}js/Accordion.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
 		'file' 	=> "{$PATH}js/Input.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],

@@ -122,3 +122,37 @@ $active_color : rgb(204, 83, 13);
 }
 
 
+.sg-accordion{
+	>.menu{
+
+		>.tab-menu{
+			width: 100%;
+      		display: inline-block;
+			background-color: rgba(111,111,111,1.00);
+			text-decoration: none;
+			color: white;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis'...';
+			//max-width: 90px;
+			//min-width: 70px;
+			box-sizing: padding-box;
+			//border-radius: 4px 12px 0px 0px;
+			//margin: 0px 2px 0px 0px;
+			padding:4px 10px 4px 10px;
+			cursor: pointer;
+			user-select: none;         
+			&.tab-active{
+				background-color: red;
+			}
+		}
+	}
+	>.menu{
+		>.tab-body{
+			&:not(.tab-active){
+				display: none !important;
+			}
+		}
+	}	
+}
+

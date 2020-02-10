@@ -94,8 +94,10 @@ var db = false, hr = false;
 		child:div,
 		left:"center",
 		top:"top",
+		className:["sevian"]
 	});
 
+	
 	
 	
 })(_sgQuery);
