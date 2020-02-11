@@ -1456,7 +1456,7 @@ form{
   display: grid;
   height: 100%;
   overflow: auto;
-  grid-gap: 10px;
+  //grid-gap: 10px;
   text-transform: uppercase;
   grid-template-columns: 1fr;
   grid-template-rows: 36px 1fr;
@@ -1505,7 +1505,7 @@ form{
 #menu {
   position: absolute;
   background: #fff;
-  padding: 10px;
+  //padding: 10px;
   font-family: 'Open Sans', sans-serif;
   }
 
@@ -1514,7 +1514,7 @@ form{
     display: grid;
     height: 100%;
     overflow: auto;
-    grid-gap: 2px;
+    //grid-gap: 2px;
     text-transform: uppercase;
     grid-template-columns: 200px 200px 1fr;
     grid-template-rows: 36px 1fr;
@@ -1524,10 +1524,12 @@ form{
       grid-row: 1;  
       grid-column: 1 / 5;
     
-      border:2px solid red;
+      //border:2px solid red;
+      background-color: rgba(4, 41, 252, 0.103);
       height: 100%;
-      
+      z-index: 2;
     }
+    /*
     .map-items{
       //margin:10px;
       grid-row: 2;  
@@ -1538,11 +1540,12 @@ form{
       z-index: 2;
       background-color: rgba(116, 116, 116, 0.562);
     }
+    */
     .map-body{
 
-      grid-row: 2;  
+      grid-row: 1/3;  
       grid-column: 1 / 5;
-      border:2px solid rgb(175, 108, 108);
+      //border:4px solid rgb(175, 108, 108);
       height: 100%;
       z-index: 1;
     }
@@ -1551,9 +1554,22 @@ form{
 
 
   .sg-menu{
-
+    .caption{
       span.text{
-        font-size: 8px;;
+      font-size: 10px;
+    }
+    }
+    
+      span.text{
+        font-size: 10px;
+      }
+
+      .icon{
+        display: none;
+      }
+
+      .submenu{
+        overflow: hidden;
       }
 
   }
@@ -1566,4 +1582,32 @@ form{
     font-size: 0.6em;
     padding: 4px;
     text-transform: uppercase;
+  }
+
+
+  .units-info{
+    padding: 2px;
+    color:white;
+    font-size: 11px;
+    min-width: 240px;
+    display: grid;
+    height: 100%;
+    overflow: auto;
+    //grid-gap: 2px;
+    text-transform: uppercase;
+    grid-template-columns: auto 1fr;
+    //grid-template-rows: 36px 1fr;
+    >div{
+      //margin-top: 1px;
+      //border-bottom: 1px solid white;
+      background-color: rgba(109, 0, 33, 0.493);
+      padding: 3px;
+    }
+
+    >div:nth-child(2n+1){
+      color: rgb(146, 146, 146);
+      font-weight: bold;
+    }
+
+
   }

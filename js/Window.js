@@ -531,7 +531,7 @@ var Float = (($) => {
                 this.main.style.top = top + "px";
             }
             if (this.info.onresize) {
-                this.info.onresize(this.xA + left - iniX, this.yA + top - iniY);
+                this.info.onresize(this.xA + left - iniX, this.yA + top - iniY, this.mode);
             }
         }
         static release(left, top, iniX, iniY) {
@@ -726,11 +726,21 @@ Float.Window = (($) => {
                     main: main.get(),
                     onstart: () => main.addClass("resizing"),
                     onrelease: () => main.removeClass("resizing"),
-                    onresize: () => this.setMode("custom")
+                    onresize: (x, y, mode) => {
+                        if (mode == "l" || mode == "r" || mode == "lt" || mode == "lb" || mode == "rt" || mode == "rb") {
+                            this._main.removeClass("w-auto");
+                        }
+                        if (mode == "b" || mode == "t" || mode == "lt" || mode == "lb" || mode == "rt" || mode == "rb") {
+                            this._main.removeClass("h-auto");
+                        }
+                        this.setMode("custom");
+                    }
                 });
                 $(main.query(".win-btn.min")).on("click", () => this.setMode("min"));
                 $(main.query(".win-btn.auto")).on("click", () => this.setMode("auto"));
                 $(main.query(".win-btn.max")).on("click", () => this.setMode("max"));
+                $(main.query(".rs.b")).on("dblclick", () => { this.setMode("custom"); this._main.addClass("h-auto"); });
+                $(main.query(".rs.r")).on("dblclick", () => { this.setMode("custom"); this._main.addClass("w-auto"); });
                 $(main.query(".caption")).on("dblclick", () => {
                     if (this.mode === "max") {
                         this.setMode("auto");

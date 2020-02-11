@@ -71,17 +71,18 @@ $delta_y_h: -240px;
     //width: fit-content;
     //box-sizing: border-box;
     min-width: 160px;
-    min-height: 40px;
+    min-height: 28px;
     max-height: 100%;
     max-width: 100%;
     display: flex;
     flex-direction: column;
-    //box-shadow: 5px 6px 12px -4px rgba(0,0,0,0.75);
+    box-shadow: 5px 6px 12px -4px rgba(0,0,0,0.50);
     background-color: rgba(1, 1, 1, 0.4);
+    border: 1px solid red;
     transition: 0.5s ease-in background-color;
     &:hover{
       
-      background-color: rgba(1, 1, 1, 0.6);
+      background-color: rgba(1, 1, 1, 0.8);
     }
   
     &.hidden{
@@ -93,14 +94,15 @@ $delta_y_h: -240px;
       }
     }
     >.caption{
-      background-color: rgba(0, 81, 255, 0.4);
+      background-color: rgba(226, 13, 95, 0.719);
       flex: 0 0 auto;
       
-      height: 40px;
+      height: 28px;
       align-items: center;
       display: flex;
       color:white;
-      
+      //text-transform: uppercase;
+      font-size: 13px;
       cursor: default;
       @include btn-color(-20px, -200px);
       >.icon{
@@ -151,6 +153,34 @@ $delta_y_h: -240px;
       >.body{
         height: auto !important;
         width: auto !important;
+      }
+    }
+
+    &.w-auto{
+      
+      width: auto !important;
+      >.caption{
+        >.win-btn.auto{
+          //display: none;
+        }
+      }
+      >.body{
+      
+        width: auto !important;
+      }
+    }
+
+    &.h-auto{
+      height: auto!important;
+      
+      >.caption{
+        >.win-btn.auto{
+          //display: none;
+        }
+      }
+      >.body{
+        height: auto !important;
+      
       }
     }
   

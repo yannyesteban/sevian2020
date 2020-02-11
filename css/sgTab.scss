@@ -1,4 +1,36 @@
 /* Scss Document */
+
+@keyframes ac_open {
+	0%{
+		opacity:0;
+		transform: scale(0.5);
+		transform-origin: 0 0;
+		max-height: 0px;
+		
+	}
+	100%{
+		max-height: 600px;
+		opacity:1;
+		transform: scale(1);
+    	transform-origin: 0 0;
+	}
+}
+
+@keyframes ac_close {
+	0%{
+		opacity:1;
+		//visibility: visible;
+		max-height: 600px;
+	}
+
+	100%{
+		opacity:0;
+		//visibility: hidden!important;
+		max-height: 0px;
+		overflow: hidden;
+	}
+}
+
 $active_color : rgb(204, 83, 13);
 .sg-tab{
 	>.menu{
@@ -128,7 +160,7 @@ $active_color : rgb(204, 83, 13);
 		>.tab-menu{
 			width: 100%;
       		display: inline-block;
-			background-color: rgba(111,111,111,1.00);
+			background-color: rgba(111, 111, 111, 0.103);
 			text-decoration: none;
 			color: white;
 			white-space: nowrap;
@@ -143,14 +175,19 @@ $active_color : rgb(204, 83, 13);
 			cursor: pointer;
 			user-select: none;         
 			&.tab-active{
-				background-color: red;
+				background-color: rgba(255, 0, 0, 0.164);
 			}
 		}
 	}
 	>.menu{
 		>.tab-body{
+			&.tab-active{
+				animation: ac_open  0.5s ease-out forwards;
+				color:yellow;
+			}
 			&:not(.tab-active){
-				display: none !important;
+				//display: none !important;
+				animation: ac_close  0.1s ease-out forwards;
 			}
 		}
 	}	

@@ -89,7 +89,18 @@ class Map extends \Sevian\Element{
             "accounts"=>$accounts,
             "units"   => $this->loadDevices(),
             "tracking"  => $tracking,
-            "events"  => $this->loadAlarmsEvents()
+            "events"  => $this->loadAlarmsEvents(),
+            "marks"  => [
+                "marks"=> $this->loadMarks(),
+                "groups"=>$this->loadMarksGroups(),
+                "scales"=>$this->loadMarksScales(),
+                "icons"=>$this->loadMarksIcons()
+            ],
+            "geofences"=>$this->loadGeofences(),
+            "alarms"=>[
+                "alarms"=>$this->loadAlarms(),
+                "types"=>$this->loadAlarmsTypes(),
+            ]
 
         ];
 
@@ -279,7 +290,7 @@ class Map extends \Sevian\Element{
         
         SELECT
 
-        t.*
+        t.*, date_format(date_time, '%d/%m/%Y %T') as date_time
 
         FROM tracking as t
         INNER JOIN units as u ON u.tracking_id = t.id
@@ -314,6 +325,154 @@ class Map extends \Sevian\Element{
         FROM alarms_events as ae
         INNER JOIN alarms as al ON al.id = ae.alarm_id
         INNER JOIN tracking as t ON t.id = ae.tracking_id
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
+
+    private function loadMarksScales(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT * FROM marks_scales 
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
+
+    private function loadMarksIcons(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT * FROM icons 
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
+
+    private function loadMarksGroups(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        SELECT g.* 
+        FROM marks as m 
+        INNER JOIN marks_groups as g ON g.id = m.group_id 
+        WHERE m.user='Cobecac' 
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
+
+    private function loadMarks(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT * FROM marks WHERE user='Cobecac' 
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
+
+
+    private function loadGeofences(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT *
+        FROM geofences as gf
+        WHERE user='tay2000'
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
+    
+    private function loadAlarmsTypes(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT id, name
+        FROM alarms_types as al
+        /*
+        WHERE user ='tay2000'
+        */
+        ORDER BY name;
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		if($rs = $cn->getDataAll($result)){
+            $data = $rs;
+        }
+
+
+        return $data;
+    }
+
+    private function loadAlarms(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT id, name, type_id
+        FROM alarms as al
+        /*
+        WHERE user ='tay2000'
+        */
+        ORDER BY name;
                 
         ";
 		$result = $cn->execute();

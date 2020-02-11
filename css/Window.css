@@ -8,7 +8,7 @@
 .sgWin.sevian {
   position: fixed;
   min-width: 160px;
-  min-height: 40px;
+  min-height: 28px;
   max-height: 100%;
   max-width: 100%;
   display: -webkit-box;
@@ -18,12 +18,15 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
+          box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
   background-color: rgba(1, 1, 1, 0.4);
+  border: 1px solid red;
   -webkit-transition: 0.5s ease-in background-color;
   transition: 0.5s ease-in background-color;
 }
 .sgWin.sevian:hover {
-  background-color: rgba(1, 1, 1, 0.6);
+  background-color: rgba(1, 1, 1, 0.8);
 }
 .sgWin.sevian.hidden {
   visibility: hidden;
@@ -32,11 +35,11 @@
   display: none;
 }
 .sgWin.sevian > .caption {
-  background-color: rgba(0, 81, 255, 0.4);
+  background-color: rgba(226, 13, 95, 0.719);
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
-  height: 40px;
+  height: 28px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -44,6 +47,7 @@
   display: -ms-flexbox;
   display: flex;
   color: white;
+  font-size: 13px;
   cursor: default;
 }
 .sgWin.sevian > .caption > .win-btn {
@@ -125,6 +129,18 @@
 .sgWin.sevian.auto > .body {
   height: auto !important;
   width: auto !important;
+}
+.sgWin.sevian.w-auto {
+  width: auto !important;
+}
+.sgWin.sevian.w-auto > .body {
+  width: auto !important;
+}
+.sgWin.sevian.h-auto {
+  height: auto !important;
+}
+.sgWin.sevian.h-auto > .body {
+  height: auto !important;
 }
 .sgWin.sevian.max {
   width: calc(100% - 20px) !important;

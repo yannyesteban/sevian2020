@@ -1,4 +1,263 @@
 var sgMap = (($) => {
+    class Units {
+        constructor(info) {
+            this.win = null;
+            this.data = [];
+            this.units = [];
+            this.main = null;
+            this.clients = [];
+            this.accounts = [];
+            this.tracking = [];
+            this.info = null;
+            this.wInfo = null;
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.main = $().create("div").addClass("win-units");
+            this.win = new Float.Window({
+                visible: true,
+                caption: "Unidades",
+                child: this.main,
+                left: 10,
+                top: 40,
+                width: "300px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"]
+            });
+            let infoMenu = [];
+            for (let x in this.clients) {
+                infoMenu[this.clients[x].id] = {
+                    id: this.clients[x].id,
+                    caption: this.clients[x].client,
+                    items: [],
+                    useCheck: true,
+                    useIcon: false,
+                };
+            }
+            for (let x in this.accounts) {
+                infoMenu[this.accounts[x].client_id].items[this.accounts[x].id] = {
+                    id: this.accounts[x].id,
+                    caption: this.accounts[x].account,
+                    items: [],
+                    useCheck: true,
+                };
+            }
+            for (let x in this.units) {
+                infoMenu[this.units[x].client_id].items[this.units[x].account_id].items[this.units[x].unit_id] = {
+                    id: this.units[x].unit_id,
+                    caption: this.units[x].vehicle_name,
+                    useCheck: true,
+                    action: () => {
+                        this.info.text(this.loadInfo(x));
+                        this.wInfo.setCaption(this.units[x].vehicle_name);
+                    }
+                };
+            }
+            let menu = new Menu({
+                caption: "",
+                autoClose: false,
+                target: this.main, items: infoMenu
+            });
+            this.info = $().create("div").addClass("win-units-info");
+            this.wInfo = new Float.Window({
+                visible: true,
+                caption: "Info",
+                child: this.info,
+                left: 10,
+                top: 40,
+                width: "300px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"]
+            });
+        }
+        loadInfo(x) {
+            var html = `
+                <div class="units-info">
+                <div>Placa</div><div>{=plate}</div>
+                <div>Marca</div><div>{=brand}</div>
+                <div>Modelo</div><div>{=model}</div>
+                <div>Color</div><div>{=color}</div>
+
+                <div>Hora</div><div>{=date_time}</div>
+                <div>Longitud</div><div>{=longitude}</div>
+                <div>Latidud</div><div>{=latitude}</div>
+                <div>Velocidad</div><div>{=speed}</div>
+
+                <div>Heading</div><div>{=heading}</div>
+                <div>Satellite</div><div>{=satellite}</div>
+                <div>Inputs</div><div>{=speed}</div>
+                <div>Outputs</div><div>{=speed}</div>
+
+
+
+
+            
+            </div>`;
+            let popup = evalHTML(html, this.units[x]);
+            popup = evalHTML(popup, this.tracking[x]);
+            return popup;
+        }
+    }
+    class Marks {
+        constructor(info) {
+            this.win = null;
+            this.data = [];
+            this.units = [];
+            this.main = null;
+            this.clients = [];
+            this.accounts = [];
+            this.scales = [];
+            this.icons = [];
+            this.groups = [];
+            this.marks = [];
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.main = $().create("div").addClass("win-marks");
+            this.win = new Float.Window({
+                visible: true,
+                caption: "Mis Sitios",
+                child: this.main,
+                left: 10,
+                top: 40,
+                width: "300px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"]
+            });
+            let infoMenu = [];
+            for (let x in this.groups) {
+                infoMenu[this.groups[x].id] = {
+                    id: this.groups[x].id,
+                    caption: this.groups[x].name,
+                    items: [],
+                    useCheck: true,
+                    useIcon: false,
+                };
+            }
+            for (let x in this.marks) {
+                infoMenu[this.marks[x].group_id].items[this.marks[x].id] = {
+                    id: this.marks[x].id,
+                    caption: this.marks[x].name,
+                    //items:[],
+                    useCheck: true,
+                };
+            }
+            let menu = new Menu({
+                caption: "",
+                autoClose: false,
+                target: this.main, items: infoMenu
+            });
+        }
+    }
+    class Geofences {
+        constructor(info) {
+            this.win = null;
+            this.data = [];
+            this.units = [];
+            this.main = null;
+            this.clients = [];
+            this.accounts = [];
+            this.scales = [];
+            this.icons = [];
+            this.groups = [];
+            this.marks = [];
+            this.geofences = [];
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.main = $().create("div").addClass("win-geofences");
+            this.win = new Float.Window({
+                visible: true,
+                caption: "Mis Geocercas",
+                child: this.main,
+                left: 10,
+                top: 40,
+                width: "300px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"]
+            });
+            let infoMenu = [];
+            for (let x in this.geofences) {
+                infoMenu[this.geofences[x].id] = {
+                    id: this.geofences[x].id,
+                    caption: this.geofences[x].name,
+                    //items:[], 
+                    useCheck: true,
+                    useIcon: false,
+                };
+            }
+            let menu = new Menu({
+                caption: "",
+                autoClose: false,
+                target: this.main, items: infoMenu
+            });
+        }
+    }
+    class Alarms {
+        constructor(info) {
+            this.win = null;
+            this.data = [];
+            this.units = [];
+            this.main = null;
+            this.clients = [];
+            this.accounts = [];
+            this.scales = [];
+            this.icons = [];
+            this.types = [];
+            this.alarms = [];
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.main = $().create("div").addClass("win-alarms");
+            this.win = new Float.Window({
+                visible: true,
+                caption: "Mis Alarmas",
+                child: this.main,
+                left: 10,
+                top: 40,
+                width: "300px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"]
+            });
+            let infoMenu = [];
+            for (let x in this.types) {
+                infoMenu[this.types[x].id] = {
+                    id: this.types[x].id,
+                    caption: this.types[x].name,
+                    items: [],
+                    useCheck: true,
+                    useIcon: false,
+                };
+            }
+            console.log(this.types);
+            for (let x in this.alarms) {
+                infoMenu[this.alarms[x].type_id].items[this.alarms[x].id] = {
+                    id: this.alarms[x].id,
+                    caption: this.alarms[x].name,
+                    //items:[],
+                    useCheck: true,
+                };
+            }
+            let menu = new Menu({
+                caption: "",
+                autoClose: false,
+                target: this.main, items: infoMenu
+            });
+        }
+    }
     class Events {
         constructor(info) {
             this.win = null;
@@ -15,7 +274,7 @@ var sgMap = (($) => {
                 visible: true,
                 caption: "Events",
                 child: this.main,
-                left: "right",
+                left: "left",
                 top: "top",
                 width: "300px",
                 height: "300px",
@@ -58,6 +317,9 @@ var sgMap = (($) => {
             this.units = [];
             this.tracking = [];
             this.events = [];
+            this.marks = [];
+            this.geofences = [];
+            this.alarms = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -95,47 +357,35 @@ var sgMap = (($) => {
         _create(main) {
             main.addClass("map-main");
             let mapMenu = main.create("div").addClass("map-menu");
-            let mapItems = main.create("div").addClass("map-items");
+            //let mapItems = main.create("div").addClass("map-items");
             let mapBody = main.create("div").addClass("map-body").id(`${this.id}_map`);
-            //this.map = new LeatfletMap({id:this.id});
-            //return;
-            let items = [];
-            let i = 0;
-            let infoMenu = [];
-            for (let x in this.clients) {
-                infoMenu[this.clients[x].id] = {
-                    id: this.clients[x].id,
-                    caption: this.clients[x].client,
-                    items: [],
-                };
-            }
             let ev = new Events({
                 data: this.events,
+                accounts: this.accounts,
+                clients: this.clients,
                 units: this.units,
             });
-            for (let x in this.accounts) {
-                infoMenu[this.accounts[x].client_id].items[this.accounts[x].id] = {
-                    id: this.accounts[x].id,
-                    caption: this.accounts[x].account,
-                    items: [],
-                };
-            }
-            for (let x in this.units) {
-                infoMenu[this.units[x].client_id].items[this.units[x].account_id].items[this.units[x].unit_id] = {
-                    id: this.units[x].unit_id,
-                    caption: this.units[x].vehicle_name,
-                    action: () => {
-                        db(this.tracking[x].latitude);
-                        this.map.flyTo(this.tracking[x].latitude * 1, this.tracking[x].longitude * 1);
-                    }
-                };
-            }
-            let menu = new Menu({
-                caption: "Devices",
-                autoClose: false,
-                target: mapItems, items: infoMenu
+            let units = new Units({
+                accounts: this.accounts,
+                clients: this.clients,
+                data: this.units,
+                units: this.units,
+                tracking: this.tracking,
             });
-            return;
+            let marks = new Marks({
+                marks: this.marks.marks,
+                groups: this.marks.groups,
+                scales: this.marks.scales,
+                icons: this.marks.icons
+            });
+            let geofences = new Geofences({
+                geofences: this.geofences,
+            });
+            let alarms = new Alarms({
+                alarms: this.alarms.alarms,
+                types: this.alarms.types,
+            });
+            //this.map = new LeatfletMap({id:this.id});
             this.map = new MapBox({ id: `${this.id}_map` });
             var html = `<div class="wecar_info">
                 <div>{=vehicle_name}</div>
@@ -149,7 +399,7 @@ var sgMap = (($) => {
             </div>`;
             let popup = "";
             for (let x in this.tracking) {
-                popup = evalHTML(html, this.devices[x]);
+                popup = evalHTML(html, this.units[x]);
                 popup = evalHTML(popup, this.tracking[x]);
                 this.map.addMark(x, {
                     lat: this.tracking[x].latitude,
