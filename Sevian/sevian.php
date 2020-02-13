@@ -1,6 +1,7 @@
 <?php
-
 namespace Sevian;
+
+date_default_timezone_set ( 'America/Caracas' );
 
 include 'Types.php';
 include 'info.php';

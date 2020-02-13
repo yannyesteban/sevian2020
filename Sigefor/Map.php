@@ -55,6 +55,18 @@ class Map extends \Sevian\Element{
 				break;
 			case 'create':
             case 'load':
+                $this->create();
+                break;
+            case 'load-events':
+
+                $events = $this->loadAlarmsEvents();
+                $opt[] = [
+                    'method'  => 'eventsData',
+                    'value' => $events
+                ];
+                $this->typeElement = "sgMap";
+		        $this->info = $opt;//$form->getInfo();
+                break;
             default:
 				$this->create();
 				break;
@@ -67,10 +79,10 @@ class Map extends \Sevian\Element{
     private function create(){
 
 
-        $clients = $this->loadClients();
-        $accounts = $this->loadAccounts();
+        //$this->loadClients()$clients = $this->loadClients();
+        //$accounts = $this->loadAccounts();
         //$devices = $this->loadDevices();
-        $tracking = $this->loadTracking();
+        //$tracking = $this->loadTracking();
         //$events = $this->loadAlarmsEvents();
 
         
@@ -85,10 +97,10 @@ class Map extends \Sevian\Element{
         $this->panel = $form;
         $info = [
             "id"        => $form->id,
-            "clients"=>$clients,
-            "accounts"=>$accounts,
+            "clients"=>$this->loadClients(),
+            "accounts"=>$this->loadAccounts(),
             "units"   => $this->loadDevices(),
-            "tracking"  => $tracking,
+            "tracking"  => $this->loadTracking(),
             "events"  => $this->loadAlarmsEvents(),
             "marks"  => [
                 "marks"=> $this->loadMarks(),
@@ -310,6 +322,13 @@ class Map extends \Sevian\Element{
 
 
     private function loadAlarmsEvents(){
+
+        if(!$this->getSes('hora')){
+			$this->setSes('hora', date("Y-m-d h:i:s"));
+        }
+
+        $this->setSes('hora', date("Y-m-d h:i:s"));
+        $hora = $this->getSes('hora');
         $cn = $this->cn;
 		
         $cn->query = "
@@ -317,16 +336,23 @@ class Map extends \Sevian\Element{
         SELECT
 
         t.date_time,
-        t.unit_id, longitude, latitude, heading, event_id, input_status, output_status,
+        t.unit_id,
+        longitude+FLOOR(RAND()*10)/1000 as longitude,
+        latitude+FLOOR(RAND()*10)/1000 as latitude,
+        heading, event_id, input_status, output_status,
 
         IFNULL(t.date_time, NOW()) AS delay,
-        al.name as alarm, al.type
+        al.name as alarm, al.type, 'pulsing-dot' as micon, '$hora' as hora
 
         FROM alarms_events as ae
         INNER JOIN alarms as al ON al.id = ae.alarm_id
         INNER JOIN tracking as t ON t.id = ae.tracking_id
                 
         ";
+
+        
+
+
 		$result = $cn->execute();
 		
         $data = [];

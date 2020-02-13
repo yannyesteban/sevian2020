@@ -1,48 +1,86 @@
-(function () {
-    var _old__setPos = L.Marker.prototype._setPos;
-    L.Marker.include({
-        _updateImg: function(i, a, s) {
-            a = L.point(s).divideBy(2)._subtract(L.point(a));
-            var transform = '';
-            transform += ' translate(' + -a.x + 'px, ' + -a.y + 'px)';
-            transform += ' rotate(' + this.options.iconAngle + 'deg)';
-            transform += ' translate(' + a.x + 'px, ' + a.y + 'px)';
-            i.style[L.DomUtil.TRANSFORM] += transform;
-        },
-
-        setIconAngle: function (iconAngle) {
-            this.options.iconAngle = iconAngle;
-
-            if (this._map) this.update();
-        },
-
-        _setPos: function (pos) {
-            if (this._icon) {
-                this._icon.style[L.DomUtil.TRANSFORM] = "";
-            }
-            if (this._shadow) {
-                this._shadow.style[L.DomUtil.TRANSFORM] = "";
-            }
-
-            _old__setPos.apply(this,[pos]);
-
-            if (this.options.iconAngle) {
-                var a = this.options.icon.options.iconAnchor;
-                var s = this.options.icon.options.iconSize;
-                var i;
-                if (this._icon) {
-                    i = this._icon;
-                    this._updateImg(i, a, s);
-                }
-
-            }
-        }
-    });
-    console.log(L.DomUtil)
-}());
-
-
 var MapBox = (($) => {
+
+
+    class Pulsing{
+        map:any = null;
+        width: number = 10;
+        height: number = 10;
+        size: number = 200;
+        data:any = null;
+        context:any = null;
+        constructor(map, size:number){
+            this.map = map;
+            this.size = size;
+            this.width = size;
+            this.height = size;
+            this.data = new Uint8Array(this.width * this.height * 4);
+            
+        }
+
+        onAdd(){
+            
+            let canvas = document.createElement('canvas');
+            canvas.width = this.width;
+            canvas.height = this.height;
+            this.context = canvas.getContext('2d')
+        }
+
+        render(){
+            
+            let duration = 1000;
+            let t = (performance.now() % duration) / duration;
+             
+            let radius = (this.size / 2) * 0.3;
+            let outerRadius = (this.size / 2) * 0.7 * t + radius;
+            let context = this.context;
+             
+            // draw outer circle
+            context.clearRect(0, 0, this.width, this.height);
+            context.beginPath();
+            context.arc(
+                this.width / 2,
+                this.height / 2,
+                outerRadius,
+                0,
+                Math.PI * 2
+            );
+            //context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
+            context.fillStyle = 'rgba(255, 165, 62,' + (1 - t) + ')';
+            context.fill();
+             
+            // draw inner circle
+            context.beginPath();
+            context.arc(
+                this.width / 2,
+                this.height / 2,
+                radius,
+                0,
+                Math.PI * 2
+            );
+            //context.fillStyle = 'rgba(255, 100, 100, 1)';
+            context.fillStyle = 'rgba(255, 165, 62, 1)';
+
+            //242, 255, 62
+            context.strokeStyle = 'white';
+            context.lineWidth = 2 + 4 * (1 - t);
+            context.fill();
+            context.stroke();
+             
+            // update this image's data with data from the canvas
+            this.data = context.getImageData(
+                0,
+                0,
+                this.width,
+                this.height
+            ).data;
+             
+            // continuously repaint the map, resulting in the smooth animation of the dot
+            this.map.triggerRepaint();
+             
+            // return `true` to let the map know that the image was updated
+            return true;
+        }
+    }
 
     class Rule{
 
@@ -74,14 +112,14 @@ var MapBox = (($) => {
         popupInfo:string = "";
 
         constructor(info:object){
-            for(var x in info){
+            for(let x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
                 }
             }
 
-            var markerHeight = 50, markerRadius = 10, linearOffset = 25;
-            var popupOffsets = {
+            let markerHeight = 50, markerRadius = 10, linearOffset = 25;
+            let popupOffsets = {
                 'top': [0, 0],
                 'top-left': [0,0],
                 'top-right': [0,0],
@@ -91,12 +129,12 @@ var MapBox = (($) => {
                 'left': [markerRadius, (markerHeight - markerRadius) * -1],
                 'right': [-markerRadius, (markerHeight - markerRadius) * -1]
                 };
-               var popup = new mapboxgl.Popup({ className: 'my-class'})
+               let popup = new mapboxgl.Popup({ className: 'my-class'})
                  //.setLngLat(e.lngLat)
                  .setHTML(this.popupInfo)
                  .setMaxWidth("300px")
                  ;//.addTo(map);
-            var greenIcon = L.icon({
+            let greenIcon = L.icon({
                 iconUrl: '../images/vehiculo_0000.png',
                 //shadowUrl: 'leaf-shadow.png',
             
@@ -107,7 +145,7 @@ var MapBox = (($) => {
                 popupAnchor:  [0, -25/2] // point from which the popup should open relative to the iconAnchor
             });
 
-            var el = document.createElement('img');
+            let el = document.createElement('img');
             el.className = 'marker';
             el.src = '../images/vehiculo_0000.png';
             el.style.width = this.width;
@@ -166,9 +204,11 @@ M.setPopup(popup);
         map:any = null;
         marks:any[] = [];
         groups:any[] = null;
-        latlng = L.latLng(10.480594, -66.903603);
+        layers:any[] = [];
+        latlng = new mapboxgl.LngLat(-66.903603, 10.480594);
+        
         constructor(info:object){
-            for(var x in info){
+            for(let x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
                 }
@@ -204,7 +244,7 @@ M.setPopup(popup);
             let map = this.map = new mapboxgl.Map({
             container: this.id,
             style: 'mapbox://styles/mapbox/streets-v10',
-            zoom: 3,
+            zoom: 10,
             center: this.latlng,
             
             });
@@ -213,6 +253,114 @@ M.setPopup(popup);
               defaultLanguage: 'es'
             }));
 
+            map.addControl(new mapboxgl.NavigationControl());
+            map.on('load', () => {
+              
+                map.addImage('pulsing-dot', new Pulsing(map, 200), { pixelRatio: 2 });
+                map.addImage('pulsing-dot2', new Pulsing(map, 100), { pixelRatio: 2 });
+                map.addImage('pulsing-dot3', new Pulsing(map, 300), { pixelRatio: 2 });
+                
+                return;
+                map.addSource('points', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': 
+                            [
+                                {
+                                    'type': 'Feature',
+                                    'geometry': {
+                                        'type': 'Point',
+                                        'coordinates': [0, 0]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                );
+                map.addSource('points2', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': 
+                            [
+                                {
+                                    'type': 'Feature',
+                                    'properties':{
+                                        'micon':"pulsing-dot3"
+                                    },
+                                    'geometry': {
+                                        'type': 'Point',
+                                        'coordinates': [-71.65522800, 10.59577000]
+                                    }
+                                },
+                                {
+                                    'type': 'Feature',
+                                    'properties':{
+                                        'micon':"pulsing-dot2"
+                                    },
+                                    'geometry': {
+                                        'type': 'Point',
+                                        'coordinates': [-69.39774800, 10.06782300]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                );
+                map.addLayer({
+                    'id': 'points2',
+                    'type': 'symbol',
+                    'source': 'points2',
+                    'layout': {
+                        'icon-image': ['get', 'micon']
+                    }
+                });
+
+                map.addLayer({
+                    'id': 'points',
+                    'type': 'symbol',
+                    'source': 'points',
+                    'layout': {
+                        'icon-image': 'pulsing-dot'
+                    }
+                });
+
+                map.getSource("points").setData( {
+                    'type': 'FeatureCollection',
+                    'features': 
+                        [
+                            {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [-66.903603, 10.480594]
+                                }
+                            },
+                            {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [-67.52839800, 10.22430800]
+                                }
+                            }
+                        ]
+                    });
+
+                let ele = document.createElement("div");
+                $(ele).addClass("marker-alpha");
+
+                var marker = new mapboxgl.Marker({element:ele})
+                    .setLngLat([-66.84444000, 10.28113600])
+                    .addTo(map);
+
+
+
+
+
+            };
+
+            
 
         }
         _load(main){
@@ -238,6 +386,125 @@ M.setPopup(popup);
         addMark(name:string, info:object){
             info.map = this.map;
             this.marks[name] = new Mark(info);
+        }
+
+        addSource(id, source){
+            this.map.addSource(id, source);
+        }
+        setDataSource(sourceId, source){
+            this.map.getSource(sourceId).setData(source);
+        }
+        addPulse(layerId, sourceId){
+           let map = this.map;
+
+           this.map.addLayer({
+                'id': layerId,
+                'type': 'symbol',
+                'source': sourceId,
+                'layout': {
+                    'icon-image': ['get', 'micon']
+                }
+            });
+            return;
+
+            map.addSource('points', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': 
+                        [
+                            {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [0, 0]
+                                }
+                            }
+                        ]
+                    }
+                }
+            );
+            map.addSource('points2', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': 
+                        [
+                            {
+                                'type': 'Feature',
+                                'properties':{
+                                    'micon':"pulsing-dot3"
+                                },
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [-71.65522800, 10.59577000]
+                                }
+                            },
+                            {
+                                'type': 'Feature',
+                                'properties':{
+                                    'micon':"pulsing-dot2"
+                                },
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [-69.39774800, 10.06782300]
+                                }
+                            }
+                        ]
+                    }
+                }
+            );
+            map.addLayer({
+                'id': 'points2',
+                'type': 'symbol',
+                'source': 'points2',
+                'layout': {
+                    'icon-image': ['get', 'micon']
+                }
+            });
+
+            map.addLayer({
+                'id': 'points',
+                'type': 'symbol',
+                'source': 'points',
+                'layout': {
+                    'icon-image': 'pulsing-dot'
+                }
+            });
+
+            map.getSource("points").setData( {
+                'type': 'FeatureCollection',
+                'features': 
+                    [
+                        {
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-66.903603, 10.480594]
+                            }
+                        },
+                        {
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': [-67.52839800, 10.22430800]
+                            }
+                        }
+                    ]
+                });
+
+               return: 
+            this.map.addLayer({
+                'id': layerId,
+                'type': 'symbol',
+                'source': sourceId,
+                'layout': {
+                    'icon-image': ['get', 'micon']
+                }
+            });
+
+            alert(layerId);
+            alert(sourceId)
         }
 
     }

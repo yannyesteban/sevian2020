@@ -319,6 +319,8 @@ var sgMap = (($) => {
         data:any[] = [];
         units:any[] = [];
         main:any = null;
+        map:any = null;
+        
         constructor(info){
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
@@ -339,6 +341,122 @@ var sgMap = (($) => {
                 className:["sevian"]
             });
             this.loadData(this.data);
+
+            setInterval((event)=>{
+
+                
+                S.send({
+                    "async":true,
+                    "panel":4,
+                    "params":
+                    [
+                        
+                        {
+                            "t":"setMethod",
+                            "id":4,
+                            "element":"sgMap",
+                            "name":"gt_map",
+                            "method":"load-events"
+                        }
+                
+                    ]
+                
+                });
+            }, 8000);
+        }
+
+        setData(data){
+            let map = this.map.map;
+           
+            this.data = data;
+
+            //this.map.addImage('pulsing-dot', new Pulsing(this.map, 200), { pixelRatio: 2 });
+            //this.map.addImage('pulsing-dot2', new Pulsing(this.map, 100), { pixelRatio: 2 });
+            //this.map.addImage('pulsing-dot3', new Pulsing(this.map, 300), { pixelRatio: 2 });
+            if(map.getLayer('p1')){
+                let source = {
+                    'type': 'FeatureCollection',
+                    'features': []
+                };
+                
+                for(let x in this.data){
+                    
+                    source.features.push({
+                        'type': 'Feature',
+                        'properties':this.data[x],
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [this.data[x].longitude, this.data[x].latitude]
+                        }
+                    })
+                }
+                //console.log(source);
+
+                map.getSource("q1").setData( source);
+                return;
+            }
+
+            let source = {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': []
+                    }
+            };
+
+            for(let x in this.data){
+                //console.log(this.data);
+                source.data.features.push({
+                    'type': 'Feature',
+                    'properties':this.data[x],
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [this.data[x].longitude, this.data[x].latitude]
+                    }
+                })
+            }
+
+            this.map.addSource('q1', source);
+            
+            this.map.addPulse('p1', 'q1');
+
+
+            // Create a popup, but don't add it to the map yet.
+            var popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+            
+
+            map.on('mouseenter', 'p1', (e)=> {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+                
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = this.units[e.features[0].properties.unit_id].vehicle_name;
+                //e.features[0].properties.description;
+                
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+            });
+            
+            map.on('mouseleave', 'p1', function() {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
+
         }
 
         loadData(data){
@@ -390,6 +508,9 @@ var sgMap = (($) => {
         marks:object[] = [];
         geofences:object[] = [];
         alarms:object[] = [];
+
+        _events:object = null;
+
         constructor(info:object){
             
             for(var x in info){
@@ -423,6 +544,10 @@ var sgMap = (($) => {
             
       
         }
+
+        msg(value){
+            
+        }
         loadMap(main){
 
         }
@@ -441,11 +566,14 @@ var sgMap = (($) => {
             //let mapItems = main.create("div").addClass("map-items");
             let mapBody = main.create("div").addClass("map-body").id(`${this.id}_map`);
            
-            let ev = new Events({
+            this.map = new MapBox({id:`${this.id}_map`});
+
+            let ev = this._events = new Events({
                 data:this.events,
                 accounts:this.accounts,
                 clients:this.clients,
                 units: this.units,
+                map:this.map
             });
 
             let units = new Units({
@@ -475,7 +603,7 @@ var sgMap = (($) => {
           
             //this.map = new LeatfletMap({id:this.id});
            
-           this.map = new MapBox({id:`${this.id}_map`});
+           
            
            
        
@@ -512,6 +640,10 @@ var sgMap = (($) => {
             
         }
         _load(main:any){}
+
+        eventsData(data){
+            this._events.setData(data);
+        }
     }
     return Map;
 })(_sgQuery);
