@@ -52,6 +52,12 @@ var ControlDevice = (($) => {
         deviceData:any = null;
         socket:object = null;
         form:any = null;
+        form2:any = null;
+
+        unitId:number = null;
+        deviceId:number = null;
+        commandId:number = 888;
+        
         constructor(info:object){
             
             for(var x in info){
@@ -89,8 +95,9 @@ var ControlDevice = (($) => {
 
             //let bar = main.create("div");
 
-            let f = new Form({
+            let f = this.form2 = new Form({
                 caption:"hello",
+                parentContext: this,
                 target:main,
                 fields:[
                     {
@@ -131,7 +138,13 @@ var ControlDevice = (($) => {
                             parent:"count_id",
                             parentValue:'103',
                             value:2109,
-                            data: this.deviceData
+                            data: this.deviceData,
+                            events:{
+                                "click":function(){
+                                    
+                                    this.commandId = this.form2.getInput("device_id").getValue();
+                                }
+                            }
                         }
                     },
                     

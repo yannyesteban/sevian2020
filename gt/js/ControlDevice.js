@@ -39,6 +39,10 @@ var ControlDevice = (($) => {
             this.deviceData = null;
             this.socket = null;
             this.form = null;
+            this.form2 = null;
+            this.unitId = null;
+            this.deviceId = null;
+            this.commandId = 888;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -65,8 +69,9 @@ var ControlDevice = (($) => {
         _create(main) {
             main.addClass("gt-control-device");
             //let bar = main.create("div");
-            let f = new Form({
+            let f = this.form2 = new Form({
                 caption: "hello",
+                parentContext: this,
                 target: main,
                 fields: [
                     {
@@ -103,7 +108,12 @@ var ControlDevice = (($) => {
                             parent: "count_id",
                             parentValue: '103',
                             value: 2109,
-                            data: this.deviceData
+                            data: this.deviceData,
+                            events: {
+                                "click": function () {
+                                    this.commandId = this.form2.getInput("device_id").getValue();
+                                }
+                            }
                         }
                     },
                 ]

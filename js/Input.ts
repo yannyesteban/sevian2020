@@ -28,6 +28,9 @@ var Input = (($) => {
         placeholder:string = "";
         rules:object = null;
 
+        context:any = null;
+        parentContext:any = null;
+        
         childs:boolean = false;
         parent:string = "";
         parentValue:any = null;
@@ -108,12 +111,12 @@ var Input = (($) => {
             for(var x in this.events){
 
                 //let action = $.bind(this.events[x], this._main);
-				this._main.on(x, $.bind(this.events[x], this, "event"));
+				this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
             
             if(this.childs){
                 this._main.ds("childs", "childs");
-                this._main.on("change", $.bind(this.evalChilds, this, "event")); 
+                this._main.on("change", $.bind(this.evalChilds, this.context || this, "event")); 
             }
 
 			this._main.prop(this.propertys);
@@ -261,6 +264,10 @@ var Hidden = (($) => {
         events:any = false;
         placeholder:string = "";
         rules:object = null;
+
+        context:any = null;
+        parentContext:any = null;
+
 
         childs:boolean = false;
         parent:string = "";
@@ -414,6 +421,10 @@ var InputDate = (($) => {
         dataset:object = null;
         style:object = {};
         events:any = false;
+
+        context:any = false;
+        parentContext:any = false;
+
         placeholder:string = "";
 
         outFormat:string = "%d/%m/%yy";
@@ -504,7 +515,7 @@ var InputDate = (($) => {
             }).addClass("type-input-out");
 
             for(var x in this.events){
-				auxTxt.on(x, $.bind(this.events[x], this, "event"));
+				auxTxt.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
 			
 			auxTxt.prop(this.propertys);
@@ -641,6 +652,10 @@ var InputInfo = (($) => {
         placeholder:string = "";
         rules:object = null;
 
+        context:any = null;
+        parentContext:any = null;
+
+
         childs:boolean = false;
         parent:string = "";
         parentValue:any = null;
@@ -703,12 +718,12 @@ var InputInfo = (($) => {
             this._text = this._main.create("div").addClass("text");
 
             for(var x in this.events){
-				this._main.on(x, $.bind(this.events[x], this, "event"));
+				this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
             
             if(this.childs){
                 this._main.ds("childs", "childs");
-                this._input.on("change", $.bind(this.evalChilds, this, "event")); 
+                this._input.on("change", $.bind(this.evalChilds, this.context || this, "event")); 
             }
 
 			this._main.prop(this.propertys);
@@ -858,6 +873,10 @@ var Multi = (($) => {
         placeholder:string = "";
         rules:object = null;
 
+        context:any = null;
+        parentContext:any = null;
+
+
         childs:boolean = false;
         parent:string = "";
         parentValue:any = "";
@@ -898,7 +917,7 @@ var Multi = (($) => {
                 }
             }
             if(info.doValues){
-                this.doValues = $.bind(info.doValues, this, "inputs");
+                this.doValues = $.bind(info.doValues, this.context || this, "inputs");
             }
             
             
@@ -1053,11 +1072,11 @@ var Multi = (($) => {
             let inputs = this._main.queryAll("input.option");
             inputs.forEach((e, index) => {
                 for(var x in this.events){
-                    $(e).on(x, $.bind(this.events[x], this, "event"));
+                    $(e).on(x, $.bind(this.events[x], this.context || this, "event"));
                 }
                 if(this.childs){
                 
-                    $(e).on("change", $.bind(this.evalChilds, this, "event")); 
+                    $(e).on("change", $.bind(this.evalChilds, this.context || this, "event")); 
                 }
                 
             });
@@ -1150,6 +1169,10 @@ var Multi = (($) => {
         placeholder:string = "";
         rules:object = null;
 
+        context:any = null;
+        parentContext:any = null;
+
+
         childs:boolean = false;
         parent:string = "";
         parentValue:any = "";
@@ -1193,7 +1216,7 @@ var Multi = (($) => {
                 }
             }
             if(info.doValues){
-                this.doValues = $.bind(info.doValues, this, "inputs");
+                this.doValues = $.bind(info.doValues, this.context || this, "inputs");
             }
             
             
@@ -1373,11 +1396,11 @@ var Multi = (($) => {
             let inputs = this._main.queryAll("input.option");
             inputs.forEach((e, index) => {
                 for(var x in this.events){
-                    $(e).on(x, $.bind(this.events[x], this, "event"));
+                    $(e).on(x, $.bind(this.events[x], this.context || this, "event"));
                 }
                 if(this.childs){
                 
-                    $(e).on("change", $.bind(this.evalChilds, this, "event")); 
+                    $(e).on("change", $.bind(this.evalChilds, this.context || this, "event")); 
                 }
                 
             });

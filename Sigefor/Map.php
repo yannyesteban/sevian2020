@@ -337,8 +337,8 @@ class Map extends \Sevian\Element{
 
         t.date_time,
         t.unit_id,
-        longitude+FLOOR(RAND()*10)/1000 as longitude,
-        latitude+FLOOR(RAND()*10)/1000 as latitude,
+        longitude+FLOOR(RAND()*100)/1000 as longitude,
+        latitude+FLOOR(RAND()*100)/1000 as latitude,
         heading, event_id, input_status, output_status,
 
         IFNULL(t.date_time, NOW()) AS delay,

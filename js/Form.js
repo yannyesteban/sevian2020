@@ -146,6 +146,7 @@ var Form = (($) => {
         }
         addFields(fields) {
             for (let x in fields) {
+                fields[x].config.context = this.getContext();
                 this.addField(fields[x]);
             }
             return;

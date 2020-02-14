@@ -368,6 +368,9 @@ var List = (($) => {
         placeholder:string = "";
         rules:object = null;
 
+        context:any = false;
+        parentContext:any = false;
+        
         childs:boolean = false;
         parent:string = "";
         parentValue:any = null;
@@ -508,13 +511,13 @@ var List = (($) => {
             for(var x in this.events){
 
                 //let action = $.bind(this.events[x], this._main);
-				this._input.on(x, $.bind(this.events[x], this, "event"));
+				this._input.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
             
             if(this.childs){
                 this._main.ds("childs", "childs");
 
-                this._input.on("change", $.bind(this.evalChilds, this, "event")); 
+                this._input.on("change", $.bind(this.evalChilds, this.context || this, "event")); 
             }
 
 			this._input.prop(this.propertys);
