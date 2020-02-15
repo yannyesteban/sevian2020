@@ -56,7 +56,7 @@ var ControlDevice = (($) => {
 
         unitId:number = null;
         deviceId:number = null;
-        commandId:number = 888;
+        commandId:number = 1200001;
         
         constructor(info:object){
             
@@ -140,9 +140,10 @@ var ControlDevice = (($) => {
                             value:2109,
                             data: this.deviceData,
                             events:{
-                                "click":function(){
+                                "change":function(){
                                     
                                     this.commandId = this.form2.getInput("device_id").getValue();
+                                    //db (this.commandId, "white")
                                 }
                             }
                         }
@@ -198,7 +199,9 @@ var ControlDevice = (($) => {
                     method:"load_cmd",
                     eparams:{
                         cmd:"",
-                        cmdId:""
+                        cmdId:"",
+                        commandId:""
+                        
                     }
                 }]
 
@@ -208,8 +211,11 @@ var ControlDevice = (($) => {
                     caption: this.cmdData[x][1],
                     action_: "db('"+this.cmdData[x][1]+"')",
                     action: () => {
+                        
                         act.params[0].eparams.cmd = this.cmdData[x][1];
                         act.params[0].eparams.cmdId = this.cmdData[x][0];
+                        act.params[0].eparams.commandId = this.form2.getInput("device_id").getValue();
+                        
                         S.send(act);
                     }
                 })

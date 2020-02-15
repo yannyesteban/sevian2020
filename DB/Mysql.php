@@ -209,16 +209,16 @@ class Mysql extends DBase{
         }
 		//hr($this->query);
 		if($this->errno){
-			//hr($this->query);
-			//hr($this->errno);
+			hr($this->query);
+			hr($this->errno);
 			//return false;
 			
 		}
 		
-			if(!$this->result->field_count){
-				return false;
-			}
-			return $this->result->fetch_assoc();			
+		if(!$this->result->field_count){
+			return false;
+		}
+		return $this->result->fetch_assoc();			
 			
 		
 

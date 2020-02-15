@@ -127,9 +127,9 @@ class Map extends \Sevian\Element{
         
         FROM units as u
         LEFT JOIN users_units as uu ON uu.unit_id = u.id
-
+        LEFT JOIN units_names as vn ON vn.id = u.name_id
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
-        LEFT JOIN vehicles_names as vn ON vn.id = ve.name_id
+        
         LEFT JOIN brands as br ON br.id = ve.brand_id
         LEFT JOIN models as mo ON mo.id = ve.model_id
 
@@ -165,9 +165,8 @@ class Map extends \Sevian\Element{
 
         FROM units as u
         LEFT JOIN users_units as uu ON uu.unit_id = u.id
-
+        LEFT JOIN units_names as vn ON vn.id = u.name_id
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
-        LEFT JOIN vehicles_names as vn ON vn.id = ve.name_id
         LEFT JOIN brands as br ON br.id = ve.brand_id
         LEFT JOIN models as mo ON mo.id = ve.model_id
 
@@ -264,10 +263,12 @@ class Map extends \Sevian\Element{
 
 
         FROM units as u
+        LEFT JOIN units_names as vn ON vn.id = u.name_id
+
         LEFT JOIN users_units as uu ON uu.unit_id = u.id
 
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
-        LEFT JOIN vehicles_names as vn ON vn.id = ve.name_id
+
         LEFT JOIN brands as br ON br.id = ve.brand_id
         LEFT JOIN models as mo ON mo.id = ve.model_id
 
