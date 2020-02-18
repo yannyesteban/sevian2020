@@ -27,7 +27,7 @@ var S = (($) => {
                 if (this._e[x.panel]) {
                     for (let y of x.actions) {
                         if (y.property !== undefined) {
-                            this._e[x.panel][y.prop] = y.value;
+                            this._e[x.panel][y.property] = y.value;
                         }
                         if (y.method !== undefined) {
                             if (y.args !== undefined) {

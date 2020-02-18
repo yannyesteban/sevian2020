@@ -20,7 +20,8 @@ class ControlDevice extends \Sevian\Element{
 		
 		if($method === false){
             $method = $this->method;
-        }
+		}
+		
 		if(!$this->async){
 			if($this->method == "list_page"){
 				$method = "list";
@@ -30,6 +31,7 @@ class ControlDevice extends \Sevian\Element{
         switch($method){
 
 			case 'load_cmd':
+				
 				$var = $this->eparams->cmd;
 				$f = new \Sevian\iFragment([
 					'targetId'=>'sg_form_5',
@@ -41,12 +43,19 @@ class ControlDevice extends \Sevian\Element{
 				;
 
 				$this->typeElement = "ControlDevice";
-				$form = $this->loadParamsForm($this->eparams->cmd, $this->eparams->cmdId);//$form->getInfo();
+				$form = $this->loadParamsForm($this->eparams->cmd, $this->eparams->cmdId, $this->eparams->deviceId);//$form->getInfo();
 				
 				$this->info = [[
 					'method'  => 'loadCmdForm',
-					'value' => $form
-				]];
+					'value' => $form,
+					
+				],
+			
+			[
+				'property'=>'deviceInfo',
+				'value'=> $this->loadDevice($this->eparams->deviceId)
+
+			]];
 				
 				break;
 			case 'create':
@@ -85,7 +94,7 @@ class ControlDevice extends \Sevian\Element{
 			"id"=>$form->id,
 			'panel'=>$this->id,
             "cmdData"=> $data,
-			'paramForm'=> $this->loadParamsForm('xxx', "5"),
+			'paramForm'=> $this->loadParamsForm('xxx', '5', ''),
 			'clientData' => $clientData,
 			'accountData' => $accountData,
 			'deviceData' => $deviceData
@@ -95,9 +104,9 @@ class ControlDevice extends \Sevian\Element{
         $this->info = $info;//$form->getInfo();
 	}
 	
-	private function loadParamsForm($cmd, $cmdId){
+	private function loadParamsForm($cmd, $cmdId, $deviceId){
 
-		$formsFields = $this->formParams($cmd, $cmdId);
+		$formsFields = $this->formParams($cmd, $cmdId, $deviceId);
 
 		$menu = [
 			'caption'=>'',
@@ -122,14 +131,17 @@ class ControlDevice extends \Sevian\Element{
 		return $form;
 	}
 
-    private function formParams($cmd, $commandId){
+    private function formParams($cmd, $commandId, $deviceId){
 		$cn = $this->cn;
 		
-		$cn->query = "SELECT param_id, v.value, v.title, p.param, c.command, type_value
-			FROM devices_params_value as v
-			INNER JOIN devices_comm_params as p ON p.id = param_id
-			INNER JOIN devices_commands as c ON c.id = command_id WHERE c.id = '$commandId'
+		$cn->query = "SELECT v.param_id, v.value, v.title, p.param, c.command, type_value
+		FROM devices_params_value as v
+		INNER JOIN devices_comm_params as p ON p.id = v.param_id
+		INNER JOIN devices_commands as c ON c.id = command_id 
+
+		WHERE c.id = '$commandId'
 		";
+
 		$result = $cn->execute();
 		$dataFields = [];
 		
@@ -147,12 +159,16 @@ class ControlDevice extends \Sevian\Element{
 
         }
 
-        $cn->query = "SELECT * FROM devices_comm_params where command_id = '$commandId' order by `order`;";
+        $cn->query = "SELECT p.*, co.value 
+		FROM devices_comm_params as p
+		LEFT JOIN devices_config as co ON co.param_id = p.id AND co.device_id = '$deviceId'
+		WHERE p.command_id = '$commandId' 
+		order by `order`;";
         
         $result = $cn->execute();
 		$fields = [];
 		
-		
+		\Sevian\S::db($cn->query);
 		$fields['param_tag'] = [
 			"input"=>'input',
 			"config"=>[
@@ -215,7 +231,8 @@ class ControlDevice extends \Sevian\Element{
 					'id' => "param_".$rs["id"].'_'.$this->id,
 					'doValues' => $doValues,
 					'events' => $events,
-					'dataset'=>["cmd"=>"param_".$rs["id"]]
+					'dataset'=>["cmd"=>"param_".$rs["id"]],
+					"value"=> $rs["value"],
                 ]
 
             ];
@@ -286,5 +303,58 @@ class ControlDevice extends \Sevian\Element{
 	private function getCommandData($commandId, $deviceId){
 
 	}
+
+	private function loadDevice($deviceId){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT
+            u.id as unit_id,
+            ac.client_id as client_id,
+            cl.client,
+            u.account_id,
+            ac.name as account,
+            u.device_id,
+            de.device_name,
+            u.vehicle_id,
+            vn.name as vehicle_name,
+            ic.icon, ve.plate, br.brand, mo.model, ve.color
+
+
+        FROM units as u
+        LEFT JOIN units_names as vn ON vn.id = u.name_id
+
+        LEFT JOIN users_units as uu ON uu.unit_id = u.id
+
+        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+
+        LEFT JOIN brands as br ON br.id = ve.brand_id
+        LEFT JOIN models as mo ON mo.id = ve.model_id
+
+        INNER JOIN devices as de ON de.id = u.device_id
+        INNER JOIN devices_names as dn ON dn.name = de.device_name
+
+
+        LEFT JOIN icons as ic ON ic.id = u.icon_id
+
+        LEFT JOIN accounts as ac ON ac.id = u.account_id
+        LEFT JOIN clients as cl ON cl.id = ac.client_id
+		
+		
+		WHERE u.device_id = '$deviceId'
+        ORDER BY u.id
+        ";
+		$result = $cn->execute();
+		
+        \Sevian\S::db($cn->query);
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            $data[$rs['unit_id']] = $rs;
+        }
+
+
+        return $data;
+    }
 
 }

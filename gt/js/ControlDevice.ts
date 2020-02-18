@@ -57,6 +57,8 @@ var ControlDevice = (($) => {
         unitId:number = null;
         deviceId:number = null;
         commandId:number = 1200001;
+
+        deviceInfo:any = null;
         
         constructor(info:object){
             
@@ -142,7 +144,7 @@ var ControlDevice = (($) => {
                             events:{
                                 "change":function(){
                                     
-                                    this.commandId = this.form2.getInput("device_id").getValue();
+                                    this.deviceId = this.form2.getInput("device_id").getValue();
                                     //db (this.commandId, "white")
                                 }
                             }
@@ -200,7 +202,7 @@ var ControlDevice = (($) => {
                     eparams:{
                         cmd:"",
                         cmdId:"",
-                        commandId:""
+                        deviceId:""
                         
                     }
                 }]
@@ -214,7 +216,7 @@ var ControlDevice = (($) => {
                         
                         act.params[0].eparams.cmd = this.cmdData[x][1];
                         act.params[0].eparams.cmdId = this.cmdData[x][0];
-                        act.params[0].eparams.commandId = this.form2.getInput("device_id").getValue();
+                        act.params[0].eparams.deviceId = this.form2.getInput("device_id").getValue();
                         
                         S.send(act);
                     }
@@ -277,9 +279,19 @@ var ControlDevice = (($) => {
                 }
                 
             }
-            db (str, "blue")
+
+            //str += ":"+this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name;
+            
             //let value = this.form.getInput("param_tag").getValue();
-            //this.socket.send(str);
+
+            str = JSON.stringify({
+                msg : str,
+                name: "yanny",
+                destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+
+            });
+            db (str, "pink")
+            this.socket.send(str);
         }
     }
     
