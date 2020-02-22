@@ -24,9 +24,10 @@ var ControlDevice = (($) => {
 
             this.socket.onopen = this.onopen;
             this.socket.onmessage = this.onmessage;
+            this.socket.onclose  = this.onclose ;
         }
-        disconnect(){
-
+        onclose (event){
+            db ("on Close");
         }
 
         send(msg){
@@ -49,11 +50,12 @@ var ControlDevice = (($) => {
         clientData:any = null;
         paramForm:any = null;
         accountData:any = null;
-        deviceData:any = null;
+        unitData:any = null;
         socket:object = null;
         form:any = null;
         form2:any = null;
 
+        units:any[] = [];
         unitId:number = null;
         deviceId:number = null;
         commandId:number = 1200001;
@@ -96,7 +98,7 @@ var ControlDevice = (($) => {
             main.addClass("gt-control-device");
 
             //let bar = main.create("div");
-
+           
             let f = this.form2 = new Form({
                 caption:"hello",
                 parentContext: this,
@@ -135,21 +137,37 @@ var ControlDevice = (($) => {
                         input: "list",
                         config: {
                             type:"text",
-                            name:"device_id",
-                            caption:"Device",
+                            name:"unit_id",
+                            caption:"Unit",
                             parent:"count_id",
                             parentValue:'103',
                             value:2109,
-                            data: this.deviceData,
+                            data: this.unitData,
                             events:{
                                 "change":function(){
                                     
-                                    this.deviceId = this.form2.getInput("device_id").getValue();
-                                    //db (this.commandId, "white")
+                                    //const getFruit = infoData.find(fruit => fruit.unit_id === this.form2.getInput("unit_id").getValue());
+                                    //console.log(infoData);
+                                    this.setUnitId(this.form2.getInput("unit_id").getValue());
+                                    
+                                    this.setDeviceId(this.units[this.form2.getInput("unit_id").getValue()].device_id);
+                                    
+                                    this.form2.getInput("device_id").setValue(this.getDeviceId());
+                                   
+                                    
                                 }
                             }
                         }
                     },
+                    {
+                        input: "input",
+                        config: {
+                            type:"text",
+                            name:"device_id",
+                            caption:"device Id",
+                            
+                        }
+                    }
                     
 
                 ]
@@ -202,7 +220,7 @@ var ControlDevice = (($) => {
                     eparams:{
                         cmd:"",
                         cmdId:"",
-                        deviceId:""
+                        unitId:0
                         
                     }
                 }]
@@ -216,8 +234,8 @@ var ControlDevice = (($) => {
                         
                         act.params[0].eparams.cmd = this.cmdData[x][1];
                         act.params[0].eparams.cmdId = this.cmdData[x][0];
-                        act.params[0].eparams.deviceId = this.form2.getInput("device_id").getValue();
-                        
+                        act.params[0].eparams.deviceId = this.getDeviceId();
+                        this.setCommandId(this.cmdData[x][0]);
                         S.send(act);
                     }
                 })
@@ -269,13 +287,38 @@ var ControlDevice = (($) => {
             this.form = f2;
         }
 
+        setDeviceInfo(info){
+
+        }
+
+        setUnitId(id){
+            this.unitId = id;
+        }
+        getUnitId(){
+            return this.unitId*1;
+        }
+        setCommandId(id){
+            this.commandId = id;
+        }
+        getCommandId(){
+            return this.commandId*1;
+        }
+        setDeviceId(id){
+            this.deviceId = id;
+        }
+        getDeviceId(){
+            return this.deviceId*1;
+        }
+
         sendCMD(){
             let inputs = this.form.getInputs();
             let str = "$WP+"+this.form.getInput("param_name").getValue()+"="+inputs["param_pass"].getValue();
+            let cmdValues = [];
             for(let i in inputs){
                 if(inputs[i].ds("cmd")){
-                    db (i,"red")
+                    
                    str += ","+inputs[i].getValue(); 
+                   cmdValues.push(inputs[i].getValue());
                 }
                 
             }
@@ -284,14 +327,21 @@ var ControlDevice = (($) => {
             
             //let value = this.form.getInput("param_tag").getValue();
 
-            str = JSON.stringify({
+            let str1 = JSON.stringify({
+                type:"config",
+                deviceId: this.getDeviceId(),
+                deviceName: "xxxxyyyyzz",
+                commandId: this.getCommandId(),
+                unitId: this.getUnitId(),
+                comdValues: cmdValues,
                 msg : str,
-                name: "yanny",
-                destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+                name: "esteban"
+                //,
+                //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
 
             });
-            db (str, "pink")
-            this.socket.send(str);
+            db (str1, "pink")
+            this.socket.send(str1);
         }
     }
     

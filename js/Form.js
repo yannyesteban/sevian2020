@@ -317,7 +317,6 @@ var Form = (($) => {
             let elems = this._main.queryAll("[data-sg-input][data-sg-name]");
             for (e of elems) {
                 elem = $(e);
-                db(elem.ds("sgInput"), "green");
                 inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"), {
                     id: elem,
                     name: elem.ds("sgName"),

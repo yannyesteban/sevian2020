@@ -30,6 +30,8 @@ class ControlDevice extends \Sevian\Element{
 
         switch($method){
 
+			case 'save_command':
+			break;
 			case 'load_cmd':
 				
 				$var = $this->eparams->cmd;
@@ -52,7 +54,7 @@ class ControlDevice extends \Sevian\Element{
 				],
 			
 			[
-				'property'=>'deviceInfo',
+				'method'=>'setDeviceInfo',
 				'value'=> $this->loadDevice($this->eparams->deviceId)
 
 			]];
@@ -83,7 +85,8 @@ class ControlDevice extends \Sevian\Element{
 		
 		$clientData = $this->getDataField([['','. seleccione',''], "SELECT id, client FROM clients ORDER BY 2;"]);
 		$accountData = $this->getDataField([['','. seleccione','*'], "SELECT id, name, client_id FROM accounts a ORDER BY name;"]);
-		$deviceData = $this->getDataField([['','. seleccione','*'], "SELECT device_id, un.name as unit_name, account_id
+		$unitData = $this->getDataField([['','. seleccione','*'], 
+		"SELECT u.id as unit_id, un.name as unit_name, account_id, device_id
 		FROM units as u
 		INNER JOIN units_names as un on un.id = u.name_id
 		ORDER BY account_id, unit_name"]);
@@ -97,7 +100,8 @@ class ControlDevice extends \Sevian\Element{
 			'paramForm'=> $this->loadParamsForm('xxx', '5', ''),
 			'clientData' => $clientData,
 			'accountData' => $accountData,
-			'deviceData' => $deviceData
+			'unitData' => $unitData,
+			'units'=>$this->loadUnits()
 
         ];
         $this->typeElement = 'ControlDevice';
@@ -168,7 +172,31 @@ class ControlDevice extends \Sevian\Element{
         $result = $cn->execute();
 		$fields = [];
 		
-		\Sevian\S::db($cn->query);
+		//\Sevian\S::db($cn->query);
+
+		$fields['param_cmd_id'] = [
+			"input"=>'input',
+			"config"=>[
+				"type"=>"text",
+				"name"=>"param_cmd_id",
+				"caption"=> 'cmd_id',
+				'value'=>$commandId
+			]
+
+		];
+
+		$fields['param_device_id'] = [
+			"input"=>'input',
+			"config"=>[
+				"type"=>"text",
+				"name"=>"param_device_id",
+				"caption"=> 'param_device_id',
+				'value'=>$deviceId
+			]
+
+		];
+
+
 		$fields['param_tag'] = [
 			"input"=>'input',
 			"config"=>[
@@ -347,7 +375,58 @@ class ControlDevice extends \Sevian\Element{
         ";
 		$result = $cn->execute();
 		
-        \Sevian\S::db($cn->query);
+        //\Sevian\S::db($cn->query);
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            $data[$rs['unit_id']] = $rs;
+        }
+
+
+        return $data;
+	}
+	
+	private function loadUnits(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT
+            u.id as unit_id,
+            ac.client_id as client_id,
+            cl.client,
+            u.account_id,
+            ac.name as account,
+            u.device_id,
+            de.device_name,
+            u.vehicle_id,
+            vn.name as vehicle_name,
+            ic.icon, ve.plate, br.brand, mo.model, ve.color
+
+
+        FROM units as u
+        LEFT JOIN units_names as vn ON vn.id = u.name_id
+
+        LEFT JOIN users_units as uu ON uu.unit_id = u.id
+
+        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+
+        LEFT JOIN brands as br ON br.id = ve.brand_id
+        LEFT JOIN models as mo ON mo.id = ve.model_id
+
+        INNER JOIN devices as de ON de.id = u.device_id
+        INNER JOIN devices_names as dn ON dn.name = de.device_name
+
+
+        LEFT JOIN icons as ic ON ic.id = u.icon_id
+
+        LEFT JOIN accounts as ac ON ac.id = u.account_id
+        LEFT JOIN clients as cl ON cl.id = ac.client_id
+        /*INNER JOIN tracking as t ON t.id = u.tracking_id*/
+        ORDER BY u.id
+        ";
+		$result = $cn->execute();
+		
+        
         $data = [];
 		while($rs = $cn->getDataAssoc($result)){
             $data[$rs['unit_id']] = $rs;
@@ -357,4 +436,7 @@ class ControlDevice extends \Sevian\Element{
         return $data;
     }
 
+	private function saveCommand(){
+
+	}
 }

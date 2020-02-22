@@ -244,6 +244,7 @@ class Map extends \Sevian\Element{
 
         return $data;
     }
+    
     private function loadDevices(){
         $cn = $this->cn;
 		

@@ -406,7 +406,6 @@ var Form = (($) => {
                 
                 elem = $(e);
                 
-                db (elem.ds("sgInput"), "green")
                 inputs[elem.ds("sgName")] = I.create(elem.ds("sgInput"),{
                     id: elem,
                     name: elem.ds("sgName"),
