@@ -31,7 +31,18 @@ class ControlDevice extends \Sevian\Element{
         switch($method){
 
 			case 'save_command':
-			break;
+				break;
+			case 'load_commands':
+				$this->typeElement = "ControlDevice";
+				$data = $this->getCommandData($this->eparams->cmdId, $this->eparams->deviceId);
+				
+				$this->info = [
+					[
+					'method'  => 'loadMenuCommands',
+					'value' => $data,
+					],
+				];
+				break;
 			case 'load_cmd':
 				
 				$var = $this->eparams->cmd;
@@ -53,11 +64,11 @@ class ControlDevice extends \Sevian\Element{
 					
 				],
 			
-			[
-				'method'=>'setDeviceInfo',
-				'value'=> $this->loadDevice($this->eparams->deviceId)
+				[
+					'method'=>'setDeviceInfo',
+					'value'=> $this->loadDevice($this->eparams->deviceId)
 
-			]];
+				]];
 				
 				break;
 			case 'create':
@@ -79,9 +90,7 @@ class ControlDevice extends \Sevian\Element{
         $this->panel = $form;
         
         
-        $q = "SELECT id, command FROM devices_commands where version_id=1 ORDER BY 1";
-
-		$data = $this->getDataField([$q]);
+        
 		
 		$clientData = $this->getDataField([['','. seleccione',''], "SELECT id, client FROM clients ORDER BY 2;"]);
 		$accountData = $this->getDataField([['','. seleccione','*'], "SELECT id, name, client_id FROM accounts a ORDER BY name;"]);
@@ -96,7 +105,7 @@ class ControlDevice extends \Sevian\Element{
         $info = [
 			"id"=>$form->id,
 			'panel'=>$this->id,
-            "cmdData"=> $data,
+            //"cmdData"=> $data,
 			'paramForm'=> $this->loadParamsForm('xxx', '5', ''),
 			'clientData' => $clientData,
 			'accountData' => $accountData,
@@ -329,7 +338,14 @@ class ControlDevice extends \Sevian\Element{
 	}
 
 	private function getCommandData($commandId, $deviceId){
-
+		$q = "SELECT c.id, c.command
+		FROM devices_commands as c
+		INNER JOIN devices as d on d.version_id = c.version_id
+		WHERE
+		d.id = '$deviceId'
+		ORDER BY 1";
+		\Sevian\S::db($q);
+		return $this->getDataField([$q]);
 	}
 
 	private function loadDevice($deviceId){

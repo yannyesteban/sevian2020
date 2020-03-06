@@ -46,7 +46,12 @@ var ControlDevice = (($) => {
             this.unitId = null;
             this.deviceId = null;
             this.commandId = 1200001;
+            this.deviceName = "";
             this.deviceInfo = null;
+            this.pageMenu = null;
+            this.pageForm = null;
+            this._pageMenu = null;
+            this._pageForm = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -119,7 +124,24 @@ var ControlDevice = (($) => {
                                     //console.log(infoData);
                                     this.setUnitId(this.form2.getInput("unit_id").getValue());
                                     this.setDeviceId(this.units[this.form2.getInput("unit_id").getValue()].device_id);
+                                    this.setDeviceName(this.units[this.form2.getInput("unit_id").getValue()].device_name);
                                     this.form2.getInput("device_id").setValue(this.getDeviceId());
+                                    S.send({
+                                        async: true,
+                                        panel: this.panel,
+                                        params: [{
+                                                t: "setMethod",
+                                                id: this.panel,
+                                                element: 'gtControlDevice',
+                                                method: "load_commands",
+                                                eparams: {
+                                                    cmd: "",
+                                                    cmdId: "",
+                                                    unitId: 0,
+                                                    deviceId: this.getDeviceId(),
+                                                }
+                                            }]
+                                    });
                                 }
                             }
                         }
@@ -157,43 +179,16 @@ var ControlDevice = (($) => {
                     },
                 ]
             });
-            let page = this._page0 = tab.getPage(0);
+            let page = this.pageMenu = this._page0 = tab.getPage(0);
             page.id(this.id + "_tpage_0").addClass("gt-control-p1");
             //let bar3 = page.create("div");
-            let items = [];
-            let act = {
-                async: true,
-                panel: this.panel,
-                params: [{
-                        t: "setMethod",
-                        id: this.panel,
-                        element: 'gtControlDevice',
-                        method: "load_cmd",
-                        eparams: {
-                            cmd: "",
-                            cmdId: "",
-                            unitId: 0
-                        }
-                    }]
-            };
-            for (let x in this.cmdData) {
-                items.push({
-                    caption: this.cmdData[x][1],
-                    action_: "db('" + this.cmdData[x][1] + "')",
-                    action: () => {
-                        act.params[0].eparams.cmd = this.cmdData[x][1];
-                        act.params[0].eparams.cmdId = this.cmdData[x][0];
-                        act.params[0].eparams.deviceId = this.getDeviceId();
-                        this.setCommandId(this.cmdData[x][0]);
-                        S.send(act);
-                    }
-                });
-            }
-            let menu = new Menu({ caption: "", target: page, items: items });
+            page.addClass("main_command");
+            this._pageMenu = page.create("div").addClass("menu_command");
+            this._pageForm = page.create("div").addClass("form_command");
             // page = tab.getPage(0);
             this.paramForm.target = page;
             this.paramForm.id = this.id + "_form_1";
-            let f2 = new Form(this.paramForm);
+            //let f2 = new Form(this.paramForm);
             /*
             this.nav = [
                 ["uno"], ["dos"]
@@ -216,12 +211,49 @@ var ControlDevice = (($) => {
             */
         }
         _load(main) { }
+        loadMenuCommands(cmdData) {
+            this.cmdData = cmdData;
+            let items = [];
+            let act = {
+                async: true,
+                panel: this.panel,
+                params: [{
+                        t: "setMethod",
+                        id: this.panel,
+                        element: 'gtControlDevice',
+                        method: "load_cmd",
+                        eparams: {
+                            cmd: "",
+                            cmdId: "",
+                            unitId: 0,
+                            deviceId: 0,
+                        }
+                    }]
+            };
+            for (let x in this.cmdData) {
+                items.push({
+                    caption: this.cmdData[x][1],
+                    action_: "db('" + this.cmdData[x][1] + "')",
+                    action: () => {
+                        act.params[0].eparams.cmd = this.cmdData[x][1];
+                        act.params[0].eparams.cmdId = this.cmdData[x][0];
+                        act.params[0].eparams.deviceId = this.getDeviceId();
+                        this.setCommandId(this.cmdData[x][0]);
+                        S.send(act);
+                    }
+                });
+            }
+            this.pageMenu.addClass("HHHHHHH");
+            this._pageMenu.text("");
+            let menu = new Menu({ caption: "", target: this._pageMenu, items: items });
+        }
         loadCmdForm(f) {
-            $(this.id + "_form_1").get().parentNode.removeChild($(this.id + "_form_1").get());
+            //$(this.id+"_form_1").get().parentNode.removeChild($(this.id+"_form_1").get());
             //this._page0
             //$(this.id+"_form_1").text("");
-            f.target = this._page0;
-            f.id = this.id + "_form_1";
+            this._pageForm.text("");
+            f.target = this._pageForm;
+            //f.id = this.id+"_form_1";
             f.parentContext = this;
             let f2 = new Form(f);
             this.form = f2;
@@ -246,6 +278,12 @@ var ControlDevice = (($) => {
         getDeviceId() {
             return this.deviceId * 1;
         }
+        setDeviceName(name) {
+            this.deviceName = name;
+        }
+        getDeviceName() {
+            return this.deviceName;
+        }
         sendCMD() {
             let inputs = this.form.getInputs();
             let str = "$WP+" + this.form.getInput("param_name").getValue() + "=" + inputs["param_pass"].getValue();
@@ -261,7 +299,7 @@ var ControlDevice = (($) => {
             let str1 = JSON.stringify({
                 type: "config",
                 deviceId: this.getDeviceId(),
-                deviceName: "xxxxyyyyzz",
+                deviceName: "2012000520",
                 commandId: this.getCommandId(),
                 unitId: this.getUnitId(),
                 comdValues: cmdValues,
