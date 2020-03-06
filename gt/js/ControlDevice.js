@@ -297,7 +297,34 @@ var ControlDevice = (($) => {
             //str += ":"+this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name;
             //let value = this.form.getInput("param_tag").getValue();
             let str1 = JSON.stringify({
-                type: "config",
+                type: "set",
+                deviceId: this.getDeviceId(),
+                deviceName: "2012000520",
+                commandId: this.getCommandId(),
+                unitId: this.getUnitId(),
+                comdValues: cmdValues,
+                msg: str,
+                name: "esteban"
+                //,
+                //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+            });
+            db(str1, "pink");
+            this.socket.send(str1);
+        }
+        sendCMD2() {
+            let inputs = this.form.getInputs();
+            let str = "$WP+" + this.form.getInput("param_name").getValue() + "=" + inputs["param_pass"].getValue();
+            let cmdValues = [];
+            for (let i in inputs) {
+                if (inputs[i].ds("cmd")) {
+                    str += "," + inputs[i].getValue();
+                    cmdValues.push(inputs[i].getValue());
+                }
+            }
+            //str += ":"+this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name;
+            //let value = this.form.getInput("param_tag").getValue();
+            let str1 = JSON.stringify({
+                type: "get",
                 deviceId: this.getDeviceId(),
                 deviceName: "2012000520",
                 commandId: this.getCommandId(),

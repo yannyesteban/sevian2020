@@ -127,7 +127,7 @@ class ControlDevice extends \Sevian\Element{
 			'className'=>'navigator',
 			'items'=>[
 				['caption'=>'save', 'action'=>"this.sendCMD();//let data = this.getValue(); for(let x in data){db ('value: '+data[x], 'red');}"],
-				['caption'=>'get'],
+				['caption'=>'get', 'action'=>"this.sendCMD2();"],
 				['caption'=>'send']
 			]
 
