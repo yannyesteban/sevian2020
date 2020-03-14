@@ -1,0 +1,14 @@
+{
+
+	"name":"One",
+	"caption":"Hello",
+	"fields":[
+		{
+			"name":"cedula",
+			"input":"cell"	
+		}
+
+	]
+
+
+}

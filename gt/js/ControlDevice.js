@@ -52,6 +52,7 @@ var ControlDevice = (($) => {
             this.pageForm = null;
             this._pageMenu = null;
             this._pageForm = null;
+            this._tab = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -140,7 +141,20 @@ var ControlDevice = (($) => {
                                                     unitId: 0,
                                                     deviceId: this.getDeviceId(),
                                                 }
-                                            }]
+                                            },
+                                            {
+                                                t: "setMethod",
+                                                id: this.panel,
+                                                element: 'gtControlDevice',
+                                                method: "h_commands",
+                                                eparams: {
+                                                    cmd: "",
+                                                    cmdId: "",
+                                                    unitId: 0,
+                                                    deviceId: this.getDeviceId(),
+                                                }
+                                            }
+                                        ]
                                     });
                                 }
                             }
@@ -162,7 +176,7 @@ var ControlDevice = (($) => {
             });
             f.add(d);
             //let bar2 = main.create("div");
-            let tab = new Tab({
+            let tab = this._tab = new Tab({
                 target: main,
                 pages: [
                     {
@@ -283,6 +297,9 @@ var ControlDevice = (($) => {
         }
         getDeviceName() {
             return this.deviceName;
+        }
+        listCommands() {
+            let page = this._tab.getPage(1);
         }
         sendCMD() {
             let inputs = this.form.getInputs();

@@ -67,6 +67,7 @@ var ControlDevice = (($) => {
 
         _pageMenu: object = null;
         _pageForm: object = null;
+        _tab: object = null;
 
 
         constructor(info:object){
@@ -178,7 +179,21 @@ var ControlDevice = (($) => {
                                                 deviceId: this.getDeviceId(),
                                                 
                                             }
-                                        }]
+                                        },
+                                        {
+                                            t:"setMethod",
+                                            id: this.panel,
+                                            element:'gtControlDevice',
+                                            method:"h_commands",
+                                            eparams:{
+                                                cmd: "",
+                                                cmdId: "",
+                                                unitId: 0,
+                                                deviceId: this.getDeviceId(),
+                                                
+                                            }
+                                        }
+                                    ]
                         
                                     });
 
@@ -212,7 +227,7 @@ var ControlDevice = (($) => {
             f.add(d);
             //let bar2 = main.create("div");
 
-            let tab = new Tab({
+            let tab = this._tab = new Tab({
                 target: main,
                 pages:[
                     {
@@ -356,6 +371,11 @@ var ControlDevice = (($) => {
         }
         getDeviceName(){
             return this.deviceName;
+        }
+
+        listCommands(){
+            let page = this._tab.getPage(1);
+            
         }
 
         sendCMD(){

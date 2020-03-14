@@ -1,7 +1,10 @@
 <?php
+
+
+
 namespace Sevian\GT;
 
-
+include "../Sigefor/FormConfig.php";
 class ControlDevice extends \Sevian\Element{
 
 
@@ -71,6 +74,16 @@ class ControlDevice extends \Sevian\Element{
 				]];
 				
 				break;
+			case 'h_commands':
+
+				$this->typeElement = "ControlDevice";
+				
+				$this->info = [[
+					'method'  => 'listCommands',
+					'value' => $this->hCommands($this->eparams->deviceId),
+					
+				]];
+				break;	
 			case 'create':
             case 'load':
             default:
@@ -453,6 +466,66 @@ class ControlDevice extends \Sevian\Element{
     }
 
 	private function saveCommand(){
+
+	}
+
+	private function  hCommands($deviceId){
+
+		$e = new \Sigefor\JsonForm();
+		return;
+
+		$cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT
+            u.id as unit_id,
+            ac.client_id as client_id,
+            cl.client,
+            u.account_id,
+            ac.name as account,
+            u.device_id,
+            de.device_name,
+            u.vehicle_id,
+            vn.name as vehicle_name,
+            ic.icon, ve.plate, br.brand, mo.model, ve.color
+
+
+        FROM units as u
+        LEFT JOIN units_names as vn ON vn.id = u.name_id
+
+        LEFT JOIN users_units as uu ON uu.unit_id = u.id
+
+        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+
+        LEFT JOIN brands as br ON br.id = ve.brand_id
+        LEFT JOIN models as mo ON mo.id = ve.model_id
+
+        INNER JOIN devices as de ON de.id = u.device_id
+        INNER JOIN devices_names as dn ON dn.name = de.device_name
+
+
+        LEFT JOIN icons as ic ON ic.id = u.icon_id
+
+        LEFT JOIN accounts as ac ON ac.id = u.account_id
+        LEFT JOIN clients as cl ON cl.id = ac.client_id
+		
+		
+		WHERE u.device_id = '$deviceId'
+        ORDER BY u.id
+        ";
+		$result = $cn->execute();
+		
+        //\Sevian\S::db($cn->query);
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            $data[$rs['unit_id']] = $rs;
+        }
+
+
+        return $data;
+
+		return $deviceId;
 
 	}
 }
