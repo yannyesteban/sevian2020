@@ -425,7 +425,7 @@ var Grid = (($) => {
             let hiddenDiv = body.create("div");
             this._data_grid = hiddenDiv.create({ tagName: "input", type: "hidden", name: "__data_" });
             let pag = this.paginator;
-            pag.change = $.bind(pag.change, this, "page");
+            //pag.change = $.bind(pag.change, this, "page");
             let menuPag = this._main.create("div").addClass("nav-paginator");
             menuPag.append(this.pag = new Paginator(pag));
             if (this.menu) {

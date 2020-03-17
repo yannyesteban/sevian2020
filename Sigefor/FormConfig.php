@@ -39,7 +39,14 @@ trait FormInfoDB{
 	protected $tFields = "_sg_fields";
 	
 	protected $tMenus = "_sg_menus";
-    protected $tMenuItems = "_sg_menu_items";
+	protected $tMenuItems = "_sg_menu_items";
+	
+	public $dataKeys = [];
+
+	public $pagination = true;
+	public $pageLimit = 25;
+
+	private $totalPages = 0;
 
 	public function loadFormDB($name){
 
@@ -80,6 +87,7 @@ trait FormInfoDB{
 
 		foreach($fields as $k => $v){
 			$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
+			$this->fields[$k]->input = 'hidden';
 		}
 
 		$cn->query = "
@@ -87,7 +95,7 @@ trait FormInfoDB{
 			field, alias, caption, input, input_type as \"inputType\", cell, cell_type as \"cellType\",
 			class, `default`, mode_value as \"modeValue\",data, params,method,rules,events,info 
 			FROM $this->tFields 
-			WHERE form = '$this->name'
+			WHERE form = '$name'
 		";
 
 		$result = $cn->execute();
@@ -97,14 +105,103 @@ trait FormInfoDB{
 				$this->fields[$rs['field']]->update($rs);
 			}
 			if($rs['params']){
-				
 				$params = json_decode(\Sevian\S::vars($rs['params']));
 				foreach($params as $k => $v){
 					$this->fields[$rs['field']]->$k = $v;
 				}
 			}
 
+			
 		}
+
+
+
+		return $this->fields;
+
+	}
+
+	private function getDataGrid($search = '', $page = 1){
+
+		$cn = $this->cn;
+
+		if($search !='' and $this->searchFor){
+			$this->query = $cn->evalFilters($this->query, $search, $this->searchFor);
+		}
+
+		$cn->query = $this->query;
+		$cn->page = $page;
+		$cn->pagination = $this->pagination;
+		$cn->pageLimit = $this->pageLimit;//$this->maxPages;
+
+		$result = $cn->execute();
+
+		$this->totalPages = $cn->pageCount;
+		$data = $cn->getDataAll($result);
+
+		$keys = $this->infoQuery->keys;
+		$i = 0;
+		//$this->pVars["records"] = []; 
+
+		//$this->resetRId();
+		
+		$this->dataKeys = [];
+
+		foreach($data as $k => $record){
+			
+			foreach($keys as $key){
+
+				$data[$k]['__record_'] = [
+					$key=>$record[$key]
+				];
+				$data[$k]['__mode_'] = 2;
+				$data[$k]['__id_'] = $k;
+				$this->gridKey[$k+1] = [
+					$key=>$record[$key]
+				];
+				$this->dataKeys[] = [
+					$key=>$record[$key]
+				];
+				//print_r("\n".$key."=".$record[$key]);
+				//$this->pVars["records"][$k + 1] = (object)$data[$k]['__record_'];
+				
+				/*
+				$this->addRId((object)[
+					$key=>$record[$key]
+				]);
+				*/
+			}
+
+			foreach($this->fields as $f){
+				if($f->subform){
+					if($f->params){
+						$params = \Sevian\S::varCustom($f->params, $record, '&');
+						$params = json_decode(\Sevian\S::vars($params));
+		
+						foreach($params as $kk => $v){
+							$f->$kk = $v;
+						}
+					}
+					$sf = new SubForm($f->subform);
+					$sf->dataRecord =  &$this->getSes('_rec');
+					
+					
+					$data[$k][$f->field] = $sf->getValue();
+					
+				}
+			}
+			
+
+		}
+
+		//print_r($this->dataKeys);
+		//print_r($data);
+
+		$cn->pageLimit = false;
+		return $data;
+
+		
+
+
 
 	}
 

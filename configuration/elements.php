@@ -190,6 +190,20 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[]
 	],
+
+	'testgrid' 		=> [
+		'file' 	=> MAIN_PATH.'Sevian/testgrid.php',
+		'class' => '\Sevian\GTest',
+		'enable' => true,
+		'js'=>[
+			[
+				'file' 	=> MAIN_PATH.'js/testgrid.js',
+				'begin'=> false
+			]
+
+		],
+		'css'=>[]
+	],
 	];
 
 Sevian\S::elementsLoad($cls_elements);

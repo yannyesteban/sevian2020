@@ -2,10 +2,33 @@
 
 	"name":"One",
 	"caption":"Hello",
+	"query":"select * FROM",
+	"param":{},
+	"method":{},
+	"pages":{},
+	"groups":{},
 	"fields":[
 		{
-			"name":"cedula",
-			"input":"cell"	
+			"field":"cedula",
+			"alias":"cedula",
+			"caption":"Cédula",
+			"input":"cell",
+			"input_type":"cell",
+
+			"cell":"cell",
+			"cell_type":"cell",
+
+			"type":"",
+			"className":"",
+			"default":"",
+			"modeValue":"",
+			"data":[],
+			"params":{},
+			"method":{},
+			"rules":{},
+			"events":{},
+			"info":""
+
 		}
 
 	]
