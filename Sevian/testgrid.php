@@ -42,10 +42,11 @@ class GTest extends \Sevian\Element{
 		$this->panel = $form;
 		
 		$g =  new Grid();
+		$this->searchFor = ['cedula'];
 		$g->fields = $this->loadFormDB("alarms");
 
 
-		$g->data = $this->getDataGrid();
+		$g->data = $this->getDataGrid(1,2);
 		
 		$g->caption = "";
 		
@@ -65,6 +66,7 @@ class GTest extends \Sevian\Element{
 	public function a(){
 
 		$g = new SGGrid("name-form");
+		
 		$g->render();
 
 

@@ -29,7 +29,10 @@ var test = (($) => {
         }
         _create(main) {
             this.grid.target = "#testgrid_2";
-            let g = new Grid(this.grid);
+            this.grid.type = "default";
+            this.grid.selectMode = "one";
+            this.grid.editMode = "simple";
+            let g = new Grid2(this.grid);
         }
         _load(main) {
         }

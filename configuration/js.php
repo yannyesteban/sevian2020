@@ -109,6 +109,10 @@ $js = [
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
+		'file' 	=> "{$PATH}js/Grid2.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
 		'file' 	=> "{$PATH}js/Calendar.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],

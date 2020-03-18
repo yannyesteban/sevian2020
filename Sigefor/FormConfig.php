@@ -42,9 +42,9 @@ trait FormInfoDB{
 	protected $tMenuItems = "_sg_menu_items";
 	
 	public $dataKeys = [];
-
+	public $searchFor = [];
 	public $pagination = true;
-	public $pageLimit = 25;
+	public $pageLimit = 10;
 
 	private $totalPages = 0;
 
@@ -86,8 +86,9 @@ trait FormInfoDB{
 		$fields = $this->infoQuery->fields;
 
 		foreach($fields as $k => $v){
+			
 			$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
-			$this->fields[$k]->input = 'hidden';
+			$this->fields[$k]->input = 'input';
 		}
 
 		$cn->query = "
@@ -114,9 +115,12 @@ trait FormInfoDB{
 			
 		}
 
+		$fields = [];
+		foreach($this->fields as $field){
+			$fields[] = $field;
+		}
 
-
-		return $this->fields;
+		return $fields;
 
 	}
 
@@ -125,9 +129,10 @@ trait FormInfoDB{
 		$cn = $this->cn;
 
 		if($search !='' and $this->searchFor){
+			//hr($this->searchFor);
 			$this->query = $cn->evalFilters($this->query, $search, $this->searchFor);
 		}
-
+//hr($this->query);
 		$cn->query = $this->query;
 		$cn->page = $page;
 		$cn->pagination = $this->pagination;
