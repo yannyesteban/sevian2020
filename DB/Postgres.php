@@ -71,6 +71,7 @@ class Postgres extends DBase{
 		
 		$this->query = preg_replace('/;+$/', '', $this->query);
 		$this->fieldCount = false;
+		$this->pageCount = 0;
 		
 		if($this->result = @pg_query($this->query)){
 			$this->fieldCount = @pg_num_fields($this->result);

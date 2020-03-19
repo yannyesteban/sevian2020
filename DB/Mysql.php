@@ -86,7 +86,7 @@ class Mysql extends DBase{
 		
 		$this->query = preg_replace('/;+$/', '', $this->query);
 		$this->fieldCount = false;
-		
+		$this->pageCount = 0;
 		
 		if($this->result = $this->c->query($this->query)){
 			

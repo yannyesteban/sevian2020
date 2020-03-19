@@ -142,7 +142,7 @@ $cls_elements = [
 		'file' 	=> MAIN_PATH.'Sigefor/Map.php',
 		'class' => '\Sevian\Sigefor\Map',
 		'enable' => true,
-		'js'=>[
+		'jss'=>[
 			
 			[
 				'file'=>'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',

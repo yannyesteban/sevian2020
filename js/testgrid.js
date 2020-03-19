@@ -32,12 +32,28 @@ var test = (($) => {
             this.grid.type = "default";
             this.grid.selectMode = "one";
             this.grid.editMode = "simple";
-            let g = new Grid2(this.grid);
+            let g = this.grid = new Grid2(this.grid);
         }
         _load(main) {
         }
+        setData(data, page, totalPages) {
+            db("page actual: " + page, "red");
+            db("total pages: " + totalPages);
+            this.grid.setData(data, page, totalPages);
+            //this.grid.setPage(1);
+            //this.grid.setPage(1);
+        }
+        setPage(page) {
+            this.grid.pag.page = page;
+            //this.grid.setPage(page);
+        }
         ver(msg) {
             alert(msg);
+        }
+        setTotalPages(pages) {
+            //
+            this.grid.pag.totalPages = pages;
+            this.grid.pag.updatePages();
         }
     }
     return test;

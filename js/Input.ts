@@ -1219,8 +1219,6 @@ var Multi = (($) => {
                 this.doValues = $.bind(info.doValues, this.context || this, "inputs");
             }
             
-            
-
 
             let target = (this.target)? $(this.target): false;
 

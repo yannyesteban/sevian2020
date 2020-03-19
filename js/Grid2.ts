@@ -129,6 +129,8 @@ var Grid2 = (($) => {
 
     class Paginator{
         
+        context:any = null;
+
         classType = "paginator";
         totalPages:number = 6;
         maxPages:number = 8;
@@ -152,7 +154,7 @@ var Grid2 = (($) => {
             this._create(this._main);
 
             if(this.change){
-                this._change = $.bind(this.change, this, "page");
+                this._change = $.bind(this.change, this.context || this, "page");
             }
             
         }
@@ -165,10 +167,10 @@ var Grid2 = (($) => {
             let ini = this.maxPages * Math.floor((this.page - 1) / this.maxPages) + 1;
             let end = ini + this.maxPages - 1;
 
-            main.create("a").prop("href", "javascript:void(0)").text(this.symbols[0]).addClass("page").on("click",()=>this.setPage("b"));
-            main.create("a").prop("href", "javascript:void(0)").text(this.symbols[1]).addClass("page").on("click",()=>this.setPage("p"));
+            main.create("a").prop("href", "javascript:void(0)").text(this.symbols[0]).addClass("page").on("click", () => this.go("b"));
+            main.create("a").prop("href", "javascript:void(0)").text(this.symbols[1]).addClass("page").on("click", () => this.go("p"));
             let cell = null;
-            for(let i = ini;i <= end; i++){
+            for(let i = ini; i <= end; i++){
                 
                 cell = main.create("a").prop("href", "javascript:void(0)").addClass("page");
                 if(i > this.totalPages){
@@ -180,17 +182,19 @@ var Grid2 = (($) => {
                     cell.addClass("active");
                 }
                 
-                cell.on("click",()=>this.setPage(event.currentTarget.dataset.number));
+                cell.on("click", () => this.go(event.currentTarget.dataset.number));
             }
 
-            main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[2]).on("click",()=>this.setPage("n"));
-            main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[3]).on("click",()=>this.setPage("e"));
+            main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[2]).on("click", () => this.go("n"));
+            main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[3]).on("click", () => this.go("e"));
 
-            if(this.totalPages>this.maxPages){
-                let selectPage = main.create("select").on("onchange",(event)=>this.setPage(event.currentTarget.value));;
+            if(this.totalPages > this.maxPages){
+                let selectPage = main.create("select")
+                    .on("onchange", (event) => this.go(event.currentTarget.value));
+                
                 let option = null;
                
-                for(let i = 1;i <= this.totalPages; i = i + this.maxPages){
+                for(let i = 1; i <= this.totalPages; i = i + this.maxPages){
                     option = $.create("option").get();
                     option.text = i;
                     option.value = i;
@@ -224,15 +228,27 @@ var Grid2 = (($) => {
                 }
                 page++;
             }
-            if(this.totalPages>this.maxPages){
+            if(this.totalPages > this.maxPages){
                 this._main.query("select").value = (Math.ceil(this.page / this.maxPages) - 1) * this.maxPages + 1;
             }
             
         }
-        setPage(page:any){
-            if(page == this.page || page == 0){
-                return false;
+
+        setPage(page:any, totalPages){
+            /*
+            db (page +"=="+ this.page, "green")
+            if(totalPages === undefined || this.totalPages == totalPages){
+                db ("uno", "green")
+                if(page == this.page || page == 0){
+                    db ("dos", "green")
+                    return false;
+                }
             }
+
+            if(totalPages !== undefined){
+                this.totalPages = totalPages;
+            }
+            */
             switch(page){
                 case "b":
                     this.page = 1;
@@ -255,11 +271,24 @@ var Grid2 = (($) => {
             if(this.page > this.totalPages){
                 this.page = this.totalPages;
             }
+            
             this.updatePages();
-
-            this._change(this.page);
             
         }
+
+        go(page:any){
+            //this.setPage(page);
+            //db ("GO: "+page)
+
+            if(page == this.page || page == 0){
+                db ("dos", "green")
+                return false;
+            }
+
+            this._change(page);
+
+        }
+
 
     }
 
@@ -538,9 +567,11 @@ var Grid2 = (($) => {
             let hiddenDiv = body.create("div");
             this._data_grid = hiddenDiv.create({tagName:"input", type:"hidden", name:"__data_"});
             let pag = this.paginator;
+
+            
             //pag.change = $.bind(pag.change, this, "page");
             
-
+            pag.context = this;
             let menuPag = this._main.create("div").addClass("nav-paginator");
         
             menuPag.append(this.pag = new Paginator(pag));
@@ -890,14 +921,17 @@ var Grid2 = (($) => {
             this._data_grid.val(JSON.stringify(this.getGrid()));
             return true;
         }
-        setData(data){
+        setData(data, page, totalPages){
             this.data = data;
             this._rowLength = 0;
             this._tbody.text("");
             
             for(let record of this.data){
                 this.createRow(record);
-            } 
+            }
+            this.pag.totalPages = totalPages;
+            this.pag.setPage(page);
+			//this.pag.updatePages();
         }
         
         getIndex(){
@@ -1063,7 +1097,9 @@ var Grid2 = (($) => {
         }
 
         setPage(page:number){
+            
             this.pag.setPage(page);
+            
         }
 
         getRow(index){

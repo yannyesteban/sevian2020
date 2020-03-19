@@ -44,10 +44,12 @@ trait FormInfoDB{
 	public $dataKeys = [];
 	public $searchFor = [];
 	public $pagination = true;
-	public $pageLimit = 10;
+	public $page = 1;
+	public $pageLimit = 6;
 
 	private $totalPages = 0;
 
+	private $query = '';
 	public function loadFormDB($name){
 
 
@@ -83,12 +85,12 @@ trait FormInfoDB{
 		$this->infoQuery = $cn->infoQuery($this->query);
 
 		
-		$fields = $this->infoQuery->fields;
+		$_fields = $this->infoQuery->fields;
 
-		foreach($fields as $k => $v){
+		foreach($_fields as $k => $v){
 			
-			$this->fields[$k] = new \Sevian\Sigefor\InfoField($v);
-			$this->fields[$k]->input = 'input';
+			$fields[$k] = new \Sevian\Sigefor\InfoField($v);
+			$fields[$k]->input = 'input';
 		}
 
 		$cn->query = "
@@ -102,37 +104,38 @@ trait FormInfoDB{
 		$result = $cn->execute();
 		
 		while($rs = $cn->getDataAssoc($result)){
-			if(isset($this->fields[$rs['field']])){
-				$this->fields[$rs['field']]->update($rs);
+			if(isset($fields[$rs['field']])){
+				$fields[$rs['field']]->update($rs);
 			}
 			if($rs['params']){
 				$params = json_decode(\Sevian\S::vars($rs['params']));
 				foreach($params as $k => $v){
-					$this->fields[$rs['field']]->$k = $v;
+					$fields[$rs['field']]->$k = $v;
 				}
 			}
 
 			
 		}
 
-		$fields = [];
-		foreach($this->fields as $field){
-			$fields[] = $field;
+		$this->fields = [];
+		foreach($fields as $field){
+			$this->fields[] = $field;
 		}
 
-		return $fields;
+		return $this->fields;
 
 	}
 
-	private function getDataGrid($search = '', $page = 1){
+	public function getDataGrid($search = '', $page = 1){
+
+		$this->page = $page;
 
 		$cn = $this->cn;
 
 		if($search !='' and $this->searchFor){
-			//hr($this->searchFor);
 			$this->query = $cn->evalFilters($this->query, $search, $this->searchFor);
 		}
-//hr($this->query);
+
 		$cn->query = $this->query;
 		$cn->page = $page;
 		$cn->pagination = $this->pagination;
@@ -144,36 +147,20 @@ trait FormInfoDB{
 		$data = $cn->getDataAll($result);
 
 		$keys = $this->infoQuery->keys;
-		$i = 0;
-		//$this->pVars["records"] = []; 
-
-		//$this->resetRId();
 		
 		$this->dataKeys = [];
 
 		foreach($data as $k => $record){
 			
 			foreach($keys as $key){
-
-				$data[$k]['__record_'] = [
-					$key=>$record[$key]
-				];
+				
 				$data[$k]['__mode_'] = 2;
 				$data[$k]['__id_'] = $k;
-				$this->gridKey[$k+1] = [
-					$key=>$record[$key]
-				];
-				$this->dataKeys[] = [
-					$key=>$record[$key]
-				];
-				//print_r("\n".$key."=".$record[$key]);
-				//$this->pVars["records"][$k + 1] = (object)$data[$k]['__record_'];
 				
-				/*
-				$this->addRId((object)[
-					$key=>$record[$key]
-				]);
-				*/
+				$this->dataKeys[] = [
+					$key => $record[$key]
+				];
+				
 			}
 
 			foreach($this->fields as $f){
@@ -189,7 +176,6 @@ trait FormInfoDB{
 					$sf = new SubForm($f->subform);
 					$sf->dataRecord =  &$this->getSes('_rec');
 					
-					
 					$data[$k][$f->field] = $sf->getValue();
 					
 				}
@@ -198,16 +184,13 @@ trait FormInfoDB{
 
 		}
 
-		//print_r($this->dataKeys);
-		//print_r($data);
-
 		$cn->pageLimit = false;
 		return $data;
 
-		
+	}
 
-
-
+	public function getTotalPages(){
+		return $this->totalPages;
 	}
 
 
