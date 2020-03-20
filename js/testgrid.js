@@ -29,16 +29,17 @@ var test = (($) => {
         }
         _create(main) {
             this.grid.target = "#testgrid_2";
+            let g = this.grid = new Form2(this.grid);
+            return;
+            this.grid.target = "#testgrid_2";
             this.grid.type = "default";
             this.grid.selectMode = "one";
             this.grid.editMode = "simple";
-            let g = this.grid = new Grid2(this.grid);
+            //let g = this.grid = new Grid2(this.grid);
         }
         _load(main) {
         }
         setData(data, page, totalPages) {
-            db("page actual: " + page, "red");
-            db("total pages: " + totalPages);
             this.grid.setData(data, page, totalPages);
             //this.grid.setPage(1);
             //this.grid.setPage(1);

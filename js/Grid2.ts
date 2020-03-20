@@ -137,9 +137,11 @@ var Grid2 = (($) => {
         page:number = 2;
         className:string = "";
         symbols:string[] = ["|&laquo;","&laquo;","&raquo;","&raquo;|"];
-        change:any = (page)=>{};
-        _firstPage = 1;
+        change:any = (page) => {};
+        _beginPage = 0;
+        _endPage = 0;
         _main:object = null;
+        _selectPage:object = null;
         _change:any=(page)=>{};
         
         constructor(info:any){
@@ -164,8 +166,8 @@ var Grid2 = (($) => {
         }
         _create(main){
 
-            let ini = this.maxPages * Math.floor((this.page - 1) / this.maxPages) + 1;
-            let end = ini + this.maxPages - 1;
+            let ini = this._beginPage = this.maxPages * Math.floor((this.page - 1) / this.maxPages) + 1;
+            let end = this._endPage = ini + this.maxPages - 1;
 
             main.create("a").prop("href", "javascript:void(0)").text(this.symbols[0]).addClass("page").on("click", () => this.go("b"));
             main.create("a").prop("href", "javascript:void(0)").text(this.symbols[1]).addClass("page").on("click", () => this.go("p"));
@@ -188,25 +190,43 @@ var Grid2 = (($) => {
             main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[2]).on("click", () => this.go("n"));
             main.create("a").prop("href", "javascript:void(0)").addClass("page").text(this.symbols[3]).on("click", () => this.go("e"));
 
+            this.pageList();
+            this.updatePageList();
+            
+        }
+
+        pageList(){
             if(this.totalPages > this.maxPages){
-                let selectPage = main.create("select")
+                let selectPage = this._selectPage = this._main.create("select")
                     .on("onchange", (event) => this.go(event.currentTarget.value));
                 
+                
+            }
+        }
+
+        updatePageList(){
+            if(this._selectPage){
+                this._selectPage.get().length = 0;
                 let option = null;
-               
+                
+                this._beginPage = this.maxPages * Math.floor((this.page - 1) / this.maxPages) + 1;
+                this._endPage = this._beginPage + this.maxPages - 1;
+    
+
+
                 for(let i = 1; i <= this.totalPages; i = i + this.maxPages){
                     option = $.create("option").get();
                     option.text = i;
                     option.value = i;
 
-                    if (i >= ini && i <= end){
+                    if (i >= this._beginPage && i <= this._endPage){
                         option.selected = true;
                     }else{
                         option.selected = false;
                     }
                     
-                    selectPage.get().options.add(option);	
-                }
+                    this._selectPage.get().options.add(option);	
+                } 
             }
             
         }
@@ -231,57 +251,52 @@ var Grid2 = (($) => {
             if(this.totalPages > this.maxPages){
                 this._main.query("select").value = (Math.ceil(this.page / this.maxPages) - 1) * this.maxPages + 1;
             }
+            this.updatePageList();
             
         }
 
-        setPage(page:any, totalPages){
-            /*
-            db (page +"=="+ this.page, "green")
-            if(totalPages === undefined || this.totalPages == totalPages){
-                db ("uno", "green")
-                if(page == this.page || page == 0){
-                    db ("dos", "green")
-                    return false;
-                }
-            }
-
-            if(totalPages !== undefined){
-                this.totalPages = totalPages;
-            }
-            */
+        evalPage(page:any){
+            let _page = 0;
+            
             switch(page){
                 case "b":
-                    this.page = 1;
+                    _page = 1;
                     break;
                 case "e":
-                    this.page = this.totalPages;
+                    _page = this.totalPages;
                     break;
                 case "p":
-                    this.page--;
+                    _page = this.page - 1;
                     break;
                 case "n":
-                    this.page++;
+                    _page = this.page + 1;
                     break;
                 default:
-                    this.page = page;
-            }
-            if(this.page < 1){
-                this.page = 1;
-            }
-            if(this.page > this.totalPages){
-                this.page = this.totalPages;
+                    _page = page;
             }
             
+            if(_page < 1){
+                _page = 1;
+            }
+            
+            if(_page > this.totalPages){
+                _page = this.totalPages;
+            }
+            return _page;
+        }
+
+        setPage(page:any, totalPages){
+            
+            this.page = this.evalPage(page);
             this.updatePages();
             
         }
 
         go(page:any){
-            //this.setPage(page);
-            //db ("GO: "+page)
+
+            page = this.evalPage(page);
 
             if(page == this.page || page == 0){
-                db ("dos", "green")
                 return false;
             }
 
@@ -468,7 +483,7 @@ var Grid2 = (($) => {
                 .addClass("search").val(this.searchValue)
                 
                 
-                .on("keyup", (event)=> {
+                .on("keypress", (event)=> {
                     // Number 13 is the "Enter" key on the keyboard
                     if (event.keyCode === 13) {
                       // Cancel the default action, if needed

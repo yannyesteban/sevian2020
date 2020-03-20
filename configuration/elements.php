@@ -192,7 +192,7 @@ $cls_elements = [
 	],
 
 	'testgrid' 		=> [
-		'file' 	=> MAIN_PATH.'Sevian/testgrid.php',
+		'file' 	=> MAIN_PATH.'Sevian/testgrid2.php',
 		'class' => '\Sevian\GTest',
 		'enable' => true,
 		'js'=>[

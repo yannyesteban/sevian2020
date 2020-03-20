@@ -1,7 +1,23 @@
 <?php
 namespace Sevian;
 
+class JSForm{
+	public $target = "";
+	public $name = "";
+	public $id = "";
+	public $caption = "";
+	public $className = "";
+	public $type = "";
+	public $iconClass = "";
+	
+	public $fields = [];
+	public $data = "";
 
+	public $pages = "";
+	public $menu = "";
+	
+	
+}
 
 class Grid  {
 	

@@ -105,6 +105,10 @@ $js = [
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
+		'file' 	=> "{$PATH}js/Form2.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
+	[
 		'file' 	=> "{$PATH}js/Grid.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],

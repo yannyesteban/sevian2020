@@ -1,0 +1,52 @@
+{
+	"form":"personas",
+	"caption":"las personas",
+	"class":"",
+	"query":"SELECT * FROM personas",
+	"params":"",
+	"method":{},
+	"pages":[],
+	"groups":{},
+	"fields":[
+		{
+			"field":"cedula",
+			"alias":"",
+			"caption":"Cédula",
+			"input":"input",
+			"inputType":"text",
+			"cell":"",
+			"cellType":"",
+			"class":"",
+			"default":"",
+			"modeValue":"",
+			"data":[],
+			"params":"",
+			"method":{},
+			"rules":{},
+			"events":{},
+			"info":""
+
+		},
+		{
+			"field":"nombre_1",
+			"alias":"",
+			"caption":"1° Nombre",
+			"input":"input",
+			"inputType":"text",
+			"cell":"",
+			"cellType":"",
+			"class":"",
+			"default":"",
+			"modeValue":"",
+			"data":[],
+			"params":"",
+			"method":{},
+			"rules":{},
+			"events":{},
+			"info":""
+
+		}
+
+	]
+
+}

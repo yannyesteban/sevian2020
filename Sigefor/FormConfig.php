@@ -50,6 +50,7 @@ trait FormInfoDB{
 	private $totalPages = 0;
 
 	private $query = '';
+	
 	public function loadFormDB($name){
 
 
@@ -196,7 +197,149 @@ trait FormInfoDB{
 
 }
 
+trait FormJson{
 
+	public $cn;
+	public $fields = [];
+
+    
+	
+	public $dataKeys = [];
+	public $searchFor = [];
+	public $pagination = true;
+	public $page = 1;
+	public $pageLimit = 6;
+
+	private $totalPages = 0;
+
+	private $query = '';
+
+	function loadJson($path){
+	
+		return json_decode(file_get_contents($path, true));
+			
+	}
+
+	public function loadFormDB($file){
+
+
+		$cn = $this->cn;
+		$config = json_decode(file_get_contents($file, true));
+
+		foreach($config as $k => $v){
+			$this->$k = $v;
+		}
+
+		$params = \Sevian\S::vars($this->params);
+		$config = json_decode($params);
+		if($config){
+			foreach($config as $k => $v){
+				$this->$k = $v;
+			}
+		}
+
+		$this->infoQuery = $cn->infoQuery($this->query);
+		$_fields = $this->infoQuery->fields;
+		$fields = [];
+		
+		foreach($_fields as $k => $v){
+			
+			$fields[$k] = new \Sevian\Sigefor\InfoField($v);
+			$fields[$k]->input = 'input';
+		}
+
+		foreach($this->fields as $field){
+			if(isset($fields[$field->field])){
+				$fields[$field->field]->update($field);
+			}
+
+			if($field->params){
+				$params = json_decode(\Sevian\S::vars($field->params));
+				foreach($params as $k => $v){
+					$fields[$field->field]->$k = $v;
+				}
+			}
+		}
+
+		$this->fields = [];
+		foreach($fields as $field){
+			$this->fields[] = $field;
+		}
+
+		return $this->fields;
+		
+
+	}
+
+	public function getDataGrid($search = '', $page = 1){
+
+		$this->page = $page;
+
+		$cn = $this->cn;
+
+		if($search !='' and $this->searchFor){
+			$this->query = $cn->evalFilters($this->query, $search, $this->searchFor);
+		}
+
+		$cn->query = $this->query;
+		$cn->page = $page;
+		$cn->pagination = $this->pagination;
+		$cn->pageLimit = $this->pageLimit;//$this->maxPages;
+
+		$result = $cn->execute();
+
+		$this->totalPages = $cn->pageCount;
+		$data = $cn->getDataAll($result);
+
+		$keys = $this->infoQuery->keys;
+		
+		$this->dataKeys = [];
+
+		foreach($data as $k => $record){
+			
+			foreach($keys as $key){
+				
+				$data[$k]['__mode_'] = 2;
+				$data[$k]['__id_'] = $k;
+				
+				$this->dataKeys[] = [
+					$key => $record[$key]
+				];
+				
+			}
+
+			foreach($this->fields as $f){
+				if($f->subform){
+					if($f->params){
+						$params = \Sevian\S::varCustom($f->params, $record, '&');
+						$params = json_decode(\Sevian\S::vars($params));
+		
+						foreach($params as $kk => $v){
+							$f->$kk = $v;
+						}
+					}
+					$sf = new SubForm($f->subform);
+					$sf->dataRecord =  &$this->getSes('_rec');
+					
+					$data[$k][$f->field] = $sf->getValue();
+					
+				}
+			}
+			
+
+		}
+
+		$cn->pageLimit = false;
+		return $data;
+
+	}
+
+	public function getTotalPages(){
+		return $this->totalPages;
+	}
+
+
+}
 class InfoForm{
 
 

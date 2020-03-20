@@ -39,10 +39,17 @@ var test = (($) => {
 		}
 		_create(main:any){
 			this.grid.target = "#testgrid_2";
+			
+			let g = this.grid = new Form2(this.grid);
+
+			return;
+
+
+			this.grid.target = "#testgrid_2";
 			this.grid.type = "default";
 			this.grid.selectMode = "one";
 			this.grid.editMode = "simple";
-			let g = this.grid = new Grid2(this.grid);
+			//let g = this.grid = new Grid2(this.grid);
 
 		}
 
@@ -53,8 +60,7 @@ var test = (($) => {
 
 		}
 		setData(data, page, totalPages){
-			db ("page actual: " + page, "red")
-			db ("total pages: "+totalPages)
+
 			this.grid.setData(data, page, totalPages);
 			
 			//this.grid.setPage(1);
