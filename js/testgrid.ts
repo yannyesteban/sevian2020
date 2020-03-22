@@ -5,6 +5,8 @@ var test = (($) => {
 		tag:string = "";
 
 		grid:object = null;
+		menu:object = null;
+
 		constructor(info:object){
             
             for(var x in info){
@@ -28,7 +30,6 @@ var test = (($) => {
     
             }else{
                 main = $.create("div").attr("id", this.id);
-                
                 this._create(main);
             }
 
@@ -38,9 +39,22 @@ var test = (($) => {
 
 		}
 		_create(main:any){
+			
 			this.grid.target = "#testgrid_2";
 			
-			let g = this.grid = new Form2(this.grid);
+			let g = this.grid = new Grid2(this.grid);
+let xc = main.create({tagName: "span"});
+			this.menu.parentContext = this;
+			this.menu.target =xc;
+            let _menu = new Menu(this.menu);
+            //return $(_menu.get());
+
+			
+			//xc.text("YANNY");
+			
+
+
+
 
 			return;
 

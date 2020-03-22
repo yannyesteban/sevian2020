@@ -693,7 +693,6 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 
 .sg-grid {
   font-size: 9pt;
-  height: 100%;
   overflow: auto;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1418,4 +1417,4 @@ form {
 #debug_1 > * {
   color: white;
 }
-/*# sourceMappingURL=to.css.map */
+/*# sourceMappingURL=Layout.css.map */

@@ -1,6 +1,20 @@
 <?php
 namespace Sevian;
 
+
+class JSMenu {
+	public $menu = "";
+	public $caption = "MENU 5.0";
+	public $class = "";
+	public $params = "";
+	//public $config = [];
+	public $items = [];
+
+	public $tag = "yanny";
+	
+	
+}
+
 class JSForm{
 	public $target = "";
 	public $name = "";

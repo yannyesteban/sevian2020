@@ -45,6 +45,7 @@ class InfoField{
 	public $placeholder = '';
 	public $input = '';//['input'=>'text'];
 	public $inputType = '';//['input'=>'text'];
+	public $type = '';//['input'=>'text'];
 	public $cell = 'xxx';//['input'=>'text'];
 	public $cellType = '';//['input'=>'text'];
 	public $value = '';

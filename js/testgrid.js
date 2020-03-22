@@ -4,6 +4,7 @@ var test = (($) => {
             this.id = "";
             this.tag = "";
             this.grid = null;
+            this.menu = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -29,7 +30,13 @@ var test = (($) => {
         }
         _create(main) {
             this.grid.target = "#testgrid_2";
-            let g = this.grid = new Form2(this.grid);
+            let g = this.grid = new Grid2(this.grid);
+            let xc = main.create({ tagName: "span" });
+            this.menu.parentContext = this;
+            this.menu.target = xc;
+            let _menu = new Menu(this.menu);
+            //return $(_menu.get());
+            //xc.text("YANNY");
             return;
             this.grid.target = "#testgrid_2";
             this.grid.type = "default";
