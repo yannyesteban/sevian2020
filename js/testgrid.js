@@ -30,7 +30,7 @@ var test = (($) => {
         }
         _create(main) {
             this.grid.target = "#testgrid_2";
-            let g = this.grid = new Grid2(this.grid);
+            let g = this.grid = new Form2(this.grid);
             let xc = main.create({ tagName: "span" });
             this.menu.parentContext = this;
             this.menu.target = xc;

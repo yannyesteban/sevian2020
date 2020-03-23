@@ -8,8 +8,8 @@ class Grid  {
 	public $id = "";
 	public $caption = "";
 	public $className = "";
-	public $type = "default";
-	public $selectMode = "none";
+	public $type = "edit";
+	public $selectMode = "one";
 	public $editMode = "";
 	public $fields = [];
 	public $data = "";

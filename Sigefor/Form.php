@@ -1469,7 +1469,7 @@ class Form extends \Sevian\Element implements \Sevian\JsPanelRequest{
 	}
 
 	private function save(){
-		$this->loadConfig();
+		//$this->loadConfig();
 
 		$_data = (object)\Sevian\S::getVReq();
 		//print_r([$_data]);

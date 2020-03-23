@@ -315,12 +315,12 @@ var Grid2 = (($) => {
         caption:string = "";
         className = "sevian";
         iconClass:string = "";
-        type:string = "default";//{"select","edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
-        selectMode:string = "";//one,multiple,
+        type:string = "select";//{"select","edit","default"};//"select-one,view,select-one,select-multiple,edit-one,edit-all,edit-form";
+        selectMode:string = "one";//one,multiple,
         editMode:string = "simple";//"multi";//simple,grid,one,inline,form,custom
 
-        actionButton:boolean = false;
-        deleteButton:boolean = false;
+        actionButton:boolean = true;
+        deleteButton:boolean = true;
 
         searchValue:string = '';
 
@@ -797,7 +797,7 @@ var Grid2 = (($) => {
                 cell = row.create("td").text("");
             }
             
-            cell = row.create("td").text("");
+            //cell = row.create("td").text("");
             if(this.actionButton){
                 row.create("td").text("&nbsp;");
             }
@@ -824,7 +824,6 @@ var Grid2 = (($) => {
                     hiddenFields.append(this._mainForm.getInput(field.name));
                 }else{
 
-                    db (field.name)
                     cell = row.create("td").ds("name", field.name);
                     cell.append(this._mainForm.getInput(field.name));  
                 }

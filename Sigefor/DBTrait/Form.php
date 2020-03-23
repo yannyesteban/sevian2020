@@ -14,8 +14,9 @@ trait Form{
 	private $query = '';
 	private $infoQuery = null;
 	private $menuName = '';
-	
-	public $mode = 0;
+	private $record = null;
+	private $dataKeys = [];
+	public $mode = 2;
 	public $fields = [];
 	
 	public function loadForm($name){
@@ -72,11 +73,12 @@ trait Form{
 		}
 
 		$this->infoQuery = $cn->infoQuery($this->query);
-				
-		$values = $this->getRecord($this->infoQuery, (object)["codpersona"=>16666]);
+			//hr($this->record)	;
+		//$values = $this->getRecord($this->infoQuery, (object)["codpersona"=>16666]);
+		$values = $this->getRecord($this->infoQuery, $this->record);
 		
 		$f = $this->infoQuery->fields;
-
+		$this->fields = [];
 		foreach($f as $key => $info){
 			$field = new \Sevian\Sigefor\InfoField($info);
 			
@@ -114,149 +116,72 @@ trait Form{
 
 		}
 		$this->fields[] = new \Sevian\Sigefor\InfoField([
-			'input'	=> 'hidden',
-			'cell'	=> 'hidden',
+			'input'	=> 'input',
+			'cell'	=> 'text',
 			'page'	=> '',
-			
-				'type'	=> 'hidden',
-				"name"	=> '__mode_',
-				"field"	=> '__mode_',
-				'value'	=> $this->mode,
-				'default'=> '1'
-			
-			
+			'type'	=> 'text',
+			"name"	=> '__mode_',
+			"field"	=> '__mode_',
+			'value'	=> $this->mode,
+			'default'=> '1'
 		]);
+
 		$this->fields[] = new \Sevian\Sigefor\InfoField([
-			'input'	=> 'hidden',
-			'cell'	=> 'hidden',
+			'input'	=> 'input',
+			'cell'	=> 'text',
 			'page'	=> '',
-			
-				'type'	=> 'text',
-				"name"	=> '__id_',
-				"field"	=> '__id_',
-				'value'	=> '1'
-			
-			
+			'type'	=> 'text',
+			"name"	=> '__id_',
+			"field"	=> '__id_',
+			'value'	=> '1'
 		]);
 
 		return $this->fields;
 	}
 
-	private function _createFields($values){
-		$fields = [];
-		$groups = json_decode(\Sevian\S::vars($this->groups));
+	public function configFields($name){
 		
-		foreach($this->fields as $f){
-			
-			if($f->params){
-				$params = \Sevian\S::varCustom($f->params, $values, '&');
-				$params = json_decode(\Sevian\S::vars($params));
+		$cn = $this->cn;
+		
+		$cn->query = "
+			SELECT 
+			field, alias, caption, input, input_type as \"type\", cell, cell_type as \"cellType\",
+			class, `default`, mode_value as \"modeValue\",data, params,method,rules,events,info 
+			FROM $this->tFields 
+			WHERE form = '$name'
+		";
 
-				foreach($params as $k => $v){
-					$f->$k = $v;
-				}
-			}
+		$result = $cn->execute();
 
-			//$id = "{$f->name}_f{$this->id}";
-			$value = '';
-			$page = '';
-			if($f->modeValue == '1' or !$values){
-				$f->value = $f->default;
-			}else if(isset($values[$f->field])){
-				$f->value = $values[$f->field];
-			}
-
-			if(isset($groups->{$f->field})){
-				$page = $groups->{$f->field};
-			}
-
-			$data = false;
-			if($f->data){
-				$data = $this->getDataField(json_decode(\Sevian\S::vars($f->data)));
-			}
-			
-			
-			if($f->subform){
-				
-				$sf = new SubForm($f->subform);
-				$sf->dataRecord =  &$this->getSes('_rec');
-				
-				$f->value = $sf->getValue();
-
-				$f->subForm = [
-					"type"=>"list",
-					"detail"=>$f->subform->detail,
-				];
-			}
-
-			if(!$f->input){
-				$this->getDefaultInput($this->infoQuery->fields[$f->field]->mtype, $input, $type);
-			}else{
-				$input = $f->input;
-				$type = $f->inputType;
-			}
-
-			$f->type = $type;
-			//$config->cell = $f->cell;
-			//$config->id = $id;
-			$f->name = $f->field;
-			//$f->caption = $f->caption;
-			$f->data = $data;
-			$f->value = $f->value?? '';
-			$f->className = $f->className?? $f->class?? '';
-			//$f->childs = $f->childs;
-			
-			//$f->placeholder = $f->placeholder;
-			if($f->parent){
-				//$f->parent = $f->parent;
-				$f->parentValue = $this->fields[$f->parent]->value?? '';
-			}
-
-			if($f->rules != null){
-				$f->rules = json_decode($f->rules);
-			}
-
-			if($f->inputConfig){
-				foreach($f->inputConfig as $k => $v){
-					$f->$k = $v;
-				}
-			}
-			/*
-			$fields[$f->name] = [
-				'input'	=> $input,
-				'page'	=> $page,
-				'config'=> $config
-			];
-			*/
-			$fields[] = $f;
-			
+		$_fields = [];
+		while($rs = $cn->getDataAssoc($result)){
+			$_fields[$rs['field']] = $rs;
 		}
 
-		$fields[] = [
-			'input'	=> 'hidden',
-			'cell'	=> 'hidden',
-			'page'	=> '',
+		$this->infoQuery = $cn->infoQuery($this->query);
+		$f = $this->infoQuery->fields;
+		$this->fields = [];
+
+		foreach($f as $key => $info){
+			$field = new \Sevian\Sigefor\InfoRecordField($info);
 			
-				'type'	=> 'hidden',
-				"name"	=> '__mode_',
-				'value'	=> $this->mode,
-				'default'=> '1'
-			
-			
-		];
-		$fields[] = [
-			'input'	=> 'hidden',
-			'cell'	=> 'hidden',
-			'page'	=> '',
-			
-				'type'	=> 'text',
-				"name"	=> '__id_',
-				'value'	=> '1'
-			
-			
-		];
-		
-		return $fields;
+			if(isset($_fields[$key])){
+				$field->update($_fields[$key]);
+
+				if($_fields[$key]['params']){
+					$params = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
+					$params = json_decode(\Sevian\S::vars($params));
+					
+					foreach($params as $k => $v){
+						$field->$k = $v;
+					}
+				}
+			}
+
+			$this->fields[] = $field;
+		}
+
+		return $this->fields;
 	}
 
 	public function getRecord($info, $record){
@@ -279,6 +204,8 @@ trait Form{
 		//$this->pVars["records"][1] = $record;
 		//$this->resetRId();
 		//$this->addRId($record);
+
+		$this->dataKeys = [$record];
 		$cn->query = $this->query." WHERE $filter;";
 
 		$result = $cn->execute();
@@ -290,4 +217,7 @@ trait Form{
 		
 	}
 	
+	public function getDataKeys(){
+		return $this->dataKeys;
+	}
 }

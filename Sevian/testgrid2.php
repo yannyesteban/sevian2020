@@ -10,6 +10,8 @@ include "../sigefor/Component/Menu.php";
 include "../sigefor/Component/Form.php";
 include "../sigefor/Component/Grid.php";
 
+include "../sigefor/Component/FormSave.php";
+
 class GTest extends \Sevian\Element{
 
 	
@@ -25,13 +27,23 @@ class GTest extends \Sevian\Element{
 		
 	}
 
+	public function config(){
+
+		if(!$this->getSes('_records')){
+			$this->setSes('_records', []);
+		}
+
+		$this->records = &$this->getSes('_records');
+
+		hr($this->records);
+	}
 
 	public function evalMethod($method = false): bool{
 
 		if($method === false){
             $method = $this->method;
         }
-
+		
 		switch($method){
 
 			case "form":
@@ -47,6 +59,10 @@ class GTest extends \Sevian\Element{
 			case "search":
 				$this->setPage($this->eparams->q, 1);
 				break;
+			case "save":
+				$this->save();
+			break;
+
 		}
 
 
@@ -61,14 +77,14 @@ class GTest extends \Sevian\Element{
 		$form = new \Sevian\Panel('div');
         //$form->text = "control-device";
         $form->id = "testgrid_".$this->id;
-        $form->innerHTML = "TEST TWO";
+        //$form->innerHTML = "TEST TWO";
 		$this->panel = $form;
-		$g =  new \Sigefor\Component\Grid(
+		$g =  new \Sigefor\Component\Form(
 			[
 				'panelId'=>$this->id,
-				'name'=>'personas'
+				'name'=>'brands'
 			]);
-
+hr($this->records = $g->getDataKeys());
 		$this->info = [
 			"id"=>"testgrid_".$this->id,
 			"tag"=>"FORM TWO",
@@ -183,188 +199,44 @@ class GTest extends \Sevian\Element{
 
 	}
 
+	public function save(){
 
-}
+		$g =  new \Sigefor\Component\FormSave(
+			[
+				'panelId'=>$this->id,
+				'name'=>'brands'
+			]);
+			\Sevian\S::setReq("__record_", (object)["id"=>48])	;
+		$_data = (object)\Sevian\S::getVReq();
+		//print_r([$_data]);
+		$result = $g->send([$_data]);
+		//hr("hola2");
 
-
-
-class Mn extends JSMenu {
-	use \Sigefor\traitMenuDB;
-
-	
-	public function __construct($info = []){
 		
-		foreach($info as $k => $v){
-			$this->$k = $v;
+		foreach($result as $k => $v){
+
+			if(!$v->error){
+				//print_r($result);
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>$g->caption,
+					'text'=>'Record was saved!!!'
+				]));
+			}else{
+				//print_r($result);
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>'Error '.$g->caption,
+					'text'=>"Record wasn't saved!!!"
+				]));
+
+			}
+
 		}
-        
-		$this->cn = \Sevian\Connection::get();
-		$this->loadMenu($this->name);
-
-
-	}
-}
-
-class Fr extends JSForm{
-
-	
-	use \Sigefor\traitFormDB;
-
-	public function __construct($info = []){
 		
-		foreach($info as $k => $v){
-			$this->$k = $v;
-		}
-        
-		$this->cn = \Sevian\Connection::get();
-		$this->fields = $this->loadForm($this->name);
-		$this->menu = new Mn(['name'=>$this->menuName]);
-		$this->createFields([]);
 	}
+
+
 }
 
-class Gr extends Grid {
-	
-	use \Sigefor\FormInfoDB;
-	public $panelId = 0;
-	public function __construct($info = []){
-		
-		foreach($info as $k => $v){
-			$this->$k = $v;
-		}
-        
-		$this->cn = \Sevian\Connection::get();
 
-		$this->fields = $this->loadFormDB($this->name);
-		$this->data = $this->getDataGrid($this->searchValue, $this->page);
-
-		$this->search = "
-			 S.send(
-                {
-                    async: true,
-                    panel:$this->panelId,
-                    valid:false,
-                    confirm_: 'seguro?',
-                    params:	[
-                        {t:'setMethod',
-                            id:$this->panelId,
-                            element:'testgrid',
-                            method:'search',
-                            name:'$this->name',
-                            eparams:{
-								page:1,
-                                token:'search',
-                                q:this.getSearchValue(),
-                            }
-                        }
-                        
-                    ]
-                });
-				 
-			 ";
-
-		$this->paginator = [
-			'page'=> $this->page,
-			'totalPages'=>	$this->totalPages,
-			'maxPages'=>	$this->pageLimit,
-			'change'=>"S.send(
-				{
-					async: true,
-					panel:$this->panelId,
-					valid:false,
-					confirm_: 'seguro?',
-					params:	[
-						{t:'setMethod',
-							id:$this->panelId,
-							element:'testgrid',
-							method:'get_data',
-							name:'$this->name',
-							eparams:{
-
-								page:page,
-								q:this.getSearchValue(),
-								
-							   
-							}
-						}
-						
-					]
-				});"
-			];
-
-	}
-}
-
-class Gr2 extends Grid {
-	
-	use \Sigefor\FormJson;
-	public $panelId = 0;
-	public function __construct($info = []){
-		
-		foreach($info as $k => $v){
-			$this->$k = $v;
-		}
-        
-		$this->cn = \Sevian\Connection::get();
-
-		$this->fields = $this->loadFormDB($this->name);
-		$this->data = $this->getDataGrid($this->searchValue, $this->page);
-
-		$this->search = "
-			 S.send(
-                {
-                    async: true,
-                    panel:$this->panelId,
-                    valid:false,
-                    confirm_: 'seguro?',
-                    params:	[
-                        {t:'setMethod',
-                            id:$this->panelId,
-                            element:'testgrid',
-                            method:'search',
-                            name:'$this->name',
-                            eparams:{
-								page:1,
-                                token:'search',
-                                q:this.getSearchValue(),
-                            }
-                        }
-                        
-                    ]
-                });
-				 
-			 ";
-
-		$this->paginator = [
-			'page'=> $this->page,
-			'totalPages'=>	$this->totalPages,
-			'maxPages'=>	$this->pageLimit,
-			'change'=>"S.send(
-				{
-					async: true,
-					panel:$this->panelId,
-					valid:false,
-					confirm_: 'seguro?',
-					params:	[
-						{t:'setMethod',
-							id:$this->panelId,
-							element:'testgrid',
-							method:'get_data',
-							name:'$this->name',
-							eparams:{
-
-								page:page,
-								q:this.getSearchValue(),
-								
-							   
-							}
-						}
-						
-					]
-				});"
-			];
-
-	}
-}
 
 

@@ -25,6 +25,7 @@ class InfoRecord{
 
 
 class InfoRecordField{
+    public $name = '';
     public $field = '';
     public $mtype = '';
     public $format = [];
@@ -48,6 +49,7 @@ class InfoRecordField{
 	public $setReq = false;
     public $setExp = false;
     
+    public $subform = null;
     public function __construct($opt = []){
 		
 		foreach($opt as $k => $v){
@@ -161,15 +163,19 @@ class FormSave{
                     }
                 }
             }
-            //hr("mode: $mode ". $q_where, "red");
-            foreach($info->fields as $k => $field){
+            //hr("table: $table, mode: $mode ". $q_where, "red");
+            
+            foreach($info->fields as $field){
+
+                $name = $field->name;
+
                 $field = new InfoRecordField($field);
               
                 if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->update)){
                     continue;
                 }
               
-                if(($field->serial) and $field->notNull and $data->$k == '' and $mode == 1){
+                if(($field->serial) and $field->notNull and $data->$name == '' and $mode == 1){
                     $serial = $field->field;
                     continue;
                 }
@@ -187,7 +193,7 @@ class FormSave{
                     }elseif($field->serialize){
                         $value = $cn->serialId($table, $field->field, $field->serializeFilters);
                     }else{
-                        $value = $data->$k;
+                        $value = $data->$name;
                     }
 
                     foreach($field->format as $format){
@@ -208,7 +214,7 @@ class FormSave{
                     }
                     
                     if($field->key){
-                        $record->$k = $value;
+                        $record->$name = $value;
                     }
 
                     $fieldValue = $cn->addSlashes($value);
@@ -226,7 +232,7 @@ class FormSave{
                 }elseif($mode == 2){
                     $q_set[] = $fieldName."=".$fieldValue;
                 }
-                $data->$k = $value;
+                $data->$name = $value;
 
                 
                 
