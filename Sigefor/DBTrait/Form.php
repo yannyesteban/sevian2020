@@ -19,6 +19,8 @@ trait Form{
 	public $mode = 2;
 	public $fields = [];
 	
+
+
 	public function loadForm($name){
 
 
@@ -53,7 +55,7 @@ trait Form{
 
 	}
 
-	public function loadFields($name, $values = []){
+	public function loadFields($name, $record = null){
 		
 		$cn = $this->cn;
 		
@@ -64,7 +66,7 @@ trait Form{
 			FROM $this->tFields 
 			WHERE form = '$name'
 		";
-
+		//hr($cn->query);
 		$result = $cn->execute();
 
 		$_fields = [];
@@ -75,8 +77,13 @@ trait Form{
 		$this->infoQuery = $cn->infoQuery($this->query);
 			//hr($this->record)	;
 		//$values = $this->getRecord($this->infoQuery, (object)["codpersona"=>16666]);
-		$values = $this->getRecord($this->infoQuery, $this->record);
-		
+		$values = [];
+		//
+		if($this->record){
+			$values = $this->getRecord($this->infoQuery, (object)$this->record);
+		}
+
+		//hr($this->query);
 		$f = $this->infoQuery->fields;
 		$this->fields = [];
 		foreach($f as $key => $info){
@@ -133,7 +140,7 @@ trait Form{
 			'type'	=> 'text',
 			"name"	=> '__id_',
 			"field"	=> '__id_',
-			'value'	=> '1'
+			'value'	=> '0'
 		]);
 
 		return $this->fields;

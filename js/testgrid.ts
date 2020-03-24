@@ -5,6 +5,7 @@ var test = (($) => {
 		tag:string = "";
 
 		grid:object = null;
+		form:object = null;
 		menu:object = null;
 
 		constructor(info:object){
@@ -40,10 +41,20 @@ var test = (($) => {
 		}
 		_create(main:any){
 			
-			this.grid.target = "#testgrid_2";
 			
-			let g = this.grid = new Form2(this.grid);
-let xc = main.create({tagName: "span"});
+
+			let g = null;
+			if(this.grid){
+				this.grid.target = "#testgrid_2";
+				g = this.grid = new Grid2(this.grid);
+			}else if(this.form){
+				this.form.target = "#testgrid_2";
+				console.log(this.form)
+				g = this.grid = new Form2(this.form);
+			}
+			
+			
+			let xc = main.create({tagName: "span"});
 			this.menu.parentContext = this;
 			this.menu.target =xc;
             let _menu = new Menu(this.menu);

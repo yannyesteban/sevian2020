@@ -4,6 +4,7 @@ var test = (($) => {
             this.id = "";
             this.tag = "";
             this.grid = null;
+            this.form = null;
             this.menu = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -29,8 +30,16 @@ var test = (($) => {
             //alert(this.tag);
         }
         _create(main) {
-            this.grid.target = "#testgrid_2";
-            let g = this.grid = new Form2(this.grid);
+            let g = null;
+            if (this.grid) {
+                this.grid.target = "#testgrid_2";
+                g = this.grid = new Grid2(this.grid);
+            }
+            else if (this.form) {
+                this.form.target = "#testgrid_2";
+                console.log(this.form);
+                g = this.grid = new Form2(this.form);
+            }
             let xc = main.create({ tagName: "span" });
             this.menu.parentContext = this;
             this.menu.target = xc;

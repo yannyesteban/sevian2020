@@ -141,7 +141,7 @@ $cls_elements = [
 	'sgMap' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Map.php',
 		'class' => '\Sevian\Sigefor\Map',
-		'enable' => true,
+		'enable' => false,
 		'jss'=>[
 			
 			[

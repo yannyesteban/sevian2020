@@ -136,6 +136,7 @@ class FormSave{
 
         $tables = $info->tables;
         $result = new \stdClass;
+        
         foreach($tables as $table){
             
             if($table == ''){

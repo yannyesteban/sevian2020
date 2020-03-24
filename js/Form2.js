@@ -30,7 +30,7 @@ var Form2 = (($) => {
             this.type = "dropdown";
             this.className = "sevian";
             this.iconClass = "";
-            this.fields = [];
+            this.fields = null;
             this.pages = [];
             this.menu = null;
             this.child = null;
@@ -241,7 +241,7 @@ var Form2 = (($) => {
             return $(_tab.get());
         }
         createInput(info) {
-            this._inputs[info.name] = I.create(input, info);
+            this._inputs[info.name] = I.create(info.input, info);
             return this._inputs[info.name];
         }
         createField(input, info) {

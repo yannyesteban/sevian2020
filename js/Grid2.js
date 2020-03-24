@@ -3,7 +3,7 @@ var Grid2 = (($) => {
         constructor() {
             this._inputs = [];
         }
-        createInput(input, info) {
+        createInput(info) {
             if (info.parent) {
                 info.getParentValue = () => {
                     return this.getInput(info.parent).getValue();
@@ -14,7 +14,7 @@ var Grid2 = (($) => {
                     this.evalChilds(info.name);
                 };
             }
-            this._inputs[info.name] = I.create(input, info);
+            this._inputs[info.name] = I.create(info.input, info);
             return this._inputs[info.name];
         }
         getValue() {
@@ -422,12 +422,10 @@ var Grid2 = (($) => {
             if (this.deleteButton) {
                 row.create("td").text("&nbsp;");
             }
-            this.fields["__index_"] = {
+            this.fields[""] = {
                 input: "hidden",
-                config: {
-                    type: "hidden",
-                    name: "__index_",
-                }
+                type: "hidden",
+                name: "__index_"
             };
             for (let x in this.fields) {
                 if (this.fields[x].input == "hidden") {
@@ -440,7 +438,7 @@ var Grid2 = (($) => {
                 this.createRow(record);
             }
             if (this.type !== "edit") {
-                this.createEditRow2({});
+                //this.createEditRow2({});
             }
             if (this.editMode !== "simple") {
                 this.createEditRow({});
@@ -473,7 +471,7 @@ var Grid2 = (($) => {
                     this._action(event.currentTarget.dataset.index);
                 });
             }
-            let cell = null, field = null, value = null, text = "", info = null, input = null, _input = null, type = null;
+            let cell = null, field = null, value = null, text = "", info = null, input = null, _input = null, name = null;
             if (this.showEnum) {
                 cell = row.create("td").text(this._rowLength + 1);
             }
@@ -501,33 +499,32 @@ var Grid2 = (($) => {
             let f = this._forms[this._rowLength] = new Form;
             for (let x in this.fields) {
                 field = this.fields[x];
-                value = data[field.name];
-                if (this._fieldData[x] && this._fieldData[x][value]) {
-                    text = this._fieldData[x][value];
+                name = field.name;
+                value = data[name];
+                if (this._fieldData[name] && this._fieldData[name][value]) {
+                    text = this._fieldData[name][value];
                 }
                 else {
                     text = value;
                 }
                 input = (field.input === "hidden" || this.type === "default") ? "input" : field.input;
-                info = Object.assign({}, field.config);
+                info = Object.assign({}, field);
                 info.type = field.type;
                 info.name = field.name + "_" + this._rowLength;
                 info.value = value;
-                if (field.config.parent) {
+                if (field.parent) {
                     info.parent = field.parent + "_" + this._rowLength;
                     info.parentValue = f.getInput(info.parent).getValue();
                 }
-                info.dataset = { "name": x };
-                _input = f.createInput(input || "input", info);
-                _input.dataName = x;
-                //alert(field.config.cell)
-                if (field.cell) {
-                }
+                info.dataset = { "name": info.name };
+                info.input = input || "input";
+                _input = f.createInput(info);
+                _input.dataName = name;
                 if (field.input == "hidden") {
                     hiddenFields.append(_input);
                 }
                 else {
-                    cell = row.create("td").ds("name", x);
+                    cell = row.create("td").ds("name", name);
                     if (this.type === "default") {
                         cell.text(text);
                     }
@@ -606,7 +603,10 @@ var Grid2 = (($) => {
             if (this.showEnum) {
                 cell = row.create("td").text("");
             }
-            //cell = row.create("td").text("");
+            if (this.selectMode === "one" || this.selectMode === "multiple") {
+                cell = row.create("td").text("");
+            }
+            //
             if (this.actionButton) {
                 row.create("td").text("&nbsp;");
             }
@@ -618,12 +618,12 @@ var Grid2 = (($) => {
             for (let x in this.fields) {
                 let field = this.fields[x];
                 value = field.default;
-                input = Object.assign({}, field);
-                input.input = (field.input === "hidden") ? "input" : field.input;
-                input.type = (field.input === "hidden") ? "hidden" : field.type;
+                info = Object.assign({}, field);
+                info.input = (field.input === "hidden") ? "input" : field.input;
+                info.type = (field.input === "hidden") ? "hidden" : field.type;
                 //info.value = value;
-                input.dataset = { "name": x };
-                this._mainForm.createInput(input.input, input); //I.create(input, info);
+                info.dataset = { "name": field.name };
+                this._mainForm.createInput(info); //I.create(input, info);
                 if (field.input == "hidden") {
                     hiddenFields.append(this._mainForm.getInput(field.name));
                 }
@@ -643,7 +643,7 @@ var Grid2 = (($) => {
         createEditRow2(data) {
             let info = null;
             let name = null;
-            let hiddenFields = $.create({ tagName: "div", style: { cssText: "display:none;" } });
+            let hiddenFields = $.create({ className: "HUMM", tagName: "div", style: { cssText: "display:none;" } });
             this._mainForm = new Form();
             for (let x in this.fields) {
                 name = this.fields[x].name;
@@ -651,10 +651,12 @@ var Grid2 = (($) => {
                 info = Object.assign({}, field);
                 info.dataset = { "name": name };
                 info.type = "hidden";
-                this._mainForm.createInput("input", info);
-                hiddenFields.append(this._mainForm.getInput(x));
+                info.name = name;
+                info.input = "input";
+                this._mainForm.createInput(info);
+                hiddenFields.append(this._mainForm.getInput(name));
             }
-            this._mainForm.reset();
+            //this._mainForm.reset();
             this._main.append(hiddenFields);
         }
         createCell(field) {

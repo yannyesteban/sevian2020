@@ -35,7 +35,7 @@ class GTest extends \Sevian\Element{
 
 		$this->records = &$this->getSes('_records');
 
-		hr($this->records);
+		//hr($this->records);
 	}
 
 	public function evalMethod($method = false): bool{
@@ -43,12 +43,15 @@ class GTest extends \Sevian\Element{
 		if($method === false){
             $method = $this->method;
         }
-		
+		//hr($method,"red");
 		switch($method){
 
 			case "form":
-				$this->createForm();
-			break;
+				$this->createForm('form');
+				break;
+			case 'grid':
+				$this->createForm('grid');
+				break;
 			case "create":
 				
 				$this->create();
@@ -70,7 +73,7 @@ class GTest extends \Sevian\Element{
 		return true;
 	}
 
-	public function createForm(){
+	public function createForm($type = 'form'){
 		$this->typeElement = "test";
 		
 
@@ -79,18 +82,36 @@ class GTest extends \Sevian\Element{
         $form->id = "testgrid_".$this->id;
         //$form->innerHTML = "TEST TWO";
 		$this->panel = $form;
-		$g =  new \Sigefor\Component\Form(
-			[
+		if($type == 'form'){
+
+			//hr($this->getRecord());
+			$g =  new \Sigefor\Component\Form([
+				'panelId'=>$this->id,
+				'name'=>'brands',
+				'record'=>$this->getRecord()
+			]);
+			
+			
+		}else if($type == 'grid'){
+			$g =  new \Sigefor\Component\Grid([
 				'panelId'=>$this->id,
 				'name'=>'brands'
 			]);
-hr($this->records = $g->getDataKeys());
-		$this->info = [
+		}
+		
+		$this->records = $g->getDataKeys();
+		
+		
+		
+			$this->info = [
 			"id"=>"testgrid_".$this->id,
 			"tag"=>"FORM TWO",
-			"grid"=>$g,
+			$type=>$g,
 			'menu'=> new \Sigefor\Component\Menu(['name'=>'catalog'])
 		];
+
+
+		
 	}
 
 	public function create(){
@@ -164,8 +185,8 @@ hr($this->records = $g->getDataKeys());
 	}
 
 	public function setPage($q, $page){
-		$g =  new Gr([
-			'name'=>'alarms']);
+		$g =  new \Sigefor\Component\Grid([
+			'name'=>'brands']);
 		$data = $g->getDataGrid($q, ($page<=0)? 1: $page);
 		$opt[] = [
 			'method'  => 'setData',
@@ -184,7 +205,7 @@ hr($this->records = $g->getDataKeys());
 		];
 		
 		
-		
+		$this->records = $g->getDataKeys();
 		$this->typeElement = "";
 		$this->info = $opt;//$form->getInfo();
 
@@ -200,18 +221,21 @@ hr($this->records = $g->getDataKeys());
 	}
 
 	public function save(){
-
+		//hr($this->records);
 		$g =  new \Sigefor\Component\FormSave(
 			[
 				'panelId'=>$this->id,
-				'name'=>'brands'
+				'name'=>'brands',
+				'dataKeys'=>$this->records
 			]);
-			\Sevian\S::setReq("__record_", (object)["id"=>48])	;
+			//\Sevian\S::setReq("__record_", (object)["id"=>48])	;
+
+			//$g::setDictRecords($this->records);	
 		$_data = (object)\Sevian\S::getVReq();
 		//print_r([$_data]);
 		$result = $g->send([$_data]);
 		//hr("hola2");
-
+		//hr($result);
 		
 		foreach($result as $k => $v){
 
@@ -234,6 +258,23 @@ hr($this->records = $g->getDataKeys());
 		
 	}
 
+	public function getRecord(){
+		$__id_ = \Sevian\S::getReq("__id_");
+		//hr( \Sevian\S::getVReq());
+		//hr($this->method."...".$this->id,"red");
+		//hr($__id_,"blue","aqua");
+		//hr($this->_rId,"orange");
+		//hr($this->getRId($__id_),"red");
+		//$record = $this->pVars['records'][$__id_]?? false;
+		$record = $this->records[$__id_];
+		/*
+			OJO :
+			evita el error cuando el usuario pulsa F5/Refresh
+			$this->records[$__id_] = $record;
+		*/
+		$this->records[$__id_] = $record;
+		return $record;
+	}
 
 }
 

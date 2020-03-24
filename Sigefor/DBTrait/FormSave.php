@@ -34,6 +34,10 @@ trait FormSave{
 		$save = 'Sevian\Sigefor\FormSave';
 		//$save::setDictRecords($this->pVars['records']);
 		//$save::setDictRecords($this->getSes('_rec'));
+
+		if($this->dataKeys){
+			$save::setDictRecords($this->dataKeys);
+		}
 		
 		return $save::send($info, $data, []);
 		//hr($this->pVars['records'],"red");

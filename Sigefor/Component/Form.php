@@ -7,7 +7,11 @@ include "../Sigefor/DBTrait/Form.php";
 
 
 class Form extends \Sevian\JS\Form {
+
+	
 	use \Sigefor\DBTrait\Form;
+
+	private $loadRecord = null;
 
 	public function __construct($info = []){
 		
@@ -17,7 +21,7 @@ class Form extends \Sevian\JS\Form {
         
 		$this->cn = \Sevian\Connection::get();
 		$this->loadForm($this->name);
-		$this->fields = $this->loadFields($this->name);
+		$this->fields = $this->loadFields($this->name, $this->loadRecord);
 		$this->menu = new Menu(['name'=>$this->menuName]);
 		//$this->createFields([]);
 	}

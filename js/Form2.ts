@@ -43,7 +43,7 @@ var Form2 = (($) => {
         className = "sevian";
         iconClass:string = "";
 
-        fields:any[] = [];
+        fields:any[] = null;
         pages:any[] = [];
         menu:object = null;
 
@@ -313,7 +313,7 @@ var Form2 = (($) => {
             return $(_tab.get());
         }
         createInput(info:any){
-            this._inputs[info.name] = I.create(input, info)
+            this._inputs[info.name] = I.create(info.input, info)
             return this._inputs[info.name];
            
         }
