@@ -1,0 +1,23 @@
+{
+	"form":"personas",
+	"caption":"Marcas Vehículos",
+	"class":"",
+	"query":"SELECT * FROM brandsx",
+	"menuName":"save_form",
+	"params":"",
+	"method":{},
+	"pages":[],
+	"groups":{},
+	"fields":[
+		{
+			
+			"name":"id",
+			"caption":"Código",
+			"_params":"{\\\"caption\\\":\\\"xxx\\\"}",
+			"params":{
+				"caption":"Un Campo ID"
+			}
+		}
+	]
+
+}

@@ -130,7 +130,7 @@ class FormSave{
         $cn = self::$cn;
         $mode = $data->__mode_;
         
-        $record = $data->__record_?? self::$dict[$data->__id_]?? new \stdClass;
+        $record = $data->__record_?? (object)self::$dict[$data->__id_]?? new \stdClass;
 
         $recordIni = clone $record;
 

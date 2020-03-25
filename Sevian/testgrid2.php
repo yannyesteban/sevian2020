@@ -8,14 +8,17 @@ include "Grid.php";
 
 include "../sigefor/Component/Menu.php";
 include "../sigefor/Component/Form.php";
+include "../sigefor/Component/JsonForm.php";
 include "../sigefor/Component/Grid.php";
 
 include "../sigefor/Component/FormSave.php";
 
 class GTest extends \Sevian\Element{
 
+	private $records = null;
+	private $lastRecord = null;
 	
-	use \Sigefor\FormInfoDB;
+	//use \Sigefor\FormInfoDB;
 
 	public function __construct($info = []){
 		
@@ -32,10 +35,14 @@ class GTest extends \Sevian\Element{
 		if(!$this->getSes('_records')){
 			$this->setSes('_records', []);
 		}
+		if(!$this->getSes('_lastRecords')){
+			$this->setSes('_lastRecords', []);
+		}
 
 		$this->records = &$this->getSes('_records');
+		$this->lastRecord = &$this->getSes('_lastRecords');
 
-		//hr($this->records);
+		//hr($this->lastRecord);
 	}
 
 	public function evalMethod($method = false): bool{
@@ -52,6 +59,9 @@ class GTest extends \Sevian\Element{
 			case 'grid':
 				$this->createForm('grid');
 				break;
+			case 'js-grid':
+				$this->createForm('js-grid');
+				break;				
 			case "create":
 				
 				$this->create();
@@ -87,15 +97,25 @@ class GTest extends \Sevian\Element{
 			//hr($this->getRecord());
 			$g =  new \Sigefor\Component\Form([
 				'panelId'=>$this->id,
-				'name'=>'brands',
+				//'name'=>$this->name,
+				'name'=>'#../json/forms/brands.json',
 				'record'=>$this->getRecord()
 			]);
 			
 			
 		}else if($type == 'grid'){
+			$this->lastRecord = null;
 			$g =  new \Sigefor\Component\Grid([
 				'panelId'=>$this->id,
-				'name'=>'brands'
+				//'name'=>$this->name,
+				'name'=>'#../json/forms/brands.json'
+			]);
+		}else if($type == 'js-grid'){
+			$type = 'grid';
+			$this->lastRecord = null;
+			$g =  new \Sigefor\Component\JsonForm([
+				'panelId'=>$this->id,
+				'name'=>'../json/forms/brands.json'
 			]);
 		}
 		
@@ -107,6 +127,7 @@ class GTest extends \Sevian\Element{
 			"id"=>"testgrid_".$this->id,
 			"tag"=>"FORM TWO",
 			$type=>$g,
+			//'menu'=> new \Sigefor\Component\Menu(['name'=>'#../json/menus/menu1.json']),
 			'menu'=> new \Sigefor\Component\Menu(['name'=>'catalog'])
 		];
 
@@ -186,7 +207,10 @@ class GTest extends \Sevian\Element{
 
 	public function setPage($q, $page){
 		$g =  new \Sigefor\Component\Grid([
-			'name'=>'brands']);
+			//'name'=>$this->name
+			'name'=>'#../json/forms/brands.json'
+		
+		]);
 		$data = $g->getDataGrid($q, ($page<=0)? 1: $page);
 		$opt[] = [
 			'method'  => 'setData',
@@ -211,22 +235,44 @@ class GTest extends \Sevian\Element{
 
 	}
 
-	public function a(){
+	
 
-		$g = new SGGrid("name-form");
-		
-		$g->render();
+	public function getRecord(){
 
 
+
+		if($this->lastRecord){
+			return $this->lastRecord;
+		}
+		$__id_ = \Sevian\S::getReq("__id_");
+
+		if(!$__id_){
+			return null;
+		}
+		//hr( \Sevian\S::getVReq());
+		//hr($this->method."...".$this->id,"red");
+		//hr($__id_,"blue","aqua");
+		//hr($this->_rId,"orange");
+		//hr($this->getRId($__id_),"red");
+		//$record = $this->pVars['records'][$__id_]?? false;
+		$record = $this->records[$__id_];
+		/*
+			OJO :
+			evita el error cuando el usuario pulsa F5/Refresh
+			$this->records[$__id_] = $record;
+		*/
+		//$this->records[$__id_] = $record;
+		$this->lastRecord = $record;
+		return $record;
 	}
-
+	
 	public function save(){
 		//hr($this->records);
 		$g =  new \Sigefor\Component\FormSave(
 			[
-				'panelId'=>$this->id,
-				'name'=>'brands',
-				'dataKeys'=>$this->records
+				'panelId'	=> $this->id,
+				'name'		=> $this->name,
+				'dataKeys'	=> &$this->records
 			]);
 			//\Sevian\S::setReq("__record_", (object)["id"=>48])	;
 
@@ -236,7 +282,8 @@ class GTest extends \Sevian\Element{
 		$result = $g->send([$_data]);
 		//hr("hola2");
 		//hr($result);
-		
+		$this->lastRecord = $this->records[0];
+		//hr($this->records);
 		foreach($result as $k => $v){
 
 			if(!$v->error){
@@ -257,25 +304,6 @@ class GTest extends \Sevian\Element{
 		}
 		
 	}
-
-	public function getRecord(){
-		$__id_ = \Sevian\S::getReq("__id_");
-		//hr( \Sevian\S::getVReq());
-		//hr($this->method."...".$this->id,"red");
-		//hr($__id_,"blue","aqua");
-		//hr($this->_rId,"orange");
-		//hr($this->getRId($__id_),"red");
-		//$record = $this->pVars['records'][$__id_]?? false;
-		$record = $this->records[$__id_];
-		/*
-			OJO :
-			evita el error cuando el usuario pulsa F5/Refresh
-			$this->records[$__id_] = $record;
-		*/
-		$this->records[$__id_] = $record;
-		return $record;
-	}
-
 }
 
 

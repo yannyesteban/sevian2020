@@ -20,9 +20,27 @@ class Form extends \Sevian\JS\Form {
 		}
         
 		$this->cn = \Sevian\Connection::get();
-		$this->loadForm($this->name);
-		$this->fields = $this->loadFields($this->name, $this->loadRecord);
-		$this->menu = new Menu(['name'=>$this->menuName]);
+		
+		if($this->name){
+			if(substr($this->name, 0, 1) == '#'){
+
+				
+				$this->name = substr($this->name, 1);
+				$info = $this->loadJsonFile($this->name);
+				$this->jsonConfig($info);
+
+				$this->setInfoFields($this->fields, $this->loadRecord);
+			}else{
+				$this->loadForm($this->name);
+				$this->fields = $this->loadFields($this->name, $this->loadRecord);
+				
+			}
+			$this->menu = new Menu(['name'=>$this->menuName]);
+		}
+
+		
 		//$this->createFields([]);
 	}
+
+	
 }

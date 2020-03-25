@@ -14,10 +14,15 @@ class Menu extends \Sevian\JS\Menu {
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-        
 		$this->cn = \Sevian\Connection::get();
-		$this->loadMenu($this->name);
-
+		if($this->name){
+			if(substr($this->name, 0, 1) == '#'){
+				$this->name = substr($this->name, 1);
+				$this->loadJsonMenu($this->name);
+			}else{
+				$this->loadMenu($this->name);
+			}
+		}
 
 	}
 }

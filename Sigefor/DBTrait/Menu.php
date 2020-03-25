@@ -2,9 +2,36 @@
 namespace Sigefor\DBTrait;
 
 trait Menu{
+	
+	private $cn = null;
+	private $infoItems = null;
+
 	protected $tMenus = "_sg_menus";
 	protected $tMenuItems = "_sg_menu_items";
-	private $cn = null;
+	
+	public function jsonConfig($info){
+		
+		foreach($info as $k => $v){
+			$this->$k = $v;
+		}
+
+		$params = \Sevian\S::vars($this->params);
+		$params = json_decode($params);
+		
+		if($params){
+			foreach($params as $k => $v){
+				$this->$k = $v;
+			}
+		}
+
+		return $info;
+	}
+
+	public function loadJsonMenu($file){
+		
+		$info = json_decode(file_get_contents($file, true));
+		return $this->jsonConfig($info);
+	}
 
 	public function loadMenu($name){
 		$cn = $this->cn;
@@ -13,9 +40,6 @@ trait Menu{
 			SELECT menu, title,class, params, config, datetime
 			FROM $this->tMenus 
 			WHERE menu = '$name'";
-        
-            
-       
 
 		$result = $cn->execute();
 		
@@ -26,22 +50,15 @@ trait Menu{
 			}
 			$params = \Sevian\S::vars($this->config);
 			$config = json_decode($params);
+			
 			if($config){
 				foreach($config as $k => $v){
 					$this->$k = $v;
 				}
 			}
 
-
-			//$this->_menu = json_decode($this->config, true);
-
-			
-			//$this->_menu["caption"] = $this->_config["caption"]??$this->title;
-			//$this->_menu["class"] = $this->_config["class"] ?? $this->class;
-
-			
 			$this->loadCfgItems($name);
-			//print_r($this->_config);
+
 		}
 	}
 
@@ -51,19 +68,16 @@ trait Menu{
 		$cn->query = "
 			SELECT * 
 			FROM $this->tMenuItems 
-			WHERE menu = '$name' order by `order`";
-        
-            
+			WHERE menu = '$name' order by `order`
+			";
 
 		$result = $cn->execute();
-		$opt = [];
 
 		$items = [];
 		$json = [];
 		
 		while($rs = $cn->getDataAssoc($result)){
 			if($rs["action"]){
-				$action = "Sevian.send(".$rs["action"].");";
 				$action = "S.send(".$rs["action"].");";
 			}else{
 				$action = "";
@@ -74,45 +88,20 @@ trait Menu{
 			
 			$items[$index] = [
 				"caption" => $rs["title"],
-
 				"action" => $action,
-
 			];
-			
 
 			if($parent != ""){
 				if(!isset($items[$parent]["items"])){
 					$items[$parent]["items"] = [];
 				}
-				
 				$items[$parent]["items"][] = &$items[$index];
 			}else{
-				
 				$json[] = &$items[$index];
 			}
 
-			
-			
-
-
-			$opt[] = [
-				"caption" => $rs["title"],
-				"index" => $rs["index"],
-				"parent" => $rs["parent"],
-				"action" => $action,
-
-			];
-			
-			
-
-
-
-			
-		
 		}
 		$this->items = $json;
-		//print_r($items);
-		//print_r(json_encode($json, JSON_PRETTY_PRINT));
 
 	}
 }

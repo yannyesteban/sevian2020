@@ -1,0 +1,34 @@
+{
+	"menu":"",
+	"title":"Menu JSON",
+	"caption":"Menu JSON",
+	"className": "purple",
+	"type":"accordion",
+	"subType":"default",
+	"infoItems":[
+
+	],
+	"items":[
+		{
+			"caption":"ONE I",
+			"items":[
+				{
+					"caption":"I - STEP",
+					"action":"alert(8)"
+				},
+				{
+					"caption":"II - STEP"
+				},
+				{
+					"caption":"III - STEP"
+				}
+			]
+		},
+		{
+			"caption":"DOS II"
+		},
+		{
+			"caption":"Tres"
+		}
+	]
+}
