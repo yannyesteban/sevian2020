@@ -204,6 +204,19 @@ $cls_elements = [
 		],
 		'css'=>[]
 	],
+	'command' 		=> [
+		'file' 	=> MAIN_PATH.'gt/command.php',
+		'class' => '\GT\Command',
+		'enable' => true,
+		'js'=>[
+			[
+				'file' 	=> MAIN_PATH.'gt/js/command.js',
+				'begin'=> false
+			]
+
+		],
+		'css'=>[]
+	],
 	];
 
 Sevian\S::elementsLoad($cls_elements);

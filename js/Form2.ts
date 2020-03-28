@@ -193,7 +193,7 @@ var Form2 = (($) => {
 
         addFields(fields){
             for(let x in fields){
-                //fields[x].config.context = this.getContext();
+                fields[x].context = this.getContext();
                 this.addField(fields[x]);
             }
             return;

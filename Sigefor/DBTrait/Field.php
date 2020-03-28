@@ -4,7 +4,7 @@ namespace Sigefor\DBTrait;
 trait ConfigField{
 	
 	private function getDataField($info){
-		
+
 		$data = [];
 		foreach($info as $_data){
 

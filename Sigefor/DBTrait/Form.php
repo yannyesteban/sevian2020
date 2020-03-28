@@ -87,7 +87,7 @@ trait Form{
 				
 			}
 			if($field->data){
-					
+
 				$field->data = $this->getDataField(json_decode(\Sevian\S::vars($field->data)));
 			}
 			if($field->modeValue == '1' or !$values){
@@ -135,7 +135,7 @@ trait Form{
 
 		$cn->query = "
 			SELECT 
-			form, caption, class, query, params, method, pages, f.groups
+			form, caption, class as className, query, params, method, pages, f.groups
 			FROM $this->tForms as f
 			WHERE form = '$name'
 		";
@@ -193,6 +193,7 @@ trait Form{
 		//hr($this->query);
 		$f = $this->infoQuery->fields;
 		$this->fields = [];
+		//
 		foreach($f as $key => $info){
 			$field = new \Sevian\Sigefor\InfoField($info);
 			
@@ -210,14 +211,15 @@ trait Form{
 				}
 				
 				if($field->data){
-					
 					$field->data = $this->getDataField(json_decode(\Sevian\S::vars($field->data)));
 				}
 				
 			}
 			
 			if($field->modeValue == '1' or !$values){
-				$field->value = $field->default;
+				//$default = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
+				//$params = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
+				$field->value = $params = json_decode(\Sevian\S::vars($field->default));;
 			}else if(isset($values[$key])){
 				$field->value = $values[$key];
 			}
@@ -225,6 +227,22 @@ trait Form{
 			if(!$field->input){
 				$this->getDefaultInput($info->mtype, $field->input, $field->type);
 			}
+
+			if($field->events){
+				
+				$params = str_replace("\r\n", '\\n', $field->events);
+				$params = str_replace("\t", '',  ($params));
+			
+				$params = \Sevian\S::varCustom($params, $values, '&');
+				$params = json_decode(\Sevian\S::vars($params));
+
+				$field->events = (object)[];
+				foreach($params as $k => $v){
+					$field->events->$k = $v;
+				}
+				
+			}
+
 
 			$this->fields[] = $field;
 

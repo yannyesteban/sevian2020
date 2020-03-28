@@ -380,7 +380,8 @@ M.setPopup(popup);
                 curve: 1,
                 easing(t) {
                   return t;
-                });
+                }
+            });
         }
 
         addMark(name:string, info:object){
@@ -493,7 +494,7 @@ M.setPopup(popup);
                     ]
                 });
 
-               return: 
+               return;
             this.map.addLayer({
                 'id': layerId,
                 'type': 'symbol',
