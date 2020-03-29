@@ -205,9 +205,7 @@ var S = (($) => {
                             sgJson.iFragment(p.fragments[x]);
                             break;
                         case "message":
-                            if (!this.msg) {
-                                this.msg = new Float.Message(p.fragments[x]);
-                            }
+                            this.msg = new Float.Message(p.fragments[x]);
                             this.msg.show({});
                             break;
                     }

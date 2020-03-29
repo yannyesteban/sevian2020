@@ -40,6 +40,9 @@ class Command extends \Sevian\Element{
 				//print_r(\Sevian\S::getVReq());
 				$this->formParams('xxx',\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'));
 			break;
+			case 'save_command':
+				$this->save_command();
+			break;
 
 		}
 
@@ -55,6 +58,7 @@ class Command extends \Sevian\Element{
 			'panelId'=>$this->id,
 			//'name'=>$this->name,
 			'name'=>'main_command',
+			'method'=>'request'
 			//'record'=>$this->getRecord()
 		]);
 
@@ -70,7 +74,8 @@ class Command extends \Sevian\Element{
 		$this->lastRecord = null;
 		$g =  new \Sigefor\Component\Grid([
 			'panelId'=>$this->id,
-			'name'=>'h_commands'
+			'name'=>'h_commands',
+			'method'=>'list'
 		]);
 		$opt[] = [
 			'method'  => 'setGrid',
@@ -87,7 +92,8 @@ class Command extends \Sevian\Element{
 		$g =  new \Sigefor\Component\Form([
 			'panelId'=>$this->id,
 			'name'=>'h_commands',
-			'mode'=>1
+			'mode'=>1,
+			'method'=>'request'
 		]);
 		$opt[] = [
 			'method'  => 'setForm',
@@ -219,7 +225,8 @@ class Command extends \Sevian\Element{
 		
 		$form = [
 			"caption"=>"Command: <span class=\"command_name\">$command</span>",
-			"fields"=>$fields
+			"fields"=>$fields,
+			'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
 		];
 
 		$opt[] = [
@@ -230,7 +237,53 @@ class Command extends \Sevian\Element{
 		$this->info = $opt;//$form->getInfo();
 
         //return $form;
-    }
+	}
+	
+	public function save_command(){
+		$this->records = [];
+		$g =  new \Sigefor\Component\FormSave(
+			[
+				'panelId'	=> $this->id,
+				'name'		=> 'h_commands',
+				'dataKeys'	=> &$this->records
+			]);
+			//\Sevian\S::setReq("__record_", (object)["id"=>48])	;
+
+			//$g::setDictRecords($this->records);	
+		$_data = (object)\Sevian\S::getVReq();
+		$_data->__mode_ = 1;
+		$_data->__id_ = 0;
+		//print_r([$_data]);
+		$result = $g->send([$_data]);
+		//hr("hola2");
+		//hr($result);
+		
+		//$this->lastRecord = $this->records[0];
+		
+		
+		//hr($this->records);
+		//print_r($result);exit;
+		
+		foreach($result as $k => $v){
+//hr("$v->error");
+			if($v->error){
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>'Error '.$g->caption,
+					'text'=>"Record wasn't saved!!!"
+				]));
+				//print_r($result);
+				
+			}else{
+				//print_r($result);
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>$g->caption,
+					'text'=>'Record was saved!!!'
+				]));
+
+			}
+
+		}
+	}
 
 }
 

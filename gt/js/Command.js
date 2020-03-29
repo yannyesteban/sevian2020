@@ -7,6 +7,8 @@ var Command = (($) => {
             this.grid = null;
             this.form = null;
             this.menu = null;
+            this.panelGrid = null;
+            this.panelCommand = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -48,12 +50,14 @@ var Command = (($) => {
         }
         setGrid(grid) {
             this.panelGrid.text("");
+            this.panelCommand.text("");
             grid.target = this.panelGrid;
             grid.parentContext = this;
             this.grid = new Grid2(grid);
         }
         setForm(form) {
             this.panelGrid.text("");
+            this.panelCommand.text("");
             form.target = this.panelGrid;
             form.parentContext = this;
             this.grid = new Form2(form);
@@ -64,6 +68,10 @@ var Command = (($) => {
             form.target = this.panelCommand;
             form.parentContext = this;
             this.grid2 = new Form2(form);
+        }
+        setPage(page) {
+            this.grid.pag.page = page;
+            //this.grid.setPage(page);
         }
     }
     return Command;

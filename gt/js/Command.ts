@@ -8,6 +8,9 @@ var Command = (($) => {
 		form:object = null;
 		menu:object = null;
 
+		panelGrid:object = null;
+		panelCommand:object = null;
+
 		constructor(info:object){
             
             for(var x in info){
@@ -59,6 +62,7 @@ var Command = (($) => {
 
 		setGrid(grid){
 			this.panelGrid.text("");
+			this.panelCommand.text("");
 
 			grid.target = this.panelGrid;
 			grid.parentContext =  this;
@@ -68,6 +72,7 @@ var Command = (($) => {
 
 		setForm(form){
 			this.panelGrid.text("");
+			this.panelCommand.text("");
 
 			form.target = this.panelGrid;
 			form.parentContext =  this;
@@ -81,6 +86,11 @@ var Command = (($) => {
 			form.parentContext =  this;
 			this.grid2 = new Form2(form);
 			
+		}
+		setPage(page){
+			this.grid.pag.page = page;
+			
+			//this.grid.setPage(page);
 		}
 	}
 

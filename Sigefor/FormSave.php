@@ -41,7 +41,7 @@ class InfoRecordField{
     public $serialize = false;
     public $serializeFilters = []; 
     public $aux = false;
-    public $update = true;
+    public $isUpdate = true;
     public $key = false;
     public $serial = '';
 
@@ -172,7 +172,7 @@ class FormSave{
 
                 $field = new InfoRecordField($field);
               
-                if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->update)){
+                if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->isUpdate)){
                     continue;
                 }
               

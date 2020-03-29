@@ -453,7 +453,7 @@ var Grid2 = (($) => {
         _create(main:any){
             let data = [];
             
-
+            let name = "";
 
             
             if(this.action){
@@ -461,10 +461,13 @@ var Grid2 = (($) => {
                 this._action = $.bind(this.action, this.parentContext, "index");
             }
             for(let x in this.fields){
-                if(data = this.fields[x].config.data){
-                    this._fieldData[x] = {};
+                name = this.fields[x].name;
+                
+                if(data = this.fields[x].data){
+                    this._fieldData[name] = {};
                     for(let _data of data){
-                        this._fieldData[x][_data[0]] = _data[1];
+                        
+                        this._fieldData[name][_data[0]] = _data[1];
                     }
                 }
             }
@@ -809,6 +812,7 @@ var Grid2 = (($) => {
             }
             let hiddenFields = $.create({tagName:"div", style:{cssText:"display:none;"}});
             this._mainForm = new Form();
+            
             for(let x in this.fields){
                 let field = this.fields[x];
                 value = field.default;
@@ -818,7 +822,6 @@ var Grid2 = (($) => {
                 info.type = (field.input === "hidden")? "hidden": field.type;
                 //info.value = value;
                 info.dataset = {"name": field.name};
-
 
                 this._mainForm.createInput(info);//I.create(input, info);
                 

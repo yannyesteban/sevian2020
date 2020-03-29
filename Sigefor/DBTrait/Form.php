@@ -17,6 +17,7 @@ trait Form{
 	private $record = null;
 	private $dataKeys = [];
 	public $mode = 2;
+	public $method = '';
 	public $fields = [];
 
 	private $lastRecord = null;
@@ -135,7 +136,7 @@ trait Form{
 
 		$cn->query = "
 			SELECT 
-			form, caption, class as className, query, params, method, pages, f.groups
+			form, caption, class as className, query, params, methods, pages, f.groups
 			FROM $this->tForms as f
 			WHERE form = '$name'
 		";
@@ -149,13 +150,26 @@ trait Form{
 			
 			$params = \Sevian\S::vars($this->params);
 			$config = json_decode($params);
-			
 			if($config){
 				foreach($config as $k => $v){
 					$this->$k = $v;
 				}
 			}
 			$this->query = \Sevian\S::vars($this->query);
+
+		}
+
+		if($this->methods){
+			
+			$config = \Sevian\S::vars($this->methods);
+			$config = json_decode($config, true);
+			
+			if($config and $config[$this->method]??false){
+				foreach($config[$this->method] as $k => $v){
+					$this->$k = $v;
+				}
+				
+			}
 
 		}
 		
@@ -180,6 +194,8 @@ trait Form{
 		while($rs = $cn->getDataAssoc($result)){
 			$_fields[$rs['field']] = $rs;
 		}
+
+
 
 		$this->infoQuery = $cn->infoQuery($this->query);
 			//hr($this->record)	;
@@ -299,7 +315,10 @@ trait Form{
 			$field = new \Sevian\Sigefor\InfoRecordField($info);
 			
 			if(isset($_fields[$key])){
-				$field->update($_fields[$key]);
+				foreach($_fields[$key] as $k => $v){
+					$field->$k = $v;
+				}
+				//$field->update($_fields[$key]);
 
 				if($_fields[$key]['params']){
 					$params = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');

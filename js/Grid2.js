@@ -350,14 +350,16 @@ var Grid2 = (($) => {
         }
         _create(main) {
             let data = [];
+            let name = "";
             if (this.action) {
                 this._action = $.bind(this.action, this.parentContext, "index");
             }
             for (let x in this.fields) {
-                if (data = this.fields[x].config.data) {
-                    this._fieldData[x] = {};
+                name = this.fields[x].name;
+                if (data = this.fields[x].data) {
+                    this._fieldData[name] = {};
                     for (let _data of data) {
-                        this._fieldData[x][_data[0]] = _data[1];
+                        this._fieldData[name][_data[0]] = _data[1];
                     }
                 }
             }
