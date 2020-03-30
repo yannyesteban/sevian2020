@@ -82,6 +82,21 @@ trait Menu{
 			}else{
 				$action = "";
 			}
+            $events = null;
+            if($rs['events']){
+				$events = [];
+				$params = str_replace("\r\n", '\\n', $rs['events']);
+				$params = str_replace("\t", '',  ($params));
+			
+				
+				$params = json_decode(\Sevian\S::vars($params));
+
+				
+				foreach($params as $k => $v){
+					$events[$k] = $v;
+				}
+				
+			}
 
 			$index = $rs["index"];
 			$parent = $rs["parent"];
@@ -90,6 +105,10 @@ trait Menu{
 				"caption" => $rs["title"],
 				"action" => $action,
 			];
+            
+            if($events){
+                $items[$index]['events'] = $events;
+            }
 
 			if($parent != ""){
 				if(!isset($items[$parent]["items"])){

@@ -194,6 +194,8 @@ var Menu =
                 if(this.action){
                     item.on("click", (event)=>{this._action($(x.parentNode));});
                 }
+                
+                
             
             }
             
@@ -379,6 +381,12 @@ var Menu =
             }else if(info.action){
                 let action = $.bind(info.action, this.parentContext, "item");
                 link.on("click", (event)=>{action(item);});
+            }
+
+            if(info.events){
+                for(let i in info.events){
+                    link.on(i, $.bind(info.events[i], this.parentContext || this, "event"));
+                }
             }
         }
 

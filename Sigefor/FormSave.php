@@ -23,7 +23,6 @@ class InfoRecord{
 	}
 }
 
-
 class InfoRecordField{
     public $name = '';
     public $field = '';
@@ -58,11 +57,8 @@ class InfoRecordField{
 				$this->$k = $v;
 			}
 		}
-		
-		
 	}
 }
-
 
 class FormSave{
     private static $cn;
@@ -93,10 +89,10 @@ class FormSave{
         }
     }
 
-
     public static function setDictRecords(&$record){
         self::$dict = &$record;
     }
+    
     public static function send($info, $data, $masterData = []){
       
         if(!$info instanceof InfoRecord){
@@ -301,11 +297,8 @@ class FormSave{
                 if($data->$k){
                    self::send($field->detail, $data->$k, $data); 
                 }
-                
             }
         }
-
-
         
         $result->error = self::$error;
         return $result;

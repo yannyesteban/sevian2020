@@ -2,8 +2,8 @@
 
 namespace GT;
 
-include_once "../sigefor/Component/Menu.php";
-include_once "../sigefor/Component/Form.php";
+include_once '../sigefor/Component/Menu.php';
+include_once '../sigefor/Component/Form.php';
 
 class Command extends \Sevian\Element{
 	public function __construct($info = []){
@@ -52,7 +52,7 @@ class Command extends \Sevian\Element{
 	public function load(){
 		$this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-command-'.$this->id;
-		$this->typeElement = "Command";
+		$this->typeElement = 'Command';
 
 		$g =  new \Sigefor\Component\Form([
 			'panelId'=>$this->id,
@@ -64,9 +64,9 @@ class Command extends \Sevian\Element{
 
 
 		$this->info = [
-			"id"=>$this->panel->id,
+			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			"form"=>$g
+			'form'=>$g
 		];
 	}
 
@@ -147,42 +147,50 @@ class Command extends \Sevian\Element{
 		//\Sevian\S::db($cn->query);
 
 		$fields[] = [
-			"input"=>'hidden',
-			"type"=>"hidden",
-			"name"=>"param_cmd_id",
-			"caption"=> 'cmd_id',
+			'input'=>'hidden',
+			'type'=>'hidden',
+			'name'=>'param_cmd_id',
+			'caption'=> 'cmd_id',
 			'value'=>$commandId
 		];
 
 		$fields[] = [
-			"input"=>'hidden',
-			"type"=>"hidden",
-			"name"=>"param_unit_id",
-			"caption"=> 'param_unit_id',
+			'input'=>'hidden',
+			'type'=>'hidden',
+			'name'=>'param_unit_id',
+			'caption'=> 'param_unit_id',
 			'value'=>$unitId
 		];
 
 		$fields[] = [
-			"input"=>'hidden',
-			"type"=>"hidden",
-			"name"=>"param_tag",
-			"caption"=> 'tag'
+			'input'=>'hidden',
+			'type'=>'hidden',
+			'name'=>'param_tag',
+			'caption'=> 'tag'
 		];
 	
 		$fields[] = [
-			"input"=>'hidden',
-			"type"=>"hidden",
-			"name"=>"param_pass",
-			"caption"=> 'pass',
-			"value"=>"0000"
+			'input'=>'hidden',
+			'type'=>'hidden',
+			'name'=>'param_pass',
+			'caption'=> 'pass',
+			'value'=>'0000'
 		];
 
 		$fields[] = [
-			"input"=>'input',
-			"type"=>"text",
-			"name"=>"param_name",
-			"caption"=> 'Name',
-			"value"=>$cmd
+			'input'=>'input',
+			'type'=>'text',
+			'name'=>'param_name',
+			'caption'=> 'Name',
+			'value'=>$cmd
+		];
+
+		$fields[] = [
+			'input'=>'input',
+			'type'=>'textarea',
+			'name'=>'x',
+			'caption'=> 'x',
+			'value'=>'x'
 		];
 		
         while($rs = $cn->getDataAssoc($result)){
@@ -204,28 +212,28 @@ class Command extends \Sevian\Element{
 				}else{
 					$type = 'checkbox';
 					$doValues = 'let sum = 0; for(let x of inputs){sum += +x.value;} return sum;';
-					$events = ["change" => "db (event.currentTarget.value,'red')"];
+					$events = ['change' => "db (event.currentTarget.value,'red')"];
 				}
 
 			}
 
 			$fields[] = [
-                "input"=>$input,
-				"type"=>$type,
-				"name"=>"param_".$rs["id"],
-				"caption"=>$rs["param"],
+                'input'=>$input,
+				'type'=>$type,
+				'name'=>'param_'.$rs['id'],
+				'caption'=>$rs['param'],
 				'data' => $data,
-				'id' => "param_".$rs["id"].'_'.$this->id,
+				'id' => 'param_'.$rs['id'].'_'.$this->id,
 				'doValues' => $doValues,
 				'events' => $events,
-				'dataset'=>["cmd"=>"param_".$rs["id"]],
-				"value"=> $rs["value"]
+				'dataset'=>['cmd'=> $rs['id']],
+				'value'=> $rs['value']
             ];
 		}
 		
 		$form = [
-			"caption"=>"Command: <span class=\"command_name\">$command</span>",
-			"fields"=>$fields,
+			'caption'=>"Command: <span class=\"command_name\">$command</span>",
+			'fields'=>$fields,
 			'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
 		];
 
@@ -240,6 +248,11 @@ class Command extends \Sevian\Element{
 	}
 	
 	public function save_command(){
+
+		print_r(\Sevian\S::getVReq());
+
+		return;
+
 		$this->records = [];
 		$g =  new \Sigefor\Component\FormSave(
 			[
@@ -265,7 +278,7 @@ class Command extends \Sevian\Element{
 		//print_r($result);exit;
 		
 		foreach($result as $k => $v){
-//hr("$v->error");
+			//hr("$v->error");
 			if($v->error){
 				$this->addFragment(new \Sevian\iMessage([
 					'caption'=>'Error '.$g->caption,

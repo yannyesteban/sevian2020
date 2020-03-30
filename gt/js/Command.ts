@@ -11,6 +11,8 @@ var Command = (($) => {
 		panelGrid:object = null;
 		panelCommand:object = null;
 
+		_formParams:object = null;
+
 		constructor(info:object){
             
             for(var x in info){
@@ -84,13 +86,45 @@ var Command = (($) => {
 
 			form.target = this.panelCommand;
 			form.parentContext =  this;
-			this.grid2 = new Form2(form);
+			this._formParams = new Form2(form);
 			
 		}
 		setPage(page){
 			this.grid.pag.page = page;
 			
 			//this.grid.setPage(page);
+		}
+		getDetail(info:any){
+			let inputs = this._formParams.getInputs();
+
+			let str = "";
+			let cmdValues = [];
+			let _data = [];
+			let n = 0;
+            for(let i in inputs){
+				
+                if(inputs[i].ds("cmd")){
+                   
+                   _data.push(
+					{
+						"h_command_id":410,
+						"param_id":inputs[i].ds("cmd"),
+						"value":inputs[i].getValue(),
+						"__mode_":info.mode || 1,
+						"__id_": n++
+					});   
+					
+					
+                }
+                
+			}
+			this._formParams.getInput("x").setValue(JSON.stringify(_data));
+			
+
+		}
+
+		test(){
+			alert("hello world!");
 		}
 	}
 
