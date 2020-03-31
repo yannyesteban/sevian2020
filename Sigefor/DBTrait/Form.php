@@ -233,9 +233,10 @@ trait Form{
 			}
 			
 			if($field->modeValue == '1' or !$values){
+				
 				//$default = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
 				//$params = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
-				$field->value = $params = json_decode(\Sevian\S::vars($field->default));;
+				$field->value = $params = \Sevian\S::vars($field->default);
 			}else if(isset($values[$key])){
 				$field->value = $values[$key];
 			}

@@ -6,6 +6,10 @@ include_once '../sigefor/Component/Menu.php';
 include_once '../sigefor/Component/Form.php';
 
 class Command extends \Sevian\Element{
+
+	private $records = null;
+	private $lastRecord = null;
+
 	public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
@@ -14,7 +18,20 @@ class Command extends \Sevian\Element{
         $this->cn = \Sevian\Connection::get();
 		
 	}
+	public function config(){
 
+		if(!$this->getSes('_records')){
+			$this->setSes('_records', []);
+		}
+		if(!$this->getSes('_lastRecords')){
+			$this->setSes('_lastRecords', []);
+		}
+
+		$this->records = &$this->getSes('_records');
+		$this->lastRecord = &$this->getSes('_lastRecords');
+
+		//hr($this->lastRecord);
+	}
 	public function evalMethod($method = false): bool{
 
 		if($method === false){
@@ -34,6 +51,12 @@ class Command extends \Sevian\Element{
 			case 'load_form':
 				$this->loadForm();
 				//print_r(\Sevian\S::getVReq());
+				
+			break;
+			case 'edit_form':
+				//$this->loadForm();
+				$this->editForm();
+				//print_r(\Sevian\S::getVReq());exit;
 				
 			break;
 			case 'form_commands':
@@ -58,7 +81,8 @@ class Command extends \Sevian\Element{
 			'panelId'=>$this->id,
 			//'name'=>$this->name,
 			'name'=>'main_command',
-			'method'=>'request'
+			'method'=>'request',
+			'mode'=>1
 			//'record'=>$this->getRecord()
 		]);
 
@@ -77,6 +101,9 @@ class Command extends \Sevian\Element{
 			'name'=>'h_commands',
 			'method'=>'list'
 		]);
+
+		$this->records = $g->getDataKeys();
+
 		$opt[] = [
 			'method'  => 'setGrid',
 			'value'=>$g,
@@ -102,8 +129,26 @@ class Command extends \Sevian\Element{
 		];
 		$this->info = $opt;//$form->getInfo();
 	}
+	public function editForm(){
 
-	private function formParams($cmd, $commandId, $unitId){
+		
+		$this->lastRecord = null;
+		$g =  new \Sigefor\Component\Form([
+			'panelId'=>$this->id,
+			'name'=>'h_commands',
+			'mode'=>2,
+			'method'=>'load',
+			'record'=>$this->getRecord()
+		]);
+		$opt[] = [
+			'method'  => 'setForm',
+			'value'=>$g,
+			'_args' => [1,1,1]
+		];
+		$this->info = $opt;//$form->getInfo();
+	}
+
+	private function formParams($cmd, $commandId, $unitId, $h_id=0){
 		$command = '';
 
 		$cn = $this->cn;
@@ -140,7 +185,12 @@ class Command extends \Sevian\Element{
 			LEFT JOIN units as u ON u.device_id = co.device_id AND u.id = '$unitId'
 			WHERE p.command_id = '$commandId' 
 			order by `order`;";
-        
+        $cn->query = "SELECT p.*, co.value, CASE WHEN co.param_id IS NOT NULL THEN 2 ELSE 1 END as param_mode
+			FROM devices_comm_params as p
+			LEFT JOIN h_commands as h ON h.command_id = p.command_id and h.id = '$h_id'
+			LEFT JOIN h_commands_values as co ON co.param_id = p.id AND co.h_command_id = h.id
+			WHERE p.command_id = '$commandId'
+			order by `order`;";
         $result = $cn->execute();
 		$fields = [];
 		
@@ -193,6 +243,7 @@ class Command extends \Sevian\Element{
 			'value'=>'x'
 		];
 		
+		$mode = 1;
         while($rs = $cn->getDataAssoc($result)){
 
 			$input = 'input';
@@ -200,7 +251,8 @@ class Command extends \Sevian\Element{
 			$data = [];
 			$doValues = false;
 			$events = false;
-			
+			$mode = $rs['param_mode'];
+
 			if(isset($dataFields[$rs['id']])){
 				$input = 'multi';
 				
@@ -231,6 +283,14 @@ class Command extends \Sevian\Element{
             ];
 		}
 		
+		$fields[] = [
+			'input'=>'input',
+			'type'=>'text',
+			'name'=>'param_mode',
+			'caption'=> 'param_mode',
+			'value'=>$mode
+		];
+
 		$form = [
 			'caption'=>"Command: <span class=\"command_name\">$command</span>",
 			'fields'=>$fields,
@@ -246,10 +306,40 @@ class Command extends \Sevian\Element{
 
         //return $form;
 	}
-	
-	public function save_command(){
 
-		print_r(\Sevian\S::getVReq());
+	public function getRecord(){
+
+		if($this->lastRecord){
+			return $this->lastRecord;
+		}
+		$__id_ = \Sevian\S::getReq("__id_");
+
+		if(!$__id_){
+			return null;
+		}
+		
+		$record = $this->records[$__id_];
+		/*
+			OJO :
+			evita el error cuando el usuario pulsa F5/Refresh
+			$this->records[$__id_] = $record;
+		*/
+		//$this->records[$__id_] = $record;
+		$this->lastRecord = $record;
+		return $record;
+	}
+
+	public function save_command(){
+		
+		$g =  new \Sigefor\Component\FS([
+			'name'	=>	'h_commands',
+			'data'=>[(object)\Sevian\S::getVReq()]
+		]);
+		
+		//$g->save();
+
+
+		//print_r(\Sevian\S::getVReq());
 
 		return;
 

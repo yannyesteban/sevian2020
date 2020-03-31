@@ -8,6 +8,9 @@ class InfoRecord{
     public $tables = [];
     public $transaction = false;
     public $masterData = false;
+    public $masterFields = null;
+    public $fieldData = null;
+    public $subforms = null;
     public $records = [];
     public $error = false;
     public $errno = 0;
@@ -125,8 +128,8 @@ class FormSave{
 
         $cn = self::$cn;
         $mode = $data->__mode_;
-        
-        $record = $data->__record_?? (object)self::$dict[$data->__id_]?? new \stdClass;
+       
+        $record = $data->__record_?? (object)self::$dict[$data->__id_xxx??false]?? new \stdClass;
 
         $recordIni = clone $record;
 
@@ -182,8 +185,9 @@ class FormSave{
                 if($field->sqlValue){
                     $fieldValue = $field->sqlValue;
                 }else{
-
-                    if($field->master and isset($masterData->{$field->master})){
+                    if($info->masterFields and isset($info->masterFields->$name)){
+                        $value = $masterData->{$info->masterFields->$name};
+                    }elseif($field->master and isset($masterData->{$field->master})){
                         $value = $masterData->{$field->master};
                     }elseif($field->refValue){
                         $value = $data->{$field->refValue};
@@ -285,6 +289,19 @@ class FormSave{
                 'errno' => $q_errno
             ];
             
+        }
+
+        if($info->subforms){
+            foreach($info->subforms as $subform){
+                //print_r($subform);exit;
+                //hr($data->{$subform->fieldData});
+                $subData = null;
+                if(is_string($data->{$subform->fieldData})){
+                    $subData = \json_decode($data->{$subform->fieldData});
+                }
+
+                self::send($subform, $subData, $data);
+            }
         }
 
         foreach($info->fields as $k => $field){
