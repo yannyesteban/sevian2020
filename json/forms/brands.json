@@ -3,13 +3,21 @@
 	"caption":"Marcas Vehículos",
 	"class":"",
 	"query":"SELECT * FROM brandsx",
-	"menuName":"save_form",
+	"menuName":"grid_menu",
+	"methods":{
+		"request":{
+			"menuName":"request_menu"
+		},
+		"load":{
+			"menuName":"request_menu"
+		}
+	},
 	"params":"",
-	"method":{},
+	
 	"pages":[],
 	"groups":{},
-	"fields":[
-		{
+	"infoFields":{
+		"id":{
 			
 			"name":"id",
 			"caption":"Código",
@@ -18,6 +26,9 @@
 				"caption":"Un Campo ID"
 			}
 		}
+	},
+	"searchFor":[
+		"brand"
 	]
 
 }

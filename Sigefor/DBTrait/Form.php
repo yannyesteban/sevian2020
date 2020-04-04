@@ -109,8 +109,12 @@ trait Form{
 				$field->update($infoField[$key]);
 
 				if($infoField[$key]['params']){
-					$params = \Sevian\S::varCustom($infoField[$key]['params'], $values, '&');
-					$params = json_decode(\Sevian\S::vars($params));
+					if(is_string($infoField[$key]['params'])){
+						$params = \Sevian\S::varCustom($infoField[$key]['params'], $values, '&');
+						$params = json_decode(\Sevian\S::vars($params));
+					}else{
+						$params = $infoField[$key]['params'];
+					}
 					
 					foreach($params as $k => $v){
 						$field->$k = $v;
@@ -204,9 +208,12 @@ trait Form{
 				}
 
 				if($infoField[$key]['params']){
-					$params = \Sevian\S::varCustom($infoField[$key]['params'], $values, '&');
-					$params = json_decode(\Sevian\S::vars($params));
-					
+					if(is_string($infoField[$key]['params'])){
+						$params = json_decode(\Sevian\S::vars($infoField[$key]['params']));
+					}else{
+						$params = $infoField[$key]['params'];
+					}
+
 					foreach($params as $k => $v){
 						$field->$k = $v;
 					}

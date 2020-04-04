@@ -93,7 +93,7 @@ var db = false, hr = false;
 		caption:"Debug: Console",
 		child:div,
 		left:"center",
-		top:"top",
+		top:"bottom",
 		className:["sevian"]
 	});
 

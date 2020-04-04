@@ -10,6 +10,7 @@ class Grid extends \Sevian\JS\Grid {
 
 	public $panelId = 0;
 	public $element = null;
+	public $asyncMode = true;
 	
 	public function __construct($info = []){
 		
@@ -39,10 +40,12 @@ class Grid extends \Sevian\JS\Grid {
 			
 			$this->menu = new Menu(['name'=>$this->menuName]);
 			
+			$async = ($this->asyncMode===true)?'true':'false';
+			
 			$this->search = "
 				S.send(
 					{
-						async: true,
+						async: $async,
 						panel:$this->panelId,
 						valid:false,
 						confirm_: 'seguro?',
@@ -63,6 +66,8 @@ class Grid extends \Sevian\JS\Grid {
 					});
 					
 				";
+			
+			
 
 			$this->paginator = [
 				'page'=> $this->page,
@@ -70,7 +75,7 @@ class Grid extends \Sevian\JS\Grid {
 				'maxPages'=>	$this->pageLimit,
 				'change'=>"S.send(
 					{
-						async: true,
+						async: $async,
 						panel:$this->panelId,
 						valid:false,
 						confirm_: 'seguro?',

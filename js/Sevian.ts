@@ -268,7 +268,7 @@ var S = (($) => {
 						case "message":
 							
 							this.msg = new Float.Message(p.fragments[x]);
-							this.msg.show({})
+							this.msg.show({});
 							break;
 							
 					}

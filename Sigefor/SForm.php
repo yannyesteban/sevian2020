@@ -72,10 +72,18 @@ class SForm extends \sevian\element{
 				$this->createForm(2);
 				break;
 			case 'list':
-				$this->createGrid();
+				$this->createGrid(1, '');
 				break;
 			case 'save':
 				$this->save();
+				break;
+			case 'get_data':
+				$this->createGrid($this->eparams->page, $this->eparams->q ?? '');
+				break;
+			case 'search':
+				$this->createGrid(1, $this->eparams->q ?? '');
+				break;
+			default:
 				break;
 
 		}
@@ -91,8 +99,8 @@ class SForm extends \sevian\element{
 			$form =  new \Sigefor\Component\Form([
 
 				'id'		=> $this->panel->id,
-				'panelId'	=> $this->panel->id,
-				'name'		=> '#../json/forms/personas.json',
+				'panelId'	=> $this->id,
+				'name'		=> '#../json/forms/brands.json',
 				'method'	=> $this->method,
 				'mode'		=> 1
 				//'record'=>$this->getRecord()
@@ -107,8 +115,8 @@ class SForm extends \sevian\element{
 			$form =  new \Sigefor\Component\Form([
 
 				'id'		=> $this->panel->id,
-				'panelId'	=> $this->panel->id,
-				'name'		=> '#../json/forms/personas.json',
+				'panelId'	=> $this->id,
+				'name'		=> '#../json/forms/brands.json',
 				'method'	=> $this->method,
 				'mode'		=> 2,
 				'record'	=> $this->getRecord('grid', $__id_)
@@ -123,17 +131,19 @@ class SForm extends \sevian\element{
 		
 	}
 	
-	public function createGrid($mode = 1){
+	public function createGrid($page = 1, $searchValue = ''){
 		$this->panel = new \Sevian\HTML('div');
 		$this->panel->id = $this->element.'-'.$this->id;
 		$this->typeElement = 'Grid2';
 
 		$grid =  new \Sigefor\Component\Grid([
-
+			'asyncMode'	=> false,
 			'id'		=> $this->panel->id,
-			'panelId'	=> $this->panel->id,
-			'name'		=> '#../json/forms/personas.json',
+			'panelId'	=> $this->id,
+			'name'		=> '#../json/forms/brands.json',
 			'method'	=> $this->method,
+			'page'		=> $page,
+			'searchValue' => $searchValue
 			
 		]);
 		$records=$grid->getDataKeys();
@@ -146,7 +156,7 @@ class SForm extends \sevian\element{
 	public function save(){
 
 		$formSave =  new \Sigefor\Component\FS([
-			'name'		=> '#../json/forms/personas.json',
+			'name'		=> '#../json/forms/brands.json',
 			'dataKeys'	=> $this->_masterData,
 			'dataKeysId'=> 'grid',
 			'data'		=> [(object)\Sevian\S::getVReq()]
