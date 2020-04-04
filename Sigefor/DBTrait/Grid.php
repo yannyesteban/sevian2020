@@ -61,7 +61,7 @@ trait Grid{
 				$data[$k]['__mode_'] = 2;
 				$data[$k]['__id_'] = $k;
 				
-				$this->dataKeys[] = [
+				$this->dataKeys[] = (object)[
 					$key => $record[$key]
 				];
 				

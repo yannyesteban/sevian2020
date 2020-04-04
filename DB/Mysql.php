@@ -352,10 +352,8 @@ class Mysql extends DBase{
 				$name = $f;
 			}			
 
-			if(!isset($info->tables[$t])){
-				
+			if(!isset($info->tables[$t]) and $t){
 				$info->tables[$t] = $t;
-				
 			}
 				
 			$field = new InfoField();
@@ -458,6 +456,7 @@ class Mysql extends DBase{
 	}
 	
 	public function serialId($table, $field, $filters = []){
+		/* erroorrrrrrrrrrrrrrrrr */
 		$len = strlen($pre)+1;
 		$_where = '';
 
@@ -630,6 +629,24 @@ class Mysql extends DBase{
 			
 		}
 		
+	}
+
+	public function prepare($sql){
+		$this->stmt = $this->c->prepare($sql);
+
+		$query = "
+		SELECT 
+		form, caption, class as className, query, params, methods, pages, f.groups
+		FROM $this->tForms as f
+		WHERE form = ?
+		";
+		$this->cn->prepare($query);
+		$this->cn->stmt->bind_param("s",$name);
+		
+		$this->cn->stmt->execute();
+
+		$result = $this->cn->stmt->get_result();
+		//print_r($this->cn->stmt->fetch());
 	}
 
 }// end class

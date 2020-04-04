@@ -49,7 +49,7 @@ class InfoField{
 	
 }
 
-class DBase{
+abstract class DBase{
 	
 	public $driver = "";
 	public $quote = "";
@@ -287,8 +287,10 @@ class DBase{
 		
 		return $q;		
 	}// end function
+
+	abstract public function prepare($sql);
 		
 }
-//núñez
+//nï¿½ï¿½ez
 
 ?>

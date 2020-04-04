@@ -116,7 +116,7 @@ class ControlDevice extends \Sevian\Element{
 
 
         $info = [
-			"id"=>$form->id,
+			'id'=>$form->id,
 			'panel'=>$this->id,
             //"cmdData"=> $data,
 			'paramForm'=> $this->loadParamsForm('xxx', '5', ''),

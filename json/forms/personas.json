@@ -4,9 +4,55 @@
 	"class":"",
 	"query":"SELECT * FROM personas",
 	"params":"",
-	"method":{},
+	"menuName":"grid_menu",
+	"methods":{
+		"request":{
+			"menuName":"request_menu"
+		},
+		"load":{
+			"menuName":"request_menu"
+		}
+	},
 	"pages":[],
 	"groups":{},
+	"infoFields":{
+		"cedula":{
+			"field":"cedula",
+			"alias":"",
+			"caption":"Cédula",
+			"input":"input",
+			"inputType":"text",
+			"cell":"",
+			"cellType":"",
+			"class":"",
+			"default":"",
+			"modeValue":"",
+			"data":[],
+			"params":"",
+			"method":{},
+			"rules":{},
+			"events":{},
+			"info":""
+		},
+		"sexo":{
+			"field":"sexo",
+			"alias":"",
+			"caption":"Género",
+			"input":"input",
+			"type":"select",
+			"cell":"",
+			"cellType":"",
+			"class":"",
+			"default":"",
+			"modeValue":"",
+			"data":[["M","Masculino","*"],["F","Femenino","*"]],
+			"params":"",
+			"method":{},
+			"rules":{},
+			"events":{},
+			"info":""
+		}
+	},
 	"fields":[
 		{
 			"field":"cedula",

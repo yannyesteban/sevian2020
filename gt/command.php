@@ -8,6 +8,7 @@ include_once '../sigefor/Component/Form.php';
 class Command extends \Sevian\Element{
 
 	private $records = null;
+	private $records2 = null;
 	private $lastRecord = null;
 
 	public function __construct($info = []){
@@ -27,10 +28,15 @@ class Command extends \Sevian\Element{
 			$this->setSes('_lastRecords', []);
 		}
 
+		if(!$this->getSes('_records2')){
+			$this->setSes('_records2', []);
+		}
+
 		$this->records = &$this->getSes('_records');
 		$this->lastRecord = &$this->getSes('_lastRecords');
 
-		//hr($this->lastRecord);
+		$this->records2 = &$this->getSes('_records2');
+		//hr($this->records);
 	}
 	public function evalMethod($method = false): bool{
 
@@ -44,7 +50,7 @@ class Command extends \Sevian\Element{
 			case 'load_commands':
 				\Sevian\S::setSes('unit_idx', \Sevian\S::getReq('unit_idx'));
 
-				$this->loadCommans();
+				$this->loadCommands();
 				//print_r(\Sevian\S::getVReq());
 				
 			break;
@@ -55,16 +61,29 @@ class Command extends \Sevian\Element{
 			break;
 			case 'edit_form':
 				//$this->loadForm();
+				//print_r(\Sevian\S::getVReq());exit;
 				$this->editForm();
 				//print_r(\Sevian\S::getVReq());exit;
 				
 			break;
 			case 'form_commands':
 				//print_r(\Sevian\S::getVReq());
-				$this->formParams('xxx',\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'));
+				$form = $this->formParams('xxx',\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'));
+				$opt[] = [
+					'method'  => 'setFormX',
+					'value'=>$form,
+					
+				];
+				$this->info = $opt;//$form->getInfo();
 			break;
 			case 'save_command':
 				$this->save_command();
+			break;
+			case "get_data":
+				$this->setPage($this->eparams->q, $this->eparams->page);
+			break;
+			case "search":
+				$this->setPage($this->eparams->q, 1);
 			break;
 
 		}
@@ -94,9 +113,10 @@ class Command extends \Sevian\Element{
 		];
 	}
 
-	public function loadCommans(){
+	public function loadCommands(){
 		$this->lastRecord = null;
 		$g =  new \Sigefor\Component\Grid([
+			'element'=>$this->element,
 			'panelId'=>$this->id,
 			'name'=>'h_commands',
 			'method'=>'list'
@@ -110,6 +130,25 @@ class Command extends \Sevian\Element{
 			'_args' => [1,1,1]
 		];
 		$this->info = $opt;//$form->getInfo();
+	}
+
+	public function setPage($q, $page){
+		$g =  new \Sigefor\Component\Grid([
+			'element'=>$this->element,
+			'panelId'=>$this->id,
+			'name'=>'h_commands',
+			'method'=>'list'
+		]);
+		$data = $g->getDataGrid($q, ($page<=0)? 1: $page);
+		$opt[] = [
+			'method'  => 'setData',
+			'args' => [$data, ($page<=0)? 1: $page, $g->getTotalPages()]
+		];
+		
+		$this->records = $g->getDataKeys();
+		$this->typeElement = "";
+		$this->info = $opt;//$form->getInfo();
+
 	}
 	
 	public function loadForm(){
@@ -131,19 +170,27 @@ class Command extends \Sevian\Element{
 	}
 	public function editForm(){
 
-		
+		$record = $this->getRecord();
+
+		//print_r($record);exit;
 		$this->lastRecord = null;
 		$g =  new \Sigefor\Component\Form([
 			'panelId'=>$this->id,
 			'name'=>'h_commands',
 			'mode'=>2,
 			'method'=>'load',
-			'record'=>$this->getRecord()
+			'record'=>$record
 		]);
+		$this->records = $g->getDataKeys();
 		$opt[] = [
 			'method'  => 'setForm',
 			'value'=>$g,
 			'_args' => [1,1,1]
+		];
+		$opt[] = [
+			'method'  => 'setFormX',
+			'value'=>$this->formParams(0,\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'),$record['id'])
+			
 		];
 		$this->info = $opt;//$form->getInfo();
 	}
@@ -185,7 +232,8 @@ class Command extends \Sevian\Element{
 			LEFT JOIN units as u ON u.device_id = co.device_id AND u.id = '$unitId'
 			WHERE p.command_id = '$commandId' 
 			order by `order`;";
-        $cn->query = "SELECT p.*, co.value, CASE WHEN co.param_id IS NOT NULL THEN 2 ELSE 1 END as param_mode
+        $cn->query = "SELECT p.*, co.value, CASE WHEN co.param_id IS NOT NULL THEN 2 ELSE 1 END as param_mode,
+			co.h_command_id, co.param_id
 			FROM devices_comm_params as p
 			LEFT JOIN h_commands as h ON h.command_id = p.command_id and h.id = '$h_id'
 			LEFT JOIN h_commands_values as co ON co.param_id = p.id AND co.h_command_id = h.id
@@ -194,57 +242,10 @@ class Command extends \Sevian\Element{
         $result = $cn->execute();
 		$fields = [];
 		
-		//\Sevian\S::db($cn->query);
-
-		$fields[] = [
-			'input'=>'hidden',
-			'type'=>'hidden',
-			'name'=>'param_cmd_id',
-			'caption'=> 'cmd_id',
-			'value'=>$commandId
-		];
-
-		$fields[] = [
-			'input'=>'hidden',
-			'type'=>'hidden',
-			'name'=>'param_unit_id',
-			'caption'=> 'param_unit_id',
-			'value'=>$unitId
-		];
-
-		$fields[] = [
-			'input'=>'hidden',
-			'type'=>'hidden',
-			'name'=>'param_tag',
-			'caption'=> 'tag'
-		];
-	
-		$fields[] = [
-			'input'=>'hidden',
-			'type'=>'hidden',
-			'name'=>'param_pass',
-			'caption'=> 'pass',
-			'value'=>'0000'
-		];
-
-		$fields[] = [
-			'input'=>'input',
-			'type'=>'text',
-			'name'=>'param_name',
-			'caption'=> 'Name',
-			'value'=>$cmd
-		];
-
-		$fields[] = [
-			'input'=>'input',
-			'type'=>'textarea',
-			'name'=>'x',
-			'caption'=> 'x',
-			'value'=>'x'
-		];
-		
 		$mode = 1;
-        while($rs = $cn->getDataAssoc($result)){
+		$records = [];
+		
+		while($rs = $cn->getDataAssoc($result)){
 
 			$input = 'input';
 			$type = 'text';
@@ -270,25 +271,30 @@ class Command extends \Sevian\Element{
 			}
 
 			$fields[] = [
-                'input'=>$input,
-				'type'=>$type,
-				'name'=>'param_'.$rs['id'],
-				'caption'=>$rs['param'],
-				'data' => $data,
-				'id' => 'param_'.$rs['id'].'_'.$this->id,
-				'doValues' => $doValues,
-				'events' => $events,
-				'dataset'=>['cmd'=> $rs['id']],
-				'value'=> $rs['value']
-            ];
-		}
+                'input'		=> $input,
+				'type'		=> $type,
+				'name'		=> 'param_'.$rs['id'],
+				'caption'	=> $rs['param'],
+				'data' 		=> $data,
+				'id' 		=> 'param_'.$rs['id'].'_'.$this->id,
+				'doValues'	=> $doValues,
+				'events' 	=> $events,
+				'dataset'	=> ['cmd'=> $rs['id']],
+				'value'		=> $rs['value']
+			];
+			//hr($mode);
+			if($mode == 2){
+				$records[] = ['h_command_id'=>$rs['h_command_id'], 'param_id'=>$rs['param_id']];
+			}
+			
+		}// end while
 		
 		$fields[] = [
-			'input'=>'input',
-			'type'=>'text',
-			'name'=>'param_mode',
-			'caption'=> 'param_mode',
-			'value'=>$mode
+			'input'		=> 'hidden',
+			'type'		=> 'hidden',
+			'name'		=> 'param_mode',
+			'caption'	=> 'param_mode',
+			'value'		=> $mode
 		];
 
 		$form = [
@@ -296,6 +302,10 @@ class Command extends \Sevian\Element{
 			'fields'=>$fields,
 			'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
 		];
+
+		//print_r($records);exit;
+		$this->records2 = $records;
+		return $form;
 
 		$opt[] = [
 			'method'  => 'setFormX',
@@ -312,12 +322,14 @@ class Command extends \Sevian\Element{
 		if($this->lastRecord){
 			return $this->lastRecord;
 		}
+
+
 		$__id_ = \Sevian\S::getReq("__id_");
 
-		if(!$__id_){
+		if(!isset($__id_)){
 			return null;
 		}
-		
+
 		$record = $this->records[$__id_];
 		/*
 			OJO :
@@ -331,11 +343,37 @@ class Command extends \Sevian\Element{
 
 	public function save_command(){
 		
+		$dataKeys["master"] = $this->records;
+		$dataKeys["detail"] = $this->records2;
+		//print_r(\Sevian\S::getVReq());exit;
+
 		$g =  new \Sigefor\Component\FS([
 			'name'	=>	'h_commands',
+			'dataKeys'=>&$dataKeys,
+			'dataKeysId'=>'master',
 			'data'=>[(object)\Sevian\S::getVReq()]
 		]);
 		
+		foreach($g->getResult() as $k => $v){
+			//hr("$v->error");
+			if($v->error){
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>'Error '.$g->getCaption(),
+					'text'=>"Record wasn't saved!!!"
+				]));
+				//print_r($result);
+				
+			}else{
+				//print_r($result);
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>$g->getCaption(),
+					'text'=>'Record was saved!!!'
+				]));
+
+			}
+
+		}
+
 		//$g->save();
 
 
@@ -367,25 +405,7 @@ class Command extends \Sevian\Element{
 		//hr($this->records);
 		//print_r($result);exit;
 		
-		foreach($result as $k => $v){
-			//hr("$v->error");
-			if($v->error){
-				$this->addFragment(new \Sevian\iMessage([
-					'caption'=>'Error '.$g->caption,
-					'text'=>"Record wasn't saved!!!"
-				]));
-				//print_r($result);
-				
-			}else{
-				//print_r($result);
-				$this->addFragment(new \Sevian\iMessage([
-					'caption'=>$g->caption,
-					'text'=>'Record was saved!!!'
-				]));
-
-			}
-
-		}
+		
 	}
 
 }

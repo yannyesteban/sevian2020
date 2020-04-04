@@ -12,6 +12,7 @@ var Command = (($) => {
 		panelCommand:object = null;
 
 		_formParams:object = null;
+		_formCommand:object = null;
 
 		constructor(info:object){
             
@@ -78,7 +79,7 @@ var Command = (($) => {
 
 			form.target = this.panelGrid;
 			form.parentContext =  this;
-			this.grid = new Form2(form);
+			this._formCommand = new Form2(form);
 			//this.panelCommand.text("yanny");
 		}
 		setFormX(form){
@@ -89,14 +90,23 @@ var Command = (($) => {
 			this._formParams = new Form2(form);
 			
 		}
+		setData(data, page, totalPages){
+
+			this.grid.setData(data, page, totalPages);
+			
+			//this.grid.setPage(1);
+			//this.grid.setPage(1);
+			
+		}
 		setPage(page){
 			this.grid.pag.page = page;
 			
 			//this.grid.setPage(page);
 		}
+		
 		getDetail(info:any){
 			let inputs = this._formParams.getInputs();
-
+			
 			let str = "";
 			let cmdValues = [];
 			let _data = [];
@@ -110,7 +120,7 @@ var Command = (($) => {
 						"h_command_id":410,
 						"param_id":inputs[i].ds("cmd"),
 						"value":inputs[i].getValue(),
-						"__mode_":info.mode || 1,
+						"__mode_":inputs["param_mode"].getValue(),
 						"__id_": n++
 					});   
 					
@@ -118,13 +128,19 @@ var Command = (($) => {
                 }
                 
 			}
-			this._formParams.getInput("x").setValue(JSON.stringify(_data));
+			this._formCommand.getInput("d").setValue(JSON.stringify(_data));
 			
 
 		}
 
 		test(){
 			alert("hello world!");
+		}
+
+		valid(){
+			
+			this.getDetail({});
+			return true;
 		}
 	}
 

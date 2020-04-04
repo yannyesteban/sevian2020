@@ -15,6 +15,23 @@ class ConfigForm{
 		}
         
 		$this->cn = \Sevian\Connection::get();
+		if($this->name){
+			if(substr($this->name, 0, 1) == '#'){
+
+				$filePath = substr($this->name, 1);
+
+				$infoForm = $this->loadJsonFile($filePath);
+				$this->setInfoForm($infoForm);
+				$this->setInfoRecordFields($infoForm['infoFields']);
+				
+			}else{
+				$infoForm = $this->infoDBForm($this->name);
+				$this->setInfoForm($infoForm);
+				$infoField = $this->infoDBFields($this->name);
+				$this->setInfoRecordFields($infoField);
+				
+			}
+		}
 	}
 
 	public function getTables(){
@@ -26,74 +43,71 @@ class FS{
 	private $name = null;
 	private $_form = null;
 	private $data = null;
+	private $result = null;
+	public $dataKeys = null;
+	public $dataKeysId = null;
 	public function __construct($info = []){
 		
 		foreach($info as $k => $v){
+			
 			$this->$k = $v;
+			
+			
 		}
+		
 		$this->cn = \Sevian\Connection::get();
 		$this->createInfoDB($this->name);
 	}
 
-	public function createInfo($name){
-
-		$this->_form = new ConfigForm();
-		$this->_form->loadForm($this->name);
-		$this->_form->configFields($this->name);
-	}
-
 	public function createInfoDB($name){
 
-		//print_r($this->data);
+		$this->_form = $_form = new ConfigForm(['name'=>$this->name]);
 
-
-		$_form = new ConfigForm();
-		$_form->loadForm($name);
-		$_form->configFields($name);
 		$aux = [];
-		if($_form->subforms){
+		if($_form->subforms?? false){
 			foreach($_form->subforms as $subform){
-				$s = new ConfigForm(); 
-				$s->loadForm($subform->form);
-				$s->configFields($subform->form);
+
+				$s = new ConfigForm(['name'=>$subform->form]); 
 				$info = new \Sevian\Sigefor\InfoRecord([
 					'cn'		=> '_default',
 					'mode'		=> 'update',
 					'tables'	=> $s->getTables(),
 					'fields'	=> $s->fields,
 					'masterFields'=>$subform->masterFields,
-					'fieldData'=>$subform->fieldData
+					'fieldData'=>$subform->fieldData,
+					'dataKeysId'=>$subform->dataKeysId
 					//'data' 		=> $this->data
 				]);
 				$aux[] = $info;
 				
 			}
 		}
-
+		
 		$info2 = new \Sevian\Sigefor\InfoRecord([
+			'token'=>'yanny',
 			'cn'		=> '_default',
 			
 			'tables'	=> $_form->getTables(),
 			'fields'	=> $_form->fields,
 			'subforms'	=> $aux,
+			'dataKeys'=> $this->dataKeys,
+			'dataKeysId'=>$this->dataKeysId,
+			
 			//'data' 		=> $this->data
 		]);
-
-		$save = 'Sevian\Sigefor\FormSave';
-		//$save::setDictRecords($this->pVars['records']);
-		//$save::setDictRecords($this->getSes('_rec'));
-
-		if($this->dataKeys??false){
-			$save::setDictRecords($this->dataKeys);
-		}
 		
-		$result = $save::send($info2, $this->data, []);
+		$save = 'Sevian\Sigefor\FormSave';
 
-		print_r($result);
-		exit;
+		$this->result = $save::send($info2, $this->data, []);
 
 	}
 
+	public function getResult(){
+		return $this->result;
+	}
+	public function getCaption(){
+		return $this->_form->caption;
+	}
 	public function save($data=null){
 
 		if($data){

@@ -2,12 +2,9 @@
 namespace Sigefor\Component;
 
 include "../Sevian/JS/Form.php";
-
 include "../Sigefor/DBTrait/Form.php";
 
-
-class Form extends \Sevian\JS\Form {
-
+class Form extends \Sevian\JS\Form{
 	
 	use \Sigefor\DBTrait\Form;
 
@@ -23,24 +20,24 @@ class Form extends \Sevian\JS\Form {
 		
 		if($this->name){
 			if(substr($this->name, 0, 1) == '#'){
-
 				
-				$this->name = substr($this->name, 1);
-				$info = $this->loadJsonFile($this->name);
-				$this->jsonConfig($info);
+				$filePath = substr($this->name, 1);
 
-				$this->setInfoFields($this->fields, $this->loadRecord);
+				$infoForm = $this->loadJsonFile($filePath);
+				$this->setInfoForm($infoForm);
+				$this->setInfoFields($infoForm['infoFields']);
+
 			}else{
-				$this->loadForm($this->name);
-				$this->fields = $this->loadFields($this->name, $this->loadRecord);
+				$infoForm = $this->infoDBForm($this->name);
+				$this->setInfoForm($infoForm);
+				$infoField = $this->infoDBFields($this->name);
+				$this->setInfoFields($infoField, $this->loadRecord);
 				
 			}
+
 			$this->menu = new Menu(['name'=>$this->menuName]);
 		}
 
-		
-		//$this->createFields([]);
 	}
-
 	
 }

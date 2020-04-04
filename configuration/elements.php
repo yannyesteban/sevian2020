@@ -217,6 +217,15 @@ $cls_elements = [
 		],
 		'css'=>[]
 	],
+	'SForm' 		=> [
+		'enable' => true,
+		
+		'file' 	=> MAIN_PATH.'Sigefor/SForm.php',
+		'class' => '\Sigefor\SForm',
+		
+		'js'=>[],
+		'css'=>[]
+	],
 	];
 
 Sevian\S::elementsLoad($cls_elements);

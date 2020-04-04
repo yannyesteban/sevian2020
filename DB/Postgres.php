@@ -432,7 +432,7 @@ class Postgres extends DBase{
 				$name = $f;
 			}
 
-			if(!isset($info->tables[$t])){
+			if(!isset($info->tables[$t]) and $t){
 				$info->tables[$t] = $t;
 				$infoTables[$t] = $this->infoTable($t);
 			}
@@ -657,6 +657,11 @@ class Postgres extends DBase{
 			
 		}
 		
+	}
+
+	public function prepare($sql){
+		hr("Postgres error");
+		exit;
 	}
 }// end class
 

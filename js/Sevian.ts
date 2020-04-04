@@ -133,7 +133,7 @@ var S = (($) => {
 			}
 
 			
-			if(info.valid !== false && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()){
+			if(info.valid === true && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()){
 				return false;
 			}
 

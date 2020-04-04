@@ -1,17 +1,15 @@
 <?php
-
 namespace Sigefor\Component;
 
 include "../Sevian/JS/Grid.php";
-
 include "../Sigefor/DBTrait/Grid.php";
-
 
 class Grid extends \Sevian\JS\Grid {
 	
 	use \Sigefor\DBTrait\Grid;
 
 	public $panelId = 0;
+	public $element = null;
 	
 	public function __construct($info = []){
 		
@@ -23,28 +21,23 @@ class Grid extends \Sevian\JS\Grid {
 		
 		if($this->name){
 			if(substr($this->name, 0, 1) == '#'){
-				$this->name = substr($this->name, 1);
-				$info = $this->loadJsonFile($this->name);
-				$this->jsonConfig($info);
+				$filePath = substr($this->name, 1);
 
-				$this->setInfoFields($this->fields);
-				$this->data = $this->getDataGrid($this->searchValue, $this->page);
+				$infoForm = $this->loadJsonFile($filePath);
+				$this->setInfoForm($infoForm);
+				$this->setInfoFields($infoForm['infoFields']);
+				
 			}else{
-				$this->loadForm($this->name);
-				$this->fields = $this->loadFields($this->name);
-				//$this->fields = $this->loadFields($this->name, $this->loadRecord);
-				$this->data = $this->getDataGrid($this->searchValue, $this->page);
+				$infoForm = $this->infoDBForm($this->name);
+				$this->setInfoForm($infoForm);
+				$infoField = $this->infoDBFields($this->name);
+				$this->setInfoFields($infoField);
 				
 			}
-			//$this->menu = new Menu(['name'=>$this->menuName]);
-		
 
-			//$this->loadForm($this->name);
-			//$this->fields = $this->loadFields($this->name);
-			//$this->data = $this->getDataGrid($this->searchValue, $this->page);
+			$this->data = $this->getDataGrid($this->searchValue, $this->page);
 			
 			$this->menu = new Menu(['name'=>$this->menuName]);
-
 			
 			$this->search = "
 				S.send(
@@ -56,7 +49,7 @@ class Grid extends \Sevian\JS\Grid {
 						params:	[
 							{t:'setMethod',
 								id:$this->panelId,
-								element:'testgrid',
+								element:'$this->element',
 								method:'search',
 								name:'$this->name',
 								eparams:{
@@ -84,7 +77,7 @@ class Grid extends \Sevian\JS\Grid {
 						params:	[
 							{t:'setMethod',
 								id:$this->panelId,
-								element:'testgrid',
+								element:'$this->element',
 								method:'get_data',
 								name:'$this->name',
 								eparams:{

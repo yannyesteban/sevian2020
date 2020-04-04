@@ -7,6 +7,8 @@ class InfoRecord{
     public $query;
     public $tables = [];
     public $transaction = false;
+    public $dataKeys = [];
+    public $dataKeysId = null;
     public $masterData = false;
     public $masterFields = null;
     public $fieldData = null;
@@ -18,11 +20,11 @@ class InfoRecord{
     public function __construct($opt = []){
 		
         foreach($opt as $k => $v){
-        
+
             if(property_exists($this, $k)){
 				$this->$k = $v;
-			}
-		}
+            }
+        }
 	}
 }
 
@@ -70,6 +72,7 @@ class FormSave{
     private static $errno = 0;
 
     private static $dict = null;
+    private static $dataKeys = null;
 
     private static $result = [];
 
@@ -95,9 +98,12 @@ class FormSave{
     public static function setDictRecords(&$record){
         self::$dict = &$record;
     }
+    public static function setDataKeys(&$dataKeys){
+        self::$dataKeys = &$dataKeys;
+    }
     
     public static function send($info, $data, $masterData = []){
-      
+       
         if(!$info instanceof InfoRecord){
             $info = new InfoRecord($info);
         }
@@ -111,6 +117,14 @@ class FormSave{
         self::$error = false;
         self::$errno = 0;
        
+        if($info->dataKeys){
+            self::setDataKeys($info->dataKeys);
+        }
+
+        if($info->dataKeysId && self::$dataKeys??false){
+            self::setDictRecords(self::$dataKeys[$info->dataKeysId]);
+        }
+
         foreach($data as $record){
             self::$result[] = self::saveRecord($info, $record, $masterData);
         }
@@ -129,7 +143,15 @@ class FormSave{
         $cn = self::$cn;
         $mode = $data->__mode_;
        
-        $record = $data->__record_?? (object)self::$dict[$data->__id_xxx??false]?? new \stdClass;
+        if(isset($data->__record_)){
+            $record = $data->__record_;
+        }elseif(isset(self::$dict[$data->__id_])){
+            $record = ((object)self::$dict[$data->__id_]);
+        }else{
+            $record = new \stdClass;
+        }
+        //hr($record,"red");exit;
+        //hr($data);exit;
 
         $recordIni = clone $record;
 
@@ -149,14 +171,14 @@ class FormSave{
             if($record != '' and $mode != '1'){
                 
                 if(count($tables ) == 1){
-                    
+                   
                     foreach($record as $k => $v){
                         $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($k)."='".$cn->addSlashes($v)."'";    
                     }
                 }else{
                     
                     foreach($record as $k => $v){
-                        
+                        hr($k);exit;
                         if(isset($info->fields[$k]) and $info->fields[$k]->table == $table){
                             $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($info->fields[$k]->field)."='".$cn->addSlashes($v)."'";    
                         }

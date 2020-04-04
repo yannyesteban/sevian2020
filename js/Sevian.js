@@ -93,7 +93,7 @@ var S = (($) => {
                     win.show(info.window.show);
                 }
             }
-            if (info.valid !== false && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()) {
+            if (info.valid === true && panel && this._e[panel] && this._e[panel].valid && !this._e[panel].valid()) {
                 return false;
             }
             if (panel && this._e[panel] && this._e[panel].onsubmit && !this._e[panel].onsubmit()) {
