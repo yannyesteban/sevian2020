@@ -102,7 +102,6 @@ class Element{
 	}
 
 	public function getPanel(){
-		
 		return $this->panel ;
 	}
 
