@@ -226,6 +226,19 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[]
 	],
+	'one' 		=> [
+		'file' 	=> MAIN_PATH.'test/testOne.php',
+		'class' => 'Test\One',
+		'enable' => true,
+		'js'=>[
+			[
+				'file' 	=> MAIN_PATH.'test/js/x.js',
+				'begin'=> false
+			]
+
+		],
+		'css'=>[]
+	],
 	];
 
 Sevian\S::elementsLoad($cls_elements);
