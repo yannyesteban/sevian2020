@@ -52,7 +52,9 @@ class S{
 	// save all fragments
 	private static $_f = [];
     // save all js Elements
-    private static $_jsElement = [];
+	private static $_jsElement = [];
+	// save all js Componets
+	private static $_jsComponets = [];
     // save all js main Elements
 	private static $_jsPanel = [];
 	private static $_jsConfigPanel = [];
@@ -356,6 +358,10 @@ class S{
 			
             if($e instanceof \Sevian\JsElementRequest){
                 self::addJsElement($e->getJsElement());
+			}
+			
+			if($e instanceof \Sevian\JSComponent){
+                self::addJsComponents($e->getJsComponents());
             }
 			
 			
@@ -370,7 +376,13 @@ class S{
 	public static function addFrament($frag){
 		self::$_f = array_merge(self::$_f, $frag);
 	}
-    
+    public static function addJsComponents($info){
+		self::$_jsComponets = array_merge(self::$_jsComponets, $info);
+	}
+
+    public static function getJsComponents(){
+		return self::$_jsComponets;
+	}
     
 
     public static function addJsElement($opt){
@@ -508,6 +520,7 @@ class S{
 			require_once($info['file']);
 		}
 		self::$_clsElement[$name] = $info['class'];
+		self::$_clsElement[$name]::$_element = $name;
 	}
 	public static function themesLoad($themes){
 		self::$_themes = $themes;
@@ -794,7 +807,8 @@ class S{
 			'debug'=>self::$_db
 			];
 		$json = json_encode($response, JSON_PRETTY_PRINT);	
-		$script .= "S.requestPanel($json)";	
+		$json2 = json_encode(self::getJsComponents(), JSON_PRETTY_PRINT);
+		$script .= "S.requestPanel($json);S.setComponents($json2)";	
 		$doc->appendScript($script, true);
 		
 		return $doc->render();

@@ -168,6 +168,35 @@ var S = (($) => {
                 return false;
             }
         }
+        static setComponents(info) {
+            let c;
+            for (let x of info) {
+                switch (x.mode) {
+                    case "create":
+                        c = this._components[x.name] = new window[x.type](x.info);
+                        break;
+                    case "setting":
+                        for (let y of x.info) {
+                            if (y.property !== undefined) {
+                                c[y.property] = y.value;
+                            }
+                            if (y.method !== undefined) {
+                                if (y.args !== undefined) {
+                                    c[y.method](...y.args);
+                                }
+                                else if (y.value !== undefined) {
+                                    c[y.method](y.value);
+                                }
+                            }
+                        }
+                        break;
+                    case "delete":
+                        break;
+                }
+                //db (x)
+                //this._e[x.panel] = new window[x.type](x.option);
+            }
+        }
         static requestPanel(p) {
             if (p.panels) {
                 for (var x in p.panels) {
@@ -257,6 +286,7 @@ var S = (($) => {
     }
     Sevian._e = [];
     Sevian._w = [];
+    Sevian._components = [];
     Sevian.defaultPanel = 0;
     Sevian.msg = null;
     return Sevian;

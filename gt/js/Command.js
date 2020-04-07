@@ -42,7 +42,6 @@ var Command = (($) => {
             if (this.form) {
                 this.form.target = main.id();
                 this.form.parentContext = this;
-                console.log(this.form);
                 g = this.form = new Form2(this.form);
             }
             this.panelGrid = main.create("div");

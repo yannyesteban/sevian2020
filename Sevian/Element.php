@@ -8,13 +8,13 @@ class Element{
 	public $id = false;
 	public $element = "default";
 	
-	public $name = "";
-	public $method = "";
+	public $name = '';
+	public $method = '';
 	public $eparams = [];
 
 	public $async = false;
 	public $updated = false;
-	public $title = "";
+	public $title = '';
 
 	public $panel = false;
 	
@@ -32,7 +32,7 @@ class Element{
     
 	protected $_jsElement = [];
 	protected $typeElement = "panel";
-	protected $info = "";
+	protected $info = '';
 
 	protected $_configInput = false;
 	
@@ -105,6 +105,10 @@ class Element{
 		return $this->panel ;
 	}
 
+	public function getPanelId(){
+		return self::$_element.'_'.$this->id;
+	}
+
 	public function getConfigPanel(){
 		return $this->_configPanel;
 	}
@@ -170,5 +174,119 @@ class EmptyElement extends Element{
 	
 } 
 
+
+class JsComponet{
+	
+	static $_element = false;
+	protected $type = '';
+
+	public $async = false;
+	public $panelId = false;
+	public $id = false;
+	public $element = "default";
+	
+	public $name = '';
+	public $method = '';
+	public $eparams = [];
+
+	
+	
+	public $caption = '';
+
+	protected $onDesing = true;
+	protected $onDebug = true;
+
+	public function __construct($opt = []){
+
+		foreach($opt as $k => $v){
+			$this->$k = $v;
+		}
+
+	}
+	
+
+	public function configPanel(){
+		return new jsConfigPanel([
+			"panel" => $this->id,
+			"type"	=> $this->typeElement,
+			"option"=> $this->info,
+			"debug" => "hola",
+			
+		]);
+	}
+
+	public function updatePanel(){
+		return new jsUpdatePanel([
+			"panel" => $this->id,
+			"actions"=> $this->info,
+			"debug" => "hola",
+			
+		]);	
+	}
+
+
+	public function evalMethod(){
+		
+	}
+	public function createID($name){
+		return $name."".$this->id;
+	}
+	public function addFragment($frag){
+		
+		$this->_response[]=$frag;
+	
+	}
+	public function getResponse(){
+
+		return $this->_response;
+
+	}
+
+	
+
+
+
+	
+	
+	public function request($method=false){
+		
+
+		return new iPanel([
+			'panel'	=> $this->id,
+			'title'	=> $this->title,
+			'html'	=> $this->panel->html,
+			'script'=> $this->panel->script,
+			'css'	=> $this->panel->css,
+			'class'	=> 'yyy',
+		]);
+		
+	}
+    
+    public function _getJsConfigPanel():jsConfigPanel{
+        
+        return new jsConfigPanel([
+            "panel"   => $this->id,
+            "type"    => "sgPanel",
+            "options" => []
+            
+        ]);
+        
+    }
+    
+    
+
+	public function setVPanel(&$var){
+		$this->_vPanel = &$var;
+	}
+	public function &getVPanel(){
+		return $this->_vPanel;
+	}
+	public function setSes($key, $value){
+		$this->_vPanel[$key] = $value;
+	}
+	public function &getSes($key){
+		return $this->_vPanel[$key];
+	}
+}
 
 ?>

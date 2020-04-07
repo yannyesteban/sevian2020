@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Sevian;
 
 interface UserAdmin{
@@ -48,6 +46,12 @@ interface JsPanelRequest{
 interface JsElementRequest{
     public function addJsElement(jsConfigElement $opt);
     public function getJsElement();
+
+}
+
+interface JSComponent{
+	
+	public function getJsComponents();
 
 }
 

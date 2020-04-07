@@ -865,6 +865,8 @@ var Grid2 = (($) => {
             }
             return false;
         }
+        test(msg) {
+        }
     }
     Grid._objs = [];
     return Grid;
