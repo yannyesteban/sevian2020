@@ -4,28 +4,17 @@ namespace test;
 include "../sigefor/SuperForm.php";
 
 
-class One extends \sevian\element implements \Sevian\JSComponent{
+class One extends \sevian\element{
 
 	public function __construct($info = []){
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
 
-		$this->panel = new \Sevian\HTML("div");
-		$this->panel->id = $this->getPanelId();
-		$this->panel->innerHTML = "test One 2";
+		
+		
 
-		$f = new  \Sigefor\SuperForm([
-			"id"=>$this->panel->id,
-			"name"=>"models",
-			"method"=>"request"
-		]);
-
-		$this->typeElement = 'One';
-		$this->info = ["a"=>2, "id"=>$this->getPanelId()];
-		//$f->evalMethod("request");
-		//print_r($f->info);
-
+		return ;
 		$this->_components[] = [
 			"name"=>"test".$this->id,
 			"type"=>"Grid2",
@@ -58,20 +47,55 @@ class One extends \sevian\element implements \Sevian\JSComponent{
 		
 	}
 
-	public function config(){
-		
+	public function evalMethod($method = ''){
+		if($method != ''){
+			$this->method = $method;
+		}
+
+		switch($this->method){
+			case 'request':
+				$this->createForm(1);
+				break;
+			case 'load':
+				break;	
+			case 'list':
+				$this->createGrid();
+
+
+		}
+
+	}
+	public function config(){}
+
+	public function createForm($mode = 1){
+		$this->panel = new \Sevian\HTML("div");
+		$this->panel->id = $this->getPanelId();
+		$this->panel->innerHTML = "test One 2";
+
+		print_r($this);
+
+		$f = new  \Sigefor\sform([
+			"id"=>$this->id,
+			//"id"=>$this->panel->id,
+			"name"=>"products",
+			"method"=>"list",
+			'eparams' => &$this->eparams
+		]);
+
+		$f->evalMethod('list');
+
+		$this->typeElement = 'One';
+		$this->info = ["a"=>2, "id"=>$this->getPanelId()];
+		//$f->evalMethod("request");
+		//print_r($f->info);
+		$this->panel->appendChild($f->panel); 
+		$this->addJasonComponent($f);
 	}
 
-	public function addComponents(){
+	public function createGrid($mode = 1){}
+	
 
-	}
-	public function getJsComponents(){
-		
-		return $this->_components?? [];
-
-	}
-
-
+	
 }
 
 

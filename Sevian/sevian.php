@@ -268,7 +268,7 @@ class S{
 
 
 	public static function setElement($info, $update = false){
-
+		
 		if($info->id == 0){
 			$info->id = self::getReq("__sg_panel");
 		}else if($info->id <= "-1"){
@@ -360,9 +360,8 @@ class S{
                 self::addJsElement($e->getJsElement());
 			}
 			
-			if($e instanceof \Sevian\JSComponent){
-                self::addJsComponents($e->getJsComponents());
-            }
+			self::addJsComponents($e->getJasonComponents());
+			
 			
 			
 
@@ -377,7 +376,10 @@ class S{
 		self::$_f = array_merge(self::$_f, $frag);
 	}
     public static function addJsComponents($info){
-		self::$_jsComponets = array_merge(self::$_jsComponets, $info);
+		if($info){
+			self::$_jsComponets = array_merge(self::$_jsComponets, $info);
+		}
+		
 	}
 
     public static function getJsComponents(){

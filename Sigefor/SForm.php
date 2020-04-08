@@ -42,10 +42,16 @@ trait DataRecord{
 
 }
 
-class SForm extends \sevian\element{
+class SForm extends \sevian\element implements \sevian\JasonComponent{
 	
 	use DataRecord;
 	
+	private $_info = null;
+	private $_mode = '';
+	private $_type = '';
+	private $_name = '';
+
+
 	public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
@@ -100,7 +106,7 @@ class SForm extends \sevian\element{
 
 				'id'		=> $this->panel->id,
 				'panelId'	=> $this->id,
-				'name'		=> '#../json/forms/brands.json',
+				'name'		=> $this->name,//'#../json/forms/brands.json',
 				'method'	=> $this->method,
 				'mode'		=> 1
 				//'record'=>$this->getRecord()
@@ -128,11 +134,17 @@ class SForm extends \sevian\element{
 		}
 		
 		$this->info = $form;
+		$form->id = 'one_6';
+		$this->_name = $this->name;
+		$this->_type = 'Form2';
+		$this->_mode = 'create';
+		$this->_info = $form;
 		
 	}
 	
 	public function createGrid($page = 1, $searchValue = ''){
 		$this->panel = new \Sevian\HTML('div');
+
 		$this->panel->id = $this->element.'-'.$this->id;
 		$this->typeElement = 'Grid2';
 
@@ -140,16 +152,25 @@ class SForm extends \sevian\element{
 			'asyncMode'	=> false,
 			'id'		=> $this->panel->id,
 			'panelId'	=> $this->id,
-			'name'		=> '#../json/forms/brands.json',
+			'name'		=> $this->name,//'#../json/forms/brands.json',
 			'method'	=> $this->method,
 			'page'		=> $page,
 			'searchValue' => $searchValue
 			
 		]);
+
+		
 		$records=$grid->getDataKeys();
 		$this->setDataRecord('grid', $records);
 
 		$this->info = $grid;
+
+		//$grid->id = $this->panel->id;
+		$this->_name = $this->name;
+		$this->_type = 'Grid2';
+		$this->_mode = 'create';
+		$this->_info = $grid;
+		//print_r(json_encode($grid,JSON_PRETTY_PRINT));exit;
 		
 	}
 
@@ -183,6 +204,16 @@ class SForm extends \sevian\element{
 			}
 		}
 		
+	}
+
+	public function jasonRender(){
+
+		return [
+			'name'	=> $this->_name,
+			'type'	=> $this->_type,
+			'mode'	=> $this->_mode,
+			'info'	=> $this->_info
+		];
 	}
 }
 

@@ -31,6 +31,7 @@ class Element{
 	protected $_response = [];
     
 	protected $_jsElement = [];
+	protected $_components = null;
 	protected $typeElement = "panel";
 	protected $info = '';
 
@@ -152,7 +153,26 @@ class Element{
 	public function configInput(){
 		return $this->_configInput;
 	}
+	public function addJasonComponent($component){
 
+		//try{
+			if($component instanceof \Sevian\JasonComponent){
+				$this->_components[] = $component->jasonRender();
+			}else{
+				throw new \Exception('Object is Not implemented \sevian\JsComponent interfaces');
+			}
+		//}catch(\Exception $e) {
+		//	hr($e->getMessage());
+
+		//}
+		
+
+
+		
+	}
+	public function getJasonComponents(){
+		return $this->_components?? [];
+	}
 	public function setVPanel(&$var){
 		$this->_vPanel = &$var;
 	}
@@ -175,7 +195,7 @@ class EmptyElement extends Element{
 } 
 
 
-class JsComponet{
+abstract class JsComponent  implements \Sevian\JasonComponent{
 	
 	static $_element = false;
 	protected $type = '';

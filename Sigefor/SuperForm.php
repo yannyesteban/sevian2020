@@ -3,10 +3,15 @@
 namespace sigefor;
 
 use DBTrait\Form as TForm;
-class SuperForm extends \sevian\JsComponet{
+class SuperForm extends \sevian\JsComponent{
 	use DBTrait\Form;
 
 	private $loadRecord = null;
+
+	private $_info = null;
+	private $_mode = '';
+	private $_type = '';
+	private $_name = '';
 
 	public function __construct($info = []){
 		
@@ -64,13 +69,22 @@ class SuperForm extends \sevian\JsComponet{
 		$f->caption = $this->caption;
 		$f->fields = $this->fields;
 		$f->menu = $this->menu;
-		
-		echo json_encode($f, JSON_PRETTY_PRINT);exit;
+		$this->_name = $this->name;
+		$this->_type = 'Form2';
+		$this->_mode = 'create';
+		$this->_info = $f;
+
+		//echo json_encode($f, JSON_PRETTY_PRINT);exit;
 	}
 
+	public function jasonRender(){
 
-
-
-
+		return [
+			'name'	=> $this->_name,
+			'type'	=> $this->_type,
+			'mode'	=> $this->_mode,
+			'info'	=> $this->_info
+		];
+	}
 
 }

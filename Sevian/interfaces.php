@@ -49,9 +49,10 @@ interface JsElementRequest{
 
 }
 
-interface JSComponent{
+interface JasonComponent{
 	
-	public function getJsComponents();
+    //public function getJsComponents();
+    public function jasonRender();
 
 }
 
