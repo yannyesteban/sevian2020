@@ -285,89 +285,80 @@ class S{
 			}
 		}
 		
-		if(isset(self::$_clsElement[$info->element])){
-			
-			$info->async = self::$onAjax;
-			
-			self::$_info[$info->id] = $info;
-			$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
-			
-			if(!isset(self::$_pVars[$info->id])){
-				self::$_pVars[$info->id] = [];
-			}
-			$e->pVars = &self::$_pVars[$info->id];
+		if(!isset(self::$_clsElement[$info->element])){
+			return;
+		}	
 
-			$e->setVPanel(self::$_pVars[$info->id]);
-			$e->gVars = &self::$_gVars;
+		$info->async = self::$onAjax;
+		
+		self::$_info[$info->id] = $info;
+		$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
+		
+		if(!isset(self::$_pVars[$info->id])){
+			self::$_pVars[$info->id] = [];
+		}
+		$e->pVars = &self::$_pVars[$info->id];
 
-			$e->config();
-			$e->getSequenceBefore();
-			$e->evalMethod();
-			$e->getSequenceAfter();
+		$e->setVPanel(self::$_pVars[$info->id]);
+		$e->gVars = &self::$_gVars;
 
-			self::addFrament($e->getResponse());
-			if($e instanceof \Sevian\UserAdmin){
-				//hr(9898988);
+		$e->config();
+		$e->getSequenceBefore();
+		$e->evalMethod();
+		$e->getSequenceAfter();
 
-			}
-
-
-			if($e instanceof \Sevian\TemplateAdmin){
-				if($html = $e->getTemplate()){
-					self::setTemplate($html);
-				}elseif($e->getThemeTemplate()){
-					self::$templateName = $e->getThemeTemplate();
-				}
-			}
-
-			if($e instanceof \Sevian\WindowsAdmin){
-				$windows = $e->getWindows();
-				if($windows){
-					self::$_windows = $windows;
-				}
-				
-			}
-
-			if($e instanceof \Sevian\PanelsAdmin){
-				$panels = $e->getPanels();
-				foreach($panels as $k => $p){
-	
-					self::setElement($p);
-				}
-			}
-
-			if($e->panel){
-				self::$_panels[$info->id] = new InfoElement($info);
-				self::$_panels[$info->id]->update = true;
-				self::$_p[$info->id] = true;
-				self::$_info[$info->id]->isPanel = true;
-				// if this->main panel then title = this->title
-				self::$_str->addPanel($info->id, $e->getPanel());
-				//print_r($e->config());
-				//self::addJsPanel($e->config());
-				self::addJsPanel($e->configPanel());
-                if($e instanceof \Sevian\JsPanelRequest){
-                    //self::addJsPanel($e->getJsConfigPanel());
-                }
-			
-			}else{
-				self::addJsConfigPanel($e->updatePanel());
-			}
-			//self::addJsPanel($e->configPanel());
-			
-			
-            if($e instanceof \Sevian\JsElementRequest){
-                self::addJsElement($e->getJsElement());
-			}
-			
-			self::addJsComponents($e->getJasonComponents());
-			
-			
-			
+		self::addFrament($e->getResponse());
+		if($e instanceof \Sevian\UserAdmin){
 
 		}
 
+		if($e instanceof \Sevian\TemplateAdmin){
+			if($html = $e->getTemplate()){
+				self::setTemplate($html);
+			}elseif($e->getThemeTemplate()){
+				self::$templateName = $e->getThemeTemplate();
+			}
+		}
+
+		if($e instanceof \Sevian\WindowsAdmin){
+			$windows = $e->getWindows();
+			if($windows){
+				self::$_windows = $windows;
+			}
+			
+		}
+
+		if($e instanceof \Sevian\PanelsAdmin){
+			$panels = $e->getPanels();
+			foreach($panels as $k => $p){
+				self::setElement($p);
+			}
+		}
+
+		if($e->panel){
+			self::$_panels[$info->id] = new InfoElement($info);
+			self::$_panels[$info->id]->update = true;
+			self::$_p[$info->id] = true;
+			self::$_info[$info->id]->isPanel = true;
+			// if this->main panel then title = this->title
+			self::$_str->addPanel($info->id, $e->getPanel());
+			//print_r($e->config());
+			//self::addJsPanel($e->config());
+			self::addJsPanel($e->configPanel());
+			if($e instanceof \Sevian\JsPanelRequest){
+				//self::addJsPanel($e->getJsConfigPanel());
+			}
 		
+		}else{
+			self::addJsConfigPanel($e->updatePanel());
+		}
+		//self::addJsPanel($e->configPanel());
+		
+		if($e instanceof \Sevian\JsElementRequest){
+			self::addJsElement($e->getJsElement());
+		}
+		
+		self::addJsComponents($e->getJasonComponents());
 		
 	}
 
@@ -831,6 +822,7 @@ class S{
 			'config'	=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
 			'update'	=> self::getJsConfigPanel(),
 			'fragments'	=> self::$_f,
+			'components'=> self::getJsComponents(),
 			'debug'		=> self::$_db
 			];
 

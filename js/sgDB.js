@@ -92,8 +92,8 @@ var db = false, hr = false;
 		visible:true,
 		caption:"Debug: Console",
 		child:div,
-		left:"center",
-		top:"bottom",
+		left:"right",
+		top:"top",
 		className:["sevian"]
 	});
 

@@ -7,8 +7,10 @@ var Command = (($) => {
             this.grid = null;
             this.form = null;
             this.menu = null;
+            this.panelListCommands = null;
             this.panelGrid = null;
             this.panelCommand = null;
+            this.main = null;
             this._formParams = null;
             this._formCommand = null;
             for (var x in info) {
@@ -17,22 +19,11 @@ var Command = (($) => {
                 }
             }
             let main = (this.id) ? $(this.id) : false;
-            if (main) {
-                if (main.ds("gtType")) {
-                    return;
-                }
-                if (main.hasClass("gt-command")) {
-                    this._load(main);
-                }
-                else {
-                    this._create(main);
-                }
-            }
-            else {
+            if (!main) {
                 main = $.create("div").attr("id", this.id);
-                this._create(main);
             }
             this.main = main;
+            this._create(main);
         }
         _create(main) {
             main.ds("gtType", "command");
@@ -44,10 +35,9 @@ var Command = (($) => {
                 this.form.parentContext = this;
                 g = this.form = new Form2(this.form);
             }
+            this.panelListCommands = main.create("div").id("list-commands").addClass("list-commands");
             this.panelGrid = main.create("div");
             this.panelCommand = main.create("div");
-        }
-        _load(main) {
         }
         setGrid(grid) {
             this.panelGrid.text("");
@@ -65,8 +55,8 @@ var Command = (($) => {
             //this.panelCommand.text("yanny");
         }
         setFormX(form) {
-            this.panelCommand.text("");
-            form.target = this.panelCommand;
+            this.panelGrid.text("");
+            form.target = this.panelGrid;
             form.parentContext = this;
             this._formParams = new Form2(form);
         }
@@ -100,6 +90,12 @@ var Command = (($) => {
         }
         test() {
             alert("hello world!");
+        }
+        clearForm() {
+            if (this.panelListCommands) {
+                this.panelListCommands.text("");
+            }
+            alert("borrando");
         }
         valid() {
             this.getDetail({});

@@ -17,7 +17,7 @@ var One = (($) => {
             this._create(main);
         }
         _create(main) {
-            main.create("div").addClass("X").text("test ONE One");
+            //main.create("div").addClass("X").text("test ONE One");
         }
     }
     return One;

@@ -42,7 +42,11 @@ trait DataRecord{
 
 }
 
-class SForm extends \sevian\element implements \sevian\JasonComponent{
+class SForm 
+	extends \sevian\element 
+	implements \sevian\JasonComponent
+
+{
 	
 	use DataRecord;
 	
@@ -98,13 +102,19 @@ class SForm extends \sevian\element implements \sevian\JasonComponent{
 	}
 
 	public function createForm($mode = 1){
-		$this->panel = new \Sevian\HTML('div');
-		$this->panel->id = $this->element.'-'.$this->id;
+
+		if(!$this->containerId){
+			$this->containerId = $this->element.'-'.$this->id;
+			$this->panel = new \Sevian\HTML('div');
+			$this->panel->id = $this->containerId;
+		}
+
+		
 		$this->typeElement = 'Form2';
 		if($mode == 1){
 			$form =  new \Sigefor\Component\Form([
 
-				'id'		=> $this->panel->id,
+				'id'		=> $this->containerId,
 				'panelId'	=> $this->id,
 				'name'		=> $this->name,//'#../json/forms/brands.json',
 				'method'	=> $this->method,
@@ -120,7 +130,7 @@ class SForm extends \sevian\element implements \sevian\JasonComponent{
 
 			$form =  new \Sigefor\Component\Form([
 
-				'id'		=> $this->panel->id,
+				'id'		=> $this->containerId,
 				'panelId'	=> $this->id,
 				'name'		=> '#../json/forms/brands.json',
 				'method'	=> $this->method,
@@ -134,7 +144,7 @@ class SForm extends \sevian\element implements \sevian\JasonComponent{
 		}
 		
 		$this->info = $form;
-		$form->id = 'one_6';
+		//$form->id = 'one_6';
 		$this->_name = $this->name;
 		$this->_type = 'Form2';
 		$this->_mode = 'create';
@@ -143,14 +153,16 @@ class SForm extends \sevian\element implements \sevian\JasonComponent{
 	}
 	
 	public function createGrid($page = 1, $searchValue = ''){
-		$this->panel = new \Sevian\HTML('div');
-
-		$this->panel->id = $this->element.'-'.$this->id;
+		if(!$this->containerId){
+			$this->containerId = $this->element.'-'.$this->id;
+			$this->panel = new \Sevian\HTML('div');
+			$this->panel->id = $this->containerId;
+		}
 		$this->typeElement = 'Grid2';
 
 		$grid =  new \Sigefor\Component\Grid([
 			'asyncMode'	=> false,
-			'id'		=> $this->panel->id,
+			'id'		=> $this->containerId,
 			'panelId'	=> $this->id,
 			'name'		=> $this->name,//'#../json/forms/brands.json',
 			'method'	=> $this->method,
@@ -215,6 +227,14 @@ class SForm extends \sevian\element implements \sevian\JasonComponent{
 			'info'	=> $this->_info
 		];
 	}
+	public function jsonSerialize() {  
+        return [
+			'name'	=> $this->_name,
+			'type'	=> $this->_type,
+			'mode'	=> $this->_mode,
+			'info'	=> $this->_info
+		];  
+    }  
 }
 
 class Form2000 extends \sevian\element{

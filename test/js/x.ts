@@ -28,7 +28,7 @@ var One = (($) => {
 
 		}
 		_create(main:any){
-			main.create("div").addClass("X").text("test ONE One");
+			//main.create("div").addClass("X").text("test ONE One");
 		}
 
 

@@ -799,10 +799,6 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   pointer-events: none;
 }
 
-form {
-  height: 100%;
-}
-
 .gt-control-device {
   display: -webkit-box;
   display: -ms-flexbox;

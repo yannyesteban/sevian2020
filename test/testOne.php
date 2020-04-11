@@ -10,41 +10,7 @@ class One extends \sevian\element{
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-
-		
-		
-
-		return ;
-		$this->_components[] = [
-			"name"=>"test".$this->id,
-			"type"=>"Grid2",
-			"mode"=>"create",
-			"info" => new \Sigefor\Component\Grid([
-				'asyncMode'	=> false,
-				'id'		=> $this->panel->id,
-				'panelId'	=> $this->id,
-				'name'		=> '#../json/forms/brands.json',
-				'method'	=> $this->method,
-				'page'		=> 1,
-				'searchValue' => ''
-				
-			])
-		];
-
-		$this->_components[] = [
-			"name"=>"test".$this->id,
-			"type"=>"Grid2",
-			"mode"=>"setting",
-			"info" =>[
-				[
-					'method'  => 'test',
-					'value'=>'nada',
-					
-				]
-			]
-				];
-
-		
+	
 	}
 
 	public function evalMethod($method = ''){
@@ -60,6 +26,12 @@ class One extends \sevian\element{
 				break;	
 			case 'list':
 				$this->createGrid();
+				break;
+			case 'get_data':
+				case 'search':
+				$this->createGrid();
+				break;
+
 
 
 		}
@@ -70,19 +42,19 @@ class One extends \sevian\element{
 	public function createForm($mode = 1){
 		$this->panel = new \Sevian\HTML("div");
 		$this->panel->id = $this->getPanelId();
-		$this->panel->innerHTML = "test One 2";
-
-		print_r($this);
+		
+	
 
 		$f = new  \Sigefor\sform([
+			'containerId'=>$this->panel->id,
 			"id"=>$this->id,
 			//"id"=>$this->panel->id,
 			"name"=>"products",
-			"method"=>"list",
+			"method"=>"request",
 			'eparams' => &$this->eparams
 		]);
 
-		$f->evalMethod('list');
+		$f->evalMethod('request');
 
 		$this->typeElement = 'One';
 		$this->info = ["a"=>2, "id"=>$this->getPanelId()];
@@ -92,7 +64,32 @@ class One extends \sevian\element{
 		$this->addJasonComponent($f);
 	}
 
-	public function createGrid($mode = 1){}
+	public function createGrid($mode = 1){
+
+		$this->panel = new \Sevian\HTML("div");
+		$this->panel->id = $this->getPanelId();
+		$this->panel->innerHTML = "test One 2";
+
+		
+
+		$f = new  \Sigefor\sform([
+			"id"=>$this->id,
+			//"id"=>$this->panel->id,
+			"name"=>"products",
+			"method"=>"list",
+			'eparams' => &$this->eparams
+		]);
+
+		$f->evalMethod('get_data');
+
+		$this->typeElement = 'One';
+		$this->info = ["a"=>2, "id"=>$this->getPanelId()];
+		//$f->evalMethod("request");
+		//print_r($f->info);
+		$this->panel->appendChild($f->panel); 
+		$this->addJasonComponent($f);
+
+	}
 	
 
 	

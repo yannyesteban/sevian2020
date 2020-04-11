@@ -49,10 +49,10 @@ interface JsElementRequest{
 
 }
 
-interface JasonComponent{
+interface JasonComponent extends \JsonSerializable{
 	
     //public function getJsComponents();
-    public function jasonRender();
+    //public function jasonRender();
 
 }
 

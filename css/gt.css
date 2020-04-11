@@ -2,6 +2,28 @@
   width: 100%;
   height: 100%;
   background-color: #8fa1bb;
+  overflow: auto;
+}
+.gt ._body {
+  height: 100%;
+  border: 2px solid green;
+  padding: 10px;
+  overflow: auto;
+}
+.gt ._body > * {
+  border: 3px solid #0866b3;
+  margin: 2px;
+  padding: 3px;
+  display: block;
+  min-height: 20px;
+  min-width: 40px;
+  max-height: 300px;
+  overflow: scroll;
+}
+.gt ._body > * > * {
+  border: 2px solid #da0782;
+  overflow: auto;
+  max-height: 200px;
 }
 .gt .btn-connect {
   background-color: #45fd45;
@@ -10,17 +32,18 @@
   padding-left: 6px !important;
   text-align: center;
 }
-.gt form {
+.gt fform {
+  overflow: auto;
+  border: 2px solid #63a000;
+}
+.gt fform > * {
   overflow: auto;
 }
-.gt form > * {
-  overflow: auto;
-}
-.gt form > * > * {
+.gt fform > * > * {
   overflow: auto;
   border: 0px solid blue;
 }
-.gt form > * > * > * {
+.gt fform > * > * > * {
   overflow: auto;
   border: 0px solid #a04cb9;
 }
@@ -34,6 +57,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  overflow: auto;
 }
 .gt > .body > * {
   -webkit-box-flex: 1;

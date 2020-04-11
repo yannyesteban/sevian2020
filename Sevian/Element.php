@@ -3,9 +3,9 @@ namespace Sevian;
 
 class Element{
 	
-	static $_element = false;
+	static $_element = null;
 	
-	public $id = false;
+	public $id = null;
 	public $element = "default";
 	
 	public $name = '';
@@ -16,17 +16,18 @@ class Element{
 	public $updated = false;
 	public $title = '';
 
-	public $panel = false;
+	public $panel = null;
 	
+	public $containerId = null;
 
 	protected $onDesing = true;
 	protected $onDebug = true;
 
-	protected $_signs = false;
-	protected $_listen = false;
+	protected $_signs = null;
+	protected $_listen = null;
 
-	protected $_secBefore = false;
-	protected $_secAfter = false;
+	protected $_secBefore = null;
+	protected $_secAfter = null;
 	protected $_config = [];
 	protected $_response = [];
     
@@ -35,7 +36,7 @@ class Element{
 	protected $typeElement = "panel";
 	protected $info = '';
 
-	protected $_configInput = false;
+	protected $_configInput = null;
 	
 	protected $_vPanel = [];
 	
@@ -154,6 +155,8 @@ class Element{
 		return $this->_configInput;
 	}
 	public function addJasonComponent($component){
+		$this->_components[] = $component;
+		return;
 
 		//try{
 			if($component instanceof \Sevian\JasonComponent){

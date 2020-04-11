@@ -288,6 +288,10 @@ var S = (($) => {
 			if(p.update){
 				this.updatePanel(p.update);
 			}
+			
+			if(p.components){
+				this.setComponents(p.components);
+			}
 			if(p.fragments){
 				for(var x in p.fragments){
 					switch(p.fragments[x].token){
@@ -312,6 +316,7 @@ var S = (($) => {
 					}
 				}
 			}
+
 
 			if(p.debug){
 

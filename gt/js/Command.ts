@@ -8,8 +8,11 @@ var Command = (($) => {
 		form:object = null;
 		menu:object = null;
 
+		panelListCommands:object = null;
 		panelGrid:object = null;
 		panelCommand:object = null;
+
+		main:object = null;
 
 		_formParams:object = null;
 		_formCommand:object = null;
@@ -23,23 +26,13 @@ var Command = (($) => {
 			}
 			let main = (this.id)? $(this.id): false;
 
-			if(main){
-                
-                if(main.ds("gtType")){
-                    return;
-                }
-    
-                if(main.hasClass("gt-command")){
-                    this._load(main);
-                }else{
-                    this._create(main);
-                }
-    
-            }else{
+			if(!main){
                 main = $.create("div").attr("id", this.id);
-                this._create(main);
 			}
 			this.main = main;
+			this._create(main);
+
+			
 		}
 		_create(main:any){
 			
@@ -55,14 +48,12 @@ var Command = (($) => {
 				
 				g = this.form = new Form2(this.form);
 			}
-
+			this.panelListCommands = main.create("div").id("list-commands").addClass("list-commands");
 			this.panelGrid = main.create("div");
 			this.panelCommand = main.create("div");
-		}
-		_load(main:any){
 			
 		}
-
+	
 		setGrid(grid){
 			this.panelGrid.text("");
 			this.panelCommand.text("");
@@ -83,9 +74,9 @@ var Command = (($) => {
 			//this.panelCommand.text("yanny");
 		}
 		setFormX(form){
-			this.panelCommand.text("");
+			this.panelGrid.text("");
 
-			form.target = this.panelCommand;
+			form.target = this.panelGrid;
 			form.parentContext =  this;
 			this._formParams = new Form2(form);
 			
@@ -135,6 +126,14 @@ var Command = (($) => {
 
 		test(){
 			alert("hello world!");
+		}
+
+		clearForm(){
+			if(this.panelListCommands){
+				this.panelListCommands.text("");
+			}
+			
+			alert("borrando")
 		}
 
 		valid(){

@@ -86,5 +86,13 @@ class SuperForm extends \sevian\JsComponent{
 			'info'	=> $this->_info
 		];
 	}
+	public function jsonSerialize() {  
+        return [
+			'name'	=> $this->_name,
+			'type'	=> $this->_type,
+			'mode'	=> $this->_mode,
+			'info'	=> $this->_info
+		];  
+    }
 
 }

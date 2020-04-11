@@ -46,26 +46,35 @@ class Command extends \Sevian\Element{
 		switch($method){
 			case 'create':
 				$this->load();
-			break;
+				break;
+			case 'unit_init':
+				\Sevian\S::setSes('unit_idx', \Sevian\S::getReq('unit_idx'));
+				$this->hCommands();
+				$this->loadCommands();
+				break;
+			case 'h_commands':
+				\Sevian\S::setSes('unit_idx', \Sevian\S::getReq('unit_idx'));
+				$this->hCommands();
+				break;
 			case 'load_commands':
 				\Sevian\S::setSes('unit_idx', \Sevian\S::getReq('unit_idx'));
-
+				
 				$this->loadCommands();
 				//print_r(\Sevian\S::getVReq());
 				
-			break;
+				break;
 			case 'load_form':
 				$this->loadForm();
 				//print_r(\Sevian\S::getVReq());
 				
-			break;
+				break;
 			case 'edit_form':
 				//$this->loadForm();
 				//print_r(\Sevian\S::getVReq());exit;
 				$this->editForm();
 				//print_r(\Sevian\S::getVReq());exit;
 				
-			break;
+				break;
 			case 'form_commands':
 				//print_r(\Sevian\S::getVReq());
 				$form = $this->formParams('xxx',\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'));
@@ -75,16 +84,27 @@ class Command extends \Sevian\Element{
 					
 				];
 				$this->info = $opt;//$form->getInfo();
-			break;
+				break;
 			case 'save_command':
 				$this->save_command();
-			break;
+				break;
 			case "get_data":
 				$this->setPage($this->eparams->q, $this->eparams->page);
-			break;
+				break;
 			case "search":
 				$this->setPage($this->eparams->q, 1);
-			break;
+				break;
+			case 'params_load':
+				
+
+				$form = $this->paramsLoad(1,\Sevian\S::getReq('command_idx'),\Sevian\S::getReq('unit_id'));
+				$opt[] = [
+					'method'  => 'setFormX',
+					'value'=>$form,
+					
+				];
+				$this->info = $opt;//$form->getInfo();
+				break;
 
 		}
 
@@ -111,6 +131,52 @@ class Command extends \Sevian\Element{
 			'panel'=>$this->id,
 			'form'=>$g
 		];
+		/*
+		$f = new  \Sigefor\sform([
+			'containerId'=>'list-commands',
+			"id"=>$this->id,
+			//"id"=>$this->panel->id,
+			"name"=>"h_commands",
+			"method"=>"request",
+			'eparams' => &$this->eparams
+		]);
+
+		$f->evalMethod('request');
+		$this->addJasonComponent($f);
+		*/
+	}
+
+	public function hCommands(){
+		
+		$f = new  \Sigefor\sform([
+			
+			'containerId'	=> 'list-commands',
+			'id'			=> $this->id,
+			'name'			=> 'form_command',
+			'method'		=> 'request',
+			'eparams'		=> &$this->eparams
+		
+		]);
+
+		$f->evalMethod('request');
+
+		//$this->typeElement = 'Command';
+		//$this->info = ["a"=>2, "id"=>$this->getPanelId()];
+		//$f->evalMethod("request");
+		//print_r($f->info);
+		//$this->panel->appendChild($f->panel); 
+		$this->addJasonComponent($f);
+
+		$opt[] = [
+			'method'  => 'clearForm',
+			'value'=> null,
+			
+		];
+		$this->info = $opt;//$form->getInfo();
+	}
+
+	public function listCommands(){
+
 	}
 
 	public function loadCommands(){
@@ -212,6 +278,7 @@ class Command extends \Sevian\Element{
 			INNER JOIN devices_commands as c ON c.id = command_id
 			WHERE c.id = '$commandId'
 		";
+
 
 		$result = $cn->execute();
 		$dataFields = [];
@@ -406,6 +473,144 @@ class Command extends \Sevian\Element{
 		//print_r($result);exit;
 		
 		
+	}
+
+
+	private function paramsLoad($dataType = 1, $commandId, $unitId, $h_id=0){
+		$command = '';
+
+		$cn = $this->cn;
+		$cn->query = "SELECT * FROM devices_commands WHERE id = '$commandId';";
+		$result = $cn->execute();
+		if($rs = $cn->getDataAssoc($result)){
+			$command = $rs['command'];
+        }
+
+		$cn->query = 
+			"SELECT v.param_id, v.value, v.title, p.param, c.command, type_value
+			FROM devices_params_value as v
+			INNER JOIN devices_comm_params as p ON p.id = v.param_id
+			INNER JOIN devices_commands as c ON c.id = command_id
+			WHERE c.id = '$commandId'
+		";
+
+
+		$result = $cn->execute();
+		$dataFields = [];
+		
+		while($rs = $cn->getDataAssoc($result)){
+
+			$id = $rs['param_id'];
+
+			if(!isset($dataFields[$id])){
+				$dataFields[$id] = [];
+			}
+			$dataFields[$id][] = [$rs['value'],$rs['title'] ?? $rs['value'],0];
+        }
+		if($dataType == 1){
+			$cn->query = "SELECT p.*, '' as value, 1 param_mode,
+			'' as h_command_id, '' as param_id
+			FROM devices_comm_params as p
+			
+			WHERE p.command_id = '$commandId'
+			order by `order`;";
+		}elseif($dataType == 2){
+			$cn->query = 
+				"SELECT p.*, co.value, CASE WHEN co.param_id IS NOT NULL THEN 2 ELSE 1 END as param_mode,
+				co.h_command_id, co.param_id
+				FROM devices_comm_params as p
+				LEFT JOIN h_commands as h ON h.command_id = p.command_id and h.id = '$h_id'
+				LEFT JOIN h_commands_values as co ON co.param_id = p.id AND co.h_command_id = h.id
+				WHERE p.command_id = '$commandId'
+				order by `order`;";
+		}elseif($dataType == 3){
+			$cn->query = "SELECT p.*, co.value
+				FROM devices_comm_params as p
+				LEFT JOIN devices_config as co ON co.param_id = p.id
+				LEFT JOIN units as u ON u.device_id = co.device_id AND u.id = '$unitId'
+				WHERE p.command_id = '$commandId' 
+				order by `order`;";
+		}elseif($dataType == 4){
+
+		}
+        
+        
+        $result = $cn->execute();
+		$fields = [];
+		
+		$mode = 1;
+		$records = [];
+		
+		while($rs = $cn->getDataAssoc($result)){
+
+			$input = 'input';
+			$type = 'text';
+			$data = [];
+			$doValues = false;
+			$events = false;
+			$mode = $rs['param_mode'];
+
+			if(isset($dataFields[$rs['id']])){
+				$input = 'multi';
+				
+				$data = $dataFields[$rs['id']];
+				if($rs['type_value'] != '2'){
+					$type = 'radio';
+					$input = 'input';
+					$type = 'select';
+				}else{
+					$type = 'checkbox';
+					$doValues = 'let sum = 0; for(let x of inputs){sum += +x.value;} return sum;';
+					$events = ['change' => "db (event.currentTarget.value,'red')"];
+				}
+
+			}
+
+			$fields[] = [
+                'input'		=> $input,
+				'type'		=> $type,
+				'name'		=> 'param_'.$rs['id'],
+				'caption'	=> $rs['param'],
+				'data' 		=> $data,
+				'id' 		=> 'param_'.$rs['id'].'_'.$this->id,
+				'doValues'	=> $doValues,
+				'events' 	=> $events,
+				'dataset'	=> ['cmd'=> $rs['id']],
+				'value'		=> $rs['value']
+			];
+			//hr($mode);
+			if($mode == 2){
+				$records[] = ['h_command_id'=>$rs['h_command_id'], 'param_id'=>$rs['param_id']];
+			}
+			
+		}// end while
+		
+		$fields[] = [
+			'input'		=> 'hidden',
+			'type'		=> 'hidden',
+			'name'		=> 'param_mode',
+			'caption'	=> 'param_mode',
+			'value'		=> $mode
+		];
+
+		$form = [
+			'caption'=>"Command: <span class=\"command_name\">$command</span>",
+			'fields'=>$fields,
+			'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
+		];
+
+		//print_r($records);exit;
+		$this->records2 = $records;
+		return $form;
+
+		$opt[] = [
+			'method'  => 'setFormX',
+			'value'=>$form,
+			
+		];
+		$this->info = $opt;//$form->getInfo();
+
+        //return $form;
 	}
 
 }
