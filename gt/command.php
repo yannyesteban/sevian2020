@@ -460,9 +460,15 @@ class Command extends \Sevian\Element{
 		$data->pending = '0';
 		$data->device_id = '0';
 		$data->__mode_ = $data->param_mode;
-		$data->__record_ = $this->getLastRecord();
 
-		//print_r($data);exit;
+		if($data->param_mode == 1){
+			$data->__record_ = new \stdClass;
+		}else{
+			$data->__record_ = $this->getLastRecord();
+		}
+		
+
+		//print_r($data->__record_);exit;
 
 		
 		$dataKeys["master"] = $this->getDataRecord('grid');
@@ -475,6 +481,7 @@ class Command extends \Sevian\Element{
 			'dataKeysId'=>'master',
 			'data'=>[$data]
 		]);
+		//print_r($data->__record_);
 		//print_r($g->getResult());
 		foreach($g->getResult() as $k => $v){
 			//hr("$v->error");
