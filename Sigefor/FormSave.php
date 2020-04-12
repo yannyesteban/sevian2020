@@ -286,7 +286,8 @@ class FormSave{
                 if($cn->error){
                     self::$error = true;
                     self::$errno = $q_errno = $cn->errno;
-                    $q_error = $cn->error;		
+                    $q_error = $cn->error;
+                    hr($q);	
                 }
                 
                 if($serial){

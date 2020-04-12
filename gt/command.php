@@ -1,11 +1,15 @@
 <?php
 
 namespace GT;
-
+include_once '../sigefor/DBTrait/DataRecord.php';
 include_once '../sigefor/Component/Menu.php';
 include_once '../sigefor/Component/Form.php';
 
+use \sigefor\DBTrait\DataRecord;
+
 class Command extends \Sevian\Element{
+	use DataRecord;
+
 
 	private $records = null;
 	private $records2 = null;
@@ -19,7 +23,7 @@ class Command extends \Sevian\Element{
         $this->cn = \Sevian\Connection::get();
 		
 	}
-	public function config(){
+	public function config2(){
 
 		if(!$this->getSes('_records')){
 			$this->setSes('_records', []);
@@ -37,6 +41,10 @@ class Command extends \Sevian\Element{
 
 		$this->records2 = &$this->getSes('_records2');
 		//hr($this->records);
+	}
+
+	public function config(){
+		$this->initDataRecord();
 	}
 	public function evalMethod($method = false): bool{
 
@@ -64,7 +72,7 @@ class Command extends \Sevian\Element{
 				
 				break;
 			case 'load_form':
-				$this->loadForm();
+				//$this->loadForm();
 				//print_r(\Sevian\S::getVReq());
 				
 				break;
@@ -77,7 +85,7 @@ class Command extends \Sevian\Element{
 				break;
 			case 'form_commands':
 				//print_r(\Sevian\S::getVReq());
-				$form = $this->formParams('xxx',\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'));
+				$form = $this->paramsLoad(2,\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'));
 				$opt[] = [
 					'method'  => 'setFormX',
 					'value'=>$form,
@@ -99,7 +107,7 @@ class Command extends \Sevian\Element{
 
 				$form = $this->paramsLoad(1,\Sevian\S::getReq('command_idx'),\Sevian\S::getReq('unit_id'));
 				$opt[] = [
-					'method'  => 'setFormX',
+					'method'  => 'setFormParams',
 					'value'=>$form,
 					
 				];
@@ -159,6 +167,12 @@ class Command extends \Sevian\Element{
 		]);
 
 		$f->evalMethod('request');
+		$this->info[] = [
+			'method'  => 'setFormCommand',
+			'value'=>$f->info
+		];
+		//$this->info = $opt;//$form->getInfo();
+		return;
 
 		//$this->typeElement = 'Command';
 		//$this->info = ["a"=>2, "id"=>$this->getPanelId()];
@@ -167,7 +181,7 @@ class Command extends \Sevian\Element{
 		//$this->panel->appendChild($f->panel); 
 		$this->addJasonComponent($f);
 
-		$opt[] = [
+		$this->info[] = [
 			'method'  => 'clearForm',
 			'value'=> null,
 			
@@ -188,14 +202,17 @@ class Command extends \Sevian\Element{
 			'method'=>'list'
 		]);
 
-		$this->records = $g->getDataKeys();
-
-		$opt[] = [
+		//$this->records = $g->getDataKeys();
+		//$records=$grid->getDataKeys();
+		$records=$g->getDataKeys();
+		
+		$this->setDataRecord('grid', $records);
+		$this->info[] = [
 			'method'  => 'setGrid',
 			'value'=>$g,
 			'_args' => [1,1,1]
 		];
-		$this->info = $opt;//$form->getInfo();
+		//$this->info = $opt;//$form->getInfo();
 	}
 
 	public function setPage($q, $page){
@@ -218,7 +235,7 @@ class Command extends \Sevian\Element{
 	}
 	
 	public function loadForm(){
-
+		hr(1111);
 		
 		$this->lastRecord = null;
 		$g =  new \Sigefor\Component\Form([
@@ -236,10 +253,20 @@ class Command extends \Sevian\Element{
 	}
 	public function editForm(){
 
-		$record = $this->getRecord();
 
-		//print_r($record);exit;
+		//print_r(\sevian\s::getVreq());exit;
+		$__id_ = \Sevian\S::getReq("__id_");
+
+		if(!isset($__id_)){
+			$__id_ = 0;
+		}
+
+		$record = $this->getRecord('grid', $__id_);
+
+		//print_r ($record);
+
 		$this->lastRecord = null;
+		/**/
 		$g =  new \Sigefor\Component\Form([
 			'panelId'=>$this->id,
 			'name'=>'h_commands',
@@ -247,21 +274,24 @@ class Command extends \Sevian\Element{
 			'method'=>'load',
 			'record'=>$record
 		]);
+
+		$values = $g->getValues();
 		$this->records = $g->getDataKeys();
-		$opt[] = [
+		$opt_[] = [
 			'method'  => 'setForm',
 			'value'=>$g,
 			'_args' => [1,1,1]
 		];
 		$opt[] = [
-			'method'  => 'setFormX',
-			'value'=>$this->formParams(0,\Sevian\S::getReq('command_id'),\Sevian\S::getReq('unit_id'),$record['id'])
+			'method'  => 'setFormParams',
+			'value'=>$this->paramsLoad(2,$values['command_id'],$values['unit_id'],$record->id, $values['description'])
 			
 		];
 		$this->info = $opt;//$form->getInfo();
 	}
 
-	private function formParams($cmd, $commandId, $unitId, $h_id=0){
+	private function formParams($cmd, $commandId, $unitId, $h_id=0, $description = ''){
+		
 		$command = '';
 
 		$cn = $this->cn;
@@ -355,7 +385,20 @@ class Command extends \Sevian\Element{
 			}
 			
 		}// end while
-		
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'id',
+			'caption'	=> 'id',
+			'value'		=> $h_id
+		];
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'description',
+			'caption'	=> 'Description',
+			'value'		=> $description
+		];
 		$fields[] = [
 			'input'		=> 'hidden',
 			'type'		=> 'hidden',
@@ -375,7 +418,7 @@ class Command extends \Sevian\Element{
 		return $form;
 
 		$opt[] = [
-			'method'  => 'setFormX',
+			'method'  => 'setFormParams',
 			'value'=>$form,
 			
 		];
@@ -384,7 +427,7 @@ class Command extends \Sevian\Element{
         //return $form;
 	}
 
-	public function getRecord(){
+	public function getRecord2(){
 
 		if($this->lastRecord){
 			return $this->lastRecord;
@@ -409,18 +452,30 @@ class Command extends \Sevian\Element{
 	}
 
 	public function save_command(){
+
+		$data = (object)\Sevian\S::getVReq();
+		$data->unit_id = $data->unit_idx;
+		//$data->command_id = $data->command_idx;
+		$data->status = 1;
+		$data->pending = '0';
+		$data->device_id = '0';
+		$data->__mode_ = $data->param_mode;
+		$data->__record_ = $this->getLastRecord();
+
+		//print_r($data);exit;
+
 		
-		$dataKeys["master"] = $this->records;
-		$dataKeys["detail"] = $this->records2;
-		//print_r(\Sevian\S::getVReq());exit;
+		$dataKeys["master"] = $this->getDataRecord('grid');
+		$dataKeys["detail"] = $this->getDataRecord('detail');
+		//print_r($dataKeys["detail"]);exit;
 
 		$g =  new \Sigefor\Component\FS([
 			'name'	=>	'h_commands',
 			'dataKeys'=>&$dataKeys,
 			'dataKeysId'=>'master',
-			'data'=>[(object)\Sevian\S::getVReq()]
+			'data'=>[$data]
 		]);
-		
+		//print_r($g->getResult());
 		foreach($g->getResult() as $k => $v){
 			//hr("$v->error");
 			if($v->error){
@@ -440,7 +495,7 @@ class Command extends \Sevian\Element{
 			}
 
 		}
-
+		$this->info = [];
 		//$g->save();
 
 
@@ -476,7 +531,7 @@ class Command extends \Sevian\Element{
 	}
 
 
-	private function paramsLoad($dataType = 1, $commandId, $unitId, $h_id=0){
+	private function paramsLoad($dataType = 1, $commandId, $unitId, $h_id=0, $description = ''){
 		$command = '';
 
 		$cn = $this->cn;
@@ -584,10 +639,30 @@ class Command extends \Sevian\Element{
 			}
 			
 		}// end while
-		
 		$fields[] = [
-			'input'		=> 'hidden',
-			'type'		=> 'hidden',
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'id',
+			'caption'	=> 'id',
+			'value'		=> ($mode == 2)? $h_id: ''
+		];
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'command_id',
+			'caption'	=> 'command_id',
+			'value'		=> $commandId
+		];
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'description',
+			'caption'	=> 'Description',
+			'value'		=> $description
+		];
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
 			'name'		=> 'param_mode',
 			'caption'	=> 'param_mode',
 			'value'		=> $mode
@@ -600,11 +675,12 @@ class Command extends \Sevian\Element{
 		];
 
 		//print_r($records);exit;
-		$this->records2 = $records;
+		$this->setDataRecord('detail', $records);
+		//$this->records2 = $records;
 		return $form;
 
 		$opt[] = [
-			'method'  => 'setFormX',
+			'method'  => 'setFormParams',
 			'value'=>$form,
 			
 		];

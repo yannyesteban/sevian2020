@@ -34,7 +34,7 @@ class Element{
 	protected $_jsElement = [];
 	protected $_components = null;
 	protected $typeElement = "panel";
-	protected $info = '';
+	protected $info = null;
 
 	protected $_configInput = null;
 	

@@ -8,14 +8,14 @@ var Command = (($) => {
 		form:object = null;
 		menu:object = null;
 
-		panelListCommands:object = null;
-		panelGrid:object = null;
 		panelCommand:object = null;
+		panelBody:object = null;
+		
 
 		main:object = null;
-
-		_formParams:object = null;
+		
 		_formCommand:object = null;
+		_formBody:object = null;
 
 		constructor(info:object){
             
@@ -48,55 +48,54 @@ var Command = (($) => {
 				
 				g = this.form = new Form2(this.form);
 			}
-			this.panelListCommands = main.create("div").id("list-commands").addClass("list-commands");
-			this.panelGrid = main.create("div");
+			
 			this.panelCommand = main.create("div");
+			this.panelBody = main.create("div");
 			
 		}
-	
-		setGrid(grid){
-			this.panelGrid.text("");
+
+		setFormCommand(form){
 			this.panelCommand.text("");
 
-			grid.target = this.panelGrid;
-			grid.parentContext =  this;
-				
-			this.grid = new Grid2(grid);
-		}
-
-		setForm(form){
-			this.panelGrid.text("");
-			this.panelCommand.text("");
-
-			form.target = this.panelGrid;
+			form.target = this.panelCommand;
 			form.parentContext =  this;
 			this._formCommand = new Form2(form);
-			//this.panelCommand.text("yanny");
 		}
-		setFormX(form){
-			this.panelGrid.text("");
 
-			form.target = this.panelGrid;
-			form.parentContext =  this;
-			this._formParams = new Form2(form);
-			
+		setGrid(grid){
+			this.panelBody.text("");
+
+			grid.target = this.panelBody;
+			grid.parentContext =  this;
+				
+			this._formBody = new Grid2(grid);
 		}
+		
+		setFormParams(form){
+			this.panelBody.text("");
+
+			form.target = this.panelBody;
+			form.parentContext =  this;
+				
+			this._formBody = new Form2(form);
+		}
+
 		setData(data, page, totalPages){
 
-			this.grid.setData(data, page, totalPages);
+			this._formBody.setData(data, page, totalPages);
 			
 			//this.grid.setPage(1);
 			//this.grid.setPage(1);
 			
 		}
 		setPage(page){
-			this.grid.pag.page = page;
+			this._formBody.pag.page = page;
 			
 			//this.grid.setPage(page);
 		}
 		
 		getDetail(info:any){
-			let inputs = this._formParams.getInputs();
+			let inputs = this._formBody.getInputs();
 			
 			let str = "";
 			let cmdValues = [];
@@ -129,11 +128,7 @@ var Command = (($) => {
 		}
 
 		clearForm(){
-			if(this.panelListCommands){
-				this.panelListCommands.text("");
-			}
-			
-			alert("borrando")
+
 		}
 
 		valid(){

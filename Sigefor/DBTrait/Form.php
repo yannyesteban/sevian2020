@@ -21,6 +21,7 @@ trait Form{
 	private $methods = null;
 	public $caption = '';
 	private $lastRecord = null;
+	private $_values = null;
 	
 	public function infoDBForm($name){
 		$name = $this->cn->addSlashes($name);
@@ -96,7 +97,7 @@ trait Form{
 		$values = [];
 
 		if($this->record){
-			$values = $this->getRecord($this->infoQuery, (object)$this->record);
+			$this->_values = $values = $this->getRecord($this->infoQuery, (object)$this->record);
 		}
 
 		$f = $this->infoQuery->fields;
@@ -321,6 +322,9 @@ trait Form{
 
 	}
 
+	public function getValues(){
+		return $this->_values;
+	}
 	public function getDataKeys(){
 		return $this->dataKeys;
 	}
