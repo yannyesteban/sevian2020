@@ -1,3 +1,37 @@
+var WebSockect = (($) => {
+    class Socket {
+        constructor(info) {
+            this.url = '127.0.0.1';
+            this.port = '3310';
+            this.socket = null;
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+        }
+        connect() {
+            this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
+            this.socket.onopen = this.onopen;
+            this.socket.onmessage = this.onmessage;
+            this.socket.onclose = this.onclose;
+        }
+        onclose(event) {
+            db("on Close");
+        }
+        send(msg) {
+            this.socket.send(msg);
+        }
+        onopen(event) {
+            db("on OPEN");
+        }
+        onmessage(event) {
+            var server_message = event.data;
+            db(server_message);
+        }
+    }
+    return Socket;
+})(_sgQuery);
 var Command = (($) => {
     class Command {
         constructor(info) {
@@ -10,8 +44,10 @@ var Command = (($) => {
             this.panelCommand = null;
             this.panelBody = null;
             this.main = null;
+            this._form = null;
             this._formCommand = null;
             this._formBody = null;
+            this._ws = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -23,16 +59,16 @@ var Command = (($) => {
             }
             this.main = main;
             this._create(main);
+            this._ws = new WebSockect({});
         }
         _create(main) {
             main.ds("gtType", "command");
             main.addClass("gt-command");
             //main.text("Mis Comandos");
-            let g = null;
             if (this.form) {
                 this.form.target = main.id();
                 this.form.parentContext = this;
-                g = this.form = new Form2(this.form);
+                this._form = new Form2(this.form);
             }
             this.panelCommand = main.create("div");
             this.panelBody = main.create("div");
@@ -91,6 +127,34 @@ var Command = (($) => {
         valid() {
             this.getDetail({});
             return true;
+        }
+        connect() {
+            this._ws.connect();
+        }
+        send() {
+            console.log(this._formBody);
+            let inputs = this._formBody.getInputs();
+            let str = "$WP+" + this._formBody.getInput("command_name").getValue() + "=0000";
+            let cmdValues = [];
+            for (let i in inputs) {
+                if (inputs[i].ds("cmd")) {
+                    str += "," + inputs[i].getValue();
+                    cmdValues.push(inputs[i].getValue());
+                }
+            }
+            let str1 = JSON.stringify({
+                type: "set",
+                deviceId: this._form.getInput('unit_idx').getValue() * 1,
+                deviceName: "2012000520",
+                commandId: this._formCommand.getInput('command_idx').getValue() * 1,
+                unitId: this._form.getInput('unit_idx').getValue() * 1,
+                comdValues: cmdValues,
+                msg: str,
+                name: "esteban"
+                //,
+                //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+            });
+            this._ws.send(str1);
         }
     }
     return Command;

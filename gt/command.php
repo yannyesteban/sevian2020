@@ -113,6 +113,9 @@ class Command extends \Sevian\Element{
 				];
 				$this->info = $opt;//$form->getInfo();
 				break;
+			case 'load_config':
+				$this->loadConfig();
+				break;
 
 		}
 
@@ -285,6 +288,18 @@ class Command extends \Sevian\Element{
 		$opt[] = [
 			'method'  => 'setFormParams',
 			'value'=>$this->paramsLoad(2,$values['command_id'],$values['unit_id'],$record->id, $values['description'])
+			
+		];
+		$this->info = $opt;//$form->getInfo();
+	}
+
+	public function loadConfig(){
+
+		//print (\sevian\s::getReq('command_idx').' '. \sevian\s::getReq('unit_idx'));
+		
+		$opt[] = [
+			'method'  => 'setFormParams',
+			'value'=>$this->paramsLoad(3, \sevian\s::getReq('command_idx'), \sevian\s::getReq('unit_id'))
 			
 		];
 		$this->info = $opt;//$form->getInfo();
@@ -570,7 +585,7 @@ class Command extends \Sevian\Element{
 			$dataFields[$id][] = [$rs['value'],$rs['title'] ?? $rs['value'],0];
         }
 		if($dataType == 1){
-			$cn->query = "SELECT p.*, '' as value, 1 param_mode,
+			$cn->query = "SELECT p.*, '' as value, 1 param_mode, 0 as exist,
 			'' as h_command_id, '' as param_id
 			FROM devices_comm_params as p
 			
@@ -579,6 +594,7 @@ class Command extends \Sevian\Element{
 		}elseif($dataType == 2){
 			$cn->query = 
 				"SELECT p.*, co.value, CASE WHEN co.param_id IS NOT NULL THEN 2 ELSE 1 END as param_mode,
+				CASE WHEN co.param_id IS NOT NULL THEN 1 ELSE 0 END as exist,
 				co.h_command_id, co.param_id
 				FROM devices_comm_params as p
 				LEFT JOIN h_commands as h ON h.command_id = p.command_id and h.id = '$h_id'
@@ -586,7 +602,8 @@ class Command extends \Sevian\Element{
 				WHERE p.command_id = '$commandId'
 				order by `order`;";
 		}elseif($dataType == 3){
-			$cn->query = "SELECT p.*, co.value
+			$cn->query = "SELECT p.*, co.value, 1 as param_mode,
+				CASE WHEN co.param_id IS NOT NULL THEN 1 ELSE 0 END as exist
 				FROM devices_comm_params as p
 				LEFT JOIN devices_config as co ON co.param_id = p.id
 				LEFT JOIN units as u ON u.device_id = co.device_id AND u.id = '$unitId'
@@ -602,7 +619,7 @@ class Command extends \Sevian\Element{
 		
 		$mode = 1;
 		$records = [];
-		
+		$exist = 0;
 		while($rs = $cn->getDataAssoc($result)){
 
 			$input = 'input';
@@ -644,6 +661,8 @@ class Command extends \Sevian\Element{
 			if($mode == 2){
 				$records[] = ['h_command_id'=>$rs['h_command_id'], 'param_id'=>$rs['param_id']];
 			}
+
+			$exist = $rs['exist'];
 			
 		}// end while
 		$fields[] = [
@@ -652,6 +671,13 @@ class Command extends \Sevian\Element{
 			'name'		=> 'id',
 			'caption'	=> 'id',
 			'value'		=> ($mode == 2)? $h_id: ''
+		];
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'command_name',
+			'caption'	=> 'command_name',
+			'value'		=> $command
 		];
 		$fields[] = [
 			'input'		=> 'input',
@@ -684,6 +710,25 @@ class Command extends \Sevian\Element{
 		//print_r($records);exit;
 		$this->setDataRecord('detail', $records);
 		//$this->records2 = $records;
+
+		if($dataType == 3){
+			if($exist){
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>'Command: '.$command,
+					'text'=>"loading correctly"
+				]));
+				//print_r($result);
+				
+			}else{
+				//print_r($result);
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'=>'Command: '.$command,
+					'text'=>"Record don't exist"
+				]));
+
+			}
+		}
+		
 		return $form;
 
 		$opt[] = [
