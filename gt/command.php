@@ -666,22 +666,22 @@ class Command extends \Sevian\Element{
 			
 		}// end while
 		$fields[] = [
-			'input'		=> 'input',
-			'type'		=> 'text',
+			'input'		=> 'hidden',
+			'type'		=> 'hidden',
 			'name'		=> 'id',
 			'caption'	=> 'id',
 			'value'		=> ($mode == 2)? $h_id: ''
 		];
 		$fields[] = [
-			'input'		=> 'input',
-			'type'		=> 'text',
+			'input'		=> 'hidden',
+			'type'		=> 'hidden',
 			'name'		=> 'command_name',
 			'caption'	=> 'command_name',
 			'value'		=> $command
 		];
 		$fields[] = [
-			'input'		=> 'input',
-			'type'		=> 'text',
+			'input'		=> 'hidden',
+			'type'		=> 'hidden',
 			'name'		=> 'command_id',
 			'caption'	=> 'command_id',
 			'value'		=> $commandId
@@ -694,8 +694,8 @@ class Command extends \Sevian\Element{
 			'value'		=> $description
 		];
 		$fields[] = [
-			'input'		=> 'input',
-			'type'		=> 'text',
+			'input'		=> 'hidden',
+			'type'		=> 'hidden',
 			'name'		=> 'param_mode',
 			'caption'	=> 'param_mode',
 			'value'		=> $mode

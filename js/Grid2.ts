@@ -323,6 +323,8 @@ var Grid2 = (($) => {
 
         searchValue:string = '';
 
+        parentContext:any = null;
+
         showEnum = false;
         allowSearch = true;
         option:any[] = [];
@@ -1112,7 +1114,7 @@ var Grid2 = (($) => {
             }
         }
         createMenu(info:any){
-            info.parentContext = this;
+            info.parentContext = this.getContext();
             let _menu = new Menu(info);
             return $(_menu.get());
         }
@@ -1144,6 +1146,18 @@ var Grid2 = (($) => {
         }
 
         test(msg){
+            
+        }
+
+        setContext(context){
+            this.parentContext = context;
+        }
+
+        getContext(){
+            if(this.parentContext){
+                return this.parentContext;
+            }
+            return this;
             
         }
 

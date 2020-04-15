@@ -247,6 +247,7 @@ var Grid2 = (($) => {
             this.actionButton = true;
             this.deleteButton = true;
             this.searchValue = '';
+            this.parentContext = null;
             this.showEnum = false;
             this.allowSearch = true;
             this.option = [];
@@ -845,7 +846,7 @@ var Grid2 = (($) => {
             }
         }
         createMenu(info) {
-            info.parentContext = this;
+            info.parentContext = this.getContext();
             let _menu = new Menu(info);
             return $(_menu.get());
         }
@@ -866,6 +867,15 @@ var Grid2 = (($) => {
             return false;
         }
         test(msg) {
+        }
+        setContext(context) {
+            this.parentContext = context;
+        }
+        getContext() {
+            if (this.parentContext) {
+                return this.parentContext;
+            }
+            return this;
         }
     }
     Grid._objs = [];

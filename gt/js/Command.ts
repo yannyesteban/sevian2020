@@ -37,6 +37,7 @@ var WebSockect = (($) => {
         }
 		
 		onmessage(event){
+			
             var server_message = event.data;
             db (server_message);
         }
@@ -193,8 +194,44 @@ var Command = (($) => {
 		connect(){
 			this._ws.connect();
 		}
-		send(){
-			console.log(this._formBody)
+		send(type:number=0){
+
+			if(type == 1){
+				let str1 = JSON.stringify({
+					type:"get",
+					deviceId: this._form.getInput('unit_idx').getValue()*1,
+					deviceName: "2012000520",//;this.getDeviceName(),
+					commandId: this._formCommand.getInput('command_idx').getValue()*1,
+					unitId: this._form.getInput('unit_idx').getValue()*1,
+					comdValues: [],
+					msg : "yanny",
+					name: "esteban"
+					//,
+					//destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+	
+				});
+				this._ws.send(str1);
+				return;
+			}else if(type == 2){
+				
+				let str1 = JSON.stringify({
+					type:"h",
+					deviceId: this._form.getInput('unit_idx').getValue()*1,
+					deviceName: "2012000520",//;this.getDeviceName(),
+					commandId: this._formBody._mainForm.getInput("id").getValue()*1,
+					unitId: this._form.getInput('unit_idx').getValue()*1,
+					comdValues: [],
+					msg : "yanny",
+					name: "esteban"
+					//,
+					//destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+	
+				});
+				this._ws.send(str1);
+				return;
+			}
+
+			
 			let inputs = this._formBody.getInputs();
             let str = "$WP+"+this._formBody.getInput("command_name").getValue()+"=0000";
             let cmdValues = [];
