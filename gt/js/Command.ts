@@ -33,7 +33,17 @@ var WebSockect = (($) => {
         }
 		
 		onopen(event){
-            db ("on OPEN")
+			db ("on OPEN");
+			
+			let openMessage = JSON.stringify({
+				type:"connect",
+				clientName:"oper4",
+				config:[]
+                
+
+            });
+
+			this.send(openMessage)
         }
 		
 		onmessage(event){
@@ -205,7 +215,7 @@ var Command = (($) => {
 					unitId: this._form.getInput('unit_idx').getValue()*1,
 					comdValues: [],
 					msg : "yanny",
-					name: "esteban"
+					name: "caracas"
 					//,
 					//destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
 	
@@ -222,7 +232,7 @@ var Command = (($) => {
 					unitId: this._form.getInput('unit_idx').getValue()*1,
 					comdValues: [],
 					msg : "yanny",
-					name: "esteban"
+					name: "valencia"
 					//,
 					//destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
 	
@@ -252,7 +262,7 @@ var Command = (($) => {
                 unitId: this._form.getInput('unit_idx').getValue()*1,
                 comdValues: cmdValues,
                 msg : str,
-                name: "esteban"
+                name: "san carlos"
                 //,
                 //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
 
