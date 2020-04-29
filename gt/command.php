@@ -105,7 +105,7 @@ class Command extends \Sevian\Element{
 			case 'params_load':
 				
 
-				$form = $this->paramsLoad(1,\Sevian\S::getReq('command_idx'),\Sevian\S::getReq('unit_id'));
+				$form = $this->paramsLoad(1,\Sevian\S::getReq('command_idx'),\Sevian\S::getReq('unit_idx'));
 				$opt[] = [
 					'method'  => 'setFormParams',
 					'value'=>$form,
@@ -299,7 +299,7 @@ class Command extends \Sevian\Element{
 		
 		$opt[] = [
 			'method'  => 'setFormParams',
-			'value'=>$this->paramsLoad(3, \sevian\s::getReq('command_idx'), \sevian\s::getReq('unit_id'))
+			'value'=>$this->paramsLoad(3, \sevian\s::getReq('command_idx'), \sevian\s::getReq('unit_idx'))
 			
 		];
 		$this->info = $opt;//$form->getInfo();
@@ -572,6 +572,7 @@ class Command extends \Sevian\Element{
 		";
 
 
+
 		$result = $cn->execute();
 		$dataFields = [];
 		
@@ -603,12 +604,14 @@ class Command extends \Sevian\Element{
 				order by `order`;";
 		}elseif($dataType == 3){
 			$cn->query = "SELECT p.*, co.value, 1 as param_mode,
-				CASE WHEN co.param_id IS NOT NULL THEN 1 ELSE 0 END as exist
-				FROM devices_comm_params as p
-				LEFT JOIN devices_config as co ON co.param_id = p.id
-				LEFT JOIN units as u ON u.device_id = co.device_id AND u.id = '$unitId'
-				WHERE p.command_id = '$commandId' 
-				order by `order`;";
+					CASE WHEN co.param_id IS NOT NULL THEN 1 ELSE 0 END as exist
+				FROM units as u
+				INNER JOIN devices as d ON d.id = u.device_id
+				INNER JOIN devices_commands as c ON c.version_id = d.version_id
+				INNER JOIN devices_comm_params as p ON p.command_id = c.id
+				LEFT JOIN devices_config as co ON co.param_id = p.id AND co.unit_id = u.id
+				WHERE c.id = '$commandId' AND u.id = '$unitId'
+				ORDER BY `order`;";
 		}elseif($dataType == 4){
 
 		}

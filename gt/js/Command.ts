@@ -205,7 +205,7 @@ var Command = (($) => {
 			this._ws.connect();
 		}
 		send(type:number=0){
-
+			
 			if(type == 1){
 				let str1 = JSON.stringify({
 					type:"get",
