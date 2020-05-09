@@ -3,15 +3,15 @@
 $PATH = MAIN_PATH;
 
 $css = array(
-	"{$PATH}css/main.css",
+	"{$PATH}css/gt_main.css",
 	"{$PATH}css/gt_map.css",
 
 	"{$PATH}css/gt_command.css",
-	"{$PATH}css/selectText.css",
-	"{$PATH}css/menu.css",
-	"{$PATH}css/form.css",
-	"{$PATH}css/grid.css",
-	"{$PATH}css/calendar.css",
+	"{$PATH}css/gt_selectText.css",
+	"{$PATH}css/gt_menu.css",
+	"{$PATH}css/gt_form.css",
+	"{$PATH}css/gt_grid.css",
+	"{$PATH}css/gt_calendar.css",
 
 	"{$PATH}css/Window.css",
 

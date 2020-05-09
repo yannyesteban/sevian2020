@@ -1,0 +1,125 @@
+/* Scss Document */
+html, body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: tahoma;
+  font-size: 11pt;
+}
+
+._sg_menu {
+  max-width: 250px;
+}
+
+#h {
+  width: 300px;
+  height: 300px;
+  min-width: 80px;
+  min-height: 50px;
+  /*max-width:500px;
+  max-height: 500px;
+  */
+  background-color: #267203;
+  _overflow: hidden;
+}
+
+#_header1 {
+  background-color: darkred;
+  position: absolute;
+  width: 90%;
+  left: 5%;
+}
+
+.float {
+  border: 2px solid green !important;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.rs_ {
+  background-color: #1ddc4a !important;
+  border-radius: 40%;
+  min-width: 6px !important;
+  min-height: 6px !important;
+  margin: -2px !important;
+}
+
+#db {
+  position: fixed;
+  top: 0;
+  left: 0px;
+  border: 1px solid red;
+  width: 400px;
+  height: 100%;
+  overflow: auto;
+  background-color: #5c5b5b;
+}
+
+#r {
+  background-color: #863435;
+  color: white;
+  margin: 10px;
+  padding: 10px;
+  overflow: auto;
+  max-height: 100%;
+  -webkit-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -moz-user-select: none;
+}
+
+#m11 {
+  background-color: #6a6a6a;
+  color: white;
+  height: 100px;
+  width: 500px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  min-width: 50px;
+  min-height: 60px;
+}
+#m11 .sss {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+#m11 .hand {
+  overflow: hidden;
+  min-height: 50px;
+  background-color: #582121;
+}
+#m11 .hand > * {
+  -webkit-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -moz-user-select: none;
+  pointer-events: none;
+}
+#m11 ul {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  margin: 0px;
+  background: #838080;
+  display: block;
+  overflow: auto;
+  max-height: 100%;
+  border: 2px solid white;
+}
+/*# sourceMappingURL=main.css.map */
