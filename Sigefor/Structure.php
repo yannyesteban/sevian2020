@@ -1,7 +1,11 @@
 <?php
 namespace Sigefor;
 
+include "DBTrait/GroupElement.php";
+
 class StructureInfo{
+    
+
     public $structure;
     public $title;
     public $template;
@@ -24,8 +28,12 @@ class Structure
     extends \Sevian\Element 
     implements  \Sevian\WindowsAdmin,
                 \Sevian\PanelsAdmin,
-                \Sevian\TemplateAdmin{
+                \Sevian\TemplateAdmin,
+                \Sevian\UserInfo
+                {
     // public static $cn;
+    
+    use \Sigefor\DBTrait\GroupElement;
     
     private $tStructures = "_sg_structures";
     private $tStrEle = "_sg_str_ele";
@@ -38,6 +46,9 @@ class Structure
 
     private $_wins = [];
 
+    private $_roles = [];
+    private $_userInfo = [];
+
     public function __construct($opt = []){
 		
 		foreach($opt as $k => $v){
@@ -45,10 +56,31 @@ class Structure
 		}
         $this->cn = \Sevian\Connection::get();
     }
+    /* Implementing : \Sevian\UserRoles */
+    public function setUserInfo($info){
+        $this->_userInfo = $info;
+    }
+
+    public function getUserInfo(){
+        return $this->_userInfo;
+    }
 
     public function evalMethod($method = ""){
-        $this->dbConfig();
+        $this->_roles = $this->dbGroupElement($this->element, $this->name, $this->method);
+        
+        $userInfo = $this->getUserInfo();
+        $n_roles = count(array_intersect($userInfo->roles, $this->_roles));
 
+        hr(count($this->_roles),"red");
+        if($n_roles == 0 or $n_roles > 0){
+            
+            hr("errror");
+        }
+        
+        
+
+        $this->dbConfig();
+        
         switch($method){
             case "login":
                 break;
@@ -67,7 +99,9 @@ class Structure
 			WHERE structure = '$this->name'";
 
 		$result = $cn->execute();
-		
+        //print_r($this->getUserInfo());
+        
+        
 		if($rs = $cn->getDataAssoc($result)){
             $this->info = new StructureInfo($rs);
             

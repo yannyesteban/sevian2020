@@ -1,33 +1,14 @@
 <?php
-
 namespace Sigefor;
 
-class UserInfo{
-    public $module;
-    public $title;
-    public $structure;
-    public $params = [];
-    public $theme;
-    public $debug = 0;
-    public $design = 0;
-
-    public function __construct($opt = []){
-		foreach($opt as $k => $v){
-			if(property_exists($this, $k)){
-				$this->$k = $v;
-			}
-		}
-	}
-}
 
 class User extends \Sevian\Element implements \Sevian\UserAdmin{
-
 
     protected $auth = false;
     private $_user = '';
     private $_pass = '';
     private $_error = 1;
-    private $_roles = 0;
+    private $_roles = [];
 
     protected $tUsers = "_sg_users";
     protected $tGroups = "_sg_groups";
@@ -78,7 +59,7 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
 			WHERE user = '$user'";
         //hr($cn->query);
 		$result = $cn->execute();
-        $auth = false;
+        $this->auth = false;
         
 		if(($rs = $cn->getDataAssoc($result)) and $user != ''){
            
@@ -91,7 +72,7 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
                     // the pass is expired
                     $this->_error = 4; 
                 }else{
-                    $auth = true;
+                    $this->auth = true;
                     // OK
                     $this->_error = 0;
                 }
@@ -117,16 +98,17 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
         $security = 'md5';
         $user = $cn->addSlashes($this->_user);
 		$cn->query = "
-			SELECT * 
-			FROM $this->tGroUsr 
+			SELECT gu.group 
+			FROM $this->tGroUsr as gu
 			WHERE user = '$user'";
 
 		$result = $cn->execute();
         $roles = [];
-        
-		while($rs = $cn->getDataAssoc($result)){
-            $roles[] = $rs['group'];
+        //hr($cn->query);
+		while($rs = $cn->getDataRow($result)){
+            $roles[] = $rs[0];
         }
+        
         return $roles;
         
     }
@@ -137,7 +119,9 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
     public function getUserInfo(){
         $info = new \Sevian\InfoUser;
         $info->user = $this->_user;
+        $info->pass = $this->_pass;
         $info->roles = $this->getRoles();
+        $info->auth = $this->auth;
         return $info;
     }
 
@@ -146,22 +130,7 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
         $div->class = "user-menu";
         $img = $div->add("img");
         $img->src = SG_PATH_IMAGES."login_red.png";
-/*{
-	async: true,
-	panel:51,
-	valid:false,
-	confirm_: 'seguro?',
-	params:	[
-		{t:'setMethod',
-			id:0,
-			element:'sgForm',
-			method:'list',
-			name:'products',
-      
-		}
 
-	]
-} */
         $opt = [
             "async"=>true,
             "panel"=>4,
@@ -190,3 +159,24 @@ class User extends \Sevian\Element implements \Sevian\UserAdmin{
         $this->panel = $div;
     }
 }// end class
+
+
+/*
+class UserInfo{
+    public $module;
+    public $title;
+    public $structure;
+    public $params = [];
+    public $theme;
+    public $debug = 0;
+    public $design = 0;
+
+    public function __construct($opt = []){
+		foreach($opt as $k => $v){
+			if(property_exists($this, $k)){
+				$this->$k = $v;
+			}
+		}
+	}
+}
+*/

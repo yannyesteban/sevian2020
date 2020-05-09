@@ -29,6 +29,8 @@ class S{
 	public static $user = 'pepe';
 	public static $role = 'public';
 
+	public static $userInfo = null;
+
 	public static $title = 'SEVIAN 2017.10';
 	public static $theme = [];
 	public static $templateName = '';
@@ -148,11 +150,11 @@ class S{
 	public static function getRole(){
 		
 	}
-	public static function setAuth($auth){
-
+	public static function setUserInfo($userInfo){
+		self::$userInfo = $userInfo;
 	}
-	public static function getAuth(){
-		
+	public static function getUserInfo(){
+		return self::$userInfo;
 	}
 
 	public static function configInit($opt){
@@ -196,11 +198,17 @@ class S{
 		self::$_str->ins = self::$ins;
 
 		if(!isset(self::$cfg['INIT'])){
+			self::$userInfo = new InfoUser();
+
+			
+
 			self::$cfg['INIT'] = true;
 			self::$cfg['SW'] = 1;
 			self::$cfg['INFO'] = [];
 			self::$cfg['AUTH'] = false;
 			
+			self::$cfg['USER_INFO'] = &self::$userInfo;
+
 			self::$cfg['VSES'] = [];
 			self::$cfg['TEMPLATE'] = &self::$_template;
 			self::$cfg['STR_PANELS'] = &self::$_strPanels;
@@ -233,12 +241,16 @@ class S{
 			self::$cfg['P_VARS'] = &self::$_pVars;
 			self::$cfg['G_VARS'] = &self::$_gVars;
 
+			
+
 		}else{
 			self::$cfg['INIT'] = false;
 			
 			self::$cfg['SW'] = (self::$cfg['SW'] == '1')? '0': '1';
 			self::$_str->sw = self::$cfg['SW'];
 			
+			self::$userInfo = &self::$cfg['USER_INFO'];
+						
 			self::$_info = &self::$cfg['INFO'];
 			self::$_panels = &self::$cfg['PANELS'];
 			self::$_windows = &self::$cfg['WINDOWS'];
@@ -260,7 +272,9 @@ class S{
 				$info->update = false;
 			}
 		}
-		
+		self::setSes("MAIN_PATH", MAIN_PATH);
+		//print_r(self::$userInfo);
+		//print(4);
 
 	}
 
@@ -301,17 +315,26 @@ class S{
 
 		$e->setVPanel(self::$_pVars[$info->id]);
 		$e->gVars = &self::$_gVars;
-
+		if($e instanceof \Sevian\UserInfo){
+			$e->setUserInfo(self::getUserInfo());
+		}
 		$e->config();
 		$e->getSequenceBefore();
 		$e->evalMethod();
 		$e->getSequenceAfter();
 
-		self::addFrament($e->getResponse());
-		if($e instanceof \Sevian\UserAdmin){
-
+		if($e instanceof \Sevian\CSSDocAdmin){
+			self::addCss($e->getCSSDocuments());
+		}
+		if($e instanceof \Sevian\JsDocAdmin){
+			self::addJs($e->getJsDocuments());
 		}
 
+		self::addFrament($e->getResponse());
+		if($e instanceof \Sevian\UserAdmin and $userInfo = $e->getUserInfo()){
+			self::setUserInfo($userInfo);
+		}
+		
 		if($e instanceof \Sevian\TemplateAdmin){
 			if($html = $e->getTemplate()){
 				self::setTemplate($html);
@@ -328,8 +351,7 @@ class S{
 			
 		}
 
-		if($e instanceof \Sevian\PanelsAdmin){
-			$panels = $e->getPanels();
+		if($e instanceof \Sevian\PanelsAdmin and $panels = $e->getPanels()){
 			foreach($panels as $k => $p){
 				self::setElement($p);
 			}
@@ -514,6 +536,13 @@ class S{
 		}
 		self::$_clsElement[$name] = $info['class'];
 		self::$_clsElement[$name]::$_element = $name;
+
+		if(isset($info['init'])){
+			// asigning static propertys at the class 
+			foreach($info['init'] as $k => $v){
+				self::$_clsElement[$name]::${$k} = $v;
+			}
+		}
 	}
 	public static function themesLoad($themes){
 		self::$_themes = $themes;
@@ -742,7 +771,12 @@ class S{
 		}
 		
 		foreach(self::$_js as $k=> $v){
-			$doc->appendScriptDoc($v['file'], $v['begin']??true, $v['attrib']??[]);
+
+			$v = (object)$v;
+			if(isset($v->file)){
+				$doc->appendScriptDoc($v->file, $v->begin?? true, $v->attrib?? []);
+			}
+			
 		}
 
 		$templates = [];
@@ -760,7 +794,7 @@ class S{
 		
 		if(!self::getTemplate()){
 			if(self::$templateName and isset($templates[self::$templateName])){
-				self::setTemplate(file_get_contents($templates[self::$templateName]));
+				self::setTemplate(@file_get_contents($templates[self::$templateName]));
 			}else{
 				self::setTemplate(self::$template);
 			}
@@ -770,13 +804,13 @@ class S{
 		self::$_str->setTemplate(self::vars(self::getTemplate()));
 		
 		//if(self::$_templateChanged){
-			self::$_strPanels = self::$_str->getStrPanels();
-			foreach(self::$_strPanels as $panel){
-				
-				if(!isset(self::$_info[$panel])){
-					self::$_str->addPanel($panel, new \Sevian\HTML(''));
-				}
+		self::$_strPanels = self::$_str->getStrPanels();
+		foreach(self::$_strPanels as $panel){
+			
+			if(!isset(self::$_info[$panel])){
+				self::$_str->addPanel($panel, new \Sevian\HTML(''));
 			}
+		}
 		//}
 		
 		

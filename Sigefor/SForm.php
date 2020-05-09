@@ -1,6 +1,11 @@
 <?php
 namespace sigefor;
 
+
+
+include "component/Form.php";
+include "component/Menu.php";
+
 trait DataRecord{
 
 	

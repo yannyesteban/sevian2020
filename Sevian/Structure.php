@@ -119,7 +119,7 @@ class JsonStructure{
 		if($template == ''){
 			$template = $this->template;
 		}
-		hr('errorrrrrrr');
+		
 		$exp = '|--([0-9]+)--|';
 		$this->_panels = array();
 

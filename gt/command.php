@@ -4,6 +4,7 @@ namespace GT;
 include_once '../sigefor/DBTrait/DataRecord.php';
 include_once '../sigefor/Component/Menu.php';
 include_once '../sigefor/Component/Form.php';
+include_once '../sigefor/Component/Grid.php';
 
 use \sigefor\DBTrait\DataRecord;
 

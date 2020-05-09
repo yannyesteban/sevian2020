@@ -23,6 +23,17 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[]
 	],
+	'structure' 		=> [
+		'enable' => true,
+		
+		'file' 	=> MAIN_PATH.'Sigefor/structure2.php',
+		'class' => '\Sigefor\structure2',
+		'init'=>[
+			'patternJsonFile'=>MAIN_PATH.'json/structure/{name}.json'
+		],
+		'js'=>[],
+		'css'=>[]
+	],
 	'ajax' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Ajax.php',
 		'class' => '\Sigefor\Ajax',

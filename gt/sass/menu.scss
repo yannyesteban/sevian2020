@@ -1,0 +1,24 @@
+.sg-menu.horizontal{
+	.caption{
+		display:none;
+	}
+	.menu{
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.item{
+		button{
+			//border:0px;
+		}
+		
+		//display: inline-block!important;
+		.icon{
+			display:none;
+		}
+	}
+	
+	li{
+		display: inline-block!important;
+	}
+	
+}

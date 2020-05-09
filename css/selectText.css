@@ -1,20 +1,30 @@
-/* Scss Document */
-*[data-sg-type="selectTextPopup"] {
-  margin-left: 0px;
-  margin-top: 0px;
-  background-color: white;
-  border: 1px solid red;
-  max-height: 20em;
+.list-menu {
+  position: fixed;
+  border: 1px solid #bbbbbb;
+  color: #838383;
+  max-height: 15em;
+  min-height: 2px;
+  min-width: 50px;
+  width: auto;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-color: #ffffff;
+  overflow: auto;
+  padding: 0px;
+  font-size: 9pt;
 }
-
-*[data-sg-type="selectTextPopup"] > * {
-  vertical-align: middle;
-  color: #737373;
-  border: 1px solid transparent;
+.list-menu:not(.active) {
+  visibility: hidden;
 }
-
-*[data-sg-type="selectTextPopup"] > *.active {
-  background-color: #9f0808;
+.list-menu .option {
+  text-transform: uppercase;
+  padding: 2px;
+  line-height: 1.5em;
+}
+.list-menu .option.active {
+  background-color: #0051ff;
   color: white;
 }
 /*# sourceMappingURL=selectText.css.map */

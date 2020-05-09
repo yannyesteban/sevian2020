@@ -1,6 +1,6 @@
 <?php
 
-namespace Sevian\Sigefor;
+namespace Sigefor;
 
 class Menu extends \Sevian\Element{
 

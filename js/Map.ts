@@ -602,9 +602,23 @@ var sgMap = (($) => {
             });
           
             //this.map = new LeatfletMap({id:this.id});
+            let infoMenu = [];
+            infoMenu.push({
+                id: 1,
+                caption:"xx",
+                useCheck:false,
+                action:() => {
+              
+                }
+                
+            });
            
-           
-           
+            let mm = new Menu({
+                caption:"", 
+                autoClose: false,
+                target:mapMenu,
+                items: infoMenu
+             });
            
        
            var html = `<div class="wecar_info">

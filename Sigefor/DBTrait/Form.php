@@ -1,7 +1,7 @@
 <?php
 namespace Sigefor\DBTrait;
-
-include_once "../Sigefor/DBTrait/Field.php";
+include_once "../Sigefor/InfoField.php";
+include_once "Field.php";
 
 trait Form{
 	use ConfigField;

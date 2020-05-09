@@ -1,6 +1,12 @@
 <?php
 namespace Sevian;
 
+interface UserInfo{
+    public function setUserInfo($info);
+    public function getUserInfo();
+
+}
+
 interface UserAdmin{
 
     //public function login();
@@ -56,4 +62,11 @@ interface JasonComponent extends \JsonSerializable{
 
 }
 
+interface CSSDocAdmin{
+    public function getCSSDocuments();
+
+}
+interface JsDocAdmin{
+    public function getJsDocuments();
+}
 

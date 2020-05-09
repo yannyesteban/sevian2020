@@ -2,8 +2,10 @@
 namespace Sevian;
 
 class InfoUser{
-	public $user = "";
-	public $roles = [];
+	public $user = 'pepe';
+	public $pass = '123';
+	public $roles = ['_public'];
+	public $auth = false;
 }
 
 class InfoWindow{
@@ -82,7 +84,7 @@ class InfoElement{
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
 
-				if($k === 'eparams' and gettype($v) !== 'object'){
+				if($k === 'eparams' and gettype($v) !== 'object' and gettype($v) !== 'array'){
 					$this->$k = \json_decode($v);
 					continue;
 				}

@@ -1,129 +1,131 @@
-/* Scss Document */
-html, body {
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
+@font-face {
+  font-family: Hemihead;
+  src: url(../../../fonts/HEMIHEAD.TTF);
 }
-
+@font-face {
+  font-family: airstrike;
+  src: url(../../fonts/airstrike.ttf);
+}
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  font-family: tahoma;
-  font-size: 11pt;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-._sg_menu {
-  max-width: 250px;
+html, body {
+  margin: 0px;
+  height: 100%;
 }
 
-#h {
-  width: 300px;
-  height: 300px;
-  min-width: 80px;
-  min-height: 50px;
-  /*max-width:500px;
-		max-height: 500px;
-		*/
-  background-color: #267203;
-  _overflow: hidden;
-}
-
-#_header1 {
-  background-color: darkred;
-  position: absolute;
-  width: 90%;
-  left: 5%;
-}
-
-.float {
-  border: 2px solid green !important;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  /* bring your own prefixes */
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-}
-
-.rs_ {
-  background-color: #1ddc4a !important;
-  border-radius: 40%;
-  min-width: 6px !important;
-  min-height: 6px !important;
-  margin: -2px !important;
-}
-
-#db {
-  position: fixed;
-  top: 0;
-  left: 0px;
-  border: 1px solid red;
-  width: 400px;
+form {
   height: 100%;
   overflow: auto;
-  background-color: #5c5b5b;
 }
 
-#r {
-  background-color: #863435;
-  color: white;
-  margin: 10px;
-  padding: 10px;
+.gt-main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 60px 30px auto 30px;
+  height: 100%;
   overflow: auto;
-  max-height: 100%;
-  -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  -moz-user-select: none;
+  background: #5a5a5a;
 }
-
-#m11 {
-  background-color: #6a6a6a;
-  color: white;
-  height: 100px;
-  width: 500px;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+.gt-main > .banner {
+  grid-row: 1;
+  grid-column: 1/4;
+}
+.gt-main > .menu {
+  grid-row: 2;
+  grid-column: 1/4;
+}
+.gt-main > .body {
+  grid-row: 3;
+  grid-column: 1/4;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  min-width: 50px;
-  min-height: 60px;
 }
-
-#m11 .sss {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-#m11 .hand {
-  overflow: hidden;
-  min-height: 50px;
-  background-color: #582121;
-}
-
-#m11 .hand > * {
-  -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  -moz-user-select: none;
-  pointer-events: none;
-}
-
-#m11 ul {
+.gt-main > .body > * {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
-  margin: 0px;
-  background: #838080;
-  display: block;
-  overflow: auto;
-  max-height: 100%;
-  border: 2px solid white;
+}
+.gt-main > .footer {
+  grid-row: 4;
+  grid-column: 1/4;
+  background-color: black;
+}
+
+.gt-logo .text {
+  color: white;
+  font-family: airstrike;
+  font-size: 35px;
+}
+
+.sg-form.gt-login {
+  border: 4px solid white;
+  width: 300px;
+}
+.sg-form.gt-login > .caption {
+  background-color: #e6e6e6;
+  color: #8f8f8f;
+  font-size: 12pt;
+  text-align: center;
+  line-height: 1.5em;
+}
+.sg-form.gt-login > .page {
+  color: #727272;
+  padding: 4px;
+}
+.sg-form.gt-login > .page > .field {
+  background-color: #dddddd;
+  padding: 4px;
+}
+.sg-form.gt-login > .page > .field > .label {
+  padding-left: 10px;
+  text-transform: capitalize;
+}
+.sg-form.gt-login > .page > .field input {
+  background-color: white;
+  line-height: 2em;
+  border: 1px solid #a3a3a3;
+}
+.sg-form.gt-login .menu {
+  background-color: crimson;
+}
+
+.sg-message-box {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  margin: 20px;
+  padding: 10px;
+  background-color: #0071ce;
+  border: 0px solid #ec8484;
+  border-radius: 5px;
+  -webkit-box-shadow: 6px 7px 5px -4px rgba(0, 0, 0, 0.71);
+          box-shadow: 6px 7px 5px -4px rgba(0, 0, 0, 0.71);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  visibility: hidden;
+  visibility: visible;
+  opacity: 1;
+}
+.sg-message-box > .caption {
+  color: white;
+  text-align: right;
+  border-bottom: 2px solid white;
+}
+.sg-message-box > .text {
+  color: aqua;
+  padding: 4px;
+}
+.sg-message-box.hidden {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0.9s linear, opacity 0.9s linear;
+  transition: visibility 0.9s linear, opacity 0.9s linear;
 }
 /*# sourceMappingURL=main.css.map */
