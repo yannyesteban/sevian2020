@@ -23,7 +23,6 @@ $cls_elements = [
 		'css'=>[]
 	],
 	
-
 	
 	'SForm' 		=> [
 		'enable' => true,
