@@ -1,7 +1,7 @@
 <?php
 namespace Sigefor\DBTrait;
-include_once 'FormSave.php';
-include_once "../Sigefor/DBTrait/Form.php";
+require_once 'FormSave.php';
+require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
 
 trait FormSave{

@@ -94,6 +94,27 @@ $cls_elements = [
 		'css'=>[]
 	],
 ];
+$cls_elements['gt_cota'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/cota.php',
+	'class' => '\GT\Cota',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/Cota.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
+$cls_elements['gt_unit'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/unit.php',
+	'class' => '\GT\Unit',
+	'enable' => true,
+	'js'=>[],
+	'css'=>[]
+	
+];
 
 Sevian\S::elementsLoad($cls_elements);
 

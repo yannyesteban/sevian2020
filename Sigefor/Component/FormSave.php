@@ -4,7 +4,7 @@ namespace Sigefor\Component;
 //include "../Sevian/JS/Form.php";
 
 //include "../Sigefor/DBTrait/Form.php";
-include "../Sigefor/DBTrait/FormSave.php";
+require_once MAIN_PATH.'Sigefor/DBTrait/FormSave.php';
 class ConfigForm{
 	use \Sigefor\DBTrait\Form;
 

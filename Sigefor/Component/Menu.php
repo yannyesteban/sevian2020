@@ -1,8 +1,10 @@
 <?php
 namespace Sigefor\Component;
 
-include "../Sevian/JS/Menu.php";
-include "../Sigefor/DBTrait/Menu.php";
+require_once MAIN_PATH.'Sevian/JS/Menu.php';
+require_once MAIN_PATH.'Sigefor/DBTrait/Menu.php';
+
+
 
 
 class Menu extends \Sevian\JS\Menu {

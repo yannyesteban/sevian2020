@@ -1,8 +1,8 @@
 <?php
 namespace Sigefor\Component;
 
-include "../Sevian/JS/Form.php";
-include "../Sigefor/DBTrait/Form.php";
+require_once MAIN_PATH.'Sevian/JS/Form.php';
+require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
 class Form extends \Sevian\JS\Form{
 	

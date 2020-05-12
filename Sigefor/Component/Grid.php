@@ -1,8 +1,8 @@
 <?php
 namespace Sigefor\Component;
 
-include "../Sevian/JS/Grid.php";
-include "../Sigefor/DBTrait/Grid.php";
+require_once MAIN_PATH.'Sevian/JS/Grid.php';
+require_once MAIN_PATH.'Sigefor/DBTrait/Grid.php';
 
 class Grid extends \Sevian\JS\Grid {
 	

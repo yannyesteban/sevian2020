@@ -1,9 +1,9 @@
 <?php
 namespace Sigefor\Component;
 
-include_once "../Sevian/JS/Form.php";
+require_once MAIN_PATH.'Sevian/JS/Form.php';
 
-include_once "../Sigefor/DBTrait/JsonForm.php";
+require_once MAIN_PATH.'Sigefor/DBTrait/JsonForm.php';
 
 
 class JsonForm extends \Sevian\JS\Form {

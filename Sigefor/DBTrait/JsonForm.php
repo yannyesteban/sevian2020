@@ -1,6 +1,6 @@
 <?php
 namespace Sigefor\DBTrait;
-include_once "../Sigefor/DBTrait/Field.php";
+require_once MAIN_PATH.'Sigefor/DBTrait/Field.php';
 
 
 trait JsonForm{

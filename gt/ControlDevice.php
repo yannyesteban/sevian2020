@@ -4,7 +4,7 @@
 
 namespace Sevian\GT;
 
-include "../Sigefor/FormConfig.php";
+require_once MAIN_PATH.'Sigefor/FormConfig.php';
 class ControlDevice extends \Sevian\Element{
 
 

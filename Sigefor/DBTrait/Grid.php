@@ -1,6 +1,6 @@
 <?php
 namespace Sigefor\DBTrait;
-include_once "../Sigefor/DBTrait/Form.php";
+require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
 trait Grid{
 

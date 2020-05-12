@@ -1,10 +1,11 @@
 <?php
 
 namespace GT;
-include_once '../sigefor/DBTrait/DataRecord.php';
-include_once '../sigefor/Component/Menu.php';
-include_once '../sigefor/Component/Form.php';
-include_once '../sigefor/Component/Grid.php';
+
+require_once MAIN_PATH.'Sigefor/DBTrait/DataRecord.php';
+require_once MAIN_PATH.'Sigefor/Component/Menu.php';
+require_once MAIN_PATH.'Sigefor/Component/Form.php';
+require_once MAIN_PATH.'Sigefor/Component/Grid.php';
 
 use \sigefor\DBTrait\DataRecord;
 
