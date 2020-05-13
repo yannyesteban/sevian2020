@@ -34,8 +34,8 @@ var Menu = (function ($, Float) {
             this.parentContext = this;
             this._isCheck = false;
             this._isItem = false;
-            this._action = function (index) { };
-            this._check = function (index) { };
+            this._action = function (index, event = null) { };
+            this._check = function (index, event = null) { };
             let x;
             for (x in opt) {
                 if (this.hasOwnProperty(x)) {
@@ -140,7 +140,7 @@ var Menu = (function ($, Float) {
                     this._isItem = false;
                 });
                 if (this.action) {
-                    item.on("click", (event) => { this._action($(x.parentNode)); });
+                    item.on("click", (event) => { this._action($(x.parentNode), event); });
                 }
             }
             items = main.queryAll("input[type='checkbox']");
@@ -158,7 +158,7 @@ var Menu = (function ($, Float) {
                 });
                 if (this.check) {
                     chk.on("click", (event) => {
-                        this._check($(chk.get().parentNode.parentNode));
+                        this._check($(chk.get().parentNode.parentNode), event);
                     });
                 }
             }
@@ -297,6 +297,9 @@ var Menu = (function ($, Float) {
         }
         add(main, info) {
             let item = main.create("div").addClass("item");
+            if (info.ds) {
+                item.ds(info.ds);
+            }
             let link = item.create(this.tagLink)
                 .addClass("option")
                 .prop("href", info.url || "javascript:void(0)")
@@ -306,6 +309,16 @@ var Menu = (function ($, Float) {
             }
             if (this.useCheck && (info.useCheck === true)) {
                 let chk = link.create("input").attr("type", "checkbox");
+                if (info.checkValue) {
+                    chk.value(info.checkValue);
+                }
+                if (info.checkDs) {
+                    chk.ds(info.checkDs);
+                }
+                if (info.check) {
+                    let action = $.bind(info.check, this.parentContext, "item");
+                    chk.on("click", (event) => { action(item, event); });
+                }
             }
             link.create("span").addClass("icon").addClass(info.iconClass || "");
             link.create("span").addClass("text").text(info.caption);
@@ -316,7 +329,7 @@ var Menu = (function ($, Float) {
             }
             else if (info.action) {
                 let action = $.bind(info.action, this.parentContext, "item");
-                link.on("click", (event) => { action(item); });
+                link.on("click", (event) => { action(item, event); });
             }
             if (info.events) {
                 for (let i in info.events) {
@@ -382,6 +395,9 @@ var Menu = (function ($, Float) {
             if (this.subType !== "any" && this.subType !== "one") {
                 this.closeMenu(this._main);
             }
+        }
+        getCheck(item) {
+            return $(item.query("input[type='checkbox']"));
         }
     }
     Menu._objs = [];

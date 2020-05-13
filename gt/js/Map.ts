@@ -1,25 +1,27 @@
-var Cota = (($) => {
+var GTMap = (($) => {
    
-    class Cota{
+    class Map{
+
+		static _instances = [];
 
         id:any = null;
         map:any = null;
 
-        win:any = null;
-        data:any[] = [];
-        units:any[] = [];
-        main:any = null;
-        clients:any[] = [];
-        accounts:any[] = [];
-        tracking:any[] = [];
+        //win:any = null;
+        //data:any[] = [];
+        //units:any[] = [];
+        //main:any = null;
+        //clients:any[] = [];
+        //accounts:any[] = [];
+        //tracking:any[] = [];
         
         info:any = null;
-		wInfo:any = null;
+		//wInfo:any = null;
 		
-        tapName:any = null;
-        
-        unit:any = null;
-        
+		tapName:any = null;
+        static getMap(name){
+            return Map._instances[name];
+        }
         constructor(info){
             
             for(var x in info){
@@ -29,14 +31,14 @@ var Cota = (($) => {
             }
             
             let main = (this.id)? $(this.id): false;
-            
+           
             if(main){
-                
-                if(main.ds("gtCota")){
+            
+                if(main.ds("gtMap")){
                     return;
                 }
     
-                if(main.hasClass("gt-cota")){
+                if(main.hasClass("gt-map")){
                     this._load(main);
                 }else{
                     this._create(main);
@@ -46,16 +48,16 @@ var Cota = (($) => {
                 main = $.create("div").attr("id", this.id);
                 
                 this._create(main);
-            }
+			}
+			
+			Map._instances[this.id] = this;
 
 		
         }
         _create(main:any){
-            main.addClass("cota-main").addClass("map-main");
-            this.map = new MapBox({id:`${this.id}`});
-            //            console.log (this.unit.info)
-            this.unit.info.map = this.map;
-            let unit = new GTUnit(this.unit.info);
+            main.addClass("map-main");
+			this.map = new MapBox({id:`${this.id}`});
+			
 
         }   
         _load(main:any){
@@ -65,5 +67,5 @@ var Cota = (($) => {
 	}
 
 
-	return Cota;
+	return Map;
 })(_sgQuery);

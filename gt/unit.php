@@ -1,10 +1,25 @@
 <?php
-
 namespace GT;
 
-class Unit extends \Sevian\Element{
+require_once MAIN_PATH.'GT/Trait.php';
 
-	public function __construct($info = []){
+class Unit
+    extends \Sevian\Element
+    implements \sevian\JasonComponent
+{
+
+    use DBClient;
+	use DBAccount;
+    use DBUnit;
+    use DBTracking;
+    
+
+    public $_name = '';
+    public $_type = '';
+    public $_mode = '';
+    public $_info = null;
+    
+        public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
@@ -25,7 +40,19 @@ class Unit extends \Sevian\Element{
 			case 'load':
 				$this->load();
 				break;
-			
+            case 'load-units':
+                $data = $this->loadUnits();
+
+                $this->_name = $this->name;
+                $this->_type = 'GTUnit';
+                $this->_mode = '';
+                $this->_info = [
+                    'dataUnits'     => $data,
+                    'dataClients'   => $this->loadClients(),
+                    'dataAccounts'  => $this->loadAccounts(),
+                    'tracking'      => $this->loadTracking(),
+                    'id'            => 'k'
+                ];
 			default:
 				break;
 
@@ -33,59 +60,28 @@ class Unit extends \Sevian\Element{
 		
 		return true;
 	}
-
-	private function loadUnits(){
-        $cn = $this->cn;
-		
-        $cn->query = "
-        
-        SELECT
-            u.id as unit_id,
-            ac.client_id as client_id,
-            cl.client,
-            u.account_id,
-            ac.name as account,
-            u.device_id,
-            de.device_name,
-            u.vehicle_id,
-            vn.name as vehicle_name,
-            ic.icon, ve.plate, br.brand, mo.model, ve.color
-
-
-        FROM units as u
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
-
-        LEFT JOIN users_units as uu ON uu.unit_id = u.id
-
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
-
-        LEFT JOIN brands as br ON br.id = ve.brand_id
-        LEFT JOIN models as mo ON mo.id = ve.model_id
-
-        INNER JOIN devices as de ON de.id = u.device_id
-        INNER JOIN devices_names as dn ON dn.name = de.device_name
-
-
-        LEFT JOIN icons as ic ON ic.id = u.icon_id
-
-        LEFT JOIN accounts as ac ON ac.id = u.account_id
-        LEFT JOIN clients as cl ON cl.id = ac.client_id
-        INNER JOIN tracking as t ON t.id = u.tracking_id
-        ORDER BY u.id
-        ";
-		$result = $cn->execute();
-		
-        
-        $data = [];
-		while($rs = $cn->getDataAssoc($result)){
-            $data[$rs['unit_id']] = $rs;
-        }
-
-
-        return $data;
-    }
+	
 	private function load(){
+        $this->panel = new \Sevian\HTML('div');
+		$this->panel->id = 'gt-unit-'.$this->id;
+		$this->panel->innerHTML = 'gt-unit-'.$this->id;
+		$this->typeElement = 'GTUnit';
 
-	}
+		$this->info = [
+			'id'=>$this->panel->id,
+			'panel'=>$this->id,
+			'tapName'=>'yanny'
+		];
+
+    }
+    
+    public function jsonSerialize() {  
+        return [
+			'name'	=> $this->_name,
+			'type'	=> $this->_type,
+			'mode'	=> $this->_mode,
+			'info'	=> $this->_info
+		];  
+    }
 
 }

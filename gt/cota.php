@@ -1,9 +1,13 @@
 <?php
-
 namespace GT;
 
+require_once MAIN_PATH.'GT/Trait.php';
 
 class Cota extends \Sevian\Element{
+
+	use DBClient;
+	use DBAccount;
+	use DBUnit;
 
 	public function __construct($info = []){
         foreach($info as $k => $v){
@@ -33,17 +37,34 @@ class Cota extends \Sevian\Element{
 	public function load(){
 		$this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-cota-'.$this->id;
-		
+		//$this->panel->innerHTML = "cooota";
 		$this->typeElement = 'Cota';
 
 	
 
 
+		$this->containerId = "y";
+
+		$unit = new Unit([
+			'asyncMode'	=> false,
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> 'cc',
+			'method'	=> 'load',
+			
+			
+			
+		]);
+		$unit->evalMethod('load-units');
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			'tapName'=>'yanny'
+			'tapName'=>'yanny',
+			'unit'=>$unit
 		];
+		//print_r( );
+
+
 		/*
 		$f = new  \Sigefor\sform([
 			'containerId'=>'list-commands',

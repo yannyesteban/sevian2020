@@ -1,3 +1,5 @@
+var ctMap = ctMap || [];
+var Mark;
 var MapBox = (($) => {
 
 
@@ -111,7 +113,10 @@ var MapBox = (($) => {
 
         popupInfo:string = "";
 
+        private _marker = null;
+
         constructor(info:object){
+            
             for(let x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -129,7 +134,7 @@ var MapBox = (($) => {
                 'left': [markerRadius, (markerHeight - markerRadius) * -1],
                 'right': [-markerRadius, (markerHeight - markerRadius) * -1]
                 };
-               let popup = new mapboxgl.Popup({ className: 'my-class'})
+            let popup = new mapboxgl.Popup({ className: 'my-class'})
                  //.setLngLat(e.lngLat)
                  .setHTML(this.popupInfo)
                  .setMaxWidth("300px")
@@ -147,17 +152,20 @@ var MapBox = (($) => {
 
             let el = document.createElement('img');
             el.className = 'marker';
-            el.src = '../images/vehiculo_0000.png';
+            el.src = 'images/vehiculo_0000.png';
             el.style.width = this.width;
             el.style.height = this.height;
 
-            let M = new mapboxgl.Marker(el)
+            let M = this._marker = new mapboxgl.Marker(el)
             
             //.bindPopup(this.popupInfo)
-            .setLngLat([this.lng, this.lat])
-            .addTo(this.map);
-M.setPopup(popup);
+            .setLngLat([this.lng, this.lat]);
+            M.setPopup(popup);
             M.setRotation(this.heading);
+
+            if(this.visible){
+                this._marker.addTo(this.map);
+            }
         }
 
         setLatLng(lat:number, lng:number){
@@ -169,7 +177,14 @@ M.setPopup(popup);
         }
 
         show(value:boolean){
-
+            if(this._marker){
+                this.visible = value;
+                if(value){
+                    this._marker.addTo(this.map);
+                }else{
+                    this._marker.remove();
+                }
+            }
         }
 
         hide(){
@@ -199,6 +214,7 @@ M.setPopup(popup);
 
     class Map{
         id:any = null;
+        name:string = null;
         target:any = null;
         className:string = "map-main-layer";
         map:any = null;
@@ -206,6 +222,8 @@ M.setPopup(popup);
         groups:any[] = null;
         layers:any[] = [];
         latlng = new mapboxgl.LngLat(-66.903603, 10.480594);
+        
+        load:any = (event)=>{};
         
         constructor(info:object){
             for(let x in info){
@@ -232,6 +250,8 @@ M.setPopup(popup);
                 this._create(main);
             }
 
+            ctMap[this.name || this.id] = this;
+            
             $(window).on("load", ()=> {
                // this.loadMap(main);
             });
@@ -248,13 +268,17 @@ M.setPopup(popup);
             center: this.latlng,
             
             });
+
+            
+
             mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
             map.addControl(new MapboxLanguage({
               defaultLanguage: 'es'
             }));
 
             map.addControl(new mapboxgl.NavigationControl());
-            map.on('load', () => {
+            map.on('load', (event) => {
+                //this.load(event);
               
                 map.addImage('pulsing-dot', new Pulsing(map, 200), { pixelRatio: 2 });
                 map.addImage('pulsing-dot2', new Pulsing(map, 100), { pixelRatio: 2 });
@@ -367,6 +391,10 @@ M.setPopup(popup);
 
         }
 
+        on(event, func){
+            this.map.on(event, func);
+        }
+
         zoom(value:number){
 
         }
@@ -384,6 +412,10 @@ M.setPopup(popup);
             });
         }
 
+        createMark(info){
+            info.map = this.map;
+            return new Mark(info);  
+        }
         addMark(name:string, info:object){
             info.map = this.map;
             this.marks[name] = new Mark(info);

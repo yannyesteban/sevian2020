@@ -46,8 +46,8 @@ var Menu =
         _isCheck:boolean = false;
         _isItem:boolean = false;
 
-        _action = function(index){};
-        _check = function(index){};
+        _action = function(index, event = null){};
+        _check = function(index, event = null){};
         static _objs = [];
         static init(){
             let menus = $().queryAll(".sg-menu.sg-detect");
@@ -192,7 +192,7 @@ var Menu =
                     this._isItem = false;
                 });
                 if(this.action){
-                    item.on("click", (event)=>{this._action($(x.parentNode));});
+                    item.on("click", (event)=>{this._action($(x.parentNode), event);});
                 }
                 
                 
@@ -215,7 +215,7 @@ var Menu =
 
                 if(this.check){
                     chk.on("click", (event)=>{
-                        this._check($(chk.get().parentNode.parentNode));
+                        this._check($(chk.get().parentNode.parentNode), event);
                     });
                 }
             }
@@ -359,6 +359,9 @@ var Menu =
 
             let item = main.create("div").addClass("item");
             
+            if(info.ds){
+                item.ds(info.ds)
+            }
             let link = item.create(this.tagLink)
                 .addClass("option")
                 .prop("href", info.url || "javascript:void(0)")
@@ -369,6 +372,17 @@ var Menu =
 
             if(this.useCheck && (info.useCheck === true)){
                 let chk = link.create("input").attr("type","checkbox");
+
+                if(info.checkValue){
+                    chk.value(info.checkValue);
+                }
+                if(info.checkDs){
+                    chk.ds(info.checkDs);
+                }
+                if(info.check){
+                    let action = $.bind(info.check, this.parentContext, "item");
+                    chk.on("click", (event)=>{action(item, event);});
+                }
             }    
             
             link.create("span").addClass("icon").addClass(info.iconClass || "");
@@ -377,10 +391,10 @@ var Menu =
             if(info.items){
                 link.create("span").addClass("ind");
                 this.createMenu(item, info.items, true);
-                link.on("click", (event)=>{this.show(item)});
+                link.on("click", (event)=>{this.show(item);});
             }else if(info.action){
                 let action = $.bind(info.action, this.parentContext, "item");
-                link.on("click", (event)=>{action(item);});
+                link.on("click", (event)=>{action(item, event);});
             }
 
             if(info.events){
@@ -460,6 +474,10 @@ var Menu =
                 this.closeMenu(this._main);
             }
 
+        }
+
+        getCheck(item){
+            return $(item.query("input[type='checkbox']"));
         }
 
     }

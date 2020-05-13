@@ -75,7 +75,7 @@ $cls_elements = [
 			]
 		],
 		'css'=>[
-			'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
+			//'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
 			'https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css'
 		]
 	],
@@ -105,12 +105,27 @@ $cls_elements['gt_cota'] = [
 	'css'=>[]
 	
 ];
+$cls_elements['gt_map'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Map.php',
+	'class' => '\GT\Map',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/Map.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
 $cls_elements['gt_unit'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/unit.php',
 	'class' => '\GT\Unit',
 	'enable' => true,
-	'js'=>[],
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/Unit.js',
+		'begin'=> false
+	]],
 	'css'=>[]
 	
 ];

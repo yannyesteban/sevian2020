@@ -1,19 +1,18 @@
-var Cota = (($) => {
-    class Cota {
+var GTMap = (($) => {
+    class Map {
         constructor(info) {
             this.id = null;
             this.map = null;
-            this.win = null;
-            this.data = [];
-            this.units = [];
-            this.main = null;
-            this.clients = [];
-            this.accounts = [];
-            this.tracking = [];
+            //win:any = null;
+            //data:any[] = [];
+            //units:any[] = [];
+            //main:any = null;
+            //clients:any[] = [];
+            //accounts:any[] = [];
+            //tracking:any[] = [];
             this.info = null;
-            this.wInfo = null;
+            //wInfo:any = null;
             this.tapName = null;
-            this.unit = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -21,10 +20,10 @@ var Cota = (($) => {
             }
             let main = (this.id) ? $(this.id) : false;
             if (main) {
-                if (main.ds("gtCota")) {
+                if (main.ds("gtMap")) {
                     return;
                 }
-                if (main.hasClass("gt-cota")) {
+                if (main.hasClass("gt-map")) {
                     this._load(main);
                 }
                 else {
@@ -35,16 +34,18 @@ var Cota = (($) => {
                 main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
+            Map._instances[this.id] = this;
+        }
+        static getMap(name) {
+            return Map._instances[name];
         }
         _create(main) {
-            main.addClass("cota-main").addClass("map-main");
+            main.addClass("map-main");
             this.map = new MapBox({ id: `${this.id}` });
-            //            console.log (this.unit.info)
-            this.unit.info.map = this.map;
-            let unit = new GTUnit(this.unit.info);
         }
         _load(main) {
         }
     }
-    return Cota;
+    Map._instances = [];
+    return Map;
 })(_sgQuery);
