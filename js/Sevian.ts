@@ -194,16 +194,36 @@ var S = (($) => {
 				dataForm.append("__sg_action", info.action || "");
 				dataForm.append("__sg_async", true);
 			}
+
+
+			
+
+
+
             if(info.async){
+				let fun;
+
+				if(info.requestFunction){
+					fun = info.requestFunction;
+				}else{
+				
+					fun = (xhr) => {
+						this.requestPanel(JSON.parse(xhr.responseText));
+					}
+				}
+				
+
+
 				var ME = this;
 				var ajax = new sgAjax({
 					url: "",
 					method: "post",
 					form: dataForm,
 					
-					onSucess:(xhr) => {
-						return this.requestPanel(JSON.parse(xhr.responseText));
+					_onSucess:(xhr) => {
+						this.requestPanel(JSON.parse(xhr.responseText));
 					},
+					onSucess:fun,
 
 					onError: function(xhr){
 
@@ -266,6 +286,8 @@ var S = (($) => {
 
         static requestPanel(p){
 			
+			//let p = JSON.parse(xhr.responseText);
+
 			if(p.panels){
 				for(var x in p.panels){
 					sgJson.iPanel(p.panels[x]);

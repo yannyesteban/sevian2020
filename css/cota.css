@@ -27,4 +27,34 @@
   grid-row: 2;
   grid-column: 1/5;
 }
+
+.units-info {
+  padding: 2px;
+  color: white;
+  font-size: 11px;
+  min-width: 240px;
+  display: grid;
+  height: 100%;
+  overflow: auto;
+  text-transform: uppercase;
+  grid-template-columns: auto 1fr;
+}
+.units-info > div {
+  background-color: rgba(102, 102, 102, 0.575);
+  padding: 3px;
+}
+.units-info > div:nth-child(2n+1) {
+  color: #929292;
+  font-weight: bold;
+}
+
+.wecar_info {
+  background-color: #187fbb;
+  color: #d1faff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px;
+  margin: 4px;
+  min-width: 200px;
+}
 /*# sourceMappingURL=cota.css.map */

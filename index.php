@@ -1,6 +1,8 @@
 <?php
-set_include_path(get_include_path().":"."/path/to/new/folder");
+//set_include_path(get_include_path().":"."/path/to/new/folder");
 define("MAIN_PATH", "");
+define("IMAGES_PATH", "images/");
+define("PATH_IMAGES", "images/");
 
 
 include MAIN_PATH.'Sevian/functions.php';

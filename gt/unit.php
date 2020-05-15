@@ -5,7 +5,10 @@ require_once MAIN_PATH.'GT/Trait.php';
 
 class Unit
     extends \Sevian\Element
-    implements \sevian\JasonComponent
+	implements 
+		\sevian\JasonComponent,
+		\sevian\JsonRequest
+	
 {
 
     use DBClient;
@@ -18,8 +21,10 @@ class Unit
     public $_type = '';
     public $_mode = '';
     public $_info = null;
-    
-        public function __construct($info = []){
+	
+	private $_jsonRequest = null;
+
+    public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
@@ -50,9 +55,14 @@ class Unit
                     'dataUnits'     => $data,
                     'dataClients'   => $this->loadClients(),
                     'dataAccounts'  => $this->loadAccounts(),
-                    'tracking'      => $this->loadTracking(),
+					'tracking'      => $this->loadTracking(),
+					'pathImages'	=> PATH_IMAGES,
+					'caption'		=> 'Unidades',
                     'id'            => 'k'
-                ];
+				];
+			case 'tracking':
+				$this->setRequest($this->updateTracking());
+				break;
 			default:
 				break;
 
@@ -82,6 +92,14 @@ class Unit
 			'mode'	=> $this->_mode,
 			'info'	=> $this->_info
 		];  
-    }
+	}
+
+	public function setRequest($data){
+		$this->_jsonRequest = $data;
+	}
+	
+	public function getRequest(){
+		return $this->_jsonRequest;
+	}
 
 }

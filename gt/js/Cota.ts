@@ -56,6 +56,7 @@ var Cota = (($) => {
             //            console.log (this.unit.info)
             this.unit.info.map = this.map;
             let unit = new GTUnit(this.unit.info);
+            unit.play();
 
         }   
         _load(main:any){

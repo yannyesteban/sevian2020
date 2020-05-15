@@ -3,6 +3,8 @@
 define("MAIN_PATH", "../");
 define("SG_PATH_IMAGES", "../images/");
 
+define("IMAGES_PATH", "images/");
+define("PATH_IMAGES", "images/");
 
 include MAIN_PATH.'Sevian/functions.php';
 include MAIN_PATH.'Sevian/sevian.php';

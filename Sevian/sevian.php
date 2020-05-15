@@ -81,6 +81,7 @@ class S{
 	private static $_info = [];// se guarda la informacion de cada panel ;
 	private static $_panels = [];
 	private static $_windows = [];
+	private static $_jsonRequest = null;
 
 
 	private static $_pVars = [];// variables de sesion para cada panel
@@ -273,6 +274,8 @@ class S{
 			}
 		}
 		self::setSes("MAIN_PATH", MAIN_PATH);
+		self::setSes("IMAGES_PATH", IMAGES_PATH);
+		self::setSes("PATH_IMAGES", PATH_IMAGES);
 		//print_r(self::$userInfo);
 		//print(4);
 
@@ -343,12 +346,13 @@ class S{
 			}
 		}
 
-		if($e instanceof \Sevian\WindowsAdmin){
-			$windows = $e->getWindows();
-			if($windows){
-				self::$_windows = $windows;
-			}
+		if($e instanceof \Sevian\WindowsAdmin and $windows = $e->getWindows()){
 			
+			self::$_windows = $windows;
+		}
+
+		if($e instanceof \Sevian\JsonRequest and $_jsonRequest = $e->getRequest()){
+			self::$_jsonRequest = $_jsonRequest;
 		}
 
 		if($e instanceof \Sevian\PanelsAdmin and $panels = $e->getPanels()){
@@ -923,6 +927,10 @@ class S{
 		//4.-
 		self::evalElements();
 		//5.-
+
+		if(self::$_jsonRequest){
+			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT);	
+		}
 
 		if(self::$onAjax){
 			return self::jsonDoc();

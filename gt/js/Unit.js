@@ -1,4 +1,5 @@
 var GTUnit = (($) => {
+    let n = 0;
     class Unit {
         constructor(info) {
             this.id = null;
@@ -9,9 +10,49 @@ var GTUnit = (($) => {
             this.tracking = null;
             this.menu = null;
             this.win = null;
+            this.caption = "u";
             this.winCaption = "";
+            this.pathImages = "";
+            this.followMe = false;
+            this.infoTemplate = `
+                <div class="units-info">
+                <div>Placa</div><div>{=plate}</div>
+                <div>Marca</div><div>{=brand}</div>
+                <div>Modelo</div><div>{=model}</div>
+                <div>Color</div><div>{=color}</div>
+
+                <div>Hora</div><div>{=date_time}</div>
+                <div>Longitud</div><div>{=longitude}</div>
+                <div>Latidud</div><div>{=latitude}</div>
+                <div>Velocidad</div><div>{=speed}</div>
+
+                <div>Heading</div><div>{=heading}</div>
+                <div>Satellite</div><div>{=satellite}</div>
+                <div>Inputs</div><div>{=speed}</div>
+                <div>Outputs</div><div>{=speed}</div>
+
+
+
+
+            
+            </div>`;
+            this.popupTemplate = `<div class="wecar_info">
+			<div>{=vehicle_name}</div>
+			<div>{=device_name}</div>
+			<div>{=brand}: {=model}<br>{=plate}, {=color} </div>
+		
+			<div>{=latitude}, {=longitude}</div>
+		
+			<div>Velocidad: {=speed}</div>
+		
+		</div>`;
+            this.delay = 30000;
             this.main = null;
             this.marks = [];
+            this._info = null;
+            this._winInfo = null;
+            this._timer = null;
+            this._lastUnitId = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -44,18 +85,33 @@ var GTUnit = (($) => {
                 */
             });
         }
+        static getInstance(name) {
+            return Unit._instances[name];
+        }
         _create(main) {
             this.main = main;
             main.addClass("unit-main");
             this.createMenu();
             this.win = new Float.Window({
                 visible: true,
-                caption: "Unidades",
+                caption: this.caption,
                 child: main,
                 left: 10,
                 top: 40,
                 width: "300px",
                 height: "300px",
+                mode: "auto",
+                className: ["sevian"]
+            });
+            this._info = $().create("div").addClass("win-units-info");
+            this._winInfo = new Float.Window({
+                visible: true,
+                caption: "Info",
+                child: this._info,
+                left: 10,
+                top: "bottom",
+                width: "300px",
+                height: "auto",
                 mode: "auto",
                 className: ["sevian"]
             });
@@ -65,6 +121,58 @@ var GTUnit = (($) => {
         init() {
         }
         load() {
+        }
+        updateTracking(data) {
+            let unitId;
+            n = n + 0.001;
+            for (let x of data) {
+                unitId = x.unit_id;
+                this.tracking[unitId].latitude = x.latitude * 1.0 + n;
+                this.tracking[unitId].longitude = x.longitude * 1.0 + n;
+                this.tracking[unitId].heading = x.heading;
+                if (this.marks[unitId]) {
+                    this.marks[unitId].setLngLat([this.tracking[unitId].longitude, this.tracking[unitId].latitude]);
+                    this.marks[unitId].setPopup(this.loadPopupInfo(unitId));
+                    this.setInfo(unitId);
+                    //let popup = this.evalHTML(this.popupTemplate, this.dataUnits[id]);
+                    //popup = this.evalHTML(popup, this.tracking[id]);
+                }
+            }
+            if (this.followMe && this._lastUnitId) {
+                this.panTo(this._lastUnitId);
+            }
+        }
+        requestFun(xhr) {
+            let json = JSON.parse(xhr.responseText);
+            this.updateTracking(json);
+        }
+        play() {
+            if (this._timer) {
+                clearTimeout(this._timer);
+            }
+            this._timer = setInterval(() => {
+                S.send({
+                    async: true,
+                    panel: 2,
+                    valid: false,
+                    confirm_: 'seguro?',
+                    requestFunction: $.bind(this.requestFun, this),
+                    params: [
+                        {
+                            t: 'setMethod',
+                            id: 2,
+                            element: 'gt_unit',
+                            method: 'tracking',
+                            name: 'x',
+                            eparams: {
+                                record: { codpersona: 16386 },
+                                token: "yanny",
+                                page: 2
+                            }
+                        }
+                    ]
+                });
+            }, this.delay);
         }
         createMenu() {
             let infoMenu = [];
@@ -114,6 +222,9 @@ var GTUnit = (($) => {
                         let ch = menu.getCheck(item);
                         ch.get().checked = true;
                         this.showUnit(x, true);
+                        this._lastUnitId = x;
+                        this.setInfo(x);
+                        this.flyTo(x);
                     }
                 };
             }
@@ -139,7 +250,8 @@ var GTUnit = (($) => {
                     lat: this.tracking[id].latitude,
                     lng: this.tracking[id].longitude,
                     heading: this.tracking[id].heading,
-                    popupInfo: "popup hola"
+                    image: this.pathImages + this.dataUnits[id].icon + ".png",
+                    popupInfo: this.loadPopupInfo(id)
                 });
             }
             else {
@@ -164,6 +276,43 @@ var GTUnit = (($) => {
                 }
             }
         }
+        evalHTML(html, data) {
+            function auxf(str, p, p2, offset, s) {
+                return data[p2];
+            }
+            for (let x in data) {
+                let regex = new RegExp('\(\{=(' + x + ')\})', 'gi');
+                html = html.replace(regex, auxf);
+            }
+            return html;
+        }
+        flyTo(unitId) {
+            if (this.marks[unitId]) {
+                this.marks[unitId].flyTo();
+            }
+        }
+        panTo(unitId) {
+            if (this.marks[unitId]) {
+                this.marks[unitId].panTo();
+            }
+        }
+        setInfo(id) {
+            this._info.text(this.loadInfo(id));
+            this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
+        }
+        loadPopupInfo(id) {
+            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataUnits[id]), this.tracking[id]);
+        }
+        loadInfo(id) {
+            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataUnits[id]), this.tracking[id]);
+        }
+        setFollowMe(value) {
+            this.followMe = value;
+        }
+        getFollowMe() {
+            return this.followMe;
+        }
     }
+    Unit._instances = [];
     return Unit;
 })(_sgQuery);

@@ -178,5 +178,31 @@ trait DBTracking{
 
         return $data;
     }
+
+    private function updateTracking(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT
+
+        t.*, date_format(date_time, '%d/%m/%Y %T') as date_time
+
+        FROM tracking as t
+        INNER JOIN units as u ON u.tracking_id = t.id
+        ORDER BY unit_id
+                
+        ";
+		//$result = $cn->execute();
+		$this->cn->execute();
+		return $this->cn->getDataAll();
+        $data = [];
+		while($rs = $cn->getDataAll($result)){
+            $data[$rs['unit_id']] = $rs;
+        }
+
+
+        return $data;
+    }
 }
 
