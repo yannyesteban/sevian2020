@@ -1,3 +1,90 @@
+var GTTrace = (($) => {
+
+	class Trace{
+		
+		id:string = "";
+		lineId:string = "";
+		map:any = null;
+		data:object = null;
+
+		_line:object = null;
+		_marks:any[] = [];
+		coordinates:any[] = [];
+		maxPoints = 5;
+		lineWidth = 5;
+
+		_active:boolean = false;
+
+		constructor(info:object){
+			
+			for(let x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+			
+			this.lineId = this.id + "_line"; 
+			this.data = {
+				
+				'type': 'geojson',
+				
+				'data': {
+					'type': 'Feature',
+					'properties': {},
+					'geometry': {
+						'type': 'LineString',
+						'coordinates': this.coordinates
+					}
+				}
+			};
+			return;[
+							[-71.65522800, 10.59577000],
+							[-69.39774800, 10.06782300],
+							[-66.903603, 10.480594]
+						]
+			
+		}
+
+		play(){
+			
+			this.map.addSource(this.lineId, this.data);
+			this.map.addLayer({
+				'id': this.lineId,
+				'type': 'line',
+				'source': this.lineId,
+				'layout': {
+					'line-join': 'round',
+					'line-cap': 'round'
+				},
+				'paint': {
+					'line-color': 'red',
+					'line-width': this.lineWidth
+				}
+			});
+		}
+		addPoint(lngLat){
+			//this.coordinates.push()
+			
+
+			if(this.data.data.geometry.coordinates.length <= this.maxPoints){
+
+			}else{
+				this.data.data.geometry.coordinates.shift();
+			}
+			this.data.data.geometry.coordinates.push(lngLat);
+			// then update the map
+			this.map.getSource(this.lineId).setData(this.data.data);
+		}
+
+		deletePoint(){
+
+		}
+
+	}
+
+	return Trace;
+})(_sgQuery)
+
 var GTUnit = (($) => {
    
 	let n=0;
@@ -62,6 +149,8 @@ var GTUnit = (($) => {
 		private _timer:any = null;
 		
 		private _lastUnitId = null;
+
+		private _traces:any[] = [];
 		
 
 		
@@ -112,6 +201,50 @@ var GTUnit = (($) => {
 
 		}
 
+		z(){
+			let map = this.map.map;
+				
+				map.addSource('point2', {
+				'type': 'geojson',
+				'data': {
+				'type': 'FeatureCollection',
+				'features': [
+				{
+				'type': 'Feature',
+				'properties':{
+					'rotacion':45
+				},
+				'geometry': {
+				'type': 'Point',
+				'coordinates': [-69.39274800, 10.07182300]	
+				}
+				},
+				{
+					'type': 'Feature',
+					'properties':{
+						'rotacion':120
+					},
+					'geometry': {
+					'type': 'Point',
+					'coordinates': [-69.30074800, 10.06682300]	
+					}
+					}
+				]
+				}
+				});
+				map.addLayer({
+				'id': 'points2',
+				'type': 'symbol',
+				'source': 'point2',
+				'layout': {
+				'icon-image': 'cat',
+				'icon-size': 0.10,
+				'icon-rotate':['get','rotacion']
+				}
+				});
+				
+		}
+
 		_create(main:any){
 			
 			this.main = main;
@@ -144,7 +277,51 @@ var GTUnit = (($) => {
                 height: "auto",
                 mode:"auto",
                 className:["sevian"]
-            });
+			});
+			let _info2 = $().create("div").addClass("win-units-info");
+			let t = new GTTrace({map: this.map.map});
+			
+			let menu = new Menu({
+				caption:"uuuu", 
+				autoClose: false,
+				target:_info2,
+				items: [
+					{
+						id: 1,
+                		caption:"o",
+                		action:(item, event) => {
+							t.play()
+						}
+					},
+					{
+						id: 1,
+                		caption:"x",
+                		action:(item, event) => {
+							t.addPoint()
+						}
+					},
+					{
+						id: 3,
+                		caption:"z",
+                		action:(item, event) => {
+							this.z()
+						}
+					}
+				]
+			 });
+			let _winInfo2 = new Float.Window({
+                visible:true,
+                caption:"Info 2",
+                child:_info2,
+                left:"center",
+                top:"top",
+                width: "300px",
+                height: "auto",
+                mode:"auto",
+                className:["sevian"]
+			});
+			
+
 			
 			
 
@@ -167,10 +344,20 @@ var GTUnit = (($) => {
 		updateTracking(data){
 			let unitId;
 			n = n + 0.001;
+			let a=0, b=0;
 			for(let x of data){
+				if(Math.floor(Math.random() * 10)>=8){
+					a = Math.random()/100;
+					b = Math.random()/300;
+				}else{
+					a = -Math.random()/100;
+					b = -Math.random()/300;
+				}
+				
+				
 				unitId = x.unit_id;
-				this.tracking[unitId].latitude = x.latitude*1.0+n;
-				this.tracking[unitId].longitude = x.longitude*1.0+n;
+				this.tracking[unitId].latitude = x.latitude*1.0+a;
+				this.tracking[unitId].longitude = x.longitude*1.0+b;
 				this.tracking[unitId].heading = x.heading;
 				if(this.marks[unitId]){
 					this.marks[unitId].setLngLat([this.tracking[unitId].longitude, this.tracking[unitId].latitude]);
@@ -183,7 +370,11 @@ var GTUnit = (($) => {
 				}
 			}
 			if(this.followMe && this._lastUnitId){
-				this.panTo(this._lastUnitId)
+				this.panTo(this._lastUnitId);
+				this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
+			
+			}
+			if(this._traces[unitId]){
 			}
 		}
 
@@ -195,7 +386,57 @@ var GTUnit = (($) => {
 		}
 		
 		play(){
+			let map = this.map.map;
+
+			map.loadImage(
+				'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
+				function(error, image) {
+				if (error) throw error;
+				map.addImage('cat', image);
+				map.addSource('point', {
+				'type': 'geojson',
+				'data': {
+				'type': 'FeatureCollection',
+				'features': [
+				{
+				'type': 'Feature',
+				'properties':{
+					'rotacion':45
+				},
+				'geometry': {
+				'type': 'Point',
+				'coordinates': [-69.39874800, 10.06882300]	
+				}
+				},
+				{
+					'type': 'Feature',
+					'properties':{
+						'rotacion':120
+					},
+					'geometry': {
+					'type': 'Point',
+					'coordinates': [-69.39674800, 10.06682300]	
+					}
+					}
+				]
+				}
+				});
+				map.addLayer({
+				'id': 'points',
+				'type': 'symbol',
+				'source': 'point',
+				'layout': {
+				'icon-image': 'cat',
+				'icon-size': 0.10,
+				'icon-rotate':['get','rotacion']
+				}
+				});
+				}
+				);
 			
+
+			
+
 			if(this._timer){
 				clearTimeout(this._timer);	
 			}
@@ -292,6 +533,10 @@ var GTUnit = (($) => {
 					this._lastUnitId = x;
 					this.setInfo(x);
 					this.flyTo(x);
+
+					this._traces[x] = new GTTrace({map:this.map.map});
+					
+					this._traces[x].play();
 					
 
 				}

@@ -4,6 +4,7 @@
   padding-right: 6px !important;
   padding-left: 6px !important;
   text-align: center;
+  border: 1px solid #00aeff;
 }
 
 .gtxxx {
@@ -76,6 +77,9 @@
   font-weight: bold;
 }
 
+.gt-command-main {
+  background-color: #e7e7e7;
+}
 .gt-command-main .page {
   overflow: auto;
   display: -webkit-box;

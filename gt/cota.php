@@ -40,7 +40,14 @@ class Cota extends \Sevian\Element{
 		//$this->panel->innerHTML = "cooota";
 		$this->typeElement = 'Cota';
 
-	
+		$main_form =  new \Sigefor\Component\Form([
+			'panelId'=>$this->id,
+			//'name'=>$this->name,
+			'name'=>'gt_cota_unit',
+			'method'=>'request',
+			'mode'=>1
+			//'record'=>$this->getRecord()
+		]);	
 
 
 		$this->containerId = "y";
@@ -54,13 +61,15 @@ class Cota extends \Sevian\Element{
 			
 			
 			
+			
 		]);
 		$unit->evalMethod('load-units');
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
 			'tapName'=>'yanny',
-			'unit'=>$unit
+			'unit'=>$unit,
+			'form'	=> $main_form,
 		];
 		//print_r( );
 

@@ -1,20 +1,10 @@
-var Cota = (($) => {
-    class Cota {
+var GTInfoUnit = (($) => {
+    class InfoUnit {
         constructor(info) {
             this.id = null;
-            this.map = null;
-            this.win = null;
-            this.data = [];
-            this.units = [];
-            this.main = null;
-            this.clients = [];
-            this.accounts = [];
-            this.tracking = [];
-            this.info = null;
-            this.wInfo = null;
-            this.tapName = null;
-            this.unit = null;
             this.form = null;
+            this._main = null;
+            this._form = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -44,15 +34,7 @@ var Cota = (($) => {
                 this.form.parentContext = this;
                 this._form = new Form2(this.form);
             }
-            this.map = new MapBox({ id: `${this.id}` });
-            //            console.log (this.unit.info)
-            this.unit.info.map = this.map;
-            let unit = new GTUnit(this.unit.info);
-            return;
-            unit.play();
-        }
-        _load(main) {
         }
     }
-    return Cota;
+    return InfoUnit;
 })(_sgQuery);

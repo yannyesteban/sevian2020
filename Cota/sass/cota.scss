@@ -62,8 +62,7 @@
   }
 
   .my-class{
-	  
-	  .mapboxgl-popup-content{
+	  	  .mapboxgl-popup-content{
 		  // background-color: aqua;
 	  }
   }
@@ -75,4 +74,16 @@
 		 padding: 4px;
 		 margin: 4px;
 		 min-width: 200px;
-	  }
+    }
+    
+
+    .info2{
+      margin:10px;
+      padding: 10px;
+      background-color: white;
+      .s{
+        margin:10px;
+        padding: 10px;
+        border:2px solid red;
+      }
+    }

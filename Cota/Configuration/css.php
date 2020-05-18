@@ -5,18 +5,23 @@ $PATH = MAIN_PATH;
 $css = array(
 	"{$PATH}css/cota_main.css",
 	"{$PATH}css/cota.css",
+	"{$PATH}css/gt_form.css",
 	"{$PATH}css/Window.css",
 
 	"{$PATH}css/Menu.css",
+	"{$PATH}css/gt_selectText.css",
+	"{$PATH}css/gt_grid.css",
+	"{$PATH}css/Paginator.css",
+	"{$PATH}css/gt_command.css",
 	/*
 	"{$PATH}css/gt_main.css",
 	"{$PATH}css/gt_map.css",
 
 	"{$PATH}css/gt_command.css",
-	"{$PATH}css/gt_selectText.css",
+	
 	"{$PATH}css/gt_menu.css",
 	"{$PATH}css/gt_form.css",
-	"{$PATH}css/gt_grid.css",
+	
 	"{$PATH}css/gt_calendar.css",
 	
 	

@@ -1,66 +1,89 @@
 .sg-form{
-	padding: 4px;
-	//margin: 5px;
-	border: 2px solid rgb(218, 218, 218);
-	background-color: #f0f0f0;
-	>.caption{
-	  background-color: #c0c0c0;
-	  text-align: center;
-	  color:rgb(255, 255, 255);
-	  line-height: 2.0em;
-	  text-transform: uppercase;
-	}
-	>.page{
-	  font-size: 10pt;
-	  color: #6e6e6e;
-	  border: 1px solid #cfcece;
-	  padding: 4px;;
-	  >.field{
-		margin-top: 5px;;
-		>.label{
-		  margin-left: 10px;
-		  text-transform: capitalize;
-		  >.ind{
-			display: inline-block;
-			color: red;
-			margin-left: 5px;
-		  }
-  
-		}
-		>.input{
-		  input{
-			color:#585858;
-			border:1px solid #d8d7d7;
-			height: 2em;
-		  }
-		  button{
-			height: 2.0em;
-			color:#585858;
-			//border-color: #ff8800;
-			border:1px solid #d8d7d7;
-		  }
-		}
-	  }
-	  >.sg-menu{
-		background-color: #e4e4e4;
+	&.basic,  &.sevian{
 		padding: 4px;
-		border: 2px solid rgb(236, 236, 236);
-		margin-top: 10px;
-		.option{
-		  line-height: 2em;
-		  background-color: #ff8800;
-		  color: #e7e7e7;
-		  border: 2px solid rgb(236, 236, 236);
-		  cursor: pointer;
-		  transition: 0.5s all ease-out;
-		  &:hover{
-			background-color: #cf4404;
-			color: #d8d7d7;
-			
+		//margin: 5px;
+		border: 2px solid rgb(218, 218, 218);
+		background-color: #f0f0f0;
+		>.caption{
+		  background-color: #c0c0c0;
+		  text-align: center;
+		  color:rgb(255, 255, 255);
+		  line-height: 2.0em;
+		  text-transform: uppercase;
+		}
+		>.page{
+		  font-size: 10pt;
+		  color: #6e6e6e;
+		  border: 1px solid #cfcece;
+		  padding: 4px;;
+		  >.field{
+			margin-top: 5px;;
+			>.label{
+			  margin-left: 10px;
+			  text-transform: capitalize;
+			  >.ind{
+				display: inline-block;
+				color: red;
+				margin-left: 5px;
+			  }
+	  
+			}
+			>.input{
+			  input{
+				color:#585858;
+				border:1px solid #d8d7d7;
+				height: 2em;
+			  }
+			  button{
+				height: 2.0em;
+				color:#585858;
+				//border-color: #ff8800;
+				border:1px solid #d8d7d7;
+			  }
+			}
+		  }
+		  >.sg-menu{
+			background-color: #e4e4e4;
+			padding: 4px;
+			border: 2px solid rgb(236, 236, 236);
+			margin-top: 10px;
+			.option{
+			  line-height: 2em;
+			  background-color: #ff8800;
+			  color: #e7e7e7;
+			  border: 2px solid rgb(236, 236, 236);
+			  cursor: pointer;
+			  transition: 0.5s all ease-out;
+			  &:hover{
+				background-color: #cf4404;
+				color: #d8d7d7;
+				
+			  }
+			}
 		  }
 		}
-	  }
 	}
+	
   
 	
-  }
+}
+
+
+.sg-form{
+	&.gt_cota_unit{
+
+		>.page{
+			display: flex;
+			flex-direction: row;
+			>.field{
+				margin:2px;
+			}
+		}
+		input{
+			color: rgb(71, 110, 110);
+			font-size: 12px;
+			font-weight: bold;
+		}
+	}
+}
+

@@ -138,7 +138,7 @@ class structure2
 					$this->infoPanels[] = new \Sevian\InfoElement($v);
 				}
 				
-				$templateInfo = $this->loadTemplate($this->templateName);
+				$this->loadTemplate($this->templateName);
 			}else{
 				$this->msgError = "You don't have permission to enter";
 			}

@@ -99,8 +99,28 @@ var S = (($) => {
             }
 
 			if(info.window ){
-				let win;
+				let win, winName;
 
+				if(info.window.name){
+					winName = info.window.name;
+				}else{
+					winName = info.panel;
+				}
+
+				if(this._w[winName]){
+					win = this._w[winName]
+				}else{
+					win = this._w[winName] = this.createWindow(info.window);
+				}
+
+				if(info.window.panel){
+					win.setBody(this.getForm(info.window.panel));
+				}else{
+					win.setBody(f);
+				}
+				//alert(winName);
+				//win.show();
+				/*
 				if(info.window.name && this._w[info.window.name]){
 					win = this._w[info.window.name];
 
@@ -115,7 +135,7 @@ var S = (($) => {
 					win = this._w[panel] = this.createWindow(info.window);
 					this._w[panel].setBody(f);
 					//this._w[panel].show({left:"center",top:"middle"});
-				}
+				}*/
 				if(info.window.caption){
 					win.setCaption(info.window.caption);
 				}

@@ -284,7 +284,7 @@ var MapBox = (($) => {
             center: this.latlng,
             
             });
-
+            map.addControl(new mapboxgl.FullscreenControl());
             
 
             mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
@@ -294,13 +294,16 @@ var MapBox = (($) => {
 
             map.addControl(new mapboxgl.NavigationControl());
             map.on('load', (event) => {
+                
+
+return;
                 //this.load(event);
               
                 map.addImage('pulsing-dot', new Pulsing(map, 200), { pixelRatio: 2 });
                 map.addImage('pulsing-dot2', new Pulsing(map, 100), { pixelRatio: 2 });
                 map.addImage('pulsing-dot3', new Pulsing(map, 300), { pixelRatio: 2 });
                 
-                return;
+                //return;
                 map.addSource('points', {
                     'type': 'geojson',
                     'data': {

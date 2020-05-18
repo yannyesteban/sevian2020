@@ -3,7 +3,7 @@ namespace GT;
 
 require_once MAIN_PATH.'GT/Trait.php';
 
-class Unit
+class InfoUnit
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
@@ -77,12 +77,22 @@ class Unit
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-unit-'.$this->id;
 		$this->panel->innerHTML = 'gt-unit-'.$this->id;
-		$this->typeElement = 'GTUnit';
+		$this->typeElement = 'GTInfoUnit';
+
+		$g =  new \Sigefor\Component\Form([
+			'panelId'=>$this->id,
+			//'name'=>$this->name,
+			'name'=>'main_command',
+			'method'=>'request',
+			'mode'=>1
+			//'record'=>$this->getRecord()
+		]);
 
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			'tapName'=>'yanny'
+			'tapName'=>'yanny',
+			'form'	=> $g,
 		];
 
     }

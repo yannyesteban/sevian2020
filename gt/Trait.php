@@ -149,6 +149,32 @@ trait DBUnit{
         return $data;
     }
 
+    public function listUnit(){
+        $cn = $this->cn;
+		
+        $cn->query = "
+        SELECT
+            u.id as unit_id,
+            COALESCE(vn.name, '  -- undefined --') as vehicle_name
+
+        FROM units as u
+        LEFT JOIN units_names as vn ON vn.id = u.name_id
+        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+
+        ORDER BY vehicle_name
+        ";
+		$result = $cn->execute();
+		
+        
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            $data[$rs['unit_id']] = $rs;
+        }
+
+
+        return $data;
+    }
+
 }
 
 trait DBTracking{

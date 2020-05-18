@@ -1,9 +1,10 @@
 <?php
-namespace GT;
+namespace sigefor;
 
-require_once MAIN_PATH.'GT/Trait.php';
+require_once 'DBTrait/Catalogue.php';
 
-class Unit
+
+class Catalogue
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
@@ -11,10 +12,7 @@ class Unit
 	
 {
 
-    use DBClient;
-	use DBAccount;
-    use DBUnit;
-    use DBTracking;
+    use	DBTrait\Catalogue;
     
 
     public $_name = '';
@@ -40,44 +38,29 @@ class Unit
 		if($method === false){
             $method = $this->method;
 		}
+		//hr(\Sevian\S::getVReq());exit;
+		$this->load();
 		
-		switch($method){
-			case 'load':
-				$this->load();
-				break;
-            case 'load-units':
-                $data = $this->loadUnits();
-
-                $this->_name = $this->name;
-                $this->_type = 'GTUnit';
-                $this->_mode = '';
-                $this->_info = [
-                    'dataUnits'     => $data,
-                    'dataClients'   => $this->loadClients(),
-                    'dataAccounts'  => $this->loadAccounts(),
-					'tracking'      => $this->loadTracking(),
-					'pathImages'	=> PATH_IMAGES,
-					'caption'		=> 'Unidades',
-					'id'            => 'k',
-					'followMe'		=> true,
-					'delay'			=> 60000,
-				];
-			case 'tracking':
-				$this->setRequest($this->updateTracking());
-				break;
-			default:
-				break;
-
-		}
 		
 		return true;
 	}
 	
 	private function load(){
+		$this->loadCatalogue($this->name);
         $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-unit-'.$this->id;
-		$this->panel->innerHTML = 'gt-unit-'.$this->id;
-		$this->typeElement = 'GTUnit';
+		$this->panel->id = 'gt-catalogue-'.$this->id;
+
+		$html = $this->evalTemplate($this->htmlTemplate, 'master');
+
+		if(!$html){
+			$html = 'Error';
+		}
+		//hr($html);
+
+		//exit;
+		$this->panel->innerHTML = $html;
+		
+		//$this->typeElement = 'GTUnit';
 
 		$this->info = [
 			'id'=>$this->panel->id,
@@ -103,5 +86,7 @@ class Unit
 	public function getRequest(){
 		return $this->_jsonRequest;
 	}
+
+	
 
 }

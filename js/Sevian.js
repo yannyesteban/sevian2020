@@ -60,23 +60,43 @@ var S = (($) => {
                 f = this.addPanel(panel);
             }
             if (info.window) {
-                let win;
-                if (info.window.name && this._w[info.window.name]) {
+                let win, winName;
+                if (info.window.name) {
+                    winName = info.window.name;
+                }
+                else {
+                    winName = info.panel;
+                }
+                if (this._w[winName]) {
+                    win = this._w[winName];
+                }
+                else {
+                    win = this._w[winName] = this.createWindow(info.window);
+                }
+                if (info.window.panel) {
+                    win.setBody(this.getForm(info.window.panel));
+                }
+                else {
+                    win.setBody(f);
+                }
+                //alert(winName);
+                //win.show();
+                /*
+                if(info.window.name && this._w[info.window.name]){
                     win = this._w[info.window.name];
-                }
-                else if (this._w[info.panel]) {
+
+                }else if(this._w[info.panel]){
                     win = this._w[info.panel];
-                }
-                else if (info.window.name) {
+                }else if(info.window.name){
                     win = this._w[info.window.name] = this.createWindow(info.window);
                     this._w[info.window.name].setBody(f);
                     //this._w[info.window.name].show({left:"center",top:"middle"});
-                }
-                else {
+                
+                }else{
                     win = this._w[panel] = this.createWindow(info.window);
                     this._w[panel].setBody(f);
                     //this._w[panel].show({left:"center",top:"middle"});
-                }
+                }*/
                 if (info.window.caption) {
                     win.setCaption(info.window.caption);
                 }

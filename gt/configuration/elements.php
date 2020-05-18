@@ -129,6 +129,31 @@ $cls_elements['gt_unit'] = [
 	'css'=>[]
 	
 ];
+$cls_elements['gt_info_unit'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/InfoUnit.php',
+	'class' => '\GT\InfoUnit',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/InfoUnit.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
+
+$cls_elements['catalogue'] = [
+	
+	'file' 	=> MAIN_PATH.'Sigefor/Catalogue.php',
+	'class' => '\Sigefor\Catalogue',
+	'enable' => true,
+	'js_'=>[[
+		'file' 	=> MAIN_PATH.'js/InfoUnit.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
 
 Sevian\S::elementsLoad($cls_elements);
 
