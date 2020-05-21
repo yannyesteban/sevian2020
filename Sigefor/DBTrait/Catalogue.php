@@ -48,7 +48,10 @@ trait Catalogue {
 	private $tCatalogue = "_sg_catalogues";
 	private $vreq = [];
 
+	private $msgError = null;
 
+
+	
 	public function loadCatalogue($name){
 		if($this->getJsonFileName($name)){
 			$info = $this->loadJsonCatalogue($name);
@@ -107,7 +110,8 @@ trait Catalogue {
 				//hr($query);exit;
 				$this->_querys = json_decode($query);
 				if(\json_last_error()){
-					hr("error ".\json_last_error_msg());
+					hr("Calalogue: error ".\json_last_error_msg(), "red","pink");
+					hr($query);
 				}
 			}else{
 				$this->_querys = $this->querys;
@@ -131,7 +135,8 @@ trait Catalogue {
 			FROM $this->tCatalogue 
 			WHERE catalogue = '$name'
 		";
-
+		
+		//hr($cn->query,"red","pink");
 		$this->cn->execute();
 		return $this->cn->getDataAssoc();
 	}

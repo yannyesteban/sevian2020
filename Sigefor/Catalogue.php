@@ -21,6 +21,9 @@ class Catalogue
     public $_info = null;
 	
 	private $_jsonRequest = null;
+	private $html = '';
+	private $caption = '';
+	private $class = '';
 
     public function __construct($info = []){
         foreach($info as $k => $v){
@@ -47,23 +50,15 @@ class Catalogue
 	
 	private function load(){
 		$this->loadCatalogue($this->name);
-        $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-catalogue-'.$this->id;
 
-		$html = $this->evalTemplate($this->htmlTemplate, 'master');
+		$this->html = $this->evalTemplate($this->htmlTemplate, 'master');
+		/*
 
-		if(!$html){
-			$html = 'Error';
-		}
-		//hr($html);
-
-		//exit;
-		$this->panel->innerHTML = $html;
 		
 		//$this->typeElement = 'GTUnit';
-
+		*/
 		$this->info = [
-			'id'=>$this->panel->id,
+			'id'=>'gt-catalogue-'.$this->id,
 			'panel'=>$this->id,
 			'tapName'=>'yanny'
 		];
@@ -79,6 +74,14 @@ class Catalogue
 		];  
 	}
 
+	public function getComponent(){
+		return [
+			'id'		=> 'gt-catalogue-'.$this->id,
+			'caption'	=> $this->caption,
+			'className'	=> $this->class,
+			'html'		=> $this->getHTML(),
+		];
+	}
 	public function setRequest($data){
 		$this->_jsonRequest = $data;
 	}
@@ -87,6 +90,20 @@ class Catalogue
 		return $this->_jsonRequest;
 	}
 
+	public function getHTML(){
+		return ($this->html)? $this->html: $this->msgError->any??'error';
+		
+	}
+
+	public function getPanel(){
+		
+        $this->panel = new \Sevian\HTML('div');
+		$this->panel->id = 'gt-catalogue-'.$this->id;
+		
+		$this->panel->innerHTML = $this->getHTML();
+
+		return $this->panel;	
+	}
 	
 
 }

@@ -30,3 +30,13 @@ tambian pensar en un sistema de paginacion para el master query
 */
 
 
+
+/*
+
+crear un magic texto
+
+para agregar numeros telefonicos, listado de codigos con prefijo
+d4309040 es igual a (0416)430.90.40
+
+*/
+

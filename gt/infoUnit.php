@@ -45,6 +45,9 @@ class InfoUnit
 			case 'load':
 				$this->load();
 				break;
+			case 'load_info':
+				$this->loadInfo('');
+				break;
             case 'load-units':
                 $data = $this->loadUnits();
 
@@ -76,13 +79,13 @@ class InfoUnit
 	private function load(){
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-unit-'.$this->id;
-		$this->panel->innerHTML = 'gt-unit-'.$this->id;
+		//$this->panel->innerHTML = 'gt-unit-'.$this->id;
 		$this->typeElement = 'GTInfoUnit';
 
 		$g =  new \Sigefor\Component\Form([
 			'panelId'=>$this->id,
 			//'name'=>$this->name,
-			'name'=>'main_command',
+			'name'=>'gt_unit_info_main',
 			'method'=>'request',
 			'mode'=>1
 			//'record'=>$this->getRecord()
@@ -95,7 +98,21 @@ class InfoUnit
 			'form'	=> $g,
 		];
 
-    }
+	}
+	
+	private function loadInfo($unit_id){
+		$cat = new \Sigefor\Catalogue([
+			'id'=>$this->id,
+			'name'=>'uno',
+			'method'=>'load'
+		]);
+		$cat->evalMethod();
+		$this->info[] = [
+			'method'  => 'loadCatalogue',
+			'value'=>$cat->getComponent(),
+			'_args' => [1,1,1]
+		];
+	} 
     
     public function jsonSerialize() {  
         return [

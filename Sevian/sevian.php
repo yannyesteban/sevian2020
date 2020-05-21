@@ -107,9 +107,19 @@ class S{
 	public static function setSes($key, $value){
 		self::$ses[$key] = $value;
 	}
+
 	public static function setReq($key, $value){
 		self::$req[$key] = $value;
 	}
+
+	public static function addSes($ses){
+		self::$ses = array_merge(self::$ses, $ses);
+	}
+
+	public static function addReq($req){
+		self::$req = array_merge(self::$req, $req);
+	}
+
 	public static function setExp($key, $value){
 		self::$exp[$key] = $value;
 	}
@@ -361,13 +371,13 @@ class S{
 			}
 		}
 
-		if($e->panel){
+		if($_panel = $e->getPanel()){
 			self::$_panels[$info->id] = new InfoElement($info);
 			self::$_panels[$info->id]->update = true;
 			self::$_p[$info->id] = true;
 			self::$_info[$info->id]->isPanel = true;
 			// if this->main panel then title = this->title
-			self::$_str->addPanel($info->id, $e->getPanel());
+			self::$_str->addPanel($info->id, $_panel);
 			//print_r($e->config());
 			//self::addJsPanel($e->config());
 			self::addJsPanel($e->configPanel());
@@ -624,10 +634,13 @@ class S{
 	public static function command($cmd){
 
 		switch($cmd->t){
-			case "vses":
 			
-				self::setSes(key($params), current($params));
-				
+
+			case "addSes":
+				self::addSes((array)$cmd->param);
+				break;			
+			case "addReq":
+				self::addReq((array)$cmd->param);
 				break;			
 			case "vexp":
 				//$this->_setVars($this->exp, $params);

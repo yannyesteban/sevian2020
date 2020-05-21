@@ -42,7 +42,7 @@ trait Form{
 		
 		$this->cn->query = "
 			SELECT 
-			field, alias, caption, input, input_type as \"type\", cell, cell_type as \"cellType\",
+			field, alias, coalesce(caption, '') as caption, input, input_type as \"type\", cell, cell_type as \"cellType\",
 			class, `default`, mode_value as \"modeValue\",data, params,method,rules,events,info 
 			FROM $this->tFields 
 			WHERE form = '$name'

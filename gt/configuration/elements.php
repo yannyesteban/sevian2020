@@ -154,6 +154,18 @@ $cls_elements['catalogue'] = [
 	'css'=>[]
 	
 ];
+$cls_elements['fcatalogue'] = [
+	
+	'file' 	=> MAIN_PATH.'Sigefor/FCatalogue.php',
+	'class' => '\Sigefor\FCatalogue',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'js/FCatalogue.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
 
 Sevian\S::elementsLoad($cls_elements);
 

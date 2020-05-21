@@ -1,8 +1,9 @@
-var GTInfoUnit = (($)=>{
+var SGFCatalogue = (($)=>{
 	
-	class InfoUnit{
+	class FCatalogue{
 		id:any = null;
-		form:object = null;
+        form:object = null;
+        catalogue:object = null;
 		_main:object = null;
 		_form:object = null;
 
@@ -19,11 +20,11 @@ var GTInfoUnit = (($)=>{
             
             if(main){
                 
-                if(main.ds("gtCota")){
+                if(main.ds("sg-f-catalogue")){
                     return;
                 }
     
-                if(main.hasClass("gt-cota")){
+                if(main.hasClass("sg-f-catalogue")){
                     this._load(main);
                 }else{
                     this._create(main);
@@ -38,7 +39,7 @@ var GTInfoUnit = (($)=>{
 		
         }
         _create(main:any){
-            main.addClass("cota-main");
+            main.addClass("sg-f-catalogue");
 
             if(this.form){
 				this.form.target = main.id();
@@ -50,15 +51,18 @@ var GTInfoUnit = (($)=>{
             this._infoBody = main.create("div");
 
 
-         
+            if(this.catalogue){
+                this.loadCatalogue(this.catalogue);
+            }
         }
 
         loadCatalogue(info:object){
+			
             this._infoBody.text(info.html);
         }
 	}
 
-	return InfoUnit;
+	return FCatalogue;
 
 
 })(_sgQuery);

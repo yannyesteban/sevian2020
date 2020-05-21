@@ -1,8 +1,9 @@
-var GTInfoUnit = (($) => {
-    class InfoUnit {
+var SGFCatalogue = (($) => {
+    class FCatalogue {
         constructor(info) {
             this.id = null;
             this.form = null;
+            this.catalogue = null;
             this._main = null;
             this._form = null;
             this._infoBody = null;
@@ -13,10 +14,10 @@ var GTInfoUnit = (($) => {
             }
             let main = (this.id) ? $(this.id) : false;
             if (main) {
-                if (main.ds("gtCota")) {
+                if (main.ds("sg-f-catalogue")) {
                     return;
                 }
-                if (main.hasClass("gt-cota")) {
+                if (main.hasClass("sg-f-catalogue")) {
                     this._load(main);
                 }
                 else {
@@ -29,17 +30,20 @@ var GTInfoUnit = (($) => {
             }
         }
         _create(main) {
-            main.addClass("cota-main");
+            main.addClass("sg-f-catalogue");
             if (this.form) {
                 this.form.target = main.id();
                 this.form.parentContext = this;
                 this._form = new Form2(this.form);
             }
             this._infoBody = main.create("div");
+            if (this.catalogue) {
+                this.loadCatalogue(this.catalogue);
+            }
         }
         loadCatalogue(info) {
             this._infoBody.text(info.html);
         }
     }
-    return InfoUnit;
+    return FCatalogue;
 })(_sgQuery);
