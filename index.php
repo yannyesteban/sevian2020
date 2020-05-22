@@ -8,8 +8,6 @@ define("PATH_IMAGES", "images/");
 include MAIN_PATH.'Sevian/functions.php';
 include MAIN_PATH.'Sevian/sevian.php';
 
-
-
 include MAIN_PATH.'configuration/themes.php';
 include MAIN_PATH.'configuration/bd.php';
 include MAIN_PATH.'configuration/inputs.php';

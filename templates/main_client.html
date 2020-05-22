@@ -1,0 +1,73 @@
+<div class="gt cota catalogue">
+	<div class="caption">{=client}</div>
+	<div class="body">
+	
+		<div class="page main">
+
+			<div class="field">
+				<div class="caption">Número de Cuentas</div>
+				<div class="value">{=account_count}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Número de Unidades</div>
+				<div class="value">{=unit_count}</div>
+			</div>
+			
+		</div>
+		
+		<div class="page account">
+			
+			<div class="title">Cuenta</div>
+			<div class="title">Estado</div>
+			
+			
+			<for data="accounts">
+			
+				<div><a href="javascript:void(0)" onclick="GT.c('accounts', 'account_id', '{=account_id}')">{=account}</a></div>
+				<div>{=unit_count_2}</div>
+				
+			
+			</for>
+		
+		</div>
+		
+	
+		<div class="page contact">
+			
+			<div class="title">Nombre</div>
+			<div class="title">Cargo</div>
+			<div class="title">Telefonos</div>
+			<div class="title">Email</div>
+			
+			<for data="contacts">
+			
+				<div>{=name} {=last_name}</div>
+				<div>{=position}</div>
+				<div>{=phone}</div>
+				<div class="email">{=email}</div>
+			
+			</for>
+		
+		</div>
+		
+		
+		<div class="page units">
+			
+			<div class="title">Unidad</div>
+			<div class="title">Equipo</div>
+			<div class="title">Estado</div>
+			
+			
+			<for data="units">
+			
+				<div><a href="javascript:void(0)" onclick="GT.c('units', 'unit_id', '{=unit_id}')">{=vehicle_name}</a></div>
+				<div>{=device_name}</div>
+				<div>Acivo</div>
+				
+			
+			</for>
+		
+		</div>
+		
+	</div>	
+</div>

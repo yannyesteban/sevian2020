@@ -1,0 +1,6 @@
+{"master":"SELECT
+d.id as device_id, d.version_id, d.serial, d.imei, d.password, d.phone_number_id, d.comment, d.status, v.name as version
+
+FROM devices as d
+LEFT JOIN devices_versions as v ON v.id = d.version_id
+WHERE d.id = 2358"}

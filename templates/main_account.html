@@ -1,0 +1,85 @@
+<div class="gt cota catalogue">
+	<div class="caption">{=account}</div>
+	<div class="body">
+	
+		<div class="page main">
+			
+			<div class="field">
+				<div class="caption">Cliente</div>
+				<div class="value"><a href="javascript:void(0)" onclick="GT.c('clients', 'client_id', '{=client_id}')">{=client}</a></div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">person_id</div>
+				<div class="value">{=person_id}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">city</div>
+				<div class="value">{=city}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">address</div>
+				<div class="value">{=address}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">email</div>
+				<div class="value">{=email}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">phone</div>
+				<div class="value">{=phone}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">status</div>
+				<div class="value">{=status}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">comment</div>
+				<div class="value">{=comment}</div>
+			</div>
+		</div>
+	
+		<div class="page contact">
+			
+			<div class="title">Nombre</div>
+			<div class="title">Cargo</div>
+			<div class="title">Telefonos</div>
+			<div class="title">Email</div>
+			
+			<for data="contacts">
+			
+				<div>{=name} {=last_name}</div>
+				<div>{=position}</div>
+				<div>{=phone}</div>
+				<div class="email">{=email}</div>
+			
+			</for>
+		
+		</div>
+		
+		<div class="page units">
+			
+			<div class="title">Unidad</div>
+			<div class="title">Equipo</div>
+			<div class="title">Estado</div>
+			
+			
+			<for data="units">
+			
+				<div><a href="javascript:void(0)" onclick="GT.c('units', 'unit_id', '{=unit_id}')">{=vehicle_name}</a></div>
+				<div>{=device_name}</div>
+				<div>Acivo</div>
+				
+			
+			</for>
+		
+		</div>
+		
+	</div>	
+</div>

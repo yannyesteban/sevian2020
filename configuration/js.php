@@ -156,6 +156,11 @@ $js = [
 		
 		//'attrib' => [			'_type'=>'module'		]
 	],
+	[
+		'file' 	=> "{$PATH}gt/js/Actions.js",
+		
+		//'attrib' => [			'_type'=>'module'		]
+	],
 ];
 
 Sevian\S::jsInit($js);

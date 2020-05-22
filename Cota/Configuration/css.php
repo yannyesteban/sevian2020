@@ -13,6 +13,7 @@ $css = array(
 	"{$PATH}css/gt_grid.css",
 	"{$PATH}css/Paginator.css",
 	"{$PATH}css/gt_command.css",
+	"{$PATH}css/gt_catalogue.css",
 	/*
 	"{$PATH}css/gt_main.css",
 	"{$PATH}css/gt_map.css",

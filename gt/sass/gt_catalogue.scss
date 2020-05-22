@@ -1,0 +1,105 @@
+.gt{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	>*{
+		height: 100%;
+	}
+}
+
+.sg-f-catalogue{
+	height: 100%;
+	background-color: blue;
+	display: flex;
+	flex-direction: column;
+	>*:nth-child(2){
+		//height: 100%;
+	}
+}
+
+.gt.cota.catalogue{
+
+	background-color: rgb(228, 228, 228);
+	font-size: 0.8em;
+	font-family: tahoma;
+	padding: 4px;
+	>.caption{
+		line-height: 1.5em;
+		background-color: darkorange;
+		color:white;
+		padding: 6px;
+		text-align: center;
+		font-weight: bold;
+	}
+	a{
+		text-decoration-line: none;
+		color: rgb(241, 252, 86);
+		&:hover{
+			color: rgb(183, 250, 255);
+			text-decoration-line: underline;
+		}
+	}
+	.page{
+		padding: 10px;
+		.field{
+			padding: 4px;
+			.caption{
+				color: rgb(255, 255, 255);
+				
+			}
+			.value{
+				padding: 2px;
+				font-weight: bold;
+				color:rgb(255, 237, 75);
+				padding-left: 10px;
+			}
+		}
+	}
+	>.body{
+		
+		display: flex;
+		flex-direction: row;
+		>.main{
+			flex: 1 1 30%;
+		}
+		>.contact{
+			flex: 1 1 auto;
+		}
+
+		>.main{
+			background-color: rgb(228, 65, 24);
+			color:white;
+		}
+
+		>.contact{
+			background-color: crimson;
+			color:white;
+		}
+	}
+
+	.contact{
+		
+		display: grid;
+		//height: 100%;
+		overflow: auto;
+		grid-gap: 3px;
+		text-transform: uppercase;
+		grid-template-columns: auto auto auto auto;
+		font-size: 0.9em;
+		
+		>*{
+			//display: table-row;
+			background-color: rgba(252, 252, 252, 0.2);
+			padding: 3px;
+			text-transform: capitalize!important;
+			
+			
+			
+		}
+
+		.email{
+			text-transform: lowercase;
+		}
+	}
+
+}

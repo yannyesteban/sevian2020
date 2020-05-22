@@ -152,7 +152,7 @@ trait Form{
 			
 				$params = \Sevian\S::varCustom($params, $values, '&');
 				$params = json_decode(\Sevian\S::vars($params));
-
+			
 				$field->events = (object)[];
 				foreach($params as $k => $v){
 					$field->events->$k = $v;
