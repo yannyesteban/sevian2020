@@ -62,6 +62,9 @@ class structure2
 				$userInfo = $this->login();
 				
 				break;
+			case 'load-panel':
+				//$this->loadPanel($this->eparams->panelId);
+			break;
 		}
 		return true;		
 	}
