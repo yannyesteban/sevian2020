@@ -1,4 +1,26 @@
 <?php 
+namespace Sevian;
+
+include "sevian/Tool.php";
+
+$q = '$if(1+3-4){"hola":"yanny"}';
+$w = "@if('a'=='1')(dfgdfg)(dfgdfg)";
+$r = Tool::evalExp($q);
+
+
+print_r($r);exit;
+
+
+$a = '
+{"a":"{if}"}
+
+';
+
+
+$d = json_decode($a);
+
+print_r($d);exit;
+
 $p = "{
 	(?(DEFINE)
 		(?<cmll>[\"'])

@@ -108,7 +108,7 @@ var S = (($) => {
 				}
 
 				if(this._w[winName]){
-					win = this._w[winName]
+					win = this._w[winName];
 				}else{
 					win = this._w[winName] = this.createWindow(info.window);
 				}

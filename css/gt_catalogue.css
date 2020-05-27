@@ -31,8 +31,8 @@
 }
 .gt.cota.catalogue > .caption {
   line-height: 1.5em;
-  background-color: darkorange;
-  color: white;
+  background-color: white;
+  color: #156ef3;
   padding: 6px;
   text-align: center;
   font-weight: bold;
@@ -40,10 +40,10 @@
 .gt.cota.catalogue a {
   -webkit-text-decoration-line: none;
           text-decoration-line: none;
-  color: #f1fc56;
+  color: #4baeff;
 }
 .gt.cota.catalogue a:hover {
-  color: #b7faff;
+  color: #a1a1a1;
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
 }
@@ -54,12 +54,12 @@
   padding: 4px;
 }
 .gt.cota.catalogue .page .field .caption {
-  color: white;
+  color: #b4b4b4;
 }
 .gt.cota.catalogue .page .field .value {
   padding: 2px;
   font-weight: bold;
-  color: #ffed4b;
+  color: #4baeff;
   padding-left: 10px;
 }
 .gt.cota.catalogue > .body {
@@ -82,12 +82,12 @@
           flex: 1 1 auto;
 }
 .gt.cota.catalogue > .body > .main {
-  background-color: #e44118;
-  color: white;
+  background-color: #fdfdfd;
+  color: #1ac0f3;
 }
 .gt.cota.catalogue > .body > .contact {
-  background-color: crimson;
-  color: white;
+  background-color: white;
+  color: #274781;
 }
 .gt.cota.catalogue .contact {
   display: grid;
@@ -98,7 +98,7 @@
   font-size: 0.9em;
 }
 .gt.cota.catalogue .contact > * {
-  background-color: rgba(252, 252, 252, 0.2);
+  background-color: #ececec;
   padding: 3px;
   text-transform: capitalize !important;
 }

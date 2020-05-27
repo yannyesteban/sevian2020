@@ -25,17 +25,17 @@
 	padding: 4px;
 	>.caption{
 		line-height: 1.5em;
-		background-color: darkorange;
-		color:white;
+		background-color: rgb(255, 255, 255);
+		color:rgb(21, 110, 243);
 		padding: 6px;
 		text-align: center;
 		font-weight: bold;
 	}
 	a{
 		text-decoration-line: none;
-		color: rgb(241, 252, 86);
+		color: rgb(75, 174, 255);
 		&:hover{
-			color: rgb(183, 250, 255);
+			color: rgb(161, 161, 161);
 			text-decoration-line: underline;
 		}
 	}
@@ -44,13 +44,13 @@
 		.field{
 			padding: 4px;
 			.caption{
-				color: rgb(255, 255, 255);
+				color: rgb(180, 180, 180);
 				
 			}
 			.value{
 				padding: 2px;
 				font-weight: bold;
-				color:rgb(255, 237, 75);
+				color:rgb(75, 174, 255);
 				padding-left: 10px;
 			}
 		}
@@ -67,13 +67,13 @@
 		}
 
 		>.main{
-			background-color: rgb(228, 65, 24);
-			color:white;
+			background-color: rgb(253, 253, 253);
+			color:rgb(26, 192, 243);
 		}
 
 		>.contact{
-			background-color: crimson;
-			color:white;
+			background-color: rgb(255, 255, 255);
+			color:rgb(39, 71, 129);
 		}
 	}
 
@@ -89,7 +89,7 @@
 		
 		>*{
 			//display: table-row;
-			background-color: rgba(252, 252, 252, 0.2);
+			background-color: rgb(236, 236, 236);
 			padding: 3px;
 			text-transform: capitalize!important;
 			

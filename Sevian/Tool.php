@@ -8,7 +8,6 @@ class Tool{
 	static function evalIf($exp, $q, $then, $else) {
 	
 		eval("\$v = $q;");
-		
 	
 		if($v){
 			$qq = $then;
@@ -32,7 +31,7 @@ class Tool{
 	}
 
 
-	static function evalExp($q){
+	static function evalExp($q){	
 
 		$exp = '
 		/
@@ -123,10 +122,10 @@ class Tool{
 		}
 		exit;
 
-//		preg_match('/(foo)(bar)(baz)/', 'foobarbaz', $matches, PREG_OFFSET_CAPTURE);
-//print_r($matches);
+		//		preg_match('/(foo)(bar)(baz)/', 'foobarbaz', $matches, PREG_OFFSET_CAPTURE);
+		//print_r($matches);
 
-//exit;
+		//exit;
 
 
 		$pcre_regex = '
@@ -152,21 +151,21 @@ class Tool{
 		)
 		((?&if))
 		/six';
-$c= "yanny";
+		$c= "yanny";
 		$q1 = 'yan @if(uno){4565}{46465}';
-	  if(preg_match($pcre_regex, $q1, $c)){
-		print_r($c);
+		if(preg_match($pcre_regex, $q1, $c)){
+			print_r($c);
 
-	
-		return"";
-	}else{
 		
-		hr("Error: ".$q);
-		//throw new Exception($q);
-		//return array();	
-		
-	}// end if
-return;
+			return"";
+		}else{
+			
+			hr("Error: ".$q);
+			//throw new Exception($q);
+			//return array();	
+			
+		}// end if
+		return;
 
 		hr($q);
 		$c = "xx";
