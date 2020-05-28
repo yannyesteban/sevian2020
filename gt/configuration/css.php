@@ -34,8 +34,8 @@ $css = array(
 );
 
 $css = array(
-	"{$PATH}css/cota_main.css",
-	"{$PATH}css/cota.css",
+	"{$PATH}GT/css/cota_main.css",
+	"{$PATH}Gt/css/cota.css",
 	"{$PATH}css/gt_form.css",
 	"{$PATH}css/Window.css",
 

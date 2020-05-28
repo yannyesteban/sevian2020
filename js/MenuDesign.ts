@@ -1534,5 +1534,5 @@ function loadMenu(){
 }
 _sgQuery(window).on("load", function(){
 	
-	loadMenu()
+	//loadMenu()
 });

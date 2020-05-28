@@ -116,7 +116,7 @@ var S = (($) => {
 				if(info.window.panel){
 					win.setBody(this.getForm(info.window.panel));
 				}else{
-					win.setBody(f);
+					//win.setBody(f);
 				}
 				//alert(winName);
 				//win.show();

@@ -1143,5 +1143,5 @@ function loadMenu() {
     //alert($("#design").text());
 }
 _sgQuery(window).on("load", function () {
-    loadMenu();
+    //loadMenu()
 });

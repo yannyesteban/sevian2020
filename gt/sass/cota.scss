@@ -1,12 +1,24 @@
+.cota-main{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  >*{
+    flex: 1 1 auto;
+  }
+  .map-main{
+			height: 100%;
+		}
+
+}
+
+
 .gt-cota{
 	>.menu{
 		display: flex;
 		flex-direction: row;
 	}
 	>.body{
-		.map-main{
-			height: 100%;
-		}
+		
 	}
 }
 
@@ -87,3 +99,43 @@
         border:2px solid red;
       }
     }
+
+
+.subwin{
+      display: grid;
+      //grid-gap: 20px;
+      grid-template-columns: 200px auto;
+      grid-template-rows: auto;
+
+      height: 100%;
+      overflow: auto;
+
+
+    >:nth-child(1){
+      
+      grid-row: 1;
+      grid-column: 1;
+      height: 100%;
+      overflow: auto;
+      //max-width: 200px;
+    }
+    >:nth-child(2){
+      
+      grid-row: 1;
+      grid-column:2;
+      height: 100%;
+      overflow: auto;
+    }
+
+}
+
+
+.sgWin{
+  .body{
+    height: 100%;
+  }
+}
+
+.sg-grid{
+  height: 100%;
+}

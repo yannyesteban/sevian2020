@@ -15,6 +15,8 @@ var Cota = (($) => {
             this.tapName = null;
             this.unit = null;
             this.form = null;
+            this._menu = null;
+            this._body = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -38,13 +40,19 @@ var Cota = (($) => {
             }
         }
         _create(main) {
-            main.addClass("cota-main").addClass("map-main");
+            this._menu = main.create("div").addClass("cota-menu");
+            this._body = main.create("div").addClass("map-main");
+            main.addClass("cota-main"); //.addClass("map-main");
             if (this.form) {
-                this.form.target = main.id();
+                //this.form.target = main.id();
+                this.form.id = this._menu;
                 this.form.parentContext = this;
                 this._form = new Form2(this.form);
             }
-            this.map = new MapBox({ id: `${this.id}` });
+            this.map = new MapBox({
+                //id:`${this.id}`
+                id: this._body.get()
+            });
             //            console.log (this.unit.info)
             this.unit.info.map = this.map;
             let unit = new GTUnit(this.unit.info);
