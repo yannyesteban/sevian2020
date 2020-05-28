@@ -1,6 +1,12 @@
 <?php
 namespace Sevian;
 
+interface DBInfo{
+    public function setDBInfo($info);
+    public function getDBInfo();
+
+}
+
 interface UserInfo{
     public function setUserInfo($info);
     public function getUserInfo();

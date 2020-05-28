@@ -8,16 +8,26 @@ trait Template{
 	
 	private $htmlTemplate = '';
 	
+	static public $patternTemplateFile = '';
+
 	public function loadTemplate($name){
 		
 		if($name){
 			if(substr($name, 0, 1) == '#'){
+				$name = substr($name, 1);
+
+		
+				$path = str_replace('{name}', $name, self::$patternTemplateFile);
+				
+				$this->htmlTemplate = $this->loadFileTemplate($path);
+				
+				
 
 			}else{
-				$info = $this->loadDBTemplate($name);
+				$this->htmlTemplate = $this->loadDBTemplate($name);
 			}
 			
-			$this->htmlTemplate = $info['htmlTemplate'] ?? '';
+			//$this->htmlTemplate = $info['htmlTemplate'] ?? '';
 		}
 	}
 
@@ -39,10 +49,8 @@ trait Template{
 		return $info;
 	}
 
-	public function loadJsonStructure($file){
-		
-		$info = json_decode(file_get_contents($file, true));
-		return $this->jsonConfig($info);
+	public function loadFileTemplate($file){
+		return @file_get_contents($file, true);
 	}
 
 	public function loadDBTemplate($name){
@@ -50,12 +58,16 @@ trait Template{
 		$name = $this->cn->addSlashes($name);
 		
 		$this->cn->query = "
-			SELECT html as htmlTemplate, params 
+			SELECT html as htmlTemplate 
 			FROM $this->tTemplates 
 			WHERE template = '$name'";
 
 		$result = $this->cn->execute();
-		return $this->cn->getDataAssoc($result);
+
+		if($rs = $this->cn->getDataAssoc($result)){
+			return $rs['htmlTemplate'];
+		}
+		return '';
 	}
 	
 }

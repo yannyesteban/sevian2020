@@ -22,7 +22,9 @@ class ModuloInfo{
 
 class Module extends \Sevian\Element{
 
-    protected $tModules = "_sg_modules";
+    static public $patternJsonFile = '';
+
+    protected $tModules = '_sg_modules';
     protected $info;
 
     public function __construct($opt = []){

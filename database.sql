@@ -145,14 +145,17 @@ CREATE TABLE  `oak`.`_sg_menus` (
 
 DROP TABLE IF EXISTS `oak`.`_sg_modules`;
 CREATE TABLE  `oak`.`_sg_modules` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(30) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `structure` varchar(30) DEFAULT NULL,
   `params` text,
+  `methods` text,
   `theme` varchar(30) DEFAULT NULL,
   `debug` int(1) DEFAULT '0',
   `design` int(1) DEFAULT '0',
-  PRIMARY KEY (`module`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `module` (`module`)
 ) ;
 
 DROP TABLE IF EXISTS `oak`.`_sg_procedures`;

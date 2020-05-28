@@ -336,9 +336,17 @@ class S{
 		$e->evalMethod();
 		$e->getSequenceAfter();
 
+		if($e instanceof \Sevian\DBInfo){
+			$dbInfo = $e->getDBInfo();
+			foreach($dbInfo as $k => $v){
+				Connection::set($k, $v);
+			}
+		}
+
 		if($e instanceof \Sevian\CSSDocAdmin){
 			self::addCss($e->getCSSDocuments());
 		}
+
 		if($e instanceof \Sevian\JsDocAdmin){
 			self::addJs($e->getJsDocuments());
 		}

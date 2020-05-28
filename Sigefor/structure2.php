@@ -26,6 +26,7 @@ class structure2
 	private $infoPanels = null;
 	
 	static public $patternJsonFile = '';
+	static public $patternTemplateFile = '';
 	static public $verificationRoles = 'db';
 	static public $usePublicRole = true;
 	private $_userInfo = null;
