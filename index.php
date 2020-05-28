@@ -4,8 +4,10 @@ define("MAIN_PATH", "");
 define("IMAGES_PATH", "images/");
 define("PATH_IMAGES", "images/");
 
+define("SEVIAN_PATH", "");
+define("SIGEFOR_PATH", "");
 
-include MAIN_PATH.'Sevian/functions.php';
+include MAIN_PATH.'Sevian/Functions.php';
 include MAIN_PATH.'Sevian/sevian.php';
 
 include MAIN_PATH.'configuration/themes.php';
