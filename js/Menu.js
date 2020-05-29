@@ -29,6 +29,7 @@ var Menu = (function ($, Float) {
             this._main = null;
             this.action = null;
             this.check = null;
+            this.onDataUser = null;
             this.useCheck = true;
             this.useIcon = true;
             this.parentContext = this;
@@ -36,6 +37,7 @@ var Menu = (function ($, Float) {
             this._isItem = false;
             this._action = function (index, event = null) { };
             this._check = function (index, event = null) { };
+            this._info = function (info, event = null) { };
             let x;
             for (x in opt) {
                 if (this.hasOwnProperty(x)) {
@@ -328,8 +330,12 @@ var Menu = (function ($, Float) {
                 link.on("click", (event) => { this.show(item); });
             }
             else if (info.action) {
-                let action = $.bind(info.action, this.parentContext, "item");
-                link.on("click", (event) => { action(item, event); });
+                let action = $.bind(info.action, this.parentContext, "item, dataUser");
+                link.on("click", (event) => { action(item, info.dataUser || false, event); });
+            }
+            else if (this.onDataUser) {
+                let action = $.bind(this.onDataUser, this.parentContext, "item, dataUser");
+                link.on("click", (event) => { action(item, info.dataUser || false, event); });
             }
             if (info.events) {
                 for (let i in info.events) {

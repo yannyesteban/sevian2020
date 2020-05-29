@@ -1,0 +1,34 @@
+{
+	"form":"contact_type",
+	"caption":"Tipos de Contactos",
+	"class":"",
+	"query":"SELECT * FROM contact_type",
+	"menuName":"grid_menu",
+	"methods":{
+		"request":{
+			"menuName":"request_menu"
+		},
+		"load":{
+			"menuName":"request_menu"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":{
+		"id":{
+			
+			"name":"id",
+			"caption":"Código",
+			
+			"params":{
+				"caption":"Un Campo ID"
+			}
+		}
+	},
+	"searchFor":[
+		"type"
+	]
+
+}

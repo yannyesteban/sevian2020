@@ -15,6 +15,12 @@ class Form{
 
 	public $pages = "";
 	public $menu = "";
+
+	public function __construct($info = []){
+		foreach($info as $k => $v){
+			$this->$k = $v;
+		}
+	}
 	
 	
 }

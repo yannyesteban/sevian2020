@@ -557,7 +557,9 @@ class S{
 			require_once($info['file']);
 		}
 		self::$_clsElement[$name] = $info['class'];
-		self::$_clsElement[$name]::$_element = $name;
+
+		self::$_clsElement[$name]::setElementName($name);
+		//self::$_clsElement[$name]::$_element = $name;
 
 		if(isset($info['init'])){
 			// asigning static propertys at the class 

@@ -39,6 +39,7 @@ var Menu =
         
         action:any = null;
         check:any = null;
+        onDataUser:any = null;
         useCheck:boolean = true;
         useIcon:boolean = true;
 
@@ -48,6 +49,7 @@ var Menu =
 
         _action = function(index, event = null){};
         _check = function(index, event = null){};
+        _info = function(info, event = null){};
         static _objs = [];
         static init(){
             let menus = $().queryAll(".sg-menu.sg-detect");
@@ -393,8 +395,11 @@ var Menu =
                 this.createMenu(item, info.items, true);
                 link.on("click", (event)=>{this.show(item);});
             }else if(info.action){
-                let action = $.bind(info.action, this.parentContext, "item");
-                link.on("click", (event)=>{action(item, event);});
+                let action = $.bind(info.action, this.parentContext, "item, dataUser");
+                link.on("click", (event)=>{action(item, info.dataUser || false, event);});
+            }else if(this.onDataUser){
+                let action = $.bind(this.onDataUser, this.parentContext, "item, dataUser");
+                link.on("click", (event)=>{action(item, info.dataUser || false, event);});
             }
 
             if(info.events){

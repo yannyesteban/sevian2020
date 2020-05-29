@@ -1,59 +1,20 @@
 <?php
-namespace sigefor;
+namespace SIGEFOR;
 
+require_once MAIN_PATH.'Sigefor/DBTrait/DataRecord.php';
+require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
-
-include "component/Form.php";
+include "component/Form2.php";
 include "component/Menu.php";
 
-trait DataRecord{
-
-	
-
-	public $_masterData = [];
-	public $_lastRecord = [];
-
-	public function initDataRecord(){
-
-		if(!$this->getSes('_masterData')){
-			$this->setSes('_masterData', []);
-		}
-
-		if(!$this->getSes('_lastRecord')){
-			$this->setSes('_lastRecord', []);
-		}
-
-		$this->_masterData = &$this->getSes('_masterData');
-		$this->_lastRecord = &$this->getSes('_lastRecord');
-
-	}
-
-	public function setDataRecord($key, $record){
-		$this->_masterData[$key] = $record;
-	}
-	public function getDataRecord($key){
-		return $this->_masterData[$key];
-	}
-	public function getRecord($name, $index){
-
-		if($this->_lastRecord){
-			//return $this->_lastRecord;
-		}
-		
-		$record = $this->_masterData[$name][$index];
-		$this->_lastRecord = $record;
-		return $record;
-	}
-
-}
-
-class SForm 
+class Form2 
 	extends \sevian\element 
 	implements \sevian\JasonComponent
 
 {
 	
-	use DataRecord;
+	use DBTrait\DataRecord;
+	use DBTrait\Form;
 	
 	private $_info = null;
 	private $_mode = '';
@@ -76,11 +37,11 @@ class SForm
 
 	public function evalMethod($method = false): bool{
 		
-		if($method === false){
-            $method = $this->method;
+		if($method){
+            $this->method = $method;
 		}
 		
-		switch($method){
+		switch($this->method){
 			case 'request':
 				$this->createForm(1);
 				break;
@@ -110,7 +71,7 @@ class SForm
 	public function createForm($mode = 1){
 
 		if(!$this->containerId){
-			$this->containerId = $this->element.'-'.$this->id;
+			$this->containerId = $this->getPanelId();
 			$this->panel = new \Sevian\HTML('div');
 			$this->panel->id = $this->containerId;
 		}

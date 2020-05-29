@@ -3,7 +3,7 @@ namespace Sevian;
 
 class Element{
 	
-	static $_element = null;
+	static private $_elementName = [];
 	
 	public $id = null;
 	public $element = "default";
@@ -107,8 +107,13 @@ class Element{
 		return $this->panel ;
 	}
 
+	static public function setElementName($name){
+		self::$_elementName[get_called_class()] = $name;
+	}
 	public function getPanelId(){
-		return self::$_element.'_'.$this->id;
+		return self::$_elementName[get_called_class()].'_'.$this->id;
+		//return get_called_class().'_'.$this->id;
+		//return static::$_element'_'.$this->id;
 	}
 
 	public function getConfigPanel(){

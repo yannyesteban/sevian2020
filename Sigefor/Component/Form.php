@@ -1,11 +1,13 @@
 <?php
 namespace Sigefor\Component;
 
+require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
 require_once MAIN_PATH.'Sevian/JS/Form.php';
 require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
 class Form extends \Sevian\JS\Form{
 	
+	use \Sigefor\DBTrait\JasonFileInfo;
 	use \Sigefor\DBTrait\Form;
 
 	private $loadRecord = null;
@@ -21,9 +23,9 @@ class Form extends \Sevian\JS\Form{
 		if($this->name){
 			if(substr($this->name, 0, 1) == '#'){
 				
-				$filePath = substr($this->name, 1);
+				//$filePath = substr($this->name, 1);
 
-				$infoForm = $this->loadJsonFile($filePath);
+				$infoForm = $this->loadJsonInfo($this->name);
 				$this->setInfoForm($infoForm);
 				$this->setInfoFields($infoForm['infoFields']);
 

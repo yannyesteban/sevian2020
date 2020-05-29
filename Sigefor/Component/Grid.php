@@ -1,11 +1,13 @@
 <?php
 namespace Sigefor\Component;
 
+require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
 require_once MAIN_PATH.'Sevian/JS/Grid.php';
 require_once MAIN_PATH.'Sigefor/DBTrait/Grid.php';
 
 class Grid extends \Sevian\JS\Grid {
 	
+	use \Sigefor\DBTrait\JasonFileInfo;
 	use \Sigefor\DBTrait\Grid;
 
 	public $panelId = 0;
@@ -22,9 +24,10 @@ class Grid extends \Sevian\JS\Grid {
 		
 		if($this->name){
 			if(substr($this->name, 0, 1) == '#'){
-				$filePath = substr($this->name, 1);
+				//$filePath = substr($this->name, 1);
 
-				$infoForm = $this->loadJsonFile($filePath);
+				//$infoForm = $this->loadJsonFile($filePath);
+				$infoForm = $this->loadJsonInfo($this->name);
 				$this->setInfoForm($infoForm);
 				$this->setInfoFields($infoForm['infoFields']);
 				

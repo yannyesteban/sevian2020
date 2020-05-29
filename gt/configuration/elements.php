@@ -22,7 +22,18 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[]
 	],
-	
+	's-menu' 		=> [
+		'enable' => true,
+		
+		'file' 	=> MAIN_PATH.'Sigefor/Menu2.php',
+		'class' => '\Sigefor\Menu2',
+		
+		'js'=>[],
+		'css'=>[],
+		'init'=>[
+			'patternJsonFile'=>MODULE_PATH.'json/menu/{name}.json'
+		]
+	],
 	
 	'SForm' 		=> [
 		'enable' => true,
@@ -31,7 +42,10 @@ $cls_elements = [
 		'class' => '\Sigefor\SForm',
 		
 		'js'=>[],
-		'css'=>[]
+		'css'=>[],
+		'init'=>[
+			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json'
+		]
 	],
 	'menu' 		=> [
 		'enable' => true,
@@ -40,7 +54,10 @@ $cls_elements = [
 		'class' => '\Sigefor\Menu',
 		
 		'js'=>[],
-		'css'=>[]
+		'css'=>[],
+		'init'=>[
+			//'patternJsonFile'=>MAIN_PATH.'json/structure/{name}.json'
+		]
 	],
 	'sgMap' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Map.php',
@@ -129,18 +146,7 @@ $cls_elements['gt_unit'] = [
 	'css'=>[]
 	
 ];
-$cls_elements['gt_info_unit'] = [
-	
-	'file' 	=> MAIN_PATH.'gt/InfoUnit.php',
-	'class' => '\GT\InfoUnit',
-	'enable' => true,
-	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/InfoUnit.js',
-		'begin'=> false
-	]],
-	'css'=>[]
-	
-];
+
 
 $cls_elements['catalogue'] = [
 	
@@ -161,6 +167,20 @@ $cls_elements['fcatalogue'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'js/FCatalogue.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
+
+
+$cls_elements['gt_info_unit'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/InfoUnit.php',
+	'class' => '\GT\InfoUnit',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/InfoUnit.js',
 		'begin'=> false
 	]],
 	'css'=>[]
