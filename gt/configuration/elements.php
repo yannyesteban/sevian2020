@@ -34,7 +34,18 @@ $cls_elements = [
 			'patternJsonFile'=>MODULE_PATH.'json/menu/{name}.json'
 		]
 	],
-	
+	's-form' 		=> [
+		'enable' => true,
+		
+		'file' 	=> MAIN_PATH.'Sigefor/Form2.php',
+		'class' => '\Sigefor\Form2',
+		
+		'js'=>[],
+		'css'=>[],
+		'init'=>[
+			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json'
+		]
+	],
 	'SForm' 		=> [
 		'enable' => true,
 		

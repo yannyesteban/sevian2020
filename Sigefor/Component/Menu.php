@@ -8,7 +8,7 @@ require_once MAIN_PATH.'Sigefor/DBTrait/Menu.php';
 
 
 class Menu extends \Sevian\JS\Menu {
-	use \Sigefor\DBTrait\Menu;
+	use \Sigefor\DBTrait\Menu2;
 
 	
 	public function __construct($info = []){
@@ -16,8 +16,13 @@ class Menu extends \Sevian\JS\Menu {
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
+
 		$this->cn = \Sevian\Connection::get();
+		
+
 		if($this->name){
+			$this->loadMenu($this->name);
+			return;
 			if(substr($this->name, 0, 1) == '#'){
 				$this->name = substr($this->name, 1);
 				$this->loadJsonMenu($this->name);

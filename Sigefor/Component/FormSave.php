@@ -1,12 +1,59 @@
 <?php
 namespace Sigefor\Component;
+require_once MAIN_PATH.'Sigefor/DBTrait/Form2.php';
+require_once MAIN_PATH.'Sigefor/FormSave.php';
+
+
+class FF{
+	use \SIGEFOR\DBTrait\Form2;
+	
+	public $patternJsonFile = '';
+	public $userData = [];
+	
+	public function __construct($info = []){
+		
+		foreach($info as $k => $v){
+			$this->$k = $v;
+		}
+		$this->cn = \Sevian\Connection::get();
+		$this->infoRecord($this->name, $this->patternJsonFile);
+		
+		
+		$info2 = new \Sigefor\InfoRecord([
+			'token'=>'yanny',
+			'cn'		=> '_default',
+			
+			'tables'	=> $this->getTables(),
+			'fields'	=> $this->fields,
+			//'subforms'	=> $aux,
+			'dataKeys'=> $this->dataKeys,
+			'dataKeysId'=>$this->dataKeysId,
+			
+			//'data' 		=> $this->data
+		]);
+		
+		
+
+		$this->result = \Sigefor\FormSave::send($info2, $this->data, []);
+
+	}
+
+	public function getResult(){
+		return $this->result;
+	}
+	public function getCaption(){
+		return $this->caption;
+	}
+}
+
+
 
 //include "../Sevian/JS/Form.php";
 
 //include "../Sigefor/DBTrait/Form.php";
 require_once MAIN_PATH.'Sigefor/DBTrait/FormSave.php';
 class ConfigForm{
-	use \Sigefor\DBTrait\Form;
+	use \Sigefor\DBTrait\Form2;
 
 	public function __construct($info = []){
 		

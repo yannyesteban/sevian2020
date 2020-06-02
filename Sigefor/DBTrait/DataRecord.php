@@ -29,6 +29,16 @@ trait DataRecord{
 	public function getDataRecord($key){
 		return $this->_masterData[$key];
 	}
+	public function getRecord2($name, $index){
+
+		if($this->_lastRecord){
+			//return $this->_lastRecord;
+		}
+		
+		$record = $this->_masterData[$name][$index];
+		$this->_lastRecord = $record;
+		return $record;
+	}
 	public function getRecord($name, $index){
 
 		$this->_lastRecord = $this->_masterData[$name][$index];

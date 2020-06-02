@@ -4,7 +4,7 @@ require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
 trait Grid{
 
-	use Form;
+	use Form2;
 
 
 	public $searchFor = [];

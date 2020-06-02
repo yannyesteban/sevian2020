@@ -1,7 +1,7 @@
 <?php
 namespace Sigefor\Component;
 
-require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
+//require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
 require_once MAIN_PATH.'Sevian/JS/Grid.php';
 require_once MAIN_PATH.'Sigefor/DBTrait/Grid.php';
 
@@ -13,7 +13,8 @@ class Grid extends \Sevian\JS\Grid {
 	public $panelId = 0;
 	public $element = null;
 	public $asyncMode = true;
-	
+	public $patternJsonFile = '';
+	public $userData = [];
 	public function __construct($info = []){
 		
 		foreach($info as $k => $v){
@@ -22,7 +23,11 @@ class Grid extends \Sevian\JS\Grid {
         
 		$this->cn = \Sevian\Connection::get();
 		
+		
+
 		if($this->name){
+			$this->loadForm($this->name, null, $this->patternJsonFile);
+			/*
 			if(substr($this->name, 0, 1) == '#'){
 				//$filePath = substr($this->name, 1);
 
@@ -38,11 +43,15 @@ class Grid extends \Sevian\JS\Grid {
 				$this->setInfoFields($infoField);
 				
 			}
-
+			*/
 			$this->data = $this->getDataGrid($this->searchValue, $this->page);
 			
-			$this->menu = new Menu(['name'=>$this->menuName]);
-			
+			$this->menu = new Menu([
+				'name'=>$this->menuName,
+				'userData'=>&$this->userData,
+				'onDataUser'=>$this->onDataUser?? 'S.send(dataUser);' 
+				]);
+			return;
 			$async = ($this->asyncMode===true)?'true':'false';
 			
 			$this->search = "

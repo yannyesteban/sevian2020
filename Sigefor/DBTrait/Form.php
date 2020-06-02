@@ -329,7 +329,7 @@ trait Form{
 	public function getDataKeys(){
 		return $this->dataKeys;
 	}
-	public function loadJsonFile($file){
+	public function loadJsonFile_($file){
 		
 		return json_decode(file_get_contents($file, true), true);
 		//return $this->jsonConfig($info);

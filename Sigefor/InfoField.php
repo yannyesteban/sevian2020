@@ -35,7 +35,7 @@ class InfoField{
 	
 	public $subform = false;
 
-	//public $mtype = false;
+	public $mtype = false;
 	//public $key = false;
 	//public $serial = false;
 	//public $length = false;

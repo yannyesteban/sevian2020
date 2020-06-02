@@ -24,7 +24,7 @@ var S = (($) => {
         }
         static updatePanel(panels) {
             for (let x of panels) {
-                if (this._e[x.panel]) {
+                if (this._e[x.panel] && x.actions) {
                     for (let y of x.actions) {
                         if (y.property !== undefined) {
                             this._e[x.panel][y.property] = y.value;

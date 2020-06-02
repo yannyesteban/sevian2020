@@ -16,8 +16,15 @@
 	
 	"pages":[],
 	"groups":{},
-	"infoFields":{
-		"id":{
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"type","caption":"Tipo"},
+		{"name":"color","caption":"Color de Letra"},
+		{"name":"background","caption":"Color de Fondo"},
+		{"name":"class_name","caption":"Class Bootstrap"}
+	],
+	"infoFields1":[
+		{
 			
 			"name":"id",
 			"caption":"Código",
@@ -26,7 +33,7 @@
 				"caption":"Un Campo ID"
 			}
 		}
-	},
+	],
 	"searchFor":[
 		"type"
 	]

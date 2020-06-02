@@ -111,4 +111,39 @@
 .sg-grid {
   height: 100%;
 }
+
+.sg-message-box {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  margin: 20px;
+  padding: 10px;
+  background-color: #0071ce;
+  border: 0px solid #ec8484;
+  border-radius: 5px;
+  -webkit-box-shadow: 6px 7px 5px -4px rgba(0, 0, 0, 0.71);
+          box-shadow: 6px 7px 5px -4px rgba(0, 0, 0, 0.71);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  visibility: hidden;
+  visibility: visible;
+  opacity: 1;
+}
+.sg-message-box > .caption {
+  color: white;
+  text-align: right;
+  border-bottom: 2px solid white;
+}
+.sg-message-box > .text {
+  color: aqua;
+  padding: 4px;
+}
+.sg-message-box.hidden {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0.9s linear, opacity 0.9s linear;
+  transition: visibility 0.9s linear, opacity 0.9s linear;
+}
 /*# sourceMappingURL=cota.css.map */

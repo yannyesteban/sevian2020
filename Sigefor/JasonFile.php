@@ -1,9 +1,9 @@
 <?php
-namespace SIGEFOR\DBTrait;
+namespace SIGEFOR;
 
-trait JasonFileInfo{
+class JasonFile{
 
-	public function loadJsonInfo($name, $pattern = null){ 
+	public static function loadJsonInfo($name, $pattern = null){ 
 		
 		if(substr($name, 0, 1) == '#'){
 			$name = substr($name, 1);
@@ -17,7 +17,7 @@ trait JasonFileInfo{
 		return null;
 	}
 
-	public function loadJsonFile($name){ 
+	public static function loadJsonFile($name){ 
 		
 		if(substr($name, 0, 1) == '#'){
 			return json_decode(@file_get_contents(substr($name, 1), true));
@@ -26,9 +26,9 @@ trait JasonFileInfo{
 		return null;
 	}
 
-	public function getNameJasonFile($name, $pattern = null){
+	 public static function getNameJasonFile($name, $pattern = null){
 		if(substr($name, 0, 1) == '#' and $pattern){
-			$name = str_replace('{name}', substr($name, 1), $pattern);
+			$name = '#'.str_replace('{name}', substr($name, 1), $pattern);
 		}
 		return $name;
 	}

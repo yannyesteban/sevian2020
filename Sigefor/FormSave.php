@@ -1,5 +1,5 @@
 <?php
-namespace Sevian\Sigefor;
+namespace Sigefor;
 
 class InfoRecord{
     public $cn ="";
@@ -287,7 +287,7 @@ class FormSave{
                     self::$error = true;
                     self::$errno = $q_errno = $cn->errno;
                     $q_error = $cn->error;
-                    hr($q);	
+                    hr("ERROR ".$q, "RED");	
                 }
                 
                 if($serial){

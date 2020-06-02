@@ -2,40 +2,33 @@
 namespace Sevian;
 
 class Element{
-	
-	static private $_elementName = [];
-	
 	public $id = null;
-	public $element = "default";
-	
 	public $name = '';
 	public $method = '';
 	public $eparams = [];
 
 	public $async = false;
-	public $updated = false;
-	public $title = '';
-
-	public $panel = null;
-	
-	public $containerId = null;
-
 	protected $onDesing = true;
 	protected $onDebug = true;
 
+	static private $_elementName = [];
+	
+	
+	public $element = "default";
+	public $updated = false;
+	public $title = '';
+	public $panel = null;
+	public $containerId = null;
 	protected $_signs = null;
 	protected $_listen = null;
-
 	protected $_secBefore = null;
 	protected $_secAfter = null;
 	protected $_config = [];
 	protected $_response = [];
-    
 	protected $_jsElement = [];
 	protected $_components = null;
 	protected $typeElement = "panel";
 	protected $info = null;
-
 	protected $_configInput = null;
 	
 	protected $_vPanel = [];
@@ -109,6 +102,9 @@ class Element{
 
 	static public function setElementName($name){
 		self::$_elementName[get_called_class()] = $name;
+	}
+	static public function getElementName(){
+		return self::$_elementName[get_called_class()];
 	}
 	public function getPanelId(){
 		return self::$_elementName[get_called_class()].'_'.$this->id;

@@ -19,7 +19,7 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"SForm",
+								"element":"s-form",
 								"method":"list",
 								"name":"brands",
 								"eparams":{"recordId":0}
@@ -39,7 +39,7 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"SForm",
+								"element":"s-form",
 								"method":"list",
 								"name":"models",
 								"eparams":{"recordId":0}
@@ -64,7 +64,7 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"SForm",
+								"element":"s-form",
 								"method":"list",
 								"name":"phone_carriers",
 								"eparams":{"recordId":0}
@@ -84,7 +84,7 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"SForm",
+								"element":"s-form",
 								"method":"list",
 								"name":"phone_numbers",
 								"eparams":{"recordId":0}
@@ -104,7 +104,7 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"SForm",
+								"element":"s-form",
 								"method":"list",
 								"name":"phone_plans",
 								"eparams":{"recordId":0}
@@ -130,7 +130,7 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"SForm",
+								"element":"s-form",
 								"method":"list",
 								"name":"#contact_type",
 								"eparams":{"recordId":0}

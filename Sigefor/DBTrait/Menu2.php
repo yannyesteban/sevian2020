@@ -11,6 +11,7 @@ trait Menu2{
 	protected $tMenus = "_sg_menus";
 	protected $tMenuItems = "_sg_menu_items";
 	
+	public $userData = [];
 	static public $patternJsonFile = '';
 	
 	public function loadMenu($name){
@@ -26,7 +27,8 @@ trait Menu2{
 			$this->$k = $v;
 		}
 		if(is_string($this->params)){
-			$params = \Sevian\S::vars($this->params);
+			$params = \Sevian\S::varCustom($this->params, $this->userData, '&P_');
+			$params = \Sevian\S::vars($params);
 			$config = json_decode($params);
 		}else{
 			$config = $this->params;
@@ -38,19 +40,33 @@ trait Menu2{
 			}
 		}
 		
-		if($this->methods){
+		if($this->methods?? false){
 			if(is_string($this->methods)){
-				$config = \Sevian\S::vars($this->methods);
-				$config = json_decode($config, true);
+				
+				$methods = \Sevian\S::varCustom($this->methods, $this->userData, '&P_');
+
+				$methods = \Sevian\S::vars($methods);
+				$methods = json_decode($methods, true);
 			}else{
-				$config = (array)$this->methods;
+				$methods = (array)$this->methods;
 			}
 			
-			if($config and $config[$this->method]?? false){
-				foreach($config[$this->method] as $k => $v){
+			if($methods and $methods[$this->method]?? false){
+				foreach($methods[$this->method] as $k => $v){
 					$this->$k = $v;
 				}
 			}
+		}
+		if($this->items?? false){
+			if(is_string($this->items)){
+				$items = \Sevian\S::varCustom($this->items, $this->userData, '&P_');
+				$items = \Sevian\S::vars($items);
+				$this->items = json_decode($items, true);
+			}else{
+				//$config = (array)$this->items;
+			}
+			
+			
 		}
 	}
 

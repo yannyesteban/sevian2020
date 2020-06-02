@@ -3,8 +3,8 @@ namespace sigefor;
 
 
 
-include "component/Form.php";
-include "component/Menu.php";
+require_once "component/Form.php";
+require_once "component/Menu.php";
 
 trait DataRecord{
 

@@ -2,46 +2,70 @@
 namespace Sigefor\DBTrait;
 
 require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
+
 require_once MAIN_PATH.'Sigefor/InfoField.php';
 require_once "Field.php";
 
-trait Form{
+trait Form2{
 	use ConfigField;
+	use JasonFileInfo;
+
+	public $mode = 2;
+	public $recordIndex = 0;
+	public $method = '';
+	public $fields = [];
+	public $caption = '';
+
 	private $cn = null;
-	
 	private $tForms = "_sg_form";
 	private $tFields = "_sg_fields";
-	
 	private $query = '';
 	private $infoQuery = null;
 	private $menuName = '';
 	private $record = null;
 	private $dataKeys = [];
-	public $mode = 2;
-	public $method = '';
-	public $fields = [];
 	private $methods = null;
-	public $caption = '';
 	private $lastRecord = null;
 	private $_values = null;
 	
 	
 	
-	public function loadForm($name, $record, $pattern){
+	public function loadForm($name, $record, $pattern = null){
+		
 		if($info = $this->loadJsonInfo($name, $pattern)){
+			
 			$this->setInfoForm($info);
-			$this->setInfoFields($info['infoFields']);
+			$this->setInfoFields($info->infoFields, $record);
 		}else{
-			$info = $this->loadDBMenu($name);
+			
+			$info = $this->loadDBForm($name);
 			$this->setInfoForm($info);
 			
-			$infoField = $this->infoDBFields($name);
+			$infoField = $this->loadDBFields($name);
 			$this->setInfoFields($infoField, $record);
 		}
-		
 	}
 
-	public function laodDBForm($name){
+	public function infoRecord($name, $pattern = null){
+		
+		if($info = $this->loadJsonInfo($name, $pattern)){
+			
+			$this->setInfoForm($info);
+			$this->setInfoRecordFields($info->infoFields);
+		}else{
+			
+			$info = $this->loadDBForm($name);
+			$this->setInfoForm($info);
+			
+			$infoField = $this->loadDBFields($name);
+			$this->setInfoRecordFields($infoField);
+		}
+	}
+
+
+
+
+	public function loadDBForm($name){
 		$name = $this->cn->addSlashes($name);
 		
 		$this->cn->query = "
@@ -95,7 +119,7 @@ trait Form{
 				$config = \Sevian\S::vars($this->methods);
 				$config = json_decode($config, true);
 			}else{
-				$config = $this->methods;
+				$config = (array)$this->methods;
 			}
 			
 			if($config and $config[$this->method]?? false){
@@ -103,6 +127,26 @@ trait Form{
 					$this->$k = $v;
 				}
 			}
+		}
+	}
+
+	public function getFields($query, $record = null){
+		$cn = $this->cn;
+		
+		$query = \Sevian\S::vars($query);
+
+		$this->infoQuery = $cn->infoQuery($query);
+
+		$values = [];
+
+		if($this->record){
+			$this->_values = $values = $this->getRecord($this->infoQuery, (object)$this->record);
+		}
+
+		$f = $this->infoQuery->fields;
+		$_fields = [];
+		foreach($this->infoQuery->fields as $key => $info){
+			$_fields[$key] = new \Sevian\Sigefor\InfoField($info);
 		}
 	}
 
@@ -116,51 +160,51 @@ trait Form{
 		$values = [];
 
 		if($this->record){
-			$this->_values = $values = $this->getRecord($this->infoQuery, (object)$this->record);
+			$this->_values = $values = $this->getRecord($this->infoQuery, (object)$record);
 		}
-
-		$f = $this->infoQuery->fields;
+		
+		$_fields = [];
 		$this->fields = [];
-		//
-		foreach($f as $key => $info){
-			$field = new \Sevian\Sigefor\InfoField($info);
-			
-			if(isset($infoField[$key])){
-				$field->update($infoField[$key]);
 
-				if($infoField[$key]['params']){
-					if(is_string($infoField[$key]['params'])){
-						$params = \Sevian\S::varCustom($infoField[$key]['params'], $values, '&');
-						$params = json_decode(\Sevian\S::vars($params));
-					}else{
-						$params = $infoField[$key]['params'];
-					}
-					
-					foreach($params as $k => $v){
-						$field->$k = $v;
-					}
+		foreach($this->infoQuery->fields as $key => $info){
+			$this->fields[] = $_fields[$key] = new \Sevian\Sigefor\InfoField($info);
+			$this->getDefaultInput($_fields[$key]->mtype, $_fields[$key]->input, $_fields[$key]->type);
+		}
+		
+		foreach($infoField as $info){
+			$name = $info->name;
+			$field = $_fields[$name];
+			
+			$field->update($info);
+			
+			if($info->params?? false){
+				if(is_string($info->params)){
+					$params = \Sevian\S::varCustom($info->params, $values, '&');
+					$params = json_decode(\Sevian\S::vars($params));
+				}else{
+					$params = $info->params;
 				}
 				
-				if($field->data){
-					if(is_string($field->data)){
-						$field->data = $this->getDataField(json_decode(\Sevian\S::vars($field->data)));
-					}elseif(is_array($field->data)){
-						$field->data = $this->getDataField($field->data);
-					}
+				foreach($params as $k => $v){
+					$field->$k = $v;
 				}
 			}
 			
+			if($field->data){
+				if(is_string($field->data)){
+					$field->data = $this->getDataField(json_decode(\Sevian\S::vars($field->data)));
+				}elseif(is_array($field->data)){
+					$field->data = $this->getDataField($field->data);
+				}
+			}
+
 			if($field->modeValue == '1' or !$values){
 				
 				//$default = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
 				//$params = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
 				$field->value = $params = \Sevian\S::vars($field->default);
-			}else if(isset($values[$key])){
-				$field->value = $values[$key];
-			}
-
-			if(!$field->input){
-				$this->getDefaultInput($info->mtype, $field->input, $field->type);
+			}else if(isset($values[$name])){
+				$field->value = $values[$name];
 			}
 
 			if($field->events){
@@ -177,11 +221,9 @@ trait Form{
 				}
 				
 			}
-
-
-			$this->fields[] = $field;
-
+			
 		}
+		
 		
 		$this->fields[] = new \Sevian\Sigefor\InfoField([
 			'input'		=> 'hidden',
@@ -201,9 +243,9 @@ trait Form{
 			'type'		=> 'hidden',
 			"name"		=> '__id_',
 			"field"		=> '__id_',
-			'value'		=> '0'
+			'value'		=> $this->recordIndex
 		]);
-
+			
 		return $this->fields;
 	}
 
@@ -220,7 +262,7 @@ trait Form{
 		$this->fields = [];
 		//
 		foreach($f as $key => $info){
-			$field = new \Sevian\Sigefor\InfoRecordField($info);
+			$field = new \Sigefor\InfoRecordField($info);
 			
 			if(isset($infoField[$key])){
 				foreach($infoField[$key] as $k => $v){
@@ -347,9 +389,9 @@ trait Form{
 	public function getDataKeys(){
 		return $this->dataKeys;
 	}
-	public function loadJsonFile($file){
-		
-		return json_decode(file_get_contents($file, true), true);
-		//return $this->jsonConfig($info);
+
+	public function getTables(){
+		return $this->infoQuery->tables;
 	}
+	
 }
