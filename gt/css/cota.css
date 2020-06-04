@@ -146,4 +146,37 @@
   -webkit-transition: visibility 0.9s linear, opacity 0.9s linear;
   transition: visibility 0.9s linear, opacity 0.9s linear;
 }
+
+.subwin .sg-form, #form_p10 .sg-form {
+  overflow: auto;
+  background-color: rgba(255, 255, 255, 0.863);
+}
+.subwin .sg-form .caption, #form_p10 .sg-form .caption {
+  background-color: #e6e6e6;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.8em;
+  font-weight: bold;
+  vertical-align: middle;
+  color: #0787dd;
+}
+.subwin .sg-form .page, #form_p10 .sg-form .page {
+  overflow: auto;
+}
+.subwin .sg-form .page .field, #form_p10 .sg-form .page .field {
+  padding: 4px;
+}
+.subwin .sg-form .page .field label, #form_p10 .sg-form .page .field label {
+  color: #138bbb;
+  font-size: 13px;
+  padding-left: 10px;
+}
+.subwin .sg-form .page .field input, #form_p10 .sg-form .page .field input {
+  border: 1px solid #b8b8b8;
+  color: #7a7a7a;
+  font-size: 12px;
+  line-height: 1.8em;
+  background-color: white;
+  padding-left: 4px;
+}
 /*# sourceMappingURL=cota.css.map */

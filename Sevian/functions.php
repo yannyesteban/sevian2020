@@ -27,3 +27,10 @@ function hr($msg_x, $color_x='black',$back_x=''){
 	}// end if
 	
 }// end function
+
+function hx($msg_x, $color_x='black',$back_x=''){
+
+	hr($msg_x, $color_x,$back_x);
+	exit;
+
+}

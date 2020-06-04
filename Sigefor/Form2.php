@@ -6,7 +6,7 @@ require_once MAIN_PATH.'Sigefor/DBTrait/DataRecord.php';
 //require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
 require_once "component/Form2.php";
-require_once "component/Menu.php";
+
 require_once "component/FormSave.php";
 
 class Form2 
@@ -26,8 +26,12 @@ class Form2
 
 	public $userData = [];
 	static public $patternJsonFile = '';
+	static public $patternFormFile = '';
+	static public $patternMenuFile = '';
+
 	
 	public function __construct($info = []){
+		
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
@@ -59,6 +63,9 @@ class Form2
 			case 'load':
 				$this->createForm(2);
 				break;
+			case 'load-from':
+				$this->createForm(2, true);
+				break;
 			case 'list':
 				$this->createGrid(1, '');
 				break;
@@ -79,7 +86,7 @@ class Form2
 		return true;
 	}
 
-	public function createForm($mode = 1){
+	public function createForm($mode = 1, $recordFrom = false){
 
 		if(!$this->containerId){
 			$this->containerId = $this->getPanelId();
@@ -99,6 +106,7 @@ class Form2
 				'method'	=> $this->method,
 				'mode'		=> 1,
 				'userData'=>$this->userData,
+				
 				//'record'=>$this->getRecord()
 			]);
 		}else if($mode == 2){
@@ -118,6 +126,7 @@ class Form2
 				'record'	=> $this->getRecord('grid', $__id_),
 				'recordIndex'=>$__id_,
 				'userData'=>$this->userData,
+				
 			]);
 
 			//$records[$__id_] = $form->getDataKeys()[0];
@@ -142,7 +151,7 @@ class Form2
 			
 		}
 		$this->typeElement = 'Grid2';
-		
+		//hx($this->name);
 		//$async = ($this->asyncMode===true)?'true':'false';
 		$async = true;
 		$search = "
@@ -200,8 +209,8 @@ class Form2
 					]
 				});"
 			];
-
-
+		
+		
 		$grid =  new \Sigefor\Component\Grid([
 			'asyncMode'	=> true,
 			'id'		=> $this->containerId,
@@ -213,13 +222,16 @@ class Form2
 			'search'=>$search,
 			'paginator'=>$paginator,
 			'userData'=>$this->userData,
+			//'patternFormFile'=>self::$patternJsonFile,
+			//'patternMenuFile'=>self::$patternMenuFile
 			
 		]);
 
+		//hx(json_encode($grid,JSON_PRETTY_PRINT));
 		
 		$records=$grid->getDataKeys();
 		$this->setDataRecord('grid', $records);
-
+		//hx($grid->data);	
 		$this->info = $grid;
 
 		//$grid->id = $this->panel->id;

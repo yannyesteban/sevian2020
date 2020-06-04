@@ -240,6 +240,10 @@ class FormSave{
                         $record->$name = $value;
                     }
 
+                    if($field->notNull and $field->mtype != 'C' and $field->mtype != 'CH' and $field->mtype != 'B' and $value == ''){
+                        continue;
+                    }
+
                     $fieldValue = $cn->addSlashes($value);
 
                     if(($field->mtype != 'C' and $field->mtype != 'CH' and $field->mtype != 'B' or !$field->notNull) and $value == ''){
@@ -288,6 +292,7 @@ class FormSave{
                     self::$errno = $q_errno = $cn->errno;
                     $q_error = $cn->error;
                     hr("ERROR ".$q, "RED");	
+                    hr($q_error, "green");	
                 }
                 
                 if($serial){

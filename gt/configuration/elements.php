@@ -31,7 +31,7 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[],
 		'init'=>[
-			'patternJsonFile'=>MODULE_PATH.'json/menu/{name}.json'
+			//'patternJsonFile'=>MODULE_PATH.'json/menu/{name}.json'
 		]
 	],
 	's-form' 		=> [
@@ -43,7 +43,9 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[],
 		'init'=>[
-			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json'
+			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json',
+			'patternFormFile'=>MODULE_PATH.'json/form/{name}.json',
+			'patternMenuFile'=>MODULE_PATH.'json/menu/{name}.json'
 		]
 	],
 	'SForm' 		=> [

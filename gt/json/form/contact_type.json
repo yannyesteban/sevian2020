@@ -2,14 +2,14 @@
 	"form":"contact_type",
 	"caption":"Tipos de Contactos",
 	"class":"",
-	"query":"SELECT * FROM contact_type",
-	"menuName":"grid_menu",
+	"query":"SELECT * FROM objects",
+	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
-			"menuName":"request_menu"
+			"menuName":"/menu/request"
 		},
 		"load":{
-			"menuName":"request_menu"
+			"menuName":"/menu/request"
 		}
 	},
 	"params":"",

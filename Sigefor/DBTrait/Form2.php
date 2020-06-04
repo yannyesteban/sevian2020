@@ -26,6 +26,7 @@ trait Form2{
 	private $dataKeys = [];
 	private $methods = null;
 	private $lastRecord = null;
+	private $recordFrom = false;
 	private $_values = null;
 	
 	
@@ -33,11 +34,11 @@ trait Form2{
 	public function loadForm($name, $record, $pattern = null){
 		
 		if($info = $this->loadJsonInfo($name, $pattern)){
-			
+		
 			$this->setInfoForm($info);
 			$this->setInfoFields($info->infoFields, $record);
 		}else{
-			
+		
 			$info = $this->loadDBForm($name);
 			$this->setInfoForm($info);
 			
@@ -83,7 +84,7 @@ trait Form2{
 		
 		$this->cn->query = "
 			SELECT 
-			field, alias, coalesce(caption, '') as caption, input, input_type as \"type\",
+			field as name, alias, coalesce(caption, '') as caption, input, input_type as \"type\",
 			cell, cell_type as \"cellType\",
 			class, `default`, mode_value as \"modeValue\",data, params,method,rules,events,info 
 			FROM $this->tFields 
@@ -92,6 +93,10 @@ trait Form2{
 		
 		$fields = [];
 		$this->cn->execute();
+
+		
+		return $this->cn->getDataAll();
+
 		while($rs = $this->cn->getDataAssoc()){
 			$fields[$rs['field']] = $rs;
 		}
@@ -158,7 +163,7 @@ trait Form2{
 		$this->infoQuery = $cn->infoQuery($this->query);
 
 		$values = [];
-
+		//hr($this->userData);
 		if($this->record){
 			$this->_values = $values = $this->getRecord($this->infoQuery, (object)$record);
 		}
@@ -169,12 +174,19 @@ trait Form2{
 		foreach($this->infoQuery->fields as $key => $info){
 			$this->fields[] = $_fields[$key] = new \Sevian\Sigefor\InfoField($info);
 			$this->getDefaultInput($_fields[$key]->mtype, $_fields[$key]->input, $_fields[$key]->type);
+			$_fields[$key]->value = $values[$key]?? '';
 		}
-		
+		//hr($infoField);
 		foreach($infoField as $info){
+			$info = (object)$info;
 			$name = $info->name;
+
+			if(!isset($_fields[$name])){
+				continue;
+			}
+
 			$field = $_fields[$name];
-			
+
 			$field->update($info);
 			
 			if($info->params?? false){
@@ -203,15 +215,13 @@ trait Form2{
 				//$default = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
 				//$params = \Sevian\S::varCustom($_fields[$key]['params'], $values, '&');
 				$field->value = $params = \Sevian\S::vars($field->default);
-			}else if(isset($values[$name])){
-				$field->value = $values[$name];
+			
 			}
 
 			if($field->events){
-				
 				$params = str_replace("\r\n", '\\n', $field->events);
 				$params = str_replace("\t", '',  ($params));
-			
+				$params = \Sevian\S::varCustom($params, $this->userData, '&P_');
 				$params = \Sevian\S::varCustom($params, $values, '&');
 				$params = json_decode(\Sevian\S::vars($params));
 			

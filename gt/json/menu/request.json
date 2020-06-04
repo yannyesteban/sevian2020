@@ -1,0 +1,70 @@
+{
+	"caption":"Catálogo",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"Guardar",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"save",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}
+		},
+		{"caption":"Guardar y Volver",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"save",
+						"name":"&P_elementName",
+						"eparams":null
+					},
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}},
+		{"caption":"Volver",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}}
+	]
+}	

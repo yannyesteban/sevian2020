@@ -40,6 +40,16 @@ class FCatalogue
 		if($method === false){
             $method = $this->method;
 		}
+
+		$this->userData = [
+			'panelId'=>$this->id,
+			'element'=>$this->element,
+			'elementName'=>$this->name,
+			'elementMethod'=>$this->method
+			
+		];
+
+
 		$this->loadInfoInfo($this->name);
 		switch($method){
 			case 'load':
@@ -152,12 +162,13 @@ class FCatalogue
 		//$this->panel->innerHTML = 'gt-unit-'.$this->id;
 		$this->typeElement = 'SGFCatalogue';
 
-		$g =  new \Sigefor\Component\Form([
+		$g =  new \Sigefor\Component\Form2([
 			'panelId'=>$this->id,
 			//'name'=>$this->name,
 			'name'=>$this->form,
 			'method'=>'request',
-			'mode'=>1
+			'mode'=>1,
+			'userData'=>$this->userData
 			//'record'=>$this->getRecord()
 		]);
 

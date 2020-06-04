@@ -12,9 +12,11 @@ trait Menu2{
 	protected $tMenuItems = "_sg_menu_items";
 	
 	public $userData = [];
-	static public $patternJsonFile = '';
+	static public $patternJsonFile = JSON_PATH.'{name}.json';
+
 	
 	public function loadMenu($name){
+		//hr(self::$patternJsonFile);hr($name);
 		if(!($info = $this->loadJsonInfo($name, self::$patternJsonFile))){
 			$info = $this->loadDBMenu($name);
 		}

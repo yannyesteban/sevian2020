@@ -14,7 +14,7 @@ class Menu2 extends \Sevian\Element {
 	private $infoPanels = null;
 	private $_dbINFO = [];
 	
-	static public $patternJsonFile = '';
+	//static public $patternJsonFile = '';
 	static public $elementStructure = '';
 	
 

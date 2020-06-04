@@ -10,6 +10,7 @@ require_once MAIN_PATH.'Sigefor/DBTrait/Menu.php';
 class Menu extends \Sevian\JS\Menu {
 	use \Sigefor\DBTrait\Menu2;
 
+	static public $patternJsonFile = JSON_PATH.'{name}.json';
 	
 	public function __construct($info = []){
 		

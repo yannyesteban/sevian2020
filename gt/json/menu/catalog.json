@@ -6,7 +6,7 @@
 	"autoClose":false,
 	"items":[
 		{
-			"caption":"Vehicles",
+			"caption":"Vehículos",
 			"items":[
 				{
 					"caption":"Marcas",
@@ -21,7 +21,7 @@
 								"id":51,
 								"element":"s-form",
 								"method":"list",
-								"name":"brands",
+								"name":"/brands",
 								"eparams":{"recordId":0}
 							}
 					
@@ -41,7 +41,67 @@
 								"id":51,
 								"element":"s-form",
 								"method":"list",
-								"name":"models",
+								"name":"/models",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Colores",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/vehicle_color",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Tipos de Vehículos",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/vehicle_type",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Vehículos",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/vehicles",
 								"eparams":{"recordId":0}
 							}
 					
@@ -66,7 +126,7 @@
 								"id":51,
 								"element":"s-form",
 								"method":"list",
-								"name":"phone_carriers",
+								"name":"/phone_carriers",
 								"eparams":{"recordId":0}
 							}
 					
@@ -86,7 +146,7 @@
 								"id":51,
 								"element":"s-form",
 								"method":"list",
-								"name":"phone_numbers",
+								"name":"/phone_numbers",
 								"eparams":{"recordId":0}
 							}
 					
@@ -106,7 +166,27 @@
 								"id":51,
 								"element":"s-form",
 								"method":"list",
-								"name":"phone_plans",
+								"name":"/phone_plans",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Cuentas GSM",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/gsm_account",
 								"eparams":{"recordId":0}
 							}
 					
@@ -132,7 +212,112 @@
 								"id":51,
 								"element":"s-form",
 								"method":"list",
-								"name":"#contact_type",
+								"name":"/contact_type",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				}
+			]
+		},
+		{
+			"caption":"Equipos",
+			"items":[
+				{
+					"caption":"Marcas",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/devices_brands",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Modelos",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/devices_models",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Equipos",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/devices",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Tipos de Eventos",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/event_type",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Tipos de Status",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/status_type",
 								"eparams":{"recordId":0}
 							}
 					
