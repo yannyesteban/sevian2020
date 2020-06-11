@@ -1,8 +1,9 @@
 <?php 
 include "Sevian/Functions.php";
+include "oper.php";
 $query = "abs(8)**22+45.6-56+56.3+98*(4+5+6**pi())**5**2+365+(-1)**2";
 $query = "alfa(1+1)*1+(2*3+5**6)+5*3*4*(1+5*2)+4+5-1+1-2+3-5-5+(-2)**2+pi()**(2+3*cos(45))";
-$query = "1+1+5*6*6+5+3*8*8+3+8+(-9)*1";
+$query = "2*3*4+5*4**2+1+5*6*6+5+3*8*8+3+8+(-9)*1+po()**2";
 
 $query = arrage_pow($query);
 $query = oper($query);
@@ -107,16 +108,18 @@ function oper($query){
 			(?<number2> \((?&number)\))
 			(?<pos>   (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
 			(?<mul> (?&exp)([*](?&exp))+)
+			(?<mul2> (?&number)([*](?&number))+)
 			
 			(?<exp> (?&number2) |(?&number) | (?&fun) | (?&paren))
 			#(?<pot> (?<=[*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp))
 			#(?<pot> \s*(?&exp)\s*[*]{2}\s*(?&exp))
 			#(?<pot> (?![*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
 			#(?<pot2> (?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
-			
+			(?<pot2> (?&number)\s*[^]\s*(?&number)(?![*]{2}))
 		)
 		#(?&exp)
-		(?&mul)|
+		
+		(?<p2>(?&pot2))|(?<m2>(?&mul2))|(?<m>(?&mul))|
 		(?<n> (?&number)) | (?<f>(?&fun)) | (?<p>(?&paren))
 		#(?<pt>(?&pot2))|
 		#(?<f>(?&fun))|
@@ -134,23 +137,25 @@ function oper($query){
 
 	$t=true;
 	if(preg_match_all($pattern, $query, $c)){
-		hx($c,"red");
+		hr($c,"red");
 	}
-	while($t){
-		$t =  false;
-		$query = preg_replace_callback(
-			$pattern,
-			function ($c) use(&$t, $query) {
-				$t = true;
-				hr($query);
-				return str_replace('**','^',"(".$c[0].")" );
-				
-				
-			},
-			$query,
-			1
-		);
-	}
+	$value = 0;
+    if(preg_match_all($pattern, $query, $c)){
+        foreach($c[0] as $k => $t){
+			//hr($c['m2'][$k],"blue");
+			if($c['m2'][$k]??false){
+				$value += multi($t);
+			}
+           // $value = $value * $t;
+        }
+
+		
+	} 
+	
+	hr($value, "aqua","blue");
+    
+
+    return $query;
 	
 	hx($query);
 
