@@ -1,6 +1,13 @@
 <?php 
 include "Sevian/Functions.php";
-hx(arrage_pow("45.6-56+56.3+98*(4+5+6**pi())**5**2+365+(-1)**2"));
+$query = "abs(8)**22+45.6-56+56.3+98*(4+5+6**pi())**5**2+365+(-1)**2";
+$query = "alfa(1+1)*1+(2*3+5**6)+5*3*4*(1+5*2)+4+5-1+1-2+3-5-5+(-2)**2+pi()**(2+3*cos(45))";
+$query = "1+1+5*6*6+5+3*8*8+3+8+(-9)*1";
+
+$query = arrage_pow($query);
+$query = oper($query);
+exit;
+
 function aa(){
 	hr("aa");
 	return 1;
@@ -94,41 +101,41 @@ function oper($query){
 		#(?<!\w)
 			(?<fun2> \w+\( (?: (?>[^()]+)| (?R)  )* \))
 			(?<fun> \w+(?&paren))
+			
 			(?<paren> \( (?: (?>[^()]+)| (?R) | (?&paren)  )* \) )
 			(?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<number2> \((?&number)\))
 			(?<pos>   (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-			(?<mul> (?&number)[*](?&number))
-			(?<exp> (?&number) | (?&fun) | (?&paren))
+			(?<mul> (?&exp)([*](?&exp))+)
+			
+			(?<exp> (?&number2) |(?&number) | (?&fun) | (?&paren))
 			#(?<pot> (?<=[*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp))
 			#(?<pot> \s*(?&exp)\s*[*]{2}\s*(?&exp))
-			(?<pot> (?![*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
-			(?<pot2> (?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
+			#(?<pot> (?![*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
+			#(?<pot2> (?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
 			
 		)
 		#(?&exp)
-		#|
-		(?<pt>(?&pot2))
-		#|
+		(?&mul)|
+		(?<n> (?&number)) | (?<f>(?&fun)) | (?<p>(?&paren))
+		#(?<pt>(?&pot2))|
 		#(?<f>(?&fun))|
 		
-		#|^(?<p>(?&paren))$#|
+		#(?<p>(?&paren))|
 		#(?<n>(?&number))
-		#(?<o>(?:[*]{2}|\+|\-|\*|/))
+		#(?&exp)[*](?&exp)|
+		#(?<o>(?:[*]{2}|\+|\-|\*|/))?((?&pos) | (?&fun) | (?&paren))
 
 		
 		#(?:(?<t1>(?&exp))(?<c>[*]{2})(?<t2>(?&exp)))
 		#((?<a>(?&number))(?<o>[*/])(?<b>(?&number)))
 	}isx";
-	$query="1+2+3*2*1+2+2**2+2+(4+3+5*2*(5+3))";
-	$query="-1+2+3*2+(8+3)+sen(45)*cos(30)*pi(8+3)";
-	$query = "2**3**4+5**6";
-
-
-	$query = "1**2**3**4**5";
-	$query="6+3*5/(-2)**2*pi(4+2*9**8)";
+	
 
 	$t=true;
-	if(preg_match_all($pattern, $query, $c)){hr($c,"red");}
+	if(preg_match_all($pattern, $query, $c)){
+		hx($c,"red");
+	}
 	while($t){
 		$t =  false;
 		$query = preg_replace_callback(
