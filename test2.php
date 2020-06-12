@@ -1,12 +1,25 @@
 <?php 
 include "Sevian/Functions.php";
 include "oper.php";
-$query = "abs(8)**22+45.6-56+56.3+98*(4+5+6**pi())**5**2+365+(-1)**2";
-$query = "alfa(1+1)*1+(2*3+5**6)+5*3*4*(1+5*2)+4+5-1+1-2+3-5-5+(-2)**2+pi()**(2+3*cos(45))";
-$query = "2*3*4+5*4**2+1+5*6*6+5+3*8*8+3+8+(-9)*1+po()**2";
+//hx(2**-( -( -( -2))));
+//hx(2**(- (- (- (-2)))));
+
+//hx(2*+(2));
+//hx(arrage_pow("2**-(2)**2"));
+
+
+$query = "4**-(+(+(-2)))";
+//$query = "2**-( -( -( -2)))";
+//$query = "3*+(2)";
+//$query = "----++-+++-1*2+2--3";
+$query = "--(--1)+2*+pi()-5*-cos(8)+3+---1+pi()+(3+5)+4*5+6*9*9/25-(-3*5*(4*2))";
+
+//$query = arrage_signe($query);
 
 $query = arrage_pow($query);
-$query = oper($query);
+$query = oper2($query);
+hr("Final : ".$query);
+
 exit;
 
 function aa(){
@@ -42,15 +55,6 @@ $a = -1;
 //hx(-7);
 
 
-$a = "-1";
-$b = "5";
-//hr(5  **   2);
-oper("1**2**3+4**5");
-hx(oper("1 ** 2 ** 3 + 5 ** 6 "));
-$query = "1+2+3*(5+6)*3+6*3+(3+6)";
-echo eval("echo 1+2*3*4+5**2**2+8/2+1;");
-hr(oper("yanny -3+-3*1/-2*4 espejo 35+78"));
-
 hx(pp($query));
 
 
@@ -65,14 +69,33 @@ $query = remp($query);
 echo eval("echo 2+2+3*4*5*6+7+(-8*9+8*3*(5+3*4))+1;");
 
 echo sEval($query);exit;
+function arrage_signe($query){
 
+	$query = preg_replace([
+		"{
+		
+			[\-]\s*(?=[\+\-])
+		}isx",
+		"{
+		
+			[\+]\s*(?=[\+\-])
+		}isx"
+
+	],['${0}1*','1*'], $query);
+
+	return $query;
+
+}
 function arrage_pow($query){
+	hr($query,"red","pink");
 	$pattern = "{
 		(?(DEFINE)
-			(?<fun> \w+(?&paren))
-			(?<paren> \( (?: (?>[^()]+)| (?R) | (?&paren)  )* \) )
-			(?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<fun> [\-\+]?\w+(?&paren))
+			(?<paren> [\-\+]?\( (?: (?>[^()]+)| (?R) | (?&paren)  )* \) )
+			(?<number>   [\-\+]? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<pos>   (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
 			(?<exp> (?&number) | (?&fun) | (?&paren))
+			(?<exp1> (?&pos) | (?&fun) | (?&paren))
 			(?<pot> (?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
 		)
 		(?&pot)
@@ -96,31 +119,210 @@ function arrage_pow($query){
 	return $query;
 }
 
-function oper($query){
+function oper2($query){
+	hr(".....Query: $query ", "blue");
 	$pattern = "{
 		(?(DEFINE)
 		#(?<!\w)
-			(?<fun2> \w+\( (?: (?>[^()]+)| (?R)  )* \))
+			#(?<fun2> \w+\( (?: (?>[^()]+)| (?R)  )* \))
 			(?<fun> \w+(?&paren))
 			
 			(?<paren> \( (?: (?>[^()]+)| (?R) | (?&paren)  )* \) )
-			(?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			#(?<parenx> \( (?: (?>[^()]+)| (?R)   )* \) )	
+			(?<number>   (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			
 			(?<number2> \((?&number)\))
 			(?<pos>   (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-			(?<mul> (?&exp)([*](?&exp))+)
-			(?<mul2> (?&number)([*](?&number))+)
+			(?<mul> (?&exp)([*%/](?&exp))+)
+			(?<mul2> (?&number)([/%*](?&number))+)
 			
-			(?<exp> (?&number2) |(?&number) | (?&fun) | (?&paren))
+			(?<exp> [\+\-]* ((?&number) | (?&fun) | (?&paren)))
 			#(?<pot> (?<=[*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp))
 			#(?<pot> \s*(?&exp)\s*[*]{2}\s*(?&exp))
 			#(?<pot> (?![*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
 			#(?<pot2> (?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
-			(?<pot2> (?&number)\s*[^]\s*(?&number)(?![*]{2}))
+			(?<pot2> (?&exp)\s*[\^]\s*(?&exp)(?![*]{2}))
+		)
+		
+		(?&mul)|
+		(?&exp)
+		
+
+		
+	}isx";
+	
+
+	$t=true;
+	if(preg_match_all($pattern, $query, $c)){
+		hr($c,"red");
+	}
+	$value = 0;
+    if(preg_match_all($pattern, $query, $c)){
+        foreach($c[0] as $k => $t){
+			hr($t);
+			//hr($c['m2'][$k],"blue");
+			if($c['oo'][$k]??false){
+				hr($c['oo'][$k],"blue");
+				$value += -oper($c['oo'][$k]);
+			}
+			if($c['o2'][$k]??false){
+				hr($c['o2'][$k],"blue");
+				$value += oper($c['o2'][$k]);
+			}
+			if($c['pq'][$k]??false){
+				//hr($c['pq'][$k],"blue");
+				$value += oper($c['pq'][$k]);
+			}
+			if($c['m'][$k]??false){
+				$value += multi($t);
+			}
+			if($c['p2'][$k]??false){
+				$value += pot($t);
+			}
+			if($c['n'][$k]??false){
+				$value += $t;
+			}
+           // $value = $value * $t;
+        }
+
+		
+	} 
+	
+	//hr($value, "aqua","blue");
+    
+
+    return $value;
+	
+	hx($query);
+
+
+	if(preg_match_all($pattern, $query, $c)){
+		$t = false;
+
+		foreach($c as $k => $v){
+			$o = $c['o'][$k]?? false;
+			
+			if($t === false){
+				$t = $v;
+			}
+
+
+		}
+		hx($c);
+	}
+	$t=true;
+	while($t){
+		$t =  false;
+		$query = preg_replace_callback(
+			$pattern,
+			function ($c) use(&$t) {
+				$t = true;
+				
+				return str_replace('**','^',"(".$c[0].")" );
+				
+				
+			},
+			$query,
+			1
+		);
+	}
+
+	hx($query, "red");
+	if(preg_match($pattern, $query, $c)){
+		hx($c);
+	}
+	$t = true;
+	while($t){
+		$t =  false;
+		$query = preg_replace_callback(
+			$pattern,
+			function ($c) use(&$t) {
+				$t = true;
+				if($c['o']=='*'){
+					return $c['a']*$c['b'];
+				}elseif($c['o']=='/' and $c['b']!='0'){
+					return $c['a']/$c['b'];
+				}else{
+					return 'error';
+				}
+				//hx($c['a']);
+				//return"";
+				
+				
+			},
+			$query, 1
+		);
+	}
+	$pattern = "{
+		(?(DEFINE)
+			(?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<mul> (?&number)[*](?&number))
+		)
+
+		((?<a>(?&number))(?<o>[+-])(?<b>(?&number)))
+	}isx";
+
+	if(preg_match($pattern, $query, $c)){
+		//hx($c);
+	}
+	$t = true;
+	while($t){
+		$t =  false;
+		$query = preg_replace_callback(
+			$pattern,
+			function ($c) use(&$t) {
+				$t = true;
+				if($c['o']=='+'){
+					return $c['a']+$c['b'];
+				}elseif($c['o']=='-'){
+					return $c['a']-$c['b'];
+				}
+				
+				//hx($c['a']);
+				//return"";
+				
+				
+			},
+			$query
+		);
+	}
+	return $query;
+	
+}
+
+function oper($query){
+	hr(".....Query: $query ", "blue");
+	$pattern = "{
+		(?(DEFINE)
+		#(?<!\w)
+			#(?<fun2> \w+\( (?: (?>[^()]+)| (?R)  )* \))
+			(?<fun> [\-\+]?\w+(?&paren))
+			
+			(?<paren> [\-\+]?\( (?: (?>[^()]+)| (?R) | (?&paren)  )* \) )
+			#(?<parenx> \( (?: (?>[^()]+)| (?R)   )* \) )	
+			(?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<number3>   \+? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<number2> \((?&number)\))
+			(?<pos>   (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<mul> (?&exp)([*%/](?&exp))+)
+			(?<mul2> (?&number)([/%*](?&number))+)
+			
+			(?<exp> (?&number2) |(?&number)|(?&number3) | (?&fun) | (?&paren))
+			#(?<pot> (?<=[*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp))
+			#(?<pot> \s*(?&exp)\s*[*]{2}\s*(?&exp))
+			#(?<pot> (?![*]{2})\s*(?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
+			#(?<pot2> (?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
+			(?<pot2> (?&exp)\s*[\^]\s*(?&exp)(?![*]{2}))
 		)
 		#(?&exp)
 		
-		(?<p2>(?&pot2))|(?<m2>(?&mul2))|(?<m>(?&mul))|
-		(?<n> (?&number)) | (?<f>(?&fun)) | (?<p>(?&paren))
+		(?<p2>(?&pot2))|
+		(-(?<oo>(?&paren)))|
+		(\+(?<o2>(?&paren)))|
+		(?<m>(?&mul))|
+		(?<n> (?&number)) | (?<f>(?&fun)) | (?<p>(\(?<pq>( (?: (?>[^()]+)| (?R)| (?&paren)   )* )\)))
+		
+		#(?<m2>(?&mul2))|
 		#(?<pt>(?&pot2))|
 		#(?<f>(?&fun))|
 		
@@ -137,14 +339,33 @@ function oper($query){
 
 	$t=true;
 	if(preg_match_all($pattern, $query, $c)){
-		hr($c,"red");
+		//hr($c,"red");
 	}
 	$value = 0;
     if(preg_match_all($pattern, $query, $c)){
         foreach($c[0] as $k => $t){
+			hr($t);
 			//hr($c['m2'][$k],"blue");
-			if($c['m2'][$k]??false){
+			if($c['oo'][$k]??false){
+				hr($c['oo'][$k],"blue");
+				$value += -oper($c['oo'][$k]);
+			}
+			if($c['o2'][$k]??false){
+				hr($c['o2'][$k],"blue");
+				$value += oper($c['o2'][$k]);
+			}
+			if($c['pq'][$k]??false){
+				//hr($c['pq'][$k],"blue");
+				$value += oper($c['pq'][$k]);
+			}
+			if($c['m'][$k]??false){
 				$value += multi($t);
+			}
+			if($c['p2'][$k]??false){
+				$value += pot($t);
+			}
+			if($c['n'][$k]??false){
+				$value += $t;
 			}
            // $value = $value * $t;
         }
@@ -152,10 +373,10 @@ function oper($query){
 		
 	} 
 	
-	hr($value, "aqua","blue");
+	//hr($value, "aqua","blue");
     
 
-    return $query;
+    return $value;
 	
 	hx($query);
 
