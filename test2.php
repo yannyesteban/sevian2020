@@ -1,6 +1,12 @@
 <?php 
 include "Sevian/Functions.php";
 include "oper.php";
+include "oper2.php";
+
+$query = "4==2 and 3==2 or 1==1 or (2==2 and 3==2)";
+
+hx(logic($query, true));
+
 //hx(2**-( -( -( -2))));
 //hx(2**(- (- (- (-2)))));
 
@@ -9,7 +15,7 @@ include "oper.php";
 
 $query = "(2)**2**(1+1)";
 $query = "2**(2+2*2+(1+2))";
-$query = "pi()**2";//2^9
+$query = "cos(deg2rad(45))";//2^9
 //$query = "";//2+4+3
 $query = arrage_pow($query);
 //hx($query);
