@@ -7,14 +7,23 @@ include "oper.php";
 //hx(2*+(2));
 //hx(arrage_pow("2**-(2)**2"));
 
+$query = "(2)**2**(1+1)";
+$query = "2**(2+2*2+(1+2))";
+$query = "pi()**2";//2^9
+//$query = "";//2+4+3
+$query = arrage_pow($query);
+//hx($query);
+hx("Total: ".oper($query, false));
+
 
 $query = "4**-(+(+(-2)))";
 //$query = "2**-( -( -( -2)))";
 //$query = "3*+(2)";
 //$query = "----++-+++-1*2+2--3";
-$query = "--(--1)+2*+pi()-5*-cos(8)+3+---1+pi()+(3+5)+4*5+6*9*9/25-(-3*5*(4*2))";
+$query = "-----4 --(--1)+2*+pi()-5*-cos(8)+3+---1+pi()+(3+5)+4*5+6*9*9/25-(-3*5*(4*2))";
 
 //$query = arrage_signe($query);
+
 
 $query = arrage_pow($query);
 $query = oper2($query);
@@ -86,21 +95,23 @@ function arrage_signe($query){
 	return $query;
 
 }
-function arrage_pow($query){
-	hr($query,"red","pink");
+function arrage_pow2($query){
+	//$query = "(2+3)";
+	//hr($query,"red","pink");
 	$pattern = "{
 		(?(DEFINE)
-			(?<fun> [\-\+]?\w+(?&paren))
-			(?<paren> [\-\+]?\( (?: (?>[^()]+)| (?R) | (?&paren)  )* \) )
-			(?<number>   [\-\+]? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-			(?<pos>   (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-			(?<exp> (?&number) | (?&fun) | (?&paren))
-			(?<exp1> (?&pos) | (?&fun) | (?&paren))
-			(?<pot> (?&exp)\s*[*]{2}\s*(?&exp)(?![*]{2}))
+			(?<fun> \w+(?&paren))
+			(?<paren> \( (?: (?>[^()]+)| (?R)| (?&paren) )* \) )
+			(?<number>  (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<exp> (?&paren) | (?&number) | (?&fun)  )
+			(?<pot> (?&exp)\s*[*]{2}\s*[\+\-]*(?&exp)(?![*]{2}))
 		)
 		(?&pot)
+		
 	}isx";
-
+	if(preg_match_all($pattern, $query, $c)){
+		//hr($c,"green");
+	}
 	$t = true;
 	
 	while($t){
@@ -109,6 +120,7 @@ function arrage_pow($query){
 			$pattern,
 			function ($c) use(&$t, $query) {
 				$t = true;
+				hr(str_replace('**','^',"(".$c[0].")" ));
 				return str_replace('**','^',"(".$c[0].")" );
 			},
 			$query,
@@ -290,7 +302,7 @@ function oper2($query){
 	
 }
 
-function oper($query){
+function oper4($query){
 	hr(".....Query: $query ", "blue");
 	$pattern = "{
 		(?(DEFINE)
