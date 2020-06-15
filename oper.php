@@ -1,4 +1,10 @@
 <?php
+
+function math($query, $debug=false){
+	$query = arrage_pow($query);
+	return oper($query, $debug);
+}
+
 function arrage_pow($query){
 	
 	//hr($query,"red","pink");
