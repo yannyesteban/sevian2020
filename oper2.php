@@ -1,13 +1,13 @@
 <?php
 //$fruit = "pear";
 //$a = ($fruit ?: 'apple'); 
-
+//hx(1==1 xor 2==2 and 0==1,"red");
 //hx ( ! 'a' );
 $query = '"a" or true or 15 or "hello" and 4==2 and 3>=2 or 1>1 or (2==2 and 3==2 or (a==1 or a==2)) or pi() and 3==null and true';
 $query = 'cos(45) and 11>10 or 3==3 and 4==4 and true and (9==4 and pi()*2) and pi()*2 or "string x" and (1==2 or 7==7) ';
 //hx(1==1 and 2==1 and true or 6==6);
-$query = "1==0 and 1==2 and 5==5";
-$query = "3==3 and 7==5 and 1==1 or 3==3";hx("Total: ".logic($query, true));
+$query = "1==0 and 1==2 and 5==4";
+$query = "'c'=='c' xor 2==2 and 1==1 and 5==5 or 1==1 xor 2==1";hx("Total: ".logic($query, true));
 //$query = '0';
 
 //$query = "1+3+5*(6+2)+---5*(4*9*(2+2))+pi(132)**2";
@@ -19,7 +19,7 @@ hx(mathx($query, true));
 
 function logic($query, $debug = false){
 	hr("Query: ".$query, "#123574", "#ffaacc");
-
+	
 	$pattern = "{
 		(?(DEFINE)
 			(?<fun> \w+(?&paren))
@@ -28,12 +28,18 @@ function logic($query, $debug = false){
 			(?<exp>  ((?&number) | (?&fun) | (?&paren) |(?&s)|(?&s2)|true|false|null ))
 			(?<exp2>  [\+\-]*((?&number) | (?&fun) | (?&paren)  ))
 			(?<pot2> (?&exp)\s*[\^]\s*(?&exp2))
-			(?<and>((?&op)|(?&exp)|(?&m))(\s*(and|xor)\s*((?&op)|(?&exp)|(?&m)))+)
+			(?<and>((?&op)|(?&exp)|(?&m))(\s*(and)\s*((?&op)|(?&exp)|(?&m)))+)
+			(?<and2>((?&op)|(?&exp)|(?&m))(\s*(and|xor)\s*((?&op)|(?&exp)|(?&m)))+)
+			//(?<xor>((?&and))(\s*(xor)\s*((?&and)))+)
+			(?<or>((?&xor))(\s*(or)\s*((?&xor)))+)
 			(?<exp3>  ((?&number) | (?&fun) | (?&paren)  ))
 		)
 		(?<term>
 			(?<a>(?&and))|
-			(?<op>(?<o1>(?&m))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)))|
+			(?<xo>(?&and2))|
+			#?<orr>(?&or))|
+			#(?<op>(?<o1>(?&m)|(?&s)|(?&s2))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)|(?&s)|(?&s2)))|
+			(?<op>(?<o1>(?&m)|(?&s)|(?&s2))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)|(?&s)|(?&s2)))|
 			(?<paren> \( (?<p>(?: (?>[^()]+)| (?R)  )*) \) )|
 			(?<m>[\+\-]*(?&exp3)(?:[\*/%\+\-](?&exp3))*(?:\*\*(?&exp3))*)|
 			(?<n>(?&number))|
@@ -44,18 +50,19 @@ function logic($query, $debug = false){
 			
 		
 		)
-		(?:\s*(?<opp>or)\s|$)
+		(?:\s*(?<opp>or)\s*|$)
 		
 		
 	}isx";
-	if($debug and preg_match_all($pattern, $query, $c)){
+	if($debug or preg_match_all($pattern, $query, $c)){
 		//hx($c);
 	}
-
+	
 	$value = '';
 	$last = null;
 	$xor = false;
     if(preg_match_all($pattern, $query, $c)){
+		
 
 		foreach($c['term'] as $k => $t){
 			if($c['paren'][$k] != ''){
@@ -67,7 +74,10 @@ function logic($query, $debug = false){
 				hr(".AND.: $t");
 				$value = logic_and($c['a'][$k]);
 			}
-
+			if($c['xo'][$k] != ''){
+				hr(".XOR.: $t");
+				$value = logic_xor($c['xo'][$k]);
+			}
 			if($c['string'][$k] != ''){
 				$value = $c['t'][$k];
 			}
@@ -143,7 +153,7 @@ function logic($query, $debug = false){
     return $value;
 }
 function logic_and($query, $debug = false){
-	hr("Query: ".$query, "#123574", "#ffaacc");
+	hr("Query [.AND.]: ".$query, "white", "#33aacc");
 
 	$pattern = "{
 		(?(DEFINE)
@@ -158,7 +168,8 @@ function logic_and($query, $debug = false){
 		)
 		(?<term>
 			#(?<a>(?&and))|
-			(?<op>(?<o1>(?&m))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)))|
+			#(?<op>(?<o1>(?&m))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)))|
+			(?<op>(?<o1>(?&m)|(?&s)|(?&s2))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)|(?&s)|(?&s2)))|
 			(?<paren> \( (?<p>(?: (?>[^()]+)| (?R)  )*) \) )|
 			(?<m>[\+\-]*(?&exp3)(?:[\*/%\+\-](?&exp3))*(?:\*\*(?&exp3))*)|
 			(?<n>(?&number))|
@@ -169,7 +180,7 @@ function logic_and($query, $debug = false){
 			
 		
 		)
-		(?:\s*(?<opp>and)\s|$)
+		(?:\s*(?<opp>and|xor)\s|$)
 		
 		
 	}isx";
@@ -178,7 +189,7 @@ function logic_and($query, $debug = false){
 	}
 
 	$value = '';
-	$last = true;
+	$last = null;
 	$xor = false;
     if(preg_match_all($pattern, $query, $c)){
 
@@ -247,28 +258,143 @@ function logic_and($query, $debug = false){
 
 			$op = $c['opp'][$k];
 			hr("$t => VALUE = $value, ".$op,"red");
-
 			if(!$value){
-				hr("error ".$value);
-				return $value;
+				hr(" F..I..N ".$value);
+				return $value; 
 			}
-			if($op == 'and' and $value){
-				hr("continue.....");
-				$last = $value;
-				continue;
+			
+			
+			
+		
+		}
+	} 
+	
+    return $value;
+}
+
+function logic_xor($query, $debug = false){
+	hr("Query [.OR.]: ".$query, "white", "#33aacc");
+
+	$pattern = "{
+		(?(DEFINE)
+			(?<fun> \w+(?&paren))
+			(?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+			(?<mul> (?&exp)([*%/](?&exp2))+)
+			(?<exp>  ((?&number) | (?&fun) | (?&paren) |(?&s)|(?&s2)|true|false|null ))
+			(?<exp2>  [\+\-]*((?&number) | (?&fun) | (?&paren)  ))
+			(?<pot2> (?&exp)\s*[\^]\s*(?&exp2))
+			(?<and>((?&op)|(?&exp)|(?&m))(\s*(and)\s*((?&op)|(?&exp)|(?&m)))+)
+			(?<and2>((?&op)|(?&exp)|(?&m))(\s*(and|xor)\s*((?&op)|(?&exp)|(?&m)))+)
+			//(?<xor>((?&and))(\s*(xor)\s*((?&and)))+)
+			(?<or>((?&xor))(\s*(or)\s*((?&xor)))+)
+			(?<exp3>  ((?&number) | (?&fun) | (?&paren)  ))
+		)
+		(?<term>
+			(?<a>(?&and))|
+			#(?<xo>(?&and2))|
+			#?<orr>(?&or))|
+			#(?<op>(?<o1>(?&m)|(?&s)|(?&s2))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)|(?&s)|(?&s2)))|
+			(?<op>(?<o1>(?&m)|(?&s)|(?&s2))(?<o>(==|>=|<=|>|<|!=))(?<o2>(?&m)|(?&s)|(?&s2)))|
+			(?<paren> \( (?<p>(?: (?>[^()]+)| (?R)  )*) \) )|
+			(?<m>[\+\-]*(?&exp3)(?:[\*/%\+\-](?&exp3))*(?:\*\*(?&exp3))*)|
+			(?<n>(?&number))|
+			(?<f>(?&fun))|
+			(?<s>(?<string>   \" (?<t>(?:   [^\"\\\\]|\\\\.     )*) \"     ))|
+			(?<s2>(?<string2>   ' (?<t2>(?:   [^'\\\\]|\\\\.     )*) '     ))|
+			(?<v>true|false|null)
+			
+		
+		)
+		(?:\s*(?<opp>xor)\s*|$)
+		
+		
+	}isx";
+	if($debug or preg_match_all($pattern, $query, $c)){
+		//hx($c);
+	}
+
+	$value = '';
+	$last = null;
+	
+    if(preg_match_all($pattern, $query, $c)){
+
+		foreach($c['term'] as $k => $t){
+			if($c['paren'][$k] != ''){
+				hr("Parentesis: $t");
+				$value = logic($c['p'][$k]);
+			}
+			if($c['a'][$k] != ''){
+				hr(".AND.: $t");
+				$value = logic_and($c['a'][$k]);
+			}
+			if($c['string'][$k] != ''){
+				$value = $c['t'][$k];
+			}
+
+			if($c['string2'][$k] != ''){
+				$value = $c['t2'][$k];
+			}
+			
+			if($c['n'][$k] != ''){
+				hr("Número: $t");
+				$value = $c['n'][$k];
+			}
+
+			if($c['v'][$k] != ''){
+				if($c['v'][$k]=='true'){
+					$value = true;
+				}else if($c['v'][$k]=='true'){
+					$value = false;
+				}
+			}
+
+			if($c['m'][$k] != ''){
+			
+				$value = math($c['m'][$k]);
+				hr("Matemática: [$t] => ".$c['m'][$k]);
+				
 				
 			}
 
-			if($value){
-				hr("fin ".$value);
-				return $value; 
+			if($c['o'][$k] != ''){
+				$t1 = logic($c['o1'][$k]);
+				$t2 = logic($c['o2'][$k]);
+				$value = false;
+				
+				switch($c['o'][$k]){
+					case '==':
+						$value = $t1 == $t2;
+					break;
+					case '>':
+						$value = $t1 > $t2;
+					break;
+					case '<':
+						$value = $t1 < $t2;
+					break;
+					case '>=':
+						$value = $t1 >= $t2;
+					break;
+					case '<=':
+						$value = $t1 <= $t2;
+					break;
+					case '!=':
+						$value = $t1 != $t2;
+					break;
+				}
+				hr("Condicion: ".$t1." ".$c['o'][$k]." ".$t2." -> $value", "green");
 			}
-		
-			
 
-			//
-			
-		
+			$op = $c['opp'][$k];
+			hr("comparando XOR [$t] => VALUE = $value, ".$op,"red");
+
+			if($last === null){
+
+				$last = $value;
+				continue;
+			}
+			$value = ($last xor $value);
+			$last = $value;
+			hr("XOR value is $value", "blue");
 		}
 	} 
 	
