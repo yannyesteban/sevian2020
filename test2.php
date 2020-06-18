@@ -1,5 +1,15 @@
 <?php 
 include "Sevian/Functions.php";
+include "Sevian/Logic.php";
+
+
+
+
+$query = "1==0 and 1==2 and 5==4";
+$query = "'c'=='c' xor 2==2 and 1==1 and 5==5 or 1==1 xor 2==1";
+hx("Total ..: ".\sevian\Logic::evalOr($query, true));
+//$query = '0';
+
 include "oper.php";
 include "oper2.php";
 
