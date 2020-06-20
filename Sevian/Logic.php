@@ -2,14 +2,15 @@
 namespace Sevian;
 
 
-$query = '$if(3>1){"alpha"}{"betha"}';
-hx("Total ..: ".\sevian\Logic::eval($query, true));
+//$query = '$if(3<6)(yanny)("betha")';
+//hx("Total ..: ".\sevian\Logic::eval($query, true));
 
 class Logic{
 
 	static function evalIf($exp, $q, $then, $else) {
 	
-		eval("\$v = $q;");
+		$v = self::evalOr($q);
+		//eval("\$v = $q;");
 	
 		if($v){
 			$qq = $then;
@@ -32,6 +33,61 @@ class Logic{
 		
 	}
 	static function eval($query, $debug){
+		$pattern = '
+		/
+		(?(DEFINE)
+			(?<pp> \( (?: (?>[^()]+) | (?&exp) )* \) )
+			(?<pc> \{ (?: (?>[^{}]+) | (?&exp) )* \} )
+			#	(?<pc> )
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (?:\.\d+)? (?:[eE] [+-]? \d+)? )    
+		   (?<boolean>   true | false | null )
+		   (?<string>    " (?:[^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
+		   (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
+		   (?<pair>      \s* (?&string) \s* : (?&json)  )
+		   (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
+		   (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
+		
+		   (?<xw> ([^(){}"])*)
+			
+			(?<exp> (?:(?&string) | (?&number) | \s* | (?&pp)| (?&pc) | (?&xw) )* )
+
+			#(?<cond>) @if\((?&exp)\){((?&number))}
+
+			(?<if> @if\((?&exp)\)\{((?R))\}(?>\{((?R))\})*+ )
+		
+		)
+		
+		(
+			
+			(?:\$if\((?<cc>(?&exp))\)\((?<then>(?&exp))\)(\((?<else>(?&exp))\))?) 
+
+		)
+		
+
+		/six';
+
+		//$q = '@if(3>1){ @if(5>6){"k"} }{ @if(4>2){@if(9>1){"zz"}} }';
+		//$q = '@if(3>1){"alpha"}{"betha"}';
+		//$q = 'k=if(33>112){if(8>3){alpha}}{if(8>3){"gamma"}{"thita"}}, m:if(2>10){"yes"}{{a:"ll"}}';
+		//$q = 'if(8>3){"gamma"}{"thita"}';
+		//$q = "case(3>2 + 5){when(1){aaa}when(2){bbb}when(3){ccc}}";
+		//$q='@if("465" 465 (999)){(4654 + 0()}';
+		//$q = 'yanny @if(u==4 + ((3+8a) + (7*3)) ){"hola"}{"adios"}';
+		if(preg_match_all($pattern, $query, $c)){
+			//hx($c);
+		}
+		if(preg_match($pattern, $query, $c)){
+			$query = preg_replace_callback ($pattern, function($c) use($pattern){
+				if($c['cc']){
+					return self::evalIf($pattern,$c['cc'],$c['then'],$c['else']??'');
+				}
+				
+			},$query);
+		}
+
+		return $query;
+	}
+	static function eval2($query, $debug){
 		$pattern = '
 		/
 		(?(DEFINE)
@@ -96,7 +152,7 @@ class Logic{
 	}
 
 	static function evalOr($query, $debug = false){
-		hr("Query: ".$query, "#123574", "#ffaacc");
+		//hr("Query: ".$query, "#123574", "#ffaacc");
 		
 		$pattern = "{
 			(?(DEFINE)
@@ -144,16 +200,16 @@ class Logic{
 	
 			foreach($c['term'] as $k => $t){
 				if($c['paren'][$k] != ''){
-					hr("Parentesis: $t");
+					//hr("Parentesis: $t");
 					$value = self::evalOr($c['p'][$k]);
 				}
 	
 				if($c['a'][$k] != ''){
-					hr(".AND.: $t");
+					//hr(".AND.: $t");
 					$value = self::evalAnd($c['a'][$k]);
 				}
 				if($c['xo'][$k] != ''){
-					hr(".XOR.: $t");
+					//hr(".XOR.: $t");
 					$value = self::evalXOr($c['xo'][$k]);
 				}
 				if($c['string'][$k] != ''){
@@ -165,7 +221,7 @@ class Logic{
 				}
 				
 				if($c['n'][$k] != ''){
-					hr("Número: $t");
+					//hr("Número: $t");
 					$value = $c['n'][$k];
 				}
 	
@@ -180,7 +236,7 @@ class Logic{
 				if($c['m'][$k] != ''){
 				
 					$value = Math::eval($c['m'][$k]);
-					hr("Matemática: [$t] => ".$c['m'][$k]);
+					//hr("Matemática: [$t] => ".$c['m'][$k]);
 					
 					
 				}
@@ -210,19 +266,17 @@ class Logic{
 							$value = $t1 != $t2;
 						break;
 					}
-					hr("Condicion: ".$t1." ".$c['o'][$k]." ".$t2." -> $value", "green");
+					//hr("Condicion: ".$t1." ".$c['o'][$k]." ".$t2." -> $value", "green");
 				}
 	
 				$op = $c['opp'][$k];
-				hr("$t => VALUE = $value, ".$op,"darkred");
+				//hr("$t => VALUE = $value, ".$op,"darkred");
 	
 				if($value){
 					return $value;
 				}
 	
-				
 	
-				//
 				
 			
 			}
@@ -232,7 +286,7 @@ class Logic{
 	}
 
 	static function evalAnd($query, $debug = false){
-		hr("Query [.AND.]: ".$query, "white", "#33aacc");
+		//hr("Query [.AND.]: ".$query, "white", "#33aacc");
 	
 		$pattern = "{
 			(?(DEFINE)
@@ -274,7 +328,7 @@ class Logic{
 	
 			foreach($c['term'] as $k => $t){
 				if($c['paren'][$k] != ''){
-					hr("Parentesis: $t");
+					//hr("Parentesis: $t");
 					$value = self::evalOr($c['p'][$k]);
 				}
 	
@@ -287,7 +341,7 @@ class Logic{
 				}
 				
 				if($c['n'][$k] != ''){
-					hr("Número: $t");
+					//hr("Número: $t");
 					$value = $c['n'][$k];
 				}
 	
@@ -302,7 +356,7 @@ class Logic{
 				if($c['m'][$k] != ''){
 				
 					$value = Math.eval($c['m'][$k]);
-					hr("Matemática: [$t] => ".$c['m'][$k]);
+					//hr("Matemática: [$t] => ".$c['m'][$k]);
 					
 					
 				}
@@ -332,13 +386,13 @@ class Logic{
 							$value = $t1 != $t2;
 						break;
 					}
-					hr("Condicion: ".$t1." ".$c['o'][$k]." ".$t2." -> $value", "green");
+					//hr("Condicion: ".$t1." ".$c['o'][$k]." ".$t2." -> $value", "green");
 				}
 	
 				$op = $c['opp'][$k];
-				hr("$t => VALUE = $value, ".$op,"red");
+				//hr("$t => VALUE = $value, ".$op,"red");
 				if(!$value){
-					hr(" F..I..N ".$value);
+					//hr(" F..I..N ".$value);
 					return $value; 
 				}
 				
@@ -352,7 +406,7 @@ class Logic{
 	}
 	
 	static function evalXOr($query, $debug = false){
-		hr("Query [.OR.]: ".$query, "white", "#33aacc");
+		//hr("Query [.OR.]: ".$query, "white", "#33aacc");
 	
 		$pattern = "{
 			(?(DEFINE)
@@ -399,11 +453,11 @@ class Logic{
 	
 			foreach($c['term'] as $k => $t){
 				if($c['paren'][$k] != ''){
-					hr("Parentesis: $t");
+					//hr("Parentesis: $t");
 					$value = self::evalOr($c['p'][$k]);
 				}
 				if($c['a'][$k] != ''){
-					hr(".AND.: $t");
+					//hr(".AND.: $t");
 					$value = self::evalAnd($c['a'][$k]);
 				}
 				if($c['string'][$k] != ''){
@@ -430,7 +484,7 @@ class Logic{
 				if($c['m'][$k] != ''){
 				
 					$value = Math::eval($c['m'][$k]);
-					hr("Matemática: [$t] => ".$c['m'][$k]);
+					//hr("Matemática: [$t] => ".$c['m'][$k]);
 					
 					
 				}
@@ -460,11 +514,11 @@ class Logic{
 							$value = $t1 != $t2;
 						break;
 					}
-					hr("Condicion: ".$t1." ".$c['o'][$k]." ".$t2." -> $value", "green");
+					//hr("Condicion: ".$t1." ".$c['o'][$k]." ".$t2." -> $value", "green");
 				}
 	
 				$op = $c['opp'][$k];
-				hr("comparando XOR [$t] => VALUE = $value, ".$op,"red");
+				//hr("comparando XOR [$t] => VALUE = $value, ".$op,"red");
 	
 				if($last === null){
 	
@@ -473,7 +527,7 @@ class Logic{
 				}
 				$value = ($last xor $value);
 				$last = $value;
-				hr("XOR value is $value", "blue");
+				//hr("XOR value is $value", "blue");
 			}
 		} 
 		
@@ -546,7 +600,7 @@ class Math{
 			
 		}isx";
 		if($debug and preg_match_all($pattern, $query, $c)){
-			hx($c);
+			//hx($c);
 		}
 	
 		$value = 0;
