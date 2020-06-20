@@ -218,6 +218,46 @@
 					
 						]
 					}
+				},
+				{
+					"caption":"Clientes",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/client",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
+				{
+					"caption":"Cuentas",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/account",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
 				}
 			]
 		},
@@ -318,6 +358,31 @@
 								"element":"s-form",
 								"method":"list",
 								"name":"/status_type",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				}
+			]
+		},
+		{
+			"caption":"Unidades",
+			"items":[
+				{
+					"caption":"Unidades",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"s-form",
+								"method":"list",
+								"name":"/unit",
 								"eparams":{"recordId":0}
 							}
 					

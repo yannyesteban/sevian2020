@@ -1,0 +1,76 @@
+{
+	"form":"unit",
+	"caption":"Unidades",
+	"className":"",
+	"query":"select units.id, units.name, name_id, device_id, vehicle_id, units.person_id, icon_id, coalesce(c.id, '') as client_id, account_id, contract_start, contract_end, status_id FROM units LEFT JOIN accounts as a ON a.id = account_id LEFT JOIN clients as c ON c.id = a.client_id",
+	"query2":"SELECT units.id, units.name, name_id, device_id, vehicle_id, units.person_id, icon_id, ifnull(c.id, '') as client_id, account_id, contract_start, contract_end, status_id FROM units LEFT JOIN accounts as a ON a.id = account_id LEFT JOIN clients as c ON c.id = a.client_id LIMIT 10",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Id", "input": "hidden", "type":"hidden"},
+		{"name":"name","caption":"Nombre"},
+		{"name":"name_id","caption":"ID Unidad", "input": "list", "type": "text", "childs": false,
+			"data":[
+				["", "seleccione", "*"],
+				"select id, name from units_names ORDER BY 2"
+				
+			]},
+		{"name":"device_id","caption":"Equipo", "input": "list", "type": "text", "childs": false,
+			"data":[
+				["", "seleccione", "*"],
+				"select id, device_name as x from devices WHERE device_name IS NOT NULL ORDER BY 2"
+				
+			]},
+
+
+		{"name":"vehicle_id","caption":"Vehículo", "input": "list", "type": "text", "childs": false,
+		"data":[
+			["", "seleccione", "*"],
+			"SELECT id, plate FROM vehicles ORDER BY 2"
+			
+		]},
+
+		{"name":"icon_id","caption":"Ícono", "input": "input", "type": "select", "childs": false,
+			"data":[
+				["", "seleccione", "*"],
+				"SELECT id, icon FROM icons WHERE type_id = 1 ORDER BY 2"
+				
+			]},
+
+		{"name":"client_id","caption":"Client", "input": "input", "type": "select", "childs": true,
+			"data":[
+				["", "seleccione", "*"],
+				"select id, client from clients ORDER BY 2"
+				
+			]},
+		{"name":"account_id","caption":"Cuenta", "input": "input", "type": "select", "parent": "client_id",
+		"data":[
+			["", "seleccione", "*"],
+			"select id, name, client_id from accounts ORDER BY 2"
+			
+		]},
+		
+		
+		
+		
+		{"name":"contract_start","caption":"Inicio del Contrato"},
+		{"name":"contract_end","caption":"Fin del Contrato"}
+
+	],
+	
+	"searchFor":[
+		"brand", "model"
+	]
+
+}

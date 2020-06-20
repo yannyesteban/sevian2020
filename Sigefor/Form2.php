@@ -64,7 +64,8 @@ class Form2
 				$this->createForm(2);
 				break;
 			case 'load-from':
-				$this->createForm(2, true);
+				//hx($this->recordFrom,"red");
+				$this->createForm(3, true);
 				break;
 			case 'list':
 				$this->createGrid(1, '');
@@ -132,6 +133,20 @@ class Form2
 			//$records[$__id_] = $form->getDataKeys()[0];
 			
 			//$this->setDataRecord('form', $records);
+		}else if($mode == 3){
+			
+			$form =  new \Sigefor\Component\Form2([
+
+				'id'		=> $this->containerId,
+				'panelId'	=> $this->id,
+				'name'		=> JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
+				'method'	=> $this->method,
+				'mode'		=> 2,
+				//'record'	=> $this->getRecord('grid', $__id_),
+				//'recordIndex'=>$__id_,
+				'userData'=>$this->userData,
+				
+			]);
 		}
 		//print_r($form);exit;
 		$this->info = $form;

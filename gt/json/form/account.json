@@ -1,8 +1,8 @@
 {
 	"form":"client",
-	"caption":"Clientes",
+	"caption":"Cuentas 2020",
 	"class":"basic",
-	"query":"SELECT * FROM clients",
+	"query":"SELECT * FROM accounts",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -16,18 +16,24 @@
 		}
 	},
 	"params":"",
-	"recordFrom":{"id":"#client_id"},
+	"recordFrom":{"id":"#account_id"},
 	
 	"pages":[],
 	"groups":{},
 	"infoFields":[
 		{"name":"id","caption":"Código"},
-		{"name":"client","caption":"Nombre"}
+		{"name":"name","caption":"Nombre de la Cuenta"},
+		{"name":"client_id","caption":"Client", "input": "input", "type": "select",
+			"data":[
+				[0, "seleccione", "*"],
+				"select id, client from clients ORDER BY 2"
+				
+			  ]}
 
 	],
 	
 	"searchFor":[
-		"client","id"
+		"name","id"
 	]
 
 }

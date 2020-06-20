@@ -164,8 +164,11 @@ trait Form2{
 
 		$values = [];
 		//hr($this->userData);
+		
 		if($this->record){
 			$this->_values = $values = $this->getRecord($this->infoQuery, (object)$record);
+		}elseif($this->recordFrom and $this->method == 'load-from'){
+			$this->_values = $values = $this->getRecord($this->infoQuery, $this->recordFrom);
 		}
 		
 		$_fields = [];
@@ -176,7 +179,7 @@ trait Form2{
 			$this->getDefaultInput($_fields[$key]->mtype, $_fields[$key]->input, $_fields[$key]->type);
 			$_fields[$key]->value = $values[$key]?? '';
 		}
-		//hr($infoField);
+		//hx($values);
 		foreach($infoField as $info){
 			$info = (object)$info;
 			$name = $info->name;
