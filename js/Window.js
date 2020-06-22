@@ -816,6 +816,11 @@ Float.Window = (($) => {
             this._main.removeClass(this.mode);
             this._main.addClass(mode);
             this.mode = mode;
+            if (mode == "auto") {
+                alert(8);
+                this.getBody().get().style.width = "auto";
+                this.getBody().get().style.height = "auto";
+            }
         }
         setVisible(value) {
             this._active = null;
