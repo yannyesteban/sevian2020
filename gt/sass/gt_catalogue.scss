@@ -1,28 +1,45 @@
+
+
 .gt{
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	>*{
-		height: 100%;
-	}
+	overflow: hidden;
 }
 
 .sg-f-catalogue{
+	
 	height: 100%;
 	background-color: blue;
 	display: flex;
 	flex-direction: column;
+	overflow: auto;
+	border:3px solid red;
+	>*{
+		flex:1 1 auto;
+		border:3px solid red;
+		margin:2px;
+
+	}
 	>*:nth-child(2){
 		//height: 100%;
+	}
+	.cat{
+		border:4px solid green;
+		height: 100%;
+		flex:1 1 auto;
+		overflow: auto;
 	}
 }
 
 .gt.cota.catalogue{
-
+	
 	background-color: rgb(228, 228, 228);
 	font-size: 0.8em;
 	font-family: tahoma;
 	padding: 4px;
+	overflow: auto;
+	height: 100%;
 	>.caption{
 		line-height: 1.5em;
 		background-color: rgb(255, 255, 255);
@@ -59,8 +76,10 @@
 		
 		display: flex;
 		flex-direction: row;
+		overflow: auto;
 		>.main{
 			flex: 1 1 30%;
+			overflow: auto;
 		}
 		>.contact{
 			flex: 1 1 auto;
@@ -78,18 +97,22 @@
 	}
 
 	.contact{
-		
+		border:2px solid orange;
 		display: grid;
 		//height: 100%;
 		overflow: auto;
 		grid-gap: 3px;
 		text-transform: uppercase;
 		grid-template-columns: auto auto auto auto;
+		//grid-template-rows: auto;
+		//grid-auto-rows: minmax(min-content, max-content);
+		grid-auto-rows: fit-content(30px);
 		font-size: 0.9em;
 		
 		>*{
 			//display: table-row;
-			background-color: rgb(236, 236, 236);
+			background-color: rgb(2, 60, 65);
+			color:white;
 			padding: 3px;
 			text-transform: capitalize!important;
 			

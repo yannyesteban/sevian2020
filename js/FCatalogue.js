@@ -36,7 +36,7 @@ var SGFCatalogue = (($) => {
                 this.form.parentContext = this;
                 this._form = new Form2(this.form);
             }
-            this._infoBody = main.create("div");
+            this._infoBody = main.create("div").addClass(["cat"]);
             if (this.catalogue) {
                 this.loadCatalogue(this.catalogue);
             }

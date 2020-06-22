@@ -1,0 +1,29 @@
+{
+	"form":"phone_number",
+	"caption":"Líneas Telefónicas",
+	"class":"",
+	"query":"SELECT phone_numbers.* FROM clients as cl INNER JOIN accounts as ac ON ac.client_id = cl.id INNER JOIN units as u ON u.account_id = ac.id INNER JOIN devices as d ON d.id = u.device_id INNER JOIN phone_numbers ON phone_numbers.id = d.phone_number_id WHERE cl.id = @clientIdx ORDER BY 2",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"voice_number","caption":"Número de Voz"}
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

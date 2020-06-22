@@ -14,7 +14,7 @@
 		}
 	},
 	"params":"",
-	
+	"recordFrom":{"id":"#unit_id"},
 	"pages":[],
 	"groups":{},
 	"infoFields":[
