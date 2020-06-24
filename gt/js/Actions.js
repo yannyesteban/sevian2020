@@ -30,3 +30,26 @@ GT.c = function (name, param_name, id) {
         }
     });
 };
+GT.w = function (name, panelId, windowId) {
+    S.send({
+        async: true,
+        panel: panelId,
+        params: [{
+                t: 'setMethod',
+                id: windowId,
+                element: 's-form',
+                method: 'list',
+                name: name,
+                eparams: {}
+            }],
+        window: {
+            panel: windowId,
+            name: windowId,
+            caption: 'ventana',
+            mode: 'custom',
+            width: '800px', height: '600px',
+            left: 'center',
+            top: 'middle', show: { left: 'center', top: 'middle', mode: 'custom' }
+        }
+    });
+};

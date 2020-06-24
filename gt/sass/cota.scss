@@ -1,12 +1,4 @@
-.sgWin{
-  >.body{
-    //border:3px solid yellow;
-    //height: 100px;
-    >*{
-      //display: none;
-    }
-  }
-}
+
 
 .cota-main{
   height: 100%;
@@ -187,19 +179,27 @@
 }
 
 .subwin, #form_p10{
+
   .sg-form{
     overflow: auto;
     background-color: rgba(255, 255, 255, 0.863);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    >*{
+      
+    }
     .caption{
-      background-color: rgb(230, 230, 230);
+      background-color: rgb(221, 96, 24);
       text-align: center;
       font-size: 13px;
-      line-height: 1.8em;
+      line-height: 2.0em;
       font-weight: bold;
       vertical-align: middle;
-      color: rgb(7, 135, 221);
+      color: rgb(224, 224, 224);
     }
     .page{
+      flex: 1 1 auto;
       overflow: auto;
       .field{
         padding: 4px;
@@ -218,6 +218,27 @@
         }
       }
 
+    }
+
+    .sg-menu{
+      background-color: #e4e4e4;
+      padding: 4px;
+      border: 2px solid #ececec;
+      margin-top: 10px;
+      
+      .menu{
+        float:right;
+      }
+      .option{
+        line-height: 2em;
+        background-color: #ff8800;
+        color: #e7e7e7;
+        border: 2px solid #ececec;
+        cursor: pointer;
+        -webkit-transition: 0.5s all ease-out;
+        transition: 0.5s all ease-out;
+
+      }
     }
   }
 }

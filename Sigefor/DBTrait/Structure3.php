@@ -1,16 +1,17 @@
 <?php
 namespace Sigefor\DBTrait;
+require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
+require_once 'template3.php';
 
-require_once 'template.php';
-
-trait Structure {
+trait Structure3 {
 	
-	use template;
-	
+	use template3;
+	use JasonFileInfo;
 
 	private $cn = null;
 	private $infoItems = null;
 	
+	private $structure = '';
 	private $methods = null;
 	private $template = '';
 	private $templateName = '';
@@ -19,9 +20,28 @@ trait Structure {
     private $tTemplates = "_sg_templates";
 	private $cssDocuments = [];
 	private $jsDocuments = [];
+	private $userData = [];
 
+	private $infoElements = [];
 
 	private $_wins = null;
+
+	public function loadStructure($name, $pattern = null){
+		
+		if($info = $this->loadJsonInfo($name, $pattern)){
+		
+			$this->setInfoStructure($info);
+			
+			$this->infoElements = $info->elements;
+		}else{
+		
+			$info = $this->loadDBStructure($name);
+			$this->setInfoStructure($info);
+			$this->infoElements = $this->loadElements($this->name);
+			
+		}
+		
+	}
 
 	public function setInfoStructure($info){
 		

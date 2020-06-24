@@ -150,17 +150,28 @@
 .subwin .sg-form, #form_p10 .sg-form {
   overflow: auto;
   background-color: rgba(255, 255, 255, 0.863);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 100%;
 }
 .subwin .sg-form .caption, #form_p10 .sg-form .caption {
-  background-color: #e6e6e6;
+  background-color: #dd6018;
   text-align: center;
   font-size: 13px;
-  line-height: 1.8em;
+  line-height: 2em;
   font-weight: bold;
   vertical-align: middle;
-  color: #0787dd;
+  color: #e0e0e0;
 }
 .subwin .sg-form .page, #form_p10 .sg-form .page {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
   overflow: auto;
 }
 .subwin .sg-form .page .field, #form_p10 .sg-form .page .field {
@@ -178,5 +189,23 @@
   line-height: 1.8em;
   background-color: white;
   padding-left: 4px;
+}
+.subwin .sg-form .sg-menu, #form_p10 .sg-form .sg-menu {
+  background-color: #e4e4e4;
+  padding: 4px;
+  border: 2px solid #ececec;
+  margin-top: 10px;
+}
+.subwin .sg-form .sg-menu .menu, #form_p10 .sg-form .sg-menu .menu {
+  float: right;
+}
+.subwin .sg-form .sg-menu .option, #form_p10 .sg-form .sg-menu .option {
+  line-height: 2em;
+  background-color: #ff8800;
+  color: #e7e7e7;
+  border: 2px solid #ececec;
+  cursor: pointer;
+  -webkit-transition: 0.5s all ease-out;
+  transition: 0.5s all ease-out;
 }
 /*# sourceMappingURL=cota.css.map */

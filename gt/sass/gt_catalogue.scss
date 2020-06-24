@@ -4,20 +4,20 @@
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	overflow: hidden;
+	//overflow: hidden;
 }
 
 .sg-f-catalogue{
 	
 	height: 100%;
-	background-color: blue;
+	//background-color: blue;
 	display: flex;
 	flex-direction: column;
 	overflow: auto;
-	border:3px solid red;
+	
 	>*{
 		flex:1 1 auto;
-		border:3px solid red;
+		//border:3px solid red;
 		margin:2px;
 
 	}
@@ -25,7 +25,7 @@
 		//height: 100%;
 	}
 	.cat{
-		border:4px solid green;
+		//border:4px solid green;
 		height: 100%;
 		flex:1 1 auto;
 		overflow: auto;
@@ -42,15 +42,15 @@
 	height: 100%;
 	>.caption{
 		line-height: 1.5em;
-		background-color: rgb(255, 255, 255);
-		color:rgb(21, 110, 243);
+		background-color: rgb(248, 248, 248);
+		color:rgb(168, 168, 168);
 		padding: 6px;
 		text-align: center;
 		font-weight: bold;
 	}
 	a{
 		text-decoration-line: none;
-		color: rgb(75, 174, 255);
+		color: rgb(255, 255, 255);
 		&:hover{
 			color: rgb(161, 161, 161);
 			text-decoration-line: underline;
@@ -67,22 +67,33 @@
 			.value{
 				padding: 2px;
 				font-weight: bold;
-				color:rgb(75, 174, 255);
+				color:rgb(212, 212, 212);
 				padding-left: 10px;
 			}
 		}
 	}
-	>.body{
+
+	.page.account{
+		background-color: rgb(145, 145, 145);
+	}
+	.page.units{
+		background-color: rgb(104, 4, 4);
+	}
+	>.body_{
 		
 		display: flex;
 		flex-direction: row;
 		overflow: auto;
+		
 		>.main{
-			flex: 1 1 30%;
+			flex: 0 0 200px;
 			overflow: auto;
+			
+			
 		}
 		>.contact{
 			flex: 1 1 auto;
+			
 		}
 
 		>.main{
@@ -91,13 +102,13 @@
 		}
 
 		>.contact{
-			background-color: rgb(255, 255, 255);
-			color:rgb(39, 71, 129);
+			//background-color: rgb(255, 255, 255);
+			//color:rgb(39, 71, 129);
 		}
 	}
 
 	.contact{
-		border:2px solid orange;
+		background-color: rgb(66, 63, 64);
 		display: grid;
 		//height: 100%;
 		overflow: auto;
@@ -108,20 +119,79 @@
 		//grid-auto-rows: minmax(min-content, max-content);
 		grid-auto-rows: fit-content(30px);
 		font-size: 0.9em;
-		
-		>*{
+		//align-content: end;
+		div:empty:after {
+			//background: lime;
+			content: '.';
+			visibility: hidden;
+			
+		  }
+		.title{
+			display:none;
+		}
+		>:nth-child(4n+1){
+			padding: 3px;
+			//text-align: center;
+			
+			grid-column: 1/5;
+			grid-row: auto;
 			//display: table-row;
-			background-color: rgb(2, 60, 65);
+			background-color: rgb(0, 0, 0, 0.1);
 			color:white;
+			//
+			text-transform: capitalize!important;
+			font-weight: bold;
+		}
+		>:nth-child(4n+2){
+			padding: 3px;
+			padding-left: 20px;
+			//padding-left: 10px;
+			grid-column: auto;
+			grid-row: auto;
+			//display: table-row;
+			background-color: rgb(0, 0, 0, 0.1);
+			color:rgb(217, 228, 158);
+			
+			text-transform: capitalize!important;
+		}
+		>:nth-child(4n+3){
+			grid-column: auto;
+			grid-row: auto;
+			//display: table-row;
+			background-color: rgb(0, 0, 0, 0.1);
+			color:rgb(252, 185, 243);
 			padding: 3px;
 			text-transform: capitalize!important;
-			
-			
-			
+		}
+		>:nth-child(4n+4){
+			grid-column: span 2;
+			grid-row: auto;
+			//display: table-row;
+			background-color: rgb(0, 0, 0, 0.1);
+			color:rgb(127, 201, 250);
+			padding: 3px;
+			text-transform: capitalize!important;
 		}
 
 		.email{
 			text-transform: lowercase;
+		}
+	}
+
+	>.body{
+		display: grid;
+		grid-auto-flow: column;
+		grid-template-columns: 200px 1fr  ;
+		grid-template-rows: 1fr 2fr 2fr ;
+		height: 100%;
+		overflow: auto;
+		grid-gap: 4px;
+		>*{
+			overflow: auto;
+		}
+		>.main{
+			//grid-column: 1/5;
+			grid-row: 1/4;
 		}
 	}
 

@@ -9,6 +9,8 @@ trait Grid{
 
 	public $searchFor = [];
 	public $pagination = true;
+	public $qWhere = '';
+	public $qOrderBy = '';
 	public $page = 1;
 	public $pageLimit = 6;
 	
@@ -35,12 +37,19 @@ trait Grid{
 		$this->page = $page;
 
 		$cn = $this->cn;
-
+		$query = $this->query;
+		if($this->qWhere){
+			$query = $query.' WHERE '.$this->qWhere;
+		}
+		if($this->qOrderBy){
+			$query = $query.' ORDER BY '.$this->qOrderBy;
+		}
+		//hx($query);
 		if($search !='' and $this->searchFor){
-			$this->query = $cn->evalFilters($this->query, $search, $this->searchFor);
+			$query = $cn->evalFilters($query, $search, $this->searchFor);
 		}
 
-		$cn->query = $this->query;
+		$cn->query = $query;
 		$cn->page = $page;
 		$cn->pagination = $this->pagination;
 		$cn->pageLimit = $this->pageLimit;//$this->maxPages;

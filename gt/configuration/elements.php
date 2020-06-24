@@ -22,6 +22,18 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[]
 	],
+	'structure3' 		=> [
+		'enable' => true,
+		
+		'file' 	=> MAIN_PATH.'Sigefor/structure3.php',
+		'class' => '\Sigefor\structure3',
+		'init'=>[
+			'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+			'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+		],
+		'js'=>[],
+		'css'=>[]
+	],
 	's-menu' 		=> [
 		'enable' => true,
 		
@@ -57,7 +69,7 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[],
 		'init'=>[
-			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json'
+			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json',
 		]
 	],
 	'menu' 		=> [
@@ -120,6 +132,13 @@ $cls_elements = [
 			]
 
 		],
+		'css'=>[]
+	],
+	'procedure' => [
+		'file' 	=> MAIN_PATH.'Sigefor/Procedure.php',
+		'class' => 'Sigefor\Procedure',
+		'enable' => true,
+		'js'=>[],
 		'css'=>[]
 	],
 ];

@@ -69,7 +69,7 @@ class Procedure extends \Sevian\Element{
 			WHERE `procedure` = '$this->name'";
 
         $result = $cn->execute();
-		//hr ($cn->query);
+		//hx ($cn->query);
 		if($rs = $cn->getDataAssoc($result)){
             $commands = json_decode($rs["commands"]);
             if($commands){
