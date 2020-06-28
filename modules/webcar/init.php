@@ -274,7 +274,7 @@ $init = [
 
 $init = [
 	'theme'=>'sevian',
-	'title'=>'GTcomm v0.0.1',
+	'title'=>'Webcar 3.0',
 	'templateName' => 'main',
 	'defaultPanel' => 4,
 	'elements' => [
@@ -282,7 +282,8 @@ $init = [
 		[
 			'id'		=> 22,
 			'element'	=> 'structure3',
-			'name'		=> '/structure/webcar',//gt2020
+			//'name'		=> '/structures/webcar-login',//gt2020
+			'name'		=> '/structures/webcar',//gt2020
 			'method'	=> 'load',
 			'designMode'=> true,
 			'fixed'		=> true,
@@ -297,4 +298,3 @@ $init = [
 ];
 
 Sevian\S::configInit($init);
-

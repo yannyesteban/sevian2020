@@ -128,6 +128,7 @@ var GTUnit = (($) => {
                     this[x] = info[x];
                 }
             }
+            //return;
             let main = (this.id) ? $(this.id) : false;
             if (main) {
                 if (main.ds("gtUnit")) {
@@ -144,21 +145,12 @@ var GTUnit = (($) => {
                 main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
-            $(window).on("load", (event) => {
-                /*
-                this.map = GTMap.getMap("gt-map-4").map;
-                //alert(this.map.map)
-                this.map.on("load", (event)=>{
-
-                    alert("que");
-                });
-                */
-            });
         }
         static getInstance(name) {
             return Unit._instances[name];
         }
         z() {
+            alert("z");
             let map = this.map.map;
             map.addSource('point2', {
                 'type': 'geojson',
@@ -203,6 +195,9 @@ var GTUnit = (($) => {
             this.main = main;
             main.addClass("unit-main");
             this.createMenu();
+            this._info = $().create("div").addClass("win-units-info");
+            //this._info = $().create("div").addClass("win-units-info");
+            return;
             this.win = new Float.Window({
                 visible: true,
                 caption: this.caption,
@@ -214,7 +209,6 @@ var GTUnit = (($) => {
                 mode: "auto",
                 className: ["sevian"]
             });
-            this._info = $().create("div").addClass("win-units-info");
             this._winInfo = new Float.Window({
                 visible: true,
                 caption: "Info",
@@ -227,7 +221,12 @@ var GTUnit = (($) => {
                 className: ["sevian"]
             });
             let _info2 = $().create("div").addClass("win-units-info");
-            let t = new GTTrace({ map: this.map.map });
+            /* OJO
+            
+            //console.log(this.map)
+            let t = new GTTrace({map: this.map.map});
+            
+            */
             let menu = new Menu({
                 caption: "uuuu",
                 autoClose: false,
@@ -274,6 +273,12 @@ var GTUnit = (($) => {
         }
         load() {
         }
+        getMap() {
+            return this.map;
+        }
+        setMap(map) {
+            this.map = map;
+        }
         updateTracking(data) {
             let unitId;
             n = n + 0.001;
@@ -311,7 +316,7 @@ var GTUnit = (($) => {
             this.updateTracking(json);
         }
         play() {
-            let map = this.map.map;
+            let map = this.getMap().map;
             map.loadImage('https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png', function (error, image) {
                 if (error)
                     throw error;
@@ -384,7 +389,6 @@ var GTUnit = (($) => {
         }
         createMenu() {
             let infoMenu = [];
-            console.log(this);
             for (let x in this.dataClients) {
                 infoMenu[this.dataClients[x].id] = {
                     id: this.dataClients[x].id,
@@ -433,6 +437,7 @@ var GTUnit = (($) => {
                         this._lastUnitId = x;
                         this.setInfo(x);
                         this.flyTo(x);
+                        return;
                         this._traces[x] = new GTTrace({ map: this.map.map });
                         this._traces[x].play();
                     }
@@ -452,11 +457,15 @@ var GTUnit = (($) => {
                     }
                 }
             });
+            return menu;
             //console.log(check);
+        }
+        getInfoLayer() {
+            return this._info;
         }
         showUnit(id, value) {
             if (!this.marks[id]) {
-                this.marks[id] = this.map.createMark({
+                this.marks[id] = this.getMap().createMark({
                     lat: this.tracking[id].latitude,
                     lng: this.tracking[id].longitude,
                     heading: this.tracking[id].heading,
@@ -508,7 +517,7 @@ var GTUnit = (($) => {
         }
         setInfo(id) {
             this._info.text(this.loadInfo(id));
-            this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
+            //this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
         }
         loadPopupInfo(id) {
             return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataUnits[id]), this.tracking[id]);

@@ -1,0 +1,206 @@
+@font-face {
+  font-family: Hemihead;
+  src: url(../../css/fonts/HEMIHEAD.TTF);
+}
+@font-face {
+  font-family: andreab;
+  src: url(../../css/fonts/ADRRDB.TTF);
+}
+@font-face {
+  font-family: futurab;
+  src: url(../../css/fonts/FUTURABI.TTF);
+}
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+  margin: 0px;
+  height: 100%;
+}
+
+.map-layout {
+  height: 100%;
+}
+
+form {
+  overflow: auto;
+}
+
+.gt-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 60px 30px auto;
+  height: 100%;
+  overflow: auto;
+  background: #f33939;
+}
+.gt-layout > .banner {
+  grid-row: 1;
+  grid-column: 1;
+  background-color: #835454;
+}
+.gt-layout > .menu {
+  grid-row: 2;
+  grid-column: 1;
+  background-color: #494949;
+}
+.gt-layout > .body {
+  grid-row: 3;
+  grid-column: 1;
+  background-color: #66c725;
+}
+
+.gt-webcar-login {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+  background-image: url(../../../wallpaper/001.webp);
+  background-size: auto 1080px;
+  background-position-x: center;
+  background-position-y: bottom;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 100px;
+}
+.gt-webcar-login .main {
+  display: grid;
+  border-radius: 10px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  height: 100%;
+  width: 800px;
+  overflow: auto;
+  background: rgba(56, 56, 56, 0.356);
+  background-position-x: center;
+  background-position-y: center;
+  background-clip: content-box;
+  background-attachment: fixed;
+}
+.gt-webcar-login .main form {
+  height: auto;
+}
+.gt-webcar-login .main > .left-side {
+  grid-row: 1;
+  grid-column: 1;
+  background-color: rgba(0, 0, 0, 0.445);
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 100px auto 30px;
+}
+.gt-webcar-login .main > .left-side .webcar-name {
+  font-size: 20pt;
+  color: white;
+  text-transform: capitalize;
+  font-family: andreab;
+  justify-self: center;
+  text-align: center;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+}
+.gt-webcar-login .main > .left-side .gtrack-logo {
+  justify-self: center;
+  -ms-flex-item-align: center;
+      align-self: center;
+  width: 180px;
+}
+.gt-webcar-login .main > .left-side .webcar-foot {
+  color: snow;
+  font-size: 8pt;
+  justify-self: center;
+  text-align: center;
+}
+.gt-webcar-login .main > .right-side {
+  grid-row: 1;
+  grid-column: 2;
+  overflow: auto;
+  border-left: 2px solid #ffde4c;
+  background-color: rgba(0, 0, 0, 0.616);
+  display: grid;
+  grid-template-columns: 2fr;
+  grid-template-rows: 100px auto 120px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.gt-webcar-login .main > .right-side .webcar-name {
+  font-size: 20pt;
+  color: white;
+  text-transform: capitalize;
+  font-family: andreab;
+  justify-self: center;
+  text-align: center;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+}
+.gt-webcar-login .main > .right-side form {
+  justify-self: center;
+  -ms-flex-item-align: center;
+      align-self: center;
+}
+.gt-webcar-login .main > .right-side form .menu {
+  background-color: #1aa35e;
+  margin-top: 10px;
+}
+.gt-webcar-login .main > .right-side form .menu .item {
+  width: 100%;
+}
+.gt-webcar-login .main > .right-side form .menu .item .text {
+  text-align: center;
+  font-size: 14pt;
+  color: white;
+  text-transform: capitalize;
+  font-family: futurab;
+}
+.gt-webcar-login .main > .right-side .gtrack-logo {
+  justify-self: center;
+  -ms-flex-item-align: center;
+      align-self: center;
+  width: 180px;
+}
+
+.sg-form {
+  width: 300px;
+}
+.sg-form .caption {
+  display: none;
+  color: #f7f7f7;
+  text-align: center;
+}
+.sg-form .caption .text {
+  font-size: 12pt;
+  text-transform: uppercase;
+  font-family: futurab !important;
+}
+.sg-form .page .field {
+  padding: 5px 0px 10px 0px;
+}
+.sg-form .page .field .label {
+  color: #d2ebff;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  padding-bottom: 10px;
+  font-family: futurab;
+  padding-left: 10px;
+}
+.sg-form .page .field input {
+  background-color: #e7e7e7;
+  color: #6d6d6d;
+  border: 0px;
+  font-size: 1em;
+  padding: 4px;
+  font-family: futurab;
+  width: 100%;
+}
+/*# sourceMappingURL=gt.css.map */

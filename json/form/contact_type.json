@@ -1,0 +1,41 @@
+{
+	"form":"contact_type",
+	"caption":"Tipos de Contactos",
+	"class":"",
+	"query":"SELECT * FROM contact_type",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"type","caption":"Tipo"},
+		{"name":"color","caption":"Color de Letra"},
+		{"name":"background","caption":"Color de Fondo"},
+		{"name":"class_name","caption":"Class Bootstrap"}
+	],
+	"infoFields1":[
+		{
+			
+			"name":"id",
+			"caption":"Código",
+			
+			"params":{
+				"caption":"Un Campo ID"
+			}
+		}
+	],
+	"searchFor":[
+		"type"
+	]
+
+}

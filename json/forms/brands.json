@@ -1,6 +1,6 @@
 {
 	"form":"personas",
-	"caption":"Marcas Vehículos",
+	"caption":"Marcas Vehículos 2",
 	"class":"",
 	"query":"SELECT * FROM brandsx",
 	"menuName":"grid_menu",

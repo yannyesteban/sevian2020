@@ -3,7 +3,7 @@
 $PATH = MAIN_PATH;
 
 $css = array(
-	//"{$PATH}css/gt_main.css",
+	"{$PATH}css/gt_main.css",
 	//"{$PATH}css/gt_map.css",
 
 	"{$PATH}css/gt_command.css",
@@ -36,6 +36,7 @@ $css = array(
 );
 
 $css = array(
+	"{$PATH}GT/css/gt.css",
 	"{$PATH}GT/css/cota_main.css",
 	"{$PATH}Gt/css/cota.css",
 	"{$PATH}css/gt_form.css",

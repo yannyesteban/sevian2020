@@ -1,0 +1,29 @@
+{
+	"form":"webcar-login",
+	"caption":"Logín",
+	"className":"gt-login",
+	"query":"SELECT '' as user, '' as pass",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menus/gt-login"
+		},
+		"load":{
+			"menuName":"/menus/gt-login"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"user","caption":"Usuario"},
+		{"name":"pass","caption":"Clave", "input":"input", "type":"password"}
+
+	],
+	
+	"searchFor":[
+		
+	]
+
+}

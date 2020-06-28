@@ -1,0 +1,39 @@
+{
+	"form":"client",
+	"caption":"Cuentas 2020",
+	"class":"basic",
+	"query":"SELECT * FROM accounts",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		},
+		"load-from":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	"recordFrom":{"id":"#account_id"},
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"name","caption":"Nombre de la Cuenta"},
+		{"name":"client_id","caption":"Client", "input": "input", "type": "select",
+			"data":[
+				[0, "seleccione", "*"],
+				"select id, client from clients ORDER BY 2"
+				
+			  ]}
+
+	],
+	
+	"searchFor":[
+		"name","id"
+	]
+
+}

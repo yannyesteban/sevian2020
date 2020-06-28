@@ -73,6 +73,20 @@ class Unit
 		return true;
 	}
 	
+	public function init(){
+		return [
+			'dataUnits'     => $this->loadUnits(),
+			'dataClients'   => $this->loadClients(),
+			'dataAccounts'  => $this->loadAccounts(),
+			'tracking'      => $this->loadTracking(),
+			'pathImages'	=> PATH_IMAGES,
+			'caption'		=> 'Unidades',
+			'id'            => 'k',
+			'followMe'		=> true,
+			'delay'			=> 60000,
+		];
+	}
+	
 	private function load(){
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-unit-'.$this->id;

@@ -43,6 +43,7 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[],
 		'init'=>[
+			'patternJsonFile'=>MAIN_PATH.'json/{name}.json'
 			//'patternJsonFile'=>MODULE_PATH.'json/menu/{name}.json'
 		]
 	],
@@ -55,9 +56,9 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[],
 		'init'=>[
-			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json',
-			'patternFormFile'=>MODULE_PATH.'json/form/{name}.json',
-			'patternMenuFile'=>MODULE_PATH.'json/menu/{name}.json'
+			'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+			'patternFormFile'=>MAIN_PATH.'json/form/{name}.json',
+			'patternMenuFile'=>MAIN_PATH.'json/menu/{name}.json'
 		]
 	],
 	'SForm' 		=> [
@@ -108,6 +109,10 @@ $cls_elements = [
 				'begin'	=> true
 			],
 			[
+				'file'=>'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js',
+				'begin'	=> true
+			],
+			[
 				'file' 	=> MAIN_PATH.'lib/MapBox.js',
 				'begin'=> false
 			],
@@ -118,7 +123,8 @@ $cls_elements = [
 		],
 		'css'=>[
 			//'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
-			'https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css'
+			'https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css',
+			'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css'
 		]
 	],
 	'command' 		=> [
@@ -213,6 +219,19 @@ $cls_elements['gt_info_unit'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'gt/js/InfoUnit.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
+
+$cls_elements['gt_webcar'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Webcar.php',
+	'class' => '\GT\Webcar',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/Webcar.js',
 		'begin'=> false
 	]],
 	'css'=>[]

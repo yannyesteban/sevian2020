@@ -1,0 +1,29 @@
+{
+	"menu":"gt-login",
+	"caption":"Catálogo",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"Aceptar",
+			"dataUser":{
+				"async": false,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"22",
+						"element":"structure3",
+						"method":"login",
+						"name":"/structures/webcar",
+						"eparams":null
+					}
+			
+				]}
+		}
+	]
+}	

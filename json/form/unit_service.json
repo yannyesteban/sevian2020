@@ -1,0 +1,36 @@
+{
+	"form":"unit_service",
+	"caption":"Servicios",
+	"class":"basic",
+	"query":"SELECT * FROM unit_service",
+	"qWhere": "unit_id = '@unit_id'",
+	"qOrderBy": "date_time DESC",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		},
+		"load-from":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	"recordFrom":{"id":"#service_id"},
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"client","caption":"Nombre"},
+		{"name":"unit_id","caption":"ID Unidad", "default":"@unit_id"}
+
+	],
+	
+	"searchFor":[
+		"client","id"
+	]
+
+}

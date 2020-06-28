@@ -2,7 +2,9 @@ var GTMap = (($) => {
    
     class Map{
 
-		static _instances = [];
+        static _instances = [];
+        static _last = null;
+        static _loadFuntions:Function[] = []
 
         id:any = null;
         map:any = null;
@@ -20,7 +22,21 @@ var GTMap = (($) => {
 		
 		tapName:any = null;
         static getMap(name){
-            return Map._instances[name];
+            
+            if(name){
+               return Map._instances[name]; 
+            }if (Map._last){
+                return Map._last;
+            }
+
+            return null;
+            
+        }
+        static setMap(name, map){
+            Map._instances[name] = map;
+        }
+        static load(fn){
+            Map._loadFuntions.push(fn);
         }
         constructor(info){
             
@@ -50,13 +66,22 @@ var GTMap = (($) => {
                 this._create(main);
 			}
 			
-			Map._instances[this.id] = this;
+            Map.setMap(this.id, this);
+            
 
 		
         }
         _create(main:any){
-            main.addClass("map-main");
-			this.map = new MapBox({id:`${this.id}`});
+            main.addClass(["map-main", "map-layout"]);
+            this.map = new MapBox({id:`${this.id}`});
+            
+            this.map.on("load", (event)=>{
+                for(let fn of Map._loadFuntions){
+                    fn(this.map, this.id);
+
+                }
+
+            });
 			
 
         }   

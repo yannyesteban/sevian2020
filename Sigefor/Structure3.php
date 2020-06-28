@@ -78,7 +78,7 @@ class structure3
 		
 		if($error === 0){
 			
-			$this->loadStructure($this->name);
+			$this->loadStructure3($this->name, 'load');
 			
 			$info = new \Sevian\InfoUser;
 			$info->user = $user;
@@ -107,11 +107,11 @@ class structure3
 		}
 	}
 
-	public function loadStructure3($name){
-		
-		$allow = $this->isValidGroup($this->element, $this->name, $this->method, $this->getUserInfo()->roles);
-		
+	public function loadStructure3($name, $method = false){
 		$this->loadStructure($name, self::$patternJsonFile);
+		$allow = $this->isValidGroup($this->element, $this->structure, $method?? $this->method, $this->getUserInfo()->roles);
+		
+		
 		
 		$this->userData['title'] = $this->title;
 		$this->userData['class'] = $this->class;

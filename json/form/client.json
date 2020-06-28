@@ -1,0 +1,33 @@
+{
+	"form":"client",
+	"caption":"Clientes",
+	"class":"basic",
+	"query":"SELECT * FROM clients",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		},
+		"load-from":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	"recordFrom":{"id":"#client_id"},
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"client","caption":"Nombre"}
+
+	],
+	
+	"searchFor":[
+		"client","id"
+	]
+
+}

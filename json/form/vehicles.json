@@ -1,0 +1,52 @@
+{
+	"form":"vehicles",
+	"caption":"Vehículos",
+	"className":"",
+	"query":"SELECT vehicles.id, vehicles.type_id, plate, brand_id, model_id, color_id, year, picture, serial, comment, status, admin_status  FROM vehicles",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código A", "input": "hidden"},
+		{"name":"plate","caption":"Placa"},
+		
+		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select", "childs": true,
+		"data":[
+			["", "seleccione", "*"],
+			"select id, brand from brands ORDER BY 2"
+			
+		]},
+		{"name":"model_id","caption":"Modelo", "input": "input", "type": "select", "parent": "brand_id",
+		"data":[
+			["", "seleccione", "*"],
+			"select id, model, brand_id from models ORDER BY 2"
+			
+		]},
+		{"name":"color_id","caption":"Color", "input": "input", "type": "select",
+			"data":[
+				["", "seleccione", "*"],
+				"select id, color from vehicle_color ORDER BY 2"
+				
+			]},
+		{"name":"year","caption":"Año"},
+		{"name":"picture","caption":"Fotografía"},
+		{"name":"serial","caption":"Serial del Motor"},
+		{"name":"comment","caption":"Observaciones"}
+
+	],
+	
+	"searchFor":[
+		"brand", "model"
+	]
+
+}

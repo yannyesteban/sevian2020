@@ -1,0 +1,29 @@
+{
+	"form":"brands",
+	"caption":"Marca de Vehículos",
+	"class":"",
+	"query":"SELECT * FROM brands",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"brand","caption":"Marca"}
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

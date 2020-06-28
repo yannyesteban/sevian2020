@@ -1,8 +1,8 @@
 <?php
 //set_include_path(get_include_path().":"."/path/to/new/folder");
 define("MAIN_PATH", "../../");
-define("MODULE_PATH", "../../GT/");
-define("JSON_PATH", "../../GT/json/");
+define("MODULE_PATH", "../../");
+define("JSON_PATH", "../../json/");
 define("IMAGES_PATH", "../../images/");
 define("PATH_IMAGES", "../../images/");
 

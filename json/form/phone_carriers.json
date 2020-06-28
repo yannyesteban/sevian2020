@@ -1,0 +1,29 @@
+{
+	"form":"brands",
+	"caption":"Operadoras Telefónicas",
+	"class":"",
+	"query":"SELECT * FROM phone_carriers",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"brand","caption":"Marca"}
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

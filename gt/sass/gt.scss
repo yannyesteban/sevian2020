@@ -1,0 +1,242 @@
+@font-face {
+	font-family: Hemihead;
+	
+	src: url(../../css/fonts/HEMIHEAD.TTF);
+	
+}
+@font-face {
+	font-family: andreab;
+	
+	src: url(../../css/fonts/ADRRDB.TTF);
+	
+} 
+
+@font-face {
+	font-family: futurab;
+	src: url(../../css/fonts/FUTURABI.TTF);
+   // font-weight: bold;
+	
+	
+}
+  
+*{
+	box-sizing: border-box;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body{
+	margin:0px;
+	height: 100%;
+	//border:2px solid white;
+}
+
+.map-layout{
+	height: 100%;
+}
+
+form{
+	overflow: auto;
+}
+
+.gt-layout{
+	display: grid;
+    //grid-gap: 4px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px 30px auto;
+    //border:4px solid rgb(167, 167, 167);
+    height: 100%;
+    overflow: auto;
+	//padding:4px;
+	background: rgb(243, 57, 57);
+   
+    >.banner{
+		grid-row: 1;
+		grid-column: 1;
+        
+        background-color: rgb(131, 84, 84);
+	}
+	>.menu{
+		grid-row: 2;
+		grid-column: 1 ;
+        
+        background-color: rgb(73, 73, 73);
+	}
+	>.body{
+		grid-row: 3;
+		grid-column: 1;
+		background-color: rgb(102, 199, 37);
+	}
+}
+
+
+.gt-webcar-login{
+	display: flex;
+	height: 100%;
+	background-image: url(../../../wallpaper/001.webp) ;
+	background-size: auto 1080px ;
+	background-position-x: center;
+	background-position-y: bottom;
+	justify-content: center;
+	align-items: center;
+	//text-align: center;
+	padding: 100px;
+	
+	.main{
+		display: grid;
+		
+		//border: 8px solid rgba(165, 165, 165, 0.514);
+		border-radius: 10px;
+		//grid-gap: 4px;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows:auto;
+		//gap: 10px;
+		//border:4px solid rgb(167, 167, 167);
+		
+		height: 100%;
+		width: 800px;
+		overflow: auto;
+		//padding:4px;
+		background: rgba(56, 56, 56, 0.356);
+		
+		//padding: 10px;
+		
+		//background-size: auto 1080px ;
+		//background-repeat: no-repeat;
+		background-position-x: center;
+		background-position-y: center;
+		background-clip: content-box;
+		background-attachment: fixed;
+		form{
+			height: auto;
+		}
+		>.left-side{
+			grid-row: 1;
+			grid-column: 1;
+			
+			background-color: rgba(0, 0, 0, 0.445);
+			overflow: auto;
+			display: grid;
+			grid-template-columns: 1fr;
+   			grid-template-rows: 100px auto 30px;
+			//justify-content: center;
+			.webcar-name{
+				font-size: 20pt;
+				color: white;;
+				text-transform: capitalize;
+				font-family: andreab;
+				justify-self: center;
+				text-align: center;
+				align-self: flex-end;
+				//margin: 50px 20px 50px 20px;
+			}
+			.gtrack-logo{
+				justify-self: center;
+				//text-align: center;
+				align-self: center;
+				width: 180px;
+			}
+			
+			.webcar-foot{
+				color: snow;
+				font-size: 8pt;
+				justify-self: center;
+				text-align: center;
+				
+			}
+		}
+		>.right-side{
+			grid-row: 1;
+			grid-column: 2;
+			overflow: auto;
+			border-left: 2px solid rgb(255, 222, 76);
+			//background-color: rgb(175, 36, 36);
+			background-color: rgba(0, 0, 0, 0.616);
+			display: grid;
+			grid-template-columns: 2fr;
+   			grid-template-rows: 100px auto 120px;
+			justify-content: center;
+			align-items: center;
+			//padding-top: 50px;
+			.webcar-name{
+				font-size: 20pt;
+				color: white;
+				text-transform: capitalize;
+				font-family: andreab;
+				justify-self: center;
+				text-align: center;
+				align-self: flex-end;
+				//margin: 50px 20px 50px 20px;
+			}
+			form{
+				justify-self: center;
+				//text-align: center;
+				align-self: center;
+				.menu{
+					background-color: rgb(26, 163, 94);
+					margin-top: 10px;
+					.item{
+						width: 100%;
+						.text{
+							text-align: center;
+							font-size: 14pt;
+							color: white;
+							text-transform: capitalize;
+							font-family: futurab;
+						}
+					}
+
+				}
+			}
+			.gtrack-logo{
+				justify-self: center;
+				//text-align: center;
+				align-self: center;
+				width: 180px;
+			}
+		}
+	}
+}
+
+
+.sg-form{
+
+	//background-color: rgba(66, 66, 66, 0.486);
+	//border:1px solid white;
+	width: 300px;
+	.caption{
+		display: none;
+		color:rgb(247, 247, 247);
+		text-align: center;
+		.text{
+			font-size: 12pt;
+			text-transform: uppercase;
+			font-family: futurab!important;
+		}
+		
+	}
+	.page{
+		.field{
+			padding: 5px 0px 10px 0px;
+			.label{
+				color: rgb(210, 235, 255);
+				text-transform: uppercase;
+				font-size: 0.8em;
+				padding-bottom: 10px;
+				font-family: futurab;
+				padding-left: 10px;
+				
+			}
+			input{
+				background-color: rgb(231, 231, 231);
+				color: rgb(109, 109, 109);
+				border: 0px;
+				//height: 30px;
+				font-size: 1em;
+				padding: 4px;
+				font-family: futurab;
+				width: 100%;
+			}
+		}
+
+	}
+}

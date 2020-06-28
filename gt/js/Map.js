@@ -34,18 +34,37 @@ var GTMap = (($) => {
                 main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
-            Map._instances[this.id] = this;
+            Map.setMap(this.id, this);
         }
         static getMap(name) {
-            return Map._instances[name];
+            if (name) {
+                return Map._instances[name];
+            }
+            if (Map._last) {
+                return Map._last;
+            }
+            return null;
+        }
+        static setMap(name, map) {
+            Map._instances[name] = map;
+        }
+        static load(fn) {
+            Map._loadFuntions.push(fn);
         }
         _create(main) {
-            main.addClass("map-main");
+            main.addClass(["map-main", "map-layout"]);
             this.map = new MapBox({ id: `${this.id}` });
+            this.map.on("load", (event) => {
+                for (let fn of Map._loadFuntions) {
+                    fn(this.map, this.id);
+                }
+            });
         }
         _load(main) {
         }
     }
     Map._instances = [];
+    Map._last = null;
+    Map._loadFuntions = [];
     return Map;
 })(_sgQuery);
