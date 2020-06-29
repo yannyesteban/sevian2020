@@ -1,4 +1,74 @@
 var GTWebcar = (($) => {
+    let color = null;
+    class TraceMarker {
+        constructor(map, size) {
+            this.map = null;
+            this.width = 10;
+            this.height = 10;
+            this.size = 200;
+            this.data = null;
+            this.context = null;
+            this.map = map;
+            this.size = size;
+            this.width = size;
+            this.height = size;
+            this.data = new Uint8Array(this.width * this.height * 4);
+        }
+        onAdd() {
+            let canvas = document.createElement('canvas');
+            canvas.width = this.width;
+            canvas.height = this.height;
+            this.context = canvas.getContext('2d');
+        }
+        render() {
+            let context = this.context;
+            context.beginPath();
+            context.moveTo(this.size / 2, 0);
+            context.lineTo(this.size, this.size);
+            context.lineTo(this.size / 2, this.size * 0.8);
+            context.lineTo(0, this.size);
+            context.lineTo(this.size / 2, 0);
+            //context.fill();
+            context.strokeStyle = 'yello3';
+            context.lineWidth = 2;
+            context.fillStyle = "#aabb1105";
+            context.fill();
+            context.stroke();
+            this.data = context.getImageData(0, 0, this.width, this.height).data;
+            // continuously repaint the map, resulting in the smooth animation of the dot
+            this.map.triggerRepaint();
+            // return `true` to let the map know that the image was updated
+            return true;
+            let duration = 1000;
+            let t = (performance.now() % duration) / duration;
+            let radius = (this.size / 2) * 0.3;
+            let outerRadius = (this.size / 2) * 0.7 * t + radius;
+            //let context = this.context;
+            // draw outer circle
+            context.clearRect(0, 0, this.width, this.height);
+            context.beginPath();
+            context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+            //context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
+            context.fillStyle = 'rgba(255, 165, 62,' + (1 - t) + ')';
+            context.fill();
+            // draw inner circle
+            context.beginPath();
+            context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+            //context.fillStyle = 'rgba(255, 100, 100, 1)';
+            context.fillStyle = 'rgba(255, 165, 62, 1)';
+            //242, 255, 62
+            context.strokeStyle = 'white';
+            context.lineWidth = 2 + 4 * (1 - t);
+            context.fill();
+            context.stroke();
+            // update this image's data with data from the canvas
+            this.data = context.getImageData(0, 0, this.width, this.height).data;
+            // continuously repaint the map, resulting in the smooth animation of the dot
+            this.map.triggerRepaint();
+            // return `true` to let the map know that the image was updated
+            return true;
+        }
+    }
     class Webcar {
         constructor(info) {
             this.id = null;
@@ -47,6 +117,7 @@ var GTWebcar = (($) => {
             }
             GTMap.load((map, s) => {
                 this._unit.setMap(map);
+                map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
             });
         }
         static getInstance(name) {
@@ -144,12 +215,18 @@ var GTWebcar = (($) => {
                         id: 8,
                         caption: "L",
                         action: (item, event) => {
+                            color = 'green';
                         }
                     },
                     {
                         id: 9,
                         caption: "O",
                         action: (item, event) => {
+                            db("circulo", "white");
+                            this.rule = this._unit.getMap().addCircle('xxx', {
+                                name: "x"
+                            });
+                            this.rule.play();
                         }
                     }
                 ]

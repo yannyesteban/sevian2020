@@ -113,6 +113,10 @@ $cls_elements = [
 				'begin'	=> true
 			],
 			[
+				'file'=>'https://unpkg.com/@turf/turf/turf.min.js',
+				'begin'	=> true
+			],
+			[
 				'file' 	=> MAIN_PATH.'lib/MapBox.js',
 				'begin'=> false
 			],
