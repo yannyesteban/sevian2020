@@ -313,7 +313,155 @@ var GTWebcar = (($) => {
 
 							this.rule.play();
 						}
+					},
+					{
+						id: 9,
+                		caption:"rs",
+                		action:(item, event) => {
+							db ("circulo","white");
+							this.rule = this._unit.getMap().addCircle('xxx', {
+								name:"x"
+							});
+
+							this.rule.reset();
+						}
+					},
+					{
+						id: 9,
+                		caption:"T",
+                		action:(item, event) => {
+							
+							
+
+							this.rule.test();
+						}
+					},
+					{
+						id: 9,
+                		caption:"S2",
+                		action:(item, event) => {
+							
+							
+
+							this.rule.stop();
+						}
+					},
+					{
+						id: 9,
+                		caption:"Pl",
+                		action:(item, event) => {
+							
+							
+
+							this.rule.play();
+						}
+					},
+					{
+						id: 9,
+                		caption:"color",
+                		action:(item, event) => {
+							
+							
+
+							this.rule.setLine({
+								width:2,
+								color:"yellow"
+							});
+							this.rule.setFill({
+								opacity:0.9,
+								color:"orange"
+							});
+						}
+					},
+					{
+						id: 9,
+                		caption:"New",
+                		action:(item, event) => {
+							db ("circulo","white");
+							this.rule = this._unit.getMap().draw('t','circle', {
+								name:"x"
+							});
+
+							this.rule.play();
+						}
+					},
+					{
+						id: 9,
+                		caption:"stop 2",
+                		action:(item, event) => {
+							let poly = this._unit.getMap().draw('t');
+							poly.stop();
+						}
+					},
+					{
+						id: 9,
+                		caption:"play 2",
+                		action:(item, event) => {
+							let poly = this._unit.getMap().draw('t');
+							poly.play();
+						}
+					},
+					{
+						id: 9,
+                		caption:"create",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'circle',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							//poly.play();
+						}
+					},
+					{
+						id: 9,
+                		caption:"play 3",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'circle',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.play();
+						}
+					},
+					{
+						id: 9,
+                		caption:"stop 3",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'circle',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.stop();
+						}
+					},
+					{
+						id: 9,
+                		caption:"hide",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'circle',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.setVisible(false);
+						}
+					},
+					{
+						id: 9,
+                		caption:"show",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'circle',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.setVisible(true);
+						}
 					}
+
 				]
 			 });
 			

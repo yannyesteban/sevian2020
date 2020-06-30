@@ -11,6 +11,7 @@ var createGeoJSONCircle = function(center, radiusInKm, points) {
     var km = radiusInKm;
 
     var ret = [];
+    let hands = [];
     var distanceX = km/(111.320*Math.cos(coords.latitude*Math.PI/180));
     var distanceY = km/110.574;
 
@@ -21,10 +22,14 @@ var createGeoJSONCircle = function(center, radiusInKm, points) {
         y = distanceY*Math.sin(theta);
 
         ret.push([coords.longitude+x, coords.latitude+y]);
+
+        if(i % (~~(points/4)) == 0 ){
+            hands.push([coords.longitude+x, coords.latitude+y]);
+        }
     }
     ret.push(ret[0]);
 
-    return {
+    let json =  {
         "type": "geojson",
         "data": {
             "type": "FeatureCollection",
@@ -37,23 +42,90 @@ var createGeoJSONCircle = function(center, radiusInKm, points) {
             }]
         }
     };
+    let point = {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Point',
+            'coordinates': center
+        },
+        'properties': {
+            'index': -1,
+            'type': 'c',
+            
+        }
+    };
+    json.data.features.push(point);
+
+    hands.forEach((item, index)=>{
+        let point = {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': item
+            },
+            'properties': {
+                'index': index,
+                'type': 'h',
+                
+            }
+        };
+        json.data.features.push(point);
+    });
+    
+ 
+    
+
+    return json;
 };
 var MapBox = (($) => {
-    let _poly:object[] = [];
+    
+    
     class Circle{
         map:any = null;
+        parent:object = null;
         name:string = "";
+        visible:boolean = true;
+        line:object = {
+            color: "#FFA969",
+            width: 2,
+            opacity: 0.9,
+            dasharray: [1]
+        };
+        fill:object = {
+            color: "#f9f871",
+            opacity: 0.4
+        };
+        lineEdit:object = {
+            color: "#ff3300",
+            width: 2,
+            opacity: 0.9,
+            dasharray: [2,2]
+        };
+        fillEdit:object = {
+            color: "#ff9933",
+            opacity: 0.4
+        };
         lineColor:string = "white";
-        lineWidth:number = 1;
+        lineWidth:number = 2;
         fillColor:string = "red"; 
         radio:number = 0;
-        center:number[] = [];
+        center:number[] = null;
+        hand:number[] = null;
         _mode:number = 0;
         _nodes:any = null;
         _line:any = null;
+        id:string = "c"+String(new Date().getTime());
+        
+        nodesId:string = null;
+        lineId:string = null;
+        circleId:string = null;
+        
+        _play:boolean = false;
 
-        nodesId:string = "n-"+String(new Date().getTime());
-        lineId:string = "l-"+String(new Date().getTime());
+        callmove:Function = ()=>{};
+        callresize:Function = ()=>{};
+        
+        calldraw:Function = ()=>{};
         constructor(info:object){
             
             for(let x in info){
@@ -61,15 +133,13 @@ var MapBox = (($) => {
                     this[x] = info[x];
                 }
             }
-
+            this.nodesId = "n-"+this.id;
+            this.lineId = "l-"+this.id;
+            this.circleId = "c-"+this.id;
+            
             let map = this.map;
-            this._nodes = {
-                'type': 'FeatureCollection',
-                'features': []
-            };
+            
             this._line = {
-                
-                
 				"type": "geojson",
                 "data": {
                     "type": "FeatureCollection",
@@ -77,41 +147,13 @@ var MapBox = (($) => {
                         "type": "Feature",
                         "geometry": {
                             "type": "Polygon",
-                            "coordinates": [
-                                [
-                                [-121.353637, 40.584978],
-                                [-121.284551, 40.584758],
-                                [-121.275349, 40.541646],
-                                [-121.246768, 40.541017],
-                                [-121.251343, 40.423383],
-                                [-121.32687, 40.423768],
-                                [-121.360619, 40.43479],
-                                [-121.363694, 40.409124],
-                                [-121.439713, 40.409197],
-                                [-121.439711, 40.423791],
-                                [-121.572133, 40.423548],
-                                [-121.577415, 40.550766],
-                                [-121.539486, 40.558107],
-                                [-121.520284, 40.572459],
-                                [-121.487219, 40.550822],
-                                [-121.446951, 40.56319],
-                                [-121.370644, 40.563267],
-                                [-121.353637, 40.584978]
-                                ]
-                                ]
+                            "coordinates": [[]]
                         }
                     }]
                 }
             };
             
-            map.addSource(this.nodesId, {
-                'type': 'geojson',
-                'data': this._nodes
-            });
-            
             this.map.addSource(this.lineId, this._line);
-
-           
             
 			this.map.addLayer({
 				'id': this.lineId,
@@ -119,47 +161,159 @@ var MapBox = (($) => {
 				'source': this.lineId,
 				'layout': {
 					'line-join': 'round',
-                    'line-cap': 'round'
+                    'line-cap': 'round',
+                    visibility:(this.visible)? 'visible': 'none'
                     
 				},
 				'paint': {
-					'line-color': 'green',
-                    'line-width': this.lineWidth,
-                    'line-opacity': 0.4,
+					//'line-color': '#ff3300',
+                    //'line-width': this.lineWidth,
+                    //'line-opacity': 0.9,
                     //'line-gap-width':4,
-                    'line-dasharray':[2,2]
+                    //'line-dasharray':[2,2]
                     
                 },
                 'filter': ['==', '$type', 'Polygon']
-			});
+            });
+            this.map.addLayer({
+				'id': this.circleId,
+				'type': 'fill',
+				'source': this.lineId,
+				'layout': {
+                    visibility:(this.visible)? 'visible': 'none'
+                },
+				'paint': {
+					//'fill-color': '#ff9900',
+                    //'fill-opacity': 0.4,
+                },
+                'filter': ['==', '$type', 'Polygon']
+            });
+            
             map.addLayer({
                 id: this.nodesId,
                 type: 'circle',
-                source: this.nodesId,
+                source: this.lineId,
+                layout: {
+                    visibility:'none'
+                },
                 paint: {
                     'circle-radius': 4,
                     'circle-opacity':0.0,
                     'circle-color': '#000',
-                    'circle-stroke-color':"red",
-                    'circle-stroke-width':2
+                    'circle-stroke-color':"#ff3300",
+                    'circle-stroke-width':1
                 },
                 filter: ['in', '$type', 'Point']
             });
 
+            this.setLine(this.line);
+            this.setFill(this.fill);
+            if(this.center && this.radio){
+                this.createCircle(this.center, this.radio);
+            }
+            if(this.center && this.hand){
+                this.createCircle(this.center, this.hand);
+            }
+        }
+
+        setLine(info:object){
+            for(let p in info){
+                this.map.setPaintProperty(this.lineId, "line-" + p, info[p]); 
+            }
+        }
+        setFill(info:object){
+            for(let p in info){
+                this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]); 
+            }
+        }
+
+        setVisible(value:boolean){
+            let visible = 'none';
+            if(value){
+                visible = 'visible';
+            }
+            this.map.setLayoutProperty(this.lineId, 'visibility', visible);
+            this.map.setLayoutProperty(this.circleId, 'visibility', visible);
+            db ("visible "+visible, "blue","aqua")
+            if(this._play){
+                
+                this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
+            }
+            
 
         }
+
+        test(){
+            
+ 
+           
+        }
+
+        _fnclick(map){
+            
+             return this._click = (e)=>{
+                var features = this.map.queryRenderedFeatures(e.point, {
+                    layers: [this.nodesId]
+                });
+
+                if(this._mode == 1){
+                    this.setCenter(e.lngLat);
+                    this.createCircle(this.center, 0);
+                    this._mode = 2;
+                    return;
+                }
+
+                if(this._mode == 2){
+                    this.setHand(e.lngLat);
+                    this.createCircle(this.center, this.hand);
+                }
+            }
+           
+        }
         play(){
+            
+            if(this._play){
+                return;
+            }
+            db ( "PLAY")
+            this.parent.stop();
+            this._play = true;
+            
             let map =  this.map;
-            let point = null;
-            this._mode = 1;
+            
+            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            this.setVisible(true);
+            this.setFill(this.fillEdit);
+            this.setLine(this.lineEdit);
+            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'visible');
+            //this.map.setPaintProperty(this.lineId, 'line-dasharray', [2,2]);
+            
+            let place = null;
+            if(this.radio == 0){
+                this._mode = 1;
+            }
+            
+            
+            
+            let fnUp = (e)=>{
+                //point = null;
+                map.off('mousemove', fnMove)
+            }
             let fnMove = (e)=>{
                 //this.coordinates[point] = [e.lngLat.lng, e.lngLat.lat];
                 //this.setCoordinates(this.coordinates);
                 //this.redraw();
-            }
-            let fnUp = (e)=>{
-                //point = null;
-                map.off('mousemove', fnMove)
+                if(place == "c"){
+                    this.center = e.lngLat;
+                    this.createCircle(this.center, this.radio);
+                    this.callmove();
+                }else if(place == "h"){
+                    this.hand = e.lngLat;
+                    this.createCircle(this.center, this.hand);
+                    this.callresize();
+                }
+                
+                
             }
             map.on('mousedown', this.nodesId, (e)=> {
                 // Prevent the default map drag behavior.
@@ -172,108 +326,101 @@ var MapBox = (($) => {
                     var id = features[0].properties.id;
                     
                 }
-                point = features[0].properties.index;
-                db (features[0].properties.index)
-                //canvas.style.cursor = 'grab';
+                place = features[0].properties.type;
+               
+               
                  
                 map.on('mousemove', fnMove);
                 map.once('mouseup', fnUp);
-                });
-            map.on('mousedown',  (e) => {
-                
-                // Prevent the default map drag behavior.
-                //e.preventDefault();
-
             });
-            map.on('mouseup',  (e) => {
-                
-                // Prevent the default map drag behavior.
-                //e.preventDefault();
-
-            });
-            map.on('mousemove',  (e) => {
-                
-                // Prevent the default map drag behavior.
-                //e.preventDefault();
-            });
-            map.on('click', (e)=> {
-               
-                var features = map.queryRenderedFeatures(e.point, {
-                    layers: [this.nodesId]
-                });
-               
-
-                if(this._mode == 1){
-                    this.createCenter(e.lngLat);
-                    
-                    this._mode = 2;
-                    return;
-                }
-
-
-                if(this._mode == 2){
-                    this.createCircle(this.center, e.lngLat);
-                    
-
-                }
-                //var line = turf.lineString([[115, -32], [131, -22], [143, -25], [150, -34]]);
-                //var length = turf.length(line, {units: 'kilometers'});
-
-
-
-                //this.add(e.lngLat);
-               
-                
-                
-                //map.getSource('geojson').setData(this.geojson);
-            
-            }
-            return;
+           
+            map.on('click', this._fnclick(this.map));
 
         }
+
         pause(){
 
         }
         stop(){
+            if(this._play){
+
+                this.map.off('click', this._click);
+                
+                
+                
+               // this.map.setPaintProperty(this.lineId, 'line-dasharray', [1]);
+                //'line-dasharray':[2,2]
+                //this.map.setPaintProperty(this.lineId, 'line-color', "#fd8d3c");
+                //map.on('mousemove', fnMove);
+            }
+            this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            this.setFill(this.fill);
+            this.setLine(this.line);
+            //this._mode = 0;
+            this._play = false;
+            db ("stop","red","yellow")
 
         }
         reset(){
-
+            if(!this._play){
+                return;
+            }
+            this._mode = 1;
+            this.radio = 0;
+            this._line = {
+				"type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [{
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [[]]
+                        }
+                    }]
+                }
+            };
+            //this._line.data.features = [];
+            this.map.getSource(this.lineId).setData(this._line.data);
         }
         draw(center, radio){
 
         }
-        createCenter(lngLat){
+        setCenter(lngLat){
             
             this.center = lngLat;
-            let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [lngLat.lng, lngLat.lat]
-            },
-            'properties': {
-                'id': String(new Date().getTime()),
-                'index': 0
-                }
-            };
             
-            this._nodes.features.push(point);
-
-            let map = this.map;
-           
-            //map.getSource(this.lineId).setData(this._line.data);
-            map.getSource(this.nodesId).setData(this._nodes);
+        }
+        setHand(lngLat){
+            
+            this.hand = lngLat;
+            
         }
 
         createCircle(center, radio){
+            let length;
+            if(typeof radio === 'number' ){
+                length = radio;
 
-            var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
-            var length = turf.length(line, {units: 'kilometers'});
-
+            }else{
+                var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
+                length = turf.length(line, {units: 'kilometers'});
+            }
+            
+            this.radio = length;
             let data = createGeoJSONCircle([center.lng, center.lat], length);
-            console.log(data.data)
+            
             this.map.getSource(this.lineId).setData(data.data);
+        }
+
+        getCenter(){
+            return this.center;
+        }
+        getHand(){
+            return this.hand;
+        }
+        getRadio(){
+            return this.radio;
         }
     }
 
@@ -422,15 +569,15 @@ var MapBox = (($) => {
             this.coordinates.forEach((el, index)=>{
                 ii = ii + 5;
                 let point = {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [el[0],el[1]]
-                },
-                'properties': {
-                    'id': String(new Date().getTime()),
-                    'index': index,
-                    'angle':ii
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [el[0],el[1]]
+                    },
+                    'properties': {
+                        'id': String(new Date().getTime()),
+                        'index': index,
+                        'angle':ii
                     }
                 };
              
@@ -800,6 +947,8 @@ var MapBox = (($) => {
         
         load:any = (event)=>{};
         
+        _poly:object[] = [];
+
         constructor(info:object){
             for(let x in info){
                 if(this.hasOwnProperty(x)) {
@@ -1205,8 +1354,50 @@ return;
         }
 
         addCircle(name:string, info:object){
+
+            if(this._poly[name]){
+                return this._poly[name];
+            }
             info.map = this.map;
-            return new Circle(info);
+            info.parent = this;
+            this._poly[name] = new Circle(info);
+            return this._poly[name];
+        }
+        draw(name:string, type:string, info:object){
+
+            if(this._poly[name]){
+                return this._poly[name];
+            }
+            info.map = this.map;
+            info.parent = this;
+            switch(type){
+                case "circle":
+                    this._poly[name] = new Circle(info);
+                break;
+                case  "rectangle":
+                    this._poly[name] = new Circle(info);
+                break;
+                case "polygon":
+                    this._poly[name] = new Circle(info);
+                break;
+                case "symbol":
+                    this._poly[name] = new Circle(info);
+                break;
+
+            }
+            
+            return this._poly[name];
+        }
+        stop(){
+            db ("STOPPPP")
+            for(let poly of this._poly){
+                db (poly.name)
+                poly.stop();
+            }
+            for(let x in this._poly){
+               
+                this._poly[x].stop();
+            }
         }
 
     }
