@@ -406,7 +406,7 @@ var GTWebcar = (($) => {
                 		caption:"create",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'circle',{
+							let poly = this._unit.getMap().draw('t', 'polygon',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -418,7 +418,7 @@ var GTWebcar = (($) => {
                 		caption:"play 3",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'circle',{
+							let poly = this._unit.getMap().draw('t', 'polygon',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -430,7 +430,7 @@ var GTWebcar = (($) => {
                 		caption:"stop 3",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'circle',{
+							let poly = this._unit.getMap().draw('t', 'polygon',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -442,7 +442,7 @@ var GTWebcar = (($) => {
                 		caption:"hide",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'circle',{
+							let poly = this._unit.getMap().draw('t', 'polygon',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -454,11 +454,23 @@ var GTWebcar = (($) => {
                 		caption:"show",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'circle',{
+							let poly = this._unit.getMap().draw('t', 'polygon',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
 							poly.setVisible(true);
+						}
+					},
+					{
+						id: 9,
+                		caption:"reset",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'polygon',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.reset();
 						}
 					}
 
