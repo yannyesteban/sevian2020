@@ -406,9 +406,15 @@ var GTWebcar = (($) => {
                 		caption:"create",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'polygon',{
-								center:{lng:-66.79008000,lat:10.49680600},
-								radio: 6
+							let poly = this._unit.getMap().draw('t', 'mark',
+							{
+								coordinates:[-66.79008000, 10.49680600],
+								image: "http://localhost/sevian2020/images/vehicle_004.png",
+								popupInfo:"HOLA MUNDO",
+								rotation:100,
+								ondrag:(e)=>{
+									//db (e,"white","red")
+								}
 							});
 							//poly.play();
 						}
@@ -418,7 +424,7 @@ var GTWebcar = (($) => {
                 		caption:"play 3",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'polygon',{
+							let poly = this._unit.getMap().draw('t', 'rectangle',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -430,7 +436,7 @@ var GTWebcar = (($) => {
                 		caption:"stop 3",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'polygon',{
+							let poly = this._unit.getMap().draw('t', 'rectangle',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -442,7 +448,7 @@ var GTWebcar = (($) => {
                 		caption:"hide",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'polygon',{
+							let poly = this._unit.getMap().draw('t', 'rectangle',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -454,7 +460,7 @@ var GTWebcar = (($) => {
                 		caption:"show",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'polygon',{
+							let poly = this._unit.getMap().draw('t', 'rectangle',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
@@ -466,11 +472,70 @@ var GTWebcar = (($) => {
                 		caption:"reset",
                 		action:(item, event) => {
 							
-							let poly = this._unit.getMap().draw('t', 'polygon',{
+							let poly = this._unit.getMap().draw('t', 'rectangle',{
 								center:{lng:-66.79008000,lat:10.49680600},
 								radio: 6
 							});
 							poly.reset();
+						}
+					},
+					{
+						id: 9,
+                		caption:"Flt",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'rectangle',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.flyTo();
+						}
+					},
+					{
+						id: 9,
+                		caption:"Pan",
+                		action:(item, event) => {
+							
+							let poly = this._unit.getMap().draw('t', 'rectangle',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.panTo();
+						}
+					},
+					{
+						id: 9,
+                		caption:"X",
+                		action:(item, event) => {
+							
+							
+							this._unit.getMap().delete('t');
+						}
+					},
+					{
+						id: 9,
+                		caption:"RT",
+                		action:(item, event) => {
+							
+							
+							let poly = this._unit.getMap().draw('t', 'mark',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.setRotation(45);
+						}
+					},
+					{
+						id: 9,
+                		caption:"Save",
+                		action:(item, event) => {
+							
+							
+							let poly = this._unit.getMap().draw('t', 'mark',{
+								center:{lng:-66.79008000,lat:10.49680600},
+								radio: 6
+							});
+							poly.save();
 						}
 					}
 
