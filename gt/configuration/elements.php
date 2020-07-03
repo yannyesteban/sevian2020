@@ -188,7 +188,18 @@ $cls_elements['gt_unit'] = [
 	'css'=>[]
 	
 ];
-
+$cls_elements['gt_site'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Site.php',
+	'class' => '\GT\Site',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/Site.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
 
 $cls_elements['catalogue'] = [
 	

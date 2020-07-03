@@ -24,7 +24,7 @@ trait DBClient{
         INNER JOIN devices_names as dn ON dn.name = de.device_name
 
 
-        LEFT JOIN icons as ic ON ic.id = u.icon_id
+        LEFT JOIN icon as ic ON ic.id = u.icon_id
 
         LEFT JOIN accounts as ac ON ac.id = u.account_id
         LEFT JOIN clients as cl ON cl.id = ac.client_id
@@ -70,7 +70,7 @@ trait DBAccount{
         INNER JOIN devices_names as dn ON dn.name = de.device_name
 
 
-        LEFT JOIN icons as ic ON ic.id = u.icon_id
+        LEFT JOIN icon as ic ON ic.id = u.icon_id
 
         LEFT JOIN accounts as ac ON ac.id = u.account_id
         LEFT JOIN clients as cl ON cl.id = ac.client_id
@@ -130,7 +130,7 @@ trait DBUnit{
         INNER JOIN devices_names as dn ON dn.name = de.device_name
 
 
-        LEFT JOIN icons as ic ON ic.id = u.icon_id
+        LEFT JOIN icon as ic ON ic.id = u.icon_id
 
         LEFT JOIN accounts as ac ON ac.id = u.account_id
         LEFT JOIN clients as cl ON cl.id = ac.client_id
@@ -232,3 +232,30 @@ trait DBTracking{
     }
 }
 
+
+trait DBSite{
+    private $cn = null;
+    private function loadSites(){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT m.id as site_id, m.name, m.description, m.category_id, c.name as category, icon,
+            m.longitude, m.latitude, m.scale, m.address, m.phone1, m.phone2, m.phone3,
+            m.fax, m.email, m.web, m.observations
+            FROM mark as m
+            INNER JOIN mark_category as c ON c.id = m.category_id
+            INNER JOIN icon as i ON i.id = m.icon_id
+            WHERE m.user = 'panda'";
+
+        $result = $cn->execute();
+                
+                
+        $data = [];
+        while($rs = $cn->getDataAssoc($result)){
+            $data[$rs['site_id']] = $rs;
+        }
+
+
+        return $data;
+    }
+}
