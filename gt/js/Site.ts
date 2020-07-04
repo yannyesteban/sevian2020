@@ -8,9 +8,9 @@ var GTSite = (($) => {
 		id:any = null;
 		map:any = null;
 		
-		dataClients:any[] = null;
+		dataCategory:any[] = null;
 		dataAccounts:any[] = null;
-		dataUnits:any[] = null;
+		dataSite:any[] = null;
 		tracking:any[] = null;
 
 		menu:any = null;
@@ -44,16 +44,16 @@ var GTSite = (($) => {
             
             </div>`;
 		popupTemplate:string = `<div class="wecar_info">
-			<div>{=vehicle_name}</div>
+			<div>{=name}</div>
 			<div>{=device_name}</div>
 			<div>{=brand}: {=model}<br>{=plate}, {=color} </div>
 		
 			<div>{=latitude}, {=longitude}</div>
 		
-			<div>Velocidad: {=speed}</div>
+			<div>Dirección: {=speed}</div>
 		
 		</div>`;
-		
+		public oninfo:Function = (info, name)=>{};
 		public delay:number = 30000;
 		private main:any = null; 
 		private marks:any[] = [];
@@ -86,11 +86,11 @@ var GTSite = (($) => {
             
             if(main){
                 
-                if(main.ds("gtUnit")){
+                if(main.ds("gtSite")){
                     return;
                 }
     
-                if(main.hasClass("gt-unit")){
+                if(main.hasClass("gt-site")){
                     this._load(main);
                 }else{
                     this._create(main);
@@ -107,59 +107,16 @@ var GTSite = (($) => {
 
 		}
 
-		z(){
-			alert("z")
-			let map = this.map.map;
-				
-				map.addSource('point2', {
-				'type': 'geojson',
-				'data': {
-				'type': 'FeatureCollection',
-				'features': [
-				{
-				'type': 'Feature',
-				'properties':{
-					'rotacion':45
-				},
-				'geometry': {
-				'type': 'Point',
-				'coordinates': [-69.39274800, 10.07182300]	
-				}
-				},
-				{
-					'type': 'Feature',
-					'properties':{
-						'rotacion':120
-					},
-					'geometry': {
-					'type': 'Point',
-					'coordinates': [-69.30074800, 10.06682300]	
-					}
-					}
-				]
-				}
-				});
-				map.addLayer({
-				'id': 'points2',
-				'type': 'symbol',
-				'source': 'point2',
-				'layout': {
-				'icon-image': 'cat',
-				'icon-size': 0.10,
-				'icon-rotate':['get','rotacion']
-				}
-				});
-				
-		}
+		
 
 		_create(main:any){
 			
 			this.main = main;
 
-			main.addClass("unit-main");
+			main.addClass("site-main");
 			
 			this.createMenu();
-			this._info = $().create("div").addClass("win-units-info");
+			this._info = $().create("div").addClass("win-sites-info");
 			//this._info = $().create("div").addClass("win-units-info");
 			return;
 
@@ -397,16 +354,16 @@ var GTSite = (($) => {
 		createMenu(){
 			let infoMenu = [];
 			
-            for(let x in this.dataClients){
+            for(let x in this.dataCategory){
 				
-                infoMenu[this.dataClients[x].id] = {
-                    id: this.dataClients[x].id,
-                    caption:this.dataClients[x].client,
+                infoMenu[this.dataCategory[x].id] = {
+                    id: this.dataCategory[x].id,
+                    caption:this.dataCategory[x].category,
                     items:[], 
                     useCheck:true,
 					useIcon:false,
 					checkValue:x,
-					checkDs:{"level":"client","clientId":x},
+					checkDs:{"level":"category","categoryId":x},
 					ds:{"clientId":x},
 					check:(item, event)=>{
 						
@@ -414,7 +371,60 @@ var GTSite = (($) => {
 
 					},
                 };    
-            }
+			}
+
+
+			for(let x in this.dataSite){
+				
+				infoMenu[this.dataSite[x].category_id].items[this.dataSite[x].site_id] = {
+					id: this.dataSite[x].site_id,
+					caption:this.dataSite[x].name,
+					useCheck:true,
+					value: x,
+					checkValue:x,
+					checkDs:{"level":"sites","siteId":x},
+					ds:{"siteId":x},
+					check:(item, event)=>{
+						this.showSite(x, event.currentTarget.checked);
+					},
+					action:(item, event) => {
+						let ch = menu.getCheck(item);
+						ch.get().checked = true;
+						this.showSite(x, true);
+						this._lastUnitId = x;
+						this.setInfo(x);
+						this.flyTo(x);
+							return;
+						this._traces[x] = new GTTrace({map:this.map.map});
+						
+						this._traces[x].play();
+						
+	
+					}
+					
+				};
+				
+	
+	
+			   }
+
+			  console.log(infoMenu); 
+			let menu = new Menu({
+				caption:"", 
+				autoClose: false,
+				target:this.main,
+				items: infoMenu,
+				check:(item) => {
+					 let ch = menu.getCheck(item);
+					 let checked = ch.get().checked;   
+					 let list = item.queryAll("input[type='checkbox']");
+					 for(let x of list){
+						 x.checked = checked;
+					 }
+					}
+			 });
+			 
+			 return menu;
             
             
             for(let x in this.dataAccounts){
@@ -467,7 +477,7 @@ var GTSite = (($) => {
 
            }
 
-           let menu = new Menu({
+           let menu1 = new Menu({
                caption:"", 
                autoClose: false,
 			   target:this.main,
@@ -482,7 +492,7 @@ var GTSite = (($) => {
 			   	}
 			});
 			
-			return menu;
+			return menu1;
 			//console.log(check);
 		}
 
@@ -491,14 +501,14 @@ var GTSite = (($) => {
 			return this._info;
 		}
 
-		showUnit(id, value){
+		showSite(id, value){
 			if(!this.marks[id]){
 				
 				this.marks[id] = this.getMap().createMark({
-					lat:this.tracking[id].latitude,
-					lng:this.tracking[id].longitude,
-					heading:this.tracking[id].heading,
-					image:this.pathImages+this.dataUnits[id].icon+".png",
+					lat:this.dataSite[id].latitude,
+					lng:this.dataSite[id].longitude,
+					heading:0,//this.tracking[id].heading,
+					image:this.pathImages+this.dataSite[id].icon+".png",
 					popupInfo: this.loadPopupInfo(id)
 				});
 				
@@ -512,8 +522,8 @@ var GTSite = (($) => {
 			
 			let e;
 
-			for(let x in this.dataUnits){
-				e = this.dataUnits[x];
+			for(let x in this.dataSite){
+				e = this.dataSite[x];
 				
 				if(accountId == e.account_id){
 					this.showUnit(x, value);
@@ -559,15 +569,17 @@ var GTSite = (($) => {
 			}
 		}
 		setInfo(id:number){
-			this._info.text(this.loadInfo(id));
+			//this._info.text(this.loadInfo(id));
 			//this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
+
+			this.oninfo(this.loadInfo(id), this.dataSite[id].name);
 		}
 		loadPopupInfo(id){
-            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataUnits[id]), this.tracking[id]);
+            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataSite[id]), this.dataSite[id]);
         }
 
 		loadInfo(id){
-            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataUnits[id]), this.tracking[id]);
+            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataSite[id]), this.dataSite[id]);
 		}
 		
 		setFollowMe(value:boolean){

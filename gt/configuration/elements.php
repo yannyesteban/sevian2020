@@ -201,6 +201,19 @@ $cls_elements['gt_site'] = [
 	
 ];
 
+$cls_elements['gt_geofence'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Geofence.php',
+	'class' => '\GT\Geofence',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/Geofence.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
+
 $cls_elements['catalogue'] = [
 	
 	'file' 	=> MAIN_PATH.'Sigefor/Catalogue.php',

@@ -1611,6 +1611,11 @@ var MapBox = (($, turf) => {
         parent:object = null;
         name:string = "";
         visible:boolean = true;
+
+        flyToSpeed:number = 0.8;
+        flyToZoom:number = 14;
+        panDuration:number = 5000;
+
         line:object = {
             color: "#FFA969",
             width: 2,
@@ -1634,6 +1639,7 @@ var MapBox = (($, turf) => {
         lineColor:string = "white";
         lineWidth:number = 2;
         fillColor:string = "red"; 
+        coordinates:any[] = null;
         radio:number = 0;
         center:number[] = null;
         hand:number[] = null;
@@ -1734,7 +1740,15 @@ var MapBox = (($, turf) => {
 
             this.setLine(this.line);
             this.setFill(this.fill);
+
+            if(this.coordinates){
+                this.center = this.coordinates[0];
+                this.radio = this.coordinates[1]/1000;
+                
+            }
+
             if(this.center && this.radio){
+                db (this.center+".."+this.radio,"white")
                 this.createCircle(this.center, this.radio);
             }
             if(this.center && this.hand){
@@ -1760,7 +1774,7 @@ var MapBox = (($, turf) => {
             }
             this.map.setLayoutProperty(this.lineId, 'visibility', visible);
             this.map.setLayoutProperty(this.circleId, 'visibility', visible);
-            db ("visible "+visible, "blue","aqua")
+            
             if(this._play){
                 
                 this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
@@ -1783,14 +1797,14 @@ var MapBox = (($, turf) => {
                 });
 
                 if(this._mode == 1){
-                    this.setCenter(e.lngLat);
+                    this.setCenter([e.lngLat.lng, e.lngLat.lat]);
                     this.createCircle(this.center, 0);
                     this._mode = 2;
                     return;
                 }
 
                 if(this._mode == 2){
-                    this.setHand(e.lngLat);
+                    this.setHand([e.lngLat.lng, e.lngLat.lat]);
                     this.createCircle(this.center, this.hand);
                 }
             }
@@ -1830,11 +1844,11 @@ var MapBox = (($, turf) => {
                 //this.setCoordinates(this.coordinates);
                 //this.redraw();
                 if(place == "c"){
-                    this.center = e.lngLat;
+                    this.center = [e.lngLat.lng, e.lngLat.lat];
                     this.createCircle(this.center, this.radio);
                     this.callmove();
                 }else if(place == "h"){
-                    this.hand = e.lngLat;
+                    this.hand = [e.lngLat.lng, e.lngLat.lat];
                     this.createCircle(this.center, this.hand);
                     this.callresize();
                 }
@@ -1929,14 +1943,15 @@ var MapBox = (($, turf) => {
                 length = radio;
 
             }else{
-                var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
+                var line = turf.lineString([center, radio]);
                 length = turf.length(line, {units: 'kilometers'});
             }
             
             this.radio = length;
-            let data = createGeoJSONCircle([center.lng, center.lat], length);
+            let data = createGeoJSONCircle(center, length);
+           
             
-            this.map.getSource(this.lineId).setData(data.data);
+            this.source = this.map.getSource(this.lineId).setData(data.data);
         }
 
         getCenter(){
@@ -1947,6 +1962,63 @@ var MapBox = (($, turf) => {
         }
         getRadio(){
             return this.radio;
+        }
+
+        flyTo(zoom, speed){
+            console.log(this.source._data);
+           
+
+            
+
+            var bbox = turf.bbox(this.source._data.features[0]);
+            
+
+            
+            this.map.fitBounds(bbox, {
+                padding: 40
+            });
+            return
+            let data = this.map.getSource(this.lineId).getData();
+           
+            var coordinates = data.features[0].geometry.coordinates;
+ 
+            // Pass the first coordinates in the LineString to `lngLatBounds` &
+            // wrap each coordinate pair in `extend` to include them in the bounds
+            // result. A variation of this technique could be applied to zooming
+            // to the bounds of multiple Points or Polygon geomteries - it just
+            // requires wrapping all the coordinates with the extend method.
+            var bounds = coordinates.reduce(function(bounds, coord) {
+            return bounds.extend(coord);
+            }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+             
+            this.map.fitBounds(bounds, {
+                padding: 40
+            });
+
+            return;
+
+            let polygon = turf.lineString(this.coordinates);
+
+            let centroid = turf.centroid(polygon);
+
+            console.log(centroid);
+            
+            this.map.flyTo({
+                center: centroid.geometry.coordinates,
+                zoom: zoom || this.flyToZoom,
+                speed: speed || this.flyToSpeed,
+                curve: 1,
+                easing(t) {
+                  return t;
+                }
+              });
+                
+        }
+        panTo(duration){
+
+   
+
+            this.map.panTo(this.center, {duration: duration || this.panDuration });
         }
     }
 
@@ -3605,52 +3677,9 @@ var MapBox = (($, turf) => {
                 displayControlsDefault: false,
                 controls: {
                     polygon: true,
-                    trash: true
-                },
-                styles: [
-                    // default themes provided by MB Draw
-                    // default themes provided by MB Draw
-                    // default themes provided by MB Draw
-                    // default themes provided by MB Draw
-        
-        
-                    {
-                        'id': 'gl-draw-polygon-fill-inactive',
-                        'type': 'fill',
-                        'filter': ['all', ['==', 'active', 'false'],
-                            ['==', '$type', 'Polygon'],
-                            ['!=', 'mode', 'static']
-                        ],
-                        'paint': {
-                            'fill-color': '#3bb2d0',
-                            'fill-outline-color': '#3bb2d0',
-                            'fill-opacity': 0.1
-                        }
-                    },
-                    {
-                        'id': 'gl-draw-polygon-midpoint',
-                        'type': 'circle',
-                        'filter': ['all', ['==', '$type', 'Point'],
-                            ['==', 'meta', 'midpoint']
-                        ],
-                        'paint': {
-                            'circle-radius': 3,
-                            'circle-color': '#fbb03b'
-                        }
-                    },
-                    {
-                        'id': 'gl-draw-polygon-fill-active',
-                        'type': 'fill',
-                        'filter': ['all', ['==', 'active', 'true'],
-                            ['==', '$type', 'Polygon']
-                        ],
-                        'paint': {
-                            'fill-color': '#fbb03b',
-                            'fill-outline-color': '#fbb03b',
-                            'fill-opacity': 0.1
-                        }
-                    }
-                ]
+                    trash: true,
+                    circle: true
+                }
                 
             });
                 map.addControl(draw);

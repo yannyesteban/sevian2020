@@ -1,13 +1,10 @@
-var GTSite = (($) => {
+var GTGeofence = (($) => {
     let n = 0;
-    class Site {
+    class Geofence {
         constructor(info) {
             this.id = null;
             this.map = null;
-            this.dataCategory = null;
-            this.dataAccounts = null;
-            this.dataSite = null;
-            this.tracking = null;
+            this.dataMain = null;
             this.menu = null;
             this.win = null;
             this.caption = "u";
@@ -63,10 +60,10 @@ var GTSite = (($) => {
             //return;
             let main = (this.id) ? $(this.id) : false;
             if (main) {
-                if (main.ds("gtSite")) {
+                if (main.ds("gtGeofence")) {
                     return;
                 }
-                if (main.hasClass("gt-site")) {
+                if (main.hasClass("gt-geofence")) {
                     this._load(main);
                 }
                 else {
@@ -83,9 +80,9 @@ var GTSite = (($) => {
         }
         _create(main) {
             this.main = main;
-            main.addClass("site-main");
+            main.addClass("geofence-main");
             this.createMenu();
-            this._info = $().create("div").addClass("win-sites-info");
+            this._info = $().create("div").addClass("win-geofence-info");
             //this._info = $().create("div").addClass("win-units-info");
             return;
             this.win = new Float.Window({
@@ -279,37 +276,23 @@ var GTSite = (($) => {
         }
         createMenu() {
             let infoMenu = [];
-            for (let x in this.dataCategory) {
-                infoMenu[this.dataCategory[x].id] = {
-                    id: this.dataCategory[x].id,
-                    caption: this.dataCategory[x].category,
-                    items: [],
-                    useCheck: true,
-                    useIcon: false,
-                    checkValue: x,
-                    checkDs: { "level": "category", "categoryId": x },
-                    ds: { "clientId": x },
-                    check: (item, event) => {
-                        this.showAccountUnits(this.dataClients[x].id, event.currentTarget.checked);
-                    },
-                };
-            }
-            for (let x in this.dataSite) {
-                infoMenu[this.dataSite[x].category_id].items[this.dataSite[x].site_id] = {
-                    id: this.dataSite[x].site_id,
-                    caption: this.dataSite[x].name,
+            console.log(this.dataMain);
+            for (let x in this.dataMain) {
+                infoMenu[this.dataMain[x].id] = {
+                    id: this.dataMain[x].id,
+                    caption: this.dataMain[x].name,
                     useCheck: true,
                     value: x,
                     checkValue: x,
-                    checkDs: { "level": "sites", "siteId": x },
-                    ds: { "siteId": x },
+                    checkDs: { "level": "geofence", "geofenceId": x },
+                    ds: { "geofenceId": x },
                     check: (item, event) => {
-                        this.showSite(x, event.currentTarget.checked);
+                        this.showGeofence(x, event.currentTarget.checked);
                     },
                     action: (item, event) => {
                         let ch = menu.getCheck(item);
                         ch.get().checked = true;
-                        this.showSite(x, true);
+                        this.showGeofence(x, true);
                         this._lastUnitId = x;
                         this.setInfo(x);
                         this.flyTo(x);
@@ -319,7 +302,6 @@ var GTSite = (($) => {
                     }
                 };
             }
-            console.log(infoMenu);
             let menu = new Menu({
                 caption: "",
                 autoClose: false,
@@ -394,18 +376,15 @@ var GTSite = (($) => {
         getInfoLayer() {
             return this._info;
         }
-        showSite(id, value) {
+        showGeofence(id, value) {
             if (!this.marks[id]) {
-                this.marks[id] = this.getMap().createMark({
-                    lat: this.dataSite[id].latitude,
-                    lng: this.dataSite[id].longitude,
-                    heading: 0,
-                    image: this.pathImages + this.dataSite[id].icon + ".png",
+                this.marks[id] = this.getMap().draw(id, this.dataMain[id].type, {
+                    coordinates: this.dataMain[id].config,
                     popupInfo: this.loadPopupInfo(id)
                 });
             }
             else {
-                this.marks[id].show(value);
+                this.marks[id].setVisible(value);
             }
         }
         showUnits(accountId, value) {
@@ -449,13 +428,13 @@ var GTSite = (($) => {
         setInfo(id) {
             //this._info.text(this.loadInfo(id));
             //this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
-            this.oninfo(this.loadInfo(id), this.dataSite[id].name);
+            this.oninfo(this.loadInfo(id), this.dataMain[id].name);
         }
         loadPopupInfo(id) {
-            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataSite[id]), this.dataSite[id]);
+            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataMain[id]), this.dataMain[id]);
         }
         loadInfo(id) {
-            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataSite[id]), this.dataSite[id]);
+            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataMain[id]), this.dataMain[id]);
         }
         setFollowMe(value) {
             this.followMe = value;
@@ -464,6 +443,6 @@ var GTSite = (($) => {
             return this.followMe;
         }
     }
-    Site._instances = [];
-    return Site;
+    Geofence._instances = [];
+    return Geofence;
 })(_sgQuery);

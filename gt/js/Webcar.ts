@@ -118,6 +118,8 @@ var GTWebcar = (($) => {
 		map:any = null;
 
 		unit:object = null;
+		site:object = null;
+		geofence:object = null;
 		
 		dataClients:any[] = null;
 		dataAccounts:any[] = null;
@@ -147,6 +149,10 @@ var GTWebcar = (($) => {
 		private _traces:any[] = [];
 		
 		private _unit:object = null;
+		private _site:object = null;
+		private _geofence:object = null;
+
+		
 		private _win:any[] = [];
 		
 		static _instances:object[] = []; 
@@ -183,6 +189,8 @@ var GTWebcar = (($) => {
 			}
 			GTMap.load((map, s)=>{
 				this._unit.setMap(map);
+				this._site.setMap(map);
+				this._geofence.setMap(map);
 				map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
 			})
 			
@@ -211,9 +219,37 @@ var GTWebcar = (($) => {
                 mode:"auto",
                 className:["sevian"]
 			});
+			this._win["site"] = new Float.Window({
+                visible:true,
+                caption: this.site.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+                className:["sevian"]
+			});
+			this._win["geofence"] = new Float.Window({
+                visible:true,
+                caption: this.geofence.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+                className:["sevian"]
+			});
 			
 			this.unit.id = this.win.getBody();
+			this.unit.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
 			this.loadUnit(this.unit);
+
+			
 
 			this._win["info"] = new Float.Window({
                 visible:true,
@@ -226,6 +262,19 @@ var GTWebcar = (($) => {
                 mode:"auto",
                 className:["sevian"]
 			});
+			this.site.id = this._win["site"].getBody();
+			this.site.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
+			this.loadSite(this.site);
+
+			this.geofence.id = this._win["geofence"].getBody();
+			this.geofence.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
+			this.loadGeofence(this.geofence);
 
 			let menu = new Menu({
 				caption:"uuuu", 
@@ -565,7 +614,12 @@ var GTWebcar = (($) => {
 		loadUnit(unit){
 			this._unit = new GTUnit(unit);
 		}
-		
+		loadSite(info){
+			this._site = new GTSite(info);
+		}
+		loadGeofence(info){
+			this._geofence = new GTGeofence(info);
+		}
         _load(main:any){
 
 		}

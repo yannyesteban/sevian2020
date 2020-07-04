@@ -2,6 +2,7 @@
 namespace GT;
 require_once 'Unit.php';
 require_once 'Site.php';
+require_once 'Geofence.php';
 class Webcar extends \Sevian\Element{
 
 	public function __construct($info = []){
@@ -35,11 +36,14 @@ class Webcar extends \Sevian\Element{
 		
 		$this->typeElement = 'GTWebcar';
 		$unit = new Unit();
-		
+		$site = new Site();
+		$geofence = new Geofence();
 		$this->info = [
-			'id'=>$this->panel->id,
-			'panel'=>$this->id,
-			'unit'=>$unit->init()
+			'id'		=> $this->panel->id,
+			'panel'		=> $this->id,
+			'unit'		=> $unit->init(),
+			'site'		=> $site->init(),
+			'geofence'	=> $geofence->init()
 		];
 
 		

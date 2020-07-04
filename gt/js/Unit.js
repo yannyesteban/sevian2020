@@ -115,6 +115,7 @@ var GTUnit = (($) => {
 			<div>Velocidad: {=speed}</div>
 		
 		</div>`;
+            this.oninfo = (info, name) => { };
             this.delay = 30000;
             this.main = null;
             this.marks = [];
@@ -516,8 +517,9 @@ var GTUnit = (($) => {
             }
         }
         setInfo(id) {
-            this._info.text(this.loadInfo(id));
+            //this._info.text(this.loadInfo(id));
             //this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
+            this.oninfo(this.loadInfo(id), this.dataUnits[id].vehicle_name);
         }
         loadPopupInfo(id) {
             return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataUnits[id]), this.tracking[id]);

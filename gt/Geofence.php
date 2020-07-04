@@ -3,7 +3,7 @@ namespace GT;
 
 require_once MAIN_PATH.'GT/Trait.php';
 
-class Site
+class Geofence
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
@@ -12,7 +12,7 @@ class Site
 {
 
    
-    use DBSite;
+    use DBGeofence;
    
     
 
@@ -77,16 +77,16 @@ class Site
                 
 
                 $this->_name = $this->name;
-                $this->_type = 'GTUnit';
+                $this->_type = 'GTGeofence';
                 $this->_mode = '';
                 $this->_info = [
-					'dataSite'		=> $this->loadSites(),
-					'dataCategory'	=> $this->loadCategorys(),
+					'dataMain'		=> $this->loadGeofences(),
+					
 					'popupTemplate' => $this->popupTemplate,
 					'infoTemplate'	=> $this->infoTemplate,
                     
 					'pathImages'	=> PATH_IMAGES,
-					'caption'		=> 'Sitios',
+					'caption'		=> 'Geocercas',
 					'id'            => 'ks',
 					'followMe'		=> true,
 					'delay'			=> 60000,
@@ -104,12 +104,12 @@ class Site
 	
 	public function init(){
 		return [
-			'dataSite'     => $this->loadSites(),
-			'dataCategory' => $this->loadCategorys(),
+			'dataMain'     => $this->loadGeofences(),
+			
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
-			'caption'		=> 'Sitios',
+			'caption'		=> 'Geocercas',
 			'id'            => 'ks',
 			'followMe'		=> true,
 			'delay'			=> 60000,
@@ -118,9 +118,9 @@ class Site
 	
 	private function load(){
         $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-site-'.$this->id;
-		$this->panel->innerHTML = 'gt-site-'.$this->id;
-		$this->typeElement = 'GTSite';
+		$this->panel->id = 'gt-geofence-'.$this->id;
+		$this->panel->innerHTML = 'gt-geofence-'.$this->id;
+		$this->typeElement = 'GTGeofence';
 
 		$this->info = [
 			'id'=>$this->panel->id,

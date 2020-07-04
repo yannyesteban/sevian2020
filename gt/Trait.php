@@ -239,6 +239,38 @@ trait DBSite{
 
         $cn = $this->cn;
 
+        /*
+        $cn->query = "select * from geofences";
+
+        $result = $cn->execute();
+                
+                
+        $value = [];
+        while($rs = $cn->getDataAssoc($result)){
+            $coord = explode(",",$rs['coords']);
+            $str = [];
+            foreach($coord as $c){
+                $aux = explode(" ",$c);
+                $str[] = [$aux[1]*1,$aux[0]*1];
+            }
+            $value[$rs['id']] = $str;
+        }
+
+        foreach($value as $k => $v){
+           
+            $v = json_encode($v);
+           
+            $cn->query = "update geofences set 
+            
+            config = '$v'
+            
+            where id=$k and type='circle'";
+ 
+            $result = $cn->execute();
+
+        }
+        
+        */
         $cn->query = "SELECT m.id as site_id, m.name, m.description, m.category_id, c.name as category, icon,
             m.longitude, m.latitude, m.scale, m.address, m.phone1, m.phone2, m.phone3,
             m.fax, m.email, m.web, m.observations
@@ -258,4 +290,84 @@ trait DBSite{
 
         return $data;
     }
+
+    private function loadCategorys(){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT c.id, c.name as category
+            FROM mark as m
+            INNER JOIN mark_category as c ON c.id = m.category_id
+
+            WHERE m.user = 'panda'
+            GROUP BY c.id";
+
+        $result = $cn->execute();
+                
+                
+        $data = [];
+        while($rs = $cn->getDataAssoc($result)){
+            $data[] = $rs;
+        }
+
+
+        return $data;
+    }
+}
+
+trait DBGeofence{
+    private $cn = null;
+    private function loadGeofences(){
+
+        $cn = $this->cn;
+
+        /*
+        $cn->query = "select * from geofences";
+
+        $result = $cn->execute();
+                
+                
+        $value = [];
+        while($rs = $cn->getDataAssoc($result)){
+            $coord = explode(",",$rs['coords']);
+            $str = [];
+            foreach($coord as $c){
+                $aux = explode(" ",$c);
+                $str[] = [$aux[1]*1,$aux[0]*1];
+            }
+            $value[$rs['id']] = $str;
+        }
+
+        foreach($value as $k => $v){
+           
+            $v = json_encode($v);
+           
+            $cn->query = "update geofences set 
+            
+            config = '$v'
+            
+            where id=$k and type='circle'";
+ 
+            $result = $cn->execute();
+
+        }
+        
+        */
+        $cn->query = "SELECT *
+            FROM geofences as g
+            
+            WHERE g.user = 'Rmartinez'";
+
+        $result = $this->cn->execute();
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            $rs['config'] = json_decode($rs['config']);
+            $data[] = $rs;
+        }
+
+
+        return $data;
+    }
+
+    
 }
