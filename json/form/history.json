@@ -1,0 +1,35 @@
+{
+	"form":"History",
+	"caption":"Historial",
+	"class":"",
+	"query":"SELECT '' as unit_id, now() as date_1, '' as hour_1, now() as date_2, '' as hour_2, '' as filter",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"unit_id","caption":"Unidad"},
+		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
+		"data":[
+			[0, "seleccione", "*"],
+			"select id, brand from brands ORDER BY brand"
+			
+		  ]},
+		{"name":"model","caption":"Modelo"}
+
+	],
+	
+	"searchFor":[
+		"brand", "model"
+	]
+
+}

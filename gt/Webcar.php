@@ -3,6 +3,7 @@ namespace GT;
 require_once 'Unit.php';
 require_once 'Site.php';
 require_once 'Geofence.php';
+require_once 'History.php';
 class Webcar extends \Sevian\Element{
 
 	public function __construct($info = []){
@@ -38,12 +39,14 @@ class Webcar extends \Sevian\Element{
 		$unit = new Unit();
 		$site = new Site();
 		$geofence = new Geofence();
+		$history = new History();
 		$this->info = [
 			'id'		=> $this->panel->id,
 			'panel'		=> $this->id,
 			'unit'		=> $unit->init(),
 			'site'		=> $site->init(),
-			'geofence'	=> $geofence->init()
+			'geofence'	=> $geofence->init(),
+			'history'	=> $history->init()
 		];
 
 		

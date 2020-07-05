@@ -214,6 +214,23 @@ $cls_elements['gt_geofence'] = [
 	
 ];
 
+$cls_elements['gt_history'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/History.php',
+	'class' => '\GT\History',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'gt/js/History.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
 $cls_elements['catalogue'] = [
 	
 	'file' 	=> MAIN_PATH.'Sigefor/Catalogue.php',
