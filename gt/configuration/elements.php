@@ -28,8 +28,8 @@ $cls_elements = [
 		'file' 	=> MAIN_PATH.'Sigefor/structure3.php',
 		'class' => '\Sigefor\structure3',
 		'init'=>[
-			'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
-			'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+			'patternJsonFile'=>JSON_PATH.'/{name}.json',
+			'patternTemplateFile'=>TEMPLATES_PATH.'/{name}.html'
 		],
 		'js'=>[],
 		'css'=>[]

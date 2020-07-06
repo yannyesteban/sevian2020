@@ -1081,7 +1081,12 @@ Float.Window = (($) => {
             }
             
         }
-
+        get(){
+            return this._main.get();
+        }
+        getMain(){
+            return this._main;
+        }
         setBody(e){
             $(this._main.query(".body")).append(e);
         }

@@ -3,6 +3,7 @@
 define("MAIN_PATH", "../../");
 define("MODULE_PATH", "../../");
 define("JSON_PATH", "../../json/");
+define("TEMPLATES_PATH", "../../templates/");
 define("IMAGES_PATH", "../../images/");
 define("PATH_IMAGES", "../../images/");
 

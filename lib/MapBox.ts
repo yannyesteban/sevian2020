@@ -3840,7 +3840,7 @@ var MapBox = (($, turf) => {
                 map.addControl(new mapboxgl.AttributionControl({
                 compact: true
                 }));    
-            map.addControl(new mapboxgl.FullscreenControl());
+            map.addControl(new mapboxgl.FullscreenControl({container: document.querySelector('body')}));
             
 
             mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
