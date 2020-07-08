@@ -15,6 +15,7 @@ var GTSite = (($) => {
 
 		menu:any = null;
 		win:any = null;
+		form:any = null;
 		
 		caption:string = "u";
 		winCaption:string = "";
@@ -496,6 +497,10 @@ var GTSite = (($) => {
 			//console.log(check);
 		}
 
+		createForm(main){
+			this.form.id = main;
+			let form = new Form2(this.form);
+		}
 		getInfoLayer(){
 			
 			return this._info;

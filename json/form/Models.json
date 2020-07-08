@@ -1,5 +1,5 @@
 {
-	"form":"brands",
+	"form":"model",
 	"caption":"Modelo de Vehículos",
 	"class":"",
 	"query":"SELECT models.* FROM models LEFT JOIN brands as b ON b.id = models.brand_id",

@@ -103,6 +103,19 @@
     overflow: hidden;
   }
 }
+.sg-menu.menu-popup .item .submenu {
+  position: absolute;
+  background-color: rgba(61, 61, 61, 0.9);
+}
+.sg-menu.menu-popup .item.open > .submenu {
+  -webkit-animation: open 0.5s ease-out forwards;
+          animation: open 0.5s ease-out forwards;
+}
+.sg-menu.menu-popup .item.close > .submenu {
+  -webkit-animation: close 0.5s ease-out forwards;
+          animation: close 0.5s ease-out forwards;
+}
+
 .sg-menu.type-default .submenu, .sg-menu.type-system .submenu {
   background-color: rgba(0, 0, 0, 0.84);
   border: 2px solid white;
@@ -120,12 +133,12 @@
   min-width: 180px;
 }
 .sg-menu.type-default .submenu.open, .sg-menu.type-system .submenu.open {
-  -webkit-animation: open 0.5s ease-out;
-          animation: open 0.5s ease-out;
+  -webkit-animation: open 5.5s ease-out;
+          animation: open 5.5s ease-out;
 }
 .sg-menu.type-default .submenu.close, .sg-menu.type-system .submenu.close {
-  -webkit-animation: close 0.2s ease-out;
-          animation: close 0.2s ease-out;
+  -webkit-animation: close 5.2s ease-out;
+          animation: close 5.2s ease-out;
 }
 .sg-menu.type-accordion .submenu, .sg-menu.menu-accordion .submenu, .sg-menu.type-accordionx .submenu, .sg-menu.type-accordiony .submenu {
   padding: 0px;
@@ -242,7 +255,7 @@
 .sg-menu .item.open .ind, .sg_menu .item.open .ind {
   float: right;
   margin: 10px;
-  width: 8px;
+  width: 6px;
   height: 3px;
   margin-right: 12px;
   background-size: 100%;

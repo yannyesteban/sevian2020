@@ -7,7 +7,7 @@ $js = [
 		'file' 	=> "{$PATH}js/_sgQuery.js",
 		'begin'	=> true],
 	[
-		'file' 	=> "{$PATH}js/Window.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Window.js",
 		//'attrib' => ['type'=>'module']
 	],	
 	[
@@ -71,57 +71,57 @@ $js = [
 			'type'=>'module'
 		]],*/
 	[
-		'file' 	=> "{$PATH}js/Sevian.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Sevian.js",
 		'begin'	=> false],
 	[
-		'file' 	=> "{$PATH}js/Page.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Page.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 
 
 	[
-		'file' 	=> "{$PATH}js/Menu.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Menu.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 
 	[
-		'file' 	=> "{$PATH}js/Tab.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Tab.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Accordion.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Accordion.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Input.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Input.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/FormDetail.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/FormDetail.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Form.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Form.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Form2.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Form2.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Grid.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Grid.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Grid2.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Grid2.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Calendar.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Calendar.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/List.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/List.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 
@@ -130,11 +130,11 @@ $js = [
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/Monads.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/Monads.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}js/MenuDesign.js",
+		'file' 	=> "{$PATH}build/Sevian/ts/MenuDesign.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
 /*
@@ -152,12 +152,12 @@ $js = [
 	],
 */
 	[
-		'file' 	=> "{$PATH}gt/js/ControlDevice.js",
+		'file' 	=> "{$PATH}build/GT/ts/ControlDevice.js",
 		
 		//'attrib' => [			'_type'=>'module'		]
 	],
 	[
-		'file' 	=> "{$PATH}gt/js/Actions.js",
+		'file' 	=> "{$PATH}build/GT/ts/Actions.js",
 		
 		//'attrib' => [			'_type'=>'module'		]
 	],

@@ -353,7 +353,7 @@ var GTGeofence = (($) => {
 			let infoMenu = [];
 			
             
-			console.log(this.dataMain)
+			
 
 			for(let x in this.dataMain){
 				
@@ -474,7 +474,7 @@ var GTGeofence = (($) => {
 			});
 			
 			return menu1;
-			//console.log(check);
+			
 		}
 
 		getInfoLayer(){

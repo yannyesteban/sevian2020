@@ -117,7 +117,7 @@ $cls_elements = [
 				'begin'	=> true
 			],
 			[
-				'file' 	=> MAIN_PATH.'lib/MapBox.js',
+				'file' 	=> MAIN_PATH.'build/lib/MapBox.js',
 				'begin'=> false
 			],
 			[
@@ -137,7 +137,7 @@ $cls_elements = [
 		'enable' => true,
 		'js'=>[
 			[
-				'file' 	=> MAIN_PATH.'gt/js/command.js',
+				'file' 	=> MAIN_PATH.'build/GT/ts/command.js',
 				'begin'=> false
 			]
 
@@ -170,7 +170,7 @@ $cls_elements['gt_map'] = [
 	'class' => '\GT\Map',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/Map.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/Map.js',
 		'begin'=> false
 	]],
 	'css'=>[]
@@ -182,7 +182,7 @@ $cls_elements['gt_unit'] = [
 	'class' => '\GT\Unit',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/Unit.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/Unit.js',
 		'begin'=> false
 	]],
 	'css'=>[]
@@ -194,10 +194,14 @@ $cls_elements['gt_site'] = [
 	'class' => '\GT\Site',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/Site.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/Site.js',
 		'begin'=> false
 	]],
-	'css'=>[]
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
 	
 ];
 
@@ -207,7 +211,7 @@ $cls_elements['gt_geofence'] = [
 	'class' => '\GT\Geofence',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/Geofence.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/Geofence.js',
 		'begin'=> false
 	]],
 	'css'=>[]
@@ -220,7 +224,7 @@ $cls_elements['gt_history'] = [
 	'class' => '\GT\History',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/History.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/History.js',
 		'begin'=> false
 	]],
 	'css'=>[],
@@ -237,7 +241,7 @@ $cls_elements['catalogue'] = [
 	'class' => '\Sigefor\Catalogue',
 	'enable' => true,
 	'js_'=>[[
-		'file' 	=> MAIN_PATH.'js/InfoUnit.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
 		'begin'=> false
 	]],
 	'css'=>[]
@@ -249,7 +253,7 @@ $cls_elements['fcatalogue'] = [
 	'class' => '\Sigefor\FCatalogue',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'js/FCatalogue.js',
+		'file' 	=> MAIN_PATH.'build/Sevian/ts/FCatalogue.js',
 		'begin'=> false
 	]],
 	'css'=>[]
@@ -263,7 +267,7 @@ $cls_elements['gt_info_unit'] = [
 	'class' => '\GT\InfoUnit',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/InfoUnit.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
 		'begin'=> false
 	]],
 	'css'=>[]
@@ -276,7 +280,7 @@ $cls_elements['gt_webcar'] = [
 	'class' => '\GT\Webcar',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/Webcar.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/Webcar.js',
 		'begin'=> false
 	]],
 	'css'=>[]

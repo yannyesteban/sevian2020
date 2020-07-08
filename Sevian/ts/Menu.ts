@@ -123,7 +123,7 @@ var Menu =
                     });
                     
                     Float.showMenu({
-                        ref:context.get(),
+                        context:context.get(),
                         e:main.get(),
                         left:"front",
                         top:"top"
@@ -422,17 +422,17 @@ var Menu =
                 
                 item.removeClass("close")
                 item.addClass("open");
-                //Float.setIndex(menu.get());
+                Float.setIndex(menu.get());
                 
                 if((this.subType === "dropdown") && !$(item.get().parentNode).hasClass("submenu")){
                     Float.showMenu({
-                        ref: item.get(), e: menu.get(), 
+                        context: item.get(), e: menu.get(), 
                         left: "left", top: "down", 
                         deltaX: 0, deltaY: 0, z: 0
                     });
                 }else{
                     Float.showMenu({
-                        ref: item.get(), e: menu.get(), 
+                        context: item.get(), e: menu.get(), 
                         left: "front", top: "top", 
                         deltaX: -2, deltaY: 5, z: 0
                     });
@@ -630,4 +630,4 @@ db ("info. target "+Info.target, "blue");
     };
 
     return Menu;
-})(_sgQuery, false);
+})(_sgQuery, Float.Float);

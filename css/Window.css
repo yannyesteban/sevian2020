@@ -20,7 +20,7 @@
           flex-direction: column;
   -webkit-box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
           box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
-  background-color: rgba(1, 1, 1, 0.4);
+  background-color: rgba(1, 1, 1, 0.6);
   border: 1px solid red;
   -webkit-transition: 0.5s ease-in background-color;
   transition: 0.5s ease-in background-color;
@@ -35,7 +35,7 @@
   display: none;
 }
 .sgWin.sevian > .caption {
-  background-color: rgba(226, 13, 95, 0.719);
+  background-color: rgba(185, 6, 0, 0.719);
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;

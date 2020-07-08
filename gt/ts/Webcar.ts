@@ -189,6 +189,7 @@ var GTWebcar = (($) => {
                 
                 this._create(main);
 			}
+			
 			GTMap.load((map, s)=>{
 				this._unit.setMap(map);
 				this._site.setMap(map);
@@ -222,18 +223,7 @@ var GTWebcar = (($) => {
                 mode:"auto",
                 className:["sevian"]
 			});
-			this._win["site"] = new Float.Window({
-                visible:false,
-                caption: this.site.caption,
-                //child:main,
-                left:300,
-                top:100,
-                width: "300px",
-                height: "200px",
-                mode:"auto",
-				className:["sevian"],
-				
-			});
+			
 			this._win["geofence"] = new Float.Window({
                 visible:false,
                 caption: this.geofence.caption,
@@ -266,11 +256,7 @@ var GTWebcar = (($) => {
                 mode:"auto",
                 className:["sevian"]
 			});
-			this.site.id = this._win["site"].getBody();
-			this.site.oninfo = (info, name) =>{
-				this._win.info.getBody().text(info);
-				this._win.info.setCaption(name);
-			};
+			
 			this.loadSite(this.site);
 
 			this.geofence.id = this._win["geofence"].getBody();
@@ -282,10 +268,29 @@ var GTWebcar = (($) => {
 			this.loadHistory(this.history);
 			let menu = new Menu({
 				caption:"uuuu", 
-				autoClose: false,
+				autoClose: true,
 				target:main,
+				type:"popup",
+				subType:"dropdown",
 				"className":["sevian","horizontal"],
 				items: [
+					{
+						id: 0,
+                		caption:"+",
+                		items:[
+							{caption:'Sitio',
+							action:(item, event)=>{
+								
+								this._win["form_site"].show();
+							}},
+							{caption:'Alarma',
+							action:(item, event)=>{
+								
+								this._win["form_site"].show();
+							}},
+							{caption:'Geocerca'},
+						]
+					},
 					{
 						id: 1,
                 		caption:"U",
@@ -620,7 +625,40 @@ var GTWebcar = (($) => {
 			this._unit = new GTUnit(unit);
 		}
 		loadSite(info){
+			this._win["site"] = new Float.Window({
+                visible:false,
+                caption: info.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				
+			});
+			info.id = this._win["site"].getBody();
+			this.site.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
 			this._site = new GTSite(info);
+
+			this._win["form_site"] = new Float.Window({
+                visible:true,
+                caption: info.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				
+			});
+			
+			info.form.target = this._win["form_site"].getBody();
+			let form = new Form2(info.form);
 		}
 		loadGeofence(info){
 			this._geofence = new GTGeofence(info);

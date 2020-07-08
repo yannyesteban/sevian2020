@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es6",
+        "sourceMap": false,
+        "outDir": "./build"
+        //"outDir": "js",
+        //"rootDir": "./ts"
+       
+    
+    },
+    //"include":["ts/y2/*", "ts/*"]
+    "include": ["./sevian/ts/*","./gt/ts/*","./lib/*"]
+}

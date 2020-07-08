@@ -22,7 +22,7 @@ class Site
     public $_info = null;
 	
 	private $_jsonRequest = null;
-
+	static $patternJsonFile = '';
 	private $popupTemplate = '<div class="wecar_info">
 		<div>{=name}</div>
 		<div>Categoria: {=category}</div>
@@ -103,6 +103,19 @@ class Site
 	}
 	
 	public function init(){
+
+		$form =  new \Sigefor\Component\Form2([
+			
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/site', self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 1,
+			'userData'=> [],
+			
+			//'record'=>$this->getRecord()
+		]);
+
 		return [
 			'dataSite'     => $this->loadSites(),
 			'dataCategory' => $this->loadCategorys(),
@@ -113,6 +126,7 @@ class Site
 			'id'            => 'ks',
 			'followMe'		=> true,
 			'delay'			=> 60000,
+			'form'     => $form,
 		];
 	}
 	

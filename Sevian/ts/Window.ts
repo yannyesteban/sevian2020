@@ -1489,7 +1489,7 @@ let div = $("").create("div").addClass("popup").text("Help?");
         
         
 
-    }
+    });
     return Popup;
 
 })(_sgQuery);

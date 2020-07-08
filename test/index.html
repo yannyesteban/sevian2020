@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<!--<script src="index.js" type="module"></script>-->
+	<script src="uno.js" type="module"></script>
+</head>
+<body><div id="h">hhh</div>
+<script type="module">
+import fn from './uno.js'
+import {number} from './uno.js'
+
+let f1 = (a, b)=> {
+	
+	setTimeout((x)=>{
+
+		if(1>2){
+			a("es el valor de a", 1);
+		}else{
+			b(["es el valor de B", 3], 2);
+		}
+		
+	}, 10000, "two");
+	
+	
+
+
+	
+};
+let p = new Promise (f1);
+let fa = (value) => {
+	console.log('perfecto ', value);
+	return 101;
+};
+
+let fb = (value) => {
+	console.log('malo ', value, ' ');
+	return 102;
+}
+
+let fc = (xx)=>{
+	//alert(xx)
+};
+p.then(fa, fb).then(fc);
+
+
+
+
+</script>	
+</body>
+</html>

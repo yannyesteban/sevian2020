@@ -32,7 +32,7 @@ form {
 .gt-layout {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 60px 30px auto;
+  grid-template-rows: 60px auto 1fr;
   height: 100%;
   overflow: auto;
   background: #f33939;
@@ -40,7 +40,7 @@ form {
 .gt-layout > .banner {
   grid-row: 1;
   grid-column: 1;
-  background-color: #835454;
+  background-color: #d80e0e;
 }
 .gt-layout > .menu {
   grid-row: 2;
@@ -92,6 +92,28 @@ form {
 
 .icon-unit {
   font-weight: bold;
+}
+
+.icon-poly {
+  background-image: url(../../images/poly.png);
+}
+
+.icon-circle {
+  background-image: url(../../images/circle.png);
+}
+
+.icon-rectangle {
+  background-image: url(../../images/rectangle.png);
+}
+
+.icon-marker {
+  background-image: url(../../images/marker.png);
+}
+
+.icon-save {
+  background-image: url(../../images/save.png);
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .icon-trash {

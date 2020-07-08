@@ -3,9 +3,20 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        
+        
         {
             "type": "typescript",
-            "tsconfig": "js/tsconfig.json",
+            "tsconfig": "gt/js/tsconfig.json",
+            "option": "watch",
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "gt/js/tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ],
@@ -13,32 +24,25 @@
         },
         {
             "type": "typescript",
-            "tsconfig": "js/tsconfig.json",
+            "tsconfig": "tsconfig.json",
             "option": "watch",
             "problemMatcher": [
                 "$tsc-watch"
+            ],
+            "group": "build",
+            "label": "tsc: watch - tsconfig.json"
+        },
+        {
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
-        },
-        {
-            "type": "typescript",
-            "tsconfig": "gt/js/tsconfig.json",
-            "option": "watch",
-            "problemMatcher": [
-                "$tsc-watch"
-            ],
-            "group": "build"
-        },
-        {
-            "type": "typescript",
-            "tsconfig": "gt/js/tsconfig.json",
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "group": "build"
+            },
+            "label": "tsc: build - tsconfig.json"
         }
     ]
 }

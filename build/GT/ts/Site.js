@@ -10,6 +10,7 @@ var GTSite = (($) => {
             this.tracking = null;
             this.menu = null;
             this.win = null;
+            this.form = null;
             this.caption = "u";
             this.winCaption = "";
             this.pathImages = "";
@@ -390,6 +391,10 @@ var GTSite = (($) => {
             });
             return menu1;
             //console.log(check);
+        }
+        createForm(main) {
+            this.form.id = main;
+            let form = new Form2(this.form);
         }
         getInfoLayer() {
             return this._info;
