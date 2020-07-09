@@ -3,7 +3,7 @@ namespace GT;
 
 require_once MAIN_PATH.'GT/Trait.php';
 
-class Geofence
+class Alarm
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
@@ -12,7 +12,7 @@ class Geofence
 {
 
    
-    use DBGeofence;
+    use DBAlarm;
    
     
 
@@ -77,16 +77,16 @@ class Geofence
                 
 
                 $this->_name = $this->name;
-                $this->_type = 'GTGeofence';
+                $this->_type = 'GTAlarm';
                 $this->_mode = '';
                 $this->_info = [
-					'dataMain'		=> $this->loadGeofences(),
-					
+					'dataMain'		=> $this->loadSites(),
+					'dataCategory'	=> $this->loadCategorys(),
 					'popupTemplate' => $this->popupTemplate,
 					'infoTemplate'	=> $this->infoTemplate,
                     
 					'pathImages'	=> PATH_IMAGES,
-					'caption'		=> 'Geocercas',
+					'caption'		=> 'Sitios',
 					'id'            => 'ks',
 					'followMe'		=> true,
 					'delay'			=> 60000,
@@ -108,20 +108,21 @@ class Geofence
 			
 			'id'		=> $this->containerId,
 			'panelId'	=> $this->id,
-			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/geofence', self::$patternJsonFile),
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/alarm', self::$patternJsonFile),
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
 			
 			//'record'=>$this->getRecord()
 		]);
+
 		return [
-			'dataMain'     => $this->loadGeofences(),
-			
+			'dataMain'     => $this->loadAlarms(),
+			//'dataCategory' => $this->loadCategorys(),
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
-			'caption'		=> 'Geocercas',
+			'caption'		=> 'Alarmas',
 			'id'            => 'ks',
 			'followMe'		=> true,
 			'delay'			=> 60000,
@@ -131,9 +132,9 @@ class Geofence
 	
 	private function load(){
         $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-geofence-'.$this->id;
-		$this->panel->innerHTML = 'gt-geofence-'.$this->id;
-		$this->typeElement = 'GTGeofence';
+		$this->panel->id = 'gt-alarm-'.$this->id;
+		$this->panel->innerHTML = 'gt-alarm-'.$this->id;
+		$this->typeElement = 'GTAlarm';
 
 		$this->info = [
 			'id'=>$this->panel->id,

@@ -119,6 +119,15 @@ form{
 .icon-marker{
 	background-image: url(../../images/marker.png);
 }
+.icon-image{
+	background-image: url(../../images/image.png);
+}
+.icon-max{
+	background-image: url(../../images/max.png);
+}
+.icon-min{
+	background-image: url(../../images/min.png);
+}
 .icon-save{
 	background-image: url(../../images/save.png);
 	background-repeat: no-repeat;
@@ -129,6 +138,33 @@ form{
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: 20px 20px;
+}
+
+.mark-tool-value{
+	border: 3px solid white;
+	width: 300px;
+	height: 120px;
+	display: grid;
+	overflow: auto;
+	grid-template-columns: repeat(8, 30px);
+	gap: 5px;
+    //grid-template-rows: 60px auto 1fr;
+	//overflow: auto;
+	//max-width: 400px;
+	
+	div{
+		width:30px;
+		height: 30px;
+		//margin: 5px;
+		background-color: rgba(255, 255, 255, 0.644);
+		img{
+			width: 100%;
+			max-height: 100%;
+		}
+
+	}
+
+
 }
 .gt-webcar-login{
 	display: flex;

@@ -1,20 +1,24 @@
 
-var GTGeofence = (($) => {
+var GTAlarm = (($) => {
    
 	let n=0;
 
-    class Geofence{
+    class Alarm{
 		
 		id:any = null;
 		map:any = null;
-		
-		
+
 		dataMain:any[] = null;
 		
+		dataCategory:any[] = null;
+		dataAccounts:any[] = null;
+		dataSite:any[] = null;
+		tracking:any[] = null;
+
 		menu:any = null;
 		win:any = null;
 		form:any = null;
-
+		
 		caption:string = "u";
 		winCaption:string = "";
 		pathImages:string = "";
@@ -85,11 +89,11 @@ var GTGeofence = (($) => {
             
             if(main){
                 
-                if(main.ds("gtGeofence")){
+                if(main.ds("gtAlarm")){
                     return;
                 }
     
-                if(main.hasClass("gt-geofence")){
+                if(main.hasClass("gt-alarm")){
                     this._load(main);
                 }else{
                     this._create(main);
@@ -112,10 +116,10 @@ var GTGeofence = (($) => {
 			
 			this.main = main;
 
-			main.addClass("geofence-main");
+			main.addClass("alarm-main");
 			
 			this.createMenu();
-			this._info = $().create("div").addClass("win-geofence-info");
+			this._info = $().create("div").addClass("win-alarm-info");
 			//this._info = $().create("div").addClass("win-units-info");
 			return;
 
@@ -216,10 +220,6 @@ var GTGeofence = (($) => {
 		}
 		setMap(map){
 			this.map = map;
-
-			this.map.getControl("poly").onsave = (coords, propertys)=>{
-				
-			};
 		}
 		updateTracking(data){
 			let unitId;
@@ -486,26 +486,25 @@ var GTGeofence = (($) => {
 			this.form.id = main;
 			let form = new Form2(this.form);
 		}
-		
 		getInfoLayer(){
 			
 			return this._info;
 		}
 
-		showGeofence(id, value){
+		showSite(id, value){
 			if(!this.marks[id]){
 				
-				this.marks[id] = this.getMap().draw(id, this.dataMain[id].type,{
-					coordinates:this.dataMain[id].config,
+				this.marks[id] = this.getMap().createMark({
+					lat:this.dataSite[id].latitude,
+					lng:this.dataSite[id].longitude,
+					heading:0,//this.tracking[id].heading,
+					image:this.pathImages+this.dataSite[id].icon+".png",
 					popupInfo: this.loadPopupInfo(id)
 				});
-
-				
-				
 				
 				
 			}else{
-				this.marks[id].setVisible(value);
+				this.marks[id].show(value);
 			}
 		}
 		
@@ -563,14 +562,14 @@ var GTGeofence = (($) => {
 			//this._info.text(this.loadInfo(id));
 			//this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
 
-			this.oninfo(this.loadInfo(id), this.dataMain[id].name);
+			this.oninfo(this.loadInfo(id), this.dataSite[id].name);
 		}
 		loadPopupInfo(id){
-            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataMain[id]), this.dataMain[id]);
+            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataSite[id]), this.dataSite[id]);
         }
 
 		loadInfo(id){
-            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataMain[id]), this.dataMain[id]);
+            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataSite[id]), this.dataSite[id]);
 		}
 		
 		setFollowMe(value:boolean){
@@ -583,5 +582,5 @@ var GTGeofence = (($) => {
 	
 
 
-	return Geofence;
+	return Alarm;
 })(_sgQuery);

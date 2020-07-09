@@ -205,6 +205,73 @@ $cls_elements['gt_site'] = [
 	
 ];
 
+$cls_elements['gt_alarm'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Alarm.php',
+	'class' => '\GT\Alarm',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Alarm.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+$cls_elements['gt_event'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Event.php',
+	'class' => '\GT\Event',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Event.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
+$cls_elements['gt_config'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Config.php',
+	'class' => '\GT\Config',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Config.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
+$cls_elements['gt_search'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Search.php',
+	'class' => '\GT\Search',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Search.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
 $cls_elements['gt_geofence'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Geofence.php',
@@ -214,7 +281,11 @@ $cls_elements['gt_geofence'] = [
 		'file' 	=> MAIN_PATH.'build/GT/ts/Geofence.js',
 		'begin'=> false
 	]],
-	'css'=>[]
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
 	
 ];
 

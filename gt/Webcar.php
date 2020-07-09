@@ -40,13 +40,17 @@ class Webcar extends \Sevian\Element{
 		$site = new Site();
 		$geofence = new Geofence();
 		$history = new History();
+		$alarm = new Alarm();
+		$config = new Config();
 		$this->info = [
 			'id'		=> $this->panel->id,
 			'panel'		=> $this->id,
 			'unit'		=> $unit->init(),
 			'site'		=> $site->init(),
 			'geofence'	=> $geofence->init(),
-			'history'	=> $history->init()
+			'history'	=> $history->init(),
+			'alarm'	=> $alarm->init(),
+			'config'	=> $config->init()
 		];
 
 		

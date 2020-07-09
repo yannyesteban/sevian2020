@@ -7,6 +7,7 @@ var GTGeofence = (($) => {
             this.dataMain = null;
             this.menu = null;
             this.win = null;
+            this.form = null;
             this.caption = "u";
             this.winCaption = "";
             this.pathImages = "";
@@ -165,6 +166,8 @@ var GTGeofence = (($) => {
         }
         setMap(map) {
             this.map = map;
+            this.map.getControl("poly").onsave = (coords, propertys) => {
+            };
         }
         updateTracking(data) {
             let unitId;
@@ -370,6 +373,10 @@ var GTGeofence = (($) => {
                 }
             });
             return menu1;
+        }
+        createForm(main) {
+            this.form.id = main;
+            let form = new Form2(this.form);
         }
         getInfoLayer() {
             return this._info;

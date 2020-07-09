@@ -121,6 +121,10 @@ var GTWebcar = (($) => {
 		site:object = null;
 		geofence:object = null;
 		history:object = null;
+		alarm:object = null;
+		event:object = null;
+		search:object = null;
+		config:object = null;
 		
 		dataClients:any[] = null;
 		dataAccounts:any[] = null;
@@ -153,6 +157,10 @@ var GTWebcar = (($) => {
 		private _site:object = null;
 		private _geofence:object = null;
 		private _history:object = null;
+		private _alarm:object = null;
+		private _search:object = null;
+		private _event:object = null;
+		private _config:object = null;
 
 		
 		private _win:any[] = [];
@@ -258,6 +266,9 @@ var GTWebcar = (($) => {
 			});
 			
 			this.loadSite(this.site);
+			this.loadAlarm(this.alarm);
+
+			this.loadConfig(this.config);
 
 			this.geofence.id = this._win["geofence"].getBody();
 			this.geofence.oninfo = (info, name) =>{
@@ -286,9 +297,28 @@ var GTWebcar = (($) => {
 							{caption:'Alarma',
 							action:(item, event)=>{
 								
-								this._win["form_site"].show();
+								this._win["form_alarm"].show();
 							}},
-							{caption:'Geocerca'},
+							{caption:'Geocerca',
+							action:(item, event)=>{
+								
+								this._win["form_geofence"].show();
+							}},
+							{caption:'Eventos',
+							action:(item, event)=>{
+								
+								this._win["form_event"].show();
+							}},
+							{caption:'Opciones',
+							action:(item, event)=>{
+								
+								this._win["config"].show();
+							}},
+							{caption:'Search',
+							action:(item, event)=>{
+								
+								this._win["form_search"].show();
+							}},
 						]
 					},
 					{
@@ -324,7 +354,7 @@ var GTWebcar = (($) => {
 						id: 4,
                 		caption:"A",
                 		action:(item, event) => {
-							
+							this._win["alarm"].show();
 						}
 					},
 					{
@@ -660,8 +690,63 @@ var GTWebcar = (($) => {
 			info.form.target = this._win["form_site"].getBody();
 			let form = new Form2(info.form);
 		}
+
+		loadAlarm(info){
+			this._win["alarm"] = new Float.Window({
+                visible:false,
+                caption: info.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				
+			});
+			info.id = this._win["alarm"].getBody();
+			this.site.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
+			this._alarm = new GTAlarm(info);
+
+			this._win["form_alarm"] = new Float.Window({
+                visible:true,
+                caption: info.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				
+			});
+			
+			info.form.target = this._win["form_alarm"].getBody();
+			let form = new Form2(info.form);
+		}
+
 		loadGeofence(info){
 			this._geofence = new GTGeofence(info);
+
+
+			this._win["form_geofence"] = new Float.Window({
+                visible:true,
+                caption: info.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				
+			});
+			
+			info.form.target = this._win["form_geofence"].getBody();
+			let form = new Form2(info.form);
 		}
 		loadHistory(info){
 			this._win["history"] = new Float.Window({
@@ -684,6 +769,28 @@ var GTWebcar = (($) => {
 			};
 			
 			this._history = new GTHistory(info);
+		}
+		loadConfig(info){
+			this._win["config"] = new Float.Window({
+                visible:false,
+                caption: info.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				
+			});
+			info.id = this._win["config"].getBody();
+			
+			info.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
+			
+			this._config = new GTConfig(info);
 		}
         _load(main:any){
 

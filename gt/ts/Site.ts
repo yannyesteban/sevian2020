@@ -8,6 +8,7 @@ var GTSite = (($) => {
 		id:any = null;
 		map:any = null;
 		
+		images:string[] = [];
 		dataCategory:any[] = null;
 		dataAccounts:any[] = null;
 		dataSite:any[] = null;
@@ -218,6 +219,8 @@ var GTSite = (($) => {
 		}
 		setMap(map){
 			this.map = map;
+			this.map.getControl("mark").images = this.images;
+			
 		}
 		updateTracking(data){
 			let unitId;

@@ -232,7 +232,6 @@ trait DBTracking{
     }
 }
 
-
 trait DBSite{
     private $cn = null;
     private function loadSites(){
@@ -362,6 +361,60 @@ trait DBGeofence{
         $data = [];
 		while($rs = $cn->getDataAssoc($result)){
             $rs['config'] = json_decode($rs['config']);
+            $data[] = $rs;
+        }
+
+
+        return $data;
+    }
+
+    
+}
+
+trait DBAlarm{
+    private $cn = null;
+    private function loadAlarms(){
+
+        $cn = $this->cn;
+
+        /*
+        $cn->query = "select * from geofences";
+
+        $result = $cn->execute();
+                
+                
+        $value = [];
+        while($rs = $cn->getDataAssoc($result)){
+            $coord = explode(",",$rs['coords']);
+            $str = [];
+            foreach($coord as $c){
+                $aux = explode(" ",$c);
+                $str[] = [$aux[1]*1,$aux[0]*1];
+            }
+            $value[$rs['id']] = $str;
+        }
+
+        foreach($value as $k => $v){
+           
+            $v = json_encode($v);
+           
+            $cn->query = "update geofences set 
+            
+            config = '$v'
+            
+            where id=$k and type='circle'";
+ 
+            $result = $cn->execute();
+
+        }
+        
+        */
+        $cn->query = "SELECT * FROM alarms";
+
+        $result = $this->cn->execute();
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            
             $data[] = $rs;
         }
 

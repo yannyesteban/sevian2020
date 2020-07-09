@@ -1,9 +1,9 @@
 
-var GTGeofence = (($) => {
+var GTConfig = (($) => {
    
 	let n=0;
 
-    class Geofence{
+    class Config{
 		
 		id:any = null;
 		map:any = null;
@@ -14,7 +14,7 @@ var GTGeofence = (($) => {
 		menu:any = null;
 		win:any = null;
 		form:any = null;
-
+		
 		caption:string = "u";
 		winCaption:string = "";
 		pathImages:string = "";
@@ -85,11 +85,11 @@ var GTGeofence = (($) => {
             
             if(main){
                 
-                if(main.ds("gtGeofence")){
+                if(main.ds("gtHistory")){
                     return;
                 }
     
-                if(main.hasClass("gt-geofence")){
+                if(main.hasClass("gt-history")){
                     this._load(main);
                 }else{
                     this._create(main);
@@ -111,11 +111,16 @@ var GTGeofence = (($) => {
 		_create(main:any){
 			
 			this.main = main;
+			main.addClass("config-main");
 
-			main.addClass("geofence-main");
+			this.form.id = this.main;
+			let form = new Form2(this.form);
+
+			return;
+			
 			
 			this.createMenu();
-			this._info = $().create("div").addClass("win-geofence-info");
+			this._info = $().create("div").addClass("win-history-info");
 			//this._info = $().create("div").addClass("win-units-info");
 			return;
 
@@ -216,10 +221,6 @@ var GTGeofence = (($) => {
 		}
 		setMap(map){
 			this.map = map;
-
-			this.map.getControl("poly").onsave = (coords, propertys)=>{
-				
-			};
 		}
 		updateTracking(data){
 			let unitId;
@@ -358,7 +359,7 @@ var GTGeofence = (($) => {
 			let infoMenu = [];
 			
             
-			
+			console.log(this.dataMain)
 
 			for(let x in this.dataMain){
 				
@@ -479,14 +480,9 @@ var GTGeofence = (($) => {
 			});
 			
 			return menu1;
-			
+			//console.log(check);
 		}
 
-		createForm(main){
-			this.form.id = main;
-			let form = new Form2(this.form);
-		}
-		
 		getInfoLayer(){
 			
 			return this._info;
@@ -583,5 +579,5 @@ var GTGeofence = (($) => {
 	
 
 
-	return Geofence;
+	return Config;
 })(_sgQuery);

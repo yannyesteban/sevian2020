@@ -44,9 +44,14 @@
     opacity: 1;
     visibility: visible;
   }
+  99% {
+    opacity: 0;
+    visibility: hidden !important;
+  }
   100% {
     opacity: 0;
     visibility: hidden !important;
+    z-index: 0;
   }
 }
 @keyframes close {
@@ -54,9 +59,14 @@
     opacity: 1;
     visibility: visible;
   }
+  99% {
+    opacity: 0;
+    visibility: hidden !important;
+  }
   100% {
     opacity: 0;
     visibility: hidden !important;
+    z-index: 0;
   }
 }
 @-webkit-keyframes acc-open {

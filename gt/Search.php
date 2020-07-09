@@ -3,7 +3,7 @@ namespace GT;
 
 require_once MAIN_PATH.'GT/Trait.php';
 
-class Geofence
+class Search
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
@@ -22,7 +22,9 @@ class Geofence
     public $_info = null;
 	
 	private $_jsonRequest = null;
+
 	static $patternJsonFile = '';
+
 	private $popupTemplate = '<div class="wecar_info">
 		<div>{=name}</div>
 		<div>Categoria: {=category}</div>
@@ -77,7 +79,7 @@ class Geofence
                 
 
                 $this->_name = $this->name;
-                $this->_type = 'GTGeofence';
+                $this->_type = 'GTHistory';
                 $this->_mode = '';
                 $this->_info = [
 					'dataMain'		=> $this->loadGeofences(),
@@ -86,7 +88,7 @@ class Geofence
 					'infoTemplate'	=> $this->infoTemplate,
                     
 					'pathImages'	=> PATH_IMAGES,
-					'caption'		=> 'Geocercas',
+					'caption'		=> 'Historial',
 					'id'            => 'ks',
 					'followMe'		=> true,
 					'delay'			=> 60000,
@@ -105,35 +107,36 @@ class Geofence
 	public function init(){
 
 		$form =  new \Sigefor\Component\Form2([
-			
+
 			'id'		=> $this->containerId,
 			'panelId'	=> $this->id,
-			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/geofence', self::$patternJsonFile),
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/history', self::$patternJsonFile),
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
 			
 			//'record'=>$this->getRecord()
 		]);
+
+		
 		return [
-			'dataMain'     => $this->loadGeofences(),
+			'form'     => $form,
 			
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
-			'caption'		=> 'Geocercas',
+			'caption'		=> 'Historial',
 			'id'            => 'ks',
 			'followMe'		=> true,
 			'delay'			=> 60000,
-			'form'     => $form,
 		];
 	}
 	
 	private function load(){
         $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-geofence-'.$this->id;
-		$this->panel->innerHTML = 'gt-geofence-'.$this->id;
-		$this->typeElement = 'GTGeofence';
+		$this->panel->id = 'gt-history-'.$this->id;
+		$this->panel->innerHTML = 'gt-history-'.$this->id;
+		$this->typeElement = 'GTHistory';
 
 		$this->info = [
 			'id'=>$this->panel->id,

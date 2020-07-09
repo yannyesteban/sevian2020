@@ -1,10 +1,10 @@
-var GTSite = (($) => {
+var GTAlarm = (($) => {
     let n = 0;
-    class Site {
+    class Alarm {
         constructor(info) {
             this.id = null;
             this.map = null;
-            this.images = [];
+            this.dataMain = null;
             this.dataCategory = null;
             this.dataAccounts = null;
             this.dataSite = null;
@@ -65,10 +65,10 @@ var GTSite = (($) => {
             //return;
             let main = (this.id) ? $(this.id) : false;
             if (main) {
-                if (main.ds("gtSite")) {
+                if (main.ds("gtAlarm")) {
                     return;
                 }
-                if (main.hasClass("gt-site")) {
+                if (main.hasClass("gt-alarm")) {
                     this._load(main);
                 }
                 else {
@@ -85,9 +85,9 @@ var GTSite = (($) => {
         }
         _create(main) {
             this.main = main;
-            main.addClass("site-main");
+            main.addClass("alarm-main");
             this.createMenu();
-            this._info = $().create("div").addClass("win-sites-info");
+            this._info = $().create("div").addClass("win-alarm-info");
             //this._info = $().create("div").addClass("win-units-info");
             return;
             this.win = new Float.Window({
@@ -170,7 +170,6 @@ var GTSite = (($) => {
         }
         setMap(map) {
             this.map = map;
-            this.map.getControl("mark").images = this.images;
         }
         updateTracking(data) {
             let unitId;
@@ -282,37 +281,22 @@ var GTSite = (($) => {
         }
         createMenu() {
             let infoMenu = [];
-            for (let x in this.dataCategory) {
-                infoMenu[this.dataCategory[x].id] = {
-                    id: this.dataCategory[x].id,
-                    caption: this.dataCategory[x].category,
-                    items: [],
-                    useCheck: true,
-                    useIcon: false,
-                    checkValue: x,
-                    checkDs: { "level": "category", "categoryId": x },
-                    ds: { "clientId": x },
-                    check: (item, event) => {
-                        this.showAccountUnits(this.dataClients[x].id, event.currentTarget.checked);
-                    },
-                };
-            }
-            for (let x in this.dataSite) {
-                infoMenu[this.dataSite[x].category_id].items[this.dataSite[x].site_id] = {
-                    id: this.dataSite[x].site_id,
-                    caption: this.dataSite[x].name,
+            for (let x in this.dataMain) {
+                infoMenu[this.dataMain[x].id] = {
+                    id: this.dataMain[x].id,
+                    caption: this.dataMain[x].name,
                     useCheck: true,
                     value: x,
                     checkValue: x,
-                    checkDs: { "level": "sites", "siteId": x },
-                    ds: { "siteId": x },
+                    checkDs: { "level": "geofence", "geofenceId": x },
+                    ds: { "geofenceId": x },
                     check: (item, event) => {
-                        this.showSite(x, event.currentTarget.checked);
+                        this.showGeofence(x, event.currentTarget.checked);
                     },
                     action: (item, event) => {
                         let ch = menu.getCheck(item);
                         ch.get().checked = true;
-                        this.showSite(x, true);
+                        this.showGeofence(x, true);
                         this._lastUnitId = x;
                         this.setInfo(x);
                         this.flyTo(x);
@@ -322,7 +306,6 @@ var GTSite = (($) => {
                     }
                 };
             }
-            console.log(infoMenu);
             let menu = new Menu({
                 caption: "",
                 autoClose: false,
@@ -392,7 +375,6 @@ var GTSite = (($) => {
                 }
             });
             return menu1;
-            //console.log(check);
         }
         createForm(main) {
             this.form.id = main;
@@ -471,6 +453,6 @@ var GTSite = (($) => {
             return this.followMe;
         }
     }
-    Site._instances = [];
-    return Site;
+    Alarm._instances = [];
+    return Alarm;
 })(_sgQuery);
