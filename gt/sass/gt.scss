@@ -141,28 +141,49 @@ form{
 }
 
 .mark-tool-value{
-	border: 3px solid white;
-	width: 300px;
-	height: 120px;
-	display: grid;
-	overflow: auto;
-	grid-template-columns: repeat(8, 30px);
-	gap: 5px;
-    //grid-template-rows: 60px auto 1fr;
-	//overflow: auto;
-	//max-width: 400px;
-	
-	div{
-		width:30px;
-		height: 30px;
-		//margin: 5px;
-		background-color: rgba(255, 255, 255, 0.644);
-		img{
-			width: 100%;
-			max-height: 100%;
+	.mark-tool-g1{
+		display: flex;
+		padding: 2px;
+		justify-content: space-around;
+		
+		input{
+			border:1px solid white;
+			background-color: rgb(245, 245, 245);
+			text-align: center;
+			color: rgb(122, 122, 122);
+			font-size: 13px;
+			//flex:1 1 100px;
+			line-height: 1.4em;
+			
 		}
-
 	}
+	.mark-tool-g2{
+		border: 3px solid white;
+		width: 300px;
+		height: 120px;
+		display: grid;
+		overflow: auto;
+		grid-template-columns: repeat(8, 30px);
+		gap: 5px;
+		//grid-template-rows: 60px auto 1fr;
+		//overflow: auto;
+		//max-width: 400px;
+		
+		div{
+			width:30px;
+			height: 30px;
+			//margin: 5px;
+			background-color: rgba(255, 255, 255, 0.644);
+			
+			img{
+				width: 100%;
+				max-height: 100%;
+				
+			}
+	
+		}
+	}
+	
 
 
 }

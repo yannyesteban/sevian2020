@@ -256,6 +256,7 @@ var createGeoJSONCircle = function (center, radiusInKm, points) {
 var MapBox = (($, turf) => {
     class InfoRuleControl {
         constructor(object) {
+            this.id = 'mapboxgl-ctrl-rule';
             this._map = null;
             this._container = null;
             this._line = null;
@@ -318,7 +319,7 @@ var MapBox = (($, turf) => {
             this._btnExit = this._group2.create("button").prop({ "type": "button", "title": "Salir de la herramienta de medición" }).addClass(["icon-exit"])
                 .on("click", () => {
                 this._length.text("0");
-                this.delete();
+                this.stop();
             });
             return this._container.get();
         }
@@ -327,13 +328,14 @@ var MapBox = (($, turf) => {
             this._map = undefined;
         }
         play() {
+            this._parent.stopControls();
             if (this._mode == 0) {
                 this._group.style("display", "");
                 this._group1.style("display", "none");
                 this._group2.style("display", "");
                 this._mode = 1;
             }
-            this._line = this._parent.draw('mapboxgl-ctrl-rule', 'rule', {
+            this._line = this._parent.draw(this.id, 'rule', {
                 maxLines: 1,
                 ondraw: (coordinates) => {
                     if (coordinates.length > 1) {
@@ -367,14 +369,13 @@ var MapBox = (($, turf) => {
             }
             this.setLength(this.length);
         }
-        stop() {
-            this._line = this._parent.draw('mapboxgl-ctrl-rule', 'rule', {});
-            this._line.play();
-        }
         delete() {
             //this._line.stop();
-            this._parent.delete("mapboxgl-ctrl-rule");
+            this._parent.delete(this.id);
+        }
+        stop() {
             if (this._mode == 1) {
+                this.delete();
                 this._group.style("display", "none");
                 this._group1.style("display", "");
                 this._group2.style("display", "none");
@@ -391,6 +392,7 @@ var MapBox = (($, turf) => {
             this._mode = 0;
             this._parent = null;
             this._meter = 1;
+            this._type = null;
             this._group = null;
             this._length = null;
             this._unit = null;
@@ -416,7 +418,7 @@ var MapBox = (($, turf) => {
             this._length = this._group.create("span").addClass("rule-tool-value");
             this._length.text("0");
             this._unit = this._group.create("span");
-            this._unit.addClass("rule-tool-unit").text("km")
+            this._unit.addClass("rule-tool-unit")
                 .on("click", () => {
                 //this.toggleUnit();
             });
@@ -464,22 +466,230 @@ var MapBox = (($, turf) => {
             this._map = undefined;
         }
         play() {
+            this._parent.stopControls();
             if (this._mode == 0) {
                 this._group.style("display", "");
                 this._group1.style("display", "none");
                 this._group2.style("display", "");
                 this._mode = 1;
             }
-            this._line = this._parent.draw(this.id, 'circle', {
-                maxLines: 1,
-                ondraw: (coordinates) => {
-                    if (coordinates.length > 1) {
-                        let line = turf.lineString(coordinates);
-                        //turf.length(linestring).toLocaleString()
-                        this.setLength(turf.length(line, { units: 'meters' }));
-                        //this.length = ;
-                        //this._length.text(this.length.toLocaleString());
+            this.setCircle();
+        }
+        setLength(length) {
+            this.length = length;
+            if (this._meter == 0) {
+                this._length.text((this.length / 1000).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._unit.text("Km");
+            }
+            else {
+                this._length.text(this.length.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._unit.text("m");
+            }
+        }
+        toggleUnit() {
+            if (this._meter == 0) {
+                this._meter = 1;
+            }
+            else {
+                this._meter = 0;
+            }
+            this.setLength(this.length);
+        }
+        stop() {
+            if (this._mode == 1) {
+                this.delete();
+                this._group.style("display", "none");
+                this._group1.style("display", "");
+                this._group2.style("display", "none");
+                this._mode = 0;
+            }
+        }
+        delete() {
+            this._length.text("0");
+            this._parent.delete(this.id);
+        }
+        printArea(area) {
+            if (area > 1000000) {
+                area = area / 1000000;
+                this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._unit.text("Km<sup>2</sup>");
+            }
+            else {
+                this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._unit.text("m<sup>2</sup>");
+            }
+        }
+        setCircle() {
+            this._line = this._parent.draw(this.id, "circle", {});
+            this._line.ondraw = (coordinates) => {
+                let radio = this._line.getRadio();
+                let area = Math.PI * Math.pow(radio, 2);
+                this._length.text("Radio: " + radio.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km; Área: " + area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._unit.text("Km<sup>2</sup>");
+                return;
+                if (coordinates.length > 2) {
+                    let coord = coordinates.slice();
+                    coord.push(coord[0]);
+                    let polygon = turf.polygon([coord]);
+                    let area = turf.area(polygon);
+                    if (area > 1000000) {
+                        area = area / 1000000;
+                        this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        this._unit.text("Km<sup>2</sup>");
                     }
+                    else {
+                        this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        this._unit.text("m<sup>2</sup>");
+                    }
+                }
+                else {
+                    this._length.text("0");
+                    this._unit.text("Km<sup>2</sup>");
+                }
+            };
+            this._line.play();
+            this._type = 1;
+        }
+        setRectangle() {
+            this._line = this._parent.draw(this.id, "rectangle", {});
+            this._line.ondraw = (coordinates) => {
+                this.printArea(this._line.getArea());
+            };
+            this._line.play();
+            this._type = 2;
+        }
+        setPolygon() {
+            this._line = this._parent.draw(this.id, "polygon", {});
+            this._line.ondraw = (coordinates) => {
+                if (coordinates.length > 2) {
+                    let coord = coordinates.slice();
+                    coord.push(coord[0]);
+                    let polygon = turf.polygon([coord]);
+                    this.printArea(turf.area(polygon));
+                }
+                else {
+                    this._length.text("0");
+                    this._unit.text("Km<sup>2</sup>");
+                }
+            };
+            this._line.play();
+            this._type = 3;
+        }
+    }
+    class MarkControl {
+        constructor(object) {
+            this.id = "mapboxgl-ctrl-mark";
+            this._map = null;
+            this._container = null;
+            this._line = null;
+            this._mode = 0;
+            this._parent = null;
+            this._meter = 1;
+            this._group = null;
+            this._length = null;
+            this._unit = null;
+            this._group1 = null;
+            this._group2 = null;
+            this._btnRule = null;
+            this._btnLine = null;
+            this._btnUnit = null;
+            this._btnMultiLine = null;
+            this._btnTrash = null;
+            this._btnExit = null;
+            this._inpLng = null;
+            this._inpLat = null;
+            this.length = 0;
+            this.images = [];
+            this.onstart = (coords, propertys) => { };
+            this.onsave = (coords, propertys) => { };
+            this.onexit = (coords, propertys) => { };
+            this._parent = object;
+        }
+        onAdd(map) {
+            this._map = map;
+            this._container = $.create("div").addClass(["rule-tool-main"]);
+            this._group = this._container.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool-text"])
+                .style("display", "none");
+            this._length = this._group.create("div").addClass("mark-tool-value");
+            let images = null;
+            let g1 = this._length.create("div").addClass("mark-tool-g1");
+            let g2 = this._length.create("div").addClass("mark-tool-g2");
+            this._inpLng = g1.create("input").prop({ type: "text" }).
+                on("change", (event) => {
+                this._line.setLngLat([this._inpLng.val(), this._inpLat.val()]);
+            });
+            this._inpLat = g1.create("input").prop({ type: "text" }).
+                on("change", (event) => {
+                this._line.setLngLat([this._inpLng.val(), this._inpLat.val()]);
+            });
+            this._parent.markImages.forEach((e, index) => {
+                images = g2.create("div").create("img");
+                images.prop("src", e);
+                images.on("click", () => {
+                    this._line.setImage(e);
+                });
+            });
+            //this._unit = this._group.create("span");
+            //this._unit.addClass("rule-tool-unit").text("km")
+            this._group1 = this._container.create("div");
+            this._group1.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
+            this._btnRule = this._group1.create("button").prop({ "type": "button", "title": "Inicia la herramienta de Marcas / Sitios" }).addClass("icon-marker");
+            this._btnRule.on("click", () => {
+                this.play();
+            });
+            this._group2 = this._container.create("div").style("display", "none");
+            this._group2.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
+            /*
+            this._btnLine = this._group2.create("button").prop({"type": "button", "title":"Seleccionar imagen a mostrar"}).addClass("icon-image")
+            .on("click", ()=>{
+                
+            });
+            */
+            this._group2.create("button").prop({ "type": "button", "title": "Aumentar [+] Tamaño" }).addClass("icon-max")
+                .on("click", () => {
+                let size = this._line.getSize();
+                this._line.setSize(null, size[1] * 1.2);
+                //this._line.setMax(1);
+            });
+            this._group2.create("button").prop({ "type": "button", "title": "Disminuir [-] Tamaño" }).addClass("icon-min")
+                .on("click", () => {
+                let size = this._line.getSize();
+                this._line.setSize(null, size[1] * 0.8);
+            });
+            this._group2.create("button").prop({ "type": "button", "title": "Guardar" }).addClass(["icon-save"])
+                .on("click", () => {
+                this.onsave(this._line.getCoordinates());
+            });
+            this._btnTrash = this._group2.create("button").prop({ "type": "button", "title": "Descarta la medición actual" }).addClass(["icon-trash"])
+                .on("click", () => {
+                //this._length.text("0");
+                this._line.reset();
+            });
+            this._btnExit = this._group2.create("button").prop({ "type": "button", "title": "Salir de la herramienta de medición" }).addClass(["icon-exit"])
+                .on("click", () => {
+                this.stop();
+            });
+            return this._container.get();
+        }
+        onRemove() {
+            this._container.parentNode.removeChild(this._container);
+            this._map = undefined;
+        }
+        play() {
+            this._parent.stopControls();
+            if (this._mode == 0) {
+                this._group.style("display", "");
+                this._group1.style("display", "none");
+                this._group2.style("display", "");
+                this._mode = 1;
+            }
+            this._line = this._parent.draw(this.id, 'mark', {
+                coordinates: [this._map.getCenter().lng, this._map.getCenter().lat],
+                height: 30,
+                image: "http://localhost/sevian2020/images/sites/squat_marker_orange-31px.png",
+                ondraw: (coord) => {
+                    this._inpLng.val(coord[0].toFixed(8));
+                    this._inpLat.val(coord[1].toFixed(8));
                 }
             });
             this._line.play();
@@ -504,170 +714,26 @@ var MapBox = (($, turf) => {
             }
             this.setLength(this.length);
         }
-        stop() {
-            this.delete();
-            if (this._mode == 1) {
-                this._group.style("display", "none");
-                this._group1.style("display", "");
-                this._group2.style("display", "none");
-                this._mode = 0;
-            }
-        }
         delete() {
             //this._line.stop();
-            this._parent.delete(this.id);
-        }
-        setCircle() {
-            this._line = this._parent.draw(this.id, 'circle', {});
-            this._line.play();
-        }
-        setRectangle() {
-            this._line = this._parent.draw(this.id, "rectangle", {});
-            this._line.play();
-        }
-        setPolygon() {
-            this._line = this._parent.draw(this.id, "polygon", {});
-            this._line.play();
-        }
-    }
-    class MarkControl {
-        constructor(object) {
-            this.id = "mapboxgl-ctrl-mark";
-            this._map = null;
-            this._container = null;
-            this._line = null;
-            this._mode = 0;
-            this._parent = null;
-            this._meter = 1;
-            this._group = null;
-            this._length = null;
-            this._unit = null;
-            this._group1 = null;
-            this._group2 = null;
-            this._btnRule = null;
-            this._btnLine = null;
-            this._btnUnit = null;
-            this._btnMultiLine = null;
-            this._btnTrash = null;
-            this._btnExit = null;
-            this.length = 0;
-            this.images = [];
-            this.onstart = (coords, propertys) => { };
-            this.onsave = (coords, propertys) => { };
-            this.onexit = (coords, propertys) => { };
-            this._parent = object;
-        }
-        onAdd(map) {
-            this._map = map;
-            this._container = $.create("div").addClass(["rule-tool-main"]);
-            this._group = this._container.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool-text"])
-                .style("display", "none");
-            this._length = this._group.create("span").addClass("mark-tool-value");
-            //this._unit = this._group.create("span");
-            //this._unit.addClass("rule-tool-unit").text("km")
-            this._group1 = this._container.create("div");
-            this._group1.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
-            this._btnRule = this._group1.create("button").prop({ "type": "button", "title": "Inicia la herramienta de Marcas / Sitios" }).addClass("icon-marker");
-            this._btnRule.on("click", () => {
-                this.play();
-            });
-            this._group2 = this._container.create("div").style("display", "none");
-            this._group2.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
-            this._btnLine = this._group2.create("button").prop({ "type": "button", "title": "Seleccionar imagen a mostrar" }).addClass("icon-image")
-                .on("click", () => {
-                let images = null;
-                this._length.text("");
-                this.images.forEach((e, index) => {
-                    images = this._length.create("div").create("img");
-                    images.prop("src", e);
-                    images.on("click", () => {
-                        this._line.setImage(e);
-                    });
-                });
-            });
-            this._group2.create("button").prop({ "type": "button", "title": "Aumentar [+] Tamaño" }).addClass("icon-max")
-                .on("click", () => {
-                let size = this._line.getSize();
-                this._line.setSize(null, size[1] * 1.2);
-                //this._line.setMax(1);
-            });
-            this._group2.create("button").prop({ "type": "button", "title": "Disminuir [-] Tamaño" }).addClass("icon-min")
-                .on("click", () => {
-                let size = this._line.getSize();
-                this._line.setSize(null, size[1] * 0.8);
-            });
-            this._btnTrash = this._group2.create("button").prop({ "type": "button", "title": "Descarta la medición actual" }).addClass(["icon-trash"])
-                .on("click", () => {
-                this._length.text("0");
-                this._line.reset();
-            });
-            this._btnExit = this._group2.create("button").prop({ "type": "button", "title": "Salir de la herramienta de medición" }).addClass(["icon-exit"])
-                .on("click", () => {
-                this.exit();
-            });
-            return this._container.get();
-        }
-        onRemove() {
-            this._container.parentNode.removeChild(this._container);
-            this._map = undefined;
-        }
-        play() {
-            if (this._mode == 0) {
-                this._group.style("display", "");
-                this._group1.style("display", "none");
-                this._group2.style("display", "");
-                this._mode = 1;
-            }
-            this._line = this._parent.draw(this.id, 'mark', {
-                coordinates: [this._map.getCenter().lng, this._map.getCenter().lat],
-                height: 30,
-                image: "http://localhost/sevian2020/images/sites/squat_marker_orange-31px.png",
-            });
-            this._line.play();
-        }
-        setLength(length) {
-            this.length = length;
-            if (this._meter == 0) {
-                this._length.text((this.length / 1000).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-                this._unit.text("Km");
-            }
-            else {
-                this._length.text(this.length.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-                this._unit.text("m");
-            }
-        }
-        toggleUnit() {
-            if (this._meter == 0) {
-                this._meter = 1;
-            }
-            else {
-                this._meter = 0;
-            }
-            this.setLength(this.length);
-        }
-        stop() {
-            //this._line = this._parent.draw(this.id, 'rule',{});
-            //this._line.play();
-        }
-        delete() {
-            //this._line.stop();
-            this._parent.delete(this.id);
-            if (this._mode == 1) {
-                this._group.style("display", "none");
-                this._group1.style("display", "");
-                this._group2.style("display", "none");
-                this._mode = 0;
-            }
-        }
-        exit() {
             this._line.stop();
-            this.delete();
+            this._parent.delete(this.id);
+        }
+        stop() {
+            if (this._mode == 1) {
+                this.delete();
+                this._group.style("display", "none");
+                this._group1.style("display", "");
+                this._group2.style("display", "none");
+                this._mode = 0;
+            }
         }
     }
     let test1 = 0;
     class IMark {
         constructor(info) {
             this.map = null;
+            this.type = "mark";
             this.parent = null;
             this.name = "";
             this.visible = true;
@@ -728,6 +794,7 @@ var MapBox = (($, turf) => {
             this._marker = new mapboxgl.Marker(this._image).setLngLat(this.coordinates);
             this._marker.setPopup(popup);
             this._marker.setRotation(this.rotation);
+            this.ondraw(this.coordinates);
             if (this.coordinates) {
                 this.coordinatesInit = this.coordinates.slice();
             }
@@ -789,10 +856,12 @@ var MapBox = (($, turf) => {
             this._marker.setDraggable(true);
             this._marker.on('drag', this._drag = () => {
                 this.ondrag(this._marker.getLngLat());
+                this.ondraw([this._marker.getLngLat().lng, this._marker.getLngLat().lat]);
             });
             this.map.on('click', this._click = (e) => {
                 this.setLngLat(e.lngLat);
                 this.onplace(e.lngLat);
+                this.ondraw([e.lngLat.lng, e.lngLat.lat]);
             });
         }
         stop() {
@@ -838,6 +907,7 @@ var MapBox = (($, turf) => {
     class Polygon {
         constructor(info) {
             this.map = null;
+            this.type = "polygon";
             this.parent = null;
             this.name = "";
             this.visible = true;
@@ -1033,21 +1103,21 @@ var MapBox = (($, turf) => {
         }
         add(lngLat) {
             this.coordinates.push([lngLat.lng, lngLat.lat]);
-            let data = createGeoJSONPoly(this.coordinates);
-            this.map.getSource(this.lineId).setData(data.data);
+            this.draw();
+            //let data = createGeoJSONPoly(this.coordinates);
+            //this.map.getSource(this.lineId).setData(data.data);
         }
         draw() {
             let data = createGeoJSONPoly(this.coordinates);
             this.map.getSource(this.lineId).setData(data.data);
+            this.ondraw(this.coordinates);
+        }
+        getArea() {
+            var polygon = turf.polygon([this.coordinates]);
+            return turf.area(polygon);
         }
         _fnclick(map) {
-            return this._click = (e) => {
-                //db (e.originalEvent.button+".........", "red","yellow")
-                var features = this.map.queryRenderedFeatures(e.point, {
-                    layers: [this.nodesId]
-                });
-                this.add(e.lngLat);
-            };
+            return;
         }
         play() {
             if (this._play) {
@@ -1118,7 +1188,13 @@ var MapBox = (($, turf) => {
                 map.on('mousemove', fnMove2);
                 map.once('mouseup', fnUp2);
             });
-            map.on('click', this._fnclick(this.map));
+            map.on('click', this._click = (e) => {
+                //db (e.originalEvent.button+".........", "red","yellow")
+                var features = this.map.queryRenderedFeatures(e.point, {
+                    layers: [this.nodesId]
+                });
+                this.add(e.lngLat);
+            });
             map.on('contextmenu', this._contextmenu = (e) => {
                 e.preventDefault();
                 this.coordinates.pop();
@@ -1150,7 +1226,6 @@ var MapBox = (($, turf) => {
             }
             this._mode = 1;
             if (this.coordinatesInit) {
-                console.log(this.coordinatesInit);
                 this.coordinates = this.coordinatesInit.slice();
                 if (this.coordinates.length > 1) {
                     this.draw();
@@ -1211,7 +1286,6 @@ var MapBox = (($, turf) => {
             this.map.getSource(this.lineId).setData(data.data);
         }
         split(index, value) {
-            db(index, "blue", "aqua");
             this.coordinates.splice(index, 0, value);
         }
         getHand() {
@@ -1257,6 +1331,7 @@ var MapBox = (($, turf) => {
     class Rectangle {
         constructor(info) {
             this.map = null;
+            this.type = "rectangle";
             this.parent = null;
             this.name = "";
             this.visible = true;
@@ -1302,6 +1377,7 @@ var MapBox = (($, turf) => {
             this.callmove = () => { };
             this.callresize = () => { };
             this.ondraw = () => { };
+            this.dataSource = null;
             for (let x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -1467,15 +1543,19 @@ var MapBox = (($, turf) => {
             let data = createGeoJSONRectangle(this.coordinates[0], this.coordinates[1]);
             //let data = createGeoJSONPoly(this.coordinates);
             this.map.getSource(this.lineId).setData(data.data);
+            this.dataSource = data.data;
+            this.ondraw(this.coordinates);
+        }
+        getArea() {
+            let coord = this.dataSource.features[0].geometry.coordinates;
+            if (coord.length >= 4) {
+                let polygon = turf.polygon(this.dataSource.features[0].geometry.coordinates);
+                return turf.area(polygon);
+            }
+            return 0;
         }
         _fnclick(map) {
-            return this._click = (e) => {
-                //db (e.originalEvent.button+".........", "red","yellow")
-                var features = this.map.queryRenderedFeatures(e.point, {
-                    layers: [this.nodesId]
-                });
-                this.add(e.lngLat);
-            };
+            return;
         }
         play() {
             if (this._play) {
@@ -1586,7 +1666,13 @@ var MapBox = (($, turf) => {
                 map.on('mousemove', fnMove2);
                 map.once('mouseup', fnUp2);
             });
-            map.on('click', this._fnclick(this.map));
+            map.on('click', this._click = (e) => {
+                //db (e.originalEvent.button+".........", "red","yellow")
+                var features = this.map.queryRenderedFeatures(e.point, {
+                    layers: [this.nodesId]
+                });
+                this.add(e.lngLat);
+            });
             map.on('contextmenu', this._contextmenu = (e) => {
                 e.preventDefault();
                 this.coordinates.pop();
@@ -1670,7 +1756,6 @@ var MapBox = (($, turf) => {
             this.map.getSource(this.lineId).setData(data.data);
         }
         split(index, value) {
-            db(index, "blue", "aqua");
             this.coordinates.splice(index, 0, value);
         }
         getHand() {
@@ -1716,6 +1801,7 @@ var MapBox = (($, turf) => {
     class Circle {
         constructor(info) {
             this.map = null;
+            this.type = "circle";
             this.parent = null;
             this.name = "";
             this.visible = true;
@@ -1837,7 +1923,6 @@ var MapBox = (($, turf) => {
                 this.radio = this.coordinates[1] / 1000;
             }
             if (this.center && this.radio) {
-                db(this.center + ".." + this.radio, "white");
                 this.createCircle(this.center, this.radio);
             }
             if (this.center && this.hand) {
@@ -1888,7 +1973,6 @@ var MapBox = (($, turf) => {
             if (this._play) {
                 return;
             }
-            db("PLAY");
             this.parent.stop();
             this._play = true;
             let map = this.map;
@@ -1995,6 +2079,7 @@ var MapBox = (($, turf) => {
             this.radio = length;
             let data = createGeoJSONCircle(center, length);
             this.source = this.map.getSource(this.lineId).setData(data.data);
+            this.ondraw(center, radio);
         }
         getCenter() {
             return this.center;
@@ -2060,6 +2145,7 @@ var MapBox = (($, turf) => {
     class Rule {
         constructor(info) {
             this.map = null;
+            this.type = "rule";
             this.parent = null;
             this.name = "";
             this.visible = true;
@@ -2495,6 +2581,7 @@ var MapBox = (($, turf) => {
     class Trace {
         constructor(info) {
             this.map = null;
+            this.type = "trace";
             this.parent = null;
             this.name = "";
             this.visible = true;
@@ -2743,7 +2830,6 @@ var MapBox = (($, turf) => {
                 map.once('mouseup', fnUp2);
             });
             map.on('click', this._click = (e) => {
-                console.log(e.originalEvent);
                 //db (e.originalEvent.button+".........", "red","yellow")
                 var features = this.map.queryRenderedFeatures(e.point, {
                     layers: [this.nodesId]
@@ -3136,7 +3222,6 @@ var MapBox = (($, turf) => {
                     var id = features[0].properties.id;
                 }
                 point = features[0].properties.index;
-                db(features[0].properties.index);
                 //canvas.style.cursor = 'grab';
                 map.on('mousemove', fnMove);
                 map.once('mouseup', fnUp);
@@ -3162,7 +3247,6 @@ var MapBox = (($, turf) => {
                     //return;
                 }
                 this.add(e.lngLat);
-                db(545454);
                 //map.getSource('geojson').setData(this.geojson);
             });
             return;
@@ -3185,14 +3269,6 @@ var MapBox = (($, turf) => {
         }
         reset() {
         }
-    }
-    class RuleX {
-    }
-    class PolyX {
-    }
-    class CircleX {
-    }
-    class TraceX {
     }
     class Popup {
         constructor() {
@@ -3309,6 +3385,7 @@ var MapBox = (($, turf) => {
             this.load = (event) => { };
             this._poly = [];
             this._controls = [];
+            this.markImages = [];
             for (let x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -3401,7 +3478,7 @@ var MapBox = (($, turf) => {
                     }
                 });
             });
-            map.addControl(new InfoRuleControl(this), 'top-right');
+            map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
             map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
             map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
             function LayerControl() { }
@@ -3729,6 +3806,11 @@ var MapBox = (($, turf) => {
                 return this._controls[name];
             }
             return false;
+        }
+        stopControls() {
+            for (let x in this._controls) {
+                this._controls[x].stop();
+            }
         }
     }
     return Map;

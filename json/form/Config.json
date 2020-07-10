@@ -2,7 +2,7 @@
 	"form":"config",
 	"caption":"Configuración",
 	"class":"",
-	"query":"SELECT '' as config1, '' as config2",
+	"query":"SELECT * FROM app_config",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{

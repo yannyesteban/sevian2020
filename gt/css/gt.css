@@ -135,7 +135,23 @@ form {
   background-size: 20px 20px;
 }
 
-.mark-tool-value {
+.mark-tool-value .mark-tool-g1 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 2px;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+.mark-tool-value .mark-tool-g1 input {
+  border: 1px solid white;
+  background-color: whitesmoke;
+  text-align: center;
+  color: #7a7a7a;
+  font-size: 13px;
+  line-height: 1.4em;
+}
+.mark-tool-value .mark-tool-g2 {
   border: 3px solid white;
   width: 300px;
   height: 120px;
@@ -144,12 +160,12 @@ form {
   grid-template-columns: repeat(8, 30px);
   gap: 5px;
 }
-.mark-tool-value div {
+.mark-tool-value .mark-tool-g2 div {
   width: 30px;
   height: 30px;
   background-color: rgba(255, 255, 255, 0.644);
 }
-.mark-tool-value div img {
+.mark-tool-value .mark-tool-g2 div img {
   width: 100%;
   max-height: 100%;
 }

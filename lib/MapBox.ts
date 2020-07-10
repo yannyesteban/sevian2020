@@ -308,7 +308,7 @@ var createGeoJSONCircle = function(center, radiusInKm, points) {
 var MapBox = (($, turf) => {
 
     class InfoRuleControl{
-        
+        id:string = 'mapboxgl-ctrl-rule';
         _map:any = null;
         _container:any = null;
         _line:any = null;
@@ -387,7 +387,7 @@ var MapBox = (($, turf) => {
             this._btnExit = this._group2.create("button").prop({"type": "button", "title":"Salir de la herramienta de medición"}).addClass(["icon-exit"])
             .on("click", ()=>{
                 this._length.text("0");
-                this.delete();
+                this.stop();
             });
 
             return this._container.get();
@@ -400,13 +400,14 @@ var MapBox = (($, turf) => {
         }
 
         play(){
+            this._parent.stopControls();
             if(this._mode == 0){
                 this._group.style("display","");
                 this._group1.style("display","none");
                 this._group2.style("display","");
                 this._mode = 1;
             }
-            this._line = this._parent.draw('mapboxgl-ctrl-rule', 'rule',{
+            this._line = this._parent.draw(this.id, 'rule',{
                 maxLines:1,
                 ondraw: (coordinates) => {
                     if(coordinates.length>1){
@@ -445,15 +446,18 @@ var MapBox = (($, turf) => {
            
 
         }
-        stop(){
-            this._line = this._parent.draw('mapboxgl-ctrl-rule', 'rule',{});
-            this._line.play();
-        }
+        
 
         delete(){
             //this._line.stop();
-            this._parent.delete("mapboxgl-ctrl-rule");
+            this._parent.delete(this.id);
+            
+        }
+
+        stop(){
+            
             if(this._mode == 1){
+                this.delete();
                 this._group.style("display","none");
                 this._group1.style("display","");
                 this._group2.style("display", "none");
@@ -473,7 +477,7 @@ var MapBox = (($, turf) => {
         _mode:number = 0;
         _parent:any = null;
         _meter:number = 1;
-
+        _type:number = null;
 
         _group:any = null;
         _length:any = null;
@@ -509,7 +513,7 @@ var MapBox = (($, turf) => {
             this._length = this._group.create("span").addClass("rule-tool-value");
             this._length.text("0");
             this._unit = this._group.create("span");
-            this._unit.addClass("rule-tool-unit").text("km")
+            this._unit.addClass("rule-tool-unit")
             .on("click", ()=>{
                 //this.toggleUnit();
             })
@@ -567,26 +571,16 @@ var MapBox = (($, turf) => {
         }
 
         play(){
+            this._parent.stopControls();
             if(this._mode == 0){
                 this._group.style("display","");
                 this._group1.style("display","none");
                 this._group2.style("display","");
                 this._mode = 1;
             }
-            this._line = this._parent.draw(this.id, 'circle',{
-                maxLines:1,
-                ondraw: (coordinates) => {
-                    if(coordinates.length>1){
-                        let line = turf.lineString(coordinates);
-                    //turf.length(linestring).toLocaleString()
-                        this.setLength(turf.length(line, {units: 'meters'}));
-                    //this.length = ;
-                    //this._length.text(this.length.toLocaleString());
-                    }
-                    
-                }
-            });
-            this._line.play();
+            this.setCircle();
+
+            
         }
 
         setLength(length){
@@ -613,8 +607,9 @@ var MapBox = (($, turf) => {
 
         }
         stop(){
-            this.delete();
+            
             if(this._mode == 1){
+                this.delete();
                 this._group.style("display","none");
                 this._group1.style("display","");
                 this._group2.style("display", "none");
@@ -623,22 +618,81 @@ var MapBox = (($, turf) => {
         }
 
         delete(){
-            //this._line.stop();
+            this._length.text("0");
             this._parent.delete(this.id);
-            
         }
 
-        setCircle(){
-            this._line = this._parent.draw(this.id, 'circle',{});
-            this._line.play();
+        printArea(area){
+            if(area > 1000000){
+                area = area / 1000000;
+                this._length.text(area.toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                this._unit.text("Km<sup>2</sup>");
+            }else{
+                this._length.text(area.toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2}));    
+                this._unit.text("m<sup>2</sup>");
+            }
         }
+        setCircle(){
+            this._line = this._parent.draw(this.id, "circle",{});
+            this._line.ondraw = (coordinates) => {
+                let radio = this._line.getRadio();
+                let area = Math.PI*Math.pow(radio, 2);
+                this._length.text("Radio: "+radio.toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2})+" Km; Área: " +area.toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2}))
+                this._unit.text("Km<sup>2</sup>");
+                return;
+                if(coordinates.length > 2){
+                   
+                    let coord = coordinates.slice();
+                    coord.push(coord[0]);
+                    let polygon = turf.polygon([coord]);
+                    let area = turf.area(polygon);
+
+                    if(area > 1000000){
+                        area = area / 1000000;
+                        this._length.text(area.toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                        this._unit.text("Km<sup>2</sup>");
+                    }else{
+                        this._length.text(area.toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2}));    
+                        this._unit.text("m<sup>2</sup>");
+                    }
+                    
+
+                }else{
+                    this._length.text("0");
+                    this._unit.text("Km<sup>2</sup>");
+                }
+            };
+            this._line.play();
+            this._type = 1;
+        }
+
+        
         setRectangle(){
             this._line = this._parent.draw(this.id, "rectangle",{});
+            this._line.ondraw = (coordinates) => {
+                this.printArea(this._line.getArea());
+
+            };
             this._line.play();
+            this._type = 2;
         }
         setPolygon(){
             this._line = this._parent.draw(this.id, "polygon",{});
+            this._line.ondraw = (coordinates) => {
+                if(coordinates.length > 2){
+                   
+                    let coord = coordinates.slice();
+                    coord.push(coord[0]);
+                    let polygon = turf.polygon([coord]);
+                    this.printArea(turf.area(polygon));
+
+                }else{
+                    this._length.text("0");
+                    this._unit.text("Km<sup>2</sup>");
+                }
+            };
             this._line.play();
+            this._type = 3;
         }
     }
     
@@ -666,6 +720,9 @@ var MapBox = (($, turf) => {
         _btnTrash:any = null;
         _btnExit:any = null;
         
+        _inpLng:any = null; 
+        _inpLat:any = null; 
+
         length:number = 0;
         images:string[] = [];
 
@@ -685,8 +742,31 @@ var MapBox = (($, turf) => {
             
             this._group = this._container.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool-text"])
             .style("display","none");
-            this._length = this._group.create("span").addClass("mark-tool-value");
+            this._length = this._group.create("div").addClass("mark-tool-value");
             
+            let images = null;
+            
+            let g1 = this._length.create("div").addClass("mark-tool-g1");
+            let g2 = this._length.create("div").addClass("mark-tool-g2");
+            this._inpLng = g1.create("input").prop({type:"text"}).
+            on("change", (event)=>{
+                this._line.setLngLat([this._inpLng.val(), this._inpLat.val()]);
+            });
+            this._inpLat = g1.create("input").prop({type:"text"}).
+            on("change", (event)=>{
+                this._line.setLngLat([this._inpLng.val(), this._inpLat.val()]);
+            });
+            
+            this._parent.markImages.forEach((e, index)=>{
+                images = g2.create("div").create("img");
+                images.prop("src", e);
+                images.on("click", ()=>{
+                    this._line.setImage(e);
+                });
+                
+            });
+            
+
             //this._unit = this._group.create("span");
             //this._unit.addClass("rule-tool-unit").text("km")
            
@@ -701,22 +781,12 @@ var MapBox = (($, turf) => {
 
             this._group2 = this._container.create("div").style("display","none");
             this._group2.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
-            
+            /*
             this._btnLine = this._group2.create("button").prop({"type": "button", "title":"Seleccionar imagen a mostrar"}).addClass("icon-image")
             .on("click", ()=>{
-                let images = null;
-                this._length.text("");
-                this.images.forEach((e, index)=>{
-                    images = this._length.create("div").create("img");
-                    images.prop("src", e);
-                    images.on("click", ()=>{
-                        this._line.setImage(e);
-                    });
-                    
-                });
                 
             });
-
+            */
             this._group2.create("button").prop({"type": "button", "title":"Aumentar [+] Tamaño"}).addClass("icon-max")
             .on("click", ()=>{
                 let size = this._line.getSize();
@@ -729,17 +799,21 @@ var MapBox = (($, turf) => {
                 let size = this._line.getSize();
                 this._line.setSize(null, size[1]*0.8);
             });
-
+            this._group2.create("button").prop({"type": "button", "title":"Guardar"}).addClass(["icon-save"])
+            .on("click", ()=>{
+                
+                this.onsave(this._line.getCoordinates());
+            });
             
             this._btnTrash = this._group2.create("button").prop({"type": "button", "title":"Descarta la medición actual"}).addClass(["icon-trash"])
             .on("click", ()=>{
-                this._length.text("0");
+                //this._length.text("0");
                 this._line.reset();
             });
             this._btnExit = this._group2.create("button").prop({"type": "button", "title":"Salir de la herramienta de medición"}).addClass(["icon-exit"])
             .on("click", ()=>{
                 
-                this.exit();
+                this.stop();
             });
 
             return this._container.get();
@@ -752,6 +826,7 @@ var MapBox = (($, turf) => {
         }
 
         play(){
+            this._parent.stopControls();
             if(this._mode == 0){
                 this._group.style("display","");
                 this._group1.style("display","none");
@@ -764,6 +839,11 @@ var MapBox = (($, turf) => {
                 coordinates:[this._map.getCenter().lng,this._map.getCenter().lat],
                 height: 30,
                 image: "http://localhost/sevian2020/images/sites/squat_marker_orange-31px.png",
+                ondraw:(coord)=>{
+                    this._inpLng.val(coord[0].toFixed(8));
+                    this._inpLat.val(coord[1].toFixed(8));
+                    
+                }
             });
 
 
@@ -794,24 +874,25 @@ var MapBox = (($, turf) => {
            
 
         }
-        stop(){
-            //this._line = this._parent.draw(this.id, 'rule',{});
-            //this._line.play();
-        }
+        
 
         delete(){
             //this._line.stop();
+            this._line.stop();
             this._parent.delete(this.id);
+            
+        }
+        stop(){
+            
+            
+
             if(this._mode == 1){
+                this.delete();
                 this._group.style("display","none");
                 this._group1.style("display","");
                 this._group2.style("display", "none");
                 this._mode = 0;
             }
-        }
-        exit(){
-            this._line.stop();
-            this.delete();
         }
     }
 
@@ -830,6 +911,7 @@ var MapBox = (($, turf) => {
     
     class IMark{
         map:any = null;
+        type:string = "mark";
         parent:object = null;
         name:string = "";
         visible:boolean = true;
@@ -865,6 +947,7 @@ var MapBox = (($, turf) => {
         _click:Function = ()=>{};
 
         ondrag:Function = (info)=>{};
+        
         onplace:Function = (info)=>{};
         onsave:Function = (info)=>{};
 
@@ -910,13 +993,13 @@ var MapBox = (($, turf) => {
             this._marker = new mapboxgl.Marker(this._image).setLngLat(this.coordinates);
             this._marker.setPopup(popup);
             this._marker.setRotation(this.rotation);
-            
+            this.ondraw(this.coordinates);
             if(this.coordinates){
                 this.coordinatesInit = this.coordinates.slice();
             
             }
             this.setVisible(this.visible);
-           
+            
         }
 
         setSize(width=null, height=null){
@@ -973,6 +1056,9 @@ var MapBox = (($, turf) => {
         getCoordinates(){
             return [this._marker.getLngLat().lng, this._marker.getLngLat().lat];
         }
+
+        
+        
         play(){
             
             if(this._play){
@@ -989,12 +1075,14 @@ var MapBox = (($, turf) => {
 
             this._marker.on('drag', this._drag = ()=>{
                 this.ondrag(this._marker.getLngLat());
+                this.ondraw([this._marker.getLngLat().lng, this._marker.getLngLat().lat]);
                 
             });
             
             this.map.on('click', this._click = (e)=>{
                 this.setLngLat(e.lngLat)
                 this.onplace(e.lngLat);
+                this.ondraw([e.lngLat.lng, e.lngLat.lat]);
             });
 
         }
@@ -1052,6 +1140,7 @@ var MapBox = (($, turf) => {
     
     class Polygon{
         map:any = null;
+        type:string = "polygon";
         parent:object = null;
         name:string = "";
         visible:boolean = true;
@@ -1280,10 +1369,11 @@ var MapBox = (($, turf) => {
 
         add(lngLat){
             this.coordinates.push([lngLat.lng, lngLat.lat]);
-            let data = createGeoJSONPoly(this.coordinates);
+            this.draw();
+            //let data = createGeoJSONPoly(this.coordinates);
             
             
-            this.map.getSource(this.lineId).setData(data.data);
+            //this.map.getSource(this.lineId).setData(data.data);
         }
 
 
@@ -1291,21 +1381,19 @@ var MapBox = (($, turf) => {
             let data = createGeoJSONPoly(this.coordinates);
             
             
-            this.map.getSource(this.lineId).setData(data.data);  
+            this.map.getSource(this.lineId).setData(data.data);
+            this.ondraw(this.coordinates);
  
            
         }
+        getArea(){
+            var polygon = turf.polygon([this.coordinates]);
 
+            return turf.area(polygon);
+        }
         _fnclick(map){
             
-             return this._click = (e)=>{
-                
-                //db (e.originalEvent.button+".........", "red","yellow")
-                var features = this.map.queryRenderedFeatures(e.point, {
-                    layers: [this.nodesId]
-                });
-                this.add(e.lngLat);
-            }
+             return ;
         }
 
         play(){
@@ -1396,7 +1484,14 @@ var MapBox = (($, turf) => {
 
             });
             
-            map.on('click', this._fnclick(this.map));
+            map.on('click', this._click = (e)=>{
+                
+                //db (e.originalEvent.button+".........", "red","yellow")
+                var features = this.map.queryRenderedFeatures(e.point, {
+                    layers: [this.nodesId]
+                });
+                this.add(e.lngLat);
+            });
             
             map.on('contextmenu', this._contextmenu = (e) => {
                 e.preventDefault();
@@ -1441,7 +1536,7 @@ var MapBox = (($, turf) => {
             }
             this._mode = 1;
             if(this.coordinatesInit){
-                console.log(this.coordinatesInit);
+                
                 this.coordinates = this.coordinatesInit.slice();
                 if(this.coordinates.length > 1){
                     this.draw();
@@ -1518,7 +1613,7 @@ var MapBox = (($, turf) => {
         }
 
         split(index, value){
-            db (index, "blue", "aqua")
+            
             this.coordinates.splice(index, 0, value);
         }
         getHand(){
@@ -1582,6 +1677,7 @@ var MapBox = (($, turf) => {
 
     class Rectangle{
         map:any = null;
+        type:string = "rectangle";
         parent:object = null;
         name:string = "";
         visible:boolean = true;
@@ -1634,6 +1730,7 @@ var MapBox = (($, turf) => {
         
         ondraw:Function = ()=>{};
 
+        private dataSource:any = null;
         
         constructor(info:object){
             
@@ -1829,18 +1926,26 @@ var MapBox = (($, turf) => {
             let data = createGeoJSONRectangle(this.coordinates[0], this.coordinates[1]);
             //let data = createGeoJSONPoly(this.coordinates);
             this.map.getSource(this.lineId).setData(data.data);  
+            this.dataSource = data.data;
+            this.ondraw(this.coordinates);
+
+            
+        }
+
+        getArea(){
+            let coord = this.dataSource.features[0].geometry.coordinates;
+            if(coord.length >= 4){
+                let polygon = turf.polygon(this.dataSource.features[0].geometry.coordinates);
+
+                return turf.area(polygon);
+            }
+            return 0;
+            
         }
 
         _fnclick(map){
             
-             return this._click = (e)=>{
-                
-                //db (e.originalEvent.button+".........", "red","yellow")
-                var features = this.map.queryRenderedFeatures(e.point, {
-                    layers: [this.nodesId]
-                });
-                this.add(e.lngLat);
-            }
+             return ;
         }
 
         play(){
@@ -1977,7 +2082,14 @@ var MapBox = (($, turf) => {
 
             });
             
-            map.on('click', this._fnclick(this.map));
+            map.on('click', this._click = (e)=>{
+                
+                //db (e.originalEvent.button+".........", "red","yellow")
+                var features = this.map.queryRenderedFeatures(e.point, {
+                    layers: [this.nodesId]
+                });
+                this.add(e.lngLat);
+            });
             
             map.on('contextmenu', this._contextmenu = (e) => {
                 e.preventDefault();
@@ -2081,7 +2193,7 @@ var MapBox = (($, turf) => {
         }
 
         split(index, value){
-            db (index, "blue", "aqua")
+            
             this.coordinates.splice(index, 0, value);
         }
         getHand(){
@@ -2142,8 +2254,10 @@ var MapBox = (($, turf) => {
             this.map.panTo(centroid.geometry.coordinates, {duration: duration || this.panDuration });
         }
     }
+    
     class Circle{
         map:any = null;
+        type:string = "circle";
         parent:object = null;
         name:string = "";
         visible:boolean = true;
@@ -2284,7 +2398,7 @@ var MapBox = (($, turf) => {
             }
 
             if(this.center && this.radio){
-                db (this.center+".."+this.radio,"white")
+                
                 this.createCircle(this.center, this.radio);
             }
             if(this.center && this.hand){
@@ -2351,7 +2465,7 @@ var MapBox = (($, turf) => {
             if(this._play){
                 return;
             }
-            db ( "PLAY")
+            
             this.parent.stop();
             this._play = true;
             
@@ -2488,6 +2602,7 @@ var MapBox = (($, turf) => {
            
             
             this.source = this.map.getSource(this.lineId).setData(data.data);
+            this.ondraw(center, radio);
         }
 
         getCenter(){
@@ -2577,6 +2692,7 @@ var MapBox = (($, turf) => {
 
     class Rule{
         map:any = null;
+        type:string = "rule";
         parent:object = null;
         name:string = "";
         visible:boolean = true;
@@ -3115,8 +3231,10 @@ var MapBox = (($, turf) => {
             this.map.panTo(centroid.geometry.coordinates, {duration: duration || this.panDuration });
         }
     }
+    
     class Trace{
         map:any = null;
+        type:string = "trace";
         parent:object = null;
         name:string = "";
         visible:boolean = true;
@@ -3431,7 +3549,7 @@ var MapBox = (($, turf) => {
             });
             
             map.on('click', this._click = (e)=>{
-                console.log(e.originalEvent);
+                
                 //db (e.originalEvent.button+".........", "red","yellow")
                 var features = this.map.queryRenderedFeatures(e.point, {
                     layers: [this.nodesId]
@@ -3930,7 +4048,7 @@ var MapBox = (($, turf) => {
                     
                 }
                 point = features[0].properties.index;
-                db (features[0].properties.index)
+                
                 //canvas.style.cursor = 'grab';
                  
                 map.on('mousemove', fnMove);
@@ -3964,7 +4082,7 @@ var MapBox = (($, turf) => {
 
                 }
                 this.add(e.lngLat);
-                db (545454)
+                
                 
                 
                 //map.getSource('geojson').setData(this.geojson);
@@ -3999,14 +4117,7 @@ var MapBox = (($, turf) => {
             
         }
     }
-    class RuleX{
-
-    }
-    class PolyX{}
-
-    class CircleX{}
-
-    class TraceX{}
+    
 
     class Popup{
         constructor(){
@@ -4158,7 +4269,7 @@ var MapBox = (($, turf) => {
         
         _poly:Polylayer[] = [];
         _controls:any[] = [];
-
+        markImages:string[] = [];
         constructor(info:object){
             for(let x in info){
                 if(this.hasOwnProperty(x)) {
@@ -4270,7 +4381,7 @@ var MapBox = (($, turf) => {
 
             });
             
-            map.addControl(new InfoRuleControl(this), 'top-right');
+            map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
             map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
             map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
 
@@ -4666,6 +4777,11 @@ var MapBox = (($, turf) => {
             }
             return false;
             
+        }
+        stopControls(){
+            for(let x in this._controls){
+                this._controls[x].stop();
+            }
         }
         
 

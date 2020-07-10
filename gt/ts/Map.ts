@@ -1,3 +1,5 @@
+
+var MAPBOX_IMAGES = 1;
 var GTMap = (($) => {
    
     class Map{
@@ -20,7 +22,10 @@ var GTMap = (($) => {
         info:any = null;
 		//wInfo:any = null;
 		
-		tapName:any = null;
+        tapName:any = null;
+        
+        markImages:string[] = [];
+
         static getMap(name){
             
             if(name){
@@ -73,7 +78,7 @@ var GTMap = (($) => {
         }
         _create(main:any){
             main.addClass(["map-main", "map-layout"]);
-            this.map = new MapBox({id:`${this.id}`});
+            this.map = new MapBox({id:`${this.id}`, markImages:this.markImages});
             
             this.map.on("load", (event)=>{
                 for(let fn of Map._loadFuntions){

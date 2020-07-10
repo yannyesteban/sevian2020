@@ -170,7 +170,7 @@ var GTSite = (($) => {
         }
         setMap(map) {
             this.map = map;
-            this.map.getControl("mark").images = this.images;
+            //this.map.getControl("mark").images = this.images;
         }
         updateTracking(data) {
             let unitId;

@@ -1,3 +1,4 @@
+var MAPBOX_IMAGES = 1;
 var GTMap = (($) => {
     class Map {
         constructor(info) {
@@ -13,6 +14,7 @@ var GTMap = (($) => {
             this.info = null;
             //wInfo:any = null;
             this.tapName = null;
+            this.markImages = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -53,7 +55,7 @@ var GTMap = (($) => {
         }
         _create(main) {
             main.addClass(["map-main", "map-layout"]);
-            this.map = new MapBox({ id: `${this.id}` });
+            this.map = new MapBox({ id: `${this.id}`, markImages: this.markImages });
             this.map.on("load", (event) => {
                 for (let fn of Map._loadFuntions) {
                     fn(this.map, this.id);
