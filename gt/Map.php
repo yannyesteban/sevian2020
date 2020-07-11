@@ -49,8 +49,8 @@ class Map extends \Sevian\Element{
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			'tapName'=> 'yanny',
-			'markImages' => $images
+			'markImages' => $images,
+			'markDefaultImage' => PATH_IMAGES."sites/"."squat_marker_orange-31px.png"
 		];
 
 		

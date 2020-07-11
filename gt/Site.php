@@ -38,7 +38,7 @@ class Site
 	private $infoTemplate = '
 	<div class="units-info">
 
-		<div>Nombre</div><div>{=name}</div>
+		<div class="site-edit" data-value="{=site_id}">Nombre</div><div>{=name}</div>
 		<div>Categoria</div><div>{=category}</div>
 
 		<div>Longitud</div><div>{=longitude}</div>

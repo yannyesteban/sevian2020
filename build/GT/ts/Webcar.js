@@ -226,6 +226,8 @@ var GTWebcar = (($) => {
                                 } },
                             { caption: 'Search',
                                 action: (item, event) => {
+                                    this._site.start();
+                                    return;
                                     this._win["form_search"].show();
                                 } },
                         ]

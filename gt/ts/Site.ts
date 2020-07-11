@@ -68,6 +68,7 @@ var GTSite = (($) => {
 
 		private _traces:any[] = [];
 		
+		private editId:number = null;
 
 		
 		static _instances:object[] = []; 
@@ -219,8 +220,18 @@ var GTSite = (($) => {
 		}
 		setMap(map){
 			this.map = map;
-			//this.map.getControl("mark").images = this.images;
+			this.map.getControl("mark").onsave = ((info)=>{
+				let id = this.editId;
+				if(this.marks[id]){
+					this.setImage(id, info.image);
+					this.moveTo(id, info.coordinates);
+
+				}
+			});
 			
+		}
+		start(){
+			this.map.getControl("mark").play();
 		}
 		updateTracking(data){
 			let unitId;
@@ -404,6 +415,11 @@ var GTSite = (($) => {
 						this._traces[x].play();
 						
 	
+					},
+					events:{
+						dblclick:()=>{
+							this.edit(this.dataSite[x].site_id);
+						}
 					}
 					
 				};
@@ -511,7 +527,7 @@ var GTSite = (($) => {
 
 		showSite(id, value){
 			if(!this.marks[id]){
-				
+				/*
 				this.marks[id] = this.getMap().createMark({
 					lat:this.dataSite[id].latitude,
 					lng:this.dataSite[id].longitude,
@@ -519,10 +535,18 @@ var GTSite = (($) => {
 					image:this.pathImages+this.dataSite[id].icon+".png",
 					popupInfo: this.loadPopupInfo(id)
 				});
-				
+				*/
+				this.marks[id] = this.getMap().draw("site-"+id, 'mark',
+            {
+                coordinates:[this.dataSite[id].longitude, this.dataSite[id].latitude],
+                height: 30,
+				image: this.pathImages+this.dataSite[id].icon+".png",
+				popupInfo: this.loadPopupInfo(id)
+                
+            });
 				
 			}else{
-				this.marks[id].show(value);
+				this.marks[id].setVisible(value);
 			}
 		}
 		
@@ -551,6 +575,19 @@ var GTSite = (($) => {
 					this.showUnits(e.account_id, value);
 				}
 			}
+		}
+
+		edit(id){
+			this.editId = id;
+			this.showSite(id, false);
+			this.map.getControl("mark").play({
+				defaultImage:this.pathImages+this.dataSite[id].icon+".png",
+				defaultCoordinates:[this.dataSite[id].longitude*1, this.dataSite[id].latitude*1],
+				onstop: ()=>{
+					this.showSite(id, true);
+					this.editId = null;
+				}
+			});
 		}
 		evalHTML(html, data){
 
@@ -583,11 +620,11 @@ var GTSite = (($) => {
 			this.oninfo(this.loadInfo(id), this.dataSite[id].name);
 		}
 		loadPopupInfo(id){
-            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataSite[id]), this.dataSite[id]);
+            return this.evalHTML(this.popupTemplate, this.dataSite[id]);
         }
 
 		loadInfo(id){
-            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataSite[id]), this.dataSite[id]);
+            return this.evalHTML(this.infoTemplate, this.dataSite[id]);
 		}
 		
 		setFollowMe(value:boolean){
@@ -595,6 +632,21 @@ var GTSite = (($) => {
 		}
 		getFollowMe(){
 			return this.followMe;
+		}
+		setImage(id, image){
+			//let image = "http://localhost/sevian2020/images/sites maison - _viii_256.png";
+			let re = /(?:\w|\s|\.|-)*(?=.png|.jpg|.svg)/gim;
+			//myRe = /\w+/
+			let result = re.exec(image);
+			
+			this.dataSite[id].icon = result[0];
+			//this.image = e;
+            this.marks[id].setImage(this.pathImages+this.dataSite[id].icon+".png");
+		}
+		moveTo(id, coordinates){
+			this.dataSite[id].longitude = coordinates[0];
+			this.dataSite[id].latitude = coordinates[1];
+			this.marks[id].setLngLat(coordinates);
 		}
 	}
 	

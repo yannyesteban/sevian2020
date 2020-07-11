@@ -135,6 +135,10 @@ form {
   background-size: 20px 20px;
 }
 
+.mark-tool-value {
+  background-color: rgba(255, 255, 255, 0.61);
+  width: 300px;
+}
 .mark-tool-value .mark-tool-g1 {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -144,6 +148,7 @@ form {
       justify-content: space-around;
 }
 .mark-tool-value .mark-tool-g1 input {
+  width: 100px;
   border: 1px solid white;
   background-color: whitesmoke;
   text-align: center;
@@ -153,21 +158,55 @@ form {
 }
 .mark-tool-value .mark-tool-g2 {
   border: 3px solid white;
-  width: 300px;
   height: 120px;
-  display: grid;
   overflow: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-line-pack: stretch;
+      align-content: stretch;
+  /*
+  display: grid;
   grid-template-columns: repeat(8, 30px);
   gap: 5px;
+  */
+}
+.mark-tool-value .mark-tool-g2 * > {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
 }
 .mark-tool-value .mark-tool-g2 div {
   width: 30px;
   height: 30px;
-  background-color: rgba(255, 255, 255, 0.644);
+}
+.mark-tool-value .mark-tool-g2 div :hover {
+  cursor: pointer;
 }
 .mark-tool-value .mark-tool-g2 div img {
   width: 100%;
   max-height: 100%;
+}
+
+.poly-tool-main .poly-tool-info {
+  background-color: rgba(0, 0, 0, 0.61);
+  color: white;
+  padding: 8px;
+  line-height: 2em;
+  width: 100%;
+}
+.poly-tool-main .poly-tool-info .info {
+  text-align: right;
+}
+.poly-tool-main .poly-tool-info .propertys {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+.poly-tool-main .poly-tool-info .propertys input {
+  width: 100%;
 }
 
 .gt-webcar-login {

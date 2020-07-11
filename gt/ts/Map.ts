@@ -25,6 +25,7 @@ var GTMap = (($) => {
         tapName:any = null;
         
         markImages:string[] = [];
+        markDefaultImage:string = "";
 
         static getMap(name){
             
@@ -78,7 +79,7 @@ var GTMap = (($) => {
         }
         _create(main:any){
             main.addClass(["map-main", "map-layout"]);
-            this.map = new MapBox({id:`${this.id}`, markImages:this.markImages});
+            this.map = new MapBox({id:`${this.id}`, markImages:this.markImages, markDefaultImage:this.markDefaultImage});
             
             this.map.on("load", (event)=>{
                 for(let fn of Map._loadFuntions){
