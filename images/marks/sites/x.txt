@@ -1,0 +1,58 @@
+ El volumen de la unidad C es Windows 10
+ El n£mero de serie del volumen es: D413-29E7
+
+ Directorio de C:\Development\sources\www\sevian2020\images\sites
+
+08/07/2020  08:02 p. m.    <DIR>          .
+08/07/2020  08:02 p. m.    <DIR>          ..
+16/11/2016  07:14 p. m.            52.854 airport.png
+16/11/2016  07:14 p. m.            21.866 alcabala.png
+16/11/2016  07:14 p. m.            40.481 bank.png
+16/11/2016  07:14 p. m.            20.295 Binoculars.png
+16/11/2016  07:14 p. m.            12.787 bridge_01.png
+16/11/2016  07:14 p. m.            18.657 building.png
+16/11/2016  07:14 p. m.            84.869 buildings.png
+16/11/2016  07:14 p. m.             2.539 bulb_grey.png
+16/11/2016  07:14 p. m.             3.265 cama.png
+16/11/2016  07:14 p. m.            27.084 cargo-1-icon.png
+16/11/2016  07:14 p. m.            40.382 car_repair.png
+16/11/2016  07:14 p. m.            24.367 car_repair_blue 2.png
+16/11/2016  07:14 p. m.            71.001 church.png
+16/11/2016  07:14 p. m.            21.619 city-icon.png
+16/11/2016  07:14 p. m.           134.192 city.png
+16/11/2016  07:14 p. m.            44.307 coal_power plant.png
+16/11/2016  07:14 p. m.            15.672 Drug-basket-icon.png
+16/11/2016  07:14 p. m.            11.399 drugstore-icon.png
+16/11/2016  07:14 p. m.            11.925 Drugstore.png
+16/11/2016  07:14 p. m.            12.563 Drugstore_azul.png
+16/11/2016  07:14 p. m.            31.812 gas_station.png
+16/11/2016  07:14 p. m.            23.231 goverment_01.png
+16/11/2016  07:14 p. m.            15.464 goverment_icon.png
+16/11/2016  07:14 p. m.            12.760 Hangar-icon.png
+16/11/2016  07:14 p. m.            18.353 home.png
+16/11/2016  07:14 p. m.            38.504 home2.png
+16/11/2016  07:14 p. m.            47.891 hospital.png
+16/11/2016  07:14 p. m.            73.622 hotel.png
+16/11/2016  07:14 p. m.             9.466 iglesia.png
+16/11/2016  07:14 p. m.            63.228 laboratory.png
+16/11/2016  07:14 p. m.            32.644 maison_viii_256.png
+16/11/2016  07:14 p. m.            12.634 mall1.png
+16/11/2016  07:14 p. m.            61.257 pharmacy.png
+16/11/2016  07:14 p. m.            41.994 police.png
+16/11/2016  07:14 p. m.            35.580 post_office.png
+16/11/2016  07:14 p. m.           133.302 property_icon.png
+16/11/2016  07:14 p. m.             6.430 ranger-station.png
+16/11/2016  07:14 p. m.             2.709 restaurant_black1.png
+16/11/2016  07:14 p. m.             4.532 restaurant_black2.png
+16/11/2016  07:14 p. m.            20.305 restaurant_blue_2.png
+16/11/2016  07:14 p. m.            12.516 retail-shop-icon.png
+16/11/2016  07:14 p. m.             7.795 risk.png
+16/11/2016  07:14 p. m.            45.633 school.png
+16/11/2016  07:14 p. m.            52.589 shopping-cart-icon.png
+16/11/2016  07:14 p. m.            19.196 sin-senal.png
+16/11/2016  07:14 p. m.             2.072 squat_marker_orange-31px.png
+16/11/2016  07:14 p. m.            26.857 stadium.png
+16/11/2016  07:14 p. m.            74.376 university.png
+08/07/2020  08:02 p. m.                 0 x.txt
+              49 archivos      1.598.876 bytes
+               2 dirs   3.391.025.152 bytes libres

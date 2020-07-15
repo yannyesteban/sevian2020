@@ -12,7 +12,9 @@ class Site
 {
 
    
-    use DBSite;
+    use DBSite{
+		DBSite::loadRecord as public loadSite;
+	}
    
     
 
@@ -69,9 +71,16 @@ class Site
             $method = $this->method;
 		}
 		
+
+		if($this->getSes('_userData')){
+			$this->userData = $this->getSes('_userData');
+			//$this->setSes('_userData', $this->userData);
+		}
 		switch($method){
 			case 'load':
+				
 				$this->load();
+				
 				break;
             case 'load-sites':
                 
@@ -91,9 +100,29 @@ class Site
 					'followMe'		=> true,
 					'delay'			=> 60000,
 				];
+				break;
 			case 'tracking':
 				
 				break;
+			case 'update':
+				
+				break;
+			case 'site-load':
+				$form =  new \Sigefor\Component\Form2([
+			
+					'id'		=> $this->containerId,
+					'panelId'	=> $this->id,
+					'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/site', self::$patternJsonFile),
+					'method'	=> 'load',
+					'mode'		=> 2,
+					'userData'	=> $this->userData,
+					
+					'record'=>['id'=>$this->eparams->siteId]
+				]);
+				$this->setRequest($form);
+				
+				
+			break;
 			default:
 				break;
 
@@ -103,16 +132,7 @@ class Site
 	}
 	
 	public function init(){
-		$images = [
-			"airport.png","alcabala.png","bank.png","Binoculars.png","bridge_01.png","building.png","buildings.png","bulb_grey.png","cama.png","cargo-1-icon.png","car_repair.png","car_repair_blue 2.png","church.png","city-icon.png","city.png","coal_power plant.png","Drug-basket-icon.png","drugstore-icon.png","Drugstore.png","Drugstore_azul.png","gas_station.png","goverment_01.png","goverment_icon.png","Hangar-icon.png","home.png","home2.png","hospital.png","hotel.png","iglesia.png","laboratory.png","maison_viii_256.png","mall1.png","pharmacy.png","police.png","post_office.png","property_icon.png","ranger-station.png","restaurant_black1.png","restaurant_black2.png","restaurant_blue_2.png","retail-shop-icon.png","risk.png","school.png","shopping-cart-icon.png","sin-senal.png","squat_marker_orange-31px.png","stadium.png","university.png"
-
-		];
-		//echo(json_encode($images));exit;
-		foreach ($images as $k => $img){
-			$images[$k] = PATH_IMAGES."sites/".$img;
-		}
 		
-
 		$form =  new \Sigefor\Component\Form2([
 			
 			'id'		=> $this->containerId,
@@ -120,7 +140,7 @@ class Site
 			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/site', self::$patternJsonFile),
 			'method'	=> $this->method,
 			'mode'		=> 1,
-			'userData'=> [],
+			'userData'	=> $this->userData,
 			
 			//'record'=>$this->getRecord()
 		]);
@@ -139,6 +159,14 @@ class Site
 			//'images'=>$images
 		];
 	}
+
+	public function update(){
+		return [
+			'dataSite'     => $this->loadSites(),
+			'dataCategory' => $this->loadCategorys()
+			
+		];
+	}
 	
 	private function load(){
         $this->panel = new \Sevian\HTML('div');
@@ -153,7 +181,42 @@ class Site
 		];
 
     }
-    
+	
+	public function save($data){
+		$master['f'][]=
+			[
+				'id'=>$data->id
+			];
+		
+		$formSave =  new \Sigefor\Component\FF([
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/site', self::$patternJsonFile),
+			'dataKeys'	=> $master,//$this->_masterData,
+			'dataKeysId'=> 'f',
+			'data'		=> [$data]
+		]);
+		$this->lastRecord = $data->id;
+		//	hx($formSave->getResult());
+		//print_r($formSave->getResult());
+
+		foreach($formSave->getResult() as $k => $v){
+			
+			if(!$v->error){
+				
+				return new \Sevian\iMessage([
+					'caption'	=> $formSave->getCaption(),
+					'text'		=> 'Record was saved!!!'
+				]);
+				
+			}else{
+				
+				return new \Sevian\iMessage([
+					'caption'	=> 'Error '.$formSave->getCaption(),
+					'text'		=> "Record wasn't saved!!!"
+				]);
+
+			}
+		}
+	}
     public function jsonSerialize() {  
         return [
 			'name'	=> $this->_name,
@@ -170,6 +233,7 @@ class Site
 	public function getRequest(){
 		return $this->_jsonRequest;
 	}
+
 
 	
 

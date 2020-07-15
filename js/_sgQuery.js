@@ -346,6 +346,11 @@ _sgObjet.prototype = {
 		
 	},
 
+	removeDs: function(prop){
+		delete this.e.dataset[prop];
+		return this;
+	},
+
 	query: function(selector){
 		if(this.e.querySelector(selector)){
 			return this.e.querySelector(selector);

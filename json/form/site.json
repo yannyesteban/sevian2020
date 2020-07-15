@@ -3,13 +3,13 @@
 	"caption":"Sitios",
 	"class":"",
 	"query":"SELECT * FROM mark",
-	"menuName":"/menu/grid",
+	"menuName":"/menu/site_menu",
 	"methods":{
 		"request":{
-			"menuName":"/menu/request"
+			"menuName":"/menu/site_menu"
 		},
 		"load":{
-			"menuName":"/menu/request"
+			"menuName":"/menu/site_menu"
 		}
 	},
 	"params":"",
@@ -17,19 +17,42 @@
 	"pages":[],
 	"groups":{},
 	"infoFields":[
-		{"name":"id","caption":"Código A", "input": "hidden"},
-		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
+		{"name":"idx","caption":"Código", "input": "hidden", "type": "hidden"},
+		{"name":"client_id","caption":"Cliente", "input": "hidden", "type": "hidden"},
+		{"name":"account_id","caption":"Cuenta", "input": "hidden", "type": "hidden"},
+		{"name":"name","caption":"Nombre", "input": "input", "type": "text"},
+		{"name":"description","caption":"Descripción"},
+		{"name":"longitude","caption":"Longitud"},
+		{"name":"latitude","caption":"Latitud"},
+
+		{"name":"address","caption":"Dirección"},
+		{"name":"phone1","caption":"Teléfono"},
+		{"name":"phone2","caption":"Teléfono 2"},
+		{"name":"phone3","caption":"Teléfono 3"},
+
+		{"name":"email","caption":"Correo Electrónico"},
+		{"name":"web","caption":"Página Web"},
+		{"name":"observations","caption":"Observaciones"},
+
+
+
+		{"name":"category_id","caption":"Categoría", "input": "input", "type": "select",
+			"data":[
+				[0, "seleccione", "*"],
+				"SELECT id, name FROM mark_category"
+				
+			  ]},
+		{"name":"scope","caption":"Nivel", "input": "input", "type": "select",
 		"data":[
-			[0, "seleccione", "*"],
-			"select id, brand from brands ORDER BY brand"
-			
-		  ]},
-		{"name":"model","caption":"Modelo"}
+			[0, "seleccione"],[1, "Usuario"],[1, "Cuenta"],[1, "Cliente"]
+		]}
+		
 
 	],
 	
 	"searchFor":[
 		"brand", "model"
-	]
+	],
+	"onDataUser":"dataUser.params[0].eparams={formData:this.getForm().getValue()};S.send(dataUser);"
 
 }

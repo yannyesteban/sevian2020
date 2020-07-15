@@ -204,6 +204,15 @@ var GTWebcar = (($) => {
 				this._geofence.setMap(map);
 				this._history.setMap(map);
 				map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
+
+
+				map.getControl("mark").onsave = ((info)=>{
+					this._site.loadForm(info);
+					this._win["form_site"].show();
+					map.getControl("mark").stop();
+					
+				});
+				//map.getControl("mark").onsave = ((info)=>{}
 			})
 			
 			
@@ -217,46 +226,10 @@ var GTWebcar = (($) => {
 			this.main = main;
 
 			main.addClass("unit-main");
-
-			
-
-			this._win["unit"] = this.win = new Float.Window({
-                visible:true,
-                caption: this.unit.caption,
-                //child:main,
-                left:10,
-                top:100,
-                width: "300px",
-                height: "200px",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-			this._win["geofence"] = new Float.Window({
-                visible:false,
-                caption: this.geofence.caption,
-                //child:main,
-                left:300,
-                top:100,
-                width: "300px",
-                height: "200px",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-			this.unit.id = this.win.getBody();
-			this.unit.oninfo = (info, name) =>{
-				this._win.info.getBody().text(info);
-				this._win.info.setCaption(name);
-			};
-			this.loadUnit(this.unit);
-
-			
-
 			this._win["info"] = new Float.Window({
-                visible:true,
+                visible:false,
                 caption: "Info",
-                child:this._unit.getInfoLayer(),
+                //child:this._unit.getInfoLayer(),
                 left:10,
                 top:310,
                 width: "300px",
@@ -265,22 +238,22 @@ var GTWebcar = (($) => {
                 className:["sevian"]
 			});
 			
+			
+			this.loadUnit(this.unit);
 			this.loadSite(this.site);
 			this.loadAlarm(this.alarm);
-
 			this.loadConfig(this.config);
-
-			this.geofence.id = this._win["geofence"].getBody();
-			this.geofence.oninfo = (info, name) =>{
-				this._win.info.getBody().text(info);
-				this._win.info.setCaption(name);
-			};
 			this.loadGeofence(this.geofence);
 			this.loadHistory(this.history);
+
+			this.mainMenu();
+
+		} 
+		mainMenu(){
 			let menu = new Menu({
 				caption:"uuuu", 
 				autoClose: true,
-				target:main,
+				target:this.main,
 				type:"popup",
 				subType:"dropdown",
 				"className":["sevian","horizontal"],
@@ -643,16 +616,27 @@ var GTWebcar = (($) => {
 
 				]
 			 });
-			
-			
-
-			
-			
-
-		} 
+		}
 		
-		loadUnit(unit){
-			this._unit = new GTUnit(unit);
+		loadUnit(info){
+			this._win["unit"] = this.win = new Float.Window({
+                visible:false,
+                caption: info.caption,
+                //child:main,
+                left:10,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+                className:["sevian"]
+			});
+
+			info.id = this.win.getBody();
+			info.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
+			this._unit = new GTUnit(info);
 		}
 		loadSite(info){
 			this._win["site"] = new Float.Window({
@@ -672,12 +656,12 @@ var GTWebcar = (($) => {
 				this._win.info.getBody().text(info);
 				this._win.info.setCaption(name);
 			};
-			this._site = new GTSite(info);
+			
 
 			this._win["form_site"] = new Float.Window({
-                visible:true,
+                visible:false,
                 caption: info.caption,
-                //child:main,
+                //child:this._site.getForm().get(),
                 left:300,
                 top:100,
                 width: "300px",
@@ -686,9 +670,10 @@ var GTWebcar = (($) => {
 				className:["sevian"],
 				
 			});
-			
-			info.form.target = this._win["form_site"].getBody();
-			let form = new Form2(info.form);
+			info.formId = this._win["form_site"].getBody();
+			this._site = new GTSite(info);
+			//info.form.target = this._win["form_site"].getBody();
+			//let form = new Form2(info.form);
 		}
 
 		loadAlarm(info){
@@ -712,7 +697,7 @@ var GTWebcar = (($) => {
 			this._alarm = new GTAlarm(info);
 
 			this._win["form_alarm"] = new Float.Window({
-                visible:true,
+                visible:false,
                 caption: info.caption,
                 //child:main,
                 left:300,
@@ -729,11 +714,30 @@ var GTWebcar = (($) => {
 		}
 
 		loadGeofence(info){
+
+			this._win["geofence"] = new Float.Window({
+                visible:false,
+                caption: info.caption,
+                //child:main,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+                className:["sevian"]
+			});
+
+			info.id = this._win["geofence"].getBody();
+			info.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
+
 			this._geofence = new GTGeofence(info);
 
 
 			this._win["form_geofence"] = new Float.Window({
-                visible:true,
+                visible:false,
                 caption: info.caption,
                 //child:main,
                 left:300,
@@ -804,7 +808,9 @@ var GTWebcar = (($) => {
 
 		}
 
-
+		siteUpdate(info){
+			this._site.update(info);
+		}
 		
 	}
 	

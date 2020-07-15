@@ -1,0 +1,37 @@
+{
+	"name":"site_menu",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"OK...",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"site_save",
+						"name":"&P_elementName",
+						"eparams":null
+					},
+					{
+						"t":"setMethodx",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"site-update",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}
+		}
+	]
+}	

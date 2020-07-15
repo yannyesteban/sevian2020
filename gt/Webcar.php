@@ -17,15 +17,56 @@ class Webcar extends \Sevian\Element{
 
 		if($method === false){
             $method = $this->method;
-        }
+		}
+		
 		switch($method){
 			case 'load':
 				$this->load();
 				break;
-			case 'x':
+			case 'site_save':
+				
+				$site = new Site();
+				
+				//hx($this->eparams->formData);
+				$msg = $site->save($this->eparams->formData);
 
+				$this->addFragment($msg);
+
+				$this->info[] = [
+					'method'  => 'siteUpdate',
+					'value'=>$site->loadSite($site->lastRecord),
+					'_args' => [1,1,1],
+					'id'=>$site->lastRecord
+				];
+				
 				break;
-		}
+			case 'site_load':
+
+				$userData = $this->getSes('_userData');
+				$site = new Site([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				//$site = new Site();
+				$site->load($this->eparams->siteId);
+				break;
+			case 'site-update':
+
+				$userData = $this->getSes('_userData');
+				$site = new Site([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				//$site = new Site();
+				;
+
+				$this->info[] = [
+					'method'  => 'siteUpdate',
+					'value'=>$site->update(),
+					'_args' => [1,1,1]
+				];
+				break;
+			}
 
 		return true;
 	}
@@ -37,7 +78,18 @@ class Webcar extends \Sevian\Element{
 		
 		$this->typeElement = 'GTWebcar';
 		$unit = new Unit();
-		$site = new Site();
+		$userData = [
+			'panelId'=>$this->id,
+			'element'=>$this->element,
+			'elementName'=>$this->name,
+			'elementMethod'=>$this->method
+		];
+		$this->setSes('_userData', $userData);
+		$site = new Site([
+			"id" => $this->id,
+			"userData"=>$userData
+		]);
+		
 		$geofence = new Geofence();
 		$history = new History();
 		$alarm = new Alarm();
@@ -49,7 +101,7 @@ class Webcar extends \Sevian\Element{
 			'site'		=> $site->init(),
 			'geofence'	=> $geofence->init(),
 			'history'	=> $history->init(),
-			'alarm'	=> $alarm->init(),
+			'alarm'		=> $alarm->init(),
 			'config'	=> $config->init()
 		];
 

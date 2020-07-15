@@ -162,7 +162,7 @@ var SgAjax = (function($){
 			
 			this._target = $(this.target);
 			if(!this._target.style().position){
-				this._target.style().position = "relative";
+				//this._target.style().position = "relative";
 			}
 			this._main = this._target.create("div");
 			this._main.ds("sgType", "sg-ajax");

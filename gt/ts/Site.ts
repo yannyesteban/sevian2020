@@ -7,7 +7,9 @@ var GTSite = (($) => {
 		
 		id:any = null;
 		map:any = null;
-		
+		mode:number = 0;
+
+		formId:any = null;
 		images:string[] = [];
 		dataCategory:any[] = null;
 		dataAccounts:any[] = null;
@@ -22,6 +24,8 @@ var GTSite = (($) => {
 		winCaption:string = "";
 		pathImages:string = "";
 		followMe:boolean = false;
+
+		tag="Yanny Esteban";
 
 		infoTemplate:string = `
                 <div class="units-info">
@@ -69,8 +73,10 @@ var GTSite = (($) => {
 		private _traces:any[] = [];
 		
 		private editId:number = null;
+		private lastId:number = null;
 
-		
+		private _form:any = null;
+
 		static _instances:object[] = []; 
 		
 		static getInstance(name){
@@ -118,7 +124,8 @@ var GTSite = (($) => {
 
 			main.addClass("site-main");
 			
-			this.createMenu();
+			this.menu = this.createMenu();
+			this.createForm(this.form);
 			this._info = $().create("div").addClass("win-sites-info");
 			//this._info = $().create("div").addClass("win-units-info");
 			return;
@@ -220,18 +227,32 @@ var GTSite = (($) => {
 		}
 		setMap(map){
 			this.map = map;
-			this.map.getControl("mark").onsave = ((info)=>{
-				let id = this.editId;
-				if(this.marks[id]){
-					this.setImage(id, info.image);
-					this.moveTo(id, info.coordinates);
-
-				}
-			});
+			
 			
 		}
 		start(){
 			this.map.getControl("mark").play();
+		}
+
+		update(info){
+			info.fax = '88888';
+			this.dataSite[info.id] = info;
+			this.updateMark(info.id);
+		}
+		updateMark(id){
+			
+			if(this.marks[id]){
+			
+				this.getMap().delete("site-"+id);
+				delete this.marks[id];
+			}
+			
+			let menu = this.menu.get().query(".item[data-site-id='"+id+"'] .text");
+			$(menu).text(this.dataSite[id].name);
+			
+			this.showSite(id, true);
+			
+
 		}
 		updateTracking(data){
 			let unitId;
@@ -272,7 +293,17 @@ var GTSite = (($) => {
 
 		requestFun(xhr){
 			let json = JSON.parse(xhr.responseText);
-			this.updateTracking(json);
+			this.createForm(json);
+			let id = this.editId;
+			this.showSite(id, false);
+			this.map.getControl("mark").play({
+				defaultImage:this.dataSite[id].image,
+				defaultCoordinates:[this.dataSite[id].longitude*1, this.dataSite[id].latitude*1],
+				onstop: ()=>{
+					this.showSite(id, true);
+					this.editId = null;
+				}
+			});
 
 			
 		}
@@ -391,8 +422,8 @@ var GTSite = (($) => {
 
 			for(let x in this.dataSite){
 				
-				infoMenu[this.dataSite[x].category_id].items[this.dataSite[x].site_id] = {
-					id: this.dataSite[x].site_id,
+				infoMenu[this.dataSite[x].category_id].items[this.dataSite[x].id] = {
+					id: this.dataSite[x].id,
 					caption:this.dataSite[x].name,
 					useCheck:true,
 					value: x,
@@ -418,7 +449,7 @@ var GTSite = (($) => {
 					},
 					events:{
 						dblclick:()=>{
-							this.edit(this.dataSite[x].site_id);
+							this.edit(this.dataSite[x].id);
 						}
 					}
 					
@@ -516,9 +547,49 @@ var GTSite = (($) => {
 			//console.log(check);
 		}
 
-		createForm(main){
-			this.form.id = main;
-			let form = new Form2(this.form);
+		createForm(info){
+			
+			if(this._form){
+				this._form.delete();
+				
+			}
+			info.parentContext = this;
+			info.id = this.formId;
+			
+			this._form = new Form2(info);
+			
+		}
+
+		getForm(){
+			return this._form;
+		}
+
+		loadForm(info){
+			
+			if(this.editId === null){
+			
+				this._form.reset();
+			}else{
+				this.marks[this.editId].setLngLat(info.coordinates);
+				this.marks[this.editId].setImage(info.image);
+			}
+			
+			this._form.setValue({
+				image:info.image,
+				longitude:info.coordinates[0],
+				latitude:info.coordinates[1],
+			});
+		}
+
+		new(info){
+			console.log(info)
+			this._form.setValue({
+				icon_id:info.image,
+				longitude:info.coordinates[0],
+				latitude:info.coordinates[1],
+			});
+
+
 		}
 		getInfoLayer(){
 			
@@ -527,6 +598,7 @@ var GTSite = (($) => {
 
 		showSite(id, value){
 			if(!this.marks[id]){
+				
 				/*
 				this.marks[id] = this.getMap().createMark({
 					lat:this.dataSite[id].latitude,
@@ -540,7 +612,7 @@ var GTSite = (($) => {
             {
                 coordinates:[this.dataSite[id].longitude, this.dataSite[id].latitude],
                 height: 30,
-				image: this.pathImages+this.dataSite[id].icon+".png",
+				image: this.dataSite[id].image,
 				popupInfo: this.loadPopupInfo(id)
                 
             });
@@ -579,15 +651,28 @@ var GTSite = (($) => {
 
 		edit(id){
 			this.editId = id;
-			this.showSite(id, false);
-			this.map.getControl("mark").play({
-				defaultImage:this.pathImages+this.dataSite[id].icon+".png",
-				defaultCoordinates:[this.dataSite[id].longitude*1, this.dataSite[id].latitude*1],
-				onstop: ()=>{
-					this.showSite(id, true);
-					this.editId = null;
-				}
-			});
+
+			S.send({
+				"async": true,
+				"panel":"2",
+				"valid":false,
+				"confirm_": "seguro?",
+				"requestFunction":$.bind(this.requestFun, this),
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"0",
+						"element":"gt-site",
+						"method":"site-load",
+						"name":"",
+						"eparams":{
+							"siteId":id
+						}
+					}
+			
+				]});
+
+			
 		}
 		evalHTML(html, data){
 

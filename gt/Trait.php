@@ -270,12 +270,11 @@ trait DBSite{
         }
         
         */
-        $cn->query = "SELECT m.id as site_id, m.name, m.description, m.category_id, c.name as category, icon,
-            m.longitude, m.latitude, m.scale, m.address, m.phone1, m.phone2, m.phone3,
-            m.fax, m.email, m.web, m.observations
+        $cn->query = "SELECT m.*,
+                c.name as category
             FROM mark as m
             INNER JOIN mark_category as c ON c.id = m.category_id
-            INNER JOIN icon as i ON i.id = m.icon_id
+            #INNER JOIN icon as i ON i.id = m.icon_id
             WHERE m.user = 'panda'";
 
         $result = $cn->execute();
@@ -283,13 +282,33 @@ trait DBSite{
                 
         $data = [];
         while($rs = $cn->getDataAssoc($result)){
-            $data[$rs['site_id']] = $rs;
+            $data[$rs['id']] = $rs;
         }
 
 
         return $data;
     }
+    private function loadRecord($id){
 
+        $cn = $this->cn;
+
+        $id = $cn->addSlashes($id);
+        $cn->query = "SELECT m.*,
+                c.name as category
+            FROM mark as m
+            INNER JOIN mark_category as c ON c.id = m.category_id
+           
+            WHERE m.id = '$id'";
+
+        $result = $cn->execute();
+
+        if($rs = $cn->getDataAssoc($result)){
+            return $rs;
+        }
+
+
+        return [];
+    }
     private function loadCategorys(){
 
         $cn = $this->cn;
@@ -416,6 +435,27 @@ trait DBAlarm{
 		while($rs = $cn->getDataAssoc($result)){
             
             $data[] = $rs;
+        }
+
+
+        return $data;
+    }
+
+    
+}
+
+trait DBImage{
+    private $cn = null;
+    private function load(){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT * FROM image";
+
+        $result = $this->cn->execute();
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            
+            $data[$rs['name']] = PATH_IMAGES."marks/".$rs['image'];
         }
 
 

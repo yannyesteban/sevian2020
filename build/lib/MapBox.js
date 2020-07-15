@@ -663,14 +663,14 @@ var MapBox = (($, turf) => {
                 this._line.setLngLat([this._inpLng.val(), this._inpLat.val()]);
             });
             this.defaultImage = this._parent.markDefaultImage;
-            this._parent.markImages.forEach((e, index) => {
+            for (let x in this._parent.markImages) {
                 images = g2.create("div").create("img");
-                images.prop("src", e);
+                images.prop("src", this._parent.markImages[x]);
                 images.on("click", () => {
-                    this.image = e;
-                    this._line.setImage(e);
+                    this.image = x;
+                    this._line.setImage(x);
                 });
-            });
+            }
             //this._unit = this._group.create("span");
             //this._unit.addClass("rule-tool-unit").text("km")
             this._group1 = this._container.create("div");
@@ -701,7 +701,6 @@ var MapBox = (($, turf) => {
             this._group2.create("button").prop({ "type": "button", "title": "Guardar" }).addClass(["icon-save"])
                 .on("click", () => {
                 this.onsave({ coordinates: this._line.getCoordinates(), image: this.image });
-                console.log({ coordinates: this._line.getCoordinates(), image: this.image });
             });
             this._btnTrash = this._group2.create("button").prop({ "type": "button", "title": "Descartar" }).addClass(["icon-trash"])
                 .on("click", () => {
@@ -851,13 +850,13 @@ var MapBox = (($, turf) => {
         getSize() {
             return [this.width, this.height];
         }
-        setImage(source) {
+        setImage(image) {
             if (!this._image) {
                 this._image = document.createElement('img');
                 this._image.className = 'marker';
                 this._image.style.height = this.height + "px";
             }
-            this._image.src = source;
+            this._image.src = this.parent.getImage(image);
             //return this._image;
         }
         setVisible(value) {
@@ -926,6 +925,7 @@ var MapBox = (($, turf) => {
         delete() {
             this.stop();
             this.setVisible(false);
+            this._marker = null;
         }
         flyTo(zoom, speed) {
             this.map.flyTo({
@@ -3850,6 +3850,9 @@ var MapBox = (($, turf) => {
             for (let x in this._controls) {
                 this._controls[x].stop();
             }
+        }
+        getImage(name) {
+            return this.markImages[name] || '';
         }
     }
     return Map;

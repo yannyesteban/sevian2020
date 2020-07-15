@@ -45,6 +45,7 @@ var S = (($) => {
             return $().query("form[data-sg-type='panel'][data-sg-panel='" + id + "']");
         }
         static send(info /*:InfoParam*/) {
+            console.log(info);
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
             }

@@ -188,7 +188,7 @@ $cls_elements['gt_unit'] = [
 	'css'=>[]
 	
 ];
-$cls_elements['gt_site'] = [
+$cls_elements['gt-site'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Site.php',
 	'class' => '\GT\Site',

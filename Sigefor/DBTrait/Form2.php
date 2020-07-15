@@ -29,7 +29,23 @@ trait Form2{
 	private $recordFrom = false;
 	private $_values = null;
 	
-	
+	public function init($name, $record, $pattern = null){
+		
+		if($info = $this->loadJsonInfo($name, $pattern)){
+			$this->infoFields = $info->infoFields;
+			
+		}else{
+			$info = $this->loadDBForm($name);
+			$this->infoFields = $this->loadDBFields($name);
+		}
+
+		$this->setInfoForm($info);
+
+	}
+
+	public function loadForm2($record){
+		$this->setInfoFields($this->infoFields, $record);
+	}
 	
 	public function loadForm($name, $record, $pattern = null){
 		
@@ -133,6 +149,10 @@ trait Form2{
 				}
 			}
 		}
+
+		$this->query = \Sevian\S::vars($this->query);
+		$this->infoQuery = $this->cn->infoQuery($this->query);
+
 	}
 
 	public function getFields($query, $record = null){
@@ -158,17 +178,17 @@ trait Form2{
 	public function setInfoFields($infoField, $record = null){
 		$cn = $this->cn;
 		
-		$this->query = \Sevian\S::vars($this->query);
+		//$this->query = \Sevian\S::vars($this->query);
 
-		$this->infoQuery = $cn->infoQuery($this->query);
+		//$this->infoQuery = $cn->infoQuery($this->query);
 
 		$values = [];
 		//hr($this->userData);
 		
 		if($this->record){
-			$this->_values = $values = $this->getRecord($this->infoQuery, (object)$record);
+			$this->_values = $values = $this->getRecord((object)$record);
 		}elseif($this->recordFrom and $this->method == 'load-from'){
-			$this->_values = $values = $this->getRecord($this->infoQuery, $this->recordFrom);
+			$this->_values = $values = $this->getRecord($this->recordFrom);
 		}
 		
 		$_fields = [];
@@ -179,7 +199,7 @@ trait Form2{
 			$this->getDefaultInput($_fields[$key]->mtype, $_fields[$key]->input, $_fields[$key]->type);
 			$_fields[$key]->value = $values[$key]?? '';
 		}
-		//hx($values);
+		
 		foreach($infoField as $info){
 			$info = (object)$info;
 			$name = $info->name;
@@ -302,7 +322,7 @@ trait Form2{
 		return $this->fields;
 	}
 
-	public function getRecord($info, $record){
+	public function getRecord($record){
 		
 		if(!$record){
 			return [];
@@ -310,13 +330,12 @@ trait Form2{
 
 		$cn = $this->cn;
 		$filter = '';
-		
+		$info = $this->infoQuery;
 		foreach($info->keys as $k => $v){
-			if(isset($record->$k)){
-				if(isset($info->fields[$k])){
-					$table = $info->fields[$k]->orgtable;
-					$filter = $table.'.'.$cn->addQuotes($k)."='".$cn->addSlashes($record->$k)."'";
-				}
+
+			if(isset($record->$k) and isset($info->fields[$k])){
+				$table = $info->fields[$k]->orgtable;
+				$filter = $table.'.'.$cn->addQuotes($k)."='".$cn->addSlashes($record->$k)."'";
 			}
 		}
 		

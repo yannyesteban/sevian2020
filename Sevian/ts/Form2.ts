@@ -361,6 +361,11 @@ var Form2 = (($) => {
             return this._main; 
         }
 
+        delete(){
+            this._main.removeDs("sgForm");
+            this._main.removeClass("sg-form");
+            this._main.text("");
+        }
         add(child:any){
             let children = this._main.get().children;
             for(let x of children){
@@ -420,11 +425,31 @@ var Form2 = (($) => {
 
             return inputs;
         }
-        getValue(){
-            let data = [];
+        setValue(data){
+            
+            for(let x in data){
+            
+                if(this._inputs[x]){
+                    this._inputs[x].setValue(data[x]);
+                }
+                
+            }
+            
+        }
+        reset(){
             
             for(let name in this._inputs){
-               
+                this._inputs[name].reset();
+                            
+            }
+            
+        }
+        getValue(){
+            
+            let data = {};
+            
+            for(let name in this._inputs){
+              
                 data[name] = this._inputs[name].getValue();
                 
                 
