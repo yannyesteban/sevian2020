@@ -314,18 +314,18 @@ trait DBSite{
         $cn = $this->cn;
 
         $cn->query = "SELECT c.id, c.name as category
-            FROM mark as m
-            INNER JOIN mark_category as c ON c.id = m.category_id
+            FROM mark_category as c
+            #INNER JOIN mark as m as c ON c.id = m.category_id
 
-            WHERE m.user = 'panda'
-            GROUP BY c.id";
+            #WHERE m.user = 'panda'
+            GROUP BY c.id ORDER BY 2";
 
         $result = $cn->execute();
-                
+        return $this->cn->getDataAll(); 
                 
         $data = [];
         while($rs = $cn->getDataAssoc($result)){
-            $data[] = $rs;
+            $data[$rs['id']] = $rs;
         }
 
 

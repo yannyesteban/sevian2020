@@ -215,7 +215,7 @@ var Form2 = (($) => {
             return _page;
         }
         createMenu(info) {
-            info.parentContext = this.getContext();
+            info.context = this.getContext();
             let _menu = new Menu(info);
             return $(_menu.get());
         }
@@ -341,11 +341,13 @@ var Form2 = (($) => {
                     this._inputs[x].setValue(data[x]);
                 }
             }
+            return this;
         }
         reset() {
             for (let name in this._inputs) {
                 this._inputs[name].reset();
             }
+            return this;
         }
         getValue() {
             let data = {};
@@ -413,11 +415,16 @@ var Form2 = (($) => {
         }
         setContext(context) {
             this.parentContext = context;
+            return this;
         }
         getContext() {
             if (this.parentContext) {
                 return this.parentContext;
             }
+            return this;
+        }
+        setMode(value) {
+            this._main.addClass("mode-" + value);
             return this;
         }
     }

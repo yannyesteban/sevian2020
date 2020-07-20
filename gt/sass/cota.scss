@@ -242,3 +242,72 @@
     }
   }
 }
+
+
+.sg-form.webcar{
+
+	background-color: rgba(255, 255, 255, 0.664);
+	//border:1px solid white;
+  width: auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+	.caption{
+		display: inherit;
+		color:rgb(255, 255, 255);
+    text-align: center;
+    background-color: rgba(99, 99, 99, 0.7);
+    line-height: 2em;
+    vertical-align: middle;
+		.text{
+			font-size: 12pt;
+			text-transform: uppercase;
+			font-family: futurab!important;
+		}
+		
+	}
+	.page{
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    //align-items: stretch;
+    //justify-content: space-between;
+    padding: 10px;
+    >*{
+      //flex:0 0 auto;
+    }
+		.field{
+      //border:1px solid white;
+      padding: 5px 0px 10px 0px;
+      min-width: 50%;
+      height: auto;
+			.label{
+				color: rgb(71, 71, 71);
+				text-transform: uppercase;
+				font-size: 0.8em;
+				padding-bottom: 10px;
+				font-family: futurab;
+				padding-left: 10px;
+				
+			}
+			input, textarea, select{
+				background-color: rgb(231, 231, 231);
+				color: rgb(109, 109, 109);
+				border: 0px;
+				//height: 30px;
+				font-size: 0.8em;
+				padding: 4px;
+				font-family: futurab;
+				width: auto;
+      }
+      
+		}
+
+  }
+  
+  .sg-menu{
+    background-color: rgba(32, 32, 32, 0.6);
+    padding: 6px;
+  }
+}

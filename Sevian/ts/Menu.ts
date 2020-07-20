@@ -7,9 +7,12 @@ document.dispatchEvent(ev);
 
 
 
-var Menu = 
+var Menu2 = 
 (function($, Float){
-   
+
+
+
+    
     class Menu{
         /* 
         type in ("accordion", "popup")

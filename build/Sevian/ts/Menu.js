@@ -4,7 +4,7 @@ document.dispatchEvent(ev);
 
 
 */
-var Menu = (function ($, Float) {
+var Menu2 = (function ($, Float) {
     class Menu {
         constructor(opt) {
             /*

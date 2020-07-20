@@ -4,6 +4,7 @@ var GTGeofence = (($) => {
         constructor(info) {
             this.id = null;
             this.map = null;
+            this.formId = null;
             this.dataMain = null;
             this.menu = null;
             this.win = null;
@@ -46,12 +47,16 @@ var GTGeofence = (($) => {
 		</div>`;
             this.oninfo = (info, name) => { };
             this.delay = 30000;
+            this.onSave = info => { };
+            this.onEdit = info => { };
             this.main = null;
             this.marks = [];
             this._info = null;
             this._winInfo = null;
             this._timer = null;
+            this._form = null;
             this._lastUnitId = null;
+            this.editId = null;
             this._traces = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -82,10 +87,12 @@ var GTGeofence = (($) => {
         _create(main) {
             this.main = main;
             main.addClass("geofence-main");
-            this.createMenu();
+            this.menu = this.createMenu();
+            this.createForm(this.form);
             this._info = $().create("div").addClass("win-geofence-info");
             //this._info = $().create("div").addClass("win-units-info");
             return;
+            //this._info = $().create("div").addClass("win-units-info");
             this.win = new Float.Window({
                 visible: true,
                 caption: this.caption,
@@ -166,8 +173,34 @@ var GTGeofence = (($) => {
         }
         setMap(map) {
             this.map = map;
-            this.map.getControl("poly").onsave = (coords, propertys) => {
-            };
+            map.getControl("poly").onsave = ((info) => {
+                //this.loadForm(info);
+                map.getControl("poly").stop();
+                this.onSave(info);
+            });
+        }
+        edit(id) {
+            this.editId = id;
+            S.send({
+                "async": true,
+                "panel": "2",
+                "valid": false,
+                "confirm_": "seguro?",
+                "requestFunction": $.bind(this.requestFun, this),
+                "params": [
+                    {
+                        "t": "setMethod",
+                        "id": "0",
+                        "element": "gt-geogence",
+                        "method": "geogence-load",
+                        "name": "",
+                        "eparams": {
+                            "geogenceId": id
+                        }
+                    }
+                ]
+            });
+            this.onEdit(id);
         }
         updateTracking(data) {
             let unitId;
@@ -203,7 +236,17 @@ var GTGeofence = (($) => {
         }
         requestFun(xhr) {
             let json = JSON.parse(xhr.responseText);
-            this.updateTracking(json);
+            this.createForm(json);
+            let id = this.editId;
+            this.showSite(id, false);
+            this.map.getControl("mark").play({
+                defaultImage: this.dataMain[id].image,
+                defaultCoordinates: [this.dataMain[id].longitude * 1, this.dataMain[id].latitude * 1],
+                onstop: () => {
+                    this.showSite(id, true);
+                    this.editId = null;
+                }
+            });
         }
         play() {
             let map = this.getMap().map;
@@ -287,12 +330,13 @@ var GTGeofence = (($) => {
                     value: x,
                     checkValue: x,
                     checkDs: { "level": "geofence", "geofenceId": x },
+                    infoElement: $.create("span").addClass("site-edit").on("click", () => { this.edit(this.dataMain[x].id); }),
                     ds: { "geofenceId": x },
                     check: (item, event) => {
                         this.showGeofence(x, event.currentTarget.checked);
                     },
                     action: (item, event) => {
-                        let ch = menu.getCheck(item);
+                        let ch = item.getCheck();
                         ch.get().checked = true;
                         this.showGeofence(x, true);
                         this._lastUnitId = x;
@@ -309,8 +353,9 @@ var GTGeofence = (($) => {
                 autoClose: false,
                 target: this.main,
                 items: infoMenu,
+                useCheck: true,
                 check: (item) => {
-                    let ch = menu.getCheck(item);
+                    let ch = item.getCheck();
                     let checked = ch.get().checked;
                     let list = item.queryAll("input[type='checkbox']");
                     for (let x of list) {
@@ -374,9 +419,13 @@ var GTGeofence = (($) => {
             });
             return menu1;
         }
-        createForm(main) {
-            this.form.id = main;
-            let form = new Form2(this.form);
+        createForm(info) {
+            if (this._form) {
+                this._form.delete();
+            }
+            info.parentContext = this;
+            info.id = this.formId;
+            this._form = new Form2(info);
         }
         getInfoLayer() {
             return this._info;
@@ -394,8 +443,8 @@ var GTGeofence = (($) => {
         }
         showUnits(accountId, value) {
             let e;
-            for (let x in this.dataSite) {
-                e = this.dataSite[x];
+            for (let x in this.dataMain) {
+                e = this.dataMain[x];
                 if (accountId == e.account_id) {
                     this.showUnit(x, value);
                 }

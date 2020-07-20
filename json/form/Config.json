@@ -1,7 +1,7 @@
 {
 	"form":"config",
 	"caption":"Configuración",
-	"class":"",
+	"className":"webcar",
 	"query":"SELECT * FROM app_config",
 	"menuName":"/menu/grid",
 	"methods":{

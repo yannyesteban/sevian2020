@@ -53,6 +53,8 @@ var GTSite = (($) => {
 		</div>`;
             this.oninfo = (info, name) => { };
             this.delay = 30000;
+            this.onSave = info => { };
+            this.onEdit = info => { };
             this.main = null;
             this.marks = [];
             this._info = null;
@@ -176,56 +178,81 @@ var GTSite = (($) => {
             return this.map;
         }
         setMap(map) {
+            map.getControl("mark").onsave = ((info) => {
+                this.loadForm(info);
+                map.getControl("mark").stop();
+                this.onSave(info);
+            });
             this.map = map;
         }
         start() {
             this.map.getControl("mark").play();
         }
         update(info) {
-            info.fax = '88888';
+            this.getForm().setValue(info).setMode('update');
+            this.getForm().getInput("__mode_").setValue(2);
+            this.getForm().getInput("__id_").setValue(0);
             this.dataSite[info.id] = info;
             this.updateMark(info.id);
         }
         updateMark(id) {
+            if (!this.menu.getByData("category-id", this.dataSite[id].category_id)) {
+                console.log(this.dataCategory);
+                this.menu.add({
+                    id: this.dataSite[id].category_id,
+                    caption: this.dataCategory.find(e => { return e.id == this.dataSite[id].category_id; }).category,
+                    items: [],
+                    useCheck: true,
+                    useIcon: false,
+                    checkValue: id,
+                    checkDs: { "level": "category", "categoryId": this.dataSite[id].category_id },
+                    ds: { "categoryId": this.dataSite[id].category_id },
+                    check: (item, event) => {
+                        //this.showAccountUnits(this.dataClients[x].id, event.currentTarget.checked);
+                    },
+                });
+            }
             if (this.marks[id]) {
+                let m = this.menu.getByData("category-id", this.dataSite[id].category_id);
+                let item = this.menu.getByValue(id);
+                console.log(item.get());
+                if (!m.getMain().contains(item)) {
+                    m.append(item); //getChild().get().appendChild(item.get());
+                }
                 this.getMap().delete("site-" + id);
                 delete this.marks[id];
+                //let menu = this.menu.get().query(".item[data-site-id='"+id+"'] .text");
+                item.getCaption().text(this.dataSite[id].name);
+                //$(menu).text(this.dataSite[id].name);
+                //item = this.menu.getByData("site-id", 19221);
+                //item.getCaption().text(this.dataSite[id].name+"...");
             }
-            let menu = this.menu.get().query(".item[data-site-id='" + id + "'] .text");
-            $(menu).text(this.dataSite[id].name);
+            else {
+                let m = this.menu.getByData("category-id", this.dataSite[id].category_id).getMenu();
+                let info = {
+                    id: this.dataSite[id].id,
+                    caption: this.dataSite[id].name,
+                    useCheck: true,
+                    value: id,
+                    checkValue: id,
+                    checkDs: { "level": "sites", "siteId": id },
+                    ds: { "siteId": id },
+                    infoElement: $.create("span").addClass("site-edit").on("click", () => { this.edit(this.dataSite[id].id); }),
+                    check: (item, event) => {
+                        this.showSite(id, event.currentTarget.checked);
+                    },
+                    action: (item, event) => {
+                        let ch = item.getCheck();
+                        ch.get().checked = true;
+                        this.showSite(id, true);
+                        this._lastUnitId = id;
+                        this.setInfo(id);
+                        this.flyTo(id);
+                    }
+                };
+                m.add(info);
+            }
             this.showSite(id, true);
-        }
-        updateTracking(data) {
-            let unitId;
-            n = n + 0.001;
-            let a = 0, b = 0;
-            for (let x of data) {
-                if (Math.floor(Math.random() * 10) >= 8) {
-                    a = Math.random() / 100;
-                    b = Math.random() / 300;
-                }
-                else {
-                    a = -Math.random() / 100;
-                    b = -Math.random() / 300;
-                }
-                unitId = x.unit_id;
-                this.tracking[unitId].latitude = x.latitude * 1.0 + a;
-                this.tracking[unitId].longitude = x.longitude * 1.0 + b;
-                this.tracking[unitId].heading = x.heading;
-                if (this.marks[unitId]) {
-                    this.marks[unitId].setLngLat([this.tracking[unitId].longitude, this.tracking[unitId].latitude]);
-                    this.marks[unitId].setPopup(this.loadPopupInfo(unitId));
-                    this.setInfo(unitId);
-                    //let popup = this.evalHTML(this.popupTemplate, this.dataUnits[id]);
-                    //popup = this.evalHTML(popup, this.tracking[id]);
-                }
-            }
-            if (this.followMe && this._lastUnitId) {
-                this.panTo(this._lastUnitId);
-                this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
-            }
-            if (this._traces[unitId]) {
-            }
         }
         requestFun(xhr) {
             let json = JSON.parse(xhr.responseText);
@@ -242,96 +269,40 @@ var GTSite = (($) => {
             });
         }
         play() {
-            let map = this.getMap().map;
-            map.loadImage('https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png', function (error, image) {
-                if (error)
-                    throw error;
-                map.addImage('cat', image);
-                map.addSource('point', {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'FeatureCollection',
-                        'features': [
-                            {
-                                'type': 'Feature',
-                                'properties': {
-                                    'rotacion': 45
-                                },
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-69.39874800, 10.06882300]
-                                }
-                            },
-                            {
-                                'type': 'Feature',
-                                'properties': {
-                                    'rotacion': 120
-                                },
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-69.39674800, 10.06682300]
-                                }
-                            }
-                        ]
-                    }
-                });
-                map.addLayer({
-                    'id': 'points',
-                    'type': 'symbol',
-                    'source': 'point',
-                    'layout': {
-                        'icon-image': 'cat',
-                        'icon-size': 0.10,
-                        'icon-rotate': ['get', 'rotacion']
-                    }
-                });
-            });
-            if (this._timer) {
-                clearTimeout(this._timer);
-            }
-            this._timer = setInterval(() => {
-                S.send({
-                    async: true,
-                    panel: 2,
-                    valid: false,
-                    confirm_: 'seguro?',
-                    requestFunction: $.bind(this.requestFun, this),
-                    params: [
-                        {
-                            t: 'setMethod',
-                            id: 2,
-                            element: 'gt_unit',
-                            method: 'tracking',
-                            name: 'x',
-                            eparams: {
-                                record: { codpersona: 16386 },
-                                token: "yanny",
-                                page: 2
-                            }
-                        }
-                    ]
-                });
-            }, this.delay);
         }
         createMenu() {
-            let infoMenu = [];
-            for (let x in this.dataCategory) {
-                infoMenu[this.dataCategory[x].id] = {
-                    id: this.dataCategory[x].id,
-                    caption: this.dataCategory[x].category,
-                    items: [],
-                    useCheck: true,
-                    useIcon: false,
-                    checkValue: x,
-                    checkDs: { "level": "category", "categoryId": x },
-                    ds: { "clientId": x },
-                    check: (item, event) => {
-                        this.showAccountUnits(this.dataClients[x].id, event.currentTarget.checked);
-                    },
-                };
-            }
+            let category = {};
+            let cat = [];
+            let catId = null;
+            this.dataCategory.forEach(e => {
+                category[e.id] = e.category;
+            });
+            let menu = new Menu({
+                autoClose: false,
+                target: this.main,
+                items: [],
+                type: "accordion",
+                useCheck: true,
+                subType: "",
+            });
             for (let x in this.dataSite) {
-                infoMenu[this.dataSite[x].category_id].items[this.dataSite[x].id] = {
+                catId = this.dataSite[x].category_id;
+                if (!cat[catId]) {
+                    cat[catId] = menu.add({
+                        id: catId,
+                        caption: category[catId],
+                        items: [],
+                        useCheck: true,
+                        useIcon: false,
+                        checkValue: x,
+                        checkDs: { "level": "category", "categoryId": catId },
+                        ds: { "categoryId": catId },
+                        check: (item, event) => {
+                            //this.showAccountUnits(this.dataClients[x].id, event.currentTarget.checked);
+                        },
+                    }).getMenu();
+                }
+                cat[catId].add({
                     id: this.dataSite[x].id,
                     caption: this.dataSite[x].name,
                     useCheck: true,
@@ -339,98 +310,21 @@ var GTSite = (($) => {
                     checkValue: x,
                     checkDs: { "level": "sites", "siteId": x },
                     ds: { "siteId": x },
+                    infoElement: $.create("span").addClass("site-edit").on("click", () => { this.edit(this.dataSite[x].id); }),
                     check: (item, event) => {
                         this.showSite(x, event.currentTarget.checked);
                     },
                     action: (item, event) => {
-                        let ch = menu.getCheck(item);
+                        let ch = item.getCheck();
                         ch.get().checked = true;
                         this.showSite(x, true);
                         this._lastUnitId = x;
                         this.setInfo(x);
                         this.flyTo(x);
-                        return;
-                        this._traces[x] = new GTTrace({ map: this.map.map });
-                        this._traces[x].play();
-                    },
-                    events: {
-                        dblclick: () => {
-                            this.edit(this.dataSite[x].id);
-                        }
                     }
-                };
+                });
             }
-            console.log(infoMenu);
-            let menu = new Menu({
-                caption: "",
-                autoClose: false,
-                target: this.main,
-                items: infoMenu,
-                check: (item) => {
-                    let ch = menu.getCheck(item);
-                    let checked = ch.get().checked;
-                    let list = item.queryAll("input[type='checkbox']");
-                    for (let x of list) {
-                        x.checked = checked;
-                    }
-                }
-            });
             return menu;
-            for (let x in this.dataAccounts) {
-                infoMenu[this.dataAccounts[x].client_id].items[this.dataAccounts[x].id] = {
-                    id: this.dataAccounts[x].id,
-                    caption: this.dataAccounts[x].account,
-                    items: [],
-                    useCheck: true,
-                    checkValue: x,
-                    checkDs: { "level": "account", "accountId": this.dataAccounts[x].id },
-                    ds: { "accountId": this.dataAccounts[x].id },
-                    check: (item, event) => {
-                        this.showUnits(this.dataAccounts[x].id, event.currentTarget.checked);
-                    },
-                };
-            }
-            for (let x in this.dataUnits) {
-                infoMenu[this.dataUnits[x].client_id].items[this.dataUnits[x].account_id].items[this.dataUnits[x].unit_id] = {
-                    id: this.dataUnits[x].unit_id,
-                    caption: this.dataUnits[x].vehicle_name,
-                    useCheck: true,
-                    value: x,
-                    checkValue: x,
-                    checkDs: { "level": "units", "unitId": x },
-                    ds: { "unitId": x },
-                    check: (item, event) => {
-                        this.showUnit(x, event.currentTarget.checked);
-                    },
-                    action: (item, event) => {
-                        let ch = menu.getCheck(item);
-                        ch.get().checked = true;
-                        this.showUnit(x, true);
-                        this._lastUnitId = x;
-                        this.setInfo(x);
-                        this.flyTo(x);
-                        return;
-                        this._traces[x] = new GTTrace({ map: this.map.map });
-                        this._traces[x].play();
-                    }
-                };
-            }
-            let menu1 = new Menu({
-                caption: "",
-                autoClose: false,
-                target: this.main,
-                items: infoMenu,
-                check: (item) => {
-                    let ch = menu.getCheck(item);
-                    let checked = ch.get().checked;
-                    let list = item.queryAll("input[type='checkbox']");
-                    for (let x of list) {
-                        x.checked = checked;
-                    }
-                }
-            });
-            return menu1;
-            //console.log(check);
         }
         createForm(info) {
             if (this._form) {
@@ -529,6 +423,7 @@ var GTSite = (($) => {
                     }
                 ]
             });
+            this.onEdit(id);
         }
         evalHTML(html, data) {
             function auxf(str, p, p2, offset, s) {

@@ -135,6 +135,21 @@ form {
   background-size: 20px 20px;
 }
 
+.item:hover > a > .site-edit {
+  visibility: visible;
+}
+
+.site-edit {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  background-image: url(../../images/setting.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 20px 20px;
+  visibility: hidden;
+}
+
 .mark-tool-value {
   background-color: rgba(255, 255, 255, 0.61);
   width: 300px;
@@ -358,5 +373,19 @@ form {
   padding: 4px;
   font-family: futurab;
   width: 100%;
+}
+
+._sg-menu-.s {
+  margin-top: 50px;
+}
+._sg-menu- .item.open > .sub-menu {
+  border: 3px solid #0077ff;
+  -webkit-animation: acc-open 0.5s ease-out forwards;
+          animation: acc-open 0.5s ease-out forwards;
+}
+._sg-menu- .item.close > .sub-menu {
+  border: 3px solid red;
+  -webkit-animation: acc-close 0.5s ease-out forwards;
+          animation: acc-close 0.5s ease-out forwards;
 }
 /*# sourceMappingURL=gt.css.map */

@@ -181,7 +181,7 @@ var Float = (($) => {
 				cH = c.cH,
 				sL = c.sL,
 				sT = c.sT;
-
+            
 			switch(xx){
 				case "center":
 					left = c.left + c.width /2 - width /2;
@@ -227,14 +227,15 @@ var Float = (($) => {
 				top = top + sT;	
 				left = left + sL;
 			}
-
+            
 			left = left + deltaX;
 			top = top + deltaY;
 
 			if ((left + width) > (cW + sL)){
 				left = cW + sL - width;
-			}
-			if (left < sL){
+            }
+
+            if (left < sL){
 				left = sL;
 			}
 
@@ -244,8 +245,8 @@ var Float = (($) => {
 
 			if (top < sT && !fixed){
 				top = sT; 
-			}	
-
+            }	
+            
 			return this.showElem({e: e, left: left, top: top, z: z});
 		}
 
@@ -1152,7 +1153,12 @@ Float.Window = (($) => {
             setActive(this);
             
         }
-
+        hide(){
+            if(!this.visible){
+                return false;	
+            }
+            this.setVisible(false);
+        }
         
         setSize(width=null, height=null){
             

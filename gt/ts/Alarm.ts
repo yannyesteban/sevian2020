@@ -400,6 +400,7 @@ var GTAlarm = (($) => {
 				autoClose: false,
 				target:this.main,
 				items: infoMenu,
+				useCheck:true,
 				check:(item) => {
 					 let ch = menu.getCheck(item);
 					 let checked = ch.get().checked;   

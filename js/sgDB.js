@@ -3,7 +3,12 @@
 var db = false, hr = false;
 (function($){
 	let linea = 0, div, win = null;
-		
+	
+	let Reset = function(){
+		linea = 0;
+		div.text("");
+	}
+
 	div = $.create("div");
 	div.prop("id","debug_1")
 	.style({minWidth:"200px"})
@@ -31,6 +36,10 @@ var db = false, hr = false;
 	}
 
 	hr = db = (msg, color, back, clear) => {
+		if(msg === undefined){
+			Reset();
+			return;
+		}
 
 		color = color || "black";
 		back = back || "";

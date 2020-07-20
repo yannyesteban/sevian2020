@@ -534,7 +534,7 @@ var GTUnit = (($) => {
 					this.showUnit(x, event.currentTarget.checked);
 				},
                 action:(item, event) => {
-					let ch = menu.getCheck(item);
+					let ch = item.getCheck();
 					ch.get().checked = true;
 					this.showUnit(x, true);
 					this._lastUnitId = x;
@@ -559,8 +559,9 @@ var GTUnit = (($) => {
                autoClose: false,
 			   target:this.main,
 			   items: infoMenu,
+			   useCheck:true,
 			   check:(item) => {
-					let ch = menu.getCheck(item);
+					let ch = item.getCheck();
 					let checked = ch.get().checked;   
 					let list = item.queryAll("input[type='checkbox']");
 					for(let x of list){

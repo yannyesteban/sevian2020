@@ -1,7 +1,7 @@
 {
 	"form":"History",
 	"caption":"Historial",
-	"class":"",
+	"className":"webcar",
 	"query":"SELECT '' as unit_id, now() as date_1, '' as hour_1, now() as date_2, '' as hour_2, '' as filter",
 	"menuName":"/menu/grid",
 	"methods":{

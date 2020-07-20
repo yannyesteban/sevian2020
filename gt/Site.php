@@ -108,6 +108,9 @@ class Site
 				
 				break;
 			case 'site-load':
+				
+				$id = $this->eparams->siteId?? \sevian\s::getSes('_siteLast');
+				
 				$form =  new \Sigefor\Component\Form2([
 			
 					'id'		=> $this->containerId,
@@ -117,7 +120,7 @@ class Site
 					'mode'		=> 2,
 					'userData'	=> $this->userData,
 					
-					'record'=>['id'=>$this->eparams->siteId]
+					'record'=>['id'=>$id]
 				]);
 				$this->setRequest($form);
 				
@@ -197,7 +200,8 @@ class Site
 		$this->lastRecord = $data->id;
 		//	hx($formSave->getResult());
 		//print_r($formSave->getResult());
-
+		\sevian\s::setSes('_siteLast', $this->lastRecord);
+		
 		foreach($formSave->getResult() as $k => $v){
 			
 			if(!$v->error){

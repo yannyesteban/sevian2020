@@ -208,4 +208,65 @@
   -webkit-transition: 0.5s all ease-out;
   transition: 0.5s all ease-out;
 }
+
+.sg-form.webcar {
+  background-color: rgba(255, 255, 255, 0.664);
+  width: auto;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+.sg-form.webcar .caption {
+  display: inherit;
+  color: white;
+  text-align: center;
+  background-color: rgba(99, 99, 99, 0.7);
+  line-height: 2em;
+  vertical-align: middle;
+}
+.sg-form.webcar .caption .text {
+  font-size: 12pt;
+  text-transform: uppercase;
+  font-family: futurab !important;
+}
+.sg-form.webcar .page {
+  overflow: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-line-pack: start;
+      align-content: flex-start;
+  padding: 10px;
+}
+.sg-form.webcar .page .field {
+  padding: 5px 0px 10px 0px;
+  min-width: 50%;
+  height: auto;
+}
+.sg-form.webcar .page .field .label {
+  color: #474747;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  padding-bottom: 10px;
+  font-family: futurab;
+  padding-left: 10px;
+}
+.sg-form.webcar .page .field input, .sg-form.webcar .page .field textarea, .sg-form.webcar .page .field select {
+  background-color: #e7e7e7;
+  color: #6d6d6d;
+  border: 0px;
+  font-size: 0.8em;
+  padding: 4px;
+  font-family: futurab;
+  width: auto;
+}
+.sg-form.webcar .sg-menu {
+  background-color: rgba(32, 32, 32, 0.6);
+  padding: 6px;
+}
 /*# sourceMappingURL=cota.css.map */

@@ -206,12 +206,7 @@ var GTWebcar = (($) => {
 				map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
 
 
-				map.getControl("mark").onsave = ((info)=>{
-					this._site.loadForm(info);
-					this._win["form_site"].show();
-					map.getControl("mark").stop();
-					
-				});
+				
 				//map.getControl("mark").onsave = ((info)=>{}
 			})
 			
@@ -248,8 +243,180 @@ var GTWebcar = (($) => {
 
 			this.mainMenu();
 
-		} 
+		}
 		mainMenu(){
+			let menu = new Menu({
+				caption:"uuuu", 
+				autoClose: true,
+				target:this.main,
+				type:"popup",
+				subType:"dropdown",
+				"className":["sevian","horizontal"],
+				items: [
+					{
+						id: 0,
+                		caption:"+",
+                		items:[
+							{caption:'Sitio',
+							action:(item, event)=>{
+								
+								this._win["form_site"].show();
+							}},
+							{caption:'Alarma',
+							action:(item, event)=>{
+								
+								this._win["form_alarm"].show();
+							}},
+							{caption:'Geocerca',
+							action:(item, event)=>{
+								
+								this._win["form_geofence"].show();
+							}},
+							{caption:'Eventos',
+							action:(item, event)=>{
+								
+								this._win["form_event"].show();
+							}},
+							{caption:'Opciones',
+							action:(item, event)=>{
+								
+								this._win["config"].show();
+							}},
+							{caption:'Search',
+							action:(item, event)=>{
+								this._site.start();return;
+								this._win["form_search"].show();
+							}},
+						]
+					},
+					{
+						id: 1,
+                		caption:"U",
+                		action:(item, event) => {
+							this.win.show();
+						}
+					},
+					{
+						id: 1,
+                		caption:"I",
+                		action:(item, event) => {
+							this._win["info"].show();
+						}
+					},
+					{
+						id: 1,
+                		caption:"S",
+                		action:(item, event) => {
+							this._win["site"].show();
+						}
+					},
+					{
+						id: 3,
+                		caption:"G",
+                		action:(item, event) => {
+							this._win["geofence"].show();
+							
+						}
+					},
+					{
+						id: 4,
+                		caption:"A",
+                		action:(item, event) => {
+							this._win["alarm"].show();
+						}
+					},
+					{
+						id: 5,
+                		caption:"H",
+                		action:(item, event) => {
+							this._win["history"].show();
+						}
+					},
+					{
+						id: 6,
+                		caption:"E",
+                		action:(item, event) => {
+							
+						}
+					},
+					{
+						id: 7,
+                		caption:"R",
+                		action:(item, event) => {
+							db ("rules");
+							this.rule = this._unit.getMap().addRule('xxx', {
+								name:"x"
+							});
+
+							this.rule.play();
+							
+						}
+					},
+					{
+						id: 8,
+                		caption:"L",
+                		action:(item, event) => {
+							color = 'green';
+						}
+					},
+					{
+						id: 9,
+                		caption:"O",
+                		action:(item, event) => {
+							this.menu3();
+						}
+					},
+					{
+						id: 10,
+                		caption:"X",
+                		action:(item, event) => {
+							let ii = this.m.getItem(1);
+							ii.getCaption().text("Esteban")
+						}
+					}
+
+				]
+			 });
+		}
+
+		menu3(){
+			
+			this.m = new Menu({
+				target:"#form_p4",
+				
+				autoClose: true,
+				
+				type:"accordion",
+				subType:"",//default
+				//className:["s","h"],
+				items: [
+					{id: 0,	caption:"A"},
+					{id: 1,	caption:"B"},
+					{id: 2,	caption:"C",items:[
+						{id: 0,	caption:"C.A"},
+						{id: 1,	caption:"C.B"},
+						{id: 2,	caption:"C.C"},
+					]},
+					{id: 2,	caption:"D"},
+					{id: 2,	caption:"E"},
+					{id: 2,	caption:"X",items:[
+						{id: 0,	caption:"X.A"},
+						{id: 1,	caption:"X.B",items:[
+							{id: 0,	caption:"X.A.1"},
+							{id: 1,	caption:"X.B.2"},
+							{id: 2,	caption:"X.C.3"},
+						]},
+						{id: 2,	caption:"X.C",items:[
+							{id: 0,	caption:"W.D.10"},
+							{id: 1,	caption:"W.D.20"},
+							{id: 2,	caption:"W.D.30"},
+						]},
+					]},
+
+				]
+			});
+		}
+		mainMenu2(){
 			let menu = new Menu({
 				caption:"uuuu", 
 				autoClose: true,
@@ -672,8 +839,21 @@ var GTWebcar = (($) => {
 			});
 			info.formId = this._win["form_site"].getBody();
 			this._site = new GTSite(info);
+
+			this._site.onSave = (info)=>{this._win["form_site"].show();};
+			this._site.onEdit = (info)=>{this._win["form_site"].hide();};
+			return;
 			//info.form.target = this._win["form_site"].getBody();
 			//let form = new Form2(info.form);
+
+
+
+			map.getControl("mark").onsave = ((info)=>{
+				this._site.loadForm(info);
+				this._win["form_site"].show();
+				map.getControl("mark").stop();
+				
+			});
 		}
 
 		loadAlarm(info){
@@ -718,7 +898,6 @@ var GTWebcar = (($) => {
 			this._win["geofence"] = new Float.Window({
                 visible:false,
                 caption: info.caption,
-                //child:main,
                 left:300,
                 top:100,
                 width: "300px",
@@ -726,32 +905,32 @@ var GTWebcar = (($) => {
                 mode:"auto",
                 className:["sevian"]
 			});
-
-			info.id = this._win["geofence"].getBody();
-			info.oninfo = (info, name) =>{
-				this._win.info.getBody().text(info);
-				this._win.info.setCaption(name);
-			};
-
-			this._geofence = new GTGeofence(info);
-
-
+			
 			this._win["form_geofence"] = new Float.Window({
                 visible:false,
                 caption: info.caption,
-                //child:main,
                 left:300,
                 top:100,
                 width: "300px",
                 height: "200px",
                 mode:"auto",
-				className:["sevian"],
-				
+				className:["sevian"]
 			});
 			
-			info.form.target = this._win["form_geofence"].getBody();
-			let form = new Form2(info.form);
+			info.oninfo = (info, name) =>{
+				this._win.info.getBody().text(info);
+				this._win.info.setCaption(name);
+			};
+			
+			info.id = this._win["geofence"].getBody();
+			info.formId = this._win["form_geofence"].getBody();
+			
+			this._geofence = new GTGeofence(info);
+			this._geofence.onSave = (info)=>{this._win["form_geofence"].show();};
+			this._geofence.onEdit = (info)=>{this._win["form_geofence"].hide();};
+			
 		}
+
 		loadHistory(info){
 			this._win["history"] = new Float.Window({
                 visible:false,

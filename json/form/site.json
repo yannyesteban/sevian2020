@@ -1,7 +1,7 @@
 {
 	"form":"site",
 	"caption":"Sitios",
-	"class":"",
+	"className":"webcar",
 	"query":"SELECT * FROM mark",
 	"menuName":"/menu/site_menu",
 	"methods":{
@@ -17,18 +17,24 @@
 	"pages":[],
 	"groups":{},
 	"infoFields":[
-		{"name":"idx","caption":"Código", "input": "hidden", "type": "hidden"},
+		{"name":"id","caption":"Código", "input": "hidden", "type": "hidden"},
 		{"name":"client_id","caption":"Cliente", "input": "hidden", "type": "hidden"},
 		{"name":"account_id","caption":"Cuenta", "input": "hidden", "type": "hidden"},
-		{"name":"name","caption":"Nombre", "input": "input", "type": "text"},
+		{"name":"user","caption":"Usuario", "input": "input", "type": "text", "default":"panda","mode_value":1},
+		{"name":"name","caption":"Nombre", "input": "input", "type": "text", "default":"panda","mode_value":1},
 		{"name":"description","caption":"Descripción"},
 		{"name":"longitude","caption":"Longitud"},
 		{"name":"latitude","caption":"Latitud"},
+
+		{"name":"icon_id","caption":"Imagen", "input": "hidden", "type": "hidden"},
+		{"name":"image","caption":"Imagen", "input": "hidden", "type": "hidden"},
+		{"name":"scale","caption":"Imagen", "input": "hidden", "type": "hidden"},
 
 		{"name":"address","caption":"Dirección"},
 		{"name":"phone1","caption":"Teléfono"},
 		{"name":"phone2","caption":"Teléfono 2"},
 		{"name":"phone3","caption":"Teléfono 3"},
+		{"name":"fax","caption":"Fax", "input": "hidden", "type": "hidden"},
 
 		{"name":"email","caption":"Correo Electrónico"},
 		{"name":"web","caption":"Página Web"},
@@ -39,12 +45,13 @@
 		{"name":"category_id","caption":"Categoría", "input": "input", "type": "select",
 			"data":[
 				[0, "seleccione", "*"],
-				"SELECT id, name FROM mark_category"
+				"SELECT id, name FROM mark_category ORDER BY name"
 				
-			  ]},
+			  ], "default":61, "mode_value":1},
 		{"name":"scope","caption":"Nivel", "input": "input", "type": "select",
+			"default":1,
 		"data":[
-			[0, "seleccione"],[1, "Usuario"],[1, "Cuenta"],[1, "Cliente"]
+			["", "seleccione"],[1, "Usuario"],[1, "Cuenta"],[1, "Cliente"]
 		]}
 		
 

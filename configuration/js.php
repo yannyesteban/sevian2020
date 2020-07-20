@@ -77,7 +77,10 @@ $js = [
 		'file' 	=> "{$PATH}build/Sevian/ts/Page.js",
 		//'attrib' => [			'_type'=>'module'		]
 	],
-
+	[
+		'file' 	=> "{$PATH}build/Sevian/ts/Menu2.js",
+		//'attrib' => [			'_type'=>'module'		]
+	],
 
 	[
 		'file' 	=> "{$PATH}build/Sevian/ts/Menu.js",

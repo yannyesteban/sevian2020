@@ -863,6 +863,12 @@ Float.Window = (($) => {
             this.setVisible(true);
             setActive(this);
         }
+        hide() {
+            if (!this.visible) {
+                return false;
+            }
+            this.setVisible(false);
+        }
         setSize(width = null, height = null) {
             if (width !== null || height !== null) {
                 this.setMode("custom");
