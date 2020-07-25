@@ -170,7 +170,7 @@ var GTWebcar = (($) => {
                 target: this.main,
                 type: "popup",
                 subType: "dropdown",
-                "className": ["sevian", "horizontal"],
+                "className": ["webcar-menu", "sevian", "horizontal"],
                 items: [
                     {
                         id: 0,
@@ -206,14 +206,22 @@ var GTWebcar = (($) => {
                     },
                     {
                         id: 1,
-                        caption: "U",
+                        caption: "",
+                        imageClass: "icon-unit",
+                        propertys: {
+                            "title": "Mostrar Unidades"
+                        },
                         action: (item, event) => {
                             this.win.show();
                         }
                     },
                     {
                         id: 1,
-                        caption: "I",
+                        caption: "",
+                        imageClass: "icon-info",
+                        propertys: {
+                            "title": "Mostrar Ventana de Información"
+                        },
                         action: (item, event) => {
                             this._win["info"].show();
                         }
@@ -221,27 +229,43 @@ var GTWebcar = (($) => {
                     {
                         id: 1,
                         caption: "S",
+                        imageClass: "icon-marker_001",
+                        propertys: {
+                            "title": "Mostrar Markadores / Sitios"
+                        },
                         action: (item, event) => {
                             this._win["site"].show();
                         }
                     },
                     {
                         id: 3,
-                        caption: "G",
+                        caption: "",
+                        imageClass: "icon-pentagon",
+                        propertys: {
+                            "title": "Mostrar Geocercas"
+                        },
                         action: (item, event) => {
                             this._win["geofence"].show();
                         }
                     },
                     {
                         id: 4,
-                        caption: "A",
+                        caption: "",
+                        imageClass: "icon-clock_001",
+                        propertys: {
+                            "title": "Mostrar Alarmas"
+                        },
                         action: (item, event) => {
                             this._win["alarm"].show();
                         }
                     },
                     {
                         id: 5,
-                        caption: "H",
+                        caption: "",
+                        imageClass: "icon-calendar",
+                        propertys: {
+                            "title": "Buscar un Historial"
+                        },
                         action: (item, event) => {
                             this._win["history"].show();
                         }
@@ -690,8 +714,8 @@ var GTWebcar = (($) => {
                 //child:this._site.getForm().get(),
                 left: 300,
                 top: 100,
-                width: "300px",
-                height: "200px",
+                width: "400px",
+                height: "500px",
                 mode: "auto",
                 className: ["sevian"],
             });
@@ -756,8 +780,8 @@ var GTWebcar = (($) => {
                 caption: info.caption,
                 left: 300,
                 top: 100,
-                width: "300px",
-                height: "200px",
+                width: "400px",
+                height: "500px",
                 mode: "auto",
                 className: ["sevian"]
             });
@@ -817,6 +841,9 @@ var GTWebcar = (($) => {
         }
         siteUpdate(info) {
             this._site.update(info);
+        }
+        geofenceUpdate(info) {
+            this._geofence.update(info);
         }
     }
     Webcar._instances = [];

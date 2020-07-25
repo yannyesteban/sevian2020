@@ -322,14 +322,6 @@ trait DBSite{
 
         $result = $cn->execute();
         return $this->cn->getDataAll(); 
-                
-        $data = [];
-        while($rs = $cn->getDataAssoc($result)){
-            $data[$rs['id']] = $rs;
-        }
-
-
-        return $data;
     }
 }
 
@@ -380,11 +372,32 @@ trait DBGeofence{
         $data = [];
 		while($rs = $cn->getDataAssoc($result)){
             $rs['config'] = json_decode($rs['config']);
-            $data[] = $rs;
+            $data[$rs['id']] = $rs;
         }
 
 
         return $data;
+    }
+
+    private function loadRecord($id){
+
+        $cn = $this->cn;
+
+        $id = $cn->addSlashes($id);
+        $cn->query = "SELECT *
+            FROM geofences as g
+           
+           
+            WHERE g.id = '$id'";
+
+        $result = $cn->execute();
+
+        if($rs = $cn->getDataAssoc($result)){
+            return $rs;
+        }
+
+
+        return [];
     }
 
     

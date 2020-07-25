@@ -12,7 +12,9 @@ class Geofence
 {
 
    
-    use DBGeofence;
+    use DBGeofence{
+		DBGeofence::loadRecord as public loadGeofence;
+	}
    
     
 
@@ -68,7 +70,10 @@ class Geofence
 		if($method === false){
             $method = $this->method;
 		}
-		
+		if($this->getSes('_userData')){
+			$this->userData = $this->getSes('_userData');
+			
+		}
 		switch($method){
 			case 'load':
 				$this->load();
@@ -94,6 +99,25 @@ class Geofence
 			case 'tracking':
 				
 				break;
+			case 'geofence-load':
+				
+				$id = $this->eparams->geofenceId?? \sevian\s::getSes('_geofenceLast');
+				
+				$form =  new \Sigefor\Component\Form2([
+			
+					'id'		=> $this->containerId,
+					'panelId'	=> $this->id,
+					'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/geofence', self::$patternJsonFile),
+					'method'	=> 'load',
+					'mode'		=> 2,
+					'userData'	=> $this->userData,
+					
+					'record'=>['id'=>$id]
+				]);
+				$this->setRequest($form);
+				
+				
+			break;
 			default:
 				break;
 
@@ -142,7 +166,45 @@ class Geofence
 		];
 
     }
-    
+	
+	
+	public function save($data){
+		$master['f'][]=
+			[
+				'id'=>$data->id
+			];
+		
+		$formSave =  new \Sigefor\Component\FF([
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/geofence', self::$patternJsonFile),
+			'dataKeys'	=> $master,//$this->_masterData,
+			'dataKeysId'=> 'f',
+			'data'		=> [$data]
+		]);
+		$this->lastRecord = $data->id;
+		//	hx($formSave->getResult());
+		//print_r($formSave->getResult());
+		\sevian\s::setSes('_siteLast', $this->lastRecord);
+		
+		foreach($formSave->getResult() as $k => $v){
+			
+			if(!$v->error){
+				
+				return new \Sevian\iMessage([
+					'caption'	=> $formSave->getCaption(),
+					'text'		=> 'Record was saved!!!'
+				]);
+				
+			}else{
+				
+				return new \Sevian\iMessage([
+					'caption'	=> 'Error '.$formSave->getCaption(),
+					'text'		=> "Record wasn't saved!!!"
+				]);
+
+			}
+		}
+	}
+
     public function jsonSerialize() {  
         return [
 			'name'	=> $this->_name,

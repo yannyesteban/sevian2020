@@ -205,6 +205,23 @@ $cls_elements['gt-site'] = [
 	
 ];
 
+$cls_elements['gt-geofence'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Geofence.php',
+	'class' => '\GT\Geofence',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Geofence.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
 $cls_elements['gt_alarm'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Alarm.php',

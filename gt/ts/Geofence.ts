@@ -7,6 +7,8 @@ var GTGeofence = (($) => {
 		
 		id:any = null;
 		map:any = null;
+		mode:number = 0;
+		tempPoly:any = null;
 		formId:any = null;
 		
 		dataMain:any[] = null;
@@ -110,8 +112,6 @@ var GTGeofence = (($) => {
 
 		}
 
-		
-
 		_create(main:any){
 			
 			this.main = main;
@@ -122,92 +122,8 @@ var GTGeofence = (($) => {
 			this.createForm(this.form);
 
 			this._info = $().create("div").addClass("win-geofence-info");
-			//this._info = $().create("div").addClass("win-units-info");
-			return;
-
-
-
 			
-			//this._info = $().create("div").addClass("win-units-info");
-			this.win = new Float.Window({
-                visible:true,
-                caption: this.caption,
-                child:main,
-                left:10,
-                top:40,
-                width: "300px",
-                height: "300px",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-			this._winInfo = new Float.Window({
-                visible:true,
-                caption:"Info",
-                child:this._info,
-                left:10,
-                top:"bottom",
-                width: "300px",
-                height: "auto",
-                mode:"auto",
-                className:["sevian"]
-			});
-			let _info2 = $().create("div").addClass("win-units-info");
-			/* OJO
-			
-			//console.log(this.map)
-			let t = new GTTrace({map: this.map.map});
-			
-			*/
-
-
-			
-			let menu = new Menu({
-				caption:"uuuu", 
-				autoClose: false,
-				target:_info2,
-				items: [
-					{
-						id: 1,
-                		caption:"o",
-                		action:(item, event) => {
-							t.play()
-						}
-					},
-					{
-						id: 1,
-                		caption:"x",
-                		action:(item, event) => {
-							t.addPoint()
-						}
-					},
-					{
-						id: 3,
-                		caption:"z",
-                		action:(item, event) => {
-							this.z()
-						}
-					}
-				]
-			 });
-			let _winInfo2 = new Float.Window({
-                visible:true,
-                caption:"Info 2",
-                child:_info2,
-                left:"center",
-                top:"top",
-                width: "300px",
-                height: "auto",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-
-			
-			
-
 		} 
-		
 		
         _load(main:any){
 
@@ -237,8 +153,26 @@ var GTGeofence = (($) => {
 			
 		}
 
+		requestFun(xhr){
+			let json = JSON.parse(xhr.responseText);
+			this.createForm(json);
+			let id = this.editId;
+			this.showGeofence(id, false);
+			
+			this.map.getControl("poly").play({
+				type:this.dataMain[id].type,
+				defaultCoordinates:this.dataMain[id].config,
+				onstop: ()=>{
+					this.showGeofence(id, true);
+					this.editId = null;
+				}
+			});
+		
+			
+		}
 		edit(id){
 
+			this.mode = 2;
 			this.editId = id;
 
 			S.send({
@@ -251,70 +185,98 @@ var GTGeofence = (($) => {
 					{
 						"t":"setMethod",
 						"id":"0",
-						"element":"gt-geogence",
-						"method":"geogence-load",
+						"element":"gt-geofence",
+						"method":"geofence-load",
 						"name":"",
 						"eparams":{
-							"geogenceId":id
+							"geofenceId":id
 						}
 					}
 			
-				]});
+				]
+			});
 			this.onEdit(id);
 			
 		}
-		updateTracking(data){
-			let unitId;
-			n = n + 0.001;
-			let a=0, b=0;
-			for(let x of data){
-				if(Math.floor(Math.random() * 10)>=8){
-					a = Math.random()/100;
-					b = Math.random()/300;
-				}else{
-					a = -Math.random()/100;
-					b = -Math.random()/300;
-				}
-				
-				
-				unitId = x.unit_id;
-				this.tracking[unitId].latitude = x.latitude*1.0+a;
-				this.tracking[unitId].longitude = x.longitude*1.0+b;
-				this.tracking[unitId].heading = x.heading;
-				if(this.marks[unitId]){
-					this.marks[unitId].setLngLat([this.tracking[unitId].longitude, this.tracking[unitId].latitude]);
 
-					this.marks[unitId].setPopup(this.loadPopupInfo(unitId));
-					this.setInfo(unitId);
-					
-					//let popup = this.evalHTML(this.popupTemplate, this.dataUnits[id]);
-					//popup = this.evalHTML(popup, this.tracking[id]);
-				}
-			}
-			if(this.followMe && this._lastUnitId){
-				this.panTo(this._lastUnitId);
-				this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
-			
-			}
-			if(this._traces[unitId]){
-			}
+
+		update(info){
+			this.getForm().setValue(info).setMode('update');
+			this.getForm().getInput("__mode_").setValue(2);
+			this.getForm().getInput("__id_").setValue(0);
+
+
+			this.dataMain[info.id] = info;
+			this.updatePoly(info.id);
 		}
 
-		requestFun(xhr){
-			let json = JSON.parse(xhr.responseText);
-			this.createForm(json);
-			let id = this.editId;
-			this.showSite(id, false);
-			this.map.getControl("mark").play({
-				defaultImage:this.dataMain[id].image,
-				defaultCoordinates:[this.dataMain[id].longitude*1, this.dataMain[id].latitude*1],
-				onstop: ()=>{
-					this.showSite(id, true);
-					this.editId = null;
-				}
-			});
-
+		updatePoly(id){
 			
+			
+			if(this.marks[id]){
+				
+				let item = this.menu.getByValue(id);
+				this.getMap().delete("geofence-"+id);
+				delete this.marks[id];
+				item.getCaption().text(this.dataMain[id].name);
+				
+			}else{
+
+				let info = {
+					id: this.dataMain[id].id,
+					caption:this.dataMain[id].name,
+					useCheck:true,
+					value: id,
+					checkValue:id,
+					checkDs:{"level":"geofences","geofenceId":id},
+					ds:{"geofenceId":id},
+
+					infoElement:$.create("span").addClass("geofence-edit").on("click",()=>{this.edit(this.dataMain[id].id);}),
+					check:(item, event)=>{
+						this.showGeofence(id, event.currentTarget.checked);
+					},
+					action:(item, event) => {
+						let ch = item.getCheck();
+						
+						ch.get().checked = true;
+						this.showGeofence(id, true);
+						this._lastUnitId = id;
+						this.setInfo(id);
+						this.flyTo(id);
+	
+					}
+					
+				};
+
+				m.add(info);
+			}
+			
+			
+			
+			this.showGeofence(id, true);
+			
+
+		}
+		
+		getForm(){
+			return this._form;
+		}
+
+		loadForm(info){
+			
+			if(this.editId === null){
+			
+				this._form.reset();
+			}else{
+				this.marks[this.editId].setLngLat(info.coordinates);
+				this.marks[this.editId].setImage(info.image);
+			}
+			
+			this._form.setValue({
+				image:info.image,
+				longitude:info.coordinates[0],
+				latitude:info.coordinates[1],
+			});
 		}
 		
 		play(){
@@ -421,7 +383,9 @@ var GTGeofence = (($) => {
 					value: x,
 					checkValue:x,
 					checkDs:{"level":"geofence","geofenceId":x},
-					infoElement:$.create("span").addClass("site-edit").on("click",()=>{this.edit(this.dataMain[x].id);}),
+					infoElement:$.create("span").addClass("geofence-edit").on("click",()=>{
+						this.edit(this.dataMain[x].id);
+					}),
 					ds:{"geofenceId":x},
 					check:(item, event)=>{
 						this.showGeofence(x, event.currentTarget.checked);

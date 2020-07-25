@@ -230,23 +230,20 @@
 }
 .sg-form.webcar .page {
   overflow: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  display: grid;
+  grid-gap: 5px;
+  padding: 4px;
+  grid-template-columns: repeat(auto-fit, [cc-start] minmax(180px, 1fr) [cc-end]);
   -ms-flex-line-pack: start;
-      align-content: flex-start;
-  padding: 10px;
+      align-content: start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .sg-form.webcar .page .field {
-  padding: 5px 0px 10px 0px;
-  min-width: 50%;
-  height: auto;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
 }
 .sg-form.webcar .page .field .label {
   color: #474747;
@@ -263,7 +260,7 @@
   font-size: 0.8em;
   padding: 4px;
   font-family: futurab;
-  width: auto;
+  width: 100%;
 }
 .sg-form.webcar .sg-menu {
   background-color: rgba(32, 32, 32, 0.6);

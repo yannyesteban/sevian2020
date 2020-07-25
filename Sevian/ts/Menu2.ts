@@ -26,11 +26,13 @@ var Menu =
         items:any[] = null;
         dataUser:any = null;
         onDataUser:Function = null;
+        propertys:any = null;
         events:any = null;
         action:any = null;
         menuInfo:any = null;
         menu:any = null;
         infoElement:any = null;
+        className:any = null;
         
         constructor(info){
             let x;
@@ -94,7 +96,9 @@ var Menu =
         }
         create(){
             let item = this.main = $.create("li").addClass("item").ds("value", this.value || "");
-
+            if(this.className){
+                item.addClass(this.className);
+            }
             if(this.ds){
                 item.ds(this.ds)
             }
@@ -167,6 +171,9 @@ var Menu =
                 for(let i in this.events){
                     link.on(i, $.bind(this.events[i], this.context || this, "event"));
                 }
+            }
+            if(this.propertys){
+                link.prop(this.propertys);
             }            
         }
         

@@ -474,6 +474,7 @@ var MapBox = (($, turf) => {
     class PolyControl{
         
         id:string = "mapboxgl-ctrl-poly";
+        type:string = "circle";
         _map:any = null;
         _container:any = null;
         _line:any = null;
@@ -499,6 +500,8 @@ var MapBox = (($, turf) => {
         _alpha:any = null;
 
         length:number = 0;
+
+        public defaultCoordinates:any = null;
         fill:any = {
             color: "#2fb5f9",
             opacity: 0.4
@@ -604,15 +607,30 @@ var MapBox = (($, turf) => {
             this._map = undefined;
         }
 
-        play(){
+        play(info?){
             this._parent.stopControls();
+            this.defaultCoordinates = info.defaultCoordinates || [];
+            this.type = info.type || this.type;
             if(this._mode == 0){
                 this._group.style("display","");
                 this._group1.style("display","none");
                 this._group2.style("display","");
                 this._mode = 1;
             }
-            this.setCircle();
+            switch(this.type){
+                case "circle":
+                   this.setCircle();
+                   break;
+                case "rectangle":
+                    this.setRectangle();
+                    break;
+                case "polygon":
+                    this.setPolygon();
+                    break;
+
+
+            }
+            
 
             
         }
@@ -666,11 +684,14 @@ var MapBox = (($, turf) => {
             }
         }
         setCircle(){
+           
+            console.log(this.defaultCoordinates);
             this._line = this._parent.draw(this.id, "circle",{
                 fill: this.fill,
                 line:this.line,
                 fillEdit: this.fill,
                 lineEdit:this.line,
+                coordinates: this.defaultCoordinates,
             });
             this._line.ondraw = (coordinates) => {
                 let radio = this._line.getRadio();
@@ -711,6 +732,7 @@ var MapBox = (($, turf) => {
                 line:this.line,
                 fillEdit: this.fill,
                 lineEdit:this.line,
+                coordinates: this.defaultCoordinates,
             });
             this._line.ondraw = (coordinates) => {
                 
@@ -4806,11 +4828,11 @@ var MapBox = (($, turf) => {
             return this._poly[name];
         }
         stop(){
-            
+            /*
             for(let poly of this._poly){
             
                 poly.stop();
-            }
+            }*/
             for(let x in this._poly){
                
                 this._poly[x].stop();

@@ -22,11 +22,13 @@ var Menu = (function ($, Float) {
             this.items = null;
             this.dataUser = null;
             this.onDataUser = null;
+            this.propertys = null;
             this.events = null;
             this.action = null;
             this.menuInfo = null;
             this.menu = null;
             this.infoElement = null;
+            this.className = null;
             let x;
             for (x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -79,6 +81,9 @@ var Menu = (function ($, Float) {
         }
         create() {
             let item = this.main = $.create("li").addClass("item").ds("value", this.value || "");
+            if (this.className) {
+                item.addClass(this.className);
+            }
             if (this.ds) {
                 item.ds(this.ds);
             }
@@ -140,6 +145,9 @@ var Menu = (function ($, Float) {
                 for (let i in this.events) {
                     link.on(i, $.bind(this.events[i], this.context || this, "event"));
                 }
+            }
+            if (this.propertys) {
+                link.prop(this.propertys);
             }
         }
     }

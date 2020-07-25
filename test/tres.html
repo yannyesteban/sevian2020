@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		.main{
+			display: grid;
+			_grid-template-columns: repeat(auto-fill, [linename1] minmax(200px, 1fr)[linename5]);
+			__grid-template-columns: max-content [linename1] 120px [linename2 linename3] 150px [linename4];
+			grid-template-columns: repeat(6, 100px);
+			gap: 10px;
+			align-content: start;  
+			background-color: pink; 
+
+		}
+		.x{
+			/*grid-area: linename3;*/
+		}
+
+		.zz{
+			
+		}
+
+		.a{
+			min-width: 60px;
+			height: 60px;
+			background-color: aqua;
+			border: blue 1px solid;
+		}
+		.f{
+			background-color: rgb(227, 129, 240);
+  			grid-column:  span 3 / 3;
+		}
+		.x{
+			background-color: rgb(130, 159, 221);
+  			_grid-column:  2/1;
+		}
+	</style>
+</head>
+<body>
+	<div class="main">
+		<div class="a">1</div>
+		<div class="a">2</div>
+		<div class="a">3</div>
+		<div class="a">4</div>
+		<div class="a">5</div>
+		<div class="a">6</div>
+		<div class="a">7</div>
+		<div class="a">8</div>
+		<div class="a">9</div>
+		<div class="a">10</div>
+		<div class="a">11</div>
+		<div class="a">12</div>
+		<div class="a">13</div>
+		<div class="a">14</div>
+		<div class="a f">15</div>
+		<div class="a">16</div>
+		<div class="a">17</div>
+		<div class="a">18</div>
+		<div class="a">19</div>
+		<div class="a">20</div>
+		<div class="a">21</div>
+		<div class="a">22</div>
+		<div class="a">23</div>
+		<div class="a">24</div>
+		<div class="a">25</div>
+		<div class="a">26</div>
+		<div class="a">27</div>
+		<div class="a">28</div>
+		<div class="a">29</div>		
+		<div class="a x">30</div>		
+		<div class="a">31</div>
+</div>
+</body>
+</html>

@@ -17,8 +17,8 @@
 	"pages":[],
 	"groups":{},
 	"infoFields":[
-		{"name":"id","caption":"Código A", "input": "","type":""},
-		{"name":"id","caption":"Código A", "input": "","type":""},
+		{"name":"id","caption":"Código A", "input": "input","type":"text"},
+		
 		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
 		"data":[
 			[0, "seleccione", "*"],

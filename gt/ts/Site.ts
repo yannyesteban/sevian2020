@@ -8,6 +8,7 @@ var GTSite = (($) => {
 		id:any = null;
 		map:any = null;
 		mode:number = 0;
+		tempPoly:any = null;
 
 		formId:any = null;
 		images:string[] = [];
@@ -119,8 +120,6 @@ var GTSite = (($) => {
 
 		}
 
-		
-
 		_create(main:any){
 			
 			this.main = main;
@@ -130,91 +129,7 @@ var GTSite = (($) => {
 			this.menu = this.createMenu();
 			this.createForm(this.form);
 			this._info = $().create("div").addClass("win-sites-info");
-			//this._info = $().create("div").addClass("win-units-info");
-
-
-			
-			return;
-
-			this.win = new Float.Window({
-                visible:true,
-                caption: this.caption,
-                child:main,
-                left:10,
-                top:40,
-                width: "300px",
-                height: "300px",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-			this._winInfo = new Float.Window({
-                visible:true,
-                caption:"Info",
-                child:this._info,
-                left:10,
-                top:"bottom",
-                width: "300px",
-                height: "auto",
-                mode:"auto",
-                className:["sevian"]
-			});
-			let _info2 = $().create("div").addClass("win-units-info");
-			/* OJO
-			
-			//console.log(this.map)
-			let t = new GTTrace({map: this.map.map});
-			
-			*/
-
-
-			
-			let menu = new Menu({
-				caption:"uuuu", 
-				autoClose: false,
-				target:_info2,
-				items: [
-					{
-						id: 1,
-                		caption:"o",
-                		action:(item, event) => {
-							t.play()
-						}
-					},
-					{
-						id: 1,
-                		caption:"x",
-                		action:(item, event) => {
-							t.addPoint()
-						}
-					},
-					{
-						id: 3,
-                		caption:"z",
-                		action:(item, event) => {
-							this.z()
-						}
-					}
-				]
-			 });
-			let _winInfo2 = new Float.Window({
-                visible:true,
-                caption:"Info 2",
-                child:_info2,
-                left:"center",
-                top:"top",
-                width: "300px",
-                height: "auto",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-
-			
-			
-
 		} 
-		
 		
         _load(main:any){
 
@@ -479,6 +394,7 @@ var GTSite = (($) => {
 		}
 
 		showSite(id, value){
+			
 			if(!this.marks[id]){
 				
 				/*
@@ -500,6 +416,7 @@ var GTSite = (($) => {
             });
 				
 			}else{
+				db (id, "white","blue")
 				this.marks[id].setVisible(value);
 			}
 		}

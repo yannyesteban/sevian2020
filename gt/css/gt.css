@@ -135,11 +135,11 @@ form {
   background-size: 20px 20px;
 }
 
-.item:hover > a > .site-edit {
+.item:hover > a > .site-edit, .item:hover .geofence-edit {
   visibility: visible;
 }
 
-.site-edit {
+.site-edit, .geofence-edit {
   width: 20px;
   height: 20px;
   margin-right: 6px;
@@ -387,5 +387,42 @@ form {
   border: 3px solid red;
   -webkit-animation: acc-close 0.5s ease-out forwards;
           animation: acc-close 0.5s ease-out forwards;
+}
+
+.icon-unit {
+  background-image: url(../../images/unit.png);
+}
+
+.icon-marker_001 {
+  background-image: url(../../images/marker_001.png);
+}
+
+.icon-info {
+  background-image: url(../../images/info.png);
+}
+
+.icon-pentagon {
+  background-image: url(../../images/pentagon.png);
+}
+
+.icon-clock_001 {
+  background-image: url(../../images/clock_001.png);
+}
+
+.icon-calendar {
+  background-image: url(../../images/calendar.png);
+}
+
+.sg-menu.webcar-menu .item a .image {
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.sg-menu.webcar-menu .item a .text {
+  display: none;
 }
 /*# sourceMappingURL=gt.css.map */

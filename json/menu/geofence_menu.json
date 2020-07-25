@@ -18,7 +18,7 @@
 						"t":"setMethod",
 						"id":"&P_panelId",
 						"element":"&P_element",
-						"method":"site_save",
+						"method":"geofence_save",
 						"name":"&P_elementName",
 						"eparams":null
 					},
@@ -26,7 +26,7 @@
 						"t":"setMethodx",
 						"id":"&P_panelId",
 						"element":"&P_element",
-						"method":"site-update",
+						"method":"geofence-update",
 						"name":"&P_elementName",
 						"eparams":null
 					}
@@ -45,7 +45,7 @@
 						"t":"setMethod",
 						"id":"&P_panelId",
 						"element":"&P_element",
-						"method":"site_save",
+						"method":"geofence_save",
 						"name":"&P_elementName",
 						"eparams":null
 					},
@@ -53,7 +53,7 @@
 						"t":"setMethodx",
 						"id":"&P_panelId",
 						"element":"&P_element",
-						"method":"site-update",
+						"method":"geofence-update",
 						"name":"&P_elementName",
 						"eparams":null
 					}

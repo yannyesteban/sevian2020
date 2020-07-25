@@ -54,19 +54,60 @@ class Webcar extends \Sevian\Element{
 			case 'site-update':
 
 				$userData = $this->getSes('_userData');
-				$site = new Site([
+				$geofence = new Geofence([
 					"id" => $this->id,
 					"userData"=>$userData
 				]);
-				//$site = new Site();
-				;
+				
 
 				$this->info[] = [
-					'method'  => 'siteUpdate',
+					'method'  => 'geofenceUpdate',
 					'value'=>$site->update(),
 					'_args' => [1,1,1]
 				];
 				break;
+			case 'geofence_save':
+			
+				$geofence = new Geofence();
+				
+				//hx($this->eparams->formData);
+				$msg = $geofence->save($this->eparams->formData);
+
+				$this->addFragment($msg);
+
+				$this->info[] = [
+					'method'  => 'geofenceUpdate',
+					'value'=>$geofence->loadGeofence($geofence->lastRecord),
+					'_args' => [1,1,1],
+					'id'=>$geofence->lastRecord
+				];
+				
+				break;
+
+			case 'geofence_load':
+
+				$userData = $this->getSes('_userData');
+				$geofence = new Geofence([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				
+				$geofence->load($this->eparams->geofenceId);
+				break;
+			case 'geofence-update':
+
+				$userData = $this->getSes('_userData');
+				$geofence = new Geofence([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				
+				$this->info[] = [
+					'method'  => 'geofenceUpdate',
+					'value'=>$geofence->update(),
+					'_args' => [1,1,1]
+				];
+				break;				
 			}
 
 		return true;
@@ -91,7 +132,10 @@ class Webcar extends \Sevian\Element{
 			"userData"=>$userData
 		]);
 		
-		$geofence = new Geofence();
+		$geofence = new Geofence([
+			"id" => $this->id,
+			"userData"=>$userData
+		]);
 		$history = new History();
 		$alarm = new Alarm();
 		$config = new Config();
