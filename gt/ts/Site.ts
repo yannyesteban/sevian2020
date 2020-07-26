@@ -60,6 +60,8 @@ var GTSite = (($) => {
 			<div>Dirección: {=speed}</div>
 		
 		</div>`;
+		
+		
 		public oninfo:Function = (info, name)=>{};
 		public delay:number = 30000;
 

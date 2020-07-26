@@ -1,0 +1,73 @@
+{
+	"name":"geofence_menu",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal","webcar-menu"],
+	"autoClose":false,
+	"params":false,
+	"items":[
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"geofence_save",
+						"name":"&P_elementName",
+						"eparams":null
+					},
+					{
+						"t":"setMethodx",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"geofence-update",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-exit_001",
+			"propertys":{
+				"title":"Mostrar Geocercas"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"geofence_save",
+						"name":"&P_elementName",
+						"eparams":null
+					},
+					{
+						"t":"setMethodx",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"geofence-update",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}
+		}
+	]
+}	

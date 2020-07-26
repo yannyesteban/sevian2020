@@ -47,19 +47,23 @@ form{
     height: 100%;
     overflow: auto;
 	//padding:4px;
-	background: rgb(243, 57, 57);
+	background: rgb(0, 0, 0);
    
     >.banner{
 		grid-row: 1;
 		grid-column: 1;
         
-        background-color: rgb(216, 14, 14);
+        background-color: rgb(0, 59, 56);
 	}
 	>.menu{
 		grid-row: 2;
 		grid-column: 1 ;
         
-		background-color: rgb(73, 73, 73);
+		//background-color: rgb(26, 152, 161);
+		background-color: rgb(13, 131, 139);
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
 		
 	}
 	>.body{
@@ -465,6 +469,18 @@ form{
 .icon-calendar{
 	background-image: url(../../images/calendar.png);
 }
+.icon-setting{
+	background-image: url(../../images/setting_001.png);
+}
+.icon-exit_001{
+	background-image: url(../../images/exit_001.png);
+}
+.icon-events{
+	background-image: url(../../images/events.png);
+}
+.icon-search{
+	background-image: url(../../images/search.png);
+}
 .sg-menu.webcar-menu{
 	
 	.item{
@@ -472,12 +488,11 @@ form{
 		a{
 			
 			.image{
-				width: 40px;
-				height: 40px;
+				
 				background-repeat: no-repeat;
 				background-position: center center;	
 				background-size: 24px 24px;
-				width: 24px;
+				width: 30px;
 				height: 24px;	
 			}
 			.text{
@@ -487,4 +502,49 @@ form{
 
 
 	}
+}
+.banner{
+	
+	display: flex;
+	flex-direction: row;
+	justify-items: stretch;
+	>*{
+		flex: 0 0 auto;
+	}
+	.logo-bestsecurity{
+		padding-left: 10px;
+		align-self: center;
+		img{
+			height: 50px;
+		}
+		
+	}
+	.logo-webcar{
+		flex: 1 1;
+		text-align: right;
+		font-size: 20pt;
+		color: white;
+		text-transform: capitalize;
+		font-family: andreab;
+		justify-self: right;
+		
+		
+		align-self: center;
+		padding-right: 10px;
+	
+	}
+}
+
+
+.sgWin{
+	border: 2px solid rgb(23, 100, 105) !important;
+	>.caption{
+		background-color: rgb(0, 59, 56) !important;
+	}
+}
+
+
+.unit-main{
+	display: flex;
+	flex-direction: row;
 }

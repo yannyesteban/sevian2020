@@ -34,7 +34,20 @@
 			"debug":0,
 			"design":0
 
+		},
+		{
+			"id":3,
+			"element":"s-menu",
+			"name":"/menu/tool",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
 		}
+
 	]
 
 }

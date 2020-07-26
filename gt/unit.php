@@ -23,6 +23,46 @@ class Unit
     public $_info = null;
 	
 	private $_jsonRequest = null;
+	private $popupTemplate = '<div class="units-popup">
+		<div class="unit-name">{=vehicle_name}</div>
+		<div><div>Placa</div><div>{=plate}</div></div>
+		<div><div>Marca</div><div>{=brand}</div></div>
+		<div><div>Modelo</div><div>{=model}</div></div>
+		<div><div>Color</div><div>{=color}</div></div>
+		
+		<div><div>Hora</div><div>{=date_time}</div></div>
+		<div><div>Lng</div><div>{=longitude}</div></div>
+		<div><div>Lat</div><div>{=latitude}</div></div>
+		
+		<div><div>Velocidad</div><div>{=speed}</div></div>
+		
+		<div><div>Heading</div><div>{=heading}</div></div>
+		<div><div>Satellite</div><div>{=satellite}</div></div>
+		<div><div>Inputs</div><div>{=speed}</div></div>
+		<div><div>Outputs</div><div>{=speed}</div></div>
+		
+		</div>';
+
+private $infoTemplate = '
+	<div class="units-info">
+	<div><div>Placa</div><div>{=plate}</div></div>
+	<div><div>Marca</div><div>{=brand}</div></div>
+	<div><div>Modelo</div><div>{=model}</div></div>
+	<div><div>Color</div><div>{=color}</div></div>
+
+	<div><div>Hora</div><div>{=date_time}</div></div>
+	<div><div>Lng - Lat</div><div>{=longitude}, {=latitude}</div></div>
+
+	<div><div>Velocidad</div><div>{=speed}</div></div>
+
+	<div><div>Heading</div><div>{=heading}</div></div>
+	<div><div>Satellite</div><div>{=satellite}</div></div>
+	<div><div>Inputs</div><div>{=speed}</div></div>
+	<div><div>Outputs</div><div>{=speed}</div></div>
+
+	</div>';
+
+	
 
     public function __construct($info = []){
         foreach($info as $k => $v){
@@ -56,6 +96,8 @@ class Unit
                     'dataClients'   => $this->loadClients(),
                     'dataAccounts'  => $this->loadAccounts(),
 					'tracking'      => $this->loadTracking(),
+					'popupTemplate' => $this->popupTemplate,
+					'infoTemplate'	=> $this->infoTemplate,
 					'pathImages'	=> PATH_IMAGES,
 					'caption'		=> 'Unidades',
 					'id'            => 'k',
@@ -79,6 +121,8 @@ class Unit
 			'dataClients'   => $this->loadClients(),
 			'dataAccounts'  => $this->loadAccounts(),
 			'tracking'      => $this->loadTracking(),
+			'popupTemplate' => $this->popupTemplate,
+			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES,
 			'caption'		=> 'Unidades',
 			'id'            => 'k',

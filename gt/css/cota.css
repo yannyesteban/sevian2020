@@ -43,24 +43,66 @@
   grid-column: 1/5;
 }
 
-.units-info {
+.units-popup {
+  background-color: white;
+  max-height: 200px;
+  width: 200px;
+  overflow: auto;
+  display: grid;
+  overflow: auto;
+  grid-gap: 2px;
+  text-transform: uppercase;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  -ms-flex-line-pack: start;
+      align-content: start;
+}
+.units-popup .unit-name {
+  text-align: center;
+  font-weight: bold;
+  color: #097e5b;
+}
+.units-popup > div {
+  background-color: #f7f7f7;
+}
+.units-popup > div > * {
   padding: 2px;
-  color: white;
-  font-size: 11px;
-  min-width: 240px;
+  display: inline;
+}
+.units-popup > div > :nth-child(1) {
+  color: #979797;
+  font-size: 10px;
+}
+.units-popup > div > :nth-child(2) {
+  padding-left: 8px;
+  color: #727272;
+  font-size: 12px;
+}
+
+.units-info {
+  padding: 4px;
+  font-size: 13px;
   display: grid;
   height: 100%;
   overflow: auto;
+  grid-gap: 5px;
   text-transform: uppercase;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  -ms-flex-line-pack: start;
+      align-content: start;
 }
 .units-info > div {
-  background-color: rgba(102, 102, 102, 0.575);
-  padding: 3px;
+  background-color: rgba(87, 87, 87, 0.555);
+  padding: 5px;
 }
-.units-info > div:nth-child(2n+1) {
-  color: #929292;
-  font-weight: bold;
+.units-info > div > :nth-child(1) {
+  padding-left: 10px;
+  color: #fdee20;
+  font-size: 11px;
+}
+.units-info > div > :nth-child(2) {
+  color: #b6b6b6;
+  font-size: 13px;
+  margin-top: 5px;
 }
 
 .wecar_info {

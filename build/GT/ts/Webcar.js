@@ -162,6 +162,7 @@ var GTWebcar = (($) => {
             this.loadGeofence(this.geofence);
             this.loadHistory(this.history);
             this.mainMenu();
+            //this.main.create("input").attr("type","text");
         }
         mainMenu() {
             let menu = new Menu({
@@ -271,44 +272,25 @@ var GTWebcar = (($) => {
                         }
                     },
                     {
-                        id: 6,
-                        caption: "E",
-                        action: (item, event) => {
-                        }
-                    },
-                    {
-                        id: 7,
-                        caption: "R",
-                        action: (item, event) => {
-                            db("rules");
-                            this.rule = this._unit.getMap().addRule('xxx', {
-                                name: "x"
-                            });
-                            this.rule.play();
-                        }
-                    },
-                    {
                         id: 8,
-                        caption: "L",
+                        imageClass: "icon-search",
+                        propertys: {
+                            "title": "Buscar"
+                        },
                         action: (item, event) => {
                             color = 'green';
                         }
                     },
                     {
-                        id: 9,
-                        caption: "O",
+                        id: 8,
+                        imageClass: "icon-events",
+                        propertys: {
+                            "title": "Eventos"
+                        },
                         action: (item, event) => {
-                            this.menu3();
+                            color = 'green';
                         }
                     },
-                    {
-                        id: 10,
-                        caption: "X",
-                        action: (item, event) => {
-                            let ii = this.m.getItem(1);
-                            ii.getCaption().text("Esteban");
-                        }
-                    }
                 ]
             });
         }
