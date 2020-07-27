@@ -456,7 +456,7 @@ var MapBox = (($, turf) => {
             this._group1.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
             this._btnRule = this._group1.create("button").prop({ "type": "button", "title": "Inicia la herramienta de Polígonos" }).addClass("icon-poly");
             this._btnRule.on("click", () => {
-                this.play();
+                this.play({});
             });
             this._group2 = this._container.create("div").style("display", "none");
             this._group2.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
