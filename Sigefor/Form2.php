@@ -5,9 +5,9 @@ require_once MAIN_PATH.'Sigefor/JasonFile.php';
 require_once MAIN_PATH.'Sigefor/DBTrait/DataRecord.php';
 //require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 
-require_once "component/Form2.php";
+require_once "Component/Form2.php";
 
-require_once "component/FormSave.php";
+require_once "Component/FormSave.php";
 
 class Form2 
 	extends \sevian\element 

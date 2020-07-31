@@ -1,7 +1,7 @@
 <?php
 namespace Sigefor\DBTrait;
 
-require_once 'template.php';
+require_once 'Template.php';
 
 trait Structure {
 	

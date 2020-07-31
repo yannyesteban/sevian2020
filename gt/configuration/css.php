@@ -36,9 +36,9 @@ $css = array(
 );
 
 $css = array(
-	"{$PATH}GT/css/gt.css",
-	"{$PATH}GT/css/cota_main.css",
-	"{$PATH}GT/css/cota.css",
+	"{$PATH}gt/css/gt.css",
+	"{$PATH}gt/css/cota_main.css",
+	"{$PATH}gt/css/cota.css",
 	"{$PATH}css/gt_form.css",
 	"{$PATH}css/Window.css",
 	"{$PATH}css/sg_calendar.css",
@@ -47,7 +47,7 @@ $css = array(
 	"{$PATH}css/gt_grid.css",
 	"{$PATH}css/Paginator.css",
 	"{$PATH}css/gt_command.css",
-	"{$PATH}GT/css/gt_catalogue.css",
+	"{$PATH}gt/css/gt_catalogue.css",
 	//"{$PATH}css/flyPopup.css",
 	/*
 	"{$PATH}css/gt_main.css",

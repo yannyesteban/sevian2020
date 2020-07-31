@@ -1,7 +1,7 @@
 <?php
 namespace Sigefor\DBTrait;
 require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
-require_once 'template3.php';
+require_once 'Template3.php';
 
 trait Structure3 {
 	

@@ -1,6 +1,6 @@
 <?php
 namespace Sigefor\DBTrait;
-require_once 'HTMLFileInfo.php';
+require_once 'HtmlFileInfo.php';
 
 trait Template3{
 	use HTMLFileInfo;

@@ -18,7 +18,7 @@ tambian pensar en un sistema de paginacion para el master query
 */
 
 
-require_once 'template.php';
+require_once 'Template.php';
 
 trait JasonFile{
 

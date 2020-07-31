@@ -4,7 +4,7 @@ namespace Sigefor\Component;
 //require_once MAIN_PATH.'Sigefor/DBTrait/JasonFileInfo.php';
 require_once MAIN_PATH.'Sevian/JS/Grid.php';
 require_once MAIN_PATH.'Sigefor/DBTrait/Grid.php';
-require_once MAIN_PATH.'Sigefor/component/Menu.php';
+require_once MAIN_PATH.'Sigefor/Component/Menu.php';
 
 class Grid extends \Sevian\JS\Grid {
 	

@@ -1,9 +1,9 @@
 <?php
 namespace sigefor;
 
-require_once 'DBTrait/user.php';
-require_once 'DBTrait/structure3.php';
-require_once 'DBTrait/groupelement.php';
+require_once 'DBTrait/User.php';
+require_once 'DBTrait/Structure3.php';
+require_once 'DBTrait/GroupElement.php';
 
 class structure3 
 	extends \Sevian\Element

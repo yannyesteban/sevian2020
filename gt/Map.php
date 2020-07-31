@@ -1,7 +1,7 @@
 <?php
 
 namespace GT;
-require_once MAIN_PATH.'GT/Trait.php';
+require_once MAIN_PATH.'gt/Trait.php';
 
 class Map extends \Sevian\Element{
 

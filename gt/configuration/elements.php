@@ -25,7 +25,7 @@ $cls_elements = [
 	'structure3' 		=> [
 		'enable' => true,
 		
-		'file' 	=> MAIN_PATH.'Sigefor/structure3.php',
+		'file' 	=> MAIN_PATH.'Sigefor/Structure3.php',
 		'class' => '\Sigefor\structure3',
 		'init'=>[
 			'patternJsonFile'=>JSON_PATH.'/{name}.json',
@@ -178,7 +178,7 @@ $cls_elements['gt_map'] = [
 ];
 $cls_elements['gt_unit'] = [
 	
-	'file' 	=> MAIN_PATH.'gt/unit.php',
+	'file' 	=> MAIN_PATH.'gt/Unit.php',
 	'class' => '\GT\Unit',
 	'enable' => true,
 	'js'=>[[
