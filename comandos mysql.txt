@@ -1,0 +1,24 @@
+/* MYSQL */
+
+1) This worked for me. First, create a new user. Example: User foo with password bar
+
+> mysql> CREATE USER 'foo'@'localhost' IDENTIFIED WITH mysql_native_password BY 'bar';
+
+2) Replace the below code with a username with 'foo'.
+
+> mysql> GRANT ALL PRIVILEGES ON database_name.* TO'foo'@'localhost';
+
+GRANT ALL PRIVILEGES ON *.* TO'foo'@'*';
+
+
+Paso 1
+Modificar el archivo de configuración de MySQL:
+
+sudo nano /etc/mysql/my.cnf
+
+Buscaremos las siguientes líneas y se descomentarán en caso de estar comentadas:
+
+    skip-external-locking
+    bind-address = 127.0.0.
+	
+sudo service mysql restart

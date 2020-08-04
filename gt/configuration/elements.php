@@ -34,6 +34,19 @@ $cls_elements = [
 		'js'=>[],
 		'css'=>[]
 	],
+	's-module' 		=> [
+		'enable' => true,
+		
+		'file' 	=> MAIN_PATH.'Sigefor/Module3.php',
+		'class' => '\Sigefor\Module3',
+		
+		'js'=>[],
+		'css'=>[],
+		'init'=>[
+			'patternJsonFile'=>MAIN_PATH.'json/{name}.json'
+			//'patternJsonFile'=>MODULE_PATH.'json/menu/{name}.json'
+		]
+	],
 	's-menu' 		=> [
 		'enable' => true,
 		
