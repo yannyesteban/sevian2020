@@ -56,6 +56,7 @@ form {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  justify-items: stretch;
 }
 .gt-layout > .body {
   grid-row: 3;
@@ -351,23 +352,70 @@ form {
   width: 180px;
 }
 
-.sg-form {
+.sg-form.flat {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+.sg-form.flat > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+.sg-form.flat .caption {
+  display: none;
+}
+.sg-form.flat .page {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.sg-form.flat .page > .field *:not(.option) {
+  height: 100%;
+}
+.sg-form.flat .page > .field > .label {
+  display: none;
+}
+.sg-form.flat .page > .field > .input {
+  padding: 2px;
+}
+.sg-form.flat .page > .field > .input input {
+  background-color: #f8f8f8;
+  color: #6d6d6d;
+  border: 0px;
+  font-size: 1em;
+}
+
+.-sg-form {
   width: 300px;
 }
-.sg-form .caption {
+.-sg-form .caption {
   display: none;
   color: #f7f7f7;
   text-align: center;
 }
-.sg-form .caption .text {
+.-sg-form .caption .text {
   font-size: 12pt;
   text-transform: uppercase;
   font-family: futurab !important;
 }
-.sg-form .page .field {
+.-sg-form .page .field {
   padding: 5px 0px 10px 0px;
 }
-.sg-form .page .field .label {
+.-sg-form .page .field .label {
   color: #d2ebff;
   text-transform: uppercase;
   font-size: 0.8em;
@@ -375,7 +423,7 @@ form {
   font-family: futurab;
   padding-left: 10px;
 }
-.sg-form .page .field input {
+.-sg-form .page .field input {
   background-color: #e7e7e7;
   color: #6d6d6d;
   border: 0px;
@@ -503,5 +551,6 @@ form {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  height: 100%;
 }
 /*# sourceMappingURL=gt.css.map */

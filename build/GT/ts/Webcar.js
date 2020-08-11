@@ -1,5 +1,5 @@
 var GTWebcar = (($) => {
-    let color = null;
+    //let color = null;
     class TraceMarker {
         constructor(map, size) {
             this.map = null;
@@ -831,3 +831,4 @@ var GTWebcar = (($) => {
     Webcar._instances = [];
     return Webcar;
 })(_sgQuery);
+//# sourceMappingURL=Webcar.js.map

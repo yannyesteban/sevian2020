@@ -7,7 +7,8 @@
     "sequence":{},
     "params":{},
     "vars":{
-        "structure":"cota"
+		"structure":"cota",
+		"module_name":"Cota"
     },
 	"theme":"sevian",
 	"debug":true

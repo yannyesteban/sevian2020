@@ -60,6 +60,8 @@ trait Menu2{
 			}
 		}
 		if($this->items?? false){
+
+			
 			if(is_string($this->items)){
 				$items = \Sevian\S::varCustom($this->items, $this->userData, '&P_');
 				$items = \Sevian\S::vars($items);

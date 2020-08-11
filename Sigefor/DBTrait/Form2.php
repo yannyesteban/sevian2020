@@ -241,7 +241,7 @@ trait Form2{
 			
 			}
 
-			if($field->events){
+			if($field->events && is_string($field->events)){
 				$params = str_replace("\r\n", '\\n', $field->events);
 				$params = str_replace("\t", '',  ($params));
 				$params = \Sevian\S::varCustom($params, $this->userData, '&P_');

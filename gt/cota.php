@@ -1,13 +1,11 @@
 <?php
 namespace GT;
-
-require_once MAIN_PATH.'gt/Trait.php';
-
+require_once 'Unit.php';
+require_once 'Site.php';
+require_once 'Geofence.php';
+require_once 'History.php';
 class Cota extends \Sevian\Element{
-
-	use DBClient;
-	use DBAccount;
-	use DBUnit;
+	static $patternJsonFile = '';
 
 	public function __construct($info = []){
         foreach($info as $k => $v){
@@ -20,15 +18,98 @@ class Cota extends \Sevian\Element{
 
 		if($method === false){
             $method = $this->method;
-        }
+		}
+		
 		switch($method){
 			case 'load':
 				$this->load();
 				break;
-			case 'x':
+			case 'site_save':
+				
+				$site = new Site();
+				
+				//hx($this->eparams->formData);
+				$msg = $site->save($this->eparams->formData);
 
+				$this->addFragment($msg);
+
+				$this->info[] = [
+					'method'  => 'siteUpdate',
+					'value'=>$site->loadSite($site->lastRecord),
+					'_args' => [1,1,1],
+					'id'=>$site->lastRecord
+				];
+				
 				break;
-		}
+
+			case 'site_load':
+
+				$userData = $this->getSes('_userData');
+				$site = new Site([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				//$site = new Site();
+				$site->load($this->eparams->siteId);
+				break;
+			case 'site-update':
+
+				$userData = $this->getSes('_userData');
+				$geofence = new Geofence([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				
+
+				$this->info[] = [
+					'method'  => 'geofenceUpdate',
+					'value'=>$site->update(),
+					'_args' => [1,1,1]
+				];
+				break;
+			case 'geofence_save':
+			
+				$geofence = new Geofence();
+				
+				//hx($this->eparams->formData);
+				$msg = $geofence->save($this->eparams->formData);
+
+				$this->addFragment($msg);
+
+				$this->info[] = [
+					'method'  => 'geofenceUpdate',
+					'value'=>$geofence->loadGeofence($geofence->lastRecord),
+					'_args' => [1,1,1],
+					'id'=>$geofence->lastRecord
+				];
+				
+				break;
+
+			case 'geofence_load':
+
+				$userData = $this->getSes('_userData');
+				$geofence = new Geofence([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				
+				$geofence->load($this->eparams->geofenceId);
+				break;
+			case 'geofence-update':
+
+				$userData = $this->getSes('_userData');
+				$geofence = new Geofence([
+					"id" => $this->id,
+					"userData"=>$userData
+				]);
+				
+				$this->info[] = [
+					'method'  => 'geofenceUpdate',
+					'value'=>$geofence->update(),
+					'_args' => [1,1,1]
+				];
+				break;				
+			}
 
 		return true;
 	}
@@ -37,55 +118,57 @@ class Cota extends \Sevian\Element{
 	public function load(){
 		$this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-cota-'.$this->id;
-		//$this->panel->innerHTML = "cooota";
-		$this->typeElement = 'Cota';
-
-		$main_form =  new \Sigefor\Component\Form([
+		
+		$this->typeElement = 'GTCota';
+		$unit = new Unit();
+		$userData = [
 			'panelId'=>$this->id,
-			//'name'=>$this->name,
-			'name'=>'gt_cota_unit',
-			'method'=>'request',
-			'mode'=>1
-			//'record'=>$this->getRecord()
-		]);	
+			'element'=>$this->element,
+			'elementName'=>$this->name,
+			'elementMethod'=>$this->method
+		];
+		$this->setSes('_userData', $userData);
+		$site = new Site([
+			"id" => $this->id,
+			"userData"=>$userData
+		]);
+		
+		$geofence = new Geofence([
+			"id" => $this->id,
+			"userData"=>$userData
+		]);
+		$history = new History();
+		$alarm = new Alarm();
+		$config = new Config();
+		$comm = new Communication();
 
-
-		$this->containerId = "y";
-
-		$unit = new Unit([
-			'asyncMode'	=> false,
+		$form =  new \Sigefor\Component\Form2([
+			
 			'id'		=> $this->containerId,
 			'panelId'	=> $this->id,
-			'name'		=> 'cc',
-			'method'	=> 'load',
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/gt_cota_unit', self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 1,
+			'userData'=> [],
 			
-			
-			
-			
+			//'record'=>$this->getRecord()
 		]);
-		$unit->evalMethod('load-units');
+		
 		$this->info = [
-			'id'=>$this->panel->id,
-			'panel'=>$this->id,
-			'tapName'=>'yanny',
-			'unit'=>$unit,
-			'form'	=> $main_form,
+			'id'		=> $this->panel->id,
+			'panel'		=> $this->id,
+			'unit'		=> $unit->init(),
+			'site'		=> $site->init(),
+			'geofence'	=> $geofence->init(),
+			'history'	=> $history->init(),
+			'alarm'		=> $alarm->init(),
+			'config'	=> $config->init(),
+			'form'		=> $form,
+			'comm'		=> $comm->init(),
 		];
-		//print_r( );
 
-
-		/*
-		$f = new  \Sigefor\sform([
-			'containerId'=>'list-commands',
-			"id"=>$this->id,
-			//"id"=>$this->panel->id,
-			"name"=>"h_commands",
-			"method"=>"request",
-			'eparams' => &$this->eparams
-		]);
-
-		$f->evalMethod('request');
-		$this->addJasonComponent($f);
-		*/
+		
 	}
 }
+
+

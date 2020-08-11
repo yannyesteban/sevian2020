@@ -228,3 +228,4 @@ var SortList = (($) => {
     I.register("sort", SortList);
     return SortList;
 })(_sgQuery);
+//# sourceMappingURL=ListOrder.js.map

@@ -370,3 +370,4 @@
         let m3 = new Menu(Info);
     };
 })(_sgQuery, _sgFloat);
+//# sourceMappingURL=Menu11.js.map

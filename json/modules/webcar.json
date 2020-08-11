@@ -1,0 +1,15 @@
+{
+	"module":"cota",
+	"title":"Módulo Principal",
+	"structure":"login",
+	"config":{},
+	"procedure":{},
+    "sequence":{},
+    "params":{},
+    "vars":{
+        "structure":"webcar",
+		"module_name":"Webcar"
+    },
+	"theme":"sevian",
+	"debug":true
+}

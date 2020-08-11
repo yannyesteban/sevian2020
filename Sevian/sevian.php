@@ -62,7 +62,7 @@ class S{
 	private static $_jsConfigPanel = [];
 	
 	private static $ins = false;
-	private static $onAjax = false;
+	private static $onAjax = 0;
 	
 	public static $_js = [];
 	private static $_css = [];
@@ -84,6 +84,7 @@ class S{
 	private static $_jsonRequest = null;
 
 
+	private static $_userData = [];// variables de sesion para cada panel
 	private static $_pVars = [];// variables de sesion para cada panel
 	private static $_gVars = [];// variables de sesion del modulo
 
@@ -252,7 +253,7 @@ class S{
 			self::$cfg['P_VARS'] = &self::$_pVars;
 			self::$cfg['G_VARS'] = &self::$_gVars;
 
-			
+			self::$cfg['USER_DATA'] = &self::$_userData;
 
 		}else{
 			self::$cfg['INIT'] = false;
@@ -277,7 +278,10 @@ class S{
 			
 			self::$_pVars = &self::$cfg['P_VARS'];
 			self::$_gVars = &self::$cfg['G_VARS'];
-			
+
+
+			self::$_userData = &self::$cfg['USER_DATA'];
+
 			//self::evalElements();
 			foreach(self::$_panels as $info){
 				$info->update = false;
@@ -319,15 +323,22 @@ class S{
 		$info->async = self::$onAjax;
 		
 		self::$_info[$info->id] = $info;
+		if(!isset(self::$_userData[$info->id])){
+			self::$_userData[$info->id] = [];
+		}
+		$info->_data_user = self::$_userData[$info->id];
+
 		$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
 		
+
 		if(!isset(self::$_pVars[$info->id])){
 			self::$_pVars[$info->id] = [];
 		}
 		$e->pVars = &self::$_pVars[$info->id];
-
 		$e->setVPanel(self::$_pVars[$info->id]);
 		$e->gVars = &self::$_gVars;
+
+
 		if($e instanceof \Sevian\UserInfo){
 			$e->setUserInfo(self::getUserInfo());
 		}
@@ -388,21 +399,26 @@ class S{
 			self::$_str->addPanel($info->id, $_panel);
 			//print_r($e->config());
 			//self::addJsPanel($e->config());
-			self::addJsPanel($e->configPanel());
+			//si self::addJsPanel($e->configPanel());
 			if($e instanceof \Sevian\JsPanelRequest){
 				//self::addJsPanel($e->getJsConfigPanel());
 			}
 		
 		}else{
-			self::addJsConfigPanel($e->updatePanel());
+			//si self::addJsConfigPanel($e->updatePanel());
 		}
+
+		self::addJsPanel($e->configPanel());
+		self::addJsConfigPanel($e->updatePanel());
+
+		
 		//self::addJsPanel($e->configPanel());
 		
 		if($e instanceof \Sevian\JsElementRequest){
 			self::addJsElement($e->getJsElement());
 		}
 		
-		self::addJsComponents($e->getJasonComponents());
+		self::addJsComponents($e->getJsonComponents());
 		
 	}
 
@@ -851,7 +867,7 @@ class S{
 		$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
 		
 		$script = "Sevian.action.initPanel($json)";
-		$script = "S.defaultPanel= '".self::$defaultPanel."';S.winInit($win);S.init($json);";
+		$script = "S.instance = '".self::$ins."';S.sw = '".self::$cfg['SW']."';S.sw2 = '".self::$cfg['SW']."';S.defaultPanel= '".self::$defaultPanel."';S.winInit($win);S.init($json);";
 		
 		$response = [
 			//'panels'=>$p,
@@ -952,6 +968,10 @@ class S{
 		//5.-
 
 		if(self::$_jsonRequest){
+			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT);	
+		}
+
+		if(self::$onAjax == 2){
 			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT);	
 		}
 

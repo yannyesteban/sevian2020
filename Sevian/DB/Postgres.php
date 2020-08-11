@@ -73,7 +73,7 @@ class Postgres extends DBase{
 		$this->fieldCount = false;
 		$this->pageCount = 0;
 		
-		if($this->result = @pg_query($this->query)){
+		if($this->result = $this->_query($this->query)){
 			$this->fieldCount = @pg_num_fields($this->result);
 		}
 		
@@ -99,7 +99,7 @@ class Postgres extends DBase{
 					$this->page = 1;
 				}// end if
 				$firstRecord = $this->pageLimit * ($this->page - 1);
-				$this->result = @pg_query($this->query." LIMIT $this->pageLimit OFFSET $firstRecord");
+				$this->result = $this->_query($this->query." LIMIT $this->pageLimit OFFSET $firstRecord");
 				$this->recordCount = @pg_num_rows($this->result);
 				$this->fieldCount = @pg_num_fields($this->result);
 				
@@ -514,6 +514,11 @@ class Postgres extends DBase{
 		return $fields;
 
     }// end function
+
+	private function _query($q){
+		$q = $this->evalQuery($q);
+		return @pg_query($q);
+	}
 
 	function begin(){
         

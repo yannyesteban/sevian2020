@@ -533,3 +533,4 @@ var Menu2 = (function ($, Float) {
     };
     return Menu;
 })(_sgQuery, Float.Float);
+//# sourceMappingURL=Menu.js.map

@@ -525,3 +525,4 @@ var sgMap = (($) => {
     }
     return Map;
 })(_sgQuery);
+//# sourceMappingURL=Map.js.map

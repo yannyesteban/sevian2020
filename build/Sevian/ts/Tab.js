@@ -264,3 +264,4 @@ const Tab = (function ($) {
     }
     return Tab;
 })(_sgQuery);
+//# sourceMappingURL=Tab.js.map

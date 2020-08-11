@@ -412,3 +412,4 @@ var GTSite = (($) => {
     Site._instances = [];
     return Site;
 })(_sgQuery);
+//# sourceMappingURL=Site.js.map

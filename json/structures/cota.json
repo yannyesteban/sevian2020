@@ -1,0 +1,54 @@
+{
+	"structure":"webcar",
+	"title":"Módulo GT",
+	"template":"gt-cota",
+	"templateName":"/gt-webcar",
+	"themeTemplate":"",
+	"class":"webcar",
+	"mainPanel":4,
+	"params":{},
+	"wins":[],
+	"roles":[],
+	"publicRole":true,
+	"elements":[
+		{
+			"id":4,
+			"element":"command",
+			"e":"gt_map",
+			"name":"gt_map",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":2,
+			"element":"gt_cota",
+			"name":"gt_cota",
+			"method":"load",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":3,
+			"element":"s-menu",
+			"name":"/menu/tool",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		}
+
+	]
+
+}

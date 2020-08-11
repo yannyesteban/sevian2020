@@ -3876,3 +3876,4 @@ var MapBox = (($, turf) => {
     }
     return Map;
 })(_sgQuery, turf);
+//# sourceMappingURL=MapBox.js.map

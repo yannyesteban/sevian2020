@@ -881,3 +881,4 @@ var Grid2 = (($) => {
     Grid._objs = [];
     return Grid;
 })(_sgQuery);
+//# sourceMappingURL=Grid2.js.map

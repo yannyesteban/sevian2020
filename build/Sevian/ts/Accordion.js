@@ -212,3 +212,4 @@ const Accordion = (function ($) {
     });
     return Tab;
 })(_sgQuery);
+//# sourceMappingURL=Accordion.js.map

@@ -30,6 +30,10 @@ var S = (($) => {
 	};
     class Sevian{
 
+		public static instance = null;
+		public static sw = 0;
+		public static sw2 = 0;
+		
 		static _e:object[] = [];
 		static _w:object[] = [];
 		static _components:object[] = [];
@@ -48,7 +52,7 @@ var S = (($) => {
 			
             for(var x of info){
 				
-                if(window[x.type]){
+                if(window[x.type] && x.option !== null){
                     this._e[x.panel] = new window[x.type](x.option);
                 }	
             }

@@ -450,3 +450,4 @@ var GTConfig = (($) => {
     Config._instances = [];
     return Config;
 })(_sgQuery);
+//# sourceMappingURL=Config.js.map

@@ -427,7 +427,7 @@ class Command extends \Sevian\Element{
 		$form = [
 			'caption'=>"Command: <span class=\"command_name\">$command</span>",
 			'fields'=>$fields,
-			'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
+			//'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
 		];
 
 		//print_r($records);exit;
@@ -709,7 +709,7 @@ class Command extends \Sevian\Element{
 		$form = [
 			'caption'=>"Command: <span class=\"command_name\">$command</span>",
 			'fields'=>$fields,
-			'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
+			//'menu'=> new \Sigefor\Component\Menu(['name'=>'gt_params'])
 		];
 
 		//print_r($records);exit;

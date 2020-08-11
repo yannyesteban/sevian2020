@@ -1,0 +1,32 @@
+{
+	"form":"gt_cota_unit",
+	"caption":"",
+	"className":["cota-unit","flat"],
+    "query":"SELECT '' as unit_id,'' as go",
+    "query2":"SELECT '' as unit_id, '' as go, '' as info, '' as cmd, '' as t1, '' as t2, '' as t3, '' as c, '' as h",
+	"menuName":"",
+	"methods":{
+		"request":{
+			"menuName":""
+		},
+		"load":{
+			"menuName":""
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+        {"name":"unit_id","caption":"","input":"list","type":"text",
+            "data":[["","--","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM units as u LEFT JOIN units_names as vn ON vn.id = u.name_id LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"]
+        },
+		{"name":"go","input":"input","type":"button"}
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

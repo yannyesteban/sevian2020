@@ -474,3 +474,4 @@ var List = (($) => {
     I.register("list", List);
     return List;
 })(_sgQuery);
+//# sourceMappingURL=List.js.map

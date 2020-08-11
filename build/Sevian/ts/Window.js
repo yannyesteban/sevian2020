@@ -1122,3 +1122,4 @@ Float.Popup = (($) => {
     });
     return Popup;
 })(_sgQuery);
+//# sourceMappingURL=Window.js.map

@@ -368,3 +368,4 @@ var Menu = (function ($, Float) {
     }
     return Menu;
 })(_sgQuery, Float.Float);
+//# sourceMappingURL=Menu2.js.map

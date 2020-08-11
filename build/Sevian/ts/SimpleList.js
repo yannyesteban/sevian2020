@@ -162,3 +162,4 @@ var SimpleList = (($) => {
     I.register("input", Input);
     return Input;
 })(_sgQuery);
+//# sourceMappingURL=SimpleList.js.map

@@ -1145,3 +1145,4 @@ function loadMenu() {
 _sgQuery(window).on("load", function () {
     //loadMenu()
 });
+//# sourceMappingURL=MenuDesign.js.map

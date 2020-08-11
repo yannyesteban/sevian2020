@@ -459,3 +459,4 @@ var GTGeofence = (($) => {
     Geofence._instances = [];
     return Geofence;
 })(_sgQuery);
+//# sourceMappingURL=Geofence.js.map

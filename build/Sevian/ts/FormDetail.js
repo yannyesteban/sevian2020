@@ -90,3 +90,4 @@ var FormDetail = (($) => {
     }
     return FormDetail;
 })(_sgQuery);
+//# sourceMappingURL=FormDetail.js.map

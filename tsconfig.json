@@ -1,8 +1,9 @@
 {
+    "compileOnSave": true,
     "compilerOptions": {
         "target": "es6",
         "module": "es6",
-        "sourceMap": false,
+        "sourceMap": true,
         "outDir": "./build"
         //"outDir": "js",
         //"rootDir": "./ts"

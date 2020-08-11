@@ -450,3 +450,4 @@ var GTHistory = (($) => {
     History._instances = [];
     return History;
 })(_sgQuery);
+//# sourceMappingURL=History.js.map

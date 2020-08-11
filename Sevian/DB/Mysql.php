@@ -88,7 +88,7 @@ class Mysql extends DBase{
 		$this->fieldCount = false;
 		$this->pageCount = 0;
 		
-		if($this->result = $this->c->query($this->query)){
+		if($this->result = $this->_query($this->query)){
 			
 			if(isset($this->result->field_count)){
 				$this->fieldCount = $this->result->field_count;
@@ -118,7 +118,7 @@ class Mysql extends DBase{
 					$this->page = 1;
 				}
 				$firstRecord = $this->pageLimit * ($this->page - 1);
-				$this->result = $this->c->query($this->query." LIMIT $firstRecord, $this->pageLimit");
+				$this->result = $this->_query($this->query." LIMIT $firstRecord, $this->pageLimit");
 				$this->recordCount = $this->result->num_rows;
 				$this->fieldCount = $this->result->field_count;
 	        }
@@ -207,9 +207,10 @@ class Mysql extends DBase{
 		if ($result!=''){
 			$this->result = $result;
         }
-		//hr($this->query);
+		//hr($this->query, "red");
 		if($this->errno){
 			hr($this->query);
+			hr($this->error);
 			hr($this->errno);
 			//return false;
 			
@@ -305,7 +306,7 @@ class Mysql extends DBase{
 			$q = $q." LIMIT 0";
 		}
 		
-		$result = $this->c->query($q);
+		$result = $this->_query($q);
 		
 		if ($this->c->errno){
 			$this->errno = $this->c->errno;
@@ -416,7 +417,12 @@ class Mysql extends DBase{
 		}// end while
 		return $fields;
     }
-
+	private function _query($q){
+		//hr($q, "purple");
+		$q = $this->evalQuery($q);
+		//hr($q, "green");
+		return $this->c->query($q);
+	}
 	public function begin(){
 		$this->c->query("BEGIN");
 		

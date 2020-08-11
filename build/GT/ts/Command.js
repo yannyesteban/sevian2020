@@ -196,3 +196,4 @@ var Command = (($) => {
     }
     return Command;
 })(_sgQuery);
+//# sourceMappingURL=Command.js.map

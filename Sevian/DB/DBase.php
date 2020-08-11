@@ -76,7 +76,8 @@ abstract class DBase{
 	public $error = false;
 	public $lastId = false;
 	public $affectedRows = false;	
-	
+	public $userData = [];
+
 	public function __construct($server="", $user="", $pass="", $dbase="", $port="", $charset = "") {
 		
 		
@@ -288,6 +289,51 @@ abstract class DBase{
 		return $q;		
 	}// end function
 
+	public function evalQuery($q, $userData = []){
+
+		$q = $this->evalVar($q, '@\?', \Sevian\S::getVSes());
+		$q = $this->evalVar($q, '\#\?', \Sevian\S::getVReq());
+		$q = $this->evalVar($q, '&EX_\?', \Sevian\S::getVExp());
+		$q = $this->evalVar($q, '&\?', $userData);
+		
+		return $q;
+		
+	}
+	public function evalVar($q, $t, $data, $default = false){
+		
+		if($q == "" or count($data) == 0){
+			return $q;	
+		}// end if
+		
+		$exp="{
+			(?:(?<![\{\\\])$t(\w++))
+			|
+			(?:\{$t(\w++)\})
+			|
+			(?:([\\\]($t\w++)))
+			
+		}isx";
+	
+		$q = preg_replace_callback($exp,
+			function($i) use (&$data, $default){
+				
+				
+				if(isset($data[$i[1]])){
+					return $this->addSlashes($data[$i[1]]);
+				}elseif(isset($i[2]) and $i[2] != "" and isset($data[$i[2]])){
+					return $this->addSlashes($data[$i[2]]);
+				}elseif(isset($i[4])){
+					return $this->addSlashes($i[4]);
+				}else{
+					if($default !== false){
+						return $default;	
+					}else{
+						return $this->addSlashes($i[0]);
+					}// end if
+				}// end if
+			},$q);
+		return $q;		
+	}
 	abstract public function prepare($sql);
 		
 }

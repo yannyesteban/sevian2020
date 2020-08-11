@@ -101,7 +101,7 @@ $cls_elements = [
 	'sgMap' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Map.php',
 		'class' => '\Sevian\Sigefor\Map',
-		'enable' => true,
+		'enable' => false,
 		'js'=>[
 			
 			[
@@ -171,17 +171,21 @@ $cls_elements['gt_cota'] = [
 	'class' => '\GT\Cota',
 	'enable' => true,
 	'js'=>[[
-		'file' 	=> MAIN_PATH.'gt/js/Cota.js',
+		'file' 	=> MAIN_PATH.'build/GT/ts/Cota.js',
 		'begin'=> false
 	]],
-	'css'=>[]
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	]
 	
 ];
 $cls_elements['gt_map'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Map.php',
 	'class' => '\GT\Map',
-	'enable' => true,
+	'enable' => false,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/Map.js',
 		'begin'=> false
@@ -201,6 +205,7 @@ $cls_elements['gt_unit'] = [
 	'css'=>[]
 	
 ];
+
 $cls_elements['gt-site'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Site.php',
@@ -208,6 +213,23 @@ $cls_elements['gt-site'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/Site.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
+$cls_elements['gt-communication'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Communication.php',
+	'class' => '\GT\Communication',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Communication.js',
 		'begin'=> false
 	]],
 	'css'=>[],

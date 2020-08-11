@@ -1,0 +1,80 @@
+{
+	"form":"gt_form_command",
+	"caption":"",
+	"className":["gt-command-main", "gt-command-main"],
+    "query":"SELECT '' as command_idx, '' as b1, '' as b2, '' as b3, '' as b4",
+	"menuName":"",
+	"methods":{
+		"request":{
+			"menuName":""
+		},
+		"load":{
+			"menuName":""
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+        {
+            "name":"command_idx",
+            "caption":"",
+            "input":"list",
+            "type":"text","mode_value":"0",
+            "data":["SELECT c.id, c.command FROM devices_commands as c INNER JOIN devices as d on d.version_id = c.version_id WHERE d.id = '&EX_?unitId' ORDER BY 2"],
+            "childs":true,
+            "params":{"placeholder":"...KEY COMMAND"}
+        },
+        {
+            "name":"b1",
+            "caption":"",
+            "default":"+",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "events":{
+                "click":"this.send2()"
+            }
+        },
+        {
+            "name":"b2",
+            "caption":"",
+            "default":"L",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "events":{
+                "change":"this.send(this.form.getInput('account_idx').getValue());"
+            }
+        },
+        {
+            "name":"b3",
+            "caption":"",
+            "default":"G",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "events":{
+                "change":"this.send(this.form.getInput('account_idx').getValue());"
+            }
+        },
+        {
+            "name":"b4",
+            "caption":"",
+            "default":"H",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "events":{
+                "change":"this.send(this.form.getInput('account_idx').getValue());"
+            }
+        }
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

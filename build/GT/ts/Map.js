@@ -71,3 +71,4 @@ var GTMap = (($) => {
     Map._loadFuntions = [];
     return Map;
 })(_sgQuery);
+//# sourceMappingURL=Map.js.map

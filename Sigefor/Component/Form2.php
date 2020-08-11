@@ -29,12 +29,14 @@ class Form2 extends \Sevian\JS\Form{
 		$this->loadForm($this->name, $this->record, $this->patternJsonFile);
 		
 		//$this->menu = new Menu(['name'=>$this->menuName]);
-		
-		$this->menu = new Menu([
+		if($this->menuName){
+			$this->menu = new Menu([
 			'name'=>$this->menuName,
 			'userData'=>&$this->userData,
 			'onDataUser'=>$this->onDataUser?? 'S.send(dataUser);' 
 			]);
+		}
+		
 		
 
 	}

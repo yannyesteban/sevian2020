@@ -1,6 +1,6 @@
 var GTWebcar = (($) => {
 
-	let color = null;
+	//let color = null;
 	class TraceMarker{
         map:any = null;
         width: number = 10;

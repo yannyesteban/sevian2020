@@ -1,0 +1,65 @@
+{
+	"form":"gt_comm_main",
+	"caption":"",
+	"className":"gt-command-main",
+	"query":"SELECT '' as client_idx, '' as account_idx, '' as unit_idx, '' as connect",
+	"_menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"_menuName":"/menu/request"
+		},
+		"load":{
+			"_menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+        {
+            "name":"client_idx",
+            "caption":"Cliente",
+            "input":"list",
+            "type":"text","mode_value":"0",
+            "data":[["","--","*"],"SELECT id, client FROM clients ORDER BY 2"],
+            "childs":true
+        },
+        {
+            "name":"account_idx",
+            "caption":"Cuenta",
+            "input":"list",
+            "type":"text","mode_value":"0",
+            "data":[["",". seleccione","*"], "SELECT id, name, client_id FROM accounts a ORDER BY name;"],
+            "childs":true,
+            "parent":"client_idx"
+        },
+        {
+            "name":"unit_idx",
+            "caption":"Unit",
+            "input":"list",
+            "type":"text","mode_value":"0",
+            "data":[["",". seleccione","*"], "SELECT u.id as unit_id, un.name as unit_name, account_id, device_id FROM units as u INNER JOIN units_names as un on un.id = u.name_id ORDER BY account_id, unit_name"],
+            "parent":"account_idx",
+            "events":{
+                "change":"this.send(this.form.getInput('unit_idx').getValue());"
+            }
+        },
+        {
+            "name":"connect",
+            "default":"connect",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":"btn-connect"}
+            
+
+        }
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

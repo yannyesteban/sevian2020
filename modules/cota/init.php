@@ -278,6 +278,14 @@ $init = [
 	'templateName' => 'main',
 	'defaultPanel' => 4,
 	'elements' => [
+		[
+            'id'=>20,
+            'element'=>'s-module',
+            'name'=>'/modules/cota',
+            'method'=>'load',
+            'designMode'=>true,
+            'fixed'=>true
+        ],
 
 		[
 			'id'		=> 22,
@@ -287,15 +295,8 @@ $init = [
 			'method'	=> 'load',
 			'designMode'=> true,
 			'fixed'		=> true,
-        ],
-        [
-            'id'=>20,
-            'element'=>'s-module',
-            'name'=>'/modules/cota',
-            'method'=>'load',
-            'designMode'=>true,
-            'fixed'=>true
         ]
+        
 	],
 	
 	'panels'	=> [],

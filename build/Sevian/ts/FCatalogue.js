@@ -47,3 +47,4 @@ var SGFCatalogue = (($) => {
     }
     return FCatalogue;
 })(_sgQuery);
+//# sourceMappingURL=FCatalogue.js.map

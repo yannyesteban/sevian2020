@@ -19,6 +19,9 @@ class Element{
 	public $title = '';
 	public $panel = null;
 	public $containerId = null;
+
+	public $_data_user = [];
+
 	protected $_signs = null;
 	protected $_listen = null;
 	protected $_secBefore = null;
@@ -29,6 +32,7 @@ class Element{
 	protected $_components = null;
 	protected $typeElement = "panel";
 	protected $info = null;
+	protected $panelActions = null;
 	protected $_configInput = null;
 	
 	protected $_vPanel = [];
@@ -40,7 +44,13 @@ class Element{
 		}
 
 	}
+	
 	public function config(){
+	
+	}
+	
+	public function evalMethod(){
+		
 	}
 
 	public function configPanel(){
@@ -56,22 +66,18 @@ class Element{
 	public function updatePanel(){
 		return new jsUpdatePanel([
 			"panel" => $this->id,
-			"actions"=> $this->info,
+			"actions"=> $this->panelActions??$this->info,
 			"debug" => "hola",
 			
 		]);	
 	}
-
-
-	public function evalMethod(){
-		
-	}
-
+	
 	public function addFragment($frag){
 		
 		$this->_response[]=$frag;
 	
 	}
+	
 	public function getResponse(){
 
 		return $this->_response;
@@ -174,7 +180,7 @@ class Element{
 
 		
 	}
-	public function getJasonComponents(){
+	public function getJsonComponents(){
 		return $this->_components?? [];
 	}
 	public function setVPanel(&$var){

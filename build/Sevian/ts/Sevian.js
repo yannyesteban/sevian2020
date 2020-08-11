@@ -17,7 +17,7 @@ var S = (($) => {
         }
         static init(info) {
             for (var x of info) {
-                if (window[x.type]) {
+                if (window[x.type] && x.option !== null) {
                     this._e[x.panel] = new window[x.type](x.option);
                 }
             }
@@ -319,6 +319,9 @@ var S = (($) => {
             return form.get();
         }
     }
+    Sevian.instance = null;
+    Sevian.sw = 0;
+    Sevian.sw2 = 0;
     Sevian._e = [];
     Sevian._w = [];
     Sevian._components = [];
@@ -326,3 +329,4 @@ var S = (($) => {
     Sevian.msg = null;
     return Sevian;
 })(_sgQuery);
+//# sourceMappingURL=Sevian.js.map
