@@ -14,6 +14,7 @@ class Form2 extends \Sevian\JS\Form{
 
 	private $loadRecord = null;
 
+	
 	public $patternJsonFile = '';
 	public $userData = [];
 	//private $record = null;

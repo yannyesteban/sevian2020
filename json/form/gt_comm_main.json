@@ -2,7 +2,7 @@
 	"form":"gt_comm_main",
 	"caption":"",
 	"className":"gt-command-main",
-	"query":"SELECT '' as client_idx, '' as account_idx, '' as unit_idx, '' as connect",
+	"query":"SELECT '' as nombre, '' as apellido,'' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as test",
 	"_menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -22,7 +22,7 @@
             "caption":"Cliente",
             "input":"list",
             "type":"text","mode_value":"0",
-            "data":[["","--","*"],"SELECT id, client FROM clients ORDER BY 2"],
+            "data":[["","","*"],"SELECT id, client FROM clients ORDER BY 2"],
             "childs":true
         },
         {
@@ -52,6 +52,19 @@
             "class":"btn-connect",
             "type":"button","mode_value":"1",
             "params":{"className":"btn-connect"}
+            
+
+        },
+        {
+            "name":"test",
+            "default":"T",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{},
+            "events":{
+                "click":"this.test2();"
+            }
             
 
         }

@@ -18,7 +18,11 @@ class Form{
 
 	public function __construct($info = []){
 		foreach($info as $k => $v){
-			$this->$k = $v;
+			
+			//$this->$k = $v;
+			if(property_exists(__CLASS__, $k)){
+				$this->$k = $v;
+			}
 		}
 	}
 	

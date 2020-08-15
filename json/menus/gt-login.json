@@ -10,7 +10,7 @@
 			"caption":"Aceptar",
 			"dataUser":{
 				"async": false,
-				"panel":"&P_panelId",
+				"id":"&P_id",
 				"valid":false,
 				"confirm_": "seguro?",
 				"params":[

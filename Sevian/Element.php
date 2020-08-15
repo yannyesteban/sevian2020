@@ -2,20 +2,28 @@
 namespace Sevian;
 
 class Element{
-	public $id = null;
-	public $name = '';
-	public $method = '';
-	public $eparams = [];
-
+	
 	public $async = false;
+	public $elementId = null;
+	public $name = '';
+	public $eparams = [];
+	public $updated = false;
+
+	private $_panel = null;
+	private $_init = null;
+	private $_jsActions = [];
+
 	protected $onDesing = true;
 	protected $onDebug = true;
+	
+	public $jsClassName = '';
+	/* to here */
+	public $id = null;
+	public $method = '';
 
 	static private $_elementName = [];
-	
-	
 	public $element = "default";
-	public $updated = false;
+	
 	public $title = '';
 	public $panel = null;
 	public $containerId = null;
@@ -45,14 +53,52 @@ class Element{
 
 	}
 	
-	public function config(){
+	/* OK */
+	public function config(){}
 	
+	/* OK */
+	public function evalMethod(){}
+	
+	/* OK */
+	public function setPanel($panel){
+		$this->_panel = $panel ;
 	}
 	
-	public function evalMethod(){
-		
+	/* OK */
+	public function getPanel(){
+		if(isset($this->_panel)){
+			return $this->_panel;
+		}
+		return $this->panel;
 	}
 
+	/* OK */
+	public function setInit($info){
+		$this->_init = $info;
+	}
+	
+	/* OK */
+	public function getInit(){
+		return $this->_init;
+	}
+	
+	/* OK */
+	public function setJSActions($info){
+		$this->_jsActions = $info;
+	}
+	
+	/* OK */
+	public function getJSActions(){
+		return $this->_jsActions;
+	}
+
+	/* OK */
+	public function getJSClass(){
+		return $this->jsClassName;
+	}
+
+
+	/* to here */
 	public function configPanel(){
 		return new jsConfigPanel([
 			"panel" => $this->id,
@@ -102,9 +148,7 @@ class Element{
 	
 	}
 
-	public function getPanel(){
-		return $this->panel ;
-	}
+	
 
 	static public function setElementName($name){
 		self::$_elementName[get_called_class()] = $name;

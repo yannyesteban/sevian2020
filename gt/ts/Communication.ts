@@ -84,7 +84,8 @@ var GTCommunication = (($) => {
 						}
 
 					}
-				]
+                ],
+                
 			});
         }
 
@@ -107,7 +108,41 @@ var GTCommunication = (($) => {
 				]
 			});
         }
+        test2(){
+            let f  = this.form.getFormData();
+            f.set("super","man");
+            console.log(f);
+            for(let [name, value] of f){
+               // alert(name+": "+value);
+            }
+           
+            S.send3({
+                "async":true,
+                //"form":f,
+                id:4,
+                
+				
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"99",
+						"element":"gt-communication",
+						"method":"unit-init",
+						"name":"x",
+						"eparams":{
+							"a":'yanny',
+                            "targetId":'x25',
+                            "unitId":5555555,
+						}
 
+					}
+                ],
+                onRequest:(x)=>{
+                    alert(x)
+                }
+			});
+
+        }
         setFormCommand(info){
 			this.menuPanel.text("");
             this.menuPanel.removeDs("sgForm");

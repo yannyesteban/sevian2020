@@ -367,6 +367,13 @@ var Form2 = (($) => {
             return data;
             */
         }
+        getFormData() {
+            let formData = new FormData();
+            for (let name in this._inputs) {
+                formData.append(name, this._inputs[name].getValue());
+            }
+            return formData;
+        }
         evalChilds(parent) {
             let input = this._inputs[parent];
             for (let i in this._inputs) {

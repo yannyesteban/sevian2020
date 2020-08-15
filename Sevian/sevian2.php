@@ -196,7 +196,7 @@ class S{
 		
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
-		\Sevian\S::setSes("nombre1", "f-2000");
+		
 		
 		if(!self::$onAjax){
 
@@ -855,19 +855,6 @@ class S{
 			}
 		}
 		//}
-
-		
-		$js = []; 
-		foreach(self::$_e as $k => $v){
-			if($v->getInit())
-			$js[] = [
-				'panel'=>$k,
-				'type'=>$v->getJSClass(),
-				'option'=>$v->getInit()
-
-			];
-			//hr($v->getInit());
-		}
 		
 		
 		$doc->body->add(self::$_str);
@@ -878,8 +865,6 @@ class S{
 		//$script = "//Sevian.loadPanels($json)";
 		$win = json_encode(self::$_windows, JSON_PRETTY_PRINT);
 		$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
-
-		$json = json_encode($js, JSON_PRETTY_PRINT);
 		
 		$script = "Sevian.action.initPanel($json)";
 		$script = "S.instance = '".self::$ins."';S.sw = '".self::$cfg['SW']."';S.sw2 = '".self::$cfg['SW']."';S.defaultPanel= '".self::$defaultPanel."';S.winInit($win);S.init($json);";
@@ -961,7 +946,7 @@ class S{
 				'__sg_sw2'		=>self::$cfg['SW'],
 				'__sg_ins'		=>self::$ins,
 				'__sg_params'	=>'',
-				'__sg_async'	=>'',
+				'__sg_async'	=>0,
 				'__sg_action'	=>self::$lastAction,
 				'__sg_thread'	=>'']);
 
