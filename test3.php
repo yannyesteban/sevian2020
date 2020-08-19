@@ -24,7 +24,7 @@
     <input type="submit" name="a" form="w" value="Z">
     <input type="submit" name="a" form="m" value="M">
     <hr>
-    <input type="button" onclick="let e= document.getElementById('s');e.value='jimenez';e.setAttribute('form','m');alert(e.getAttribute('form'))" value="M">
+    <input type="button" onclick="let e= document.getElementById('s');e.value='jimenezz';e.setAttribute('form','m');alert(e.getAttribute('form'))" value="M">
 </form>
 <?php
 class SEAT {
