@@ -2,7 +2,7 @@
 	"stucture":"gt",
 	"title":"Módulo GT",
 	"template":"gt",
-	"templateName":"gt",
+	"templateName":"/gt-webcar",
 	"themeTemplate":"",
 	"class":"",
 	"mainPanel":4,
@@ -12,10 +12,22 @@
 	"publicRole":true,
 	"elements":[
 		{
+			"id":3,
+			"element":"s-menu",
+			"name":"/menu/tool",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
 			"id":4,
-			"element":"SForm",
+			"element":"gt-communication",
 			"name":"gt_login",
-			"method":"request",
+			"method":"load",
 			"eparams":{},
 			"type":0,
 			"class":"",

@@ -54,6 +54,7 @@ var Command = (($) => {
             this._formCommand = null;
             this._formBody = null;
             this._ws = null;
+            alert("f");
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];

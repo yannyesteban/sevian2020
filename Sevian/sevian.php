@@ -283,7 +283,7 @@ class S{
 			self::$_userData = &self::$cfg['USER_DATA'];
 
 			//self::evalElements();
-			foreach(self::$_panels as $info){
+			foreach(self::$_info as $info){
 				$info->update = false;
 			}
 		}
@@ -299,10 +299,10 @@ class S{
 
 
 	public static function setElement($info, $update = false){
-		
-		if($info->id == 0){
+		//hx($info->id);
+		if($info->id === 0 or $info->id === "0"){
 			$info->id = self::getReq("__sg_panel")?? self::$defaultPanel;
-		}else if($info->id <= "-1"){
+		}else if($info->id === -1 or $info->id === "-1"){
 			$info->id = self::$defaultPanel;
 		}
 		
@@ -323,11 +323,24 @@ class S{
 		$info->async = self::$onAjax;
 		
 		self::$_info[$info->id] = $info;
+
+		
+
 		if(!isset(self::$_userData[$info->id])){
 			self::$_userData[$info->id] = [];
 		}
 		$info->_data_user = self::$_userData[$info->id];
-
+		/*
+		$info = [
+			"name"=>'',
+			'eparams=>'',
+			'id'=>'',
+			'debug'='',
+			'design'=>'',
+			'userData'=>[]
+		]
+		
+		*/
 		$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
 		
 
@@ -390,10 +403,18 @@ class S{
 			}
 		}
 
+		if($e->mode == 'panel'){
+			self::$_str->addPanel($info->id, $e->getPanel());	
+			$info->update = true;
+			$info->isPanel = true;
+		}
+		
+		return;
+
 		if($_panel = $e->getPanel()){
 			self::$_panels[$info->id] = new InfoElement($info);
 			self::$_panels[$info->id]->update = true;
-			self::$_p[$info->id] = true;
+			//self::$_p[$info->id] = true;
 			self::$_info[$info->id]->isPanel = true;
 			// if this->main panel then title = this->title
 			self::$_str->addPanel($info->id, $_panel);
@@ -908,10 +929,26 @@ class S{
 		$p = 	self::$_str->render();
 		
 		//echo json_encode(self::$_f, JSON_PRETTY_PRINT);
-		
+		$js = []; 
+		foreach(self::$_e as $k => $v){
+			if($v->getInit()){
+				
+				$js[] = [
+					'mode'=>self::$_info[$k]->mode,
+					'id'=>$k,
+					'type'=>$v->getJSClass(),
+					'option'=>$v->getInit()
+
+				];
+			}
+			//hr($v->getInit());
+		}
+
+
+
 		$response = [
 			'panels'	=> $p,
-			'config'	=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			'config'	=> $js,//self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
 			'update'	=> self::getJsConfigPanel(),
 			'fragments'	=> self::$_f,
 			'components'=> self::getJsComponents(),
@@ -937,9 +974,11 @@ class S{
 		if(self::$onAjax){
 			return true;
 		}
-		foreach(self::$_panels as $id => $info){
-			
+		
+		foreach(self::$_info as $id => $info){
+			//hr($id);
 			if(!$info->update){
+				//hr($id,"red");
 				//hr($id,"yellow","red");
 				self::setElement($info);
 			}
@@ -982,6 +1021,11 @@ class S{
 		self::evalElements();
 		//5.-
 
+		if(!self::$onAjax){
+			return self::htmlDoc();
+		}
+
+		
 		if(self::$_jsonRequest){
 			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT);	
 		}

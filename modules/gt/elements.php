@@ -26,7 +26,7 @@ $cls_elements = [
         'js'=>[],
         'css'=>[]
     ],
-'s-menu' 		=> [
+	's-menu' 		=> [
 		'enable' => true,
 		
 		'file' 	=> MAIN_PATH.'Sigefor/Menu2.php',
@@ -40,11 +40,11 @@ $cls_elements = [
 			//'patternJsonFile'=>MODULE_PATH.'json/menu/{name}.json'
 		]
 	],    
-    'x-form' 		=> [
+    'form' 		=> [
 		'enable' => true,
 		
-		'file' 	=> MAIN_PATH.'Sigefor/XForm.php',
-		'class' => '\Sigefor\XForm',
+		'file' 	=> MAIN_PATH.'Sigefor/Form.php',
+		'class' => '\Sigefor\Form',
 		
 		'js'=>[],
 		'css'=>[],
@@ -55,9 +55,55 @@ $cls_elements = [
 			
 		]
 	],    
+	'command' 		=> [
+		'file' 	=> MAIN_PATH.'gt/command.php',
+		'class' => '\GT\Command',
+		'enable' => true,
+		'js'=>[
+			[
+				'file' 	=> MAIN_PATH.'build/GT/ts/command.js',
+				'begin'=> false
+			]
+
+		],
+		'css'=>[]
+	],
 	
 ];
 
+$cls_elements['gt_cota'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/cota.php',
+	'class' => '\GT\Cota',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Cota.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	]
+	
+];
+
+$cls_elements['gt-communication'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Communication.php',
+	'class' => '\GT\Communication',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Communication.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
 Sevian\S::elementsLoad($cls_elements);
 
 ?>

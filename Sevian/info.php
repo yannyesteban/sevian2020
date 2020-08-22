@@ -66,6 +66,7 @@ class InfoParam{
 	}
 }
 class InfoElement{
+	public $mode = 'panel';
 	public $id = false;
 	public $element = '';
 	public $name = '';

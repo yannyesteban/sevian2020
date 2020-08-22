@@ -398,8 +398,15 @@ var sgJson;
 (function($){
 sgJson = {
 	iPanel: function(opt){
-
-		var target = $("form_p"+opt.id);
+		let target = null;
+		if(typeof opt.id === "number"){
+ 			target = $("form_p"+opt.id);
+		}else{
+			target = $(opt.id);
+			alert("no");
+			return;
+		}
+		
 		
 		target.text(opt.html);
 		

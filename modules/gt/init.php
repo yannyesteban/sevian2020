@@ -7,9 +7,10 @@ $init = [
 	'defaultPanel' => 4,
 	'elements' => [
 		[
-            'id'	=> 20,
+			'mode'=>'panel',
+			'id'	=> 20,
             'element'	=> 's-module',
-            'name'		=> '/modules/cota',
+            'name'		=> '/modules/gt',
             'method'	=> 'load',
             'designMode'=> true,
             'fixed'		=> true

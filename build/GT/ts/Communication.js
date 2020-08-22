@@ -35,7 +35,7 @@ var GTCommunication = (($) => {
             main.removeClass("sg-form");
             this.mainPanel = main.create("div").addClass("mainPanel");
             this.menuPanel = main.create("div").addClass("menuPanel");
-            this.historyPanel = main.create("div").addClass("historyPanel");
+            this.historyPanel = main.create("div").addClass("historyPanel").id("his");
             this.mainForm.id = this.mainPanel;
             this.mainForm.parentContext = this;
             this.form = new Form2(this.mainForm);
@@ -87,25 +87,35 @@ var GTCommunication = (($) => {
                 // alert(name+": "+value);
             }
             S.send3({
-                "async": true,
-                //"form":f,
-                id: 4,
+                "async": 1,
+                "form": f,
+                //id:4,
                 "params": [
                     {
                         "t": "setMethod",
-                        "id": "99",
-                        "element": "gt-communication",
-                        "method": "unit-init",
-                        "name": "x",
+                        'mode': 'element',
+                        "id": "his",
+                        "element": "form",
+                        "method": "list",
+                        "name": "/form/h_commands",
                         "eparams": {
                             "a": 'yanny',
-                            "targetId": 'x25',
+                            "mainId": 'his',
                             "unitId": 5555555,
                         }
+                    },
+                    {
+                        "t": "setMethod",
+                        'mode': 'panel',
+                        "id": 5,
+                        "element": "form",
+                        "method": "request",
+                        "name": "/form/models",
+                        "eparams": {}
                     }
                 ],
                 onRequest: (x) => {
-                    alert(x);
+                    // alert(x)
                 }
             });
         }

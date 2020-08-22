@@ -304,7 +304,9 @@ var Grid2 = (($) => {
             let main = (this.id) ? $(this.id) : false;
             if (main) {
                 if (main.ds("sgGrid")) {
-                    return;
+                    main.removeClass("sg-grid");
+                    main.text("");
+                    //return;
                 }
                 if (main.hasClass("sg-grid")) {
                     this._load(main);

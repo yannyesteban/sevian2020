@@ -3,6 +3,8 @@ namespace GT;
 require_once 'Unit.php';
 require_once 'Site.php';
 require_once 'Geofence.php';
+require_once 'Alarm.php';
+require_once 'Config.php';
 require_once 'History.php';
 class Cota extends \Sevian\Element{
 	static $patternJsonFile = '';

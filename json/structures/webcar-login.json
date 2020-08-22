@@ -13,7 +13,7 @@
 	"elements":[
 		{
 			"id":4,
-			"element":"x-form",
+			"element":"form",
 			"name":"/forms/webcar-login",
 			"method":"request",
 			"eparams":{},

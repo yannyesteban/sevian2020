@@ -1,0 +1,35 @@
+{
+	"name":"h_commands",
+	"caption":"Historial Comandos",
+	"className":"webcar",
+	"query":"SELECT id, device_id, unit_id, command_id, description, status, pending, '' as d, '' as get_info  FROM h_commands",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código A", "input": "hidden", "type":"hidden"},
+		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
+		"data":[
+			[0, "seleccione", "*"],
+			"select id, brand from brands ORDER BY brand"
+			
+		  ]},
+		{"name":"model","caption":"Modelo"}
+
+	],
+	
+	"searchFor":[
+		"brand", "model"
+	]
+
+}

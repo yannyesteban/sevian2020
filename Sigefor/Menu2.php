@@ -4,19 +4,19 @@
 namespace SIGEFOR;
 
 
-require_once MAIN_PATH.'Sigefor/DBTrait/Menu2.php';
+//require_once MAIN_PATH.'Sigefor/DBTrait/Menu2.php';
 
 class Menu2 extends \Sevian\Element {
 	
-	use	DBTrait\Menu2;
+	//use	DBTrait\Menu2;
 
 	
 	private $infoPanels = null;
 	private $_dbINFO = [];
-	
+	public $jsClassName = 'Menu';
 	//static public $patternJsonFile = '';
 	static public $elementStructure = '';
-	
+	static public $patternJsonFile = '';
 
 	public function __construct($info = []){
         foreach($info as $k => $v){
@@ -38,6 +38,8 @@ class Menu2 extends \Sevian\Element {
 
 		switch($this->method){
 			case 'create':
+				$this->createMenu();
+				/*
 				$this->loadMenu($this->name);
 				$this->panel = new \SEVIAN\HTML('div');
 				
@@ -58,23 +60,39 @@ class Menu2 extends \Sevian\Element {
 				];
 				$this->info = $menu;
 				
-
+				*/
 
 
 			break;
 			case 'load':
-				$info = $this->loadModule($this->name);
-
-				$this->infoPanels[] = new \Sevian\InfoElement([
-					'id'=>0,
-					'element'=>self::$elementStructure,
-					'method'=>'load',
-					'name'=>$this->structure
-					
-				]);
-				break;
+				
 
 		}
 		return true;		
+	}
+
+	public function createMenu(){
+
+		if(!$this->containerId){
+            $this->containerId = 'menu-main-'.$this->id;
+        }
+
+		$info = new Component\Menu([
+
+            'id'		=> $this->containerId,
+            'panelId'	=> $this->id,
+            'name'		=> $this->name,//JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
+			'method'	=> $this->method,
+			'onDataUser'=>$this->onDataUser?? 'S.send(dataUser);' 
+            
+        ]);
+
+		$div = new \SEVIAN\HTML('div');
+        $div->id = $this->containerId;
+        $this->setPanel($div);
+
+        $info->id = $this->containerId;
+        $this->setInit($info);
+		
 	}
 }

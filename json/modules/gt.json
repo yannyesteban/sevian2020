@@ -1,0 +1,15 @@
+{
+	"module":"cota",
+	"title":"Módulo Principal",
+	"structure":"login",
+	"config":{},
+	"procedure":{},
+    "sequence":{},
+    "params":{},
+    "vars":{
+		"structure":"gt",
+		"module_name":"GT-COMM"
+    },
+	"theme":"sevian",
+	"debug":true
+}

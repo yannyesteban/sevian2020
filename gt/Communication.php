@@ -7,6 +7,8 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
 
     public $unitId = '';
 
+    public $jsClassName = 'GTCommunication';
+
     use DBCommunication{
 		DBCommunication::ccc as public ccc;
 	}
@@ -40,10 +42,14 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
     }
     public function init2(){
 
+        if(!$this->containerId){
+            $this->containerId = 'form-main-'.$this->id;
+        }
+
         $form =  new \Sigefor\Component\Form2([
 			
-            'id'		=> $this->containerId,
-            'panelId'	=> $this->id,
+            //'id'		=> $this->containerId,
+            //'panelId'	=> $this->id,
             'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/gt_comm_main', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
             'method'	=> 'request',
             'mode'		=> 2,
@@ -51,6 +57,21 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
             
             //'record'=>['id'=>$id]
         ]);
+
+        //hx(json_encode($form, JSON_PRETTY_PRINT));
+        $div = new \SEVIAN\HTML('div');
+        $div->id = $this->containerId;
+        $this->setPanel($div);
+
+        //$info->id = $this->containerId;
+        $this->setInit([
+            'id'=>$this->containerId,
+            //'id'=>$this->eparams->targetId,
+               "caption"=>"Communication 3.0",
+                "mainForm"=>$form,
+           ]);
+        
+        return;
        // $this->_info = $
        $this->info = [
         'id'=>$this->eparams->targetId,

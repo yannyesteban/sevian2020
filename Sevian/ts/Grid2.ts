@@ -422,8 +422,9 @@ var Grid2 = (($) => {
             if(main){
                 
                 if(main.ds("sgGrid")){
-                   
-                    return;
+                    main.removeClass("sg-grid")
+                    main.text("");
+                    //return;
                 }
     
                 if(main.hasClass("sg-grid")){

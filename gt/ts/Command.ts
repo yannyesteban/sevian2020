@@ -81,7 +81,7 @@ var Command = (($) => {
 		_ws:object = null;
 
 		constructor(info:object){
-            
+            alert("f")
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];

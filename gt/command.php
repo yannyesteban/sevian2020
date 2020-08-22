@@ -17,6 +17,8 @@ class Command extends \Sevian\Element{
 	private $records2 = null;
 	private $lastRecord = null;
 
+	public $jsClassName = 'Command';
+
 	public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
@@ -125,19 +127,37 @@ class Command extends \Sevian\Element{
 	}
 	
 	public function load(){
-		$this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-command-'.$this->id;
+
+		if(!$this->containerId){
+            $this->containerId = 'gt-command-'.$this->id;
+        }
+
+		//$this->panel = new \Sevian\HTML('div');
+		//$this->panel->id = 'gt-command-'.$this->id;
 		$this->typeElement = 'Command';
 
-		$g =  new \Sigefor\Component\Form([
+		$g =  new \Sigefor\Component\Form2([
 			'panelId'=>$this->id,
+			//'id'		=> $this->containerId,
 			//'name'=>$this->name,
 			'name'=>'main_command',
 			'method'=>'request',
 			'mode'=>1
 			//'record'=>$this->getRecord()
 		]);
+		//hr(json_encode($g, JSON_PRETTY_PRINT));
+		$div = new \SEVIAN\HTML('div');
+        $div->id = $this->containerId;
+        $this->setPanel($div);
 
+        //$info->id = $this->containerId;
+		$this->setInit([
+			'id'=>$this->containerId,
+			'panel'=>$this->id,
+			'form'=>$g
+
+		]);
+		return;
 
 		$this->info = [
 			'id'=>$this->panel->id,

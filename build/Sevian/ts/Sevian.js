@@ -21,7 +21,10 @@ var S = (($) => {
         static init(info) {
             for (var x of info) {
                 if (window[x.type] && x.option !== null) {
-                    this._e[x.panel] = new window[x.type](x.option);
+                    if (this._e[x.id]) {
+                        delete this._e[x.id];
+                    }
+                    this._e[x.id] = new window[x.type](x.option);
                 }
             }
         }
@@ -85,7 +88,7 @@ var S = (($) => {
             else if (this.getForm(info.id)) {
                 form = this.getForm(info.id);
             }
-            alert(info.id);
+            //alert (info.id);
             if (form) {
                 if (form.__sg_sw.value === form.__sg_sw2.value) {
                     if (form.__sg_sw.value != 1) {

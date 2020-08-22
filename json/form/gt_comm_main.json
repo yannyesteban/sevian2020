@@ -1,5 +1,5 @@
 {
-	"form":"gt_comm_main",
+	"name":"gt_comm_main",
 	"caption":"",
 	"className":"gt-command-main",
 	"query":"SELECT '' as nombre, '' as apellido,'' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as test",

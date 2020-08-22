@@ -2,7 +2,8 @@
 namespace Sevian\JS;
 
 class Menu {
-	public $menu = "";
+	public $id = "";
+	//public $menu = "";
 	public $caption = "";
 	public $class = "";
 	public $params = "";
