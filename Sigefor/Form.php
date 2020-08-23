@@ -43,7 +43,10 @@ class Form extends \sevian\element {
                 break;
             case 'get_data':
                 $this->createGrid($this->eparams->page, $this->eparams->q ?? '');
-                break;                
+				break;
+			case 'search':
+				$this->createGrid(1, $this->eparams->q ?? '');
+				break;				                
         }
 
         return true;
@@ -89,34 +92,7 @@ class Form extends \sevian\element {
 		//$async = ($this->asyncMode===true)?'true':'false';
         $async = true;
         $element = self::getElementName();
-		$search = "
-			S.send3(
-				{
-					async: $async,
-					panel:$this->id,
-					valid:false,
-					confirm_: 'seguro?',
-					params:	[
-						{t:'setMethod',
-							id:$this->id,
-							element:'$element',
-							method:'search',
-							name:'$this->name',
-							eparams:{
-								page:1,
-								token:'search',
-                                q:this.getSearchValue(),
-                                $mainId
-							}
-						}
-						
-					]
-				});
-				
-			";
 		
-		
-
 		
 		
 		//hx($paginator);
@@ -128,13 +104,41 @@ class Form extends \sevian\element {
 			'method'	=> $this->method,
 			'page'		=> $page,
 			'searchValue' => $searchValue,
-			'search'=>$search,
+			//'search'=>$search,
 			//'paginator'=>$paginator,
 			'userData'=>$this->userData,
 			//'patternFormFile'=>self::$patternJsonFile,
 			//'patternMenuFile'=>self::$patternMenuFile
 			
 		]);
+		
+		$search = "
+		S.send3(
+			{
+				async: $async,
+				panel:'$this->id',
+				valid:false,
+				confirm_: 'seguro?',
+				params:	[
+					{a:'yannye',t:'setMethod',
+						'mode':'element',
+						id:'$this->id',
+						element:'$element',
+						method:'search',
+						name:'$this->name',
+						eparams:{
+							page:1,
+							token:'search',
+							q:this.getSearchValue(),
+							$mainId
+						}
+					}
+					
+				]
+			});
+			
+		";
+	
 		
 
 		$paginator = [
@@ -148,7 +152,7 @@ class Form extends \sevian\element {
 					valid:false,
 					confirm_: 'seguro?',
 					params:	[
-                        {t:'setMethod',
+                        {n:'esteban',t:'setMethod',
                             'mode':'element',
 							id:'$this->id',
 							element:'$element',
@@ -168,6 +172,7 @@ class Form extends \sevian\element {
 			];
 		//hx($info->getTotalPages());
 		$info->paginator = $paginator;
+		$info->search = $search;
         $info->id = $this->containerId;
         
 
