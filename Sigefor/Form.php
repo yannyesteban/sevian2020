@@ -73,8 +73,12 @@ class Form extends \sevian\element {
         $this->setInit($info);
     }
     public function createGrid($page = 1, $searchValue = ''){
+
+		$mainId = '';
+
 		if($this->eparams->mainId?? false){
-            $this->containerId = $this->eparams->mainId;
+			$this->containerId = $this->eparams->mainId;
+			$mainId = "mainId:'$this->containerId',";
         }
 
         if(!$this->containerId){
@@ -102,7 +106,7 @@ class Form extends \sevian\element {
 								page:1,
 								token:'search',
                                 q:this.getSearchValue(),
-                                mainId:this.id,
+                                $mainId
 							}
 						}
 						
@@ -113,9 +117,29 @@ class Form extends \sevian\element {
 		
 		
 
+		
+		
+		//hx($paginator);
+		$info =  new \Sigefor\Component\Grid([
+			'asyncMode'	=> true,
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
+			'method'	=> $this->method,
+			'page'		=> $page,
+			'searchValue' => $searchValue,
+			'search'=>$search,
+			//'paginator'=>$paginator,
+			'userData'=>$this->userData,
+			//'patternFormFile'=>self::$patternJsonFile,
+			//'patternMenuFile'=>self::$patternMenuFile
+			
+		]);
+		
+
 		$paginator = [
 			'page'=> $page,
-			'totalPages'=>	5,
+			'totalPages'=>	$info->getTotalPages(),
 			'maxPages'=>	5,
 			'change'=>"S.send3(
 				{
@@ -131,7 +155,7 @@ class Form extends \sevian\element {
 							method:'get_data',
 							name:'$this->name',
 							eparams:{
-                                mainId:this.id,
+                                $mainId
 								page:page,
 								q:this.getSearchValue(),
 								
@@ -142,24 +166,8 @@ class Form extends \sevian\element {
 					]
 				});"
 			];
-		
-		//hx($paginator);
-		$info =  new \Sigefor\Component\Grid([
-			'asyncMode'	=> true,
-			'id'		=> $this->containerId,
-			'panelId'	=> $this->id,
-			'name'		=> JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
-			'method'	=> $this->method,
-			'page'		=> $page,
-			'searchValue' => $searchValue,
-			'search'=>$search,
-			'paginator'=>$paginator,
-			'userData'=>$this->userData,
-			//'patternFormFile'=>self::$patternJsonFile,
-			//'patternMenuFile'=>self::$patternMenuFile
-			
-        ]);
-        
+		//hx($info->getTotalPages());
+		$info->paginator = $paginator;
         $info->id = $this->containerId;
         
 
