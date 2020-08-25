@@ -104,6 +104,24 @@ $cls_elements['gt-communication'] = [
 	],
 	
 ];
+
+
+$cls_elements['h-command'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/HCommand.php',
+	'class' => '\GT\HCommand',
+	'enable' => true,
+	'js'=>[[
+		//'file' 	=> MAIN_PATH.'build/GT/ts/Communication.js',
+		//'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
 Sevian\S::elementsLoad($cls_elements);
 
 ?>

@@ -1,0 +1,88 @@
+{
+	"name":"h_commands",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"Create",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"save",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}
+		},
+		{"caption":"Edit",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"save",
+						"name":"&P_elementName",
+						"eparams":null
+					},
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}},
+		{"caption":"Delete",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}},
+		{"caption":"send",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}}
+	]
+}	

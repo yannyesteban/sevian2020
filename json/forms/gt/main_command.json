@@ -1,15 +1,15 @@
 {
-	"name":"gt_comm_main",
+	"name":"main_command",
 	"caption":"",
 	"className":"gt-command-main",
-	"query":"SELECT '' as nombre, '' as apellido,'' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as test",
+	"query":"SELECT '' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as test",
 	"_menuName":"/menu/grid",
 	"methods":{
 		"request":{
-			"_menuName":"/menu/request"
+			"_menuName":"/menu/h_commands"
 		},
 		"load":{
-			"_menuName":"/menu/request"
+			"_menuName":"/menu/h_commands"
 		}
 	},
 	"params":"",
@@ -19,34 +19,38 @@
 	"infoFields":[
         {
             "name":"client_idx",
-            "caption":"Cliente",
+            "caption":"",
             "input":"list",
             "type":"text","mode_value":"0",
             "data":[["","","*"],"SELECT id, client FROM clients ORDER BY 2"],
-            "childs":true
+            "childs":true,
+            "params":{"placeholder":"...CLIENTE"}
         },
         {
             "name":"account_idx",
-            "caption":"Cuenta",
+            "caption":"",
             "input":"list",
             "type":"text","mode_value":"0",
             "data":[["",". seleccione","*"], "SELECT id, name, client_id FROM accounts a ORDER BY name;"],
             "childs":true,
-            "parent":"client_idx"
+            "parent":"client_idx",
+            "params":{"placeholder":"...CUENTA"}
         },
         {
             "name":"unit_idx",
-            "caption":"Unit",
+            "caption":"",
             "input":"list",
             "type":"text","mode_value":"0",
             "data":[["",". seleccione","*"], "SELECT u.id as unit_id, un.name as unit_name, account_id, device_id FROM units as u INNER JOIN units_names as un on un.id = u.name_id ORDER BY account_id, unit_name"],
             "parent":"account_idx",
+            "params":{"placeholder":"...UNIDAD"},
             "events":{
-                "change":"this.send(this.form.getInput('unit_idx').getValue());"
+                "change":"this.loadUnit(this.form.getInput('unit_idx').getValue());"
             }
         },
         {
             "name":"connect",
+            "caption":"",
             "default":"connect",
             "input":"input",
             "class":"btn-connect",
@@ -63,7 +67,7 @@
             "type":"button","mode_value":"1",
             "params":{},
             "events":{
-                "click":"this.test2();"
+                "click":"this.getDetail();"
             }
             
 

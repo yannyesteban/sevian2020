@@ -1,0 +1,44 @@
+{
+	"name":"form_param",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"Save",
+			"events":{
+				"click":"this.getContext().save(0);"
+			}
+		},
+		{
+			"caption":"Enviar CMD",
+			"events":{
+				"click":"alert(this);"
+			}
+
+			
+		},
+		{"caption":"Cancel",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"s-form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]
+			}
+		}
+		
+	]
+}	

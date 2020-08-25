@@ -15,6 +15,7 @@ class FF{
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
+		
 		$this->cn = \Sevian\Connection::get();
 		$this->infoRecord($this->name, $this->patternJsonFile);
 		
@@ -25,7 +26,7 @@ class FF{
 			
 			'tables'	=> $this->getTables(),
 			'fields'	=> $this->fields,
-			//'subforms'	=> $aux,
+			'subforms'	=> $this->subforms,
 			'dataKeys'=> $this->dataKeys,
 			'dataKeysId'=>$this->dataKeysId,
 			
@@ -33,7 +34,14 @@ class FF{
 		]);
 		
 		
-
+		$xx = function($parametro){
+			hr($this->tables);
+			hx("Parametro: $parametro\n","red");
+		};
+		$z = $xx->bindTo($info2, $info2);
+		
+		$z("5");
+		//hx($info2);
 		$this->result = \Sigefor\FormSave::send($info2, $this->data, []);
 
 	}

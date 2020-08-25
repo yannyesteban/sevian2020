@@ -1,15 +1,27 @@
 {
 	"name":"h_commands",
-	"caption":"Historial Comandos",
+	"caption":"Historial Comandos @unit_idx",
 	"className":"webcar",
-	"query":"SELECT id, device_id, unit_id, command_id, description, status, pending, '' as d, '' as get_info  FROM h_commands",
-	"menuName":"/menu/grid",
+	"query":"SELECT 8 as ddd, id, device_id, unit_id, command_id, description, status, pending, '' as d, '' as get_info  FROM h_commands WHERE unit_id='@unit_idx'",
+	"menuName":"/menu/h_commands",
+	"subforms":
+	[
+		{
+			"tables":["h_commands_values"],
+			"fieldData":"_detail",
+			"dataKeysId":"detail",
+			"masterFields":
+			{
+				"h_command_id":"id"
+			}
+		}
+	],
 	"methods":{
 		"request":{
-			"menuName":"/menu/request"
+			"menuName":"/menu/h_commands"
 		},
 		"load":{
-			"menuName":"/menu/request"
+			"menuName":"/menu/h_commands"
 		}
 	},
 	"params":"",

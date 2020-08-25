@@ -99,9 +99,13 @@ var Form2 = (($) => {
             if(main){
                 
                 if(main.ds("sgForm")){
-                    return;
+                    main.removeClass("sg-form")
+                    
+                    //return;
                 }
-    
+                
+                main.text("");
+                
                 if(main.hasClass("sg-form")){
                     this._load(main);
                 }else{

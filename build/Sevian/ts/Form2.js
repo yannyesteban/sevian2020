@@ -51,8 +51,10 @@ var Form2 = (($) => {
             let main = (this.id) ? $(this.id) : false;
             if (main) {
                 if (main.ds("sgForm")) {
-                    return;
+                    main.removeClass("sg-form");
+                    //return;
                 }
+                main.text("");
                 if (main.hasClass("sg-form")) {
                     this._load(main);
                 }

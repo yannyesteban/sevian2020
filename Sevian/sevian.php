@@ -977,7 +977,7 @@ class S{
 		
 		foreach(self::$_info as $id => $info){
 			//hr($id);
-			if(!$info->update){
+			if($info->isPanel and !$info->update){
 				//hr($id,"red");
 				//hr($id,"yellow","red");
 				self::setElement($info);

@@ -32,7 +32,12 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
                 $this->init2();
             break;
             case 'unit-init':
-                $this->unitInit($this->eparams->unitId);
+            case 'load-unit':
+                //hx($this->eparams->unitId);
+                \Sevian\S::setSes('unit_idx', $this->eparams->unitId);
+                //hx(\Sevian\S::getSes('unit_idx'));
+                //$this->unitInit($this->eparams->unitId);
+
             break;
 
 
@@ -50,7 +55,7 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
 			
             //'id'		=> $this->containerId,
             //'panelId'	=> $this->id,
-            'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/gt_comm_main', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
+            'name'		=> \Sigefor\JasonFile::getNameJasonFile('/forms/gt/main_command', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
             'method'	=> 'request',
             'mode'		=> 2,
             //'userData'	=> $this->userData,

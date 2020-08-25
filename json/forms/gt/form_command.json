@@ -1,0 +1,54 @@
+{
+	"name":"form_command",
+	"caption":"",
+	"className":"gt-command-main",
+	"query":"SELECT '' as command_idx, '' as b1, '' as b2, '' as b3, '' as b4",
+	"menuName_":"grid_menu",
+	"methods":{
+		"request":{
+			
+		},
+		"load":{
+			
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código A", "input": "hidden", "type":"hidden"},
+		{
+			"name":"command_idx","caption":"", "input": "list", "type": "text",
+			"data":["SELECT c.id, c.command FROM devices_commands as c INNER JOIN devices as d on d.version_id = c.version_id WHERE d.id = '@unit_idx' ORDER BY 2"],
+			"params":{"placeholder":"...COMANDO @unit_idx",
+			"events":{
+				"change":"this.getContext().paramLoad(this.getInput('command_idx').getValue())"
+			}}
+		},
+		{
+			"name":"b1",
+			"caption":"",
+			"input": "input", "type":"button","default":"+", "mode_value":1,
+			"events":{"click":"this.getContext().paramLoad(this.getInput('command_idx').getValue())"}
+		},
+		{
+			"name":"b2",
+			"caption":"",
+			"input": "input", "type":"button","default":"L", "mode_value":1,
+			"events":{"click":"this.getContext().getConfigParam(this.getInput('command_idx').getValue())"}
+		},
+		{"name":"b3","caption":"", "input": "input", "type":"button","default":"G", "mode_value":1},
+		{
+			"name":"b4",
+			"caption":"",
+			"input": "input", "type":"button","default":"H", "mode_value":1,
+			"events":{"click":"this.getContext().loadHistory()"}
+		}
+
+	],
+	"searchFor":[
+		"brand"
+	]
+
+}
