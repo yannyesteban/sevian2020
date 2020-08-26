@@ -7,7 +7,7 @@
 	"subforms":
 	[
 		{
-			"tables":["h_commands_values"],
+			"form":"h_commands_values",
 			"fieldData":"_detail",
 			"dataKeysId":"detail",
 			"masterFields":

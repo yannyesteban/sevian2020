@@ -17,8 +17,6 @@ class InfoRecord{
     public $error = false;
     public $errno = 0;
 
-    public $xx = null;
-
     public function __construct($opt = []){
 		
         foreach($opt as $k => $v){
@@ -321,15 +319,6 @@ class FormSave{
             
         }
         
-        if($info->xx?? false){
-            hx($info->xx);
-            
-            $info->xx("12474737") ;
-        
-        
-        
-        }
-
         if($info->subforms){
             foreach($info->subforms as $subform){
                 //hx($subform);

@@ -19,7 +19,26 @@ class FF{
 		$this->cn = \Sevian\Connection::get();
 		$this->infoRecord($this->name, $this->patternJsonFile);
 		
-		
+		$aux = [];
+		if($this->subforms?? false){
+			foreach($this->subforms as $subform){
+
+				$s = new ConfigForm(['name'=>$subform->form]); 
+				$info = new \Sevian\Sigefor\InfoRecord([
+					'cn'		=> '_default',
+					'mode'		=> 'update',
+					'tables'	=> $s->getTables(),
+					'fields'	=> $s->fields,
+					'masterFields'=>$subform->masterFields,
+					'fieldData'=>$subform->fieldData,
+					'dataKeysId'=>$subform->dataKeysId
+					//'data' 		=> $this->data
+				]);
+				$aux[] = $info;
+				
+			}
+		}
+		hx($aux);
 		$info2 = new \Sigefor\InfoRecord([
 			'token'=>'yanny',
 			'cn'		=> '_default',
@@ -32,7 +51,7 @@ class FF{
 			
 			//'data' 		=> $this->data
 		]);
-		
+		/*
 		
 		$xx = function($parametro){
 			hr($this->tables);
@@ -42,6 +61,7 @@ class FF{
 		
 		$z("5");
 		//hx($info2);
+		*/
 		$this->result = \Sigefor\FormSave::send($info2, $this->data, []);
 
 	}
