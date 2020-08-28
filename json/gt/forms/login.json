@@ -6,10 +6,10 @@
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
-			"menuName":"/menus/gt-login"
+			"menuName":"/gt/menus/gt-login"
 		},
 		"load":{
-			"menuName":"/menus/gt-login"
+			"menuName":"/gt/menus/gt-login"
 		}
 	},
 	"params":"",

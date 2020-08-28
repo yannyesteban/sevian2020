@@ -47,20 +47,35 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
     }
     public function init2(){
 
+        if($this->eparams->mainId?? false){
+            $this->containerId = $this->eparams->mainId;
+        }
+
         if(!$this->containerId){
             $this->containerId = 'form-main-'.$this->id;
+        }
+        $unitId = null;
+        if($this->eparams->unitId ?? false){
+            $unitId = $this->eparams->unitId;
+            $record = ['unit_idx'=>$unitId];
+            $method = 'load';
+            $mode = 2;
+        }else{
+            $record = false;
+            $method = 'request';
+            $mode = 1;
         }
 
         $form =  new \Sigefor\Component\Form2([
 			
             //'id'		=> $this->containerId,
             //'panelId'	=> $this->id,
-            'name'		=> \Sigefor\JasonFile::getNameJasonFile('/forms/gt/main_command', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
-            'method'	=> 'request',
-            'mode'		=> 2,
+            'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/main_command', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
+            'method'	=> $method,
+            'mode'		=> $mode,
             //'userData'	=> $this->userData,
             
-            //'record'=>['id'=>$id]
+            'record'=>$record
         ]);
 
         //hx(json_encode($form, JSON_PRETTY_PRINT));
@@ -74,6 +89,7 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
             //'id'=>$this->eparams->targetId,
                "caption"=>"Communication 3.0",
                 "mainForm"=>$form,
+                'unitId'=>$unitId
            ]);
         
         return;
@@ -116,7 +132,7 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
 			
             'id'		=> $this->containerId,
             'panelId'	=> $this->id,
-            'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/gt_form_command', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
+            'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/gt_form_command', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
             'method'	=> 'request',
             'mode'		=> 2,
             'userData'   => [

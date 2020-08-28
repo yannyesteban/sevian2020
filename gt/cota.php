@@ -120,7 +120,7 @@ class Cota extends \Sevian\Element{
 	public function load(){
 		$this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-cota-'.$this->id;
-		
+		$this->jsClassName = 'GTCota';
 		$this->typeElement = 'GTCota';
 		$unit = new Unit();
 		$userData = [
@@ -148,7 +148,7 @@ class Cota extends \Sevian\Element{
 			
 			'id'		=> $this->containerId,
 			'panelId'	=> $this->id,
-			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/gt_cota_unit', self::$patternJsonFile),
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/main_unit', self::$patternJsonFile),
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
@@ -166,9 +166,10 @@ class Cota extends \Sevian\Element{
 			'alarm'		=> $alarm->init(),
 			'config'	=> $config->init(),
 			'form'		=> $form,
-			'comm'		=> $comm->init(),
+			//'comm'		=> $comm->init(),
 		];
 
+		$this->setInit($this->info);
 		
 	}
 }

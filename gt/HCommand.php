@@ -8,6 +8,7 @@ require_once MAIN_PATH.'Sigefor/JasonFile.php';
 //require_once MAIN_PATH.'Sigefor/DBTrait/Form.php';
 //require_once "Component/Form2.php";
 require_once MAIN_PATH.'Sigefor/Component/FormSave.php';
+require_once MAIN_PATH.'Sigefor/Component/SaveForm.php';
 
 class HCommand extends \sevian\element {
     
@@ -229,6 +230,21 @@ class HCommand extends \sevian\element {
 			'value'		=> $description
 		];
 
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'unit_id',
+			'caption'	=> 'UnitId',
+			'value'		=> $unitId
+		];
+		$fields[] = [
+			'input'		=> 'input',
+			'type'		=> 'text',
+			'name'		=> 'status',
+			'caption'	=> 'UnitId',
+			'value'		=> 1
+		];
+
 		$form = [
 			'caption'=>"Command: <span class=\"command_name\">$command</span>",
 			'fields'=>$fields,
@@ -271,6 +287,39 @@ class HCommand extends \sevian\element {
 	}
 
 	private function save(){
+
+
+		
+		$f = new \Sigefor\Component\SaveForm([
+			'name'=>'/gt/forms/h_commands',//\Sigefor\JasonFile::getNameJasonFile('/forms/gt/h_commands', self::$patternJsonFile),//'/forms/gt/h_commands',
+			//'data'=>(object)\Sevian\S::getVReq()
+		]);
+
+		$result = $f->send([(object)\Sevian\S::getVReq()], []);
+
+		foreach($result as $k => $v){
+			
+			if(!$v->error){
+				
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'	=> $f->getCaption(),
+					'text'		=> 'Record was saved!!!'
+				]));
+				
+			}else{
+				
+				$this->addFragment(new \Sevian\iMessage([
+					'caption'	=> 'Error '.$f->getCaption(),
+					'text'		=> "Record wasn't saved!!!"
+				]));
+
+			}
+		}
+		
+	
+		return;
+		//hx($result);
+
 		$data = (object)\Sevian\S::getVReq();
 		$data->unit_id = $this->eparams->unitId;
 		//$data->command_id = $data->command_idx;
@@ -293,6 +342,9 @@ class HCommand extends \sevian\element {
 		$dataKeys["detail"] = [];//$this->getDataRecord('detail');
 		//print_r($dataKeys["detail"]);exit;
 		
+
+
+
 		$g =  new \Sigefor\Component\FF([
 			'name'	=>	\Sigefor\JasonFile::getNameJasonFile('/forms/gt/h_commands', self::$patternJsonFile),//'/forms/gt/h_commands',
 			'dataKeys'=>&$dataKeys,

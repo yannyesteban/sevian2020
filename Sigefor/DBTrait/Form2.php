@@ -28,6 +28,8 @@ trait Form2{
 	private $lastRecord = null;
 	private $recordFrom = false;
 	private $_values = null;
+
+	private $keyFrom = null;
 	
 	public function init($name, $record, $pattern = null){
 		
@@ -331,7 +333,17 @@ trait Form2{
 		$cn = $this->cn;
 		$filter = '';
 		$info = $this->infoQuery;
+		
+
 		foreach($info->keys as $k => $v){
+
+			if($this->keyFrom){
+				if(isset($this->keyFrom->$k) and isset($record->$k)){
+					$filter = $this->keyFrom->$k."='".$cn->addSlashes($record->$k)."'";
+				}
+
+				continue;
+			}
 
 			if(isset($record->$k) and isset($info->fields[$k])){
 				$table = $info->fields[$k]->orgtable;

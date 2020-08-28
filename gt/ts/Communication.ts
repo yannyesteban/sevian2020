@@ -1,8 +1,59 @@
-
 var GTCommunication = (($) => {
    
 	let n=0;
 
+    class Socket{
+
+		url:string = '127.0.0.1';
+		port:string = '3310';
+        socket:object = null;
+        constructor(info:object){
+            
+            for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            
+        }
+
+        connect(){
+            this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
+
+            this.socket.onopen = this.onopen;
+            this.socket.onmessage = this.onmessage;
+            this.socket.onclose  = this.onclose ;
+        }
+		
+		onclose (event){
+            db ("on Close");
+        }
+
+        send(msg){
+            this.socket.send(msg); 
+        }
+		
+		onopen(event){
+			db ("on OPEN");
+			
+			let openMessage = JSON.stringify({
+				type:"connect",
+				clientName:"oper4",
+				config:[]
+                
+
+            });
+
+			this.send(openMessage)
+        }
+		
+		onmessage(event){
+			
+            var server_message = event.data;
+            db (server_message);
+        }
+
+    }
     class Communication{
 		
         public id:any = null;
@@ -29,6 +80,10 @@ var GTCommunication = (($) => {
         private _bodyPanel:any = null;
         private bodyPanelId:string = "gtcomm-panel-2";
 
+        public _ws = null;
+        
+        private unitId:number = null;
+
         constructor(info){
 			
             for(var x in info){
@@ -40,7 +95,7 @@ var GTCommunication = (($) => {
 			let main = (this.id)? $(this.id): false;
             
             if(main){
-                
+            
                 if(main.ds(this.mainDS)){
                     //return;
                 }
@@ -51,6 +106,7 @@ var GTCommunication = (($) => {
                 
 			}
             this._create(main);
+            this._ws = new Socket({});
 			
 			
 
@@ -76,7 +132,9 @@ var GTCommunication = (($) => {
             this.mainForm.parentContext =  this;
             this.form = new Form2(this.mainForm);
           
-            
+            if(this.unitId){
+                this.loadUnit(this.unitId);
+            }
 			
         }
         test(){
@@ -220,7 +278,7 @@ var GTCommunication = (($) => {
 						"id":this.commandPanelId,
 						"element":"form",
 						"method":"request",
-						"name":"/forms/gt/form_command",
+						"name":"/gt/forms/form_command",
 						"eparams":{
 							"a":'yanny',
                             "mainId":this.commandPanelId,
@@ -234,7 +292,7 @@ var GTCommunication = (($) => {
 						"id":this.bodyPanelId,
 						"element":"form",
 						"method":"list",
-						"name":"/forms/gt/h_commands",
+						"name":"/gt/forms/h_commands",
 						"eparams":{
 							"a":'yanny',
                             "mainId":this.bodyPanelId,
@@ -358,7 +416,7 @@ var GTCommunication = (($) => {
 						"id":this.bodyPanelId,
 						"element":"form",
 						"method":"list",
-						"name":"/forms/gt/h_commands",
+						"name":"/gt/forms/h_commands",
 						"eparams":{
 							"a":'yanny',
                             "mainId":this.bodyPanelId,
@@ -390,7 +448,7 @@ var GTCommunication = (($) => {
                    
                    _data.push(
 					{
-						"h_command_id":410,
+						"h_command_id":'',
 						"param_id":inputs[i].ds("cmd"),
 						"value":inputs[i].getValue(),
 						"__mode_":inputs["param_mode"].getValue(),
@@ -407,7 +465,13 @@ var GTCommunication = (($) => {
 			
 
         }
-        
+        getUnitId(){
+            return this.form.getInput("unit_idx").getValue()*1;
+        }
+        getCommandId(){
+            return S.getElement(this.commandPanelId).getInput("command_idx").getValue()*1;
+
+        }
         save(commandId){
             this.getDetail();
 
@@ -446,6 +510,78 @@ var GTCommunication = (($) => {
 			});
         }
 
+        connect(){
+			
+			this._ws.connect();
+		}
+
+        s(type:number=0){
+
+            let commandId = this.getCommandId();
+			let unitId = this.getUnitId();
+			if(type == 1){
+				let str1 = JSON.stringify({
+					type:"get",
+					deviceId: 1,
+					deviceName: "2012000520",//;this.getDeviceName(),
+					commandId: commandId,
+					unitId: unitId,
+					comdValues: [],
+					msg : "yanny",
+					name: "caracas"
+					//,
+					//destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+	
+				});
+				this._ws.send(str1);
+				return;
+			}else if(type == 2){
+				
+				let str1 = JSON.stringify({
+					type:"h",
+					deviceId: 1,
+					deviceName: "2012000520",//;this.getDeviceName(),
+					commandId: commandId,
+					unitId: unitId,
+					comdValues: [],
+					msg : "yanny",
+					name: "valencia"
+					//,
+					//destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+	
+				});
+				this._ws.send(str1);
+				return;
+			}
+
+			
+			let inputs = this._formBody.getInputs();
+            let str = "$WP+"+this._formBody.getInput("command_name").getValue()+"=0000";
+            let cmdValues = [];
+            for(let i in inputs){
+                if(inputs[i].ds("cmd")){
+                    
+                   str += ","+inputs[i].getValue(); 
+                   cmdValues.push(inputs[i].getValue());
+                }
+                
+			}
+			
+			let str1 = JSON.stringify({
+                type:"set",
+                deviceId: 1,
+                deviceName: "2012000520",//;this.getDeviceName(),
+                commandId: commandId,
+				unitId: unitId,
+                comdValues: cmdValues,
+                msg : str,
+                name: "san carlos"
+                //,
+                //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+
+            });
+			this._ws.send(str1);
+		}
 	}
 	
 

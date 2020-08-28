@@ -281,7 +281,7 @@ $init = [
 		[
             'id'=>20,
             'element'=>'s-module',
-            'name'=>'/modules/cota',
+            'name'=>'/gt/modules/cota',
             'method'=>'load',
             'designMode'=>true,
             'fixed'=>true
@@ -291,7 +291,7 @@ $init = [
 			'id'		=> 22,
 			'element'	=> 'structure3',
 			//'name'		=> '/structures/webcar-login',//gt2020
-			'name'		=> '/structures/webcar-login',//gt2020
+			'name'		=> '/gt/structures/webcar-login',//gt2020
 			'method'	=> 'load',
 			'designMode'=> true,
 			'fixed'		=> true,

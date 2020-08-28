@@ -4,7 +4,9 @@ namespace GT;
 require_once MAIN_PATH.'gt/Trait.php';
 
 class Map extends \Sevian\Element{
-
+	
+	public $jsClassName = 'GTMap';
+	
 	use DBImage {
 		load as loadImage;
 	}
@@ -57,6 +59,7 @@ class Map extends \Sevian\Element{
 			'markImages' => $this->loadImage(),
 			'markDefaultImage' => 'img_35'
 		];
+		$this->setInit($this->info);
 
 		
 	}

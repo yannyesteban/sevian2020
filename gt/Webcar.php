@@ -5,7 +5,9 @@ require_once 'Site.php';
 require_once 'Geofence.php';
 require_once 'History.php';
 class Webcar extends \Sevian\Element{
-
+	
+	public $jsClassName = 'GTWebcar';
+	
 	public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
@@ -18,7 +20,7 @@ class Webcar extends \Sevian\Element{
 		if($method === false){
             $method = $this->method;
 		}
-		
+		$this->info = null;
 		switch($method){
 			case 'load':
 				$this->load();
@@ -110,6 +112,9 @@ class Webcar extends \Sevian\Element{
 				break;				
 			}
 
+			if($this->info){
+				$this->setInit($this->info);
+			}
 		return true;
 	}
 

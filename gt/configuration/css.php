@@ -39,7 +39,7 @@ $css = array(
 	"{$PATH}gt/css/gt.css",
 	"{$PATH}gt/css/cota_main.css",
 	"{$PATH}gt/css/cota.css",
-	"{$PATH}css/gt_form.css",
+	"{$PATH}gt/css/gt_form.css",
 	"{$PATH}css/Window.css",
 	"{$PATH}css/sg_calendar.css",
 	"{$PATH}css/Menu.css",

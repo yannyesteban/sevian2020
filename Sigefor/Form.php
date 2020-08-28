@@ -37,7 +37,10 @@ class Form extends \sevian\element {
             case 'request':
                 $this->requestForm();
 
-            break;
+			break;
+			case 'load':
+				$this->loadRecord();
+			break;
             case 'list':
 				$this->createGrid(1, '');
                 break;
@@ -74,7 +77,37 @@ class Form extends \sevian\element {
 
         $info->id = $this->containerId;
         $this->setInit($info);
-    }
+	}
+	
+	public function loadRecord(){
+		if($this->eparams->mainId?? false){
+            $this->containerId = $this->eparams->mainId;
+        }
+
+        if(!$this->containerId){
+            $this->containerId = 'form-main-'.$this->id;
+		}
+		
+		hr(1);
+
+		
+		$form =  new \Sigefor\Component\Form2([
+
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 2,
+			'record'	=> ["id"=>20],
+			//'recordIndex'=>$__id_,
+			//'userData'=>$this->userData,
+			
+		]);
+
+		$info->id = $this->containerId;
+        $this->setInit($info);
+	}
+
     public function createGrid($page = 1, $searchValue = ''){
 
 		$mainId = '';

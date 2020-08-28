@@ -2,7 +2,8 @@
 	"name":"main_command",
 	"caption":"",
 	"className":"gt-command-main",
-	"query":"SELECT '' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as test",
+    "query_":"SELECT '' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as v",
+    "query": "SELECT c.id as client_idx, a.id as account_idx, u.id as unit_idx, '' as connect, '' as v FROM units as u INNER JOIN accounts as a ON a.id = u.account_id INNER JOIN clients as c ON c.id = a.client_id",
 	"_menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -13,7 +14,7 @@
 		}
 	},
 	"params":"",
-	
+	"keyFrom" : {"unit_idx": "u.id"},
 	"pages":[],
 	"groups":{},
 	"infoFields":[
@@ -51,23 +52,27 @@
         {
             "name":"connect",
             "caption":"",
-            "default":"connect",
+            "default":"",
             "input":"input",
             "class":"btn-connect",
             "type":"button","mode_value":"1",
-            "params":{"className":"btn-connect"}
+            "params":{"className":"btn-connect"},
+            "events":{
+                "click":"this.connect();"
+            }
             
 
         },
         {
-            "name":"test",
-            "default":"T",
+            "name":"v",
+            "caption":"",
+            "default":"",
             "input":"input",
             "class":"btn-connect",
             "type":"button","mode_value":"1",
-            "params":{},
+            "params":{"className":"btn-connect"},
             "events":{
-                "click":"this.getDetail();"
+                "click":"this.s(1);"
             }
             
 

@@ -13,10 +13,9 @@
 	"elements":[
 		{
 			"id":4,
-			"element":"command",
-			"e":"gt_map",
+			"element":"gt_map",
 			"name":"gt_map",
-			"method":"create",
+			"method":"load",
 			"eparams":{},
 			"type":0,
 			"class":"",

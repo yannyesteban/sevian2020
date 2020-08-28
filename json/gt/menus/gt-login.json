@@ -19,7 +19,7 @@
 						"id":"22",
 						"element":"structure3",
 						"method":"login",
-						"name":"/structures/@structure",
+						"name":"/gt/structures/@structure",
 						"eparams":null
 					}
 			

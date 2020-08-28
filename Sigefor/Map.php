@@ -28,7 +28,7 @@ class Map extends \Sevian\Element{
 				$method = "list";
 			}
         }
-
+hr(5);
         switch($method){
 
 			case 'load_cmd':

@@ -138,7 +138,7 @@ var Form2 = (($) => {
             main.addClass(this.open? "open": "close");
 
             let target = (this.target)? $(this.target): false;
-            if(target){alert(this.id)
+            if(target){
                 target.append(this._main);
             }
             

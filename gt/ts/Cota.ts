@@ -87,10 +87,7 @@ var GTCota = (($) => {
                 
                 this._create(main);
             }
-            let GTMap = false;
-			if(!GTMap){
-                return;
-            }
+           
 			GTMap.load((map, s)=>{
 				this._unit.setMap(map);
 				this._site.setMap(map);
@@ -284,7 +281,17 @@ var GTCota = (($) => {
 							this.loadComm(this.comm);
 						}
 					},
-					
+					{
+						id: 9,
+						imageClass:"icon-events",
+                		propertys:{
+							"title":"Eventos"
+						},
+                		action:(item, event) => {
+							
+							this.loadCommunication();
+						}
+					}
 
 				]
 			 });
@@ -887,8 +894,70 @@ var GTCota = (($) => {
 			this._config = new GTConfig(info);
         }
 		
+		loadCommunication(){
+
+			let unitId = this._form.getInput("unit_id").getValue();
+			
+
+			this.bodyPanelId = "xxx1000";
+
+			if(this._win["comm"]){
+				this._win["comm"].show();
+				
+			}else{
+				this._win["comm"] = new Float.Window({
+					visible:true,
+					caption: "",
+					left:300,
+					top:100,
+					width: "400px",
+					height: "400px",
+					mode:"auto",
+					className:["sevian"]
+				});
+				
+				
+				this._win["comm"].getBody().id(this.bodyPanelId);
+			}
+
+			
+
+			
+			S.send3({
+                "async":1,
+                //"form":f,
+                id:2,
+                
+				
+				"params":[
+                    
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.bodyPanelId,
+						"element":"gt-communication",
+						"method":"load",
+						"name":"",
+						"eparams":{
+							"a":'yanny',
+                            "mainId":this.bodyPanelId,
+                            "unitId":unitId,
+						}
+
+                    }
+                ],
+                onRequest:(x)=>{
+                    //S.getElement(this.commandPanelId).setContext(this);
+					//S.getElement(this.bodyPanelId).setContext(this);
+					//alert(2)
+                   // alert(x)
+                }
+			});
+		}
 		
 		loadComm(info){
+
+			
 			S.send({
 				async:true,
 				panel:4,

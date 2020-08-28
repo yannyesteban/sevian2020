@@ -26,7 +26,7 @@ class Form2 extends \Sevian\JS\Form{
 		}
         
 		$this->cn = \Sevian\Connection::get();
-		
+		//hr($this->record);
 		$this->loadForm($this->name, $this->record, $this->patternJsonFile);
 		
 		//$this->menu = new Menu(['name'=>$this->menuName]);

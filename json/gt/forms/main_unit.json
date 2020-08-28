@@ -21,7 +21,14 @@
         {"name":"unit_id","caption":"","input":"list","type":"text",
             "data":[["","--","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM units as u LEFT JOIN units_names as vn ON vn.id = u.name_id LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"]
         },
-		{"name":"go","input":"input","type":"button"}
+		{
+			"name":"go",
+			"default":"x", 
+			"input":"input","type":"button",
+			"events":{
+				"click":"console.log(this);"
+			}
+		}
 
 	],
 	

@@ -86,6 +86,18 @@ $cls_elements = [
 			'patternJsonFile'=>MODULE_PATH.'json/form/{name}.json',
 		]
 	],
+	'form' 		=> [
+		'enable' => true,
+		
+		'file' 	=> MAIN_PATH.'Sigefor/Form.php',
+		'class' => '\Sigefor\Form',
+		
+		'js'=>[],
+		'css'=>[],
+		'init'=>[
+			'patternJsonFile'=>MAIN_PATH.'json/{name}.json'
+		]
+	],
 	'menu' 		=> [
 		'enable' => true,
 		
@@ -101,7 +113,7 @@ $cls_elements = [
 	'sgMap' 		=> [
 		'file' 	=> MAIN_PATH.'Sigefor/Map.php',
 		'class' => '\Sevian\Sigefor\Map',
-		'enable' => false,
+		'enable' => true,
 		'js'=>[
 			
 			[
@@ -133,10 +145,10 @@ $cls_elements = [
 				'file' 	=> MAIN_PATH.'build/lib/MapBox.js',
 				'begin'=> false
 			],
-			[
+			/*[
 				'file' 	=> MAIN_PATH.'js/Map.js',
 				'begin'=> false
-			]
+			]*/
 		],
 		'css'=>[
 			//'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
@@ -185,7 +197,7 @@ $cls_elements['gt_map'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Map.php',
 	'class' => '\GT\Map',
-	'enable' => false,
+	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/Map.js',
 		'begin'=> false
@@ -407,6 +419,24 @@ $cls_elements['gt_webcar'] = [
 		'begin'=> false
 	]],
 	'css'=>[]
+	
+];
+
+
+$cls_elements['h-command'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/HCommand.php',
+	'class' => '\GT\HCommand',
+	'enable' => true,
+	'js'=>[[
+		//'file' 	=> MAIN_PATH.'build/GT/ts/Communication.js',
+		//'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
 	
 ];
 

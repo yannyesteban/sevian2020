@@ -70,6 +70,7 @@
 
 
 .sg-form{
+	
 	&.gt_cota_unit{
 
 		>.page{
@@ -83,6 +84,53 @@
 			color: rgb(71, 110, 110);
 			font-size: 12px;
 			font-weight: bold;
+		}
+	}
+
+
+	&.gt-login{
+		width: 300px;
+		.caption{
+			display: none;
+			color:rgb(247, 247, 247);
+			text-align: center;
+			.text{
+				font-size: 12pt;
+				text-transform: uppercase;
+				font-family: futurab!important;
+			}
+			
+		}
+		.page{
+			.field{
+				padding: 5px 0px 10px 0px;
+				.label{
+					color: rgb(210, 235, 255);
+					text-transform: uppercase;
+					font-size: 0.8em;
+					padding-bottom: 10px;
+					font-family: futurab;
+					padding-left: 10px;
+					
+				}
+				input{
+					background-color: rgb(231, 231, 231);
+					color: rgb(109, 109, 109);
+					border: 0px;
+					//height: 30px;
+					font-size: 1em;
+					padding: 4px;
+					font-family: futurab;
+					width: 100%;
+				}
+			}
+
+		}
+
+
+
+		.menu{
+			background-color: crimson;
 		}
 	}
 }
