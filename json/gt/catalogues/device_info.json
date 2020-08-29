@@ -1,0 +1,17 @@
+{
+	"name":"device_info",
+	"caption":"Device",
+	"class":"catalogo",
+	"querys":{
+		"master":"SELECT d.id as device_id, d.device_name as device, d.version_id, d.serial, d.imei, d.password, d.phone_number_id, d.comment, d.status, v.name as version, cl.id as client_id, cl.client, a.id as account_id, a.name as account  FROM devices as d LEFT JOIN units as u ON u.device_id = d.id LEFT JOIN accounts as a ON a.id = u.account_id LEFT JOIN clients as cl on cl.id = a.client_id LEFT JOIN devices_versions as v ON v.id = d.version_id WHERE d.id = '&EX_deviceId' "
+	},
+	"templateName":"/cota/device_info",
+	"params":{
+		"msgError":{
+			"query":"Registro no encontrado",
+			"any":"Opps Error" 
+		
+		}
+		
+	}
+}

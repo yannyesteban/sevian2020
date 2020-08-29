@@ -351,7 +351,10 @@ var Form2 = (($) => {
             }
             return this;
         }
-        getValue() {
+        getValue(input) {
+            if (input) {
+                return this._inputs[input].getValue();
+            }
             let data = {};
             for (let name in this._inputs) {
                 data[name] = this._inputs[name].getValue();

@@ -21,7 +21,7 @@ $cls_elements = [
         'class' => '\Sigefor\structure3',
         'init'=>[
             'patternJsonFile'=>JSON_PATH.'/{name}.json',
-            'patternTemplateFile'=>TEMPLATES_PATH.'/{name}.html'
+            'patternTemplateFile'=>TEMPLATES_PATH.'{name}.html'
         ],
         'js'=>[],
         'css'=>[]
@@ -120,6 +120,82 @@ $cls_elements['h-command'] = [
 		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
 		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
 	],
+	
+];
+
+
+$cls_elements['catalogue'] = [
+	
+	'file' 	=> MAIN_PATH.'Sigefor/Catalogue.php',
+	'class' => '\Sigefor\Catalogue',
+	'enable' => true,
+	'js_'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
+
+$cls_elements['catalogue2'] = [
+	
+	'file' 	=> MAIN_PATH.'Sigefor/Catalogue2.php',
+	'class' => '\Sigefor\Catalogue2',
+	'enable' => true,
+	'js_'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		'patternTemplateFile'=>TEMPLATES_PATH.'{name}.html'
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	]
+	
+];
+
+$cls_elements['fcatalogue'] = [
+	
+	'file' 	=> MAIN_PATH.'Sigefor/FCatalogue.php',
+	'class' => '\Sigefor\FCatalogue',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/Sevian/ts/FCatalogue.js',
+		'begin'=> false
+	]],
+	'css'=>[]
+	
+];
+
+$cls_elements['i-catalogue'] = [
+	
+	'file' 	=> MAIN_PATH.'Sigefor/ICatalogue.php',
+	'class' => '\Sigefor\ICatalogue',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/Sevian/ts/ICatalogue.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+	
+	]
+	
+];
+
+
+$cls_elements['gt_info_unit'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/InfoUnit.php',
+	'class' => '\GT\InfoUnit',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
+		'begin'=> false
+	]],
+	'css'=>[]
 	
 ];
 Sevian\S::elementsLoad($cls_elements);

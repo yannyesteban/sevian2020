@@ -1,0 +1,19 @@
+{
+	"name":"unit_info",
+	"caption":"Unidades",
+	"class":"catalogo",
+	"querys":
+	{
+		"master":"SELECT v.id as vehicle_id, v.aux_name, v.plate, b.brand, m.model, v.serial, picture, v.year, vt.type as vehicle_type, vc.color, s.name as status, sa.name as admin_status, comment  FROM vehicles as v INNER JOIN brands as b ON b.id = v.brand_id INNER JOIN models as m ON m.id = v.model_id LEFT JOIN vehicle_type as vt ON vt.id=type_id LEFT JOIN vehicle_color as vc ON vc.id = v.color_id LEFT JOIN status as s ON s.id = v.status LEFT JOIN status as sa ON sa.id = v.admin_status   WHERE v.id = '&EX_vehicleId' ",
+		"units":"SELECT             u.id as unit_id,              u.device_id,             de.device_name,             u.vehicle_id,             vn.name as vehicle_name,             ic.icon         FROM units as u         LEFT JOIN units_names as vn ON vn.id = u.name_id          LEFT JOIN users_units as uu ON uu.unit_id = u.id          LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id                  INNER JOIN devices as de ON de.id = u.device_id         INNER JOIN devices_names as dn ON dn.name = de.device_name           LEFT JOIN icons as ic ON ic.id = u.icon_id          INNER JOIN accounts as ac ON ac.id = u.account_id         INNER JOIN clients as cl ON cl.id = ac.client_id                WHERE ve.id = '&vehicle_id'         ORDER BY vn.name"
+	},
+	"templateName":"/cota/unit_info",
+	"params":{
+		"msgError":{
+			"query":"Registro no encontrado",
+			"any":"Opps Error" 
+		
+		}
+		
+	}
+}

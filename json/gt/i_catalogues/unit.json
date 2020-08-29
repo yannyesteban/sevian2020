@@ -1,0 +1,12 @@
+{
+	"name":"unit",
+	"caption":"Unidades",
+	"form":"/gt/forms/unit_info_main",
+	"catalogue":"/gt/catalogues/unit_info",
+	"className":"",
+	"structure":"login",
+	"params":{},
+	"methods":null,
+    "sequence":{}
+
+}

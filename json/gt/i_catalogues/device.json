@@ -1,0 +1,11 @@
+{
+	"name":"account",
+	"caption":"Account",
+	"form":"/gt/forms/device_info_main",
+	"catalogue":"/gt/catalogues/device_info",
+	"className":"",
+	"params":{},
+	"methods":null,
+    "sequence":{}
+
+}

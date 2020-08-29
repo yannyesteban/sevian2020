@@ -1,0 +1,95 @@
+<div class="gt cota catalogue unit">
+	<div class="caption">{=vehicle_name}</div>
+	<div class="body">
+	
+		<div class="page main">
+			
+			<div class="field">
+				<div class="caption">Cliente</div>
+				<div class="value"><a href="javascript:void(0)" onclick="GT.c('clients', 'client_id', '{=client_id}')">{=client}</a></div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Cuenta</div>
+				<div class="value"><a href="javascript:void(0)" onclick="GT.c('accounts', 'account_id', '{=account_id}')">{=account}</a></div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Equipo</div>
+				<div class="value"><a href="javascript:void(0)" onclick="GT.c('devices', 'device_id', '{=device_id}')">{=device_name}</a></div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Matrícula</div>
+				<div class="value"><a href="javascript:void(0)" onclick="GT.c('vehicles', 'vehicle_id', '{=vehicle_id}')">{=plate}</a></div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Marca</div>
+				<div class="value">{=brand}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Modelo</div>
+				<div class="value">{=model}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Color</div>
+				<div class="value">{=color}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Servicios</div>
+				<div class="value"><a href="javascript:void(0)" onclick="S.send({
+					async : true,
+					panel: 5,
+					params:[{
+						t:'setMethod',
+						id: 5,
+						element:'procedure',
+						method:'list',
+						name:'set_unit_id',
+						eparams:{}
+					},{
+						t:'setMethod',
+						id: 10,
+						element:'s-form',
+						method:'list',
+						name:'/unit_service',
+						eparams:{}
+					}],
+					window:{
+						panel:10,
+						name:10,
+						caption:'ventana',
+						mode:'custom',
+						width:'800px',height:'600px',
+						left:'center',
+						top:'middle',show:{left:'center',top:'middle', mode:'custom'}
+					}
+				
+				});">Ver</a></div>
+			</div>
+			
+		</div>
+	
+		<div class="page contact">
+			
+			<div class="title">Nombre</div>
+			<div class="title">Cargo</div>
+			<div class="title">Telefonos</div>
+			<div class="title">Email</div>
+			
+			<for data="contacts">
+			
+				<div>{=name} {=last_name}</div>
+				<div>{=position}</div>
+				<div>{=phone}</div>
+				<div class="email">{=email}</div>
+			
+			</for>
+		
+		</div>
+		
+	</div>	
+</div>

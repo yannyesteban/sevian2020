@@ -1,0 +1,62 @@
+<div class="gt cota catalogue vehicle">
+	<div class="caption">{=plate}</div>
+	<div class="body">
+	
+		<div class="page main">
+			
+			<div class="field">
+				<div class="caption">Placa</div>
+				<div class="value">{=plate}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Marca</div>
+				<div class="value">{=brand}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Modelo</div>
+				<div class="value">{=model}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Serial</div>
+				<div class="value">{=serial}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Año</div>
+				<div class="value">{=year}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Color</div>
+				<div class="value">{=color}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Estatus</div>
+				<div class="value">{=status}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Estatus Administrativo</div>
+				<div class="value">{=admin_status}</div>
+			</div>
+			<div class="field">
+				<div class="caption">Comentario</div>
+				<div class="value">{=comment}</div>
+			</div>
+			
+		</div>
+
+		<div class="page units">
+			
+			<div class="title">Unidad</div>
+			<div class="title">Equipo</div>
+			<div class="title">Estado</div>
+			
+			<for data="units">
+			
+				<div><a href="javascript:void(0)" onclick="GT.c('units', 'unit_id', '{=unit_id}')">{=vehicle_name}</a></div>
+				<div>{=device_name}</div>
+				<div>Acivo</div>
+			
+			</for>
+		
+		</div>
+	</div>	
+</div>

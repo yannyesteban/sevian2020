@@ -1,0 +1,82 @@
+{
+	"name":"unit_info_main",
+	"caption":"",
+	"className":["cota-unit","flat", "_gt-command-main"],
+    "query":"SELECT '' as vehicle_id, '' as n, '' as e, '' as s",
+	"menuName":"",
+	"methods":{
+		"request":{
+			"menuName":""
+		},
+		"load":{
+			"menuName":""
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+        {
+			"name":"vehicle_id","caption":"nnn","input":"list","type":"text",
+			
+			"data":[["","","*"],"SELECT id, coalesce(plate, 'sin matricula') as vehicle FROM vehicles as d ORDER BY 2"],
+			"params":{"placeholder":"...VEHICLE"},
+			"events":{"change":"S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{vehicleId:this.getForm().getValue('vehicle_id')}}],});"}
+		},
+		{
+            "name":"n",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        },
+		{
+            "name":"e",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+		},
+		{
+            "name":"d",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        },
+		{
+            "name":"s",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        }
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

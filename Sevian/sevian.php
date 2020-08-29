@@ -341,6 +341,19 @@ class S{
 		]
 		
 		*/
+
+		self::setExp("ID_", $info->id);
+		self::setExp("ELEMENT_", $info->element);
+		self::setExp("NAME_", $info->name);
+		self::setExp("ASYNC_", $info->async);
+		if($info->eparams){
+			foreach($info->eparams as $k => $v){
+				//hr("$k -> $v");
+				self::setExp($k, $v);
+			}
+		}
+		
+
 		$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
 		
 
@@ -930,6 +943,7 @@ class S{
 		
 		//echo json_encode(self::$_f, JSON_PRETTY_PRINT);
 		$js = []; 
+		$up = [];
 		foreach(self::$_e as $k => $v){
 			if($v->getInit()){
 				
@@ -941,6 +955,10 @@ class S{
 
 				];
 			}
+
+			if($v->getJSActions()){
+				$up[] = ['id'=>$k, 'actions'=>$v->getJSActions()];
+			}
 			//hr($v->getInit());
 		}
 
@@ -949,7 +967,8 @@ class S{
 		$response = [
 			'panels'	=> $p,
 			'config'	=> $js,//self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
-			'update'	=> self::getJsConfigPanel(),
+			//'update'	=> self::getJsConfigPanel(),
+			'update'	=> $up,
 			'fragments'	=> self::$_f,
 			'components'=> self::getJsComponents(),
 			'debug'		=> self::$_db

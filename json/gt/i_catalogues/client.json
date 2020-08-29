@@ -1,0 +1,12 @@
+{
+	"name":"client",
+	"caption":"Clientes",
+	"form":"/gt/forms/client_info_main",
+	"catalogue":"/gt/catalogues/client_info",
+	"className":"",
+	"structure":"login",
+	"params":{},
+	"methods":null,
+    "sequence":{}
+
+}

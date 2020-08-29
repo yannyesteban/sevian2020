@@ -1,0 +1,126 @@
+{
+	"name":"geofence_menu",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal","webcar-menu"],
+	"autoClose":false,
+	"params":false,
+	"items":[
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":4,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":4,
+						"element":"i-catalogue",
+						"method":"load",
+						"name":"/gt/i_catalogues/client",
+						"eparams":null
+					}
+			
+				]}
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration unit"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":4,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":4,
+						"element":"i-catalogue",
+						"method":"load",
+						"name":"/gt/i_catalogues/unit",
+						"eparams":null
+					}
+			
+				]}
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration Account"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":4,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":4,
+						"element":"i-catalogue",
+						"method":"load",
+						"name":"/gt/i_catalogues/account",
+						"eparams":null
+					}
+			
+				]}
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration Devices"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":4,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":4,
+						"element":"i-catalogue",
+						"method":"load",
+						"name":"/gt/i_catalogues/device",
+						"eparams":null
+					}
+			
+				]}
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration Vehicles"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":4,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":4,
+						"element":"i-catalogue",
+						"method":"load",
+						"name":"/gt/i_catalogues/vehicle",
+						"eparams":null
+					}
+			
+				]}
+		}
+	]
+}	

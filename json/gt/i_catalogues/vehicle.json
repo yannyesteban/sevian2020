@@ -1,0 +1,11 @@
+{
+	"name":"vehicle",
+	"caption":"Vehicle",
+	"form":"/gt/forms/vehicle_info_main",
+	"catalogue":"/gt/catalogues/vehicle_info",
+	"className":"",
+	"params":{},
+	"methods":null,
+    "sequence":{}
+
+}

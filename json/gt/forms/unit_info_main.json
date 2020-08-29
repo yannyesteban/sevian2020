@@ -1,0 +1,82 @@
+{
+	"name":"unit_info_main",
+	"caption":"",
+	"className":["cota-unit","flat", "_gt-command-main"],
+    "query":"SELECT '' as unit_id, '' as n, '' as e, '' as d, '' as s",
+	"menuName":"",
+	"methods":{
+		"request":{
+			"menuName":""
+		},
+		"load":{
+			"menuName":""
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+        {
+			"name":"unit_id","caption":"nnn","input":"list","type":"text",
+			
+			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM units as u LEFT JOIN units_names as vn ON vn.id = u.name_id LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
+			"params":{"placeholder":"...UNITS"},
+			"events":{"change":"S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{unitId:this.getForm().getValue('unit_id')}}],});"}
+		},
+		{
+            "name":"n",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        },
+		{
+            "name":"e",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+		},
+		{
+            "name":"d",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        },
+		{
+            "name":"s",
+            "caption":"",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"button","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        }
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

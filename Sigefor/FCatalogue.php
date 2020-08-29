@@ -23,6 +23,9 @@ class FCatalogue
 	private $getVForm = null;
 	private $getEparam = null;
 
+
+	public $jsClassName = 'SGFCatalogue';
+
     public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
@@ -154,6 +157,8 @@ class FCatalogue
 		
 	}
 	
+
+	
 	private function load(){
 
 		
@@ -179,6 +184,9 @@ class FCatalogue
 			'form'	=> $g,
 			'catalogue'=>$this->loadCatalogue('')
 		];
+
+		$this->setPanel($this->panel);
+		$this->setInit($this->info);
 
 	}
 	

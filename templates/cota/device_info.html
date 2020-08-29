@@ -1,0 +1,65 @@
+<div class="gt cota catalogue device">
+	<div class="caption">{=device}</div>
+	<div class="body">
+	
+		<div class="page main">
+			
+			<div class="field">
+				<div class="caption">Versión</div>
+				<div class="value">{=version}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Cliente</div>
+				<div class="value"><a href="javascript:void(0)" onclick="GT.c('clients', 'client_id', '{=client_id}')">{=client}</a></div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Cuenta</div>
+				<div class="value"><a href="javascript:void(0)" onclick="GT.c('accounts', 'account_id', '{=account_id}')">{=account}</a></div>
+			</div>
+			
+			
+			
+			<div class="field">
+				<div class="caption">IMEI</div>
+				<div class="value">{=imei}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Password</div>
+				<div class="value">{=password}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">phone_number_id</div>
+				<div class="value">{=phone_number_id}</div>
+			</div>
+			
+			<div class="field">
+				<div class="caption">Comment</div>
+				<div class="value">{=comment}</div>
+			</div>
+			
+		</div>
+	
+		<div class="page contact">
+			
+			<div class="title">Nombre</div>
+			<div class="title">Cargo</div>
+			<div class="title">Telefonos</div>
+			<div class="title">Email</div>
+			
+			<for data="contacts">
+			
+				<div>{=name} {=last_name}</div>
+				<div>{=position}</div>
+				<div>{=phone}</div>
+				<div class="email">{=email}</div>
+			
+			</for>
+		
+		</div>
+		
+	</div>	
+</div>

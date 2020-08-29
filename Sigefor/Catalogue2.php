@@ -1,18 +1,18 @@
 <?php
 namespace sigefor;
 
-require_once 'DBTrait/Catalogue.php';
+require_once 'DBTrait/Catalogue2.php';
 
 
-class Catalogue
+class Catalogue2
     extends \Sevian\Element
-	implements 
-		\sevian\JasonComponent,
-		\sevian\JsonRequest
+
 	
 {
 
-    use	DBTrait\Catalogue;
+    use	DBTrait\Catalogue2{
+		DBTrait\Catalogue2::init as loadCatalogue;
+	}
     
 
     public $_name = '';
@@ -25,6 +25,8 @@ class Catalogue
 	private $caption = '';
 	private $class = '';
 
+	static public $patternJsonFile = '';
+	static public $patternTemplateFile = '';
 
 	
     public function __construct($info = []){
@@ -43,7 +45,7 @@ class Catalogue
 		if($method){
             $this->method = $method;//$method = $this->method;
 		}
-		//hr(\Sevian\S::getVReq());exit;
+		
 		$this->load();
 		
 		
@@ -51,46 +53,13 @@ class Catalogue
 	}
 	
 	private function load(){
-		$this->loadCatalogue($this->name);
+		$this->loadCatalogue($this->name, self::$patternJsonFile);
 
 		$this->html = $this->evalTemplate($this->htmlTemplate, 'master');
-		/*
-
+		$this->title = $this->caption;
 		
-		//$this->typeElement = 'GTUnit';
-		*/
-		$this->info = [
-			'id'=>'gt-catalogue-'.$this->id,
-			'panel'=>$this->id,
-			'tapName'=>'yanny'
-		];
 
     }
-    
-    public function jsonSerialize() {  
-        return [
-			'name'	=> $this->_name,
-			'type'	=> $this->_type,
-			'mode'	=> $this->_mode,
-			'info'	=> $this->_info
-		];  
-	}
-
-	public function getComponent(){
-		return [
-			'id'		=> 'gt-catalogue-'.$this->id,
-			'caption'	=> $this->caption,
-			'className'	=> $this->class,
-			'html'		=> $this->getHTML(),
-		];
-	}
-	public function setRequest($data){
-		$this->_jsonRequest = $data;
-	}
-	
-	public function getRequest(){
-		return $this->_jsonRequest;
-	}
 
 	public function getHTML(){
 		return ($this->html)? $this->html: $this->msgError->any??'error';

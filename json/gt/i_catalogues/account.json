@@ -1,0 +1,11 @@
+{
+	"name":"account",
+	"caption":"Account",
+	"form":"/gt/forms/account_info_main",
+	"catalogue":"/gt/catalogues/account_info",
+	"className":"",
+	"params":{},
+	"methods":null,
+    "sequence":{}
+
+}

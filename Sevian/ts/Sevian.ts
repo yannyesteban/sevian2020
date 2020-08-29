@@ -67,18 +67,22 @@ var S = (($) => {
             }
         }
 
+		
         static updatePanel(panels){
+			
 			for(let x of panels){
-				if(this._e[x.panel] && x.actions){
+			
+				if(this._e[x.id] && x.actions){
+					
 					for(let y of x.actions){
 						if(y.property !== undefined){
-							this._e[x.panel][y.property] = y.value;
+							this._e[x.id][y.property] = y.value;
 						}
 						if(y.method !== undefined){
 							if(y.args !== undefined){
-								this._e[x.panel][y.method](...y.args);
+								this._e[x.id][y.method](...y.args);
 							}else if(y.value !== undefined){
-								this._e[x.panel][y.method](y.value);
+								this._e[x.id][y.method](y.value);
 							}
 						}
 					}
