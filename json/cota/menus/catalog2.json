@@ -1,0 +1,36 @@
+{
+	"menu":"catalog",
+	"caption":"Catálogo",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian",""],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"Marcas",
+			"dataUser":{
+				"async": true,
+				"panel":51,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":51,
+						"element":"form",
+						"method":"list",
+						"name":"/form/brands",
+						"eparams":{"recordId":0}
+					}
+			
+				]
+			}
+		}
+	],
+	"params":{},
+	"methods":{},
+	"config":{},
+	"onDataUser":"S.send3(dataUser);",
+	"_onDataUser":"alert(344);"
+
+}

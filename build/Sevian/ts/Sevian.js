@@ -54,6 +54,9 @@ var S = (($) => {
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
             }
+            if (info.window) {
+                this.configWin(info.window);
+            }
             let elem = null;
             if (elem = this.getElement(info.id)) {
                 if (info.valid && elem.valid && !elem.valid(info.valid)) {
@@ -582,6 +585,49 @@ var S = (($) => {
             info.top = "middle";
             let _win = new Float.Window(info || _winOptions);
             return _win;
+        }
+        static configWin(wins) {
+            if (Array.isArray(wins)) {
+                for (let w of wins) {
+                    this._configWin(w);
+                }
+            }
+            else {
+                this._configWin(wins);
+            }
+        }
+        static _configWin(info) {
+            if (!info.name) {
+                return;
+            }
+            let name = info.name;
+            let win = null;
+            if (this._w[name]) {
+                win = this._w[name];
+            }
+            else {
+                info.left = info.left || "center";
+                info.top = info.top || "middle";
+                win = new Float.Window(info);
+            }
+            if (info.child) {
+                win.setBody(this.getForm(info.child));
+            }
+            if (info.caption) {
+                win.setCaption(info.caption);
+            }
+            if (info.mode) {
+                win.setMode(info.mode);
+            }
+            if (info.show === true) {
+                win.show();
+            }
+            else if (info.show === false) {
+                win.setVisible(false);
+            }
+            else if (info.show) {
+                win.show(info.show);
+            }
         }
         static addPanel(id) {
             let form = $().create({

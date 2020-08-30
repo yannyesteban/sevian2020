@@ -7,7 +7,22 @@
 	"class":"",
 	"mainPanel":4,
 	"params":{},
-	"wins":[],
+	"wins":[
+		{
+			"name":"v1",
+			"caption":"Ventana @module_name",
+			"mode":"max",
+			"visible":false,
+			"child":"#win_001"
+		},
+		{
+			"name":"v2",
+			"caption":"Ventana II @module_name",
+			"mode":"max",
+			"visible":false,
+			"child":"#win_002"
+		}
+	],
 	"roles":[],
 	"publicRole":true,
 	"elements":[
@@ -40,6 +55,18 @@
 			"element":"gt-communication",
 			"name":"gt_login",
 			"method":"load",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":50,
+			"element":"s-menu",
+			"name":"/cota/menus/catalog",
+			"method":"create",
 			"eparams":{},
 			"type":0,
 			"class":"",

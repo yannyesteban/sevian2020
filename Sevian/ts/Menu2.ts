@@ -153,6 +153,7 @@ var Menu =
                     type:       this.menu.type,
                     subType:    this.menu.subType,
                     useCheck:   this.menu.useCheck,
+                    onDataUser: this.onDataUser
                 });
                 item.append(menu.get());
                 //this.createMenu(item, info.items, true);

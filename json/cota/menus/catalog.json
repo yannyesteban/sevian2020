@@ -7,7 +7,7 @@
 	"autoClose":false,
 	"items":[
 		{
-			"caption":"Vehículos",
+			"caption":"Vehículos...",
 			"items":[
 				{
 					"caption":"Marcas",
@@ -20,9 +20,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/brands",
+								"name":"/form/brands",
 								"eparams":{"recordId":0}
 							}
 					
@@ -40,9 +40,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/models",
+								"name":"/form/models",
 								"eparams":{"recordId":0}
 							}
 					
@@ -60,9 +60,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/vehicle_color",
+								"name":"/form/vehicle_color",
 								"eparams":{"recordId":0}
 							}
 					
@@ -80,9 +80,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/vehicle_type",
+								"name":"/form/vehicle_type",
 								"eparams":{"recordId":0}
 							}
 					
@@ -100,9 +100,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/vehicles",
+								"name":"/form/vehicles",
 								"eparams":{"recordId":0}
 							}
 					
@@ -125,9 +125,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/phone_carriers",
+								"name":"/form/phone_carriers",
 								"eparams":{"recordId":0}
 							}
 					
@@ -145,9 +145,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/phone_numbers",
+								"name":"/form/phone_numbers",
 								"eparams":{"recordId":0}
 							}
 					
@@ -165,9 +165,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/phone_plans",
+								"name":"/form/phone_plans",
 								"eparams":{"recordId":0}
 							}
 					
@@ -185,9 +185,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/gsm_account",
+								"name":"/form/gsm_account",
 								"eparams":{"recordId":0}
 							}
 					
@@ -211,9 +211,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/contact_type",
+								"name":"/form/contact_type",
 								"eparams":{"recordId":0}
 							}
 					
@@ -231,9 +231,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/client",
+								"name":"/form/client",
 								"eparams":{"recordId":0}
 							}
 					
@@ -251,9 +251,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/account",
+								"name":"/form/account",
 								"eparams":{"recordId":0}
 							}
 					
@@ -276,9 +276,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/devices_brands",
+								"name":"/form/devices_brands",
 								"eparams":{"recordId":0}
 							}
 					
@@ -296,9 +296,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/devices_models",
+								"name":"/form/devices_models",
 								"eparams":{"recordId":0}
 							}
 					
@@ -316,9 +316,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/devices",
+								"name":"/form/devices",
 								"eparams":{"recordId":0}
 							}
 					
@@ -336,9 +336,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/event_type",
+								"name":"/form/event_type",
 								"eparams":{"recordId":0}
 							}
 					
@@ -356,9 +356,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/status_type",
+								"name":"/form/status_type",
 								"eparams":{"recordId":0}
 							}
 					
@@ -381,9 +381,9 @@
 							{
 								"t":"setMethod",
 								"id":51,
-								"element":"s-form",
+								"element":"form",
 								"method":"list",
-								"name":"/unit",
+								"name":"/form/unit",
 								"eparams":{"recordId":0}
 							}
 					
@@ -396,6 +396,6 @@
 	"params":{},
 	"methods":{},
 	"config":{},
-	"_onDataUser":"S.send(dataUser);"
+	"onDataUser":"S.send3(dataUser);"
 
 }

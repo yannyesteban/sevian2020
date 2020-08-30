@@ -6,6 +6,7 @@
 	"className":["sevian","horizontal","webcar-menu"],
 	"autoClose":false,
 	"params":false,
+	"onDataUser":"S.send3(dataUser);",
 	"items":[
 		{
 			"caption":"",
@@ -121,6 +122,37 @@
 					}
 			
 				]}
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration Windos"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":4,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+								
+				],
+				"window2":[
+					{
+						"name":"v2",
+						"show":true
+					}
+				],
+				"window":
+				{
+					"name":"v1",
+					"show":true,
+					"mode_":"max"
+				}
+				
+			}
+				
 		}
+
 	]
 }	
