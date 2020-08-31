@@ -9,16 +9,16 @@
 			"caption":"Guardar",
 			"dataUser":{
 				"async": true,
-				"panel":"&P_panelId",
+				"panel":"&EX_ID_",
 				"valid":false,
 				"confirm_": "seguro?",
 				"params":[
 					{
 						"t":"setMethod",
-						"id":"&P_panelId",
-						"element":"s-form",
+						"id":"&EX_ID_",
+						"element":"&EX_ELEMENT_",
 						"method":"save",
-						"name":"&P_elementName",
+						"name":"&EX_NAME_",
 						"eparams":null
 					}
 			
@@ -27,24 +27,24 @@
 		{"caption":"Guardar y Volver",
 			"dataUser":{
 				"async": true,
-				"panel":"&P_panelId",
+				"panel":"&EX_ID_",
 				"valid":false,
 				"confirm_": "seguro?",
 				"params":[
 					{
 						"t":"setMethod",
-						"id":"&P_panelId",
-						"element":"s-form",
+						"id":"&EX_ID_",
+						"element":"&EX_ELEMENT_",
 						"method":"save",
-						"name":"&P_elementName",
+						"name":"&EX_NAME_",
 						"eparams":null
 					},
 					{
 						"t":"setMethod",
-						"id":"&P_panelId",
-						"element":"s-form",
+						"id":"&EX_ID_",
+						"element":"&EX_ELEMENT_",
 						"method":"list",
-						"name":"&P_elementName",
+						"name":"&EX_NAME_",
 						"eparams":null
 					}
 			
@@ -52,19 +52,50 @@
 		{"caption":"Volver",
 			"dataUser":{
 				"async": true,
-				"panel":"&P_panelId",
+				"panel":"&EX_ID_",
 				"valid":false,
 				"confirm_": "seguro?",
 				"params":[
 					{
 						"t":"setMethod",
-						"id":"&P_panelId",
-						"element":"s-form",
+						"id":"&EX_ID_",
+						"element":"&EX_ELEMENT_",
 						"method":"list",
-						"name":"&P_elementName",
+						"name":"&EX_NAME_",
 						"eparams":null
 					}
 			
-				]}}
+				]
+			}
+		},
+		{
+			"caption":"Guardar y Editar",
+			"dataUser":{
+				"async": true,
+				"panel":"&EX_ID_",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&EX_ID_",
+						"element":"&EX_ELEMENT_",
+						"method":"save",
+						"name":"&EX_NAME_",
+						"eparams":null
+					},
+					{
+						"t":"setMethod",
+						"id":"&EX_ID_",
+						"element":"&EX_ELEMENT_",
+						"method":"load",
+						"name":"&EX_NAME_",
+						"eparams":null
+					}
+			
+				]
+			}
+		}
+
 	]
 }	

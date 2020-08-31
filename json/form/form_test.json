@@ -1,0 +1,29 @@
+{
+	"name":"form_test",
+	"caption":"Formulario de Prueba",
+	"class":"",
+	"query":"SELECT * FROM brandsx",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Código"},
+		{"name":"brand","caption":"Marca"}
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

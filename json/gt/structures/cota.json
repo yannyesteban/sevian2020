@@ -7,7 +7,19 @@
 	"class":"webcar",
 	"mainPanel":4,
 	"params":{},
-	"wins":[],
+	"wins":[
+		{
+			"name":"v1",
+			"caption":"Catálogo @module_name",
+			"mode":"custom",
+			"width":"400px",
+			"height":"400px",
+			"top":"middle",
+			"left":"center",
+			"visible":false,
+			"child":"#win_001"
+		}
+	],
 	"roles":[],
 	"publicRole":true,
 	"elements":[
@@ -41,6 +53,20 @@
 			"name":"/menu/tool",
 			"method":"create",
 			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":50,
+			"element":"s-menu",
+			"name":"/cota/menus/catalog",
+			"method":"create",
+			"eparams":{
+				"band":"yanny esteban"
+			},
 			"type":0,
 			"class":"",
 			"debug":0,

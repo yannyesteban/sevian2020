@@ -14,7 +14,8 @@ trait Menu2{
 	public $userData = [];
 	static public $patternJsonFile = JSON_PATH.'{name}.json';
 
-	
+	private $expressions = null;
+
 	public function loadMenu($name){
 		//hr(self::$patternJsonFile);hr($name);
 		if(!($info = $this->loadJsonInfo($name, self::$patternJsonFile))){
@@ -39,6 +40,12 @@ trait Menu2{
 		if($config){
 			foreach($config as $k => $v){
 				$this->$k = $v;
+			}
+		}
+
+		if($this->expressions){
+			foreach($this->expressions as $k => $v){
+				\Sevian\S::setExp($k, $v);
 			}
 		}
 		

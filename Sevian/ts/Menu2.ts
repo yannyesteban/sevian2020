@@ -148,11 +148,11 @@ var Menu =
                 let menu = new Menu({
                     items:      this.items,
                     context:    this.context,
-                    dataUser:   this.dataUser,
                     subMenu:    true,
                     type:       this.menu.type,
                     subType:    this.menu.subType,
                     useCheck:   this.menu.useCheck,
+                    dataUser:   this.dataUser,
                     onDataUser: this.onDataUser
                 });
                 item.append(menu.get());

@@ -7,8 +7,28 @@
 	"autoClose":false,
 	"items":[
 		{
-			"caption":"Vehículos...",
+			"caption":"Vehículos",
 			"items":[
+				{
+					"caption":"TEST",
+					"dataUser":{
+						"async": true,
+						"panel":51,
+						"valid":false,
+						"confirm_": "seguro?",
+						"params":[
+							{
+								"t":"setMethod",
+								"id":51,
+								"element":"form",
+								"method":"list",
+								"name":"/form/form_test",
+								"eparams":{"recordId":0}
+							}
+					
+						]
+					}
+				},
 				{
 					"caption":"Marcas",
 					"dataUser":{

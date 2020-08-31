@@ -130,7 +130,9 @@ class JsonStructure{
 	public function render(){
 		$j = [];
 		foreach($this->_ele as $id => $e){
-			
+			if(!$e){
+				continue;
+			}
 			$form = new \Sevian\HTML('');
 			$form->add($e);
 			$form->add($this->configInputs([

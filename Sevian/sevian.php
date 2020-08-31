@@ -299,7 +299,7 @@ class S{
 
 
 	public static function setElement($info, $update = false){
-		//hx($info->id);
+		
 		if($info->id === 0 or $info->id === "0"){
 			$info->id = self::getReq("__sg_panel")?? self::$defaultPanel;
 		}else if($info->id === -1 or $info->id === "-1"){

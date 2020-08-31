@@ -11,7 +11,11 @@
 		{
 			"name":"v1",
 			"caption":"Ventana @module_name",
-			"mode":"max",
+			"mode":"custom",
+			"width":"400px",
+			"height":"400px",
+			"top":"middle",
+			"left":"center",
 			"visible":false,
 			"child":"#win_001"
 		},
@@ -67,7 +71,9 @@
 			"element":"s-menu",
 			"name":"/cota/menus/catalog",
 			"method":"create",
-			"eparams":{},
+			"eparams":{
+				"band":"yanny esteban"
+			},
 			"type":0,
 			"class":"",
 			"debug":0,

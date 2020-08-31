@@ -44,7 +44,7 @@
 		{"name":"icon_id","caption":"Ícono", "input": "input", "type": "select", "childs": false,
 			"data":[
 				["", "seleccione", "*"],
-				"SELECT id, icon FROM icons WHERE type_id = 1 ORDER BY 2"
+				"SELECT id, icon FROM icon WHERE type_id = 1 ORDER BY 2"
 				
 			]},
 

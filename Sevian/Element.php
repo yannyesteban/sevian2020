@@ -9,7 +9,7 @@ class Element{
 	public $eparams = [];
 	public $updated = false;
 
-	private $_panel = null;
+	protected $_panel = null;
 	private $_init = null;
 	private $_jsActions = [];
 

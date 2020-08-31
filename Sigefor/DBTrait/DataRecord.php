@@ -22,7 +22,9 @@ trait DataRecord{
 		$this->_lastRecord = &$this->getSes('_lastRecord');
 
 	}
-
+	public function &getMasterData(){
+		return $this->_masterData;
+	}
 	public function setDataRecord($key, $record){
 		$this->_masterData[$key] = $record;
 	}
@@ -41,7 +43,7 @@ trait DataRecord{
 	}
 	public function getRecord($name, $index){
 
-		$this->_lastRecord = $this->_masterData[$name][$index];
+		$this->_lastRecord = $this->_masterData[$name][$index]?? false;
 		return $this->_lastRecord;
 
 	}

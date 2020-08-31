@@ -245,6 +245,33 @@ var GTCota = (($) => {
                         action: (item, event) => {
                             this.loadCommunication();
                         }
+                    },
+                    {
+                        id: 9,
+                        imageClass: "icon-events",
+                        propertys: {
+                            "title": "Catálogo"
+                        },
+                        action: (item, event) => {
+                            S.send3({
+                                "async": true,
+                                "panel": 4,
+                                "valid": false,
+                                "confirm_": "seguro?",
+                                "params": [],
+                                "window2": [
+                                    {
+                                        "name": "v2",
+                                        "show": true
+                                    }
+                                ],
+                                "window": {
+                                    "name": "v1",
+                                    "show": true,
+                                    "mode_": "max"
+                                }
+                            });
+                        }
                     }
                 ]
             });
