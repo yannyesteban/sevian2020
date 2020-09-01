@@ -205,6 +205,19 @@ trait DBTracking{
         return $data;
     }
 
+
+    private function getUnitInput(){
+        $query = "SELECT input_status , d ,input_status & d, (input_status & d) div d,tk.unit_id, input_status, u.*,t.*,i.*
+        FROM tracking as tk
+        
+        inner join unit_input as u on u.unit_id = tk.unit_id
+        
+        
+        inner join input_type as t on t.id = u.input_id
+        
+        inner join input as i on i.type_id=t.id and (input_status & d) div d = i.mode
+        ";
+    }
     private function updateTracking(){
         $cn = $this->cn;
 		

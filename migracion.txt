@@ -1,0 +1,27 @@
+INSERT into unit_input (unit_id, number, type, input_id, mode , codvehiculo)
+SELECT codvehiculo as unit_id ,
+8 as number,
+1 as type,
+input_8 as input_id,
+0 as mode, codvehiculo
+FROM vehiculo_inputs
+WHERE input_8 is not null
+
+
+
+/****************/
+
+
+INSERT into unit_input (unit_id, number, type, input_id, mode , codvehiculo)
+SELECT codvehiculo as unit_id ,
+
+1 as number,
+
+
+2 as type,
+output_1 as output_id,
+0 as mode, codvehiculo
+FROM vehiculo_inputs
+
+
+WHERE output_1 is not null
