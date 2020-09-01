@@ -73,7 +73,7 @@ class Form extends \sevian\element {
             $this->containerId = 'form-main-'.$this->id;
         }
         
-        $info = new Component\Form2([
+        $form = new Component\Form2([
 
             'id'		=> $this->containerId,
             'panelId'	=> $this->id,
@@ -82,9 +82,10 @@ class Form extends \sevian\element {
             'mode'		=> 1
         ]);
 
-        $info->id = $this->containerId;
-		$this->setInit($info);
+        $form->id = $this->containerId;
+		$this->setInit($form);
 		$this->setPanel($this->createPanel());
+		$this->title = $form->caption;
 	}
 	
 	public function loadRecord(){
@@ -114,6 +115,7 @@ class Form extends \sevian\element {
 		$form->id = $this->containerId;
 		$this->setInit($form);
 		$this->setPanel($this->createPanel());
+		$this->title = $form->caption;
 	}
 
     public function createGrid($page = 1, $searchValue = ''){
@@ -137,7 +139,7 @@ class Form extends \sevian\element {
 		
 		
 		//hx($paginator);
-		$info =  new \Sigefor\Component\Grid([
+		$form =  new \Sigefor\Component\Grid([
 			'asyncMode'	=> true,
 			'id'		=> $this->containerId,
 			'panelId'	=> $this->id,
@@ -153,7 +155,7 @@ class Form extends \sevian\element {
 			
 		]);
 		
-		$this->setDataRecord('grid', $info->getDataKeys());
+		$this->setDataRecord('grid', $form->getDataKeys());
 		$search = "
 		S.send3(
 			{
@@ -185,7 +187,7 @@ class Form extends \sevian\element {
 
 		$paginator = [
 			'page'=> $page,
-			'totalPages'=>	$info->getTotalPages(),
+			'totalPages'=>	$form->getTotalPages(),
 			'maxPages'=>	5,
 			'change'=>"S.send3(
 				{
@@ -213,14 +215,14 @@ class Form extends \sevian\element {
 				});"
 			];
 		//hx($info->getTotalPages());
-		$info->paginator = $paginator;
-		$info->search = $search;
-        $info->id = $this->containerId;
+		$form->paginator = $paginator;
+		$form->search = $search;
+        $form->id = $this->containerId;
         
 
 		//hx(json_encode($grid,JSON_PRETTY_PRINT));
 		
-		$records=$info->getDataKeys();
+		$records=$form->getDataKeys();
 		$this->setDataRecord('grid', $records);
 		//hx($grid->data);	
 		//$this->info = $grid;
@@ -231,8 +233,9 @@ class Form extends \sevian\element {
 		//$this->_mode = 'create';
 		//$this->_info = $grid;
         //print_r(json_encode($grid,JSON_PRETTY_PRINT));exit;
-		$this->setInit($info);
+		$this->setInit($form);
 		$this->setPanel($this->createPanel());
+		$this->title = $form->caption;
 		
 	}
 

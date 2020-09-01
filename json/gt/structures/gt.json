@@ -11,10 +11,10 @@
 		{
 			"name":"v1",
 			"caption":"Ventana @module_name",
-			"mode":"custom",
-			"width":"400px",
-			"height":"400px",
-			"top":"middle",
+			"mode":"auto",
+			"width":"auto",
+			"height":"auto",
+			"top":"amiddle",
 			"left":"center",
 			"visible":false,
 			"child":"#win_001"
@@ -23,6 +23,10 @@
 			"name":"v2",
 			"caption":"Ventana II @module_name",
 			"mode":"max",
+			"width":"400px",
+			"height":"200px",
+			"top":"top",
+			"left":"center",
 			"visible":false,
 			"child":"#win_002"
 		}

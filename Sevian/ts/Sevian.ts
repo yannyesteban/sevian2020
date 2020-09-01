@@ -51,6 +51,73 @@ var S = (($) => {
 		static getElement(id){
 			return this._e[id];
 		}
+
+		static requestPanel(p){
+			
+			//let p = JSON.parse(xhr.responseText);
+
+			if(p.panels){
+				for(var x in p.panels){
+					sgJson.iPanel(p.panels[x]);
+					if(this._w[p.panels[x].id]){
+						this._w[p.panels[x].id].setCaption(p.panels[x].title);
+						
+						this._w[p.panels[x].id].show();
+					}else{
+						if(this.defaultPanel == p.panels[x].id){
+							document.title = p.panels[x].title;
+						}
+
+					}
+					
+				}
+			}
+			if(p.config){
+				this.init(p.config);
+			}
+			if(p.update){
+				this.updatePanel(p.update);
+			}
+			
+			if(p.components){
+				this.setComponents(p.components);
+			}
+			if(p.fragments){
+				for(var x in p.fragments){
+					switch(p.fragments[x].token){
+						case "fragment":
+							sgJson.iFragment(p.fragments[x]);
+							break;
+						case "dataInput":
+							sgJson.iDataInput(p.fragments[x]);
+							break;
+						case "propertyHTML":
+							sgJson.iPropertyHTML(p.fragments[x]);
+							break;
+						case "objectData":
+							sgJson.iFragment(p.fragments[x]);
+							break;
+						case "message":
+							
+							this.msg = new Float.Message(p.fragments[x]);
+							this.msg.show({});
+							break;
+							
+					}
+				}
+			}
+
+
+			if(p.debug){
+
+				for(let msg of p.debug){
+					db (msg);
+				}
+				
+				
+			}
+        }
+
 		static init(info:object[]){
 			
             for(var x of info){
@@ -678,71 +745,7 @@ var S = (($) => {
 			}
 		}
 
-        static requestPanel(p){
-			
-			//let p = JSON.parse(xhr.responseText);
-
-			if(p.panels){
-				for(var x in p.panels){
-					sgJson.iPanel(p.panels[x]);
-					if(this._w[p.panels[x].id]){
-						this._w[p.panels[x].id].setCaption(p.panels[x].title);
-						
-						this._w[p.panels[x].id].show();
-					}else{
-						if(this.defaultPanel == p.panels[x].id){
-							document.title = p.panels[x].title;
-						}
-
-					}
-					
-				}
-			}
-			if(p.config){
-				this.init(p.config);
-			}
-			if(p.update){
-				this.updatePanel(p.update);
-			}
-			
-			if(p.components){
-				this.setComponents(p.components);
-			}
-			if(p.fragments){
-				for(var x in p.fragments){
-					switch(p.fragments[x].token){
-						case "fragment":
-							sgJson.iFragment(p.fragments[x]);
-							break;
-						case "dataInput":
-							sgJson.iDataInput(p.fragments[x]);
-							break;
-						case "propertyHTML":
-							sgJson.iPropertyHTML(p.fragments[x]);
-							break;
-						case "objectData":
-							sgJson.iFragment(p.fragments[x]);
-							break;
-						case "message":
-							
-							this.msg = new Float.Message(p.fragments[x]);
-							this.msg.show({});
-							break;
-							
-					}
-				}
-			}
-
-
-			if(p.debug){
-
-				for(let msg of p.debug){
-					db (msg);
-				}
-				
-				
-			}
-        }
+        
         static createWindow(info){
 			
 			info.left = "center";
@@ -769,14 +772,16 @@ var S = (($) => {
 			if(!info.name){
 				return;
 			}
-			let name = info.name;
+			
 			let win = null;
-			if(this._w[name]){
-				win = this._w[name];
+
+			if(this._w[info.name]){
+				win = this._w[info.name];
 			}else{
 				info.left = info.left || "center";
-				info.top = info.top || "middle";
-            	win = new Float.Window(info);
+				info.top = info.top || "top";
+				win = new Float.Window(info);
+				return;
 			}
 			
 			if(info.child){

@@ -146,7 +146,7 @@
 				"window":
 				{
 					"name":"v1",
-					"show":true,
+					"show":{"top":"middle","right":"center"},
 					"mode_":"max"
 				}
 				

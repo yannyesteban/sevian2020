@@ -417,12 +417,42 @@ class S{
 		}
 
 		if($e->mode == 'panel'){
-			self::addPanel($e);
 			self::$_str->addPanel($info->id, $e->getPanel());	
 			$info->update = true;
 			$info->isPanel = true;
 		}
 		
+		return;
+
+		if($_panel = $e->getPanel()){
+			self::$_panels[$info->id] = new InfoElement($info);
+			self::$_panels[$info->id]->update = true;
+			//self::$_p[$info->id] = true;
+			self::$_info[$info->id]->isPanel = true;
+			// if this->main panel then title = this->title
+			self::$_str->addPanel($info->id, $_panel);
+			//print_r($e->config());
+			//self::addJsPanel($e->config());
+			//si self::addJsPanel($e->configPanel());
+			if($e instanceof \Sevian\JsPanelRequest){
+				//self::addJsPanel($e->getJsConfigPanel());
+			}
+		
+		}else{
+			//si self::addJsConfigPanel($e->updatePanel());
+		}
+
+		self::addJsPanel($e->configPanel());
+		self::addJsConfigPanel($e->updatePanel());
+
+		
+		//self::addJsPanel($e->configPanel());
+		
+		if($e instanceof \Sevian\JsElementRequest){
+			self::addJsElement($e->getJsElement());
+		}
+		
+		self::addJsComponents($e->getJsonComponents());
 		
 	}
 
@@ -911,11 +941,6 @@ class S{
 	public static function jsonDoc(){
 		
 		
-		foreach(self::$_panels as $k => $e){
-			
-		}
-
-
 		//$elems = self::$_str->getElements();
 		
 		$p = 	self::$_str->render();
