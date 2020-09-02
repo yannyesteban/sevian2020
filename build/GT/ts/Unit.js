@@ -526,6 +526,17 @@ var GTUnit = (($) => {
             return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataUnits[id]), this.tracking[id]);
         }
         loadInfo(id) {
+            let input = "";
+            for (let x in this.dataUnits[id].input) {
+                input += x + ": " + this.dataUnits[id].input[x];
+            }
+            this.dataUnits[id].input1 = input;
+            input = "";
+            for (let x in this.dataUnits[id].input) {
+                input += x + ": " + this.dataUnits[id].input[x];
+            }
+            this.dataUnits[id].output1 = input;
+            console.log(this.dataUnits[id]);
             return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataUnits[id]), this.tracking[id]);
         }
         setFollowMe(value) {

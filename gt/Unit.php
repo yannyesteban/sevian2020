@@ -38,8 +38,8 @@ class Unit
 		
 		<div><div>Heading</div><div>{=heading}</div></div>
 		<div><div>Satellite</div><div>{=satellite}</div></div>
-		<div><div>Inputs</div><div>{=speed}</div></div>
-		<div><div>Outputs</div><div>{=speed}</div></div>
+		<div><div>Inputs</div><div>{=input1}</div></div>
+		<div><div>Outputs</div><div>{=output1}</div></div>
 		
 		</div>';
 
@@ -57,8 +57,8 @@ private $infoTemplate = '
 
 	<div><div>Heading</div><div>{=heading}</div></div>
 	<div><div>Satellite</div><div>{=satellite}</div></div>
-	<div><div>Inputs</div><div>{=speed}</div></div>
-	<div><div>Outputs</div><div>{=speed}</div></div>
+	<div><div>Inputs</div><div>{=input1}</div></div>
+	<div><div>Outputs</div><div>{=output1}</div></div>
 
 	</div>';
 

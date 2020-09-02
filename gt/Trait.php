@@ -113,7 +113,7 @@ trait DBUnit{
             de.device_name,
             u.vehicle_id,
             vn.name as vehicle_name,
-            ic.icon, ve.plate, br.brand, mo.model, ve.color
+            ic.icon, ve.plate, br.brand, mo.model, ve.color, t.id as trackId
 
 
         FROM units as u
@@ -145,6 +145,12 @@ trait DBUnit{
             $data[$rs['unit_id']] = $rs;
         }
 
+        $s = [];
+        foreach($data as $unitId => $v){
+            $s[] = $v['trackId'];
+        }
+        
+        $this->getUnitInput($data, $s);
 
         return $data;
     }
@@ -181,6 +187,7 @@ trait DBTracking{
 	private $cn = null;
 
 	private function loadTracking(){
+
         $cn = $this->cn;
 		
         $cn->query = "
@@ -200,23 +207,52 @@ trait DBTracking{
 		while($rs = $cn->getDataAssoc($result)){
             $data[$rs['unit_id']] = $rs;
         }
-
-
+        //hr($data);
+        $s = [];
+        foreach($data as $unitId => $v){
+            $s[] = $v['id'];
+        }
+        
+        $this->getUnitInput($data, $s);
+        
+        //hx(json_encode($data,JSON_PRETTY_PRINT));
         return $data;
     }
 
 
-    private function getUnitInput(){
-        $query = "SELECT input_status , d ,input_status & d, (input_status & d) div d,tk.unit_id, input_status, u.*,t.*,i.*
+    private function getUnitInput(&$data, $trackIds){
+
+        $ids = implode(',', $trackIds);
+        $cn = $this->cn;
+		
+        $cn->query = 
+        "SELECT tk.unit_id, t.type as des, name, number, 'input' as type
+
         FROM tracking as tk
+        INNER JOIN unit_input as u on u.unit_id = tk.unit_id and u.type=1
+        INNER JOIN input_type as t on t.id = u.input_id
+        INNER JOIN input as i on i.type_id=t.id and (input_status & d) div d = i.mode
+        WHERE tk.id IN ($ids)
+
+        UNION 
+
+        SELECT tk.unit_id, t.type as des, name, number, 'output' as type
+
+        FROM tracking as tk
+        INNER JOIN unit_input as u on u.unit_id = tk.unit_id and u.type=2
+        INNER JOIN input_type as t on t.id = u.input_id
+        INNER JOIN input as i on i.type_id=t.id and (output_status & d) div d = i.mode
+        WHERE tk.id IN ($ids)
+        ;";
+
+        $result = $cn->execute();
         
-        inner join unit_input as u on u.unit_id = tk.unit_id
+		while($rs = $cn->getDataAssoc($result)){
+            //$data[$rs['unit_id']][$rs['type']][] = $rs;
+            $data[$rs['unit_id']][$rs['type']][$rs['des']] = $rs['name'];
+        }
+        return $data;
         
-        
-        inner join input_type as t on t.id = u.input_id
-        
-        inner join input as i on i.type_id=t.id and (input_status & d) div d = i.mode
-        ";
     }
     private function updateTracking(){
         $cn = $this->cn;
