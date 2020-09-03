@@ -1,0 +1,41 @@
+{
+	"name":"history",
+	"caption":"Historial",
+	"className":"webcar",
+	"query":"SELECT '' as unit_id, now() as date_from, '' as hour_from, now() as date_to, '' as hour_to, '' as filter",
+	"menuName":"/gt/menus/history_form",
+	"methods":{
+		"request":{
+			"menuName":"/gt/menus/history_form"
+		},
+		"load":{
+			"menuName":"/gt/menus/history_form"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{
+			"name":"unit_id","caption":"nnn","input":"list","type":"text",
+			
+			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM units as u LEFT JOIN units_names as vn ON vn.id = u.name_id LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
+			"params":{"placeholder":"...UNITS"},
+			"_events":{"change":"S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{unitId:this.getForm().getValue('unit_id')}}],});"}
+		},
+		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
+		"data":[
+			[0, "seleccione", "*"],
+			"select id, brand from brands ORDER BY brand"
+			
+		  ]},
+		{"name":"model","caption":"Modelo"}
+
+	],
+	
+	"searchFor":[
+		"brand", "model"
+	]
+
+}

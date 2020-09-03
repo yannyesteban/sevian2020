@@ -48,6 +48,7 @@ $css = array(
 	"{$PATH}css/Paginator.css",
 	"{$PATH}css/gt_command.css",
 	"{$PATH}gt/css/gt_catalogue.css",
+	"{$PATH}css/sgTab.css"
 	//"{$PATH}css/flyPopup.css",
 	/*
 	"{$PATH}css/gt_main.css",

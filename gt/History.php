@@ -11,8 +11,8 @@ class History
 	
 {
 
-   
-    use DBGeofence;
+	use DBUnit;
+    use DBHistory;
    
     
 
@@ -22,6 +22,8 @@ class History
     public $_info = null;
 	
 	private $_jsonRequest = null;
+
+	public $jsClassName = 'GTHistory';
 
 	static $patternJsonFile = '';
 
@@ -72,9 +74,16 @@ class History
 		}
 		
 		switch($method){
+			case 'request':
+				$this->load2();
+				break;
 			case 'load':
 				$this->load();
 				break;
+			case 'load-data':
+				$this->loadHistory();
+				
+			break;
             case 'load-sites':
                 
 
@@ -89,7 +98,7 @@ class History
                     
 					'pathImages'	=> PATH_IMAGES,
 					'caption'		=> 'Historial',
-					'id'            => 'ks',
+					'id'            => $this->containerId,
 					'followMe'		=> true,
 					'delay'			=> 60000,
 				];
@@ -103,14 +112,48 @@ class History
 		
 		return true;
 	}
-	
-	public function init(){
+	public function load2(){
+
+		if($this->eparams->mainId?? false){
+            $this->containerId = $this->eparams->mainId;
+        }
+
+        if(!$this->containerId){
+            $this->containerId = 'history-main-'.$this->id;
+		}
 
 		$form =  new \Sigefor\Component\Form2([
 
 			'id'		=> $this->containerId,
 			'panelId'	=> $this->id,
-			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/history', self::$patternJsonFile),
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/history', self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 1,
+			'userData'=> [],
+			
+			//'record'=>$this->getRecord()
+		]);
+
+		
+		$this->setInit([
+			'form'     => $form,
+			
+			'popupTemplate' => $this->popupTemplate,
+			'infoTemplate'	=> $this->infoTemplate,
+			'pathImages'	=> PATH_IMAGES."sites/",
+			'caption'		=> 'Historial',
+			'id'            => $this->containerId,
+			'followMe'		=> true,
+			'delay'			=> 60000,
+		]);
+	}
+	public function init(){
+
+		$form =  new \Sigefor\Component\Form2([
+
+			//'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/history', self::$patternJsonFile),
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
@@ -126,7 +169,7 @@ class History
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
 			'caption'		=> 'Historial',
-			'id'            => 'ks',
+			'id'            => $this->containerId,
 			'followMe'		=> true,
 			'delay'			=> 60000,
 		];
@@ -145,7 +188,37 @@ class History
 		];
 
     }
-    
+	
+	private function loadHistory(){
+
+		$unitId = \SEVIAN\S::getReq('unit_id');
+		$dateFrom = \SEVIAN\S::getReq('date_from');
+		$hourFrom = \SEVIAN\S::getReq('hour_from');
+		$dateTo = \SEVIAN\S::getReq('date_to');
+		$hourTo = \SEVIAN\S::getReq('hour_to');
+		$filter = \SEVIAN\S::getReq('filter');
+		if($dateFrom){
+			//$dateForm .= ' '
+		}
+
+		$data = $this->loadTracking($unitId, $dateFrom, $dateTo, $filter);
+		
+		$this->setJSActions([
+			[
+            	'method'	=> 'setData',
+				'value'		=> $data,
+			],
+			[
+				'method'	=> 'setInfoUnit',
+				'value'		=> $this->infoUnit($unitId)
+			],
+			[
+				'method'	=> 'setInfoUnitInfo',
+				'value'		=> $this->infoUnitInput($unitId)
+			]
+		]);
+	}
+
     public function jsonSerialize() {  
         return [
 			'name'	=> $this->_name,

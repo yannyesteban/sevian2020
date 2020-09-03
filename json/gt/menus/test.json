@@ -127,7 +127,7 @@
 			"caption":"",
 			"imageClass":"icon-setting",
 			"propertys":{
-				"title":"Configuration Windos"
+				"title":"Configuration Windows"
 			},
 			"dataUser":{
 				"async": true,
@@ -152,6 +152,30 @@
 				
 			}
 				
+		},
+
+		{
+			"caption":"",
+			"imageClass":"icon-setting",
+			"propertys":{
+				"title":"Configuration Vehicles"
+			},
+			"dataUser":{
+				"async": true,
+				"panel":4,
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":4,
+						"element":"form",
+						"method":"request",
+						"name":"/form/alarm",
+						"eparams":null
+					}
+			
+				]}
 		}
 
 	]

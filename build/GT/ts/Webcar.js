@@ -130,10 +130,11 @@ var GTWebcar = (($) => {
                 this._create(main);
             }
             GTMap.load((map, s) => {
+                this.map = map;
                 this._unit.setMap(map);
                 this._site.setMap(map);
                 this._geofence.setMap(map);
-                this._history.setMap(map);
+                //this._history.setMap(map);
                 map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
                 //map.getControl("mark").onsave = ((info)=>{}
             });
@@ -160,7 +161,7 @@ var GTWebcar = (($) => {
             this.loadAlarm(this.alarm);
             this.loadConfig(this.config);
             this.loadGeofence(this.geofence);
-            this.loadHistory(this.history);
+            //this.loadHistory(this.history);
             this.mainMenu();
             //this.main.create("input").attr("type","text");
         }
@@ -249,17 +250,17 @@ var GTWebcar = (($) => {
                             this._win["geofence"].show();
                         }
                     },
-                    {
+                    /*{
                         id: 4,
-                        caption: "",
-                        imageClass: "icon-clock_001",
-                        propertys: {
-                            "title": "Mostrar Alarmas"
+                        caption:"",
+                        imageClass:"icon-clock_001",
+                        propertys:{
+                            "title":"Mostrar Alarmas"
                         },
-                        action: (item, event) => {
+                        action:(item, event) => {
                             this._win["alarm"].show();
                         }
-                    },
+                    },*/
                     {
                         id: 5,
                         caption: "",
@@ -282,7 +283,7 @@ var GTWebcar = (($) => {
                         }
                     },
                     {
-                        id: 8,
+                        id: 9,
                         imageClass: "icon-events",
                         propertys: {
                             "title": "Eventos"
@@ -290,6 +291,37 @@ var GTWebcar = (($) => {
                         action: (item, event) => {
                             color = 'green';
                         }
+                    },
+                    {
+                        id: 9,
+                        imageClass: "icon-calendar",
+                        propertys: {
+                            "title": "Calendar"
+                        },
+                        action: (item, event) => {
+                            this.loadHistory2();
+                        }
+                    },
+                    {
+                        id: 10,
+                        imageClass: "icon-clock_001",
+                        propertys: {
+                            "title": "Eventos"
+                        },
+                        items: [
+                            {
+                                caption: 'Sitio',
+                                action: (item, event) => {
+                                    this._win["form_alarm"].show();
+                                }
+                            },
+                            {
+                                caption: 'Sitio',
+                                action: (item, event) => {
+                                    this._win["alarm"].show();
+                                }
+                            },
+                        ]
                     },
                 ]
             });
@@ -826,6 +858,54 @@ var GTWebcar = (($) => {
         }
         geofenceUpdate(info) {
             this._geofence.update(info);
+        }
+        loadHistory2() {
+            let unitId = 8; //this.form.getInput("unit_idx").getValue();
+            this.historyId = "hist_xxy";
+            if (this._win["history2"]) {
+                this._win["history2"].show();
+            }
+            else {
+                this._win["history2"] = new Float.Window({
+                    visible: true,
+                    caption: "xx hist",
+                    //child:main,
+                    left: 300,
+                    top: 100,
+                    width: "300px",
+                    height: "200px",
+                    mode: "auto",
+                    className: ["sevian"],
+                });
+                this._win["history2"].getBody().id(this.historyId);
+            }
+            //let f  = this.form.getFormData();
+            S.send3({
+                "async": 1,
+                //"form":f,
+                id: 2,
+                "params": [
+                    {
+                        "t": "setMethod",
+                        'mode': 'element',
+                        "id": this.historyId,
+                        "element": "gt_history",
+                        "method": "request",
+                        "name": "/form/h_commands",
+                        "eparams": {
+                            "a": 'yanny',
+                            "mainId": this.historyId,
+                            "unitId": unitId,
+                        }
+                    }
+                ],
+                onRequest: (x) => {
+                    //S.getElement(this.commandPanelId).setContext(this);
+                    S.getElement(this.historyId).setContext(this);
+                    S.getElement(this.historyId).setMap(this.map);
+                    // alert(x)
+                }
+            });
         }
     }
     Webcar._instances = [];

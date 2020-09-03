@@ -251,11 +251,12 @@ var GTCommunication = (($) => {
 
         loadUnit(unitId){
             let f  = this.form.getFormData();
+            
             S.send3({
                 "async":1,
                 "form":f,
                 //id:4,
-                
+               
 				
 				"params":[
                     {

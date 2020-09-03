@@ -64,8 +64,9 @@ var GTHistory = (($) => {
 		private _lastUnitId = null;
 
 		private _traces:any[] = [];
-		
-
+		private _form:any = null;
+		private _parentContext :any = null;
+		private dataInput:any = null;
 		
 		static _instances:object[] = []; 
 		
@@ -114,7 +115,8 @@ var GTHistory = (($) => {
 			main.addClass("history-main");
 
 			this.form.id = this.main;
-			let form = new Form2(this.form);
+			this.form.parentContext =  this;
+			this._form = new Form2(this.form);
 
 			return;
 			
@@ -266,6 +268,58 @@ var GTHistory = (($) => {
 			
 		}
 		
+		setContext(context){
+			this._parentContext =  context;
+		}
+
+		find(unitId){
+         
+
+            //let unitId = this.form.getInput("unit_idx").getValue();
+			this.bodyPanelId = "x888";
+            let f  = this._form.getFormData();
+            S.send3({
+                "async":1,
+                "form":f,
+                //id:4,
+                
+				
+				"params":[
+                    
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.id,
+						"element":"gt_history",
+						"method":"load-data",
+						"name":"/form/h_commands",
+						"eparams":{
+							"a":'yanny',
+                            //"mainId":this.bodyPanelId,
+                            //"unitId":unitId,
+                            
+						}
+
+                    }
+                ],
+                onRequest:(x)=>{
+                    //S.getElement(this.commandPanelId).setContext(this);
+                   // S.getElement(this.bodyPanelId).setContext(this);
+                   // alert(x)
+                }
+			});
+		}
+		
+		setData(data){
+			
+			console.log(data);
+		}
+		setInfoUnit(info){
+			console.log(info);
+		}
+		setInfoUnitInfo(info){
+			this.dataInput = info;
+		}
 		play(){
 			let map = this.getMap().map;
 

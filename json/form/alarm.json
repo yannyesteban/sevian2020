@@ -2,7 +2,7 @@
 	"form":"alarm",
 	"caption":"Alarmas",
 	"className":"webcar",
-	"query":"SELECT * FROM alarms",
+	"query":"SELECT * FROM alarm",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -14,17 +14,33 @@
 	},
 	"params":"",
 	
-	"pages":[],
+	"pages":[
+		{
+			"type":"tab",
+			"name":"tab",
+			"config":{
+				"caption":"hello"
+			}
+		},
+		{
+			"type":"tab_page",
+			"name":"xxx",
+			"config":{
+				"caption":"hello"
+			}
+		},
+		{
+			"type":"tab_page",
+			"name":"xx2",
+			"config":{
+				"caption":"Dos"
+			}
+		}
+	],
 	"groups":{},
 	"infoFields":[
-		{"name":"id","caption":"Código A", "input": "hidden", "type":"hidden"},
-		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
-		"data":[
-			[0, "seleccione", "*"],
-			"select id, brand from brands ORDER BY brand"
-			
-		  ]},
-		{"name":"model","caption":"Modelo"}
+		{"name":"id","caption":"Usuario","page":"xxx"},
+		{"name":"week","caption":"Modelo","page":"xx2"}
 
 	],
 	

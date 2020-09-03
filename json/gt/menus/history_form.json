@@ -1,29 +1,22 @@
 {
-	"name":"form_param",
+	"name":"history_form",
 	"caption":"",
 	"type":"accordion",
 	"subType":"default",
 	"className":["sevian","horizontal"],
 	"autoClose":false,
+	"onDataUser":"(dataUser)=>{}",
 	"items":[
 		{
-			"caption":"Save",
+			"caption":"Go",
 			"events":{
-				"click":"this.getContext().save(0);"
+				"click":"this.find();"
 			}
 		},
 		{
 			"caption":"Enviar CMD",
 			"events":{
 				"click":"alert(this);"
-			}
-
-			
-		},
-		{
-			"caption":"Cancel",
-			"events":{
-				"click":"this.getContext().loadHistory()"
 			}
 		}
 		

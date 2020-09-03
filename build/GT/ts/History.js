@@ -53,6 +53,9 @@ var GTHistory = (($) => {
             this._timer = null;
             this._lastUnitId = null;
             this._traces = [];
+            this._form = null;
+            this._parentContext = null;
+            this.dataInput = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -83,7 +86,8 @@ var GTHistory = (($) => {
             this.main = main;
             main.addClass("history-main");
             this.form.id = this.main;
-            let form = new Form2(this.form);
+            this.form.parentContext = this;
+            this._form = new Form2(this.form);
             return;
             this.createMenu();
             this._info = $().create("div").addClass("win-history-info");
@@ -205,6 +209,46 @@ var GTHistory = (($) => {
         requestFun(xhr) {
             let json = JSON.parse(xhr.responseText);
             this.updateTracking(json);
+        }
+        setContext(context) {
+            this._parentContext = context;
+        }
+        find(unitId) {
+            //let unitId = this.form.getInput("unit_idx").getValue();
+            this.bodyPanelId = "x888";
+            let f = this._form.getFormData();
+            S.send3({
+                "async": 1,
+                "form": f,
+                //id:4,
+                "params": [
+                    {
+                        "t": "setMethod",
+                        'mode': 'element',
+                        "id": this.id,
+                        "element": "gt_history",
+                        "method": "load-data",
+                        "name": "/form/h_commands",
+                        "eparams": {
+                            "a": 'yanny',
+                        }
+                    }
+                ],
+                onRequest: (x) => {
+                    //S.getElement(this.commandPanelId).setContext(this);
+                    // S.getElement(this.bodyPanelId).setContext(this);
+                    // alert(x)
+                }
+            });
+        }
+        setData(data) {
+            console.log(data);
+        }
+        setInfoUnit(info) {
+            console.log(info);
+        }
+        setInfoUnitInfo(info) {
+            this.dataInput = info;
         }
         play() {
             let map = this.getMap().map;

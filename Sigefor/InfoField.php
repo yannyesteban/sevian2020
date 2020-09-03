@@ -8,6 +8,7 @@ class InfoField{
 	public $name = '';
 	//public $method = '';
 
+	public $page = '';
 	public $params = '';
 	public $caption = false;
 	public $class = '';

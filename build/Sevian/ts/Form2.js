@@ -136,13 +136,8 @@ var Form2 = (($) => {
             this._main = main.addClass("sg-page");
         }
         addField(field) {
-            if (field.page) {
-                if (this._pg[field.page]) {
-                    this._page = this._pg[field.page];
-                }
-            }
-            else {
-                //return;
+            if (field.page && this._pg[field.page]) {
+                this._page = this._pg[field.page];
             }
             this.createField(field);
         }
@@ -162,7 +157,8 @@ var Form2 = (($) => {
                     case "page":
                         let ele = new Page(page.config);
                         this._pg[page.name] = ele.getPage();
-                        body.append(this._pg[page.name].get());
+                        //body.append(this._pg[page.name].get());
+                        body.append(ele.get());
                         break;
                     case "tab":
                         this._tab = new Tab(page.config);
