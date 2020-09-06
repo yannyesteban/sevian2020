@@ -56,6 +56,8 @@ var GTHistory = (($) => {
             this._form = null;
             this._parentContext = null;
             this.dataInput = null;
+            this.unitInfo = null;
+            this.data = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -241,11 +243,35 @@ var GTHistory = (($) => {
                 }
             });
         }
+        uPlay() {
+            if (this._trace) {
+                this._trace.restart();
+            }
+            else {
+                let data = this.formateData(this.data);
+                this._trace = this.getMap().draw('traza2', 'trace', { data: data });
+                this._trace.play();
+            }
+        }
+        formateData(data) {
+            let result = [];
+            for (let x in data) {
+                result.push({
+                    coordinates: [data[x].longitude * 1, data[x].latitude * 1],
+                    speed: data[x].speed * 1,
+                    ts: data[x].ts - data[0].ts
+                });
+            }
+            //console.log(result);
+            return result;
+        }
         setData(data) {
-            console.log(data);
+            this.data = data;
+            //console.log(data);
         }
         setInfoUnit(info) {
-            console.log(info);
+            this.unitInfo = info;
+            //console.log(info);
         }
         setInfoUnitInfo(info) {
             this.dataInput = info;

@@ -1,0 +1,2362 @@
+[
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:20:34",
+   "latitud": "10,502258",
+   "longitud": "-66,848768",
+   "heading": 0,
+   "altitud": 890,
+   "satelites": 4,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:20:49",
+   "latitud": "10,50479",
+   "longitud": "-66,84828",
+   "heading": 0,
+   "altitud": 890,
+   "satelites": 4,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:21:04",
+   "latitud": "10,50479",
+   "longitud": "-66,84828",
+   "heading": 0,
+   "altitud": 890,
+   "satelites": 5,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:21:19",
+   "latitud": "10,50483",
+   "longitud": "-66,848083",
+   "heading": 86,
+   "altitud": 889,
+   "satelites": 5,
+   "velocidad": 20
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:21:34",
+   "latitud": "10,504933",
+   "longitud": "-66,847018",
+   "heading": 82,
+   "altitud": 890,
+   "satelites": 5,
+   "velocidad": 18
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:21:49",
+   "latitud": "10,505707",
+   "longitud": "-66,84671",
+   "heading": 18,
+   "altitud": 919,
+   "satelites": 5,
+   "velocidad": 33
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:22:04",
+   "latitud": "10,507022",
+   "longitud": "-66,846257",
+   "heading": 12,
+   "altitud": 939,
+   "satelites": 5,
+   "velocidad": 35
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:22:19",
+   "latitud": "10,507465",
+   "longitud": "-66,845722",
+   "heading": 94,
+   "altitud": 948,
+   "satelites": 5,
+   "velocidad": 34
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:22:34",
+   "latitud": "10,507463",
+   "longitud": "-66,844258",
+   "heading": 90,
+   "altitud": 935,
+   "satelites": 5,
+   "velocidad": 35
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:22:49",
+   "latitud": "10,507453",
+   "longitud": "-66,843105",
+   "heading": 89,
+   "altitud": 932,
+   "satelites": 5,
+   "velocidad": 26
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:23:04",
+   "latitud": "10,507487",
+   "longitud": "-66,842005",
+   "heading": 93,
+   "altitud": 929,
+   "satelites": 5,
+   "velocidad": 20
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:23:19",
+   "latitud": "10,507563",
+   "longitud": "-66,840758",
+   "heading": 79,
+   "altitud": 916,
+   "satelites": 5,
+   "velocidad": 15
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:23:34",
+   "latitud": "10,507753",
+   "longitud": "-66,84016",
+   "heading": 25,
+   "altitud": 933,
+   "satelites": 4,
+   "velocidad": 21
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:23:49",
+   "latitud": "10,50873",
+   "longitud": "-66,839812",
+   "heading": 36,
+   "altitud": 954,
+   "satelites": 5,
+   "velocidad": 13
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:24:04",
+   "latitud": "10,5088",
+   "longitud": "-66,839005",
+   "heading": 87,
+   "altitud": 931,
+   "satelites": 5,
+   "velocidad": 28
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:24:19",
+   "latitud": "10,508772",
+   "longitud": "-66,83801",
+   "heading": 100,
+   "altitud": 938,
+   "satelites": 5,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:24:34",
+   "latitud": "10,508817",
+   "longitud": "-66,837448",
+   "heading": 92,
+   "altitud": 947,
+   "satelites": 5,
+   "velocidad": 29
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:24:49",
+   "latitud": "10,508693",
+   "longitud": "-66,83643",
+   "heading": 80,
+   "altitud": 960,
+   "satelites": 5,
+   "velocidad": 4
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:25:04",
+   "latitud": "10,508687",
+   "longitud": "-66,83643",
+   "heading": 80,
+   "altitud": 959,
+   "satelites": 6,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:25:19",
+   "latitud": "10,508625",
+   "longitud": "-66,836353",
+   "heading": 110,
+   "altitud": 957,
+   "satelites": 6,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:25:34",
+   "latitud": "10,508532",
+   "longitud": "-66,836195",
+   "heading": 114,
+   "altitud": 963,
+   "satelites": 5,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:25:49",
+   "latitud": "10,508532",
+   "longitud": "-66,836195",
+   "heading": 114,
+   "altitud": 963,
+   "satelites": 7,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:26:04",
+   "latitud": "10,508532",
+   "longitud": "-66,836195",
+   "heading": 114,
+   "altitud": 963,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:26:19",
+   "latitud": "10,508532",
+   "longitud": "-66,836195",
+   "heading": 114,
+   "altitud": 963,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:26:34",
+   "latitud": "10,508532",
+   "longitud": "-66,836195",
+   "heading": 114,
+   "altitud": 963,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:26:49",
+   "latitud": "10,508532",
+   "longitud": "-66,836195",
+   "heading": 114,
+   "altitud": 963,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:26:51",
+   "latitud": "10,508507",
+   "longitud": "-66,836172",
+   "heading": 112,
+   "altitud": 958,
+   "satelites": 9,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:27:04",
+   "latitud": "10,508497",
+   "longitud": "-66,836152",
+   "heading": 113,
+   "altitud": 957,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:27:18",
+   "latitud": "10,508497",
+   "longitud": "-66,836152",
+   "heading": 113,
+   "altitud": 957,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:27:19",
+   "latitud": "10,50849",
+   "longitud": "-66,836133",
+   "heading": 117,
+   "altitud": 957,
+   "satelites": 9,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:27:34",
+   "latitud": "10,508475",
+   "longitud": "-66,83614",
+   "heading": 352,
+   "altitud": 956,
+   "satelites": 9,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:27:49",
+   "latitud": "10,50864",
+   "longitud": "-66,83631",
+   "heading": 298,
+   "altitud": 954,
+   "satelites": 8,
+   "velocidad": 18
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:28:04",
+   "latitud": "10,508693",
+   "longitud": "-66,836625",
+   "heading": 180,
+   "altitud": 966,
+   "satelites": 7,
+   "velocidad": 5
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:28:19",
+   "latitud": "10,507473",
+   "longitud": "-66,83661",
+   "heading": 191,
+   "altitud": 959,
+   "satelites": 8,
+   "velocidad": 29
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:28:34",
+   "latitud": "10,5065",
+   "longitud": "-66,836608",
+   "heading": 128,
+   "altitud": 947,
+   "satelites": 9,
+   "velocidad": 25
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:28:49",
+   "latitud": "10,505753",
+   "longitud": "-66,836758",
+   "heading": 195,
+   "altitud": 938,
+   "satelites": 9,
+   "velocidad": 32
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:29:04",
+   "latitud": "10,504557",
+   "longitud": "-66,836482",
+   "heading": 173,
+   "altitud": 929,
+   "satelites": 8,
+   "velocidad": 21
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:29:19",
+   "latitud": "10,503603",
+   "longitud": "-66,836645",
+   "heading": 188,
+   "altitud": 922,
+   "satelites": 8,
+   "velocidad": 28
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:29:34",
+   "latitud": "10,50244",
+   "longitud": "-66,836758",
+   "heading": 182,
+   "altitud": 917,
+   "satelites": 7,
+   "velocidad": 26
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:29:49",
+   "latitud": "10,501843",
+   "longitud": "-66,836788",
+   "heading": 179,
+   "altitud": 910,
+   "satelites": 8,
+   "velocidad": 16
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:30:04",
+   "latitud": "10,50076",
+   "longitud": "-66,836847",
+   "heading": 182,
+   "altitud": 903,
+   "satelites": 8,
+   "velocidad": 30
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:30:19",
+   "latitud": "10,499563",
+   "longitud": "-66,836915",
+   "heading": 186,
+   "altitud": 894,
+   "satelites": 7,
+   "velocidad": 23
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:30:34",
+   "latitud": "10,4988",
+   "longitud": "-66,836942",
+   "heading": 183,
+   "altitud": 890,
+   "satelites": 8,
+   "velocidad": 17
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:30:49",
+   "latitud": "10,498393",
+   "longitud": "-66,836658",
+   "heading": 94,
+   "altitud": 897,
+   "satelites": 6,
+   "velocidad": 22
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:31:04",
+   "latitud": "10,498303",
+   "longitud": "-66,836172",
+   "heading": 113,
+   "altitud": 899,
+   "satelites": 7,
+   "velocidad": 10
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:31:19",
+   "latitud": "10,498095",
+   "longitud": "-66,836188",
+   "heading": 293,
+   "altitud": 923,
+   "satelites": 8,
+   "velocidad": 2
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:31:34",
+   "latitud": "10,497862",
+   "longitud": "-66,836245",
+   "heading": 190,
+   "altitud": 938,
+   "satelites": 8,
+   "velocidad": 6
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:31:49",
+   "latitud": "10,497827",
+   "longitud": "-66,83623",
+   "heading": 190,
+   "altitud": 938,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:32:04",
+   "latitud": "10,497827",
+   "longitud": "-66,83623",
+   "heading": 190,
+   "altitud": 938,
+   "satelites": 7,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:32:19",
+   "latitud": "10,497827",
+   "longitud": "-66,83623",
+   "heading": 190,
+   "altitud": 938,
+   "satelites": 6,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:32:34",
+   "latitud": "10,49724",
+   "longitud": "-66,836188",
+   "heading": 191,
+   "altitud": 933,
+   "satelites": 8,
+   "velocidad": 14
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:32:49",
+   "latitud": "10,496968",
+   "longitud": "-66,836223",
+   "heading": 181,
+   "altitud": 920,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:33:04",
+   "latitud": "10,496968",
+   "longitud": "-66,836223",
+   "heading": 181,
+   "altitud": 920,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:33:19",
+   "latitud": "10,496968",
+   "longitud": "-66,836223",
+   "heading": 181,
+   "altitud": 920,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:33:34",
+   "latitud": "10,496968",
+   "longitud": "-66,836223",
+   "heading": 181,
+   "altitud": 920,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:33:49",
+   "latitud": "10,49648",
+   "longitud": "-66,835882",
+   "heading": 114,
+   "altitud": 882,
+   "satelites": 9,
+   "velocidad": 33
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:34:04",
+   "latitud": "10,496152",
+   "longitud": "-66,834962",
+   "heading": 111,
+   "altitud": 873,
+   "satelites": 10,
+   "velocidad": 5
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:34:19",
+   "latitud": "10,496155",
+   "longitud": "-66,834963",
+   "heading": 111,
+   "altitud": 873,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:34:34",
+   "latitud": "10,496155",
+   "longitud": "-66,834963",
+   "heading": 111,
+   "altitud": 873,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:34:49",
+   "latitud": "10,496155",
+   "longitud": "-66,834963",
+   "heading": 111,
+   "altitud": 873,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:35:04",
+   "latitud": "10,496155",
+   "longitud": "-66,834963",
+   "heading": 111,
+   "altitud": 873,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:35:19",
+   "latitud": "10,496175",
+   "longitud": "-66,834552",
+   "heading": 36,
+   "altitud": 871,
+   "satelites": 10,
+   "velocidad": 22
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:35:34",
+   "latitud": "10,496988",
+   "longitud": "-66,834267",
+   "heading": 71,
+   "altitud": 878,
+   "satelites": 10,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:35:49",
+   "latitud": "10,496792",
+   "longitud": "-66,833567",
+   "heading": 107,
+   "altitud": 887,
+   "satelites": 9,
+   "velocidad": 20
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:36:04",
+   "latitud": "10,49667",
+   "longitud": "-66,832887",
+   "heading": 124,
+   "altitud": 884,
+   "satelites": 7,
+   "velocidad": 12
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:36:19",
+   "latitud": "10,496338",
+   "longitud": "-66,833067",
+   "heading": 221,
+   "altitud": 883,
+   "satelites": 8,
+   "velocidad": 2
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:36:34",
+   "latitud": "10,496338",
+   "longitud": "-66,833067",
+   "heading": 221,
+   "altitud": 883,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:36:49",
+   "latitud": "10,496217",
+   "longitud": "-66,832987",
+   "heading": 149,
+   "altitud": 887,
+   "satelites": 9,
+   "velocidad": 7
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:37:04",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:37:06",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:37:08",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:37:13",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:38:33",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "9:38:40",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:06:15",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:06:38",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:06:56",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:06:57",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:06:58",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:07:13",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:07:28",
+   "latitud": "10,496213",
+   "longitud": "-66,83298",
+   "heading": 166,
+   "altitud": 887,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:07:43",
+   "latitud": "10,496607",
+   "longitud": "-66,832962",
+   "heading": 61,
+   "altitud": 916,
+   "satelites": 10,
+   "velocidad": 16
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:07:58",
+   "latitud": "10,496852",
+   "longitud": "-66,832132",
+   "heading": 45,
+   "altitud": 914,
+   "satelites": 9,
+   "velocidad": 17
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:08:13",
+   "latitud": "10,497242",
+   "longitud": "-66,831167",
+   "heading": 60,
+   "altitud": 893,
+   "satelites": 10,
+   "velocidad": 23
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:08:28",
+   "latitud": "10,49768",
+   "longitud": "-66,830145",
+   "heading": 57,
+   "altitud": 886,
+   "satelites": 9,
+   "velocidad": 23
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:08:43",
+   "latitud": "10,498152",
+   "longitud": "-66,829378",
+   "heading": 62,
+   "altitud": 887,
+   "satelites": 9,
+   "velocidad": 27
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:08:58",
+   "latitud": "10,498692",
+   "longitud": "-66,828288",
+   "heading": 64,
+   "altitud": 891,
+   "satelites": 9,
+   "velocidad": 34
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:09:13",
+   "latitud": "10,499173",
+   "longitud": "-66,827372",
+   "heading": 68,
+   "altitud": 893,
+   "satelites": 10,
+   "velocidad": 25
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:09:28",
+   "latitud": "10,49893",
+   "longitud": "-66,826423",
+   "heading": 113,
+   "altitud": 890,
+   "satelites": 9,
+   "velocidad": 13
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:09:43",
+   "latitud": "10,497988",
+   "longitud": "-66,826505",
+   "heading": 192,
+   "altitud": 891,
+   "satelites": 10,
+   "velocidad": 24
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:09:58",
+   "latitud": "10,497332",
+   "longitud": "-66,826723",
+   "heading": 189,
+   "altitud": 894,
+   "satelites": 10,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:10:13",
+   "latitud": "10,496843",
+   "longitud": "-66,82685",
+   "heading": 194,
+   "altitud": 896,
+   "satelites": 10,
+   "velocidad": 13
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:10:28",
+   "latitud": "10,495755",
+   "longitud": "-66,827105",
+   "heading": 193,
+   "altitud": 888,
+   "satelites": 10,
+   "velocidad": 32
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:10:43",
+   "latitud": "10,494802",
+   "longitud": "-66,827355",
+   "heading": 193,
+   "altitud": 885,
+   "satelites": 9,
+   "velocidad": 21
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:10:58",
+   "latitud": "10,494488",
+   "longitud": "-66,827452",
+   "heading": 193,
+   "altitud": 883,
+   "satelites": 10,
+   "velocidad": 22
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:11:13",
+   "latitud": "10,493393",
+   "longitud": "-66,827878",
+   "heading": 206,
+   "altitud": 888,
+   "satelites": 7,
+   "velocidad": 30
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:11:28",
+   "latitud": "10,492645",
+   "longitud": "-66,828445",
+   "heading": 220,
+   "altitud": 899,
+   "satelites": 8,
+   "velocidad": 13
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:11:43",
+   "latitud": "10,492017",
+   "longitud": "-66,828993",
+   "heading": 216,
+   "altitud": 906,
+   "satelites": 7,
+   "velocidad": 21
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:11:58",
+   "latitud": "10,491457",
+   "longitud": "-66,829088",
+   "heading": 137,
+   "altitud": 883,
+   "satelites": 8,
+   "velocidad": 14
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:12:13",
+   "latitud": "10,49055",
+   "longitud": "-66,82799",
+   "heading": 131,
+   "altitud": 879,
+   "satelites": 8,
+   "velocidad": 44
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:12:28",
+   "latitud": "10,489517",
+   "longitud": "-66,826828",
+   "heading": 132,
+   "altitud": 880,
+   "satelites": 8,
+   "velocidad": 35
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:12:43",
+   "latitud": "10,489333",
+   "longitud": "-66,826617",
+   "heading": 132,
+   "altitud": 874,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:12:58",
+   "latitud": "10,489032",
+   "longitud": "-66,826257",
+   "heading": 130,
+   "altitud": 870,
+   "satelites": 9,
+   "velocidad": 32
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:13:13",
+   "latitud": "10,487925",
+   "longitud": "-66,825097",
+   "heading": 132,
+   "altitud": 865,
+   "satelites": 9,
+   "velocidad": 50
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:13:28",
+   "latitud": "10,486775",
+   "longitud": "-66,823748",
+   "heading": 126,
+   "altitud": 858,
+   "satelites": 9,
+   "velocidad": 40
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:13:43",
+   "latitud": "10,485935",
+   "longitud": "-66,822582",
+   "heading": 126,
+   "altitud": 855,
+   "satelites": 9,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:13:58",
+   "latitud": "10,48588",
+   "longitud": "-66,822458",
+   "heading": 118,
+   "altitud": 855,
+   "satelites": 8,
+   "velocidad": 16
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:14:13",
+   "latitud": "10,485585",
+   "longitud": "-66,822098",
+   "heading": 130,
+   "altitud": 860,
+   "satelites": 9,
+   "velocidad": 10
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:14:28",
+   "latitud": "10,485067",
+   "longitud": "-66,822283",
+   "heading": 215,
+   "altitud": 861,
+   "satelites": 7,
+   "velocidad": 18
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:14:43",
+   "latitud": "10,484552",
+   "longitud": "-66,822478",
+   "heading": 214,
+   "altitud": 862,
+   "satelites": 7,
+   "velocidad": 18
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:14:58",
+   "latitud": "10,484485",
+   "longitud": "-66,822558",
+   "heading": 358,
+   "altitud": 861,
+   "satelites": 8,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:15:13",
+   "latitud": "10,484615",
+   "longitud": "-66,822473",
+   "heading": 21,
+   "altitud": 858,
+   "satelites": 9,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:15:28",
+   "latitud": "10,4849",
+   "longitud": "-66,822345",
+   "heading": 3,
+   "altitud": 869,
+   "satelites": 6,
+   "velocidad": 4
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:15:43",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:15:58",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:16:04",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 7,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:16:57",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 7,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "10:20:32",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:01:50",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 7,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:02:10",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:02:18",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:02:19",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:02:34",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:02:38",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:02:49",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:02:50",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:03:05",
+   "latitud": "10,48491",
+   "longitud": "-66,822342",
+   "heading": 3,
+   "altitud": 870,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:03:20",
+   "latitud": "10,485188",
+   "longitud": "-66,82248",
+   "heading": 58,
+   "altitud": 865,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:03:35",
+   "latitud": "10,485188",
+   "longitud": "-66,82248",
+   "heading": 58,
+   "altitud": 865,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:03:50",
+   "latitud": "10,485188",
+   "longitud": "-66,82248",
+   "heading": 58,
+   "altitud": 865,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:04:05",
+   "latitud": "10,485295",
+   "longitud": "-66,822045",
+   "heading": 34,
+   "altitud": 887,
+   "satelites": 10,
+   "velocidad": 6
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:04:20",
+   "latitud": "10,486115",
+   "longitud": "-66,821365",
+   "heading": 31,
+   "altitud": 863,
+   "satelites": 8,
+   "velocidad": 30
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:04:35",
+   "latitud": "10,487338",
+   "longitud": "-66,821287",
+   "heading": 0,
+   "altitud": 859,
+   "satelites": 8,
+   "velocidad": 28
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:04:50",
+   "latitud": "10,488782",
+   "longitud": "-66,821262",
+   "heading": 2,
+   "altitud": 865,
+   "satelites": 9,
+   "velocidad": 38
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:05:05",
+   "latitud": "10,489787",
+   "longitud": "-66,821265",
+   "heading": 310,
+   "altitud": 868,
+   "satelites": 10,
+   "velocidad": 12
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:05:20",
+   "latitud": "10,489862",
+   "longitud": "-66,821755",
+   "heading": 275,
+   "altitud": 871,
+   "satelites": 10,
+   "velocidad": 8
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:05:35",
+   "latitud": "10,489948",
+   "longitud": "-66,822317",
+   "heading": 280,
+   "altitud": 874,
+   "satelites": 10,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:05:50",
+   "latitud": "10,490405",
+   "longitud": "-66,822393",
+   "heading": 7,
+   "altitud": 871,
+   "satelites": 9,
+   "velocidad": 20
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:06:05",
+   "latitud": "10,491067",
+   "longitud": "-66,822282",
+   "heading": 10,
+   "altitud": 870,
+   "satelites": 10,
+   "velocidad": 14
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:06:20",
+   "latitud": "10,49177",
+   "longitud": "-66,82219",
+   "heading": 5,
+   "altitud": 871,
+   "satelites": 10,
+   "velocidad": 17
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:06:35",
+   "latitud": "10,49253",
+   "longitud": "-66,822102",
+   "heading": 6,
+   "altitud": 870,
+   "satelites": 9,
+   "velocidad": 24
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:06:50",
+   "latitud": "10,492988",
+   "longitud": "-66,822037",
+   "heading": 9,
+   "altitud": 877,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:07:05",
+   "latitud": "10,492988",
+   "longitud": "-66,822037",
+   "heading": 9,
+   "altitud": 877,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:07:20",
+   "latitud": "10,492988",
+   "longitud": "-66,822037",
+   "heading": 9,
+   "altitud": 877,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:07:35",
+   "latitud": "10,492988",
+   "longitud": "-66,822037",
+   "heading": 9,
+   "altitud": 877,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:07:50",
+   "latitud": "10,493357",
+   "longitud": "-66,821903",
+   "heading": 7,
+   "altitud": 877,
+   "satelites": 8,
+   "velocidad": 23
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:08:05",
+   "latitud": "10,494348",
+   "longitud": "-66,821803",
+   "heading": 8,
+   "altitud": 881,
+   "satelites": 7,
+   "velocidad": 28
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:08:20",
+   "latitud": "10,495385",
+   "longitud": "-66,821667",
+   "heading": 4,
+   "altitud": 886,
+   "satelites": 10,
+   "velocidad": 10
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:08:35",
+   "latitud": "10,495703",
+   "longitud": "-66,821757",
+   "heading": 295,
+   "altitud": 886,
+   "satelites": 10,
+   "velocidad": 10
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:08:50",
+   "latitud": "10,496193",
+   "longitud": "-66,822902",
+   "heading": 292,
+   "altitud": 880,
+   "satelites": 9,
+   "velocidad": 40
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:09:05",
+   "latitud": "10,496653",
+   "longitud": "-66,82377",
+   "heading": 291,
+   "altitud": 884,
+   "satelites": 9,
+   "velocidad": 19
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:09:20",
+   "latitud": "10,497108",
+   "longitud": "-66,824703",
+   "heading": 293,
+   "altitud": 889,
+   "satelites": 10,
+   "velocidad": 26
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:09:35",
+   "latitud": "10,497605",
+   "longitud": "-66,825788",
+   "heading": 285,
+   "altitud": 895,
+   "satelites": 8,
+   "velocidad": 22
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:09:50",
+   "latitud": "10,497847",
+   "longitud": "-66,826403",
+   "heading": 293,
+   "altitud": 897,
+   "satelites": 9,
+   "velocidad": 10
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:10:05",
+   "latitud": "10,49815",
+   "longitud": "-66,827098",
+   "heading": 295,
+   "altitud": 896,
+   "satelites": 10,
+   "velocidad": 27
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:10:20",
+   "latitud": "10,498762",
+   "longitud": "-66,827593",
+   "heading": 10,
+   "altitud": 890,
+   "satelites": 10,
+   "velocidad": 31
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:10:35",
+   "latitud": "10,498778",
+   "longitud": "-66,828195",
+   "heading": 241,
+   "altitud": 897,
+   "satelites": 9,
+   "velocidad": 36
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:10:50",
+   "latitud": "10,498195",
+   "longitud": "-66,829273",
+   "heading": 243,
+   "altitud": 897,
+   "satelites": 10,
+   "velocidad": 18
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:11:05",
+   "latitud": "10,497635",
+   "longitud": "-66,8304",
+   "heading": 239,
+   "altitud": 890,
+   "satelites": 9,
+   "velocidad": 36
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:11:20",
+   "latitud": "10,496977",
+   "longitud": "-66,831523",
+   "heading": 242,
+   "altitud": 894,
+   "satelites": 9,
+   "velocidad": 35
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:11:35",
+   "latitud": "10,496517",
+   "longitud": "-66,832443",
+   "heading": 243,
+   "altitud": 891,
+   "satelites": 10,
+   "velocidad": 32
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:11:50",
+   "latitud": "10,49611",
+   "longitud": "-66,833263",
+   "heading": 245,
+   "altitud": 880,
+   "satelites": 9,
+   "velocidad": 25
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:12:05",
+   "latitud": "10,495983",
+   "longitud": "-66,834082",
+   "heading": 285,
+   "altitud": 885,
+   "satelites": 9,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:12:20",
+   "latitud": "10,496018",
+   "longitud": "-66,8341",
+   "heading": 285,
+   "altitud": 884,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:12:35",
+   "latitud": "10,496018",
+   "longitud": "-66,8341",
+   "heading": 285,
+   "altitud": 884,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:12:50",
+   "latitud": "10,496162",
+   "longitud": "-66,8347",
+   "heading": 292,
+   "altitud": 877,
+   "satelites": 9,
+   "velocidad": 26
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:13:05",
+   "latitud": "10,496472",
+   "longitud": "-66,835532",
+   "heading": 289,
+   "altitud": 874,
+   "satelites": 8,
+   "velocidad": 20
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:13:35",
+   "latitud": "10,49689",
+   "longitud": "-66,836817",
+   "heading": 287,
+   "altitud": 886,
+   "satelites": 8,
+   "velocidad": 33
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:13:50",
+   "latitud": "10,497267",
+   "longitud": "-66,838232",
+   "heading": 281,
+   "altitud": 888,
+   "satelites": 8,
+   "velocidad": 28
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:14:05",
+   "latitud": "10,497438",
+   "longitud": "-66,838882",
+   "heading": 279,
+   "altitud": 896,
+   "satelites": 10,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:14:20",
+   "latitud": "10,497493",
+   "longitud": "-66,839193",
+   "heading": 275,
+   "altitud": 904,
+   "satelites": 10,
+   "velocidad": 4
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:14:35",
+   "latitud": "10,49746",
+   "longitud": "-66,839423",
+   "heading": 271,
+   "altitud": 913,
+   "satelites": 10,
+   "velocidad": 4
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:14:50",
+   "latitud": "10,497555",
+   "longitud": "-66,839695",
+   "heading": 296,
+   "altitud": 902,
+   "satelites": 10,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:15:05",
+   "latitud": "10,497555",
+   "longitud": "-66,839695",
+   "heading": 296,
+   "altitud": 902,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:15:20",
+   "latitud": "10,497555",
+   "longitud": "-66,839695",
+   "heading": 296,
+   "altitud": 902,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:15:35",
+   "latitud": "10,497555",
+   "longitud": "-66,839695",
+   "heading": 296,
+   "altitud": 902,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:15:50",
+   "latitud": "10,497613",
+   "longitud": "-66,839958",
+   "heading": 269,
+   "altitud": 897,
+   "satelites": 9,
+   "velocidad": 21
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:16:05",
+   "latitud": "10,497605",
+   "longitud": "-66,840192",
+   "heading": 274,
+   "altitud": 898,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:16:20",
+   "latitud": "10,497628",
+   "longitud": "-66,840438",
+   "heading": 274,
+   "altitud": 902,
+   "satelites": 10,
+   "velocidad": 5
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:16:35",
+   "latitud": "10,497637",
+   "longitud": "-66,840462",
+   "heading": 273,
+   "altitud": 904,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:16:50",
+   "latitud": "10,497672",
+   "longitud": "-66,840638",
+   "heading": 275,
+   "altitud": 914,
+   "satelites": 10,
+   "velocidad": 7
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:17:05",
+   "latitud": "10,497677",
+   "longitud": "-66,840697",
+   "heading": 272,
+   "altitud": 914,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:17:20",
+   "latitud": "10,497677",
+   "longitud": "-66,840697",
+   "heading": 272,
+   "altitud": 914,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:17:35",
+   "latitud": "10,497677",
+   "longitud": "-66,840697",
+   "heading": 272,
+   "altitud": 914,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:17:50",
+   "latitud": "10,497692",
+   "longitud": "-66,84089",
+   "heading": 272,
+   "altitud": 913,
+   "satelites": 10,
+   "velocidad": 4
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:18:05",
+   "latitud": "10,497693",
+   "longitud": "-66,840902",
+   "heading": 272,
+   "altitud": 913,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:18:20",
+   "latitud": "10,497693",
+   "longitud": "-66,840902",
+   "heading": 272,
+   "altitud": 913,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:18:35",
+   "latitud": "10,497693",
+   "longitud": "-66,840902",
+   "heading": 272,
+   "altitud": 913,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:18:50",
+   "latitud": "10,497693",
+   "longitud": "-66,840902",
+   "heading": 272,
+   "altitud": 913,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:19:05",
+   "latitud": "10,497688",
+   "longitud": "-66,84096",
+   "heading": 272,
+   "altitud": 904,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:19:20",
+   "latitud": "10,497592",
+   "longitud": "-66,841025",
+   "heading": 90,
+   "altitud": 901,
+   "satelites": 10,
+   "velocidad": 6
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:19:35",
+   "latitud": "10,497512",
+   "longitud": "-66,840112",
+   "heading": 95,
+   "altitud": 889,
+   "satelites": 9,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:19:50",
+   "latitud": "10,498312",
+   "longitud": "-66,839862",
+   "heading": 7,
+   "altitud": 887,
+   "satelites": 9,
+   "velocidad": 31
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:20:05",
+   "latitud": "10,499482",
+   "longitud": "-66,839878",
+   "heading": 356,
+   "altitud": 891,
+   "satelites": 8,
+   "velocidad": 29
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:20:20",
+   "latitud": "10,500325",
+   "longitud": "-66,83962",
+   "heading": 5,
+   "altitud": 895,
+   "satelites": 9,
+   "velocidad": 21
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:20:35",
+   "latitud": "10,501187",
+   "longitud": "-66,839523",
+   "heading": 7,
+   "altitud": 898,
+   "satelites": 10,
+   "velocidad": 27
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:20:50",
+   "latitud": "10,50154",
+   "longitud": "-66,840192",
+   "heading": 274,
+   "altitud": 904,
+   "satelites": 10,
+   "velocidad": 12
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:21:05",
+   "latitud": "10,501572",
+   "longitud": "-66,840455",
+   "heading": 280,
+   "altitud": 902,
+   "satelites": 10,
+   "velocidad": 5
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:21:20",
+   "latitud": "10,501592",
+   "longitud": "-66,840453",
+   "heading": 280,
+   "altitud": 906,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:21:35",
+   "latitud": "10,501592",
+   "longitud": "-66,840453",
+   "heading": 280,
+   "altitud": 906,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:21:50",
+   "latitud": "10,501355",
+   "longitud": "-66,840712",
+   "heading": 189,
+   "altitud": 941,
+   "satelites": 8,
+   "velocidad": 7
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:22:05",
+   "latitud": "10,501113",
+   "longitud": "-66,841002",
+   "heading": 276,
+   "altitud": 910,
+   "satelites": 10,
+   "velocidad": 17
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:22:20",
+   "latitud": "10,501132",
+   "longitud": "-66,841087",
+   "heading": 274,
+   "altitud": 906,
+   "satelites": 8,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:22:35",
+   "latitud": "10,501135",
+   "longitud": "-66,841233",
+   "heading": 275,
+   "altitud": 892,
+   "satelites": 9,
+   "velocidad": 7
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:22:50",
+   "latitud": "10,501168",
+   "longitud": "-66,841543",
+   "heading": 269,
+   "altitud": 896,
+   "satelites": 9,
+   "velocidad": 8
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:23:05",
+   "latitud": "10,501158",
+   "longitud": "-66,84173",
+   "heading": 291,
+   "altitud": 912,
+   "satelites": 9,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:23:20",
+   "latitud": "10,501158",
+   "longitud": "-66,84173",
+   "heading": 291,
+   "altitud": 912,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:23:35",
+   "latitud": "10,501158",
+   "longitud": "-66,84173",
+   "heading": 291,
+   "altitud": 912,
+   "satelites": 10,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:23:50",
+   "latitud": "10,501182",
+   "longitud": "-66,842223",
+   "heading": 271,
+   "altitud": 944,
+   "satelites": 10,
+   "velocidad": 14
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:24:05",
+   "latitud": "10,501152",
+   "longitud": "-66,842397",
+   "heading": 278,
+   "altitud": 938,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:24:20",
+   "latitud": "10,500973",
+   "longitud": "-66,84256",
+   "heading": 264,
+   "altitud": 917,
+   "satelites": 9,
+   "velocidad": 7
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:24:35",
+   "latitud": "10,501127",
+   "longitud": "-66,843453",
+   "heading": 270,
+   "altitud": 915,
+   "satelites": 10,
+   "velocidad": 12
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:24:50",
+   "latitud": "10,501112",
+   "longitud": "-66,844192",
+   "heading": 266,
+   "altitud": 911,
+   "satelites": 9,
+   "velocidad": 29
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:25:05",
+   "latitud": "10,501072",
+   "longitud": "-66,84503",
+   "heading": 268,
+   "altitud": 909,
+   "satelites": 10,
+   "velocidad": 29
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:25:20",
+   "latitud": "10,501042",
+   "longitud": "-66,845802",
+   "heading": 265,
+   "altitud": 903,
+   "satelites": 10,
+   "velocidad": 16
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:25:35",
+   "latitud": "10,500872",
+   "longitud": "-66,846475",
+   "heading": 257,
+   "altitud": 910,
+   "satelites": 9,
+   "velocidad": 24
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:25:50",
+   "latitud": "10,500712",
+   "longitud": "-66,847158",
+   "heading": 259,
+   "altitud": 914,
+   "satelites": 10,
+   "velocidad": 19
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:26:05",
+   "latitud": "10,500713",
+   "longitud": "-66,848302",
+   "heading": 258,
+   "altitud": 909,
+   "satelites": 10,
+   "velocidad": 33
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:26:20",
+   "latitud": "10,500367",
+   "longitud": "-66,849298",
+   "heading": 254,
+   "altitud": 918,
+   "satelites": 9,
+   "velocidad": 5
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:26:35",
+   "latitud": "10,500323",
+   "longitud": "-66,849787",
+   "heading": 253,
+   "altitud": 912,
+   "satelites": 10,
+   "velocidad": 11
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:26:50",
+   "latitud": "10,499533",
+   "longitud": "-66,849815",
+   "heading": 167,
+   "altitud": 892,
+   "satelites": 9,
+   "velocidad": 10
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:27:05",
+   "latitud": "10,498802",
+   "longitud": "-66,849712",
+   "heading": 124,
+   "altitud": 889,
+   "satelites": 10,
+   "velocidad": 8
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:27:20",
+   "latitud": "10,49851",
+   "longitud": "-66,849468",
+   "heading": 104,
+   "altitud": 892,
+   "satelites": 9,
+   "velocidad": 13
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:27:35",
+   "latitud": "10,498665",
+   "longitud": "-66,848523",
+   "heading": 83,
+   "altitud": 900,
+   "satelites": 9,
+   "velocidad": 17
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:27:50",
+   "latitud": "10,500363",
+   "longitud": "-66,848318",
+   "heading": 3,
+   "altitud": 917,
+   "satelites": 9,
+   "velocidad": 34
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:28:05",
+   "latitud": "10,500558",
+   "longitud": "-66,848293",
+   "heading": 357,
+   "altitud": 906,
+   "satelites": 9,
+   "velocidad": 0
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:28:20",
+   "latitud": "10,501227",
+   "longitud": "-66,84832",
+   "heading": 0,
+   "altitud": 896,
+   "satelites": 9,
+   "velocidad": 36
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:28:35",
+   "latitud": "10,502273",
+   "longitud": "-66,848555",
+   "heading": 258,
+   "altitud": 893,
+   "satelites": 10,
+   "velocidad": 22
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:28:49",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 4,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:29:53",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 4,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:31:38",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 4,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:41:49",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 4,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "11:42:18",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 4,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "12:09:44",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 4,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "12:09:50",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 4,
+   "velocidad": 1
+ },
+ {
+   "fecha": "2020-07-01",
+   "hora": "17:35:51",
+   "latitud": "10,502305",
+   "longitud": "-66,848752",
+   "heading": 25,
+   "altitud": 905,
+   "satelites": 0,
+   "velocidad": 0
+ }
+]

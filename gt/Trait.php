@@ -314,22 +314,22 @@ trait DBTracking{
         $cn = $this->cn;
 		
         $cn->query = 
-        "SELECT tk.unit_id, t.type as des, name, number, 'input' as type
+        "SELECT tk.unit_id, i.name as des, m.name, number, 'input' as type
 
         FROM tracking as tk
         INNER JOIN unit_input as u on u.unit_id = tk.unit_id and u.type=1
-        INNER JOIN input_type as t on t.id = u.input_id
-        INNER JOIN input as i on i.type_id=t.id and (input_status & d) div d = i.mode
+        INNER JOIN input as i on i.id = u.input_id
+        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & d) div d = m.mode
         WHERE tk.id IN ($ids)
 
         UNION 
 
-        SELECT tk.unit_id, t.type as des, name, number, 'output' as type
+        SELECT tk.unit_id, i.name as des, m.name, number, 'input' as type
 
         FROM tracking as tk
         INNER JOIN unit_input as u on u.unit_id = tk.unit_id and u.type=2
-        INNER JOIN input_type as t on t.id = u.input_id
-        INNER JOIN input as i on i.type_id=t.id and (output_status & d) div d = i.mode
+        INNER JOIN input as i on i.id = u.input_id
+        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & d) div d = m.mode
         WHERE tk.id IN ($ids)
         ;";
 
@@ -710,13 +710,16 @@ trait DBHistory{
         
         SELECT
 
-        t.*, date_format(date_time, '%d/%m/%Y %T') as date_time
+        t.*, date_format(date_time, '%d/%m/%Y %T') as date_time, UNIX_TIMESTAMP(date_time) as ts
 
         FROM tracking as t
-        INNER JOIN units as u ON u.tracking_id = t.id
+        
+        WHERE t.id >= 12699
         ORDER BY unit_id
+        
                 
         ";
+        
 		$result = $cn->execute();
 		$data = $cn->getDataAll($result);
        

@@ -189,7 +189,35 @@ class History
 
     }
 	
+
+	private function loadTest(){
+		$rr = json_decode(@file_get_contents("data.json", true), true);
+		//hx($rr);
+		foreach($rr as $k => $t){
+			$cn = $this->cn;
+			$date_time = $t['fecha']." ".$t['hora'];
+			$latitude = str_replace("," ,".",$t['latitud']);
+			$longitude = str_replace("," ,".",$t['longitud']);
+			$heading = $t['heading'];
+			$altitud = $t['altitud'];
+			$satellites = $t['satelites'];
+			$speed = $t['velocidad'];
+			
+
+			$cn->query = 
+			"INSERT INTO tracking (unit_id, device_id, date_time, longitude, latitude, speed, altitude, heading, satellite) 
+			VALUES (2336, '2012000750', '$date_time', '$longitude', '$latitude', '$speed',
+			'$altitud', '$heading', '$satellites') ";
+			//hr($cn->query);
+			$result = $cn->execute();
+		}
+		hx($rr);
+	}
 	private function loadHistory(){
+
+
+		//$this->loadTest();
+		
 
 		$unitId = \SEVIAN\S::getReq('unit_id');
 		$dateFrom = \SEVIAN\S::getReq('date_from');
@@ -215,6 +243,10 @@ class History
 			[
 				'method'	=> 'setInfoUnitInfo',
 				'value'		=> $this->infoUnitInput($unitId)
+			],
+			[
+				'method'	=> 'uPlay',
+				'value'		=> null
 			]
 		]);
 	}

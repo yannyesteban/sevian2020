@@ -323,6 +323,21 @@ var GTWebcar = (($) => {
                             },
                         ]
                     },
+                    {
+                        id: 11,
+                        imageClass: "icon-calendar",
+                        propertys: {
+                            "title": "Trace"
+                        },
+                        action: (item, event) => {
+                            if (this._trace) {
+                                this._trace.restart();
+                            }
+                            else {
+                                this._trace = this._unit.getMap().draw('traza1', 'trace', []);
+                            }
+                        }
+                    },
                 ]
             });
         }
@@ -868,7 +883,7 @@ var GTWebcar = (($) => {
             else {
                 this._win["history2"] = new Float.Window({
                     visible: true,
-                    caption: "xx hist",
+                    caption: "History",
                     //child:main,
                     left: 300,
                     top: 100,
