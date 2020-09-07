@@ -2679,8 +2679,11 @@ var MapBox = (($, turf) => {
             this.id = "p" + String(new Date().getTime());
             this.nodesId = null;
             this.lineId = null;
+            this.lineIdA = null;
             this.circleId = null;
+            this.mobileId = null;
             this._play = false;
+            this._lastIndex = null;
             this.callmove = () => { };
             this.callresize = () => { };
             this.ondraw = (coordinates) => { };
@@ -2693,13 +2696,56 @@ var MapBox = (($, turf) => {
                     this[x] = info[x];
                 }
             }
+            this.lineIdA = "la-" + this.id;
             this.nodesId = "n-" + this.id;
             this.lineId = "l-" + this.id;
             this.circleId = "c-" + this.id;
+            this.mobileId = "m-" + this.id;
             this.init();
         }
         init() {
+            this.coordinates = [
+                [-66.84927463531494, 10.490132784557675],
+                [-66.84916734695435, 10.487727485274153],
+                [-66.847482919693, 10.488339361426192],
+                [-66.84403896331787, 10.48798067555274],
+                [-66.83899641036987, 10.4872211040956],
+                [-66.83056354522705, 10.480659173081785],
+                [-66.82998418807983, 10.48194625089936],
+                [-66.83200120925903, 10.48333882087384],
+                [-66.83295607566833, 10.483686962388932],
+                [-66.83379024267197, 10.484296209098416],
+                [-66.83488190174103, 10.485327442138733],
+                [-66.83595210313797, 10.486147678753897],
+                [-66.8368935585022, 10.487347699467918],
+                [-66.83808445930487, 10.488181117709713],
+                [-66.83968305587774, 10.488465956341086],
+                [-66.84177517890936, 10.488687497317594],
+                [-66.84476852416998, 10.489014533707307],
+                [-66.84704303741461, 10.489362668839194],
+                [-66.84779405593878, 10.490064212687859],
+                [-66.84927463531494, 10.490132784557675]
+            ];
+            this.coordinates = [];
+            let fixDelay = 0;
+            let ts = [];
+            for (let x in this.data) {
+                this.coordinates.push(this.data[x].coordinates);
+                ts[x] = this.data[x].ts;
+                if (x > 0) {
+                    if (ts[x] - ts[x - 1] > 120) {
+                        fixDelay += (ts[x] - ts[x - 1]) - 120;
+                    }
+                }
+                this.data[x].ts = this.data[x].ts - ts[0] - fixDelay;
+            }
+            this.coordinatesInit = this.coordinates.slice();
+            //let index = this.data.findIndex((e)=>e.ts>=885);
+            console.log(this.data);
+            this.drawLineA();
             let map = this.map;
+            this.flyTo();
+            //return;
             //let polygon = turf.polygon([coo], { name: 'poly1' });
             //polygon = turf.bezierSpline(polygon);
             //            console.log(polygon)
@@ -2728,8 +2774,8 @@ var MapBox = (($, turf) => {
                     visibility: (this.visible) ? 'visible' : 'none'
                 },
                 'paint': {
-                    'line-color': '#ff33cc',
-                    'line-width': 8,
+                    'line-color': ['get', 'color'],
+                    'line-width': 3,
                 },
                 'filter': ['==', '$type', 'LineString']
             });
@@ -2750,107 +2796,90 @@ var MapBox = (($, turf) => {
             //this.setFill(this.fill);
             map.addLayer({
                 id: this.nodesId,
-                type: 'circle',
+                type: 'symbol',
                 source: this.lineId,
                 layout: {
-                    visibility: 'none'
+                    visibility: 'visible',
+                    'icon-image': 'vehiculo_004',
+                    'icon-size': 0.4,
+                    'icon-rotate': ['get', 'heading'],
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
                 },
                 paint: {
-                    'circle-radius': 4,
-                    'circle-opacity': ["case", ["==", ['get', 'type'], 'm'], 0.0, 0.8],
-                    'circle-color': 'white',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
+                    'icon-color': '#4d0000'
+                    //'circle-radius': 4,
+                    //'circle-opacity':["case",["==",['get','type'],'m'] , 0.0, 0.8],
+                    //'circle-color': 'orange',
+                    //'circle-stroke-color':"yellow",
+                    //'circle-stroke-width':1
                 },
                 filter: ['in', '$type', 'Point']
                 //filter: ["in", 'type', 'h', 'm']
                 //filter: ["in", 'type']
             });
-            /*
             map.addLayer({
-                id: this.nodesId+"2",
+                id: this.nodesId + "2",
                 type: 'circle',
-                source: this.lineId,
+                source: this.lineIdA,
                 layout: {
-                    visibility:'visible'
+                    visibility: 'visible'
                 },
                 paint: {
-                    'circle-radius': 3,
-                    'circle-opacity':0.5,
-                    'circle-color': '#000',
-                    'circle-stroke-color':"#ff3300",
-                    'circle-stroke-width':1
+                    'circle-radius': 5,
+                    'circle-opacity': 0.8,
+                    'circle-color': 'green',
+                    'circle-stroke-color': "#ff3300",
+                    'circle-stroke-width': 1
                 },
                 //filter: ['in', '$type', 'Point']
                 filter: ["in", 'type', 'm']
                 //filter: ["in", 'type']
             });
-            */
-            this.setLine(this.line);
-            this.setFill(this.fill);
-            this.coordinates = [
-                [-66.84927463531494, 10.490132784557675],
-                [-66.84916734695435, 10.487727485274153],
-                [-66.847482919693, 10.488339361426192],
-                [-66.84403896331787, 10.48798067555274],
-                [-66.83899641036987, 10.4872211040956],
-                [-66.83056354522705, 10.480659173081785],
-                [-66.82998418807983, 10.48194625089936],
-                [-66.83200120925903, 10.48333882087384],
-                [-66.83295607566833, 10.483686962388932],
-                [-66.83379024267197, 10.484296209098416],
-                [-66.83488190174103, 10.485327442138733],
-                [-66.83595210313797, 10.486147678753897],
-                [-66.8368935585022, 10.487347699467918],
-                [-66.83808445930487, 10.488181117709713],
-                [-66.83968305587774, 10.488465956341086],
-                [-66.84177517890936, 10.488687497317594],
-                [-66.84476852416998, 10.489014533707307],
-                [-66.84704303741461, 10.489362668839194],
-                [-66.84779405593878, 10.490064212687859],
-                [-66.84927463531494, 10.490132784557675]
-            ];
-            this.coordinates = [];
-            for (let x in this.data) {
-                this.coordinates.push(this.data[x].coordinates);
-            }
+            //this.setLine(this.line);
+            //this.setFill(this.fill);
+            //alert(index);return;
             //console.log(this.data)
-            let t = [
-                0, 10, 1, 1, 1,
-                1, 1, 1, 1, 1,
-                1, 1, 1, 1, 1,
-                1, 2, 1, 1, 2,
-                1, 2, 3, 10, 20
-            ];
+            /*
+            let t= [
+                0,10,1,1,1,
+                1,1,1,1,1,
+                1,1,1,1,1,
+                1,2,1,1,2,
+                1,2,3,10,20];
             this.coordinatesInit = [];
             let from = null, distance = null, speed = null, along = null, length = 0;
             let g = 0;
             let line = turf.lineString(this.coordinates);
-            let totalLength = turf.length(line, { units: 'meters' });
-            db("total " + totalLength, "white");
-            for (let x in this.coordinates) {
-                if (x == 0) {
-                    db("x " + x, "white");
+            let totalLength = turf.length(line, {units: 'meters'});
+            db ("total "+totalLength,"white");
+            for(let x in this.coordinates){
+                if(x==0){
+                    db ("x "+x,"white")
                     this.coordinatesInit.push(this.coordinates[x]);
                     from = this.coordinates[x];
                     continue;
                 }
-                distance = turf.distance(from, this.coordinates[x], { units: 'meters' });
-                //db ("length "+distance,"pink");
-                t[x] = t[x] || 1;
-                from = this.coordinates[x];
-                speed = distance / (t[x] * 60);
-                db("step " + distance + " speed: " + speed, "pink");
-                for (let j = 1; j <= t[x]; j++) {
+                
+                 distance = turf.distance(from, this.coordinates[x], {units: 'meters'});
+                 //db ("length "+distance,"pink");
+                 t[x] = t[x] || 1;
+                 from = this.coordinates[x];
+                 speed = distance / (t[x]*60);
+                 
+                db ("step "+distance+ " speed: "+speed,"pink")
+                
+                 for(let j=1;j<=t[x];j++){
                     //length = length + speed*j*60;
-                    db("delta " + (length + speed * j * 60), "aqua");
-                    along = turf.along(line, length + speed * j * 60, { units: 'meters' });
+                    db ("delta "+(length + speed*j*60),"aqua");
+                    along = turf.along(line, length + speed*j*60, {units: 'meters'});
                     //console.log (turf.getCoords(along),"aqua");
                     this.coordinatesInit.push(turf.getCoords(along));
-                }
-                length += distance;
+                 }
+                 length +=  distance;
             }
-            console.log(this.coordinatesInit);
+            */
+            //console.log(this.coordinatesInit);
             //return;
             if (this.coordinates && false) {
                 let line = turf.lineString(this.coordinates);
@@ -2868,7 +2897,6 @@ var MapBox = (($, turf) => {
                 }
                 console.log(this.coordinatesInit);
             }
-            this.flyTo();
             this.coordinates = [];
             //this.play();
         }
@@ -2900,9 +2928,113 @@ var MapBox = (($, turf) => {
             this.coordinates.push([lngLat.lng, lngLat.lat]);
             this.draw();
         }
+        drawLineA() {
+            let geojson = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [] //[polygon, point]
+                }
+            };
+            let lineString = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": this.coordinatesInit
+                }
+            };
+            geojson.data.features.push(lineString);
+            this.coordinatesInit.forEach(element => {
+                let point = {
+                    type: "Feature",
+                    geometry: {
+                        type: "Point",
+                        coordinates: element
+                    }
+                };
+                geojson.data.features.push(point);
+            });
+            this.map.addSource(this.lineIdA, geojson);
+            this.map.addLayer({
+                'id': this.lineIdA,
+                'type': 'line',
+                'source': this.lineIdA,
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                    visibility: (this.visible) ? 'visible' : 'none'
+                },
+                'paint': {
+                    'line-color': '#ff9900',
+                    'line-width': 2,
+                    'line-opacity': 0.8,
+                    //'line-gap-width':4,
+                    'line-dasharray': [2, 2]
+                },
+                'filter': ['==', '$type', 'LineString']
+            });
+            return;
+            this.map.addLayer({
+                id: this.nodesId + "cc",
+                type: 'circle',
+                source: this.lineIdA,
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'circle-radius': 3,
+                    'circle-opacity': 0.5,
+                    'circle-color': 'white',
+                    'circle-stroke-color': "#ff3300",
+                    'circle-stroke-width': 1
+                },
+                filter: ['in', '$type', 'Point']
+                //filter: ["in", 'type', 'h', 'm']
+                //filter: ["in", 'type']
+            });
+        }
         draw() {
-            let data = createGeoJSONLine(this.coordinates);
-            this.map.getSource(this.lineId).setData(data.data);
+            //console.log(this.coordinates);
+            //let data = createGeoJSONLine(this.coordinates);
+            let geojson = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [
+                        {
+                            "type": "Feature",
+                            'properties': {
+                                'color': '#f743d8'
+                            },
+                            "geometry": {
+                                "type": "LineString",
+                                "coordinates": this.coordinates
+                            }
+                        }
+                    ]
+                }
+            };
+            //console.log(this.data);
+            //db (this._lastIndex)
+            if (this._lastIndex > 10) {
+                // return;
+            }
+            let heading = 0;
+            if (this.data[this._lastIndex]) {
+                heading = this.data[this._lastIndex].heading;
+            }
+            let point = {
+                type: "Feature",
+                properties: {
+                    'heading': heading
+                },
+                geometry: {
+                    type: "Point",
+                    coordinates: this.coordinates[this.coordinates.length - 1]
+                }
+            };
+            geojson.data.features.push(point);
+            this.map.getSource(this.lineId).setData(geojson.data);
             this.ondraw(this.coordinates);
         }
         restart() {
@@ -2911,48 +3043,44 @@ var MapBox = (($, turf) => {
         }
         play() {
             this.startTime = performance.now();
-            let i = 0;
             let animateLine = (timestamp) => {
                 if (this.resetTime) {
                     // resume previous progress
                     this.startTime = performance.now() - this.progress;
-                    i = 0;
                     this.coordinates = [];
                     this.resetTime = false;
                 }
                 else {
                     this.progress = timestamp - this.startTime;
                 }
-                // restart if it finishes a loop
-                if (this.progress > this.speedFactor * 360) {
-                    this.startTime = timestamp;
-                    //geojson.features[0].geometry.coordinates = [];
+                let speed = this.progress * 0.05;
+                let index = this.data.findIndex((e) => e.ts >= speed);
+                this._lastIndex = index;
+                if (index > 0) {
+                    let delta = this.data[index].ts - speed;
+                    let pointFrom = this.coordinatesInit[index - 1];
+                    let pointTo = this.coordinatesInit[index];
+                    let line = turf.lineString([pointFrom, pointTo]);
+                    let totalLength = turf.length(line, { units: 'meters' });
+                    let totalTime = this.data[index].ts - this.data[index - 1].ts;
+                    //db ("index: "+index+", deltaLength: "+(delta*totalLength/totalTime).toFixed(2),"white")
+                    let along = turf.along(line, totalLength - delta * totalLength / totalTime, { units: 'meters' });
+                    //console.log (turf.getCoords(along),"aqua");
+                    this.coordinates = this.coordinatesInit.slice(0, index);
+                    this.coordinates.push(turf.getCoords(along));
+                    line = turf.lineString(this.coordinates);
+                    totalLength = turf.length(line, { units: 'meters' });
+                    var start = totalLength - 1000;
+                    var stop = totalLength;
+                    if (start > 0) {
+                        var sliced = turf.lineSliceAlong(line, start, stop, { units: 'meters' });
+                        this.coordinates = turf.getCoords(sliced);
+                    }
                 }
                 else {
-                    //var x = this.progress / this.speedFactor;
-                    // draw a sine wave with some math.
-                    //var y = Math.sin((x * Math.PI) / 90) * 40;
-                    // append new coordinates to the lineString
-                    //geojson.features[0].geometry.coordinates.push([x, y]);
-                    // then update the map
-                    //db (this.coordinatesInit[i],"aqua")
-                    //this.add(this.coordinatesInit[i++]);
-                    //map.getSource('line').setData(geojson);
+                    this.coordinates = this.coordinatesInit[0];
                 }
-                if (this.progress > 1000) {
-                    //db (this.progress,"pink")
-                    //this.progress = 0;
-                    this.startTime = timestamp;
-                    if (this.coordinatesInit[i]) {
-                        this.coordinates.push(this.coordinatesInit[i++]);
-                        this.draw();
-                    }
-                    else {
-                        cancelAnimationFrame(animateLine);
-                        db("error");
-                        return;
-                    }
-                }
+                this.draw();
                 // Request the next frame of the animation.
                 this.animation = requestAnimationFrame(animateLine);
             };
@@ -3995,6 +4123,7 @@ var MapBox = (($, turf) => {
             this._poly = [];
             this._controls = [];
             this.markImages = [];
+            this.iconImages = null;
             this.markDefaultImage = null;
             for (let x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -4033,6 +4162,16 @@ var MapBox = (($, turf) => {
                 attributionControl: true
             });
             map.on('load', (event) => {
+                if (this.iconImages) {
+                    this.iconImages.forEach((e) => {
+                        map.loadImage(e.source, (error, image) => {
+                            if (error) {
+                                throw error;
+                            }
+                            map.addImage(e.name, image, { sdf: true });
+                        });
+                    });
+                }
                 let traffic = {
                     "url": "mapbox://mapbox.mapbox-traffic-v1",
                     "type": "vector"

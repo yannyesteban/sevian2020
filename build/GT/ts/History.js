@@ -246,6 +246,7 @@ var GTHistory = (($) => {
         uPlay() {
             if (this._trace) {
                 this._trace.restart();
+                this._trace.play();
             }
             else {
                 let data = this.formateData(this.data);
@@ -259,7 +260,8 @@ var GTHistory = (($) => {
                 result.push({
                     coordinates: [data[x].longitude * 1, data[x].latitude * 1],
                     speed: data[x].speed * 1,
-                    ts: data[x].ts - data[0].ts
+                    ts: data[x].ts - data[0].ts,
+                    heading: data[x].heading * 1,
                 });
             }
             //console.log(result);

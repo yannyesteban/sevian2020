@@ -717,6 +717,7 @@ trait DBHistory{
         WHERE t.id >= 12699
         ORDER BY unit_id
         
+        
                 
         ";
         
