@@ -319,7 +319,7 @@ var GTHistory = (($) => {
 			}else{
 				let data = this.formateData(this.data);
 				this._trace = this.getMap().draw('traza2', 'trace', {data:data});
-				this._trace.play();
+				//this._trace.play();
 			}
 		}
 		formateData(data){
@@ -330,6 +330,9 @@ var GTHistory = (($) => {
 					speed:data[x].speed*1,
 					ts:data[x].ts-data[0].ts,
 					heading:data[x].heading*1,
+					event:data[x].event,
+					event_id:data[x].event_id,
+					iconImage:(data[x].event_id)?"pulsing-dot":"pulsing-dot2"
 				})
 			}
 			//console.log(result);

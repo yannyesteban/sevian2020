@@ -2682,6 +2682,8 @@ var MapBox = (($, turf) => {
             this.lineIdA = null;
             this.circleId = null;
             this.mobileId = null;
+            this.pulsingId = null;
+            this._events = [];
             this._play = false;
             this._lastIndex = null;
             this.callmove = () => { };
@@ -2701,6 +2703,7 @@ var MapBox = (($, turf) => {
             this.lineId = "l-" + this.id;
             this.circleId = "c-" + this.id;
             this.mobileId = "m-" + this.id;
+            this.pulsingId = "p-" + this.id;
             this.init();
         }
         init() {
@@ -2795,6 +2798,22 @@ var MapBox = (($, turf) => {
             //this.setLine(this.line);
             //this.setFill(this.fill);
             map.addLayer({
+                id: this.pulsingId,
+                type: 'symbol',
+                source: this.lineId,
+                layout: {
+                    //visibility:['get', 'visible'],
+                    'icon-image': 'pulsing-dot',
+                    'icon-size': 0.4,
+                    'icon-rotate': ['get', 'heading'],
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true,
+                },
+                paint: {},
+                //filter: ['in', '$type', 'Point']
+                filter: ['in', 'dot', 'dot']
+            });
+            map.addLayer({
                 id: this.nodesId,
                 type: 'symbol',
                 source: this.lineId,
@@ -2804,17 +2823,34 @@ var MapBox = (($, turf) => {
                     'icon-size': 0.4,
                     'icon-rotate': ['get', 'heading'],
                     'icon-allow-overlap': true,
-                    'icon-ignore-placement': true
+                    'icon-ignore-placement': true,
                 },
                 paint: {
-                    'icon-color': '#4d0000'
-                    //'circle-radius': 4,
-                    //'circle-opacity':["case",["==",['get','type'],'m'] , 0.0, 0.8],
-                    //'circle-color': 'orange',
-                    //'circle-stroke-color':"yellow",
-                    //'circle-stroke-width':1
+                    //'icon-color':'#4d0000',
+                    'icon-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'speed'],
+                        0,
+                        'green',
+                        25,
+                        'yellow',
+                        50,
+                        'blue',
+                        75,
+                        'green',
+                        100,
+                        'rgb(209,229,240)',
+                        120,
+                        'orange',
+                        140,
+                        'red',
+                        160,
+                        'black'
+                    ],
                 },
-                filter: ['in', '$type', 'Point']
+                filter: ["in", 'dot', '']
+                //filter: ['in', '$type', 'Point']
                 //filter: ["in", 'type', 'h', 'm']
                 //filter: ["in", 'type']
             });
@@ -2838,67 +2874,7 @@ var MapBox = (($, turf) => {
             });
             //this.setLine(this.line);
             //this.setFill(this.fill);
-            //alert(index);return;
-            //console.log(this.data)
-            /*
-            let t= [
-                0,10,1,1,1,
-                1,1,1,1,1,
-                1,1,1,1,1,
-                1,2,1,1,2,
-                1,2,3,10,20];
-            this.coordinatesInit = [];
-            let from = null, distance = null, speed = null, along = null, length = 0;
-            let g = 0;
-            let line = turf.lineString(this.coordinates);
-            let totalLength = turf.length(line, {units: 'meters'});
-            db ("total "+totalLength,"white");
-            for(let x in this.coordinates){
-                if(x==0){
-                    db ("x "+x,"white")
-                    this.coordinatesInit.push(this.coordinates[x]);
-                    from = this.coordinates[x];
-                    continue;
-                }
-                
-                 distance = turf.distance(from, this.coordinates[x], {units: 'meters'});
-                 //db ("length "+distance,"pink");
-                 t[x] = t[x] || 1;
-                 from = this.coordinates[x];
-                 speed = distance / (t[x]*60);
-                 
-                db ("step "+distance+ " speed: "+speed,"pink")
-                
-                 for(let j=1;j<=t[x];j++){
-                    //length = length + speed*j*60;
-                    db ("delta "+(length + speed*j*60),"aqua");
-                    along = turf.along(line, length + speed*j*60, {units: 'meters'});
-                    //console.log (turf.getCoords(along),"aqua");
-                    this.coordinatesInit.push(turf.getCoords(along));
-                 }
-                 length +=  distance;
-            }
-            */
-            //console.log(this.coordinatesInit);
-            //return;
-            if (this.coordinates && false) {
-                let line = turf.lineString(this.coordinates);
-                let length = turf.length(line, { units: 'meters' });
-                let delta = length / 500;
-                db("distance : " + length, "white");
-                //this.coordinatesInit = this.coordinates.slice();
-                //this.draw();
-                this.coordinatesInit = [];
-                let along = 0;
-                for (let i = 0; i < length; i = i + delta) {
-                    along = turf.along(line, i, { units: 'meters' });
-                    console.log(turf.getCoords(along), "aqua");
-                    this.coordinatesInit.push(turf.getCoords(along));
-                }
-                console.log(this.coordinatesInit);
-            }
             this.coordinates = [];
-            //this.play();
         }
         setLine(info) {
             for (let p in info) {
@@ -2944,9 +2920,15 @@ var MapBox = (($, turf) => {
                 }
             };
             geojson.data.features.push(lineString);
-            this.coordinatesInit.forEach(element => {
+            this.coordinatesInit.forEach((element, index) => {
                 let point = {
                     type: "Feature",
+                    'properties': {
+                        'iconImage': this.data[index].iconImage,
+                        'speed': this.data[index].speed,
+                        'heading': this.data[index].heading,
+                        "event": this.data[index].event,
+                    },
                     geometry: {
                         type: "Point",
                         coordinates: element
@@ -2972,6 +2954,47 @@ var MapBox = (($, turf) => {
                     'line-dasharray': [2, 2]
                 },
                 'filter': ['==', '$type', 'LineString']
+            });
+            this.map.addLayer({
+                id: this.lineIdA + "3",
+                type: 'circle',
+                'minzoom': 13,
+                'source': this.lineIdA,
+                layout: {
+                    visibility: 'visible'
+                },
+                paint: {
+                    'circle-radius': 4,
+                    //'circle-opacity':["case",["=>",['get','type'],30] , 0.0, 0.8],
+                    //'circle-color': 'white',
+                    'circle-color': ["case", [">=", ['get', 'speed'], 31], 'red', [">=", ['get', 'speed'], 21], 'yellow', [">=", ['get', 'speed'], 11], '#00d4ff', [">=", ['get', 'speed'], 1], '#f743b7', 'purple'],
+                    'circle-stroke-color': "#ffffff",
+                    'circle-stroke-width': 1
+                },
+                //filter: ['in', '$type', 'Point']
+                //filter: ["in", 'type', 'h', 'm']
+                //filter: ["in", 'type']
+                //filter:['>=','speed',31]
+                //filter:["case",[">=",['get','speed'],31], true,false]
+                filter: ['any', ['>=', 'speed', 31], ['>=', 'speed', 30]]
+            });
+            return;
+            this.map.addLayer({
+                id: this.lineIdA + "3",
+                type: 'symbol',
+                'source': this.lineIdA,
+                layout: {
+                    //visibility:['get', 'visible'],
+                    'icon-image': ['get', 'iconImage'],
+                    'icon-size': 0.4,
+                    'icon-rotate': ['get', 'heading'],
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true,
+                },
+                paint: {},
+                //filter: ['in', '$type', 'Point']
+                //filter:['in','dot', 'dot']
+                'filter': ['==', '$type', 'Point']
             });
             return;
             this.map.addLayer({
@@ -3019,14 +3042,32 @@ var MapBox = (($, turf) => {
             if (this._lastIndex > 10) {
                 // return;
             }
-            let heading = 0;
+            let heading = 0, speed = 0;
             if (this.data[this._lastIndex]) {
                 heading = this.data[this._lastIndex].heading;
+                speed = this.data[this._lastIndex].speed;
             }
+            this._events.forEach((e, index) => {
+                let point = {
+                    type: "Feature",
+                    properties: {
+                        'heading': heading,
+                        'speed': speed,
+                        dot: 'dot',
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: e
+                    }
+                };
+                geojson.data.features.push(point);
+            });
             let point = {
                 type: "Feature",
                 properties: {
-                    'heading': heading
+                    'heading': heading,
+                    'speed': speed,
+                    dot: '',
                 },
                 geometry: {
                     type: "Point",
@@ -3076,9 +3117,16 @@ var MapBox = (($, turf) => {
                         var sliced = turf.lineSliceAlong(line, start, stop, { units: 'meters' });
                         this.coordinates = turf.getCoords(sliced);
                     }
+                    let point1 = turf.point(pointFrom);
+                    let point2 = turf.point(pointTo);
+                    let bearing = turf.bearing(point1, point2);
+                    this.data[this._lastIndex].heading = bearing;
                 }
                 else {
                     this.coordinates = this.coordinatesInit[0];
+                }
+                if (this.data[this._lastIndex] && this.data[this._lastIndex].event) {
+                    this._events.push(this.coordinatesInit[index]);
                 }
                 this.draw();
                 // Request the next frame of the animation.
@@ -3735,17 +3783,22 @@ var MapBox = (($, turf) => {
 }); */
     let ii = 0;
     class Pulsing {
-        constructor(map, size) {
+        constructor(map, option) {
             this.map = null;
-            this.width = 10;
-            this.height = 10;
+            this.width = 200;
+            this.height = 200;
             this.size = 200;
             this.data = null;
             this.context = null;
+            this.rgb = [255, 165, 62];
+            this.center = [255, 165, 62];
+            for (let x in option) {
+                this[x] = option[x];
+            }
             this.map = map;
-            this.size = size;
-            this.width = size;
-            this.height = size;
+            //this.size = size;
+            //this.width = size;
+            //this.height = size;
             this.data = new Uint8Array(this.width * this.height * 4);
         }
         onAdd() {
@@ -3765,13 +3818,14 @@ var MapBox = (($, turf) => {
             context.beginPath();
             context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
             //context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
-            context.fillStyle = 'rgba(255, 165, 62,' + (1 - t) + ')';
+            //context.fillStyle = 'rgba(255, 165, 62,' + (1 - t) + ')';
+            context.fillStyle = `rgba(${this.rgb[0]},${this.rgb[1]},${this.rgb[2]},${1 - t})`;
             context.fill();
             // draw inner circle
             context.beginPath();
             context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
             //context.fillStyle = 'rgba(255, 100, 100, 1)';
-            context.fillStyle = 'rgba(255, 165, 62, 1)';
+            context.fillStyle = `rgb(${this.center[0]},${this.center[1]},${this.center[2]})`;
             //242, 255, 62
             context.strokeStyle = 'white';
             context.lineWidth = 2 + 4 * (1 - t);
@@ -4168,10 +4222,18 @@ var MapBox = (($, turf) => {
                             if (error) {
                                 throw error;
                             }
-                            map.addImage(e.name, image, { sdf: true });
+                            map.addImage(e.name, image, { sdf: e.sfd || false });
                         });
                     });
                 }
+                map.addImage('pulsing-dot', new Pulsing(map, {
+                    rgb: [153, 255, 51],
+                    center: [0, 204, 0]
+                }), { pixelRatio: 3 });
+                map.addImage('pulsing-dot2', new Pulsing(map, {
+                    rgb: [247, 67, 183],
+                    center: [247, 67, 216]
+                }), { pixelRatio: 3 });
                 let traffic = {
                     "url": "mapbox://mapbox.mapbox-traffic-v1",
                     "type": "vector"

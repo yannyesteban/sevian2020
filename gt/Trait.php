@@ -710,10 +710,12 @@ trait DBHistory{
         
         SELECT
 
-        t.*, date_format(date_time, '%d/%m/%Y %T') as date_time, UNIX_TIMESTAMP(date_time) as ts
+        t.*, date_format(date_time, '%d/%m/%Y %T') as date_time, UNIX_TIMESTAMP(date_time) as ts, e.name as event
 
         FROM tracking as t
-        
+        LEFT JOIN unit_event as ue ON ue.unit_id = t.unit_id and ue.event = t.event_id
+        LEFT JOIN event as e on e.id = ue.event_id
+
         WHERE t.id >= 12699
         ORDER BY unit_id
         

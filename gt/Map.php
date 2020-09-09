@@ -58,7 +58,7 @@ class Map extends \Sevian\Element{
 			'panel'=>$this->id,
 			'markImages' => $this->loadImage(),
 			'iconImages'=>[
-				['source'=>PATH_IMAGES.'vehicle_004.png','name'=>'vehiculo_004']
+				['source'=>PATH_IMAGES.'vehicle_004.png','name'=>'vehiculo_004', 'sfd'=>false]
 			],
 			'markDefaultImage' => 'img_35'
 		];
