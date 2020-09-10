@@ -685,7 +685,7 @@ var MapBox = (($, turf) => {
         }
         setCircle(){
            
-            console.log(this.defaultCoordinates);
+            
             this._line = this._parent.draw(this.id, "circle",{
                 fill: this.fill,
                 line:this.line,
@@ -3307,7 +3307,155 @@ var MapBox = (($, turf) => {
             this.map.panTo(centroid.geometry.coordinates, {duration: duration || this.panDuration });
         }
     }
-    
+    class TraceLayer{
+        
+        map:any = null;
+        id:string = "";
+        source:string ="";
+        dataSource:any = null;
+        data:any = null;
+        filter:any = [];
+        type:string = "circle";
+        paint:any = {};
+        layout:any = {};
+        image:any = null;
+        visible:boolean = true;
+        color:any = "red";
+        borderColor:any = "white";
+        borderWidth:any = 1;
+        range:[number, number] =  [0, undefined];
+
+        constructor(info){
+            for(let x in info){
+                if(this.hasOwnProperty(x)){
+                    this[x] = info[x];
+                }
+            }
+            
+            this.init();
+        }
+
+        init(){
+            let data = this.data.slice(this.range[0], this.range[1]);
+            switch(this.type){
+                case 'circle':
+                    this.setCircle(data);
+                    break;
+                case 'pulsing':
+                    this.setPulsing(data);
+                    break;
+            }
+        }
+
+        setRange(begin, end){
+            this.range = [begin, (end >= 0)? end + 1: undefined];
+            this.init();
+
+        }
+        setCircle(data){
+            
+            let geojson = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            };
+
+            
+
+            let paint = {
+                'circle-radius': 4,
+                    //'circle-opacity':["case",["=>",['get','type'],30] , 0.0, 0.8],
+                    'circle-color': this.color,
+                    //'circle-color':["case",[">=",['get','speed'],31] , 'red',[">=",['get','speed'],21],'yellow' ,[">=",['get','speed'],11],'#00d4ff',[">=",['get','speed'],1],'#f743b7','purple'],
+                    'circle-stroke-color':this.borderColor,
+                    'circle-stroke-width':this.borderWidth
+            };
+            for(let x in this.paint){
+                paint['circle-' + x] = this.paint[x];
+            }
+
+            let filter = [];
+            for(let x in this.filter){
+                filter = ['in', x, this.filter[x]]
+            }
+
+            let l = null;
+           
+            this.map.addLayer(l = {
+                'id': this.id,
+                'type': 'circle',
+                'minzoom': 13,
+                'source': this.source,
+                'layout': {
+                    'visibility':'visible'
+                },
+                'paint': paint,
+                //filter: ['in', '$type', 'Point']
+                //filter: ["in", 'type', 'h', 'm']
+                //filter: ["in", 'type']
+                //filter:['>=','speed',31]
+                //filter:["case",[">=",['get','speed'],31], true,false]
+                //filter:['any',['>=','speed',31],['>=','speed',30]]
+                filter:filter
+                
+            });
+            
+        }
+        setPulsing(data){
+            
+            let geojson = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            };
+
+            
+
+            let filter = [];
+            for(let x in this.filter){
+                filter = ['in', x, this.filter[x]]
+            }
+
+            
+            this.map.addLayer({
+                'id': this.id,
+                'type': 'symbol',
+                'source': this.source,
+                'layout': {
+                    //visibility:['get', 'visible'],
+                    'icon-image': 'pulsing-01',
+                    'icon-size': 0.4,
+                    'icon-rotate':['get', 'heading'],
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true,
+                
+                    
+                },
+                filter:filter
+
+                
+            });
+        }
+        setVisible(value){
+
+        }
+        setStyle(style){
+
+        }
+        setFilter(filter){
+
+        }
+        setData(data){
+
+        }
+        delete(){
+
+        }
+    }
     class Trace{
         map:any = null;
         type:string = "trace";
@@ -3321,6 +3469,10 @@ var MapBox = (($, turf) => {
         flyToSpeed:number = 0.8;
         flyToZoom:number = 14;
         panDuration:number = 5000;
+
+
+        layers:any = [];
+        _layers:any = [];
 
         maxLines:number = 0;
         line:object = {
@@ -3436,7 +3588,7 @@ var MapBox = (($, turf) => {
             this.coordinatesInit = this.coordinates.slice();
 
             //let index = this.data.findIndex((e)=>e.ts>=885);
-            console.log(this.data);
+            
             this.drawLineA();
             let map = this.map;
             this.flyTo();
@@ -3656,8 +3808,6 @@ var MapBox = (($, turf) => {
                 }
             };
 
-
-
             let lineString = {
                 
                 "type": "Feature",
@@ -3668,7 +3818,68 @@ var MapBox = (($, turf) => {
             
             };
             geojson.data.features.push(lineString);
+            this.map.addSource(this.lineIdA, geojson);
 
+
+
+            let geojson2 = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []//[polygon, point]
+                }
+            };
+            this.coordinatesInit.forEach((element, index) => {
+                let point = {
+                    'type': "Feature",
+                    'properties': this.data[index],
+                    'geometry': {
+                        'type': "Point",
+                        'coordinates': element
+                    }
+                };
+                geojson2.data.features.push(point);
+            });
+            this.map.addSource(this.lineIdA+"2", geojson2);
+            console.log(this.data);
+            
+            
+            this.map.addLayer({
+                'id': this.lineIdA,
+                'type': 'line',
+                'source': this.lineIdA,
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                    'visibility':(this.visible)? 'visible': 'none'
+                    
+                },
+                'paint': {
+                    'line-color': '#ff9900',
+                    'line-width': 2,
+                    'line-opacity': 0.8,
+                    //'line-gap-width':4,
+                    'line-dasharray':[2,2]
+                    
+                    
+                },
+                'filter': ['==', '$type', 'LineString']
+            });
+
+            this.layers.forEach((e, index)=>{
+                e.id = 't_layer'+index;
+                e.map = this.map;
+                e.data = this.data;
+                e.range = [null, null];
+                e.source = this.lineIdA+"2";
+                this._layers[index] = new TraceLayer(e);
+            });
+            //this.map.setFilter('t_layer'+0,['>=',['get','i'],100]);
+            //this.map.setFilter('t_layer'+1,['>=',['get','i'],100]);
+            //this.map.setFilter('t_layer'+2,['>=',['get','i'],100]);
+            this.map.setFilter('t_layer'+10,['<=',['get','i'],30]);
+            return;
+            
             this.coordinatesInit.forEach((element, index) => {
                 let point = {
                     type: "Feature",
@@ -3713,6 +3924,8 @@ var MapBox = (($, turf) => {
                 },
                 'filter': ['==', '$type', 'LineString']
             });
+
+
             this.map.addLayer({
                 id: this.lineIdA+"3",
                 type: 'circle',
@@ -3821,7 +4034,7 @@ var MapBox = (($, turf) => {
                 speed = this.data[this._lastIndex].speed;
             }
 
-
+            /*
             this._events.forEach((e, index) =>{
                 
                 let point = {
@@ -3838,6 +4051,7 @@ var MapBox = (($, turf) => {
                 };
                 geojson.data.features.push(point);
             });
+            */
             let point = {
                 type: "Feature",
                 properties:{
@@ -3856,6 +4070,7 @@ var MapBox = (($, turf) => {
             this.map.getSource(this.lineId).setData(geojson.data);  
             
             this.ondraw(this.coordinates);
+           
         }
         restart(){
             this.resetTime = true;
@@ -5347,6 +5562,10 @@ var MapBox = (($, turf) => {
                 map.addImage('pulsing-dot2', new Pulsing(map, {
                     rgb:[247,67,183],
                     center:[247,67,216]
+                }), { pixelRatio: 3 });
+                map.addImage('pulsing-01', new Pulsing(map, {
+                    rgb:[255,76,0],
+                    center:[255, 255, 102]
                 }), { pixelRatio: 3 });
 
                 let traffic = {

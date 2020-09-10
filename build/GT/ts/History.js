@@ -53,6 +53,7 @@ var GTHistory = (($) => {
             this._timer = null;
             this._lastUnitId = null;
             this._traces = [];
+            this.layers = [];
             this._form = null;
             this._parentContext = null;
             this.dataInput = null;
@@ -249,10 +250,121 @@ var GTHistory = (($) => {
                 this._trace.play();
             }
             else {
+                this.layers = [
+                    {
+                        type: "circle",
+                        color: "red",
+                        filter: {
+                            s: 1
+                        }
+                    },
+                    {
+                        type: "circle",
+                        color: "#43f3f7",
+                        filter: {
+                            s: 2
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "#00d4ff",
+                        filter: {
+                            s: 3
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "#007dff",
+                        filter: {
+                            s: 4
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "#0005ff",
+                        filter: {
+                            s: 5
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "#6f00ff",
+                        filter: {
+                            s: 6
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "#e200ff",
+                        filter: {
+                            s: 7
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "#ff8400",
+                        filter: {
+                            s: 8
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "#00ff80",
+                        filter: {
+                            s: 9
+                        },
+                    },
+                    {
+                        type: "circle",
+                        color: "black",
+                        filter: {
+                            s: 10
+                        },
+                    },
+                    {
+                        type: "pulsing",
+                        color: "black",
+                        filter: {
+                            p: 1
+                        }
+                    }
+                ];
                 let data = this.formateData(this.data);
-                this._trace = this.getMap().draw('traza2', 'trace', { data: data });
+                this._trace = this.getMap().draw('traza2', 'trace', {
+                    data: data,
+                    layers: this.layers,
+                });
                 //this._trace.play();
             }
+        }
+        initTrace() {
+            let layers = [
+                {
+                    type: "circle",
+                    color: "red",
+                    filter: (e => e.speed > 0 && e.speed <= 20),
+                },
+                {
+                    type: "circle",
+                    color: "blue",
+                    filter: (e => e.speed > 20 && e.speed <= 30),
+                },
+                {
+                    type: "pulsing",
+                    color: "orange",
+                    filter: (e => e.event != null),
+                },
+                {
+                    type: "pulsing",
+                    color: "green",
+                    filter: (e => e.event != null),
+                },
+                {
+                    type: "circle",
+                    color: "orange",
+                    filter: (e => e.input != null),
+                }
+            ];
         }
         formateData(data) {
             let result = [];
@@ -264,10 +376,39 @@ var GTHistory = (($) => {
                     heading: data[x].heading * 1,
                     event: data[x].event,
                     event_id: data[x].event_id,
-                    iconImage: (data[x].event_id) ? "pulsing-dot" : "pulsing-dot2"
+                    iconImage: (data[x].event_id) ? "pulsing-dot" : "pulsing-dot2",
+                    s: 0,
+                    p: 0,
+                    i: x * 1
                 });
             }
-            //console.log(result);
+            let filter = [
+                (e) => { if (e.speed <= 0)
+                    e.s = 1; },
+                (e) => { if (e.speed > 0 && e.speed <= 10)
+                    e.s = 2; },
+                (e) => { if (e.speed > 10 && e.speed <= 20)
+                    e.s = 3; },
+                (e) => { if (e.speed > 20 && e.speed <= 30)
+                    e.s = 4; },
+                (e) => { if (e.speed > 30 && e.speed <= 40)
+                    e.s = 5; },
+                (e) => { if (e.speed > 40 && e.speed <= 50)
+                    e.s = 6; },
+                (e) => { if (e.speed > 50 && e.speed <= 60)
+                    e.s = 7; },
+                (e) => { if (e.speed > 60 && e.speed <= 70)
+                    e.s = 8; },
+                (e) => { if (e.speed > 70 && e.speed <= 80)
+                    e.s = 9; },
+                (e) => { if (e.speed > 80)
+                    e.s = 10; },
+                (e) => { if (e.event != null)
+                    e.p = 1; },
+            ];
+            filter.forEach((f) => {
+                result.forEach(f);
+            });
             return result;
         }
         setData(data) {
@@ -355,7 +496,6 @@ var GTHistory = (($) => {
         }
         createMenu() {
             let infoMenu = [];
-            console.log(this.dataMain);
             for (let x in this.dataMain) {
                 infoMenu[this.dataMain[x].id] = {
                     id: this.dataMain[x].id,
