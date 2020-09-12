@@ -306,6 +306,199 @@ var createGeoJSONCircle = function(center, radiusInKm, points) {
     return json;
 };
 var MapBox = (($, turf) => {
+    class TraceControl{
+        id:string = 'mapboxgl-ctrl-trace';
+        _map:any = null;
+        _container:any = null;
+        _line:any = null;
+        _mode:number = 0;
+        _parent:any = null;
+        _meter:number = 1;
+
+
+        _group:any = null;
+        _length:any = null;
+        _unit:any = null;
+        _group1:any = null;
+        _group2:any = null;
+        
+        _btnRule:any = null;
+        _btnLine:any = null;
+        _btnUnit:any = null;
+        _btnMultiLine:any = null;
+        _btnTrash:any = null;
+        _btnExit:any = null;
+        propertys:object = {
+            color: "#ff0000",
+            opacity: 0.4
+        }
+        length:number = 0;
+
+        constructor(object){
+            this._parent = object;
+        }
+
+        onAdd(map){
+            
+            this._map = map;
+            
+            this._container = $.create("div").addClass(["trace-tool"]);
+            
+            
+
+            this._group1 = this._container.create("div");
+            this._group1.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "trace-tool"]);
+            
+            this._btnRule = this._group1.create("button").prop({"type": "button", "title":"Inicia la herramienta de Traza"}).addClass("icon-trace");
+            this._btnRule.on("click", ()=>{
+                this.play();
+            });
+
+
+
+            this._group2 = this._container.create("div").style("display","none");
+            this._group2.addClass(["trace-nav"]);
+            this._group_a = this._group2.create("div").addClass(["mapboxgl-ctrl","trace-nav"]);
+
+            this._group = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "trace-layer"])
+            .style("display","none");
+            this._length = this._group.create("span").addClass("rule-tool-value");
+            this._length.text("Layers");
+            this._unit = this._group.create("span");
+            this._unit.addClass("rule-tool-unit").text(" +")
+            .on("click", ()=>{
+                //this.toggleUnit();
+            })
+            ;
+
+            this._group_b = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group"]);
+            this._group_a.create("button").prop({"type": "button", "title":"+"}).addClass("icon-fb")
+            .on("click", ()=>{
+               
+            });
+            this._group_a.create("button").prop({"type": "button", "title":"-"}).addClass("icon-play")
+            .on("click", ()=>{
+               
+            });
+            this._group_a.create("button").prop({"type": "button", "title":"Play"}).addClass("icon-ff")
+            .on("click", ()=>{
+               
+            });
+
+            this._group_a.create("button").prop({"type": "button", "title":"+"}).addClass("icon-go_begin")
+            .on("click", ()=>{
+               
+            });
+            this._group_a.create("button").prop({"type": "button", "title":"+"}).addClass("icon-sb")
+            .on("click", ()=>{
+               
+            });
+            this._group_a.create("button").prop({"type": "button", "title":"-"}).addClass("icon-sf")
+            .on("click", ()=>{
+               
+            });
+            this._group_a.create("button").prop({"type": "button", "title":"Play"}).addClass("icon-go_end")
+            .on("click", ()=>{
+               
+            });
+
+
+
+
+            this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Descarta la medición actual"}).addClass(["icon-stop"])
+            .on("click", ()=>{
+                
+            });
+            this._btnExit = this._group_b.create("button").prop({"type": "button", "title":"Salir de la herramienta de medición"}).addClass(["icon-exit"])
+            .on("click", ()=>{
+                this.stop();
+            });
+
+            this.showLayers();
+            return this._container.get();
+            
+        }
+
+        onRemove(){
+            this._container.parentNode.removeChild(this._container);
+            this._map = undefined;
+        }
+
+        play(){
+            this._parent.stopControls();
+            if(this._mode == 0){
+                this._group.style("display","");
+                this._group1.style("display","none");
+                this._group2.style("display","");
+                this._mode = 1;
+            }
+           
+        }
+
+        showLayers(){
+            let layers = [
+                {
+                    title:"Uno"
+                },
+                {
+                    title:"Dos"
+                },
+                {
+                    title:"Tres"
+                }
+            ];
+
+
+            for(let x in layers){
+                let line = this._group.create("div").addClass("line");
+                let check = line.create("input").attr("type","checkbox");
+                let text = line.create("span").text(layers[x].title);
+            }
+        }
+        setLength(length){
+            this.length = length;
+            if(this._meter == 0){
+                this._length.text((this.length/1000).toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                this._unit.text("Km");
+            }else{
+                this._length.text(this.length.toLocaleString('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                this._unit.text("m");
+            }
+            
+            
+        }
+        toggleUnit(){
+
+            if(this._meter == 0){
+                this._meter = 1; 
+            }else{
+                this._meter = 0;
+            }
+            this.setLength(this.length);
+           
+
+        }
+        
+
+        delete(){
+            //this._line.stop();
+            this._parent.delete(this.id);
+            
+        }
+
+        stop(){
+            
+            if(this._mode == 1){
+                //this.delete();
+                this._group.style("display","none");
+                this._group1.style("display","");
+                this._group2.style("display", "none");
+                this._mode = 0;
+            }
+        }
+
+        
+    }
 
     class InfoRuleControl{
         id:string = 'mapboxgl-ctrl-rule';
@@ -5617,6 +5810,8 @@ var MapBox = (($, turf) => {
 
             });
             
+            
+            map.addControl(this._controls["rule"] = new TraceControl(this), 'top-right');
             map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
             map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
             map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');

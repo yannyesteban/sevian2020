@@ -81,6 +81,46 @@ form {
   margin: 4px;
 }
 
+.icon-trace {
+  background-image: url(../../images/trace.png);
+}
+
+.icon-play {
+  background-image: url(../../images/play.png);
+}
+
+.icon-pause {
+  background-image: url(../../images/pause.png);
+}
+
+.icon-stop {
+  background-image: url(../../images/stop.png);
+}
+
+.icon-fb {
+  background-image: url(../../images/fb.png);
+}
+
+.icon-ff {
+  background-image: url(../../images/ff.png);
+}
+
+.icon-go_begin {
+  background-image: url(../../images/go_begin.png);
+}
+
+.icon-go_end {
+  background-image: url(../../images/go_end.png);
+}
+
+.icon-sb {
+  background-image: url(../../images/sb.png);
+}
+
+.icon-sf {
+  background-image: url(../../images/sf.png);
+}
+
 .icon-rule {
   background-image: url(../../images/rule.png);
 }
@@ -552,5 +592,28 @@ form {
       -ms-flex-direction: row;
           flex-direction: row;
   height: 100%;
+}
+
+.trace-tool .trace-nav {
+  display: block;
+  white-space: nowrap;
+  background-color: rgba(255, 255, 255, 0.288);
+}
+.trace-tool .trace-nav button {
+  width: 29px;
+  height: 29px;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0;
+  outline: none;
+  border: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: transparent;
+  cursor: pointer;
+}
+.trace-tool .trace-layer {
+  width: 200px;
+  min-height: 200px;
 }
 /*# sourceMappingURL=gt.css.map */
