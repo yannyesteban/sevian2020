@@ -279,6 +279,10 @@ var MapBox = (($, turf) => {
                 opacity: 0.4
             };
             this.length = 0;
+            this._trace = null;
+            this._playButton = null;
+            this._factorIndex = 0;
+            this._factorValue = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.20, 0.01];
             this._parent = object;
         }
         onAdd(map) {
@@ -305,27 +309,47 @@ var MapBox = (($, turf) => {
             this._group_b = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group"]);
             this._group_a.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-fb")
                 .on("click", () => {
+                if (this._factorIndex <= 0) {
+                    this._factorIndex = this._factorValue.length;
+                }
+                this._factorIndex = (this._factorIndex - 1) % this._factorValue.length;
+                db(this._factorValue[this._factorIndex], "white");
+                this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
             });
-            this._group_a.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-play")
+            this._playButton = this._group_a.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-play")
                 .on("click", () => {
+                if (this._trace.getStatus() == 1) {
+                    this.cmdTrace('pause');
+                }
+                else {
+                    this.cmdTrace('play');
+                }
             });
             this._group_a.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-ff")
                 .on("click", () => {
+                this._factorIndex = (this._factorIndex + 1) % this._factorValue.length;
+                db(this._factorValue[this._factorIndex], "aqua");
+                this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
             });
             this._group_a.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-go_begin")
                 .on("click", () => {
+                this.cmdTrace('go-begin');
             });
             this._group_a.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-sb")
                 .on("click", () => {
+                this.cmdTrace('sb');
             });
             this._group_a.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-sf")
                 .on("click", () => {
+                this.cmdTrace('sf');
             });
             this._group_a.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-go_end")
                 .on("click", () => {
+                this.cmdTrace('go-end');
             });
             this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Descarta la medición actual" }).addClass(["icon-stop"])
                 .on("click", () => {
+                this.cmdTrace('stop');
             });
             this._btnExit = this._group_b.create("button").prop({ "type": "button", "title": "Salir de la herramienta de medición" }).addClass(["icon-exit"])
                 .on("click", () => {
@@ -346,6 +370,62 @@ var MapBox = (($, turf) => {
                 this._group2.style("display", "");
                 this._mode = 1;
             }
+        }
+        init() {
+        }
+        setIconPlay(value) {
+            if (value) {
+                this._playButton.removeClass("icon-pause");
+                this._playButton.addClass("icon-play");
+            }
+            else {
+                this._playButton.removeClass("icon-play");
+                this._playButton.addClass("icon-pause");
+            }
+        }
+        cmdTrace(cmd) {
+            switch (cmd) {
+                case 'play':
+                    this.setIconPlay(false);
+                    this._trace.play();
+                    break;
+                case 'pause':
+                    this.setIconPlay(true);
+                    this._trace.pause();
+                    break;
+                case 'fb':
+                    this.setIconPlay(true);
+                    this._trace.play('fb');
+                    break;
+                case 'ff':
+                    this.setIconPlay(true);
+                    this._trace.play('ff');
+                    break;
+                case 'go-begin':
+                    this.setIconPlay(true);
+                    this._trace.goBegin();
+                    break;
+                case 'go-end':
+                    this.setIconPlay(true);
+                    this._trace.goEnd();
+                    break;
+                case 'sb':
+                    this.setIconPlay(true);
+                    this._trace.step(-1);
+                    break;
+                case 'sf':
+                    this.setIconPlay(true);
+                    this._trace.step(1);
+                    break;
+                case 'stop':
+                    this.setIconPlay(true);
+                    this._trace.stop();
+                    break;
+            }
+        }
+        setTrace(trace) {
+            this._trace = trace;
+            this.init();
         }
         showLayers() {
             let layers = [
@@ -2823,7 +2903,7 @@ var MapBox = (($, turf) => {
             this._nodes = null;
             this._line = null;
             this.id = "p" + String(new Date().getTime());
-            this.nodesId = null;
+            this.layerMobilId = null;
             this.lineId = null;
             this.lineIdA = null;
             this.circleId = null;
@@ -2837,7 +2917,7 @@ var MapBox = (($, turf) => {
             this.callmove = () => { };
             this.callresize = () => { };
             this.ondraw = (coordinates) => { };
-            this.speedFactor = 30; // number of frames per longitude degree
+            this.speedFactor = 0.05; // number of frames per longitude degree
             this.startTime = 0;
             this.progress = 0; // progress = timestamp - startTime
             this.resetTime = false; // indicator of whether time reset is needed for the animation
@@ -2847,7 +2927,7 @@ var MapBox = (($, turf) => {
                 }
             }
             this.lineIdA = "la-" + this.id;
-            this.nodesId = "n-" + this.id;
+            this.layerMobilId = "n-" + this.id;
             this.lineId = "l-" + this.id;
             this.circleId = "c-" + this.id;
             this.mobileId = "m-" + this.id;
@@ -2857,28 +2937,6 @@ var MapBox = (($, turf) => {
             this.init();
         }
         init() {
-            this.coordinates = [
-                [-66.84927463531494, 10.490132784557675],
-                [-66.84916734695435, 10.487727485274153],
-                [-66.847482919693, 10.488339361426192],
-                [-66.84403896331787, 10.48798067555274],
-                [-66.83899641036987, 10.4872211040956],
-                [-66.83056354522705, 10.480659173081785],
-                [-66.82998418807983, 10.48194625089936],
-                [-66.83200120925903, 10.48333882087384],
-                [-66.83295607566833, 10.483686962388932],
-                [-66.83379024267197, 10.484296209098416],
-                [-66.83488190174103, 10.485327442138733],
-                [-66.83595210313797, 10.486147678753897],
-                [-66.8368935585022, 10.487347699467918],
-                [-66.83808445930487, 10.488181117709713],
-                [-66.83968305587774, 10.488465956341086],
-                [-66.84177517890936, 10.488687497317594],
-                [-66.84476852416998, 10.489014533707307],
-                [-66.84704303741461, 10.489362668839194],
-                [-66.84779405593878, 10.490064212687859],
-                [-66.84927463531494, 10.490132784557675]
-            ];
             this.coordinates = [];
             let fixDelay = 0;
             let ts = [];
@@ -2901,19 +2959,21 @@ var MapBox = (($, turf) => {
             //let polygon = turf.polygon([coo], { name: 'poly1' });
             //polygon = turf.bezierSpline(polygon);
             //            console.log(polygon)
+            /*
             this.map.addLayer({
                 'id': this.circleId,
                 'type': 'fill',
                 'source': this.lineId,
                 'layout': {
-                    visibility: (this.visible) ? 'visible' : 'none'
+                    visibility:(this.visible)? 'visible': 'none'
                 },
                 'paint': {
-                //'fill-color': '#ff9900',
-                //'fill-opacity': 0.4,
+                    //'fill-color': '#ff9900',
+                    //'fill-opacity': 0.4,
                 },
                 'filter': ['==', '$type', 'Polygon']
             });
+            */
             //this.setLine(this.line);
             //this.setFill(this.fill);
             map.addLayer({
@@ -2933,7 +2993,7 @@ var MapBox = (($, turf) => {
                 filter: ['in', 'dot', 'dot']
             });
             map.addLayer({
-                id: this.nodesId,
+                id: this.layerMobilId,
                 type: 'symbol',
                 source: this.lineId,
                 layout: {
@@ -3306,9 +3366,20 @@ var MapBox = (($, turf) => {
                 //filter: ["in", 'type']
             });
         }
-        draw() {
-            //console.log(this.coordinates);
-            //let data = createGeoJSONLine(this.coordinates);
+        draw(nextPoint, nextBearing) {
+            this.coordinates = this.coordinatesInit.slice(0, this._lastIndex);
+            this.coordinates.push(nextPoint);
+            if (this._lastIndex > 0) {
+                // creating the trace line of fixed length
+                let line = turf.lineString(this.coordinates);
+                let totalLength = turf.length(line, { units: 'meters' });
+                var start = totalLength - 1000;
+                var stop = totalLength;
+                if (start > 0) {
+                    var sliced = turf.lineSliceAlong(line, start, stop, { units: 'meters' });
+                    this.coordinates = turf.getCoords(sliced);
+                }
+            }
             let geojson = {
                 "type": "geojson",
                 "data": {
@@ -3327,38 +3398,15 @@ var MapBox = (($, turf) => {
                     ]
                 }
             };
-            //console.log(this.data);
-            //db (this._lastIndex)
-            if (this._lastIndex > 10) {
-                // return;
-            }
             let heading = 0, speed = 0;
             if (this.data[this._lastIndex]) {
                 heading = this.data[this._lastIndex].heading;
                 speed = this.data[this._lastIndex].speed;
             }
-            /*
-            this._events.forEach((e, index) =>{
-                
-                let point = {
-                    type: "Feature",
-                    properties:{
-                        'heading':heading,
-                        'speed':speed,
-                        dot:'dot',
-                    },
-                    geometry: {
-                        type: "Point",
-                        coordinates: e
-                    }
-                };
-                geojson.data.features.push(point);
-            });
-            */
             let point = {
                 type: "Feature",
                 properties: {
-                    'heading': heading,
+                    'heading': nextBearing,
                     'speed': speed,
                     dot: '',
                 },
@@ -3371,17 +3419,68 @@ var MapBox = (($, turf) => {
             this.map.getSource(this.lineId).setData(geojson.data);
             this.map.getSource(this.layerSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex)).data);
             this.ondraw(this.coordinates);
-            if (this._lastIndex >= 20) {
-                //console.log(this.dataFilter(this.data.slice(0,30)).data);
-                //throw new Error();
-            }
         }
         restart() {
             this.resetTime = true;
             this.play();
         }
+        setStatus(status) {
+            if (status == 0) {
+                this.map.setLayoutProperty(this.lineId, "visibility", "none");
+                this.map.setLayoutProperty(this.layerMobilId, "visibility", "none");
+                this.map.getSource(this.layerSourceId).setData(this.dataFilter(this.coordinatesInit).data);
+            }
+            else {
+                this.map.setLayoutProperty(this.lineId, "visibility", "visible");
+                this.map.setLayoutProperty(this.layerMobilId, "visibility", "visible");
+            }
+            this._status = status;
+        }
+        getStatus() {
+            return this._status;
+        }
+        goTo(index) {
+        }
+        setSpeedFactor(speedFactor) {
+            this.speedFactor = speedFactor;
+        }
+        step(n) {
+            this.setStatus(2);
+            cancelAnimationFrame(this.animation);
+            let index = this._lastIndex + n;
+            if (index < 0) {
+                index = 0;
+            }
+            if (index > this.coordinatesInit.length - 1) {
+                index = this.coordinatesInit.length - 1;
+            }
+            this._lastIndex = index;
+            this.progress = this.data[this._lastIndex].ts / this.speedFactor;
+            this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
+        }
+        goBegin() {
+            this.setStatus(2);
+            cancelAnimationFrame(this.animation);
+            this._lastIndex = 0;
+            this.progress = this.data[this._lastIndex].ts / this.speedFactor;
+            this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
+        }
+        goEnd() {
+            this.setStatus(2);
+            cancelAnimationFrame(this.animation);
+            this._lastIndex = this.coordinatesInit.length - 1;
+            this.progress = this.data[this._lastIndex].ts / this.speedFactor;
+            this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
+        }
+        pause() {
+            this.setStatus(2);
+            cancelAnimationFrame(this.animation);
+            this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
+        }
         play() {
+            this.setStatus(1);
             this.startTime = performance.now();
+            this.resetTime = true;
             let animateLine = (timestamp) => {
                 if (this.resetTime) {
                     // resume previous progress
@@ -3392,171 +3491,46 @@ var MapBox = (($, turf) => {
                 else {
                     this.progress = timestamp - this.startTime;
                 }
-                let speed = this.progress * 0.05;
+                let speed = this.progress * this.speedFactor;
                 let index = this.data.findIndex((e) => e.ts >= speed);
                 this._lastIndex = index;
                 if (this._lastIndex + 1 == this.data.length) {
                     cancelAnimationFrame(this.animation);
                     return;
                 }
+                let nextPoint = null;
+                let nextBearing = null;
                 if (index > 0) {
                     let delta = this.data[index].ts - speed;
+                    let totalTime = this.data[index].ts - this.data[index - 1].ts;
+                    //calculating next point
                     let pointFrom = this.coordinatesInit[index - 1];
                     let pointTo = this.coordinatesInit[index];
                     let line = turf.lineString([pointFrom, pointTo]);
                     let totalLength = turf.length(line, { units: 'meters' });
-                    let totalTime = this.data[index].ts - this.data[index - 1].ts;
-                    //db ("index: "+index+", deltaLength: "+(delta*totalLength/totalTime).toFixed(2),"white")
-                    let along = turf.along(line, totalLength - delta * totalLength / totalTime, { units: 'meters' });
-                    //console.log (turf.getCoords(along),"aqua");
-                    this.coordinates = this.coordinatesInit.slice(0, index);
-                    this.coordinates.push(turf.getCoords(along));
-                    line = turf.lineString(this.coordinates);
-                    totalLength = turf.length(line, { units: 'meters' });
-                    var start = totalLength - 1000;
-                    var stop = totalLength;
-                    if (start > 0) {
-                        var sliced = turf.lineSliceAlong(line, start, stop, { units: 'meters' });
-                        this.coordinates = turf.getCoords(sliced);
-                    }
+                    nextPoint = turf.getCoords(turf.along(line, totalLength - delta * totalLength / totalTime, { units: 'meters' }));
+                    // calculating simulated bearing
                     let point1 = turf.point(pointFrom);
                     let point2 = turf.point(pointTo);
-                    let bearing = turf.bearing(point1, point2);
-                    this.data[this._lastIndex].heading = bearing;
+                    nextBearing = turf.bearing(point1, point2);
                 }
                 else {
-                    this.coordinates = this.coordinatesInit[0];
+                    nextPoint = this.coordinatesInit[0];
+                    nextBearing = this.data[0].heading;
                 }
-                if (this.data[this._lastIndex] && this.data[this._lastIndex].event) {
-                    this._events.push(this.coordinatesInit[index]);
-                }
-                this.draw();
+                this.draw(nextPoint, nextBearing);
                 // Request the next frame of the animation.
                 this.animation = requestAnimationFrame(animateLine);
             };
             animateLine();
         }
-        setMaxLines(lines) {
-            if (lines >= 0) {
-                this.maxLines = lines;
-                this.reset();
-            }
-        }
-        _fnclick(map) {
-            return;
-        }
-        playX() {
-            if (this._play) {
-                return;
-            }
-            this.parent.stop();
-            this._play = true;
-            let map = this.map;
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
-            this.setVisible(true);
-            this.setFill(this.fillEdit);
-            this.setLine(this.lineEdit);
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'visible');
-            //this.map.setPaintProperty(this.lineId, 'line-dasharray', [2,2]);
-            let place = null;
-            let type = null;
-            let place_one = null;
-            let down1 = false;
-            let fnUp = (e) => {
-                map.off('mousemove', fnMove);
-                type = null;
-                down1 = false;
-            };
-            let fnMove = (e) => {
-                this.coordinates[place] = [e.lngLat.lng, e.lngLat.lat];
-                this.draw();
-            };
-            let fnUp2 = (e) => {
-                map.off('mousemove', fnMove2);
-            };
-            let fnMove2 = (e) => {
-                //this.move(place_one, e.lngLat);
-                let dLng = e.lngLat.lng - place_one.lng;
-                let dLat = e.lngLat.lat - place_one.lat;
-                //db (dLng)
-                let c = [];
-                this.coordinates.forEach((elem, index) => {
-                    //db (index+"  "+elem[0], "white")
-                    c.push([elem[0] + dLng, elem[1] + dLat]);
-                });
-                this.coordinates = c;
-                place_one = e.lngLat;
-                this.draw();
-            };
-            map.on('mousedown', this.nodesId, this._mousedown = (e) => {
-                // Prevent the default map drag behavior.
-                e.preventDefault();
-                var features = map.queryRenderedFeatures(e.point, {
-                    layers: [this.nodesId]
-                });
-                down1 = true;
-                place = features[0].properties.index;
-                type = features[0].properties.type;
-                if (type == "m" && !this.split(place, [e.lngLat.lng, e.lngLat.lat])) {
-                    return;
-                }
-                map.on('mousemove', fnMove);
-                map.once('mouseup', fnUp);
-            });
-            map.on('mousedown', this.circleId, this._mousedown2 = (e) => {
-                if (down1) {
-                    return;
-                }
-                // Prevent the default map drag behavior.
-                e.preventDefault();
-                place_one = e.lngLat;
-                map.on('mousemove', fnMove2);
-                map.once('mouseup', fnUp2);
-            });
-            map.on('click', this._click = (e) => {
-                //db (e.originalEvent.button+".........", "red","yellow")
-                var features = this.map.queryRenderedFeatures(e.point, {
-                    layers: [this.nodesId]
-                });
-                if (this.maxLines == 0) {
-                    this.add(e.lngLat);
-                    return;
-                }
-                let lines = this.coordinates.length - 1;
-                if (lines < this.maxLines) {
-                    this.add(e.lngLat);
-                }
-                else {
-                    this.coordinates[this.maxLines] = [e.lngLat.lng, e.lngLat.lat];
-                    this.draw();
-                    return;
-                }
-                return;
-            });
-            map.on('contextmenu', this._contextmenu = (e) => {
-                e.preventDefault();
-                this.coordinates.pop();
-                this.draw();
-            });
-        }
-        pause() {
-        }
         stop() {
-            if (this._play) {
-                this.map.off('click', this._click);
-                this.map.off('contextmenu', this._contextmenu);
-                this.map.off('mousedown', this.nodesId, this._mousedown);
-                this.map.off('mousedown', this.circleId, this._mousedown2);
-                // this.map.setPaintProperty(this.lineId, 'line-dasharray', [1]);
-                //'line-dasharray':[2,2]
-                //this.map.setPaintProperty(this.lineId, 'line-color', "#fd8d3c");
-                //map.on('mousemove', fnMove);
+            if (this._status != 0) {
+                cancelAnimationFrame(this.animation);
+                this.setStatus(0);
+                this.progress = 0;
+                this._lastIndex = 0;
             }
-            this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
-            this.setFill(this.fill);
-            this.setLine(this.line);
-            //this._mode = 0;
-            this._play = false;
         }
         reset() {
             if (!this._play) {
@@ -3598,39 +3572,6 @@ var MapBox = (($, turf) => {
                 map.removeLayer(this.nodesId);
             if (map.getSource(this.lineId))
                 map.removeSource(this.lineId);
-        }
-        setCenter(lngLat) {
-            this.center = lngLat;
-        }
-        setHand(lngLat) {
-            this.hand = lngLat;
-        }
-        createCircle(center, radio) {
-            let length;
-            if (typeof radio === 'number') {
-                length = radio;
-            }
-            else {
-                var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
-                length = turf.length(line, { units: 'kilometers' });
-            }
-            this.radio = length;
-            let data = createGeoJSONCircle([center.lng, center.lat], length);
-            this.map.getSource(this.lineId).setData(data.data);
-        }
-        split(index, value) {
-            if (this.maxLines != 0 && (this.coordinates.length - 1) >= this.maxLines) {
-                return false;
-            }
-            this.coordinates.splice(index, 0, value);
-            this.draw();
-            return true;
-        }
-        getHand() {
-            return this.hand;
-        }
-        getRadio() {
-            return this.radio;
         }
         flyTo(zoom, speed) {
             var coordinates = this.coordinates;
@@ -4594,7 +4535,7 @@ var MapBox = (($, turf) => {
                     }
                 });
             });
-            map.addControl(this._controls["rule"] = new TraceControl(this), 'top-right');
+            map.addControl(this._controls["trace"] = new TraceControl(this), 'top-right');
             map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
             map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
             map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');

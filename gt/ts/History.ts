@@ -404,6 +404,7 @@ var GTHistory = (($) => {
 					data:data,
 					layers:this.layers,
 				});
+				this.getMap().getControl('trace').setTrace(this._trace);
 				//this._trace.play();
 			}
 		}
