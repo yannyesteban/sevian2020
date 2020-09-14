@@ -3,6 +3,7 @@
 $PATH = MAIN_PATH;
 
 $js = [
+	
 	[
 		'file' 	=> "{$PATH}js/_sgQuery.js",
 		'begin'	=> true],
@@ -164,6 +165,8 @@ $js = [
 		
 		//'attrib' => [			'_type'=>'module'		]
 	],
+
+	
 ];
 
 Sevian\S::jsInit($js);

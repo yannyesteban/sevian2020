@@ -1,3 +1,5 @@
+
+
 var ctMap = ctMap || [];
 var Mark;
 var createGeoJSONRectangle = function(p1, p2 = null) {
@@ -337,7 +339,7 @@ var MapBox = (($, turf) => {
         private _trace:Trace = null;
         private _playButton:any = null;
         private _factorIndex = 0;
-        private _factorValue = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.20, 0.01];
+        private _factorValue = [0.005, 0.01, 0.05, 0.09, 0.13, 0.20];
 
         constructor(object){
             this._parent = object;
@@ -384,7 +386,7 @@ var MapBox = (($, turf) => {
                 }
 
                 this._factorIndex = (this._factorIndex - 1 ) % this._factorValue.length;
-                db (this._factorValue[this._factorIndex],"white")
+                
                 this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
 
             });
@@ -488,8 +490,8 @@ var MapBox = (($, turf) => {
                     this.setIconPlay(true);
                     this._trace.play('ff');
                 break;
-                case 'go-begin'
-                this.setIconPlay(true);:
+                case 'go-begin':
+                    this.setIconPlay(true);
                     this._trace.goBegin();
                 break;
                 case 'go-end':

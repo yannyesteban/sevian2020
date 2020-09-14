@@ -282,7 +282,7 @@ var MapBox = (($, turf) => {
             this._trace = null;
             this._playButton = null;
             this._factorIndex = 0;
-            this._factorValue = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.20, 0.01];
+            this._factorValue = [0.005, 0.01, 0.05, 0.09, 0.13, 0.20];
             this._parent = object;
         }
         onAdd(map) {
@@ -313,7 +313,6 @@ var MapBox = (($, turf) => {
                     this._factorIndex = this._factorValue.length;
                 }
                 this._factorIndex = (this._factorIndex - 1) % this._factorValue.length;
-                db(this._factorValue[this._factorIndex], "white");
                 this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
             });
             this._playButton = this._group_a.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-play")

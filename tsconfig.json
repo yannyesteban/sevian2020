@@ -4,12 +4,14 @@
         "target": "es6",
         "module": "es6",
         "sourceMap": true,
-        "outDir": "./build"
+        "outDir": "./build",
+        "moduleResolution": "classic",
         //"outDir": "js",
         //"rootDir": "./ts"
        
     
     },
     //"include":["ts/y2/*", "ts/*"]
-    "include": ["./sevian/ts/*","./gt/ts/*","./lib/*"]
+    "include": ["./sevian/ts/*","./gt/ts/*","./lib/*"],
+
 }
