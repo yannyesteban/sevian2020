@@ -209,7 +209,7 @@ var S = (($) => {
 				
 				form = this.getForm(info.id);
 			}
-			//alert (info.id);
+			
 			if(form){
 				
 				if(form.__sg_sw.value === form.__sg_sw2.value){

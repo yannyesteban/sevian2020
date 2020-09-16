@@ -403,10 +403,7 @@ sgJson = {
  			target = $("form_p"+opt.id);
 		}else{
 			target = $(opt.id);
-			alert("no");
-			return;
 		}
-		
 		
 		target.text(opt.html);
 		
@@ -417,7 +414,10 @@ sgJson = {
 		if(opt.css){
 			$.appendStyle(opt.css);
 		}
-		//document.title = opt.title;
+		if(opt.title){
+			document.title = opt.title;
+		}
+		
 		
 	},
 

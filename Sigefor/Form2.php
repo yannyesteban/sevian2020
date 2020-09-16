@@ -89,6 +89,10 @@ class Form2
 
 	public function createForm($mode = 1, $recordFrom = false){
 
+		if($this->eparams->mainId?? false){
+            $this->containerId = $this->eparams->mainId;
+        }
+
 		if(!$this->containerId){
 			$this->containerId = $this->getPanelId();
 			$this->panel = new \Sevian\HTML('div');
@@ -159,6 +163,11 @@ class Form2
 	}
 	
 	public function createGrid($page = 1, $searchValue = ''){
+
+		if($this->eparams->mainId?? false){
+            $this->containerId = $this->eparams->mainId;
+		}
+
 		if(!$this->containerId){
 			$this->containerId = $this->element.'-'.$this->id;
 			$this->panel = new \Sevian\HTML('div');

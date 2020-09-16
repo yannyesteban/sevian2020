@@ -201,10 +201,10 @@ class S{
 		if(!self::$onAjax){
 
 			//self::db(self::$req);
-			self::$_str = new Structure();
+			self::$_str = new HtmlStructure();
 		}else{
 			
-			self::$_str = new JsonStructure();
+			self::$_str = new AsyncStructure();
 		}
 		
 		self::$_str->ins = self::$ins;
@@ -418,7 +418,8 @@ class S{
 
 		if($e->mode == 'panel'){
 			self::addPanel($e);
-			self::$_str->addPanel($info->id, $e->getPanel());	
+			//self::$_str->addPanel($info->id, $e->getPanel());	
+			self::$_str->addPanel($info->id, $e);
 			$info->update = true;
 			$info->isPanel = true;
 		}
@@ -855,6 +856,8 @@ class S{
 		self::$_str->setTemplate(self::vars(self::getTemplate()));
 		
 		//if(self::$_templateChanged){
+
+		/*	
 		self::$_strPanels = self::$_str->getStrPanels();
 		foreach(self::$_strPanels as $panel){
 			
@@ -862,6 +865,7 @@ class S{
 				self::$_str->addPanel($panel, new \Sevian\HTML(''));
 			}
 		}
+		*/
 		//}
 
 		

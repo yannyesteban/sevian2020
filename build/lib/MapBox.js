@@ -327,7 +327,6 @@ var MapBox = (($, turf) => {
             this._group_a.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-ff")
                 .on("click", () => {
                 this._factorIndex = (this._factorIndex + 1) % this._factorValue.length;
-                db(this._factorValue[this._factorIndex], "aqua");
                 this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
             });
             this._group_a.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-go_begin")
@@ -429,13 +428,22 @@ var MapBox = (($, turf) => {
         showLayers() {
             let layers = [
                 {
-                    title: "Uno"
+                    title: "10 a 20 Km/h"
                 },
                 {
-                    title: "Dos"
+                    title: "20 a 30 Km/h"
                 },
                 {
-                    title: "Tres"
+                    title: "30 a 40 Km/h"
+                },
+                {
+                    title: "40 a 50 Km/h"
+                },
+                {
+                    title: "50 a 60 Km/h"
+                },
+                {
+                    title: "Evento Activo"
                 }
             ];
             for (let x in layers) {
@@ -4839,7 +4847,6 @@ var MapBox = (($, turf) => {
                     this._poly[name] = new IMark(info);
                 //this._poly[name] = new Trace(info);
                 case "trace":
-                    db(name, "white");
                     this._poly[name] = new Trace(info);
                     //this._poly[name] = new Trace(info);
                     break;

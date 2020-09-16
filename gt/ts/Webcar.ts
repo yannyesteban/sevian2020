@@ -162,7 +162,7 @@ var GTWebcar = (($) => {
 		private _event:object = null;
 		private _config:object = null;
 
-		
+		private _layerAlarm = "alarm_001";
 		private _win:any[] = [];
 		
 		static _instances:object[] = []; 
@@ -406,10 +406,43 @@ var GTWebcar = (($) => {
 								}
 							},
 							{
-								caption:'Sitio',
+								caption:'Alarm',
 								action:(item, event)=>{
 								
 									this._win["alarm"].show();
+
+									S.send3({
+										"async":1,
+										//"form":f,
+										id:2,
+										
+										
+										"params":[
+											
+											{
+												"t":"setMethod",
+												'mode':'element',
+												"id":this._layerAlarm,
+												"element":"form",
+												"method":"list",
+												"name":"/form/Alarm",
+												"eparams":{
+													"a":'yanny',
+													"mainId":this._layerAlarm,
+													
+													
+												}
+						
+											}
+										],
+										onRequest:(x)=>{
+											//S.getElement(this.commandPanelId).setContext(this);
+											//S.getElement(this.historyId).setContext(this);
+											//S.getElement(this.historyId).setMap(this.map);
+										   // alert(x)
+										}
+									});
+
 								}
 							},
 						]
@@ -916,7 +949,7 @@ var GTWebcar = (($) => {
 		loadAlarm(info){
 			this._win["alarm"] = new Float.Window({
                 visible:false,
-                caption: info.caption,
+                caption: info.caption+"....",
                 //child:main,
                 left:300,
                 top:100,
@@ -926,6 +959,11 @@ var GTWebcar = (($) => {
 				className:["sevian"],
 				
 			});
+
+			this._win["alarm"].getBody().id(this._layerAlarm);
+			return;
+
+
 			info.id = this._win["alarm"].getBody();
 			this.site.oninfo = (info, name) =>{
 				this._win.info.getBody().text(info);
@@ -935,7 +973,7 @@ var GTWebcar = (($) => {
 
 			this._win["form_alarm"] = new Float.Window({
                 visible:false,
-                caption: info.caption,
+                caption: info.caption+"....",
                 //child:main,
                 left:300,
                 top:100,

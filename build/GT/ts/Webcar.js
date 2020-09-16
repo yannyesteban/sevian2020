@@ -107,6 +107,7 @@ var GTWebcar = (($) => {
             this._search = null;
             this._event = null;
             this._config = null;
+            this._layerAlarm = "alarm_001";
             this._win = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -316,9 +317,34 @@ var GTWebcar = (($) => {
                                 }
                             },
                             {
-                                caption: 'Sitio',
+                                caption: 'Alarm',
                                 action: (item, event) => {
                                     this._win["alarm"].show();
+                                    S.send3({
+                                        "async": 1,
+                                        //"form":f,
+                                        id: 2,
+                                        "params": [
+                                            {
+                                                "t": "setMethod",
+                                                'mode': 'element',
+                                                "id": this._layerAlarm,
+                                                "element": "form",
+                                                "method": "list",
+                                                "name": "/form/Alarm",
+                                                "eparams": {
+                                                    "a": 'yanny',
+                                                    "mainId": this._layerAlarm,
+                                                }
+                                            }
+                                        ],
+                                        onRequest: (x) => {
+                                            //S.getElement(this.commandPanelId).setContext(this);
+                                            //S.getElement(this.historyId).setContext(this);
+                                            //S.getElement(this.historyId).setMap(this.map);
+                                            // alert(x)
+                                        }
+                                    });
                                 }
                             },
                         ]
@@ -764,7 +790,7 @@ var GTWebcar = (($) => {
         loadAlarm(info) {
             this._win["alarm"] = new Float.Window({
                 visible: false,
-                caption: info.caption,
+                caption: info.caption + "....",
                 //child:main,
                 left: 300,
                 top: 100,
@@ -773,6 +799,8 @@ var GTWebcar = (($) => {
                 mode: "auto",
                 className: ["sevian"],
             });
+            this._win["alarm"].getBody().id(this._layerAlarm);
+            return;
             info.id = this._win["alarm"].getBody();
             this.site.oninfo = (info, name) => {
                 this._win.info.getBody().text(info);
@@ -781,7 +809,7 @@ var GTWebcar = (($) => {
             this._alarm = new GTAlarm(info);
             this._win["form_alarm"] = new Float.Window({
                 visible: false,
-                caption: info.caption,
+                caption: info.caption + "....",
                 //child:main,
                 left: 300,
                 top: 100,
