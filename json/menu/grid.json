@@ -19,7 +19,7 @@
 						"element":"form",
 						"method":"request",
 						"name":"&EX_NAME_",
-						"eparams":{"recordId":0,"mainId":"&EX_mainId"}
+						"eparams":{"recordId":0,"mainId_":"&EX_mainId"}
 					}
 			
 				]}

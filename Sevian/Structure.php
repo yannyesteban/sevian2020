@@ -66,7 +66,7 @@ class HtmlStructure extends HTML{
 		
 		$this->html = preg_replace_callback(
 			"{--(\w+)--}isx",
-			function ($c) use ($formMethod){
+			function ($c){
 				$id = $c[1];
 				
 				if(is_numeric($id)){

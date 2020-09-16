@@ -327,14 +327,14 @@ var GTWebcar = (($) => {
                                         "params": [
                                             {
                                                 "t": "setMethod",
-                                                'mode': 'element',
+                                                'mode': 'panel',
                                                 "id": this._layerAlarm,
                                                 "element": "form",
                                                 "method": "list",
                                                 "name": "/form/Alarm",
                                                 "eparams": {
                                                     "a": 'yanny',
-                                                    "mainId": this._layerAlarm,
+                                                    "mainId_": this._layerAlarm,
                                                 }
                                             }
                                         ],
