@@ -256,7 +256,7 @@ var GTCommunication = (($) => {
             info.parentContext = this;
             this._formCommand = new Form2(info);
         }
-        paramLoad(commandId) {
+        paramLoad(commandId, request) {
             let unitId = this.form.getInput("unit_idx").getValue();
             let f = this.form.getFormData();
             S.send3({
@@ -269,7 +269,7 @@ var GTCommunication = (($) => {
                         'mode': 'element',
                         "id": this.bodyPanelId,
                         "element": "h-command",
-                        "method": "request",
+                        "method": (request) ? "request" : "load",
                         "name": "/form/h_commands",
                         "eparams": {
                             "a": 'yanny',
@@ -285,6 +285,40 @@ var GTCommunication = (($) => {
                     // alert(x)
                 }
             });
+        }
+        paramReadLoad(commandId) {
+            if ((this.getTypeCommand() == "A" || this.getTypeCommand() == "R") && this.getQParams() > 0) {
+                let unitId = this.form.getInput("unit_idx").getValue();
+                let f = this.form.getFormData();
+                S.send3({
+                    "async": 1,
+                    "form": f,
+                    //id:4,
+                    "params": [
+                        {
+                            "t": "setMethod",
+                            'mode': 'element',
+                            "id": this.bodyPanelId,
+                            "element": "h-command",
+                            "method": "read-params",
+                            "name": "/form/h_commands",
+                            "eparams": {
+                                "a": 'yanny',
+                                "mainId": this.bodyPanelId,
+                                "unitId": unitId,
+                                "commandId": commandId
+                            }
+                        }
+                    ],
+                    onRequest: (x) => {
+                        //S.getElement(this.commandPanelId).setContext(this);
+                        S.getElement(this.bodyPanelId).setContext(this);
+                        // alert(x)
+                    }
+                });
+                return;
+            }
+            this.s('GET');
         }
         getConfigParam(commandId) {
             let unitId = this.form.getInput("unit_idx").getValue();
@@ -373,6 +407,12 @@ var GTCommunication = (($) => {
         getCommandId() {
             return S.getElement(this.commandPanelId).getInput("command_idx").getValue() * 1;
         }
+        getTypeCommand() {
+            return S.getElement(this.bodyPanelId).getInput("type_command").getValue();
+        }
+        getQParams() {
+            return S.getElement(this.bodyPanelId).getInput("q_params").getValue();
+        }
         save(commandId) {
             this.getDetail();
             let unitId = this.form.getInput("unit_idx").getValue();
@@ -407,61 +447,27 @@ var GTCommunication = (($) => {
         connect() {
             this._ws.connect();
         }
-        s(type = 0) {
+        readCommand() {
+        }
+        s(type = "SET") {
             let commandId = this.getCommandId();
             let unitId = this.getUnitId();
-            if (type == 1) {
-                let str1 = JSON.stringify({
-                    type: "get",
-                    deviceId: 1,
-                    deviceName: "2012000520",
-                    commandId: commandId,
-                    unitId: unitId,
-                    comdValues: [],
-                    msg: "yanny",
-                    name: "caracas"
-                    //,
-                    //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
-                });
-                this._ws.send(str1);
-                return;
-            }
-            else if (type == 2) {
-                let str1 = JSON.stringify({
-                    type: "h",
-                    deviceId: 1,
-                    deviceName: "2012000520",
-                    commandId: commandId,
-                    unitId: unitId,
-                    comdValues: [],
-                    msg: "yanny",
-                    name: "valencia"
-                    //,
-                    //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
-                });
-                this._ws.send(str1);
-                return;
-            }
-            let inputs = this._formBody.getInputs();
-            let str = "$WP+" + this._formBody.getInput("command_name").getValue() + "=0000";
-            let cmdValues = [];
+            let inputs = S.getElement(this.bodyPanelId).getInputs();
+            let values = [];
             for (let i in inputs) {
                 if (inputs[i].ds("cmd")) {
-                    str += "," + inputs[i].getValue();
-                    cmdValues.push(inputs[i].getValue());
+                    values.push(inputs[i].getValue());
                 }
             }
             let str1 = JSON.stringify({
-                type: "set",
+                type: type,
                 deviceId: 1,
-                deviceName: "2012000520",
+                deviceName: "",
                 commandId: commandId,
                 unitId: unitId,
-                comdValues: cmdValues,
-                msg: str,
-                name: "san carlos"
-                //,
-                //destino:this.deviceInfo[this.form2.getInput("device_id").getValue()].device_name
+                comdValues: values,
+                msg: "",
+                name: ""
             });
             this._ws.send(str1);
         }

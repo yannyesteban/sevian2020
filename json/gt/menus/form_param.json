@@ -7,15 +7,23 @@
 	"autoClose":false,
 	"items":[
 		{
-			"caption":"Save",
+			"caption":"Guardar Parámetros",
 			"events":{
 				"click":"this.getContext().save(0);"
 			}
 		},
 		{
-			"caption":"Enviar CMD",
+			"caption":"Configurar",
 			"events":{
-				"click":"alert(this);"
+				"click":"this.getContext().s('SET');"
+			}
+
+			
+		},
+		{
+			"caption":"Leer Configuración ",
+			"events":{
+				"click":"this.getContext().paramReadLoad(this.getContext().getCommandId())"
 			}
 
 			

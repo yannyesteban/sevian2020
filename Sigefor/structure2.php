@@ -36,6 +36,8 @@ class structure2
 	
 
 	public function __construct($info = []){
+
+		hr("Structure2.php");
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}

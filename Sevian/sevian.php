@@ -354,7 +354,7 @@ class S{
 		}
 		
 
-		$e = self::$_e[$info->id] = new self::$_clsElement[$info->element]($info);
+		$e = self::$_e[$info->id] = new self::$_clsElement[$info->element](new InfoElement($info));
 		
 
 		if(!isset(self::$_pVars[$info->id])){
@@ -416,7 +416,7 @@ class S{
 			}
 		}
 
-		if($e->mode == 'panel'){
+		if($info->mode == 'panel'){
 			self::addPanel($e);
 			//self::$_str->addPanel($info->id, $e->getPanel());	
 			self::$_str->addPanel($info->id, $e);
@@ -687,9 +687,12 @@ class S{
 			
 				//self::setElement($params, true);
 				//self::setPanel(new InfoParam($params), true);
+				$cmd['mode'] = 'panel';
+				self::setElement(new InfoParam($cmd), true);
 				break;
 			case "setMethod":
-				self::setElement(new InfoElement($cmd), true);
+				//self::setElement(new InfoElement($cmd), true);
+				self::setElement(new InfoParam($cmd), true);
 				//self::evalMethod($params);
 				
 				break;

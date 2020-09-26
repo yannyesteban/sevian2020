@@ -191,7 +191,7 @@ class History
 	
 
 	private function loadTest(){
-		$rr = json_decode(@file_get_contents("data.json", true), true);
+		$rr = json_decode(@file_get_contents("data2.json", true), true);
 		//hx($rr);
 		foreach($rr as $k => $t){
 			$cn = $this->cn;
@@ -206,7 +206,7 @@ class History
 
 			$cn->query = 
 			"INSERT INTO tracking (unit_id, device_id, date_time, longitude, latitude, speed, altitude, heading, satellite) 
-			VALUES (2336, '2012000750', '$date_time', '$longitude', '$latitude', '$speed',
+			VALUES (2319, '2012000750', '$date_time', '$longitude', '$latitude', '$speed',
 			'$altitud', '$heading', '$satellites') ";
 			//hr($cn->query);
 			$result = $cn->execute();

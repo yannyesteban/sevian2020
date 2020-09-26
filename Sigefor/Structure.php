@@ -50,7 +50,7 @@ class Structure
     private $_userInfo = [];
 
     public function __construct($opt = []){
-		
+		hr("Structure.php");
 		foreach($opt as $k => $v){
 			$this->$k = $v;
 		}

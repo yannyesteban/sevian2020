@@ -45,16 +45,24 @@ class InfoRequest{
 	}
 }
 class InfoParam{
+	public $async = 0;
+
+	public $id = null;
 	public $panel = false;
+	public $mode = 'panel';
+
+	
 	public $element = '';
 	public $name = '';
 	public $method = '';
 	public $eparams = false;
-	public $async = false;
-	public $update = false;
 	public $debugMode = false;
 	public $designMode = false;
+
+	public $update = false;
 	public $fixed = false;
+
+	public $isPanel = false;
 	
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
@@ -66,20 +74,23 @@ class InfoParam{
 	}
 }
 class InfoElement{
-	public $mode = 'panel';
+	//public $mode = 'panel';
 	public $id = false;
 	public $element = '';
 	public $name = '';
 	public $method = '';
 	public $eparams = false;
-	public $async = false;
-	public $update = false;
-    public $isPanel = false;
+
 	public $debugMode = false;
 	public $designMode = false;
-	public $fixed = false;
 
-	public $evalSigns = false;
+	//public $async = false;
+	//public $update = false;
+    //public $isPanel = false;
+	
+	//public $fixed = false;
+
+	//public $evalSigns = false;
 	
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
@@ -149,7 +160,8 @@ class InfoInit{
 				
 				if($k == 'elements'){
 					foreach($v as $kk => $vv){
-						$this->$k[$vv['id']] = new InfoElement($vv);
+						//$this->$k[$vv['id']] = new InfoElement($vv);
+						$this->$k[$vv['id']] = new InfoParam($vv);
 					}
 					
 				}else if($k == 'panels'){

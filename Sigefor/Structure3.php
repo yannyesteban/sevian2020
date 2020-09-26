@@ -130,7 +130,7 @@ class structure3
 						$v->eparams = \Sevian\S::vars($v->eparams);
 					}
 					
-					$this->infoPanels[] = new \Sevian\InfoElement($v);
+					$this->infoPanels[] = new \Sevian\InfoParam($v);
 				}
 				
 				$this->loadTemplate($this->templateName, self::$patternTemplateFile);

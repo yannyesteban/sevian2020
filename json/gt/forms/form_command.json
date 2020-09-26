@@ -30,7 +30,7 @@
 			"name":"b1",
 			"caption":"",
 			"input": "input", "type":"button","default":"+", "mode_value":1,
-			"events":{"click":"this.getContext().paramLoad(this.getInput('command_idx').getValue())"}
+			"events":{"click":"this.getContext().paramLoad(this.getInput('command_idx').getValue(), true)"}
 		},
 		{
 			"name":"b2",
@@ -38,7 +38,14 @@
 			"input": "input", "type":"button","default":"L", "mode_value":1,
 			"events":{"click":"this.getContext().getConfigParam(this.getInput('command_idx').getValue())"}
 		},
-		{"name":"b3","caption":"", "input": "input", "type":"button","default":"G", "mode_value":1},
+		{
+			"name":"b3",
+			"caption":"",
+			"input": "input",
+			"type":"button",
+			"default":"G", 
+			"mode_value":1
+		},
 		{
 			"name":"b4",
 			"caption":"",

@@ -55,7 +55,7 @@ class Module3 extends \sevian\element
                        
                     }
                 }
-				$this->infoPanels[] = new \Sevian\InfoElement([
+				$this->infoPanels[] = new \Sevian\InfoParam([
 					'id'=>0,
 					'element'=>'',
 					'method'=>'load',
