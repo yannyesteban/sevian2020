@@ -6,7 +6,9 @@ var GTCommunication = (($) => {
 
 		url:string = '127.0.0.1';
 		port:string = '3310';
-        socket:object = null;
+        socket:WebSocket = null;
+        user:string = "juan";
+        key:string = "";
         constructor(info:object){
             
             for(var x in info){
@@ -15,14 +17,15 @@ var GTCommunication = (($) => {
                 }
             }
             
+            
         }
 
         connect(){
             this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
 
-            this.socket.onopen = this.onopen;
-            this.socket.onmessage = this.onmessage;
-            this.socket.onclose  = this.onclose ;
+            this.socket.onopen = $.bind(this.onopen, this);
+            this.socket.onmessage = $.bind(this.onmessage, this);//this.onmessage;
+            this.socket.onclose  = $.bind(this.onclose, this);//this.onclose ;
         }
 		
 		onclose (event){
@@ -38,7 +41,7 @@ var GTCommunication = (($) => {
 			
 			let openMessage = JSON.stringify({
 				type:"connect",
-				clientName:"oper4",
+				clientName: this.user,
 				config:[]
                 
 
@@ -81,7 +84,7 @@ var GTCommunication = (($) => {
         private bodyPanelId:string = "gtcomm-panel-2";
 
         public _ws = null;
-        
+        public user:string = "";
         private unitId:number = null;
 
         constructor(info){
@@ -106,7 +109,8 @@ var GTCommunication = (($) => {
                 
 			}
             this._create(main);
-            this._ws = new Socket({});
+            this._ws = new Socket({user:this.user});
+            
 			
 			
 

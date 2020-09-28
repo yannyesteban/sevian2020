@@ -5,6 +5,8 @@ var GTCommunication = (($) => {
             this.url = '127.0.0.1';
             this.port = '3310';
             this.socket = null;
+            this.user = "juan";
+            this.key = "";
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -13,9 +15,9 @@ var GTCommunication = (($) => {
         }
         connect() {
             this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
-            this.socket.onopen = this.onopen;
-            this.socket.onmessage = this.onmessage;
-            this.socket.onclose = this.onclose;
+            this.socket.onopen = $.bind(this.onopen, this);
+            this.socket.onmessage = $.bind(this.onmessage, this); //this.onmessage;
+            this.socket.onclose = $.bind(this.onclose, this); //this.onclose ;
         }
         onclose(event) {
             db("on Close");
@@ -27,7 +29,7 @@ var GTCommunication = (($) => {
             db("on OPEN");
             let openMessage = JSON.stringify({
                 type: "connect",
-                clientName: "oper4",
+                clientName: this.user,
                 config: []
             });
             this.send(openMessage);
@@ -57,6 +59,7 @@ var GTCommunication = (($) => {
             this._bodyPanel = null;
             this.bodyPanelId = "gtcomm-panel-2";
             this._ws = null;
+            this.user = "";
             this.unitId = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -73,7 +76,7 @@ var GTCommunication = (($) => {
                 main = $.create("div").attr("id", this.id);
             }
             this._create(main);
-            this._ws = new Socket({});
+            this._ws = new Socket({ user: this.user });
         }
         _create(main) {
             this.main = main;

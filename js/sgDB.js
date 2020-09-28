@@ -9,7 +9,7 @@ var db = false, hr = false;
 		div.text("");
 	}
 
-	div = $.create("div");
+	div = $.create("div").addClass("debug");
 	div.prop("id","debug_1")
 	.style({minWidth:"200px"})
 	.on("dblclick",function(){

@@ -2,16 +2,27 @@
 namespace GT;
 include "CommunicationTrait.php";
 
-class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
+class Communication extends 
+    \Sevian\Element implements \Sevian\JasonComponent,
+    \Sevian\UserInfo
+    {
     static $patternJsonFile = '';
 
     public $unitId = '';
 
     public $jsClassName = 'GTCommunication';
 
+    private $_userInfo = null;
+
     use DBCommunication{
 		DBCommunication::ccc as public ccc;
-	}
+    }
+    public function setUserInfo($info){
+        $this->_userInfo = $info;
+    }
+    public function getUserInfo(){
+        return $this->_userInfo;
+    }
 
     public function __construct($info = []){
         foreach($info as $k => $v){
@@ -89,7 +100,8 @@ class Communication extends \Sevian\Element implements \Sevian\JasonComponent{
             //'id'=>$this->eparams->targetId,
                "caption"=>"Communication 3.0",
                 "mainForm"=>$form,
-                'unitId'=>$unitId
+                'unitId'=>$unitId,
+                'user'=>$this->_userInfo->user
            ]);
         
         return;
