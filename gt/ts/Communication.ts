@@ -9,6 +9,7 @@ var GTCommunication = (($) => {
         socket:WebSocket = null;
         user:string = "juan";
         key:string = "";
+        error:any = null;
         constructor(info:object){
             
             for(var x in info){
@@ -21,11 +22,16 @@ var GTCommunication = (($) => {
         }
 
         connect(){
-            this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
+            try{
+                this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
 
-            this.socket.onopen = $.bind(this.onopen, this);
-            this.socket.onmessage = $.bind(this.onmessage, this);//this.onmessage;
-            this.socket.onclose  = $.bind(this.onclose, this);//this.onclose ;
+                this.socket.onopen = $.bind(this.onopen, this);
+                this.socket.onmessage = $.bind(this.onmessage, this);//this.onmessage;
+                this.socket.onclose  = $.bind(this.onclose, this);//this.onclose ;
+            }catch(e){
+                this.error = e;
+            }
+            
         }
 		
 		onclose (event){
@@ -54,6 +60,19 @@ var GTCommunication = (($) => {
 			
             var server_message = event.data;
             db (server_message);
+
+
+            
+
+            try {
+                let json = JSON.parse(server_message);
+                console.log(json);
+                //alert(json.message)
+                db (json.message);
+            }catch(e){
+                //alert(e)
+            }
+            
         }
 
     }
@@ -596,10 +615,14 @@ var GTCommunication = (($) => {
 				unitId: unitId,
                 comdValues: values,
                 msg : "",
-                name: ""
+                name: "",
+                level:1,
+                user:this.user,
+                mode:1
                 
 
             });
+            
 			this._ws.send(str1);            
 
             
