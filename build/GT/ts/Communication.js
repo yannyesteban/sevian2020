@@ -488,7 +488,8 @@ var GTCommunication = (($) => {
                 name: "",
                 level: 1,
                 user: this.user,
-                mode: 1
+                mode: 1,
+                useTag: 0
             });
             this._ws.send(str1);
         }
