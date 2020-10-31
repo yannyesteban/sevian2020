@@ -1,6 +1,6 @@
 <?php
 namespace Sigefor;
-require_once MAIN_PATH.'Sigefor/DBTrait/Icatalogue.php';
+require_once MAIN_PATH.'Sigefor/DBTrait/ICatalogue.php';
 
 class ICatalogue extends \Sevian\Element {
 
