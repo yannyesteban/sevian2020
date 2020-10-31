@@ -133,12 +133,16 @@ function tracking($track=""){
 			if(!$cn->error){
 
 				echo "\n\n\n OK -> $cn->error....\n";
-				$cadena = "UPDATE equipos 
-SET id_track='$id', id_track2='$cn->insert_id', last_track='".$c2["fecha_hora"]."' WHERE codequipo='$codequipo'";
+				$cadena = 
+					"UPDATE equipos 
+					SET id_track='$id', id_track2='$cn->insert_id', last_track='".$c2["fecha_hora"]."' 
+					WHERE codequipo='$codequipo'";
 
 
-$cadena = "UPDATE equipos 
-SET id_track='$id', id_track2='$cn->insert_id' WHERE codequipo='$codequipo'";
+				$cadena = 
+				"UPDATE equipos 
+					SET id_track='$id', id_track2='$cn->insert_id'
+					WHERE codequipo='$codequipo'";
 
 				$cn->ejecutar($cadena);
 				
