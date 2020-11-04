@@ -23,6 +23,7 @@ var GTCommunication = (($) => {
 
         connect(){
             try{
+                
                 this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
 
                 this.socket.onopen = $.bind(this.onopen, this);
@@ -106,8 +107,13 @@ var GTCommunication = (($) => {
         public user:string = "";
         private unitId:number = null;
 
+        private socketServer = {
+            host:"127.0.0.1",
+            port:3310
+        }
         constructor(info){
-			
+            
+            //console.di(info);
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -128,7 +134,12 @@ var GTCommunication = (($) => {
                 
 			}
             this._create(main);
-            this._ws = new Socket({user:this.user});
+            
+            this._ws = new Socket({
+                user:this.user,
+                url:this.socketServer.host,
+                port:this.socketServer.port
+            });
             
 			
 			

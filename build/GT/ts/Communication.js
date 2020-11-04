@@ -76,6 +76,11 @@ var GTCommunication = (($) => {
             this._ws = null;
             this.user = "";
             this.unitId = null;
+            this.socketServer = {
+                host: "127.0.0.1",
+                port: 3310
+            };
+            //console.di(info);
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -91,7 +96,11 @@ var GTCommunication = (($) => {
                 main = $.create("div").attr("id", this.id);
             }
             this._create(main);
-            this._ws = new Socket({ user: this.user });
+            this._ws = new Socket({
+                user: this.user,
+                url: this.socketServer.host,
+                port: this.socketServer.port
+            });
         }
         _create(main) {
             this.main = main;

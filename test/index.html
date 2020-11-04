@@ -45,7 +45,16 @@ let fc = (xx)=>{
 };
 p.then(fa, fb).then(fc);
 
+let h = async (d)=>{
+	console.log(8);
+	return d+"....";
+}
 
+let c=h(5);
+
+c.then((value)=>{
+	console.dir("el nuevo valor de x es "+value);
+})
 
 
 </script>	

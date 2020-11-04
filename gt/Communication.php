@@ -101,7 +101,11 @@ class Communication extends
                "caption"=>"Communication 3.0",
                 "mainForm"=>$form,
                 'unitId'=>$unitId,
-                'user'=>$this->_userInfo->user
+                'user'=>$this->_userInfo->user,
+                "socketServer"=>[
+                    "host"=>"localhost",
+                    "port"=>3323
+                ]
            ]);
         
         return;
@@ -109,7 +113,11 @@ class Communication extends
        $this->info = [
         'id'=>$this->eparams->targetId,
            "caption"=>"Communication 3.0",
-            "mainForm"=>$form,
+           "mainForm"=>$form,
+           "socketServer"=>[
+               "host"=>"localhost",
+               "port"=>3320
+           ]
        ];
        $this->typeElement = 'GTCommunication';
        $this->panelActions = [];
