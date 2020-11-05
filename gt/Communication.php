@@ -104,7 +104,7 @@ class Communication extends
                 'user'=>$this->_userInfo->user,
                 "socketServer"=>[
                     "host"=>"bests.no-ip.info",
-                    "port"=>3323
+                    "port"=>3321
                 ]
            ]);
         
