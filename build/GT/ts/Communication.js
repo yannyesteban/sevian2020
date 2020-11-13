@@ -16,6 +16,10 @@ var GTCommunication = (($) => {
         }
         connect() {
             try {
+                if (this.socket && this.socket.OPEN) {
+                    db("is still connected...");
+                    return;
+                }
                 this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
                 this.socket.onopen = $.bind(this.onopen, this);
                 this.socket.onmessage = $.bind(this.onmessage, this); //this.onmessage;

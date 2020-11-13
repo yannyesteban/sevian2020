@@ -103,7 +103,7 @@ class Communication extends
                 'unitId'=>$unitId,
                 'user'=>$this->_userInfo->user,
                 "socketServer"=>[
-                    "host"=>"bests.no-ip.info",
+                    "host"=>"localhost",//"bests.no-ip.info",
                     "port"=>3321
                 ]
            ]);
