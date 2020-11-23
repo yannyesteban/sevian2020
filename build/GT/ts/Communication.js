@@ -8,6 +8,20 @@ var GTCommunication = (($) => {
             this.user = "juan";
             this.key = "";
             this.error = null;
+            this.onmessage = (event) => {
+                alert(1.001);
+                var server_message = event.data;
+                db(server_message);
+                try {
+                    let json = JSON.parse(server_message);
+                    console.log(json);
+                    //alert(json.message)
+                    db(json.message);
+                }
+                catch (e) {
+                    //alert(e)
+                }
+            };
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -18,7 +32,7 @@ var GTCommunication = (($) => {
             try {
                 if (this.socket && this.socket.OPEN) {
                     db("is still connected...");
-                    return;
+                    //return;
                 }
                 this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
                 this.socket.onopen = $.bind(this.onopen, this);
@@ -44,7 +58,8 @@ var GTCommunication = (($) => {
             });
             this.send(openMessage);
         }
-        onmessage(event) {
+        onmessage1(event) {
+            alert(1.001);
             var server_message = event.data;
             db(server_message);
             try {
@@ -73,6 +88,8 @@ var GTCommunication = (($) => {
             this.paramCommand = null;
             this._formCommand = null;
             this.formCommandId = "formCommand";
+            this._responseForm = null;
+            this.responseForm = null;
             this._commandPanel = null;
             this.commandPanelId = "gtcomm-panel-1";
             this._bodyPanel = null;
@@ -103,7 +120,20 @@ var GTCommunication = (($) => {
             this._ws = new Socket({
                 user: this.user,
                 url: this.socketServer.host,
-                port: this.socketServer.port
+                port: this.socketServer.port,
+                onmessage: (event) => {
+                    var server_message = event.data;
+                    db(server_message, "red");
+                    try {
+                        let json = JSON.parse(server_message);
+                        console.log(json);
+                        //alert(json.message)
+                        db(json.message);
+                    }
+                    catch (e) {
+                        //alert(e)
+                    }
+                }
             });
         }
         _create(main) {
@@ -113,6 +143,7 @@ var GTCommunication = (($) => {
             main.removeDs("sgForm");
             main.removeClass("sg-form");
             this.mainPanel = main.create("div").addClass("mainPanel");
+            this._aux = main.create("div").addClass("command-panel").id("aux3");
             this._commandPanel = main.create("div").addClass("command-panel").id(this.commandPanelId);
             this._bodyPanel = main.create("div").addClass("body-panel").id(this.bodyPanelId);
             this._formCommand = main.create("div").addClass("formCommand").id(this.formCommandId);
@@ -122,6 +153,9 @@ var GTCommunication = (($) => {
             this.mainForm.id = this.mainPanel;
             this.mainForm.parentContext = this;
             this.form = new Form2(this.mainForm);
+            this.responseForm.id = "aux3";
+            this.responseForm.parentContext = this;
+            this.form2 = new Grid2(this.responseForm);
             if (this.unitId) {
                 this.loadUnit(this.unitId);
             }
@@ -396,6 +430,35 @@ var GTCommunication = (($) => {
                         "element": "form",
                         "method": "list",
                         "name": "/gt/forms/h_commands",
+                        "eparams": {
+                            "a": 'yanny',
+                            "mainId": this.bodyPanelId,
+                            "unitId": 5555555,
+                        }
+                    }
+                ],
+                onRequest: (x) => {
+                    //S.getElement(this.commandPanelId).setContext(this);
+                    S.getElement(this.bodyPanelId).setContext(this);
+                    // alert(x)
+                }
+            });
+        }
+        loadCmdResponse() {
+            let unitId = this.form.getInput("unit_idx").getValue();
+            let f = this.form.getFormData();
+            S.send3({
+                "async": 1,
+                "form": f,
+                //id:4,
+                "params": [
+                    {
+                        "t": "setMethod",
+                        'mode': 'element',
+                        "id": this.bodyPanelId,
+                        "element": "form",
+                        "method": "list",
+                        "name": "/gt/forms/unit_cmd_response",
                         "eparams": {
                             "a": 'yanny',
                             "mainId": this.bodyPanelId,

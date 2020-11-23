@@ -1,0 +1,40 @@
+{
+	"name":"unit_cmd_response",
+	"caption":"Ventana Inmediato",
+	"className":["cota-unit","flat", "_gt-command-main"],
+    "query":"SELECT '' as unit, '' as device_id, '' as message",
+	"menuName":"",
+	"methods":{
+		"request":{
+			"menuName":""
+		},
+		"load":{
+			"menuName":""
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+       
+		{
+            "name":"unit",
+            "caption":"Unidad",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"text","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        }
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}
