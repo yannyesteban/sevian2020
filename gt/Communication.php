@@ -115,6 +115,7 @@ class Communication extends
             'mainForm'      => $form,
             'responseForm'  => $form2,
             'unitId'        => $unitId,
+            'gridId'        => $this->eparams->gridId??'',
             'user'          => $this->_userInfo->user,
             'socketServer'  => [
                 'host'  => 'localhost',//'bests.no-ip.info',

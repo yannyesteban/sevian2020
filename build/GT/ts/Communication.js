@@ -83,6 +83,7 @@ var GTCommunication = (($) => {
             this.mainForm = null;
             this.mainPanel = null;
             this.menuPanel = null;
+            this.gridId = null;
             this.historyPanel = null;
             this.paramCommandId = "xxx1";
             this.paramCommand = null;
@@ -97,6 +98,8 @@ var GTCommunication = (($) => {
             this._ws = null;
             this.user = "";
             this.unitId = null;
+            this._grid = null;
+            this.callOnMessage = (messaje) => { };
             this.socketServer = {
                 host: "127.0.0.1",
                 port: 3310
@@ -123,12 +126,13 @@ var GTCommunication = (($) => {
                 port: this.socketServer.port,
                 onmessage: (event) => {
                     var server_message = event.data;
-                    db(server_message, "red");
                     try {
                         let json = JSON.parse(server_message);
-                        console.log(json);
+                        //console.log(json);
                         //alert(json.message)
                         db(json.message);
+                        this.callOnMessage(json);
+                        this._grid.createRow(json);
                     }
                     catch (e) {
                         //alert(e)
@@ -153,9 +157,10 @@ var GTCommunication = (($) => {
             this.mainForm.id = this.mainPanel;
             this.mainForm.parentContext = this;
             this.form = new Form2(this.mainForm);
-            this.responseForm.id = "aux3";
+            this.responseForm.id = this.gridId;
+            this.responseForm.type = "default";
             this.responseForm.parentContext = this;
-            this.form2 = new Grid2(this.responseForm);
+            this._grid = new Grid2(this.responseForm);
             if (this.unitId) {
                 this.loadUnit(this.unitId);
             }

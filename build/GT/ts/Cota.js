@@ -816,6 +816,23 @@ var GTCota = (($) => {
                 });
                 this._win["comm"].getBody().id(this.bodyPanelId);
             }
+            this.bodyUnitResponsesId = "unit-responses";
+            if (this._win["immedite"]) {
+                this._win["immedite"].show();
+            }
+            else {
+                this._win["immedite"] = new Float.Window({
+                    visible: true,
+                    caption: "Unit Responses",
+                    left: 300,
+                    top: 100,
+                    width: "400px",
+                    height: "400px",
+                    mode: "auto",
+                    className: ["sevian"]
+                });
+                this._win["immedite"].getBody().id(this.bodyUnitResponsesId);
+            }
             S.send3({
                 "async": 1,
                 //"form":f,
@@ -831,6 +848,7 @@ var GTCota = (($) => {
                         "eparams": {
                             "a": 'yanny',
                             "mainId": this.bodyPanelId,
+                            "gridId": this.bodyUnitResponsesId,
                             "unitId": unitId,
                         }
                     }
