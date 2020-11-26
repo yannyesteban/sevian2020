@@ -42,8 +42,14 @@ class Document{
 				$this->head = new HTML("head");
 				$this->head->appendChild($this->_meta);
 				$this->head->appendChild("\n");
+				
 				$this->head->appendChild($this->title = new HTML("title"));
 				$this->head->appendChild("\n");
+
+				$this->head->appendChild($this->_style);
+				$this->head->appendChild("\n");
+
+				
 
 				$this->body = new HTML("body");
 				
@@ -75,7 +81,7 @@ class Document{
 		$link->href = $sheet;
 		$link->rel = "stylesheet";
 		$link->type = "text/css";
-		$this->head->appendChild($link);
+		$this->_style->appendChild($link);
 		//$this->head->appendChild("\n");
 	}
 	

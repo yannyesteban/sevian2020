@@ -115,7 +115,7 @@ $cls_elements = [
 		'class' => '\Sevian\Sigefor\Map',
 		'enable' => true,
 		'js'=>[
-			
+			/*
 			[
 				'file'=>'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
 				'begin'	=> false
@@ -123,8 +123,8 @@ $cls_elements = [
 			[
 				'file' 	=> MAIN_PATH.'lib/LeafletMap.js',
 				'begin'=> false
-			],
-			/**/
+			],*/
+			
 			[
 				'file'=>'https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js',
 				'begin'	=> true
@@ -143,7 +143,7 @@ $cls_elements = [
 			],
 			[
 				'file' 	=> MAIN_PATH.'build/lib/MapBox.js',
-				'begin'=> false
+				'begin'=> true
 			],
 			/*[
 				'file' 	=> MAIN_PATH.'js/Map.js',

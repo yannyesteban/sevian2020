@@ -1,0 +1,118 @@
+// JavaScript Document
+
+var db = false, hr = false;
+(function($){
+	let linea = 0, div, win = null;
+	
+	let Reset = function(){
+		linea = 0;
+		div.text("");
+	}
+
+	$(window).on("load",()=>{
+		div = $.create("div").addClass("debug");
+		div.prop("id","debug_1")
+		.style({minWidth:"200px"})
+		.on("dblclick",function(){
+			linea = 0;
+			this.innerHTML = "";
+		});
+
+		win = new Float.Window({
+			visible:true,
+			caption:"Debug: Console",
+			child:div,
+			left:"right",
+			top:"top",
+			className:["sevian"]
+		});
+	})
+
+	
+
+	objValue = function(msg){
+
+		let div = $.create("div").addClass("debug-object");
+		for(let x in msg){
+			
+			let _aux = div.create("div");
+			_aux.create("span").text(x +": ");
+			if(typeof msg[x] === 'object'){
+				_aux.create("span").append(objValue(msg[x]));
+			}else{
+				_aux.create("span").text(msg[x]);
+			}
+			
+			
+		}
+		return div;
+	}
+
+	hr = db = (msg, color, back, clear) => {
+		if(msg === undefined){
+			Reset();
+			return;
+		}
+
+		color = color || "black";
+		back = back || "";
+
+		linea++;
+
+		var _div = $.create("div");
+
+		_div.style({color: color, backgroundColor:back});
+
+
+		_div.text(linea +".- "+ msg);
+
+		div.insertFirst(_div);
+		if(win){
+			if(!win.getVisible()){
+				win.show({});
+			}
+			
+		}
+		
+
+	};
+
+	ob = (msg, color, back, clear) => {
+
+		color = color || "black";
+		back = back || "";
+
+		linea++;
+
+		var _div = $.create("div");
+
+		_div.style({color: color, backgroundColor:back});
+
+		if (typeof msg === 'object'){
+			
+
+			_div.append(objValue(msg))
+			
+		}else{
+			_div.text(linea +".- "+ msg);
+		}
+
+		
+
+		div.insertFirst(_div);
+		if(win){
+			if(!win.getVisible()){
+				win.show({});
+			}
+			
+		}
+		
+
+	};
+
+	
+
+	
+	
+	
+})(_sgQuery);

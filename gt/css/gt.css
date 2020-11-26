@@ -186,6 +186,18 @@ form {
   background-size: 20px 20px;
 }
 
+.icon-command {
+  background-image: url(../../images/command.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.icon-catalogue {
+  background-image: url(../../images/catalogue.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 .item:hover > a > .site-edit, .item:hover .geofence-edit {
   visibility: visible;
 }

@@ -98,7 +98,7 @@ class Communication extends
             'mode'		=> $mode,
             //'userData'	=> $this->userData,
             
-            'record'    => $record
+            //'record'    => $record
         ]);
 
        

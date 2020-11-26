@@ -62,7 +62,7 @@ $cls_elements = [
 		'js'=>[
 			[
 				'file' 	=> MAIN_PATH.'build/GT/ts/command.js',
-				'begin'=> false
+				'begin'=> true
 			]
 
 		],
@@ -78,7 +78,7 @@ $cls_elements['gt_cota'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/Cota.js',
-		'begin'=> false
+		'begin'=> true
 	]],
 	'css'=>[],
 	'init'=>[
@@ -95,7 +95,7 @@ $cls_elements['gt-communication'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/Communication.js',
-		'begin'=> false
+		'begin'=> true
 	]],
 	'css'=>[],
 	'init'=>[
@@ -131,7 +131,7 @@ $cls_elements['catalogue'] = [
 	'enable' => true,
 	'js_'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
-		'begin'=> false
+		'begin'=> true
 	]],
 	'css'=>[]
 	
@@ -144,7 +144,7 @@ $cls_elements['catalogue2'] = [
 	'enable' => true,
 	'js_'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
-		'begin'=> false
+		'begin'=> true
 	]],
 	'css'=>[],
 	'init'=>[
@@ -162,7 +162,7 @@ $cls_elements['fcatalogue'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/Sevian/ts/FCatalogue.js',
-		'begin'=> false
+		'begin'=> true
 	]],
 	'css'=>[]
 	
@@ -175,7 +175,7 @@ $cls_elements['i-catalogue'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/Sevian/ts/ICatalogue.js',
-		'begin'=> false
+		'begin'=> true
 	]],
 	'css'=>[],
 	'init'=>[
@@ -193,7 +193,7 @@ $cls_elements['gt_info_unit'] = [
 	'enable' => true,
 	'js'=>[[
 		'file' 	=> MAIN_PATH.'build/GT/ts/InfoUnit.js',
-		'begin'=> false
+		'begin'=> true
 	]],
 	'css'=>[]
 	

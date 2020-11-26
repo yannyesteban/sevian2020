@@ -226,21 +226,21 @@ var GTCota = (($) => {
                             color = 'green';
                         }
                     },
-                    {
+                    /*{
                         id: 8,
-                        imageClass: "icon-events",
-                        propertys: {
-                            "title": "Eventos"
+                        imageClass:"icon-events",
+                        propertys:{
+                            "title":"Eventos"
                         },
-                        action: (item, event) => {
+                        action:(item, event) => {
                             this.loadComm(this.comm);
                         }
-                    },
+                    },*/
                     {
                         id: 9,
-                        imageClass: "icon-events",
+                        imageClass: "icon-command",
                         propertys: {
-                            "title": "Eventos"
+                            "title": "Enviar Commando"
                         },
                         action: (item, event) => {
                             this.loadCommunication();
@@ -248,7 +248,7 @@ var GTCota = (($) => {
                     },
                     {
                         id: 9,
-                        imageClass: "icon-events",
+                        imageClass: "icon-catalogue",
                         propertys: {
                             "title": "Catálogo"
                         },

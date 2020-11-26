@@ -1,4 +1,3 @@
-
 // JavaScript Document
 /*
 // Add "focus" and "highlighted" classes, and then remove them
@@ -347,6 +346,11 @@ _sgObjet.prototype = {
 		
 	},
 
+	removeDs: function(prop){
+		delete this.e.dataset[prop];
+		return this;
+	},
+
 	query: function(selector){
 		if(this.e.querySelector(selector)){
 			return this.e.querySelector(selector);
@@ -359,6 +363,19 @@ _sgObjet.prototype = {
 		}
 		return false;
 	},
+	children:function(){
+		return Array.from(this.e.children);
+	},
+
+	parent:function(){
+		return this.e.parentNode || null;
+	},
+
+	q: function(selector){
+		
+		return _sgQuery(this.e.querySelector(selector));
+	},
+	
 	childs:function(){
 		var ch = this.e.childNodes;
 		var childs = [];
@@ -373,6 +390,15 @@ _sgObjet.prototype = {
 		return childs;
 	},
 	
+	contains: function(elem){
+
+		if(elem instanceof HTMLElement){
+			return this.e.contains(elem);
+		}else if(elem.get && typeof elem.get === "function"){
+			return this.e.contains(elem.get());
+		}
+	},
+
 	on: function(_event, _function){
 		_sg.on(this.e, _event, _function);
 		return this;
@@ -435,10 +461,10 @@ var _sgQuery = function(obj){
 		e = document.getElementById(obj);
 	}
 	
-	if(e !== false){
+	if(e !== false && e !== null){
 		return new _sgObjet(e);
 	}else{
-		return false;
+		return e;
 	}
 	
 };
