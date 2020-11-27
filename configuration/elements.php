@@ -221,7 +221,7 @@ $cls_elements = [
 		'enable' => true,
 		'js'=>[
 			[
-				'file' 	=> MAIN_PATH.'gt/js/command.js',
+				'file' 	=> MAIN_PATH.'gt/js/Command.js',
 				'begin'=> false
 			]
 
