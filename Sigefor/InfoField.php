@@ -11,7 +11,7 @@ class InfoField{
 	public $page = '';
 	public $params = '';
 	public $caption = false;
-	public $class = '';
+	public $className = '';
 	public $placeholder = '';
 	public $input = '';//['input'=>'text'];
 	public $inputType = '';//['input'=>'text'];
@@ -20,6 +20,9 @@ class InfoField{
 	public $cellType = '';//['input'=>'text'];
 	public $value = '';
 	
+
+	public $propertys = null;
+
 	public $modeValue = '';
 	public $default = '';
 	public $data = false;

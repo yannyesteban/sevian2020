@@ -27,9 +27,9 @@
 		{
             "name":"n",
             "caption":"",
-            "default":"",
+            "default":"555",
             "input":"input",
-            "class":"btn-connect",
+            "class":"btn-connect1",
             "type":"button","mode_value":"1",
             "params":{"className":""},
             "events":{

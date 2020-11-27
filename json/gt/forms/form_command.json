@@ -30,18 +30,25 @@
 			"name":"b1",
 			"caption":"",
 			"input": "input", "type":"button","default":"+", "mode_value":1,
+			"propertys":{"title":"Enviar Comando al Equipo"},
+			"className":["gt-button", ""],
+			
 			"events":{"click":"this.getContext().paramLoad(this.getInput('command_idx').getValue(), true)"}
 		},
 		{
 			"name":"b2",
 			"caption":"",
-			"input": "input", "type":"button","default":"L", "mode_value":1,
+			"input": "input", "type":"button","default":"", "mode_value":1,
+			"className":["gt-button", "icon-info"],
+			"propertys":{"title":"Cargar Última Configuración del Equipo"},
 			"events":{"click":"this.getContext().getConfigParam(this.getInput('command_idx').getValue())"}
 		},
 		{
 			"name":"b3",
 			"caption":"",
 			"input": "input",
+			"propertys":{"title":"Pedir información al Equipo"},
+			"className":["gt-button", ""],
 			"type":"button",
 			"default":"G", 
 			"mode_value":1
@@ -50,6 +57,8 @@
 			"name":"b4",
 			"caption":"",
 			"input": "input", "type":"button","default":"H", "mode_value":1,
+			"propertys":{"title":"Ver Todos los Comandos Guardados"},
+			"className":["gt-button", ""],
 			"events":{"click":"this.getContext().loadHistory()"}
 		}
 

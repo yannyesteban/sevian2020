@@ -189,6 +189,23 @@ form{
 }
 
 
+.gt-button{
+	background-color: #0d838b;
+	width:26px;
+	height:26px;
+	background-size: 26px 26px;
+	border:0px;
+	color:white;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 26px;
+	vertical-align: top;
+	padding: 0px!important;
+	
+
+	
+}
+
 .item:hover{
 	>a>.site-edit, .geofence-edit{
 		visibility: visible;
