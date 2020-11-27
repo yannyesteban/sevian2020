@@ -49,7 +49,7 @@
 			"input": "input",
 			"propertys":{"title":"Pedir información al Equipo"},
 			"className":["gt-button", ""],
-			"type":"button",
+			"type":"hidden",
 			"default":"G", 
 			"mode_value":1
 		},
