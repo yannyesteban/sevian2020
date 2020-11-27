@@ -118,7 +118,7 @@ class Communication extends
             'gridId'        => $this->eparams->gridId??'',
             'user'          => $this->_userInfo->user,
             'socketServer'  => [
-                'host'  => 'bests.no-ip.info',
+                'host'  => 'localhost',//'bests.no-ip.info',
                 'port'  => 3321
             ]
         ]);
