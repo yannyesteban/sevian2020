@@ -4845,7 +4845,8 @@ var MapBox = (($, turf) => {
                     break;
                 case "mark":
                     this._poly[name] = new IMark(info);
-                //this._poly[name] = new Trace(info);
+                    //this._poly[name] = new Trace(info);
+                    break;
                 case "trace":
                     this._poly[name] = new Trace(info);
                     //this._poly[name] = new Trace(info);

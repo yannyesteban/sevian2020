@@ -6087,13 +6087,13 @@ var MapBox = (($, turf) => {
             switch(type){
                 case "circle":
                     this._poly[name] = new Circle(info);
-                break;
+                    break;
                 case  "rectangle":
                     this._poly[name] = new Rectangle(info);
-                break;
+                    break;
                 case "polygon":
                     this._poly[name] = new Polygon(info);
-                break;
+                    break;
                 case "symbol":
                     this._poly[name] = new Circle(info);
                     break;
@@ -6103,6 +6103,7 @@ var MapBox = (($, turf) => {
                 case "mark":
                     this._poly[name] = new IMark(info);
                     //this._poly[name] = new Trace(info);
+                    break;
                 case "trace":
                     
                     this._poly[name] = new Trace(info);

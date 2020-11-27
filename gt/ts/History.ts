@@ -410,6 +410,7 @@ var GTHistory = (($) => {
 		}
 
 		initTrace(){
+			alert("initTrace")
 			let layers = [
 				{
 					type:"circle",

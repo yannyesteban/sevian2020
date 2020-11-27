@@ -38,14 +38,14 @@ class FF{
 				
 			}
 		}
-		hx($aux);
+		
 		$info2 = new \Sigefor\InfoRecord([
 			'token'=>'yanny',
 			'cn'		=> '_default',
 			
 			'tables'	=> $this->getTables(),
 			'fields'	=> $this->fields,
-			'subforms'	=> $this->subforms,
+			'subforms'	=> $this->subforms??null,
 			'dataKeys'=> $this->dataKeys,
 			'dataKeysId'=>$this->dataKeysId,
 			
