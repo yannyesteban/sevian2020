@@ -3,7 +3,7 @@
 	"caption":"",
 	"className":"gt-command-main",
     "query_":"SELECT '' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as v",
-    "query": "SELECT c.id as client_idx, a.id as account_idx, u.id as unit_idx, '' as connect, '' as v FROM units as u INNER JOIN accounts as a ON a.id = u.account_id INNER JOIN clients as c ON c.id = a.client_id",
+    "query": "SELECT c.id as client_idx, a.id as account_idx, u.id as unit_idx/*, '' as connect, '' as v*/ FROM units as u INNER JOIN accounts as a ON a.id = u.account_id INNER JOIN clients as c ON c.id = a.client_id",
 	"_menuName":"/menu/grid",
 	"methods":{
 		"request":{
