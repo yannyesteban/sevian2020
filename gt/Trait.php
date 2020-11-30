@@ -1,4 +1,24 @@
 <?php
+/*
+
+set @k=19;
+
+SELECT BIT_AND(((@k & POW(2, number)) DIV POW(2, number))=ai.mode) as _and,
+BIT_OR(((@k & POW(2, number)) DIV POW(2, number))=ai.mode) as _or,
+number,ai.input_id,ai.mode,
+(@k & POW(2, number)) DIV POW(2, number) as v
+
+FROM units as u
+INNER JOIN alarm_unit as au ON au.unit_id=u.id
+
+INNER JOIN unit_input ui ON ui.unit_id = u.id
+INNER JOIN alarm_input as ai ON ai.alarm_id = au.alarm_id AND ai.input_id = ui.input_id
+
+
+WHERE u.id = 2417
+
+*/
+
 
 namespace GT;
 
@@ -502,8 +522,9 @@ trait DBGeofence{
         */
         $cn->query = "SELECT *
             FROM geofences as g
-            
-            WHERE g.user = 'Rmartinez'";
+            WHERE type='polygon'
+            #WHERE g.user = 'Rmartinez'
+            ";
 
         $result = $this->cn->execute();
         $data = [];

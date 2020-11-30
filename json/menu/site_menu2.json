@@ -1,0 +1,29 @@
+{
+	"name":"site_menu2",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"Aplicar Cambios",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"save",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}
+		}
+	]
+}	

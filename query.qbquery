@@ -1,0 +1,34 @@
+﻿set @k=19;
+
+SELECT
+number,ai.input_id,ai.mode,
+(@k & POW(2, number)) DIV POW(2, number) as v,
+
+
+case number when 1 then ai.input_id else null end as I1,
+(@k & 1) DIV 1 as v1,
+case number when 2 then ai.input_id else null end as I2,
+(@k & 2) DIV 2 as v2,
+case number when 3 then ai.input_id else null end as I3,
+(@k & 4) DIV 4 as v3,
+case number when 4 then ai.input_id else null end as I4,
+(@k & 8) DIV 8 as v4,
+case number when 5 then ai.input_id else null end as I5,
+(@k & 16) DIV 16 as v5,
+case number when 6 then ai.input_id else null end as I6,
+(@k & 32) DIV 32 as v6,
+case number when 7 then ai.input_id else null end as I7,
+(@k & 64) DIV  64 as v7,
+case number when 8 then ai.input_id else null end as I8,
+(@k & 128) DIV  128 as v8,
+
+ui.*
+
+FROM units as u
+INNER JOIN alarm_unit as au ON au.unit_id=u.id
+
+INNER JOIN unit_input ui ON ui.unit_id = u.id
+INNER JOIN alarm_input as ai ON ai.alarm_id = au.alarm_id AND ai.input_id = ui.input_id
+
+
+WHERE u.id = 2417

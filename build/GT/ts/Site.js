@@ -98,6 +98,50 @@ var GTSite = (($) => {
             this.menu = this.createMenu();
             this.createForm(this.form);
             this._info = $().create("div").addClass("win-sites-info");
+            return;
+            const xx = $().create("form").id("yan124");
+            xx.text("Hoooooooola");
+            const win = new Float.Window({
+                visible: true,
+                caption: "Site IIs",
+                child: xx,
+                left: 300,
+                top: 100,
+                width: "400px",
+                height: "500px",
+                mode: "auto",
+                className: ["sevian"],
+            });
+            this.loadSite2();
+        }
+        loadSite2() {
+            //let unitId = this.form.getInput("unit_idx").getValue();
+            //let f  = this.form.getFormData();
+            const nameId = "yan124";
+            S.send3({
+                "async": 1,
+                //"form":f,
+                //id:4,
+                "params": [
+                    {
+                        "t": "setMethod",
+                        'mode': 'element',
+                        "id": nameId,
+                        "element": "form",
+                        "method": "request",
+                        "name": "/form/site2",
+                        "eparams": {
+                            "a": 'yanny',
+                            "mainId": nameId,
+                            "unitId": 5555555,
+                        }
+                    }
+                ],
+                onRequest: (x) => {
+                    //S.getElement(this.commandPanelId).setContext(this);
+                    S.getElement(nameId).setContext(this);
+                }
+            });
         }
         _load(main) {
         }
