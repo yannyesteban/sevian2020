@@ -942,9 +942,9 @@ var GTCota = (($) => {
 				this._win["comm"] = new Float.Window({
 					visible:true,
 					caption: "",
-					left:300,
+					left:100,
 					top:100,
-					width: "400px",
+					width: "500px",
 					height: "400px",
 					mode:"auto",
 					className:["sevian"]
@@ -962,7 +962,7 @@ var GTCota = (($) => {
 				this._win["immedite"] = new Float.Window({
 					visible:true,
 					caption: "Unit Responses",
-					left:300,
+					left:200+300+100+10,
 					top:100,
 					width: "400px",
 					height: "400px",

@@ -39,7 +39,20 @@ var GTCommunication = (($) => {
                 }
             }
             
+            this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
             
+
+            this.socket.onopen = $.bind(this.onopen, this);
+            this.socket.onmessage = $.bind(this.onmessage, this);//this.onmessage;
+            this.socket.onclose  = $.bind(this.onclose, this);//this.onclose ;
+            /*
+            this.socket.onclose = () => {
+                // Try to reconnect in 5 seconds
+                setTimeout(() => {
+                    this.connect();
+                }, 5000);
+            };
+            */
         }
 
         connect(){
@@ -47,33 +60,56 @@ var GTCommunication = (($) => {
             
             try{
 
-                if(this.socket && this.socket.OPEN){
+                if(this.socket && this.socket.readyState == 1){
                     db ("is still connected...");
-                    //return;
+                    return;
                 }
-                
                 this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
-                
+            
 
                 this.socket.onopen = $.bind(this.onopen, this);
                 this.socket.onmessage = $.bind(this.onmessage, this);//this.onmessage;
                 this.socket.onclose  = $.bind(this.onclose, this);//this.onclose ;
-            }catch(e){
+
+                /*this.socket.onclose = () => {
+                    // Try to reconnect in 5 seconds
+                    setTimeout(() => {
+                        this.connect();
+                    }, 5000);
+                };*/
+
+                //this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
+                
+
+             }catch(e){
                 this.error = e;
             }
             
         }
 		
 		onclose (event){
-            db ("on Close");
+            db ("Connection lost...!!!");
+            // Try to reconnect in 5 seconds
+            setTimeout(() => {
+                //db ("Connection lost...!!!");
+                this.connect();
+            }, 5000);
         }
 
         send(msg){
-            this.socket.send(msg); 
+            //console.log( this.socket);
+
+            if(this.socket && this.socket.readyState == 1){
+                this.socket.send(msg); 
+                return;
+            }
+           
+            alert("Connecting, wait !!!");
+            
         }
 		
 		onopen(event){
-			db ("on OPEN");
+			
 			
 			let openMessage = JSON.stringify({
 				type:"connect",
@@ -83,7 +119,8 @@ var GTCommunication = (($) => {
 
             });
 
-			this.send(openMessage)
+            this.send(openMessage);
+            db ("Websockect Connected...!");
         }
 		
 		onmessage1(event){
@@ -179,9 +216,9 @@ var GTCommunication = (($) => {
                 port:this.socketServer.port,
                 onmessage:(event)=>{
                     
-                    var server_message = event.data;
+                    const server_message = event.data;
 
-        
+                    console.log(server_message)
                     try {
                         let json = JSON.parse(server_message);
                         //console.log(json);

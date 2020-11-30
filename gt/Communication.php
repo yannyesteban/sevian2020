@@ -14,6 +14,8 @@ class Communication extends
 
     private $_userInfo = null;
 
+        private $host = 'bests.no-ip.info';
+
     use DBCommunication{
 		DBCommunication::ccc as public ccc;
     }
@@ -107,6 +109,9 @@ class Communication extends
         $this->setPanel($div);
 
         //$info->id = $this->containerId;
+
+        //$this->host = 'localhost';
+
         $this->setInit([
             //'id'=>$this->eparams->targetId,
 
@@ -118,7 +123,7 @@ class Communication extends
             'gridId'        => $this->eparams->gridId??'',
             'user'          => $this->_userInfo->user,
             'socketServer'  => [
-                'host'  => 'bests.no-ip.info',//'localhost',//'bests.no-ip.info',
+                'host'  => $this->host,// ='bests.no-ip.info',//'localhost',//'bests.no-ip.info',
                 'port'  => 3321
             ]
         ]);
