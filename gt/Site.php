@@ -7,7 +7,8 @@ class Site
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
-		\sevian\JsonRequest
+		\sevian\JsonRequest,
+		\Sevian\ListenSigns
 	
 {
 
@@ -106,6 +107,13 @@ class Site
 				break;
 			case 'update':
 				
+				$this->panelActions[] = [
+					'method'  => 'updateSite',
+					'value'=> $this->update(),
+					
+				];
+				
+				
 				break;
 			case 'site-load':
 				
@@ -135,7 +143,7 @@ class Site
 	}
 	
 	public function init(){
-		
+		hr(8888);
 		$form =  new \Sigefor\Component\Form2([
 			
 			'id'		=> $this->containerId,
@@ -172,16 +180,32 @@ class Site
 	}
 	
 	private function load(){
-        $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-site-'.$this->id;
-		$this->panel->innerHTML = 'gt-site-'.$this->id;
-		$this->typeElement = 'GTSite';
-
+		$this->panel = new \Sevian\HTML('div');
+		if(\is_numeric($this->id)){
+			$this->panel->id = 'gt-site-'.$this->id;
+		}
+		//$this->panel->innerHTML = 'gt-site-'.$this->id;
+		//$this->typeElement = 'GTSite';
+		$this->jsClassName = 'GTSite';
 		$this->info = [
+			'dataSite'     => $this->loadSites(),
+			'dataCategory' => $this->loadCategorys(),
+			'popupTemplate' => $this->popupTemplate,
+			'infoTemplate'	=> $this->infoTemplate,
+			'pathImages'	=> PATH_IMAGES."sites/",
+			'caption'		=> 'Sitios',
+			//'id'            => 'ks',
+			'followMe'		=> true,
+			'delay'			=> 60000,
+			//'form'     => $form,
+
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			'tapName'=>'yanny'
+			'infoId'		=> $this->eparams->infoId ?? false,
+			'formId'		=> $this->id.'-form'
 		];
+		
+		$this->setInit($this->info);
 
     }
 	
@@ -238,7 +262,27 @@ class Site
 		return $this->_jsonRequest;
 	}
 
+	public function getTaskXSigns(){
 
+		return [
+			"form:/form/site2:save"=>[[
+				"t"=>"setMethod",
+				"id"=>$this->id,
+				"element"=>$this->element,
+				"name"=>$this->name,
+				"method"=>"update",
+				"eparams"=>[]
+			]],
+			"form:/form/site:save"=>[[
+				"t"=>"setMethod",
+				"id"=>$this->id,
+				"element"=>$this->element,
+				"name"=>$this->name,
+				"method"=>"update",
+				"eparams"=>[]
+			]],
+		];
+	}
 	
 
 }

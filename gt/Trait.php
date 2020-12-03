@@ -520,7 +520,8 @@ trait DBGeofence{
         }
         
         */
-        $cn->query = "SELECT *
+        $cn->query = "SELECT g.*
+            #, concat(name, ' ', type) as name
             FROM geofences as g
             WHERE type='polygon'
             #WHERE g.user = 'Rmartinez'

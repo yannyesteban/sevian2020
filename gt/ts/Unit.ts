@@ -141,18 +141,24 @@ var GTUnit = (($) => {
 		</div>`;
 		
 		public oninfo:Function = (info, name)=>{};
-		public delay:number = 30000;
+		public delay:number = 10000;
+		public delay2:number = 12000;
 		private main:any = null; 
 		private marks:any[] = [];
 
 		private _info:any = null;
 		private _winInfo:any = null;
+		
 		private _timer:any = null;
+		private _timer2:any = null;
 		
 		private _lastUnitId = null;
 
 		private _traces:any[] = [];
 		
+		private infoId:string = null;
+		private statusId:string = null;
+		private _win:any[] = [];
 
 		
 		static _instances:object[] = []; 
@@ -189,8 +195,18 @@ var GTUnit = (($) => {
                 this._create(main);
 			}
 
+			GTMap.load((map, s)=>{
+				this.setMap(map);
+				//this.play();
+				//map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
+
+
+				
+				//map.getControl("mark").onsave = ((info)=>{}
+			});
 			
 			
+			this.play2();
 
 		}
 
@@ -239,6 +255,13 @@ var GTUnit = (($) => {
 				
 		}
 
+
+		showMenu(){
+			this._win["menu-unit"].show();
+		}
+		showConnected(){
+			this._win["status-unit"].show();
+		}
 		_create(main:any){
 			
 			this.main = main;
@@ -246,8 +269,48 @@ var GTUnit = (($) => {
 			main.addClass("unit-main");
 			
 			this.createMenu();
+
+			//this.menu = this.createMenu();
+			this._win["menu-unit"] = new Float.Window({
+                visible:true,
+                caption: this.caption,
+                left:10,
+                top:100,
+                width: "280px",
+                height: "250px",
+                mode:"auto",
+				className:["sevian"],
+				child:this.main.get()
+			});
+
+			this.statusId = "yasta";
+			const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
+			this._win["status-unit"] = new Float.Window({
+                visible:true,
+                caption: "Conected Units",
+                left:10+280+20,
+                top:100,
+                width: "380px",
+                height: "300px",
+                mode:"auto",
+				className:["sevian"],
+				child:_statusUnit.get()
+			});
+
+
 			this._info = $().create("div").addClass("win-units-info");
 			//this._info = $().create("div").addClass("win-units-info");
+
+			
+			if(this.infoId){
+				
+				this.oninfo = (info, name) =>{
+
+					S.getElement(this.infoId).setCaption(name);
+					S.getElement(this.infoId).setText(info);
+				};
+				
+			}
 			return;
 
 			this.win = new Float.Window({
@@ -378,9 +441,14 @@ var GTUnit = (($) => {
 			}
 			if(this.followMe && this._lastUnitId){
 				this.panTo(this._lastUnitId);
-				this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
+				
+				
+				
+				//this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
 			
 			}
+
+			return;
 			if(this._traces[unitId]){
 			}
 		}
@@ -394,53 +462,6 @@ var GTUnit = (($) => {
 		
 		play(){
 			let map = this.getMap().map;
-
-			map.loadImage(
-				'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
-				function(error, image) {
-				if (error) throw error;
-				map.addImage('cat', image);
-				map.addSource('point', {
-				'type': 'geojson',
-				'data': {
-				'type': 'FeatureCollection',
-				'features': [
-				{
-				'type': 'Feature',
-				'properties':{
-					'rotacion':45
-				},
-				'geometry': {
-				'type': 'Point',
-				'coordinates': [-69.39874800, 10.06882300]	
-				}
-				},
-				{
-					'type': 'Feature',
-					'properties':{
-						'rotacion':120
-					},
-					'geometry': {
-					'type': 'Point',
-					'coordinates': [-69.39674800, 10.06682300]	
-					}
-					}
-				]
-				}
-				});
-				map.addLayer({
-				'id': 'points',
-				'type': 'symbol',
-				'source': 'point',
-				'layout': {
-				'icon-image': 'cat',
-				'icon-size': 0.10,
-				'icon-rotate':['get','rotacion']
-				}
-				});
-				}
-				);
-			
 
 			
 
@@ -479,6 +500,22 @@ var GTUnit = (($) => {
 
 				
 			}, this.delay);
+		}
+
+		play2(){
+			
+			
+
+			if(this._timer2){
+				clearTimeout(this._timer2);	
+			}
+			
+			this._timer2 = setInterval(()=>{
+				this.showStatusWin();
+				
+
+				
+			}, this.delay2);
 		}
 		
 		createMenu(){
@@ -650,6 +687,8 @@ var GTUnit = (($) => {
 			//this._info.text(this.loadInfo(id));
 			//this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
 			this.oninfo(this.loadInfo(id), this.dataUnits[id].vehicle_name);
+
+			
 		}
 		loadPopupInfo(id){
             return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataUnits[id]), this.tracking[id]);
@@ -677,6 +716,30 @@ var GTUnit = (($) => {
 		}
 		getFollowMe(){
 			return this.followMe;
+		}
+
+
+		showStatusWin(){
+			S.send3({
+                "async":1,
+				
+				"params":[
+                    
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.statusId,
+						"element":"form",
+						"method":"list",
+						"name":"/form/status_unit",
+						"eparams":{"mainId":this.statusId}
+
+                    }
+                ],
+                onRequest:(x)=>{
+                    
+                }
+			});
 		}
 	}
 	

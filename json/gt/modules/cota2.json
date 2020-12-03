@@ -1,0 +1,15 @@
+{
+	"module":"cota",
+	"title":"Módulo Principal",
+	"structure":"login",
+	"config":{},
+	"procedure":{},
+    "sequence":{},
+    "params":{},
+    "vars":{
+		"structure":"cota2",
+		"module_name":"Cota2"
+    },
+	"theme":"sevian",
+	"debug":true
+}

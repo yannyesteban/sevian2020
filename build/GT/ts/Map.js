@@ -17,6 +17,7 @@ var GTMap = (($) => {
             this.markImages = [];
             this.markDefaultImage = "";
             this.iconImages = [];
+            this.controls = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -61,7 +62,8 @@ var GTMap = (($) => {
                 id: `${this.id}`,
                 markImages: this.markImages,
                 markDefaultImage: this.markDefaultImage,
-                iconImages: this.iconImages
+                iconImages: this.iconImages,
+                controls: this.controls
             });
             this.map.on("load", (event) => {
                 for (let fn of Map._loadFuntions) {

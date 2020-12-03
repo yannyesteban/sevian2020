@@ -10,7 +10,7 @@ var GTSite = (($) => {
 		mode:number = 0;
 		tempPoly:any = null;
 
-		formId:any = null;
+		//formId:any = null;
 		images:string[] = [];
 		dataCategory:any[] = null;
 		dataAccounts:any[] = null;
@@ -83,12 +83,16 @@ var GTSite = (($) => {
 
 		private _form:any = null;
 
+		private infoId:string = null;
+		private formId:string = null;
+		private _win:any[] = [];
+
 		static _instances:object[] = []; 
-		
+		/*
 		static getInstance(name){
             return Unit._instances[name];
         }
-		
+		*/
 		constructor(info){
 			
             for(var x in info){
@@ -117,6 +121,15 @@ var GTSite = (($) => {
                 this._create(main);
 			}
 
+			GTMap.load((map, s)=>{
+				this.setMap(map);
+				//this.play();
+				//map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
+
+
+				
+				//map.getControl("mark").onsave = ((info)=>{}
+			});
 			
 			
 
@@ -129,8 +142,45 @@ var GTSite = (($) => {
 			main.addClass("site-main");
 			
 			this.menu = this.createMenu();
-			this.createForm(this.form);
+
+			this._win["menu-site"] = new Float.Window({
+                visible:false,
+                caption: this.caption,
+                left:10,
+                top:100,
+                width: "280px",
+                height: "250px",
+                mode:"auto",
+				className:["sevian"],
+				child:this.main.get()
+			});
+
+			const _formDiv = $().create("form").id(this.formId).text("hello");
+			this._win["form-site"] = new Float.Window({
+                visible:false,
+                caption: this.caption,
+                left:10+280,
+                top:100,
+                width: "280px",
+                height: "250px",
+                mode:"auto",
+				className:["sevian"],
+				child:_formDiv.get()
+			});
+
+			//this.createForm(this.form);
 			this._info = $().create("div").addClass("win-sites-info");
+
+			if(this.infoId){
+				
+				this.oninfo = (info, name) =>{
+
+					S.getElement(this.infoId).setCaption(name);
+					S.getElement(this.infoId).setText(info);
+				};
+				
+			}
+
 			return;
 			const xx = $().create("form").id("yan124");
 			xx.text("Hoooooooola");
@@ -150,6 +200,50 @@ var GTSite = (($) => {
 			this.loadSite2();
 		} 
 		
+
+		showMenu(){
+			this._win["menu-site"].show();
+		}
+
+		showForm(){
+			this._win["form-site"].show();
+		}
+
+		newSite(){
+            //let unitId = this.form.getInput("unit_idx").getValue();
+
+			//let f  = this.form.getFormData();
+			
+			
+            S.send3({
+                "async":1,
+                //"form":f,
+                //id:4,
+                
+				
+				"params":[
+                    
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.formId,
+						"element":"form",
+						"method":"request",
+						"name":"/form/site2",
+						"eparams":{"mainId":this.formId}
+
+                    }
+                ],
+                onRequest:(x)=>{
+                    //S.getElement(this.commandPanelId).setContext(this);
+					S.getElement(this.formId).setContext(this);
+					this._form = S.getElement(this.formId);
+					
+                    
+                }
+			});
+        }
+
 		loadSite2(){
             //let unitId = this.form.getInput("unit_idx").getValue();
 
@@ -187,6 +281,48 @@ var GTSite = (($) => {
 			});
         }
 
+		loadSite3(id){
+            //let unitId = this.form.getInput("unit_idx").getValue();
+
+			//let f  = this.form.getFormData();
+			
+			
+            S.send3({
+                "async":1,
+                //"form":f,
+                //id:4,
+                
+				
+				"params":[
+                    
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.formId,
+						"element":"form",
+						"method":"load",
+						"name":"/form/site2",
+						"eparams":{
+							
+							//"a":'yanny',
+                            "mainId":this.formId,
+							//"unitId":5555555,
+							'record':{'id':id}
+						}
+
+                    }
+                ],
+                onRequest:(x)=>{
+                    //S.getElement(this.commandPanelId).setContext(this);
+					S.getElement(this.formId).setContext(this);
+					this._form = S.getElement(this.formId);
+
+					this.showForm();
+                    
+                }
+			});
+        }
+
         _load(main:any){
 
 		}
@@ -205,17 +341,24 @@ var GTSite = (($) => {
 		setMap(map){
 			
 			map.getControl("mark").onsave = ((info)=>{
+				console.log(info)
+				
 				this.loadForm(info);
 				map.getControl("mark").stop();
 				this.onSave(info);
+
+				this.showForm();
+				
 			});
-			
+			map.getControl("mark").onnew = $.bind(this.newSite, this);
 			this.map = map;
 		}
 		start(){
 			this.map.getControl("mark").play();
 		}
-
+		updateSite(info){
+			console.log(info);
+		}
 		update(info){
 			this.getForm().setValue(info).setMode('update');
 			this.getForm().getInput("__mode_").setValue(2);
@@ -505,8 +648,13 @@ var GTSite = (($) => {
 		}
 
 		edit(id){
-
+			
 			this.editId = id;
+
+			this.loadSite3(id);
+			this.start();
+			return;
+			
 
 			S.send({
 				"async": true,

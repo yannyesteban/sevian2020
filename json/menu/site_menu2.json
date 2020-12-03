@@ -10,7 +10,7 @@
 			"caption":"Aplicar Cambios",
 			"dataUser":{
 				"async": true,
-				"panel":"&P_panelId",
+				"form":"&P_panelId",
 				"valid":false,
 				"confirm_": "seguro?",
 				"params":[
@@ -20,7 +20,8 @@
 						"element":"&P_element",
 						"method":"save",
 						"name":"&P_elementName",
-						"eparams":null
+						"eparams":null,
+						"mode":"request"
 					}
 			
 				]}

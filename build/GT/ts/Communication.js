@@ -106,6 +106,7 @@ var GTCommunication = (($) => {
         constructor(info) {
             this.id = null;
             this.target = null;
+            this.caption = "gt-comm";
             this.mainClass = "gt-comm";
             this.mainDS = "gtComm";
             this.main = null;
@@ -129,6 +130,7 @@ var GTCommunication = (($) => {
             this.unitId = null;
             this._grid = null;
             this.callOnMessage = (messaje) => { };
+            this._win = [];
             this.socketServer = {
                 host: "127.0.0.1",
                 port: 3310
@@ -176,6 +178,17 @@ var GTCommunication = (($) => {
             main.text("");
             main.removeDs("sgForm");
             main.removeClass("sg-form");
+            this._win["main"] = new Float.Window({
+                visible: false,
+                caption: this.caption,
+                left: 10 + 280 + 20,
+                top: 100,
+                width: "600px",
+                height: "250px",
+                mode: "auto",
+                className: ["sevian"],
+                child: this.main.get()
+            });
             this.mainPanel = main.create("div").addClass("mainPanel");
             this._aux = main.create("div").addClass("command-panel").id("aux3");
             this._commandPanel = main.create("div").addClass("command-panel").id(this.commandPanelId);
@@ -194,6 +207,9 @@ var GTCommunication = (($) => {
             if (this.unitId) {
                 this.loadUnit(this.unitId);
             }
+        }
+        show() {
+            this._win["main"].show();
         }
         test() {
             alert("Communication");

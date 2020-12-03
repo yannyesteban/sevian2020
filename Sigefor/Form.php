@@ -35,7 +35,14 @@ class Form extends \sevian\element {
     public function evalMethod($method = false): bool{
         if($method){
             $this->method = $this->method;
-        }
+		}
+		
+		$this->userData = [
+			'panelId'=>$this->id,
+			'element'=>$this->element,
+			'elementName'=>$this->name,
+			'elementMethod'=>$this->method
+		];
 
         switch($this->method){
             case 'request':
@@ -79,7 +86,8 @@ class Form extends \sevian\element {
             'panelId'	=> $this->id,
             'name'		=> JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
             'method'	=> $this->method,
-            'mode'		=> 1
+			'mode'		=> 1,
+			'userData'	=> $this->userData,
         ]);
 
         $form->id = $this->containerId;
@@ -96,8 +104,19 @@ class Form extends \sevian\element {
         if(!$this->containerId){
             $this->containerId = 'form-main-'.$this->id;
 		}
+		$record = null;
+		if(isset($this->eparams->record)){
+
+			$this->setDataRecord('grid', [$this->eparams->record]);
+
+			$record = $this->eparams->record;
+			//$this->setDataRecord('grid',$this->eparams->record);
+		}else{
+			$record = $this->getRecord('grid', \Sevian\S::getReq("__id_") ?? 0);
+		}
 		
-		$record = $this->getRecord('grid', \Sevian\S::getReq("__id_") ?? 0);
+		//$record = $this->getRecord('grid', \Sevian\S::getReq("__id_") ?? 0);
+		
 		//hx($record);
 		$form =  new \Sigefor\Component\Form2([
 
@@ -108,7 +127,7 @@ class Form extends \sevian\element {
 			'mode'		=> 2,
 			'record'	=> $record,
 			'recordIndex'=>\Sevian\S::getReq("__id_") ?? 0,
-			//'userData'=>$this->userData,
+			'userData'	=> $this->userData,
 			
 		]);
 
@@ -156,6 +175,7 @@ class Form extends \sevian\element {
 		]);
 		
 		$this->setDataRecord('grid', $form->getDataKeys());
+		
 		$search = "
 		S.send3(
 			{
@@ -241,6 +261,8 @@ class Form extends \sevian\element {
 
 	public function save($data){
 
+		
+
 		if(count($this->getDataRecord('grid'))==0){
 			$this->setDataRecord('grid', [(object)["id"=>0]]);
 		}
@@ -273,6 +295,7 @@ class Form extends \sevian\element {
 			
 			
 		}
+		
 		$this->setInit(null);
 		$this->setPanel(false);
 	}

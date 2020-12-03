@@ -1085,6 +1085,7 @@ var MapBox = (($, turf) => {
         image:string = null;
         defaultImage:string = null;
         defaultCoordinates:any[] = null;
+        onnew:Function = ()=>{};
         onplay:Function = (coords, propertys)=>{};
         onsave:Function = (coords, propertys)=>{};
         onstop:Function = (coords, propertys)=>{};
@@ -1138,6 +1139,7 @@ var MapBox = (($, turf) => {
             
             this._btnRule = this._group1.create("button").prop({"type": "button", "title":"Inicia la herramienta de Marcas / Sitios"}).addClass("icon-marker");
             this._btnRule.on("click", ()=>{
+                this.onnew();
                 this.play();
             });
 
@@ -2766,6 +2768,7 @@ var MapBox = (($, turf) => {
             if(this.center && this.hand){
                 this.createCircle(this.center, this.hand);
             }
+           
         }
 
         setLine(info:object){
@@ -5598,6 +5601,10 @@ var MapBox = (($, turf) => {
         markImages:string[] = [];
         iconImages:any[] = null;
         markDefaultImage:string = null;
+
+        //controls:string[] = ["trace", "rule", "poly", "mark", "layer"];
+        controls:string[] = ["rule"];
+
         constructor(info:object){
             for(let x in info){
                 if(this.hasOwnProperty(x)) {
@@ -5739,11 +5746,12 @@ var MapBox = (($, turf) => {
             });
             
             
-            map.addControl(this._controls["trace"] = new TraceControl(this), 'top-right');
-            map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
-            map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
-            map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
-
+            
+            //map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
+            //map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
+            //map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
+            //this.controls = ["rule"];
+            
             
             function LayerControl() { }
 
@@ -5759,9 +5767,28 @@ var MapBox = (($, turf) => {
                 this._container.parentNode.removeChild(this._container);
                 this._map = undefined;
             };
+            this.controls = ["rule"];
+            
+            this.controls.forEach((e)=>{
+                switch(e){
+                    case "trace":
+                        map.addControl(this._controls["trace"] = new TraceControl(this), 'top-right');
+                        break;
+                    case "poly":
+                        map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
+                        break;
+                    case "rule":
+                        map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
+                        break;
+                    case "mark":
+                        map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
+                        break;
+                    case "layer":
+                        map.addControl(this._controls["layer"] = new LayerControl(), 'top-right');
+                        break;
+                }
 
-           
-            map.addControl(new LayerControl(), 'top-right');
+            });
 
 
 

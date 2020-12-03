@@ -27,6 +27,7 @@ var GTMap = (($) => {
         markImages:string[] = [];
         markDefaultImage:string = "";
         iconImages:any[] = [];
+        controls:string[] = [];
 
         static getMap(name){
             
@@ -79,12 +80,14 @@ var GTMap = (($) => {
 		
         }
         _create(main:any){
+            
             main.addClass(["map-main", "map-layout"]);
             this.map = new MapBox({
-                id:`${this.id}`,
-                markImages:this.markImages, 
-                markDefaultImage:this.markDefaultImage,
-                iconImages:this.iconImages
+                id:                 `${this.id}`,
+                markImages:         this.markImages, 
+                markDefaultImage:   this.markDefaultImage,
+                iconImages:         this.iconImages,
+                controls:           this.controls
             });
             
             this.map.on("load", (event)=>{

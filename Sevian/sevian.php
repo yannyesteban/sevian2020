@@ -90,6 +90,9 @@ class S{
 
 	private static $_infoClasses = [];
 	private static $_infoInputs = [];
+
+	private static $_tasks = [];
+
 	private static $_pSigns = [];
 	private static $_signs = false;
 	private static $_commands = false;
@@ -179,6 +182,17 @@ class S{
 		self::$_init = new InfoInit($opt);
 		
 	}
+
+
+	public static function addTask($id, $task){
+
+		self::$_tasks[$id] = $task;
+	}
+
+	public static function &getTasks($id, $task){
+
+		return self::$_tasks[$id];
+	}
 	public static function sessionInit(){
 		
 	
@@ -242,6 +256,8 @@ class S{
 				self::setPanel(new InfoPanel($p));
 			}
 
+			
+			self::$cfg['TASKS'] = &self::$_tasks;
 			self::$cfg['LISTEN_PANEL'] = &self::$_pSigns;
 			self::$cfg['LISTEN'] = &self::$_signs;
 			self::$cfg['COMMANDS'] = &self::$_commands;
@@ -272,6 +288,8 @@ class S{
 			
 			self::$_signs = &self::$cfg['LISTEN'];
 			
+			self::$_tasks = &self::$cfg['TASKS'];
+
 			self::$_pSigns = &self::$cfg['LISTEN_PANEL'];
 			self::$_commands = &self::$cfg['COMMANDS'];
 			self::$_actions = &self::$cfg['ACTIONS'];
@@ -372,6 +390,11 @@ class S{
 		$e->getSequenceBefore();
 		$e->evalMethod();
 		$e->getSequenceAfter();
+		
+		
+		if($e instanceof \Sevian\ListenSigns){
+			self::addTask($info->id, $e->getTaskXSigns());
+		}
 
 		if($e instanceof \Sevian\DBInfo){
 			$dbInfo = $e->getDBInfo();
@@ -417,11 +440,24 @@ class S{
 		}
 
 		if($info->mode == 'panel'){
+			
 			self::addPanel($e);
 			//self::$_str->addPanel($info->id, $e->getPanel());	
 			self::$_str->addPanel($info->id, $e);
 			$info->update = true;
 			$info->isPanel = true;
+		}
+		
+		
+		$sign = "$info->element:$info->name:$info->method";
+		
+		foreach(self::$_tasks as $_id => $task){
+			//hr($task,"red");
+			//hr($sign,"blue");
+
+			if(isset($task[$sign])){
+				self::sequence($task[$sign]);
+			}
 		}
 		
 		
@@ -656,14 +692,14 @@ class S{
 
 			
 			//self::command(key($line), current(($line)));
-			self::command($cmd);
+			self::command((object)$cmd);
 
 		
 		}
 		
 	}
 	public static function command($cmd){
-
+		
 		switch($cmd->t){
 			
 
@@ -876,7 +912,7 @@ class S{
 		foreach(self::$_e as $k => $v){
 			if($v->getInit())
 			$js[] = [
-				'panel'=>$k,
+				'id'=>$k,
 				'type'=>$v->getJSClass(),
 				'option'=>$v->getInit()
 

@@ -42,7 +42,7 @@ class Communication extends
         
         switch($this->method){
             case 'load':
-                $this->init2();
+                $this->load();
             break;
             case 'unit-init':
             case 'load-unit':
@@ -58,7 +58,7 @@ class Communication extends
 
         return true;
     }
-    public function init2(){
+    public function load(){
 
         if($this->eparams->mainId?? false){
             $this->containerId = $this->eparams->mainId;
@@ -110,7 +110,7 @@ class Communication extends
 
         //$info->id = $this->containerId;
 
-        //$this->host = 'localhost';
+        $this->host = 'localhost';
 
         $this->setInit([
             //'id'=>$this->eparams->targetId,

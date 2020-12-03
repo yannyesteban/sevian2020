@@ -1,0 +1,134 @@
+{
+	"structure":"webcar",
+	"title":"Módulo GT",
+	"template":"gt-cota",
+	"templateName":"/gt-webcar",
+	"themeTemplate":"",
+	"class":"webcar",
+	"mainPanel":4,
+	"params":{},
+	"wins":[
+		{
+			"name":"v1",
+			"caption":"Catálogo @module_name",
+			"mode":"custom",
+			"width":"400px",
+			"height":"400px",
+			"top":"middle",
+			"left":"center",
+			"visible":false,
+			"child":"#win_001"
+		}
+	],
+	"roles":[],
+	"publicRole":true,
+	"elements":[
+		{
+			"id":4,
+			"element":"gt_map",
+			"name":"gt_map",
+			"method":"load",
+			"eparams":{
+				"controls_":["rule"]
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":2,
+			"element":"s-menu",
+			"name":"/gt/menus/webcar",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":"gt-info-11",
+			"element":"gt-info",
+			"name":"gt-info",
+			"method":"load",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":"gt-unit-10",
+			"element":"gt_unit",
+			"name":"gt_unit",
+			"method":"load",
+			"eparams":{
+				"infoId":"gt-info-11"
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":"gt-site-11",
+			"element":"gt-site",
+			"name":"gt-site",
+			"method":"load",
+			"eparams":{
+				"infoId":"gt-info-11"
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":9,
+			"element":"gt_geofence",
+			"name":"gt-geofence",
+			"method":"load",
+			"eparams":{"formId":"form_geo_9"},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		
+		{
+			"id":"jota",
+			"element":"form",
+			"name":"/form/geofence",
+			"method":"request",
+			"eparams":{"mainId":"form_geo_9"},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":"comm",
+			"element":"gt-communication",
+			"name":"gt-communication",
+			"method":"load",
+			"eparams":{
+				
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		}
+
+	]
+
+}

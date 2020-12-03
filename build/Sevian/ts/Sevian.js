@@ -145,17 +145,17 @@ var S = (($) => {
                 form = this.getForm(info.id);
             }
             if (form) {
-                if (form.__sg_sw.value === form.__sg_sw2.value) {
-                    if (form.__sg_sw.value != 1) {
-                        form.__sg_sw.value = 1;
-                    }
-                    else {
-                        form.__sg_sw.value = 0;
-                    }
-                }
-                form.__sg_params.value = params;
-                form.__sg_async.value = info.async ? 1 : 0;
                 if (!info.async) {
+                    if (form.__sg_sw.value === form.__sg_sw2.value) {
+                        if (form.__sg_sw.value != 1) {
+                            form.__sg_sw.value = 1;
+                        }
+                        else {
+                            form.__sg_sw.value = 0;
+                        }
+                    }
+                    form.__sg_params.value = params;
+                    form.__sg_async.value = info.async ? 1 : 0;
                     form.submit();
                     return false;
                 }

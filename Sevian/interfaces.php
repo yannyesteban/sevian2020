@@ -39,6 +39,11 @@ interface PanelsAdmin{
 
 }
 
+interface ListenSigns{
+    public function getTaskXSigns();
+
+}
+
 interface JsElement{
     public function getJsType();
 

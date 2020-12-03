@@ -157,13 +157,29 @@ class Geofence
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-geofence-'.$this->id;
 		$this->panel->innerHTML = 'gt-geofence-'.$this->id;
-		$this->typeElement = 'GTGeofence';
+		
+
+		$this->jsClassName = 'GTGeofence';
+		//$this->typeElement = 'GTCota';
 
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			'tapName'=>'yanny'
+			'caption'=>'Geocercas',
+			'formId'=>$this->eparams->formId??"form_".$this->id,
+
+			'dataMain'		=> $this->loadGeofences(),
+					
+					'popupTemplate' => $this->popupTemplate,
+					'infoTemplate'	=> $this->infoTemplate,
+                    
+					'pathImages'	=> PATH_IMAGES,
+					'caption'		=> 'Geocercas',
+					'id'            => 'ks',
+					'followMe'		=> true,
+					'delay'			=> 60000,
 		];
+		$this->setInit($this->info);
 
     }
 	

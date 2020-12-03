@@ -116,14 +116,19 @@ var GTUnit = (($) => {
 		
 		</div>`;
             this.oninfo = (info, name) => { };
-            this.delay = 30000;
+            this.delay = 10000;
+            this.delay2 = 12000;
             this.main = null;
             this.marks = [];
             this._info = null;
             this._winInfo = null;
             this._timer = null;
+            this._timer2 = null;
             this._lastUnitId = null;
             this._traces = [];
+            this.infoId = null;
+            this.statusId = null;
+            this._win = [];
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -146,6 +151,13 @@ var GTUnit = (($) => {
                 main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
+            GTMap.load((map, s) => {
+                this.setMap(map);
+                //this.play();
+                //map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
+                //map.getControl("mark").onsave = ((info)=>{}
+            });
+            this.play2();
         }
         static getInstance(name) {
             return Unit._instances[name];
@@ -192,12 +204,49 @@ var GTUnit = (($) => {
                 }
             });
         }
+        showMenu() {
+            this._win["menu-unit"].show();
+        }
+        showConnected() {
+            this._win["status-unit"].show();
+        }
         _create(main) {
             this.main = main;
             main.addClass("unit-main");
             this.createMenu();
+            //this.menu = this.createMenu();
+            this._win["menu-unit"] = new Float.Window({
+                visible: true,
+                caption: this.caption,
+                left: 10,
+                top: 100,
+                width: "280px",
+                height: "250px",
+                mode: "auto",
+                className: ["sevian"],
+                child: this.main.get()
+            });
+            this.statusId = "yasta";
+            const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
+            this._win["status-unit"] = new Float.Window({
+                visible: true,
+                caption: "Conected Units",
+                left: 10 + 280 + 20,
+                top: 100,
+                width: "380px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"],
+                child: _statusUnit.get()
+            });
             this._info = $().create("div").addClass("win-units-info");
             //this._info = $().create("div").addClass("win-units-info");
+            if (this.infoId) {
+                this.oninfo = (info, name) => {
+                    S.getElement(this.infoId).setCaption(name);
+                    S.getElement(this.infoId).setText(info);
+                };
+            }
             return;
             this.win = new Float.Window({
                 visible: true,
@@ -307,8 +356,9 @@ var GTUnit = (($) => {
             }
             if (this.followMe && this._lastUnitId) {
                 this.panTo(this._lastUnitId);
-                this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
+                //this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
             }
+            return;
             if (this._traces[unitId]) {
             }
         }
@@ -318,49 +368,6 @@ var GTUnit = (($) => {
         }
         play() {
             let map = this.getMap().map;
-            map.loadImage('https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png', function (error, image) {
-                if (error)
-                    throw error;
-                map.addImage('cat', image);
-                map.addSource('point', {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'FeatureCollection',
-                        'features': [
-                            {
-                                'type': 'Feature',
-                                'properties': {
-                                    'rotacion': 45
-                                },
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-69.39874800, 10.06882300]
-                                }
-                            },
-                            {
-                                'type': 'Feature',
-                                'properties': {
-                                    'rotacion': 120
-                                },
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-69.39674800, 10.06682300]
-                                }
-                            }
-                        ]
-                    }
-                });
-                map.addLayer({
-                    'id': 'points',
-                    'type': 'symbol',
-                    'source': 'point',
-                    'layout': {
-                        'icon-image': 'cat',
-                        'icon-size': 0.10,
-                        'icon-rotate': ['get', 'rotacion']
-                    }
-                });
-            });
             if (this._timer) {
                 clearTimeout(this._timer);
             }
@@ -387,6 +394,14 @@ var GTUnit = (($) => {
                     ]
                 });
             }, this.delay);
+        }
+        play2() {
+            if (this._timer2) {
+                clearTimeout(this._timer2);
+            }
+            this._timer2 = setInterval(() => {
+                this.showStatusWin();
+            }, this.delay2);
         }
         createMenu() {
             let infoMenu = [];
@@ -544,6 +559,24 @@ var GTUnit = (($) => {
         }
         getFollowMe() {
             return this.followMe;
+        }
+        showStatusWin() {
+            S.send3({
+                "async": 1,
+                "params": [
+                    {
+                        "t": "setMethod",
+                        'mode': 'element',
+                        "id": this.statusId,
+                        "element": "form",
+                        "method": "list",
+                        "name": "/form/status_unit",
+                        "eparams": { "mainId": this.statusId }
+                    }
+                ],
+                onRequest: (x) => {
+                }
+            });
         }
     }
     Unit._instances = [];

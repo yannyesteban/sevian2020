@@ -1,9 +1,9 @@
 <?php
 namespace GT;
 
-require_once MAIN_PATH.'gt/Trait.php';
 
-class Unit
+
+class Info
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
@@ -11,10 +11,7 @@ class Unit
 	
 {
 
-    use DBClient;
-	use DBAccount;
-    use DBUnit;
-    use DBTracking;
+    
     
 
     public $_name = '';
@@ -85,28 +82,7 @@ private $infoTemplate = '
 			case 'load':
 				$this->load();
 				break;
-            case 'load-units':
-                $data = $this->loadUnits();
-
-                $this->_name = $this->name;
-                $this->_type = 'GTUnit';
-                $this->_mode = '';
-                $this->_info = [
-                    'dataUnits'     => $data,
-                    'dataClients'   => $this->loadClients(),
-                    'dataAccounts'  => $this->loadAccounts(),
-					'tracking'      => $this->loadTracking(),
-					'popupTemplate' => $this->popupTemplate,
-					'infoTemplate'	=> $this->infoTemplate,
-					'pathImages'	=> PATH_IMAGES,
-					'caption'		=> 'Unidades',
-					'id'            => 'k',
-					'followMe'		=> true,
-					'delay'			=> 60000,
-				];
-			case 'tracking':
-				$this->setRequest($this->updateTracking());
-				break;
+            
 			default:
 				break;
 
@@ -127,35 +103,22 @@ private $infoTemplate = '
 			'caption'		=> 'Unidades',
 			'id'            => 'k',
 			'followMe'		=> true,
-			'delay'			=> 10000,
+			'delay'			=> 60000,
 		];
 	}
 	
 	private function load(){
         $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-unit-'.$this->id;
-		$this->panel->innerHTML = 'gt-unit-'.$this->id;
-		$this->typeElement = 'GTUnit';
-		$this->jsClassName = 'GTUnit';
+		$this->panel->id = 'gt-info-'.$this->id;
+		//$this->panel->innerHTML = 'gt-unit-'.$this->id;
+		//$this->typeElement = 'GTUnit';
+		$this->jsClassName = 'GTInfo';
 		
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			
+			'caption'=>'Info',			
 
-			'dataUnits'     => $this->loadUnits(),
-			'dataClients'   => $this->loadClients(),
-			'dataAccounts'  => $this->loadAccounts(),
-			'tracking'      => $this->loadTracking(),
-			'popupTemplate' => $this->popupTemplate,
-			'infoTemplate'	=> $this->infoTemplate,
-			'pathImages'	=> PATH_IMAGES,
-			'caption'		=> 'Unidades',
-			'id'            => 'U-'.$this->panel->id,
-			'followMe'		=> true,
-			'delay'			=> 10000,	
-			'infoId'		=> $this->eparams->infoId ?? false,	
-			'statusId'		=> $this->eparams->statusId ?? false,	
 		];
 
 		$this->setInit($this->info);

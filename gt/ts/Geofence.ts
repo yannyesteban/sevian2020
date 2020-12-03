@@ -71,7 +71,7 @@ var GTGeofence = (($) => {
 		private editId:number = null;
 		private _traces:any[] = [];
 		
-
+		private _win:any[] = [];
 		
 		static _instances:object[] = []; 
 		
@@ -86,6 +86,7 @@ var GTGeofence = (($) => {
                     this[x] = info[x];
                 }
 			}
+			
 			//return;
 			let main = (this.id)? $(this.id): false;
             
@@ -116,10 +117,36 @@ var GTGeofence = (($) => {
 			
 			this.main = main;
 
+			this.menu = this.createMenu();
+			this._win["geofence"] = new Float.Window({
+                visible:false,
+                caption: this.caption,
+                left:300,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				child:this.main.get()
+			});
+			let formMain = $.create("div").attr("id", this.formId);
+
+			this._win["form"] = new Float.Window({
+                visible:false,
+                caption: this.caption,
+                left:700,
+                top:100,
+                width: "300px",
+                height: "200px",
+                mode:"auto",
+				className:["sevian"],
+				child:formMain
+			});
+
 			main.addClass("geofence-main");
 			
-			this.menu = this.createMenu();
-			this.createForm(this.form);
+			
+			//this.createForm(this.form);
 
 			this._info = $().create("div").addClass("win-geofence-info");
 			
@@ -144,9 +171,10 @@ var GTGeofence = (($) => {
 			this.map = map;
 
 			map.getControl("poly").onsave = ((info)=>{
-				//this.loadForm(info);
+				this.loadForm(info);
 				
 				map.getControl("poly").stop();
+				console.log(info);
 				this.onSave(info);
 			});
 
@@ -263,7 +291,7 @@ var GTGeofence = (($) => {
 		}
 
 		loadForm(info){
-			
+			/*
 			if(this.editId === null){
 			
 				this._form.reset();
@@ -271,11 +299,10 @@ var GTGeofence = (($) => {
 				this.marks[this.editId].setLngLat(info.coordinates);
 				this.marks[this.editId].setImage(info.image);
 			}
-			
+			*/
 			this._form.setValue({
-				image:info.image,
-				longitude:info.coordinates[0],
-				latitude:info.coordinates[1],
+				coords:info[0],
+				
 			});
 		}
 		

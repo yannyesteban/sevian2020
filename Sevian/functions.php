@@ -21,9 +21,9 @@ function hr($msg_x, $color_x='black',$back_x=''){
 	}
 	
 	if ($color_x==''){
-		echo "<hr>$msg_x<hr>";
+		echo "<pre>$msg_x<pre>";
 	}else{
-		echo "<hr><span style=\"background-color:$back_x;color:$color_x;font-family:tahoma;font-size:9pt;font-weight:bold;\">$msg_x</span><hr>";
+		echo "<pre><span style=\"background-color:$back_x;color:$color_x;font-family:tahoma;font-size:9pt;font-weight:bold;\">$msg_x</span><pre>";
 	}// end if
 	
 }// end function

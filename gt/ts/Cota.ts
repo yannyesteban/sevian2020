@@ -87,7 +87,9 @@ var GTCota = (($) => {
                 
                 this._create(main);
             }
-           
+		   
+			return;
+
 			GTMap.load((map, s)=>{
 				this._unit.setMap(map);
 				this._site.setMap(map);
@@ -110,6 +112,9 @@ var GTCota = (($) => {
 			
 			this.main = main;
 
+			this.mainMenu();
+
+			return;
 			main.addClass("unit-main");
 			this._win["info"] = new Float.Window({
                 visible:false,
@@ -133,7 +138,7 @@ var GTCota = (($) => {
 			//this.loadComm(this.comm);
             
 
-			this.mainMenu();
+			
             this.loadForm(this.form);
 			//this.main.create("input").attr("type","text");
 

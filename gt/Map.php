@@ -14,6 +14,7 @@ class Map extends \Sevian\Element{
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
+		
         $this->cn = \Sevian\Connection::get();
 	}
 	
@@ -21,13 +22,11 @@ class Map extends \Sevian\Element{
 
 		if($method === false){
             $method = $this->method;
-        }
+		}
+		
 		switch($method){
 			case 'load':
 				$this->load();
-				break;
-			case 'x':
-
 				break;
 		}
 
@@ -52,11 +51,13 @@ class Map extends \Sevian\Element{
 			$images[$k] = PATH_IMAGES."sites/".$img;
 		}
 		*/
-
+		
+		
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
 			'markImages' => $this->loadImage(),
+			'controls'=> $this->eparams->controls?? [],
 			'iconImages'=>[
 				['source'=>PATH_IMAGES.'vehicle_004.png','name'=>'vehiculo_004', 'sfd'=>false]
 			],

@@ -62,6 +62,7 @@ var GTCota = (($) => {
                 main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
+            return;
             GTMap.load((map, s) => {
                 this._unit.setMap(map);
                 this._site.setMap(map);
@@ -76,6 +77,8 @@ var GTCota = (($) => {
         }
         _create(main) {
             this.main = main;
+            this.mainMenu();
+            return;
             main.addClass("unit-main");
             this._win["info"] = new Float.Window({
                 visible: false,
@@ -95,7 +98,6 @@ var GTCota = (($) => {
             this.loadGeofence(this.geofence);
             this.loadHistory(this.history);
             //this.loadComm(this.comm);
-            this.mainMenu();
             this.loadForm(this.form);
             //this.main.create("input").attr("type","text");
         }

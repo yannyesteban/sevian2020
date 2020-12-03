@@ -252,22 +252,7 @@ $cls_elements['gt-communication'] = [
 	
 ];
 
-$cls_elements['gt-geofence'] = [
-	
-	'file' 	=> MAIN_PATH.'gt/Geofence.php',
-	'class' => '\GT\Geofence',
-	'enable' => true,
-	'js'=>[[
-		'file' 	=> MAIN_PATH.'build/GT/ts/Geofence.js',
-		'begin'=> false
-	]],
-	'css'=>[],
-	'init'=>[
-		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
-		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
-	],
-	
-];
+
 
 $cls_elements['gt_alarm'] = [
 	
@@ -335,7 +320,22 @@ $cls_elements['gt_search'] = [
 	],
 	
 ];
-
+$cls_elements['gt-geofence'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Geofence.php',
+	'class' => '\GT\Geofence',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Geofence.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
 $cls_elements['gt_geofence'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Geofence.php',
@@ -435,6 +435,23 @@ $cls_elements['h-command'] = [
 	'css'=>[],
 	'init'=>[
 		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
+$cls_elements['gt-info'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Info.php',
+	'class' => '\GT\Info',
+	'enable' => true,
+	'js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Info.js',
+		//'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		//'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
 		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
 	],
 	

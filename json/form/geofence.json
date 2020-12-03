@@ -25,7 +25,8 @@
 			"select id, brand from brands ORDER BY brand"
 			
 		  ]},
-		{"name":"model","caption":"Modelo"}
+		{"name":"model","caption":"Modelo"},
+		{"name":"type","caption":"Tipo","type":"select","data":[[0,"seleccione","*"],["circle","Círculo"],["rectangle","Rectánguloa"],["polygon","Polígono"]]}
 
 	],
 	

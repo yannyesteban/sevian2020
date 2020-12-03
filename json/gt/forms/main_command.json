@@ -42,7 +42,7 @@
             "caption":"",
             "input":"list",
             "type":"text","mode_value":"0",
-            "data":[["","","*"], "SELECT u.id as unit_id, un.name as unit_name, account_id, device_id FROM units as u INNER JOIN units_names as un on un.id = u.name_id ORDER BY account_id, unit_name"],
+            "data":[["","","*"], "SELECT u.id as unit_id, un.name as unit_name, account_id, device_id FROM units as u INNER JOIN units_names as un on un.id = u.name_id ORDER BY /*account_id,*/ unit_name"],
             "parent_":"account_idx",
             "params":{"placeholder":"...UNIDAD"},
             "events":{

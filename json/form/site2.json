@@ -60,6 +60,6 @@
 	"searchFor":[
 		"brand", "model"
 	],
-	"onDataUser":"S.send(dataUser);"
+	"onDataUser":"S.send3(dataUser);"
 
 }
