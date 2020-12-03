@@ -223,6 +223,9 @@ var GTCommunication = (($) => {
         show() {
             this._win["main"].show();
         }
+        show2() {
+            this._win["main2"].show();
+        }
         test() {
             alert("Communication");
         }

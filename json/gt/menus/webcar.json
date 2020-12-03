@@ -39,6 +39,14 @@
 				"title":"Ver conexiones de las Unidades"
 			},
 			"action":"S.getElement('gt-unit-10').showConnected()"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-command",
+			"propertys":{
+				"title":"Ver Ventana de Inmediato"
+			},
+			"action":"S.getElement('comm').show2()"
 		}
 
 	]
