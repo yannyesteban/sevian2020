@@ -110,7 +110,7 @@ class Communication extends
 
         //$info->id = $this->containerId;
 
-        $this->host = 'localhost';
+        //$this->host = 'localhost';
 
         $this->setInit([
             //'id'=>$this->eparams->targetId,
