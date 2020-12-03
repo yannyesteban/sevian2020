@@ -280,11 +280,23 @@ var GTCommunication = (($) => {
             this.mainForm.parentContext =  this;
             this.form = new Form2(this.mainForm);
           
-
+            const _formDiv = $().create("form").id(this.gridId);
             this.responseForm.id = this.gridId;
             this.responseForm.type = "default";
             this.responseForm.parentContext =  this;
             this._grid = new Grid2(this.responseForm);
+            
+            this._win["main2"] = new Float.Window({
+                visible:true,
+                caption: "Ventana Inmediato",
+                left:10+280+20+390,
+                top:100,
+                width: "600px",
+                height: "250px",
+                mode:"auto",
+				className:["sevian"],
+				child:_formDiv.get()
+			});
 
             if(this.unitId){
                 this.loadUnit(this.unitId);
