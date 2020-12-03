@@ -26,14 +26,6 @@
 		},
 		{
 			"caption":"",
-			"imageClass":"icon-marker_001",
-			"propertys":{
-				"title":"Mostrar Markadores / Sitios"
-			},
-			"action":"S.getElement('gt-site-11').showMenu()"
-		},
-		{
-			"caption":"",
 			"imageClass":"icon-command",
 			"propertys":{
 				"title":"Enviar Commando"

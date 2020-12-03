@@ -1,3 +1,13 @@
+,
+		{
+			"caption":"",
+			"imageClass":"icon-marker_001",
+			"propertys":{
+				"title":"Mostrar Markadores / Sitios"
+			},
+			"action":"S.getElement('gt-site-11').showMenu()"
+		}
+
 {
 	"structure":"webcar",
 	"title":"Módulo GT",

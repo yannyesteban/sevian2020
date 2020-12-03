@@ -75,20 +75,7 @@
 			"design":0
 
 		},
-		{
-			"id":"gt-site-11",
-			"element":"gt-site",
-			"name":"gt-site",
-			"method":"load",
-			"eparams":{
-				"infoId":"gt-info-11"
-			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
-		},
+		
 		{
 			"id":9,
 			"element":"gt_geofence",
