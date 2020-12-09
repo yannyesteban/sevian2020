@@ -5,7 +5,7 @@ if(!Sevian){
 	
 }
 
-var Valid = false;
+//var Valid = false;
 (function(namespace, $){
 	
 	let trim = function(value){
@@ -90,7 +90,7 @@ var Valid = false;
 		},
 		
 		send: function(rules, value, title, masterData){
-			let error = false, rule = false, key = false;
+			let error = false, rule = null, key = null;
 			for(key in rules){
 				rule = rules[key];	
 				error = false;

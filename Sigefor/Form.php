@@ -49,14 +49,16 @@ class Form extends \sevian\element {
                 $this->requestForm();
 			break;
 			case 'load':
+			case 'load-from':
 				$this->loadRecord();
 			break;
             case 'list':
 				$this->createGrid(1, '');
 				break;
 			case 'save':
-
+				
 				$this->save([(object)\Sevian\S::getVReq()]);
+				
 			break;
             case 'get_data':
                 $this->createGrid($this->eparams->page, $this->eparams->q ?? '');
@@ -118,6 +120,10 @@ class Form extends \sevian\element {
 		//$record = $this->getRecord('grid', \Sevian\S::getReq("__id_") ?? 0);
 		
 		//hx($record);
+
+		if($this->method == 'load-from'){
+			$record = false;
+		}
 		$form =  new \Sigefor\Component\Form2([
 
 			'id'		=> $this->containerId,
@@ -261,7 +267,8 @@ class Form extends \sevian\element {
 
 	public function save($data){
 
-		
+		//$data = [(object)\Sevian\S::getVReq()];
+		//$this->save([(object)\Sevian\S::getVReq()]);
 
 		if(count($this->getDataRecord('grid'))==0){
 			$this->setDataRecord('grid', [(object)["id"=>0]]);
@@ -274,7 +281,11 @@ class Form extends \sevian\element {
 		]);
 
 		$result = $f->send($data, []);
+		\Sevian\S::addReq((array)$data[0]);
 
+			//hr(\Sevian\S::getVReq());
+		//hx($data);
+		//hx(\Sevian\S::getVReq());
 		foreach($result as $k => $v){
 			
 			if(!$v->error){

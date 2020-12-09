@@ -63,6 +63,7 @@ class Map extends \Sevian\Element{
 			],
 			'markDefaultImage' => 'img_35'
 		];
+		
 		$this->setInit($this->info);
 
 		

@@ -884,6 +884,7 @@ var MapBox = (($, turf) => {
             this._inpLng = null;
             this._inpLat = null;
             this.length = 0;
+            this.coordinates = [];
             this.images = [];
             this.image = null;
             this.defaultImage = null;
@@ -892,6 +893,7 @@ var MapBox = (($, turf) => {
             this.onplay = (coords, propertys) => { };
             this.onsave = (coords, propertys) => { };
             this.onstop = (coords, propertys) => { };
+            this.onchange = (coords, propertys) => { };
             this._parent = object;
         }
         onAdd(map) {
@@ -918,6 +920,11 @@ var MapBox = (($, turf) => {
                 images.on("click", () => {
                     this.image = x;
                     this._line.setImage(x);
+                    this.onchange({
+                        coordinates: this.coordinates,
+                        image: this.image,
+                        size: this._line.getSize()
+                    });
                 });
             }
             //this._unit = this._group.create("span");
@@ -926,8 +933,12 @@ var MapBox = (($, turf) => {
             this._group1.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "mark-tool"]);
             this._btnRule = this._group1.create("button").prop({ "type": "button", "title": "Inicia la herramienta de Marcas / Sitios" }).addClass("icon-marker");
             this._btnRule.on("click", () => {
-                this.onnew();
                 this.play();
+                this.onnew({
+                    coordinates: this.coordinates,
+                    image: this.image,
+                    size: this._line.getSize()
+                });
             });
             this._group2 = this._container.create("div").style("display", "none");
             this._group2.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "mark-tool"]);
@@ -941,12 +952,22 @@ var MapBox = (($, turf) => {
                 .on("click", () => {
                 let size = this._line.getSize();
                 this._line.setSize(null, size[1] * 1.2);
+                this.onchange({
+                    coordinates: this.coordinates,
+                    image: this.image,
+                    size: this._line.getSize()
+                });
                 //this._line.setMax(1);
             });
             this._group2.create("button").prop({ "type": "button", "title": "Disminuir [-] Tamaño" }).addClass("icon-min")
                 .on("click", () => {
                 let size = this._line.getSize();
                 this._line.setSize(null, size[1] * 0.8);
+                this.onchange({
+                    coordinates: this.coordinates,
+                    image: this.image,
+                    size: this._line.getSize()
+                });
             });
             this._group2.create("button").prop({ "type": "button", "title": "Guardar" }).addClass(["icon-save"])
                 .on("click", () => {
@@ -981,18 +1002,27 @@ var MapBox = (($, turf) => {
                 this.onstop = info.onstop;
             }
             else {
-                this.defaultCoordinates = [this._map.getCenter().lng, this._map.getCenter().lat];
+                this.coordinates = [this._map.getCenter().lng, this._map.getCenter().lat];
+                this.defaultCoordinates = this.coordinates.slice();
             }
             this.image = this.defaultImage;
             this._line = this._parent.draw(this.id, 'mark', {
                 coordinates: this.defaultCoordinates,
                 height: 30,
                 image: this.image,
-                ondraw: (coord) => {
-                    this._inpLng.val(coord[0].toFixed(8));
-                    this._inpLat.val(coord[1].toFixed(8));
-                }
             });
+            this._inpLng.val(this.defaultCoordinates[0].toFixed(8));
+            this._inpLat.val(this.defaultCoordinates[1].toFixed(8));
+            this._line.ondraw = (coord) => {
+                this.coordinates = coord;
+                this._inpLng.val(coord[0].toFixed(8));
+                this._inpLat.val(coord[1].toFixed(8));
+                this.onchange({
+                    coordinates: this.coordinates,
+                    image: this.image,
+                    size: this._line.getSize()
+                });
+            };
             this._line.play();
             this.onplay();
         }
@@ -1119,6 +1149,9 @@ var MapBox = (($, turf) => {
                     this._marker.remove();
                 }
             }
+        }
+        getLngLat() {
+            return this._marker.getLngLat();
         }
         setLngLat(lngLat) {
             this._marker.setLngLat(lngLat);
@@ -4415,6 +4448,7 @@ var MapBox = (($, turf) => {
         }
     }
     class Map {
+        //controls:string[] = ["rule"];
         constructor(info) {
             this.id = null;
             this.name = null;
@@ -4431,8 +4465,7 @@ var MapBox = (($, turf) => {
             this.markImages = [];
             this.iconImages = null;
             this.markDefaultImage = null;
-            //controls:string[] = ["trace", "rule", "poly", "mark", "layer"];
-            this.controls = ["rule"];
+            this.controls = ["trace", "rule", "poly", "mark", "layer"];
             for (let x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -4562,7 +4595,8 @@ var MapBox = (($, turf) => {
                 this._container.parentNode.removeChild(this._container);
                 this._map = undefined;
             };
-            this.controls = ["rule"];
+            //this.controls = ["rule"];
+            //this.controls = ["trace", "rule", "poly", "mark", "layer"];
             this.controls.forEach((e) => {
                 switch (e) {
                     case "trace":
@@ -4578,7 +4612,7 @@ var MapBox = (($, turf) => {
                         map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
                         break;
                     case "layer":
-                        map.addControl(this._controls["layer"] = new LayerControl(), 'top-right');
+                        //map.addControl(this._controls["layer"] = new LayerControl(), 'top-right');
                         break;
                 }
             });

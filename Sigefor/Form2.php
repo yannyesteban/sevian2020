@@ -277,7 +277,7 @@ class Form2
 			'data'		=> [(object)\Sevian\S::getVReq()]
 		]);
 		
-		//print_r($formSave->getResult());
+		hx($formSave->getResult());
 
 		foreach($formSave->getResult() as $k => $v){
 			

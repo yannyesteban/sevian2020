@@ -180,6 +180,30 @@ class SaveForm {
         return $this->result;
     }
 
+    public function sendOne($record, $masterData = []){
+       
+      
+        $this->begin();
+
+        $this->error = false;
+        $this->errno = 0;
+       
+        if($this->dataKeys){
+            $this->setDataKeys($this->dataKeys);
+        }
+
+        if($this->dataKeysId && $this->dataKeys??false){
+            $this->setDictRecords($this->dataKeys[$this->dataKeysId]);
+        }
+
+        
+        $this->result[] = $this->saveRecord($record, $masterData);
+        
+        
+        $this->end($this->error);
+        
+        return $this->result;
+    }
 
 	private function saveRecord($data, $masterData){
 

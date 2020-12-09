@@ -1,0 +1,17 @@
+1. Hay manera de encendet el icono cuando subrespectiva ventana esta abierta?
+2. La busqueda de vehiculos tiene que ser en la ventana unidades
+3. Veo l-v06 pero sale otro propietario
+4. Donde veo los comandos que fueron enviados pero quedaron como pendientes
+5. tiene razón deveria decir crear comando nuevo
+[5:36 p. m., 3/12/2020] Tony: Cuando uno modificaba o creaba un comando y salvaba se ponia en amarillo. Cuando lo enviaba se ponia en rojo
+[5:36 p. m., 3/12/2020] Tony: Cuando el equipo lo recibia ae ponía en verde
+Asi que cuando abrimos la ventana de los comandos podriamos ver facilmente cual todavia no recivio el comando o cual fue creado o modificado pero no fue enviado
+
+[6:23 p. m., 3/12/2020] Tony: En ventana de inmediato
+[6:23 p. m., 3/12/2020] Tony: Falta ver cuando se desconecta la unidad
+[6:23 p. m., 3/12/2020] Tony: Cuando envia sync
+[6:24 p. m., 3/12/2020] Tony: Como el xt
+[6:24 p. m., 3/12/2020] Tony: En xt hay como un led que muestra si esta unidad seleccionada esta conectada o no
+[6:25 p. m., 3/12/2020] Tony: Al darle doble click al led desconecta esta unidad
+los sync no los muestros
+es mucha informacion no cree, se borran las anteriores

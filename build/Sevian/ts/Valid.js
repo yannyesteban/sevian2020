@@ -2,7 +2,7 @@
 if (!Sevian) {
     var Sevian = {};
 }
-var Valid = false;
+//var Valid = false;
 (function (namespace, $) {
     let trim = function (value) {
         let re = /^\s+/i;
@@ -70,7 +70,7 @@ var Valid = false;
             return msg;
         },
         send: function (rules, value, title, masterData) {
-            let error = false, rule = false, key = false;
+            let error = false, rule = null, key = null;
             for (key in rules) {
                 rule = rules[key];
                 error = false;

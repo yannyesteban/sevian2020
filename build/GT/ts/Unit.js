@@ -129,6 +129,7 @@ var GTUnit = (($) => {
             this.infoId = null;
             this.statusId = null;
             this._win = [];
+            this.showConnectedUnit = false;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -157,7 +158,9 @@ var GTUnit = (($) => {
                 //map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
                 //map.getControl("mark").onsave = ((info)=>{}
             });
-            this.play2();
+            if (this.showConnectedUnit) {
+                this.play2();
+            }
         }
         static getInstance(name) {
             return Unit._instances[name];
@@ -229,7 +232,7 @@ var GTUnit = (($) => {
             this.statusId = "yasta";
             const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
             this._win["status-unit"] = new Float.Window({
-                visible: true,
+                visible: this.showConnectedUnit,
                 caption: "Conected Units",
                 left: 10 + 280 + 20,
                 top: 100,

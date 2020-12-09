@@ -160,6 +160,7 @@ var GTUnit = (($) => {
 		private statusId:string = null;
 		private _win:any[] = [];
 
+		public showConnectedUnit:boolean = false;
 		
 		static _instances:object[] = []; 
 		
@@ -205,8 +206,10 @@ var GTUnit = (($) => {
 				//map.getControl("mark").onsave = ((info)=>{}
 			});
 			
+			if(this.showConnectedUnit){
+				this.play2();
+			}
 			
-			this.play2();
 
 		}
 
@@ -286,7 +289,7 @@ var GTUnit = (($) => {
 			this.statusId = "yasta";
 			const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
 			this._win["status-unit"] = new Float.Window({
-                visible:true,
+                visible:this.showConnectedUnit,
                 caption: "Conected Units",
                 left:10+280+20,
                 top:100,

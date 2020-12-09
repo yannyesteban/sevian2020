@@ -1,4 +1,46 @@
 ,
+		
+		{
+			"id":9,
+			"element":"gt_geofence",
+			"name":"gt-geofence",
+			"method":"load",
+			"eparams":{"formId":"form_geo_9"},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		
+		{
+			"id":"jota",
+			"element":"form",
+			"name":"/form/geofence",
+			"method":"request",
+			"eparams":{"mainId":"form_geo_9"},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":"comm",
+			"element":"gt-communication",
+			"name":"gt-communication",
+			"method":"load",
+			"eparams":{
+				
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		}
+
+,
 		{
 			"caption":"",
 			"imageClass":"icon-marker_001",

@@ -39,9 +39,10 @@ class Site
 	</div>';
 
 	private $infoTemplate = '
-	<div class="units-info">
+	<div class="units-info site-info">
 
-		<div class="site-edit" data-value="{=site_id}">Nombre</div><div>{=name}</div>
+		<div data-value="{=site_id}">Nombre</div>
+		<div>{=name}</div>
 		<div>Categoria</div><div>{=category}</div>
 
 		<div>Longitud</div><div>{=longitude}</div>
@@ -107,11 +108,15 @@ class Site
 				break;
 			case 'update':
 				
-				$this->panelActions[] = [
+				//$this->test();
+				hx('');
+				//hx($this->loadRecord(\sevian\s::getReq('id')));
+				//hx(\sevian\s::getVReq());
+				$this->setJSActions([[
 					'method'  => 'updateSite',
-					'value'=> $this->update(),
+					'value'=> $this->update(\sevian\s::getReq('id')),
 					
-				];
+				]]);
 				
 				
 				break;
@@ -171,10 +176,11 @@ class Site
 		];
 	}
 
-	public function update(){
+	public function update($lastId = 0){
 		return [
-			'dataSite'     => $this->loadSites(),
-			'dataCategory' => $this->loadCategorys()
+			'dataSite'		=> $this->loadSites(),
+			'dataCategory'	=> $this->loadCategorys(),
+			'lastId'		=> $lastId
 			
 		];
 	}
@@ -266,11 +272,15 @@ class Site
 
 		return [
 			"form:/form/site2:save"=>[[
+				"t"=>"addSes",
+				"param"=>["kkk"=>""]
+			],[
 				"t"=>"setMethod",
 				"id"=>$this->id,
 				"element"=>$this->element,
 				"name"=>$this->name,
 				"method"=>"update",
+				"mode"=>"element",
 				"eparams"=>[]
 			]],
 			"form:/form/site:save"=>[[
@@ -279,6 +289,7 @@ class Site
 				"element"=>$this->element,
 				"name"=>$this->name,
 				"method"=>"update",
+				"mode"=>"element",
 				"eparams"=>[]
 			]],
 		];

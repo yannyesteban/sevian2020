@@ -74,6 +74,7 @@ var GTSite = (($) => {
             this.infoId = null;
             this.formId = null;
             this._win = [];
+            this._isplay = false;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -108,7 +109,7 @@ var GTSite = (($) => {
             main.addClass("site-main");
             this.menu = this.createMenu();
             this._win["menu-site"] = new Float.Window({
-                visible: false,
+                visible: true,
                 caption: this.caption,
                 left: 10,
                 top: 100,
@@ -116,19 +117,22 @@ var GTSite = (($) => {
                 height: "250px",
                 mode: "auto",
                 className: ["sevian"],
-                child: this.main.get()
+                child: this.main.get(),
             });
-            const _formDiv = $().create("form").id(this.formId).text("hello");
+            const _formDiv = $().create("form").id(this.formId);
             this._win["form-site"] = new Float.Window({
                 visible: false,
                 caption: this.caption,
-                left: 10 + 280,
+                left: 10 + 280 + 10,
                 top: 100,
                 width: "280px",
                 height: "250px",
                 mode: "auto",
                 className: ["sevian"],
-                child: _formDiv.get()
+                child: _formDiv.get(),
+                onhide: (info) => {
+                    this.stop();
+                },
             });
             //this.createForm(this.form);
             this._info = $().create("div").addClass("win-sites-info");
@@ -160,9 +164,10 @@ var GTSite = (($) => {
         showForm() {
             this._win["form-site"].show();
         }
-        newSite() {
+        newSite(info) {
             //let unitId = this.form.getInput("unit_idx").getValue();
             //let f  = this.form.getFormData();
+            this.editId = null;
             S.send3({
                 "async": 1,
                 //"form":f,
@@ -182,6 +187,8 @@ var GTSite = (($) => {
                     //S.getElement(this.commandPanelId).setContext(this);
                     S.getElement(this.formId).setContext(this);
                     this._form = S.getElement(this.formId);
+                    this.loadForm(info);
+                    this.showForm();
                 }
             });
         }
@@ -241,7 +248,7 @@ var GTSite = (($) => {
                     //S.getElement(this.commandPanelId).setContext(this);
                     S.getElement(this.formId).setContext(this);
                     this._form = S.getElement(this.formId);
-                    this.showForm();
+                    this.play(id);
                 }
             });
         }
@@ -255,9 +262,10 @@ var GTSite = (($) => {
             return this.map;
         }
         setMap(map) {
-            map.getControl("mark").onsave = ((info) => {
-                console.log(info);
+            map.getControl("mark").onchange = (info) => {
                 this.loadForm(info);
+            };
+            map.getControl("mark").onsave = ((info) => {
                 map.getControl("mark").stop();
                 this.onSave(info);
                 this.showForm();
@@ -266,10 +274,43 @@ var GTSite = (($) => {
             this.map = map;
         }
         start() {
+            if (this._isplay) {
+                this.stop();
+            }
+            this._isplay = true;
             this.map.getControl("mark").play();
         }
+        play(id) {
+            this.editId = id;
+            this.showForm();
+            this.showSite(id, false);
+            this.map.getControl("mark").play({
+                defaultImage: this._form.getInput("image").value,
+                defaultCoordinates: [
+                    this._form.getInput("longitude").value * 1,
+                    this._form.getInput("latitude").value * 1
+                ],
+                onstop: () => {
+                    //this.showSite(id, true);
+                    //this.editId = null;
+                }
+            });
+            this._isplay = true;
+        }
+        stop() {
+            if (this.editId) {
+                this.marks[this.editId].setLngLat([this.dataSite[this.editId].longitude, this.dataSite[this.editId].latitude]);
+                this.marks[this.editId].setImage(this.dataSite[this.editId].image);
+                this.showSite(this.editId, true);
+            }
+            this.map.getControl("mark").stop();
+            this._isplay = false;
+        }
         updateSite(info) {
-            console.log(info);
+            this.dataSite[info.lastId] = info.dataSite[info.lastId];
+            this.updateMark(info.lastId);
+            this.map.getControl("mark").stop();
+            this._isplay = false;
         }
         update(info) {
             this.getForm().setValue(info).setMode('update');
@@ -280,7 +321,6 @@ var GTSite = (($) => {
         }
         updateMark(id) {
             if (!this.menu.getByData("category-id", this.dataSite[id].category_id)) {
-                console.log(this.dataCategory);
                 this.menu.add({
                     id: this.dataSite[id].category_id,
                     caption: this.dataCategory.find(e => { return e.id == this.dataSite[id].category_id; }).category,
@@ -298,7 +338,6 @@ var GTSite = (($) => {
             if (this.marks[id]) {
                 let m = this.menu.getByData("category-id", this.dataSite[id].category_id);
                 let item = this.menu.getByValue(id);
-                console.log(item.get());
                 if (!m.getMain().contains(item)) {
                     m.append(item); //getChild().get().appendChild(item.get());
                 }
@@ -320,13 +359,24 @@ var GTSite = (($) => {
                     checkValue: id,
                     checkDs: { "level": "sites", "siteId": id },
                     ds: { "siteId": id },
-                    infoElement: $.create("span").addClass("site-edit").on("click", () => { this.edit(this.dataSite[id].id); }),
+                    infoElement: $.create("span").addClass("site-edit").on("click", () => {
+                        this.showSite(id, true);
+                        this._lastUnitId = id;
+                        this.setInfo(id);
+                        this.flyTo(id);
+                        this.edit(this.dataSite[id].id);
+                    }),
                     check: (item, event) => {
                         this.showSite(id, event.currentTarget.checked);
                     },
                     action: (item, event) => {
                         let ch = item.getCheck();
                         ch.get().checked = true;
+                        if ($(event.target).hasClass("site-edit")) {
+                            return;
+                        }
+                        //let ch = item.getCheck();
+                        //ch.get().checked = true;
                         this.showSite(id, true);
                         this._lastUnitId = id;
                         this.setInfo(id);
@@ -338,6 +388,7 @@ var GTSite = (($) => {
             this.showSite(id, true);
         }
         requestFun(xhr) {
+            alert(8888);
             let json = JSON.parse(xhr.responseText);
             this.createForm(json);
             let id = this.editId;
@@ -350,8 +401,6 @@ var GTSite = (($) => {
                     this.editId = null;
                 }
             });
-        }
-        play() {
         }
         createMenu() {
             let category = {};
@@ -393,13 +442,24 @@ var GTSite = (($) => {
                     checkValue: x,
                     checkDs: { "level": "sites", "siteId": x },
                     ds: { "siteId": x },
-                    infoElement: $.create("span").addClass("site-edit").on("click", () => { this.edit(this.dataSite[x].id); }),
+                    infoElement: $.create("span").addClass("site-edit").on("click", (event) => {
+                        this.showSite(x, true);
+                        this._lastUnitId = x;
+                        this.setInfo(x);
+                        this.flyTo(x);
+                        this.edit(this.dataSite[x].id);
+                    }),
                     check: (item, event) => {
                         this.showSite(x, event.currentTarget.checked);
                     },
-                    action: (item, event) => {
+                    action: (item, dataUser, event) => {
                         let ch = item.getCheck();
                         ch.get().checked = true;
+                        if ($(event.target).hasClass("site-edit")) {
+                            return;
+                        }
+                        //let ch = item.getCheck();
+                        //ch.get().checked = true;
                         this.showSite(x, true);
                         this._lastUnitId = x;
                         this.setInfo(x);
@@ -422,7 +482,7 @@ var GTSite = (($) => {
         }
         loadForm(info) {
             if (this.editId === null) {
-                this._form.reset();
+                //this._form.reset();
             }
             else {
                 this.marks[this.editId].setLngLat(info.coordinates);
@@ -435,7 +495,8 @@ var GTSite = (($) => {
             });
         }
         new(info) {
-            console.log(info);
+            this.editId = null;
+            alert(8);
             this._form.setValue({
                 icon_id: info.image,
                 longitude: info.coordinates[0],
@@ -447,15 +508,6 @@ var GTSite = (($) => {
         }
         showSite(id, value) {
             if (!this.marks[id]) {
-                /*
-                this.marks[id] = this.getMap().createMark({
-                    lat:this.dataSite[id].latitude,
-                    lng:this.dataSite[id].longitude,
-                    heading:0,//this.tracking[id].heading,
-                    image:this.pathImages+this.dataSite[id].icon+".png",
-                    popupInfo: this.loadPopupInfo(id)
-                });
-                */
                 this.marks[id] = this.getMap().draw("site-" + id, 'mark', {
                     coordinates: [this.dataSite[id].longitude, this.dataSite[id].latitude],
                     height: 30,
@@ -464,7 +516,6 @@ var GTSite = (($) => {
                 });
             }
             else {
-                db(id, "white", "blue");
                 this.marks[id].setVisible(value);
             }
         }
@@ -487,9 +538,15 @@ var GTSite = (($) => {
             }
         }
         edit(id) {
-            this.editId = id;
+            //this.editId = id;
+            if (this._isplay) {
+                if (this.editId == id) {
+                    return;
+                }
+                this.stop();
+            }
             this.loadSite3(id);
-            this.start();
+            //this.start();
             return;
             S.send({
                 "async": true,
@@ -514,7 +571,7 @@ var GTSite = (($) => {
         }
         evalHTML(html, data) {
             function auxf(str, p, p2, offset, s) {
-                return data[p2];
+                return data[p2] || "";
             }
             for (let x in data) {
                 let regex = new RegExp('\(\{=(' + x + ')\})', 'gi');

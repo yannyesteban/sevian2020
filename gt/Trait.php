@@ -391,6 +391,38 @@ trait DBTracking{
 
 trait DBSite{
     private $cn = null;
+    private function test(){
+
+        $cn = $this->cn;
+
+       
+        $cn->query = "SELECT *
+            FROM geofences WHERE type='polygon'";
+
+        $result = $cn->execute();
+
+        while($rs = $cn->getDataAssoc($result)){
+            //lat lng
+            $coord = $rs['coords'];
+            $id = $rs['id'];
+            $points = explode(',', $rs['coords']);
+
+            $points[] = $points[0];
+            $coord .= ','.$points[0];
+            hr($coord);
+
+
+            $cn->query = "UPDATE geofences SET coords='$coord'  WHERE id='$id' and type='polygon'";
+            $cn->execute();
+
+        
+        }
+
+
+        return [];
+    }
+
+
     private function loadSites(){
 
         $cn = $this->cn;
@@ -474,7 +506,7 @@ trait DBSite{
             FROM mark_category as c
             #INNER JOIN mark as m as c ON c.id = m.category_id
 
-            #WHERE m.user = 'panda'
+            WHERE c.user = 'panda'
             GROUP BY c.id ORDER BY 2";
 
         $result = $cn->execute();

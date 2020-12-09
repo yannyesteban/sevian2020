@@ -1081,6 +1081,7 @@ var MapBox = (($, turf) => {
         _inpLat:any = null; 
 
         length:number = 0;
+        coordinates:number[] = [];
         images:string[] = [];
         image:string = null;
         defaultImage:string = null;
@@ -1089,6 +1090,7 @@ var MapBox = (($, turf) => {
         onplay:Function = (coords, propertys)=>{};
         onsave:Function = (coords, propertys)=>{};
         onstop:Function = (coords, propertys)=>{};
+        onchange:Function = (coords, propertys)=>{};
 
         constructor(object){
             this._parent = object;
@@ -1125,6 +1127,12 @@ var MapBox = (($, turf) => {
                 images.on("click", ()=>{
                     this.image = x;
                     this._line.setImage(x);
+
+                    this.onchange({
+                        coordinates:this.coordinates,
+                        image:this.image,
+                        size:this._line.getSize()
+                    });
                 });
             }
            
@@ -1139,8 +1147,15 @@ var MapBox = (($, turf) => {
             
             this._btnRule = this._group1.create("button").prop({"type": "button", "title":"Inicia la herramienta de Marcas / Sitios"}).addClass("icon-marker");
             this._btnRule.on("click", ()=>{
-                this.onnew();
+
+                
                 this.play();
+
+                this.onnew({
+                    coordinates:this.coordinates,
+                    image:this.image,
+                    size:this._line.getSize()
+                });
             });
 
             this._group2 = this._container.create("div").style("display","none");
@@ -1155,6 +1170,11 @@ var MapBox = (($, turf) => {
             .on("click", ()=>{
                 let size = this._line.getSize();
                 this._line.setSize(null, size[1]*1.2);
+                this.onchange({
+                    coordinates:this.coordinates,
+                    image:this.image,
+                    size:this._line.getSize()
+                });
                 //this._line.setMax(1);
             });
             this._group2.create("button").prop({"type": "button", "title":"Disminuir [-] Tamaño"}).addClass("icon-min")
@@ -1162,6 +1182,12 @@ var MapBox = (($, turf) => {
                 
                 let size = this._line.getSize();
                 this._line.setSize(null, size[1]*0.8);
+                this.onchange({
+                    coordinates:this.coordinates,
+                    image:this.image,
+                    size:this._line.getSize()
+                });
+                
             });
             this._group2.create("button").prop({"type": "button", "title":"Guardar"}).addClass(["icon-save"])
             .on("click", ()=>{
@@ -1203,21 +1229,31 @@ var MapBox = (($, turf) => {
                 this.defaultCoordinates = info.defaultCoordinates;
                 this.onstop = info.onstop;
             }else{
-                this.defaultCoordinates = [this._map.getCenter().lng,this._map.getCenter().lat];
+                this.coordinates = [this._map.getCenter().lng,this._map.getCenter().lat];
+                this.defaultCoordinates = this.coordinates.slice();
             }
-
+            
             this.image = this.defaultImage;
             this._line = this._parent.draw(this.id, 'mark',
             {
                 coordinates:this.defaultCoordinates,
                 height: 30,
                 image: this.image,
-                ondraw:(coord)=>{
-                    this._inpLng.val(coord[0].toFixed(8));
-                    this._inpLat.val(coord[1].toFixed(8));
-                    
-                }
+                
             });
+            this._inpLng.val(this.defaultCoordinates[0].toFixed(8));
+            this._inpLat.val(this.defaultCoordinates[1].toFixed(8));
+            this._line.ondraw = (coord)=>{
+                this.coordinates = coord;
+                this._inpLng.val(coord[0].toFixed(8));
+                this._inpLat.val(coord[1].toFixed(8));
+                this.onchange({
+                    coordinates:this.coordinates,
+                    image:this.image,
+                    size:this._line.getSize()
+                });
+                
+            };
 
 
            
@@ -1401,7 +1437,9 @@ var MapBox = (($, turf) => {
             }
         }
        
-
+        getLngLat(){
+            return this._marker.getLngLat();
+        }
         setLngLat(lngLat){
             this._marker.setLngLat(lngLat);
         }
@@ -5602,8 +5640,8 @@ var MapBox = (($, turf) => {
         iconImages:any[] = null;
         markDefaultImage:string = null;
 
-        //controls:string[] = ["trace", "rule", "poly", "mark", "layer"];
-        controls:string[] = ["rule"];
+        controls:string[] = ["trace", "rule", "poly", "mark", "layer"];
+        //controls:string[] = ["rule"];
 
         constructor(info:object){
             for(let x in info){
@@ -5767,8 +5805,8 @@ var MapBox = (($, turf) => {
                 this._container.parentNode.removeChild(this._container);
                 this._map = undefined;
             };
-            this.controls = ["rule"];
-            
+            //this.controls = ["rule"];
+            //this.controls = ["trace", "rule", "poly", "mark", "layer"];
             this.controls.forEach((e)=>{
                 switch(e){
                     case "trace":
@@ -5784,7 +5822,7 @@ var MapBox = (($, turf) => {
                         map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
                         break;
                     case "layer":
-                        map.addControl(this._controls["layer"] = new LayerControl(), 'top-right');
+                        //map.addControl(this._controls["layer"] = new LayerControl(), 'top-right');
                         break;
                 }
 

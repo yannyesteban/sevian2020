@@ -407,14 +407,22 @@ var Form2 = (($) => {
             let inputs = this._inputs;
             let msg = null;
             for (let x in this.fields) {
-                config = this.fields[x].config;
-                rules = config.rules;
+                //config = this.fields[x].config;
+                //rules = config.rules;
+                rules = this.fields[x].rules;
                 if (rules) {
-                    msg = Sevian.Valid.send(rules, inputs[config.name].getValue(), config.caption, data);
-                    if (msg) {
+                    /*msg = Sevian.Valid.send(rules, inputs[config.name].getValue(), config.caption, data);
+                    if(msg){
                         alert(msg);
                         inputs[config.name].focus();
                         inputs[config.name].select();
+                        return false;
+                    }*/
+                    msg = Sevian.Valid.send(rules, inputs[this.fields[x].name].getValue(), this.fields[x].caption, data);
+                    if (msg) {
+                        alert(msg);
+                        inputs[this.fields[x].name].focus();
+                        inputs[this.fields[x].name].select();
                         return false;
                     }
                 }

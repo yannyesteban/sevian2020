@@ -1,9 +1,9 @@
 {
 	"form":"site2",
-	"caption":"Sitios II",
+	"caption":"Mis Sitios",
 	"className":"webcar",
-	"query":"SELECT * FROM mark",
-	"menuName":"/menu/site_menu",
+	"query":"SELECT id, category_id, client_id, account_id, user, name, description,  longitude, latitude, icon_id, image, scale, address, phone1, phone2, phone3, fax, email, web, observations, scope, stamp FROM mark",
+	"menuName":"/menu/site_menu2",
 	"methods":{
 		"request":{
 			"menuName":"/menu/site_menu2"
@@ -13,18 +13,18 @@
 		}
 	},
 	"params":"",
-	
+	"recordFrom":{"id":"#id"},
 	"pages":[],
 	"groups":{},
 	"infoFields":[
 		{"name":"id","caption":"Código", "input": "hidden", "type": "hidden"},
 		{"name":"client_id","caption":"Cliente", "input": "hidden", "type": "hidden"},
 		{"name":"account_id","caption":"Cuenta", "input": "hidden", "type": "hidden"},
-		{"name":"user","caption":"Usuario", "input": "input", "type": "text", "default":"panda","mode_value":1},
-		{"name":"name","caption":"Nombre", "input": "input", "type": "text", "default":"panda","mode_value":1},
+		{"name":"user","caption":"Usuario", "input": "hidden", "type": "hidden", "default":"panda","mode_value":1},
+		{"name":"name","caption":"Nombre", "input": "input", "type": "text", "default":"","mode_value":1, "rules":{"required":true}},
 		{"name":"description","caption":"Descripción"},
-		{"name":"longitude","caption":"Longitud"},
-		{"name":"latitude","caption":"Latitud"},
+		{"name":"longitude","caption":"Longitud","rules":{"required":true}},
+		{"name":"latitude","caption":"Latitud","rules":{"required":true}},
 
 		{"name":"icon_id","caption":"Imagen", "input": "hidden", "type": "hidden"},
 		{"name":"image","caption":"Imagen", "input": "hidden", "type": "hidden"},
@@ -45,15 +45,15 @@
 		{"name":"category_id","caption":"Categoría", "input": "input", "type": "select",
 			"data":[
 				[0, "seleccione", "*"],
-				"SELECT id, name FROM mark_category ORDER BY name"
+				"SELECT id, name FROM mark_category WHERE user = 'panda' ORDER BY name"
 				
-			  ], "default":61, "mode_value":1},
+			  ], "default":61, "mode_value":1,"rules":{"required":true}},
 		{"name":"scope","caption":"Nivel", "input": "input", "type": "select",
-			"default":1,
+			"default":1,"rules":{"required":true},
 		"data":[
 			["", "seleccione"],[1, "Usuario"],[1, "Cuenta"],[1, "Cliente"]
-		]}
-		
+		]},
+		{"name":"stamp","caption":"Stamp", "input": "hidden", "type": "hidden"}
 
 	],
 	

@@ -318,6 +318,8 @@ class S{
 
 	public static function setElement($info, $update = false){
 		
+
+
 		if($info->id === 0 or $info->id === "0"){
 			$info->id = self::getReq("__sg_panel")?? self::$defaultPanel;
 		}else if($info->id === -1 or $info->id === "-1"){
@@ -452,13 +454,15 @@ class S{
 		$sign = "$info->element:$info->name:$info->method";
 		
 		foreach(self::$_tasks as $_id => $task){
-			//hr($task,"red");
 			//hr($sign,"blue");
+			//hx($task,"red");
+			
 
 			if(isset($task[$sign])){
 				self::sequence($task[$sign]);
 			}
 		}
+		
 		
 		
 	}
@@ -953,10 +957,6 @@ class S{
 
 	public static function jsonDoc(){
 		
-		
-		foreach(self::$_panels as $k => $e){
-			
-		}
 
 
 		//$elems = self::$_str->getElements();
@@ -967,6 +967,7 @@ class S{
 		$js = []; 
 		$up = [];
 		foreach(self::$_e as $k => $v){
+			
 			if($v->getInit()){
 				
 				$js[] = [

@@ -12,4 +12,13 @@ INNER JOIN unit_input ui ON ui.unit_id = u.id
 INNER JOIN alarm_input as ai ON ai.alarm_id = au.alarm_id AND ai.input_id = ui.input_id
 
 
-WHERE u.id = 2417
+WHERE u.id = 2417;
+
+
+SELECT ST_GeomFromText(CONCAT('Polygon((',coords,'))')) FROM geofences WHERE type='polygon'
+
+SELECT ST_Contains(geom, ST_GeomFromText( 'POINT(10.487662077623066 -66.83862090176262)', 4326 )) FROM geofences g WHERE type='polygon';
+SELECT ST_Within(ST_GeomFromText( 'POINT(10.487662077623066 -66.83862090176262)', 4326 ), geom) FROM geofences g WHERE type='polygon';
+
+update geofences set geom = ST_GeomFromText(CONCAT('Polygon((',coords2,'))'), 4326) WHERE type='polygon'
+update geofences set geom = ST_GeomFromText(CONCAT('Polygon((',coords2,'))')) WHERE type='polygon'

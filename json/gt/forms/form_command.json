@@ -30,7 +30,7 @@
 			"name":"b1",
 			"caption":"",
 			"input": "input", "type":"button","default":"+", "mode_value":1,
-			"propertys":{"title":"Enviar Comando al Equipo"},
+			"propertys":{"title":"Crear Nuevo Comando"},
 			"className":["gt-button", ""],
 			
 			"events":{"click":"this.getContext().paramLoad(this.getInput('command_idx').getValue(), true)"}

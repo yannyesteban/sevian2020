@@ -91,13 +91,22 @@
       }
     }
 }
+
+.units-info{
+  //background-color: rgba(0, 0, 0, 0.336);
+  color:white;
+  >:nth-child(2n+1){
+    color:rgb(191, 250, 186);
+  }
+  //font-size: 6px!;
+}
 .units-info{
   
   
    
     padding: 4px;
     //color:rgb(29, 117, 158);
-    font-size: 13px;
+    font-size: 11px;
     //min-width: 240px;
     display: grid;
     height: 100%;

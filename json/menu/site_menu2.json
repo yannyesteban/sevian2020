@@ -9,9 +9,10 @@
 		{
 			"caption":"Aplicar Cambios",
 			"dataUser":{
+				"id":"&P_panelId",
 				"async": true,
 				"form":"&P_panelId",
-				"valid":false,
+				"valid":true,
 				"confirm_": "seguro?",
 				"params":[
 					{
@@ -21,7 +22,22 @@
 						"method":"save",
 						"name":"&P_elementName",
 						"eparams":null,
-						"mode":"request"
+						"mode":"element"
+					},
+					
+					{
+						"t":"setMethod",
+						"id":"&EX_ID_",
+						"element":"&EX_ELEMENT_",
+						"method":"load-from",
+						"name":"&EX_NAME_",
+						"eparams":{
+							
+							
+                            "mainId":"&EX_ID_"
+							
+							
+						}
 					}
 			
 				]}

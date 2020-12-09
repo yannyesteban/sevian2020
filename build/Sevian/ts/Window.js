@@ -653,7 +653,7 @@ Float.Window = (($) => {
         w.setActive(true);
         _last = w;
     };
-    class W {
+    class Window {
         constructor(info) {
             this.id = null;
             this.caption = "";
@@ -675,6 +675,8 @@ Float.Window = (($) => {
             this._active = false;
             this.active = null;
             this._timer = null;
+            this.onshow = (info) => { };
+            this.onhide = (info) => { };
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -830,11 +832,13 @@ Float.Window = (($) => {
                 this._main.removeClass("hidden");
                 this._main.addClass("visible");
                 this.setTimer();
+                this.onshow({});
             }
             else {
                 this._main.removeClass("visible");
                 this._main.addClass("hidden");
                 this.resetTimer();
+                this.onhide({});
             }
         }
         getVisible() {
@@ -894,42 +898,7 @@ Float.Window = (($) => {
             }
         }
     }
-    $(window).on("load_", () => {
-        let div2 = $().create("div").addClass("drag4").on("resize", () => db(888));
-        let div3 = $().create("div").addClass("drag4a");
-        //Float.init(div.get());
-        //Float.show({e:div.get(), left:"center",top:"top"});
-        //Move.init({main:div.get(),hand:div.get()});
-        Float.Float.init(div2.get());
-        let div = $("").create("div").text("hola");
-        let ww = new W({
-            caption: "ventana Alpha",
-            child: div,
-            width: "450px",
-            height: "300px",
-            left: "center",
-            top: "top"
-        });
-        // ww.setCaption("jejejeje")
-        /*ww.setSize("200px","200px");
-        ww.show({
-            top:"middle",
-              left:"center"
-          });
-          */
-        let btn = $("#form_p4").create("input").attr("type", "button").val("show");
-        btn.on("click", () => {
-            //ww.setSize("200px","600px");
-            div2.get().innerHTML += ("hola ");
-            return;
-            ww.show({
-                top: "middle",
-                left: "center"
-            });
-            db(1);
-        });
-    });
-    return W;
+    return Window;
 })(_sgQuery);
 Float.Popup = (($) => {
     class Popup {

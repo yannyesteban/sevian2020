@@ -79,8 +79,15 @@
 }
 
 .units-info {
+  color: white;
+}
+.units-info > :nth-child(2n+1) {
+  color: #bffaba;
+}
+
+.units-info {
   padding: 4px;
-  font-size: 13px;
+  font-size: 11px;
   display: grid;
   height: 100%;
   overflow: auto;

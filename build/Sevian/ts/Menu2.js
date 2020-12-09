@@ -135,11 +135,11 @@ var Menu = (function ($, Float) {
                 link.on("click", (event) => { this.menu.show(item); });
             }
             else if (this.action) {
-                let action = $.bind(this.action, this.context, "item, dataUser");
+                let action = $.bind(this.action, this.context, "item, dataUser, event");
                 link.on("click", (event) => { action(this, this.dataUser || false, event); });
             }
             else if (this.onDataUser) {
-                let action = $.bind(this.onDataUser, this.context, "item, dataUser");
+                let action = $.bind(this.onDataUser, this.context, "item, dataUser, event");
                 link.on("click", (event) => { action(this, this.dataUser || false, event); });
             }
             if (this.events) {

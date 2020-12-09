@@ -24,7 +24,10 @@ class Module3 extends \sevian\element
     use	DBTrait\Module3{
 		DBTrait\Module3::init as public loadModule;
 	}
-    static public $patternJsonFile = '';
+	
+	private $infoPanels = [];
+	
+	static public $patternJsonFile = '';
     
     public function __construct($info = []){
 		
@@ -54,7 +57,8 @@ class Module3 extends \sevian\element
                         $config = \Sevian\S::setSes($k, $v);
                        
                     }
-                }
+				}
+				/*
 				$this->infoPanels[] = new \Sevian\InfoParam([
 					'id'=>0,
 					'element'=>'',
@@ -62,6 +66,7 @@ class Module3 extends \sevian\element
 					'name'=>$this->structure
 					
 				]);
+				*/
 				break;
             break;
 
