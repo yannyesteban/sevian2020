@@ -928,6 +928,7 @@ alert(1)
         
 
         sendCommand(unitId:number, type:string = "RC"){
+           
             let commandId = 0;
 			//let unitId = this.getUnitId();
 
@@ -941,7 +942,7 @@ alert(1)
                 deviceId: 1,
                 deviceName: "",
                 commandId: commandId,
-				unitId: unitId,
+				unitId: unitId*1,
                 comdValues: values,
                 msg : "",
                 name: "",

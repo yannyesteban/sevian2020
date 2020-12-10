@@ -536,6 +536,14 @@ var Grid2 = (($) => {
                     else {
                         cell.append(f.getInput(info.name));
                     }
+                    if (info.events) {
+                        for (let i in info.events) {
+                            let action = $.bind(info.events[i], this.getContext(), "data, event");
+                            cell.on(i, (event) => {
+                                action(data, event);
+                            });
+                        }
+                    }
                 }
             }
             if (cell) {
@@ -669,6 +677,9 @@ var Grid2 = (($) => {
         setRecord(index, params) {
         }
         getRecord(index) {
+            if (!this._mainForm) {
+                return;
+            }
             this._main.addClass("record-edit");
             let rows = this._tbody.queryAll(".body-row.active");
             rows.forEach(row => {

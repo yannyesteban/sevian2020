@@ -20,7 +20,8 @@
 	"infoFields":[
 		{"name":"id","caption":"Código", "input": "hidden", "type": "hidden"},
 		{"name":"device_name","caption":"Equipo" },
-		{"name":"vehicle_name","caption":"Nombre"}
+		{"name":"vehicle_name","caption":"Nombre"},
+		{"name":"status","caption":"Estatus", "events":{"click":"S.getElement('comm').sendCommand( Number.parseInt(data.id, 10))"}}
 
 	],
 	

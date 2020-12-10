@@ -710,6 +710,17 @@ var Grid2 = (($) => {
                         cell.append(f.getInput(info.name));
                     }
                     
+                    if(info.events){
+                        for(let i in info.events){
+                            
+                            let action = $.bind(info.events[i], this.getContext(), "data, event");
+                            cell.on(i, (event)=>{
+                                action(data, event);
+                            });
+
+                            
+                        }
+                    }
                     
                    
                 }
@@ -883,7 +894,9 @@ var Grid2 = (($) => {
             
         }
         getRecord(index:number) {
-
+            if(!this._mainForm){
+                return;
+            }
 
             this._main.addClass("record-edit");
             

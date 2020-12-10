@@ -727,7 +727,7 @@ var GTCommunication = (($) => {
                 deviceId: 1,
                 deviceName: "",
                 commandId: commandId,
-                unitId: unitId,
+                unitId: unitId * 1,
                 comdValues: values,
                 msg: "",
                 name: "",

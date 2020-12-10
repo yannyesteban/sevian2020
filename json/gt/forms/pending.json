@@ -1,6 +1,6 @@
 {
 	"name":"pending",
-	"caption":"Comandos Pendientes @unit_idx",
+	"caption":"Comandos Pendientes",
 	"className":"webcar",
 	"query":"SELECT pending.id,pending.unit_id, c.command as name, pending.command, CASE pending.type WHEN 1 THEN 'SET' ELSE 'GET' END as type, pending.datetime, (TIMEDIFF(now(), datetime)) as delay FROM pending INNER JOIN devices_commands as c ON c.id = pending.command_id WHERE pending.unit_id='@unit_idx'",
 	"menuName":"/menu/pending",
@@ -18,15 +18,13 @@
 	"pages":[],
 	"groups":{},
 	"infoFields":[
-		{"name":"ddd", "caption":"xxxxxddd","sqlValue":"123456"},
-		{"name":"id_","caption":"Código", "input": "hidden", "type":"hidden"},
-		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
-		"data":[
-			[0, "seleccione", "*"],
-			"select id, brand from brands ORDER BY brand"
-			
-		  ]},
-		{"name":"model","caption":"Modelo"}
+		{"name":"unit_id", "caption":"Unit Id", "input": "hidden", "type":"hidden"},
+		{"name":"id","caption":"Código", "input": "hidden", "type":"hidden"},
+		{"name":"name","caption":"Nombre", "input": "input", "type": "text"},
+		{"name":"command","caption":"Comando", "input": "input", "type": "text"},
+		{"name":"delay","caption":"Retraso", "input": "input", "type": "text"},
+		{"name":"datetime","caption":"Fecha", "input": "input", "type": "text"},
+		{"name":"type","caption":"Tipo"}
 
 	],
 	
