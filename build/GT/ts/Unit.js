@@ -581,6 +581,11 @@ var GTUnit = (($) => {
                 }
             });
         }
+        findUnit(unitId) {
+            this.showUnit(unitId, true);
+            this.setInfo(unitId);
+            this.flyTo(unitId);
+        }
     }
     Unit._instances = [];
     return Unit;

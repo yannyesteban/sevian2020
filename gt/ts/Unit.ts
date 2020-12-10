@@ -746,6 +746,13 @@ var GTUnit = (($) => {
                 }
 			});
 		}
+
+
+		findUnit(unitId:number){
+			this.showUnit(unitId, true);
+			this.setInfo(unitId);
+			this.flyTo(unitId);
+		}
 	}
 	
 

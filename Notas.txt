@@ -1,4 +1,5 @@
 1. Hay manera de encendet el icono cuando subrespectiva ventana esta abierta?
+
 2. La busqueda de vehiculos tiene que ser en la ventana unidades
 3. Veo l-v06 pero sale otro propietario
 4. Donde veo los comandos que fueron enviados pero quedaron como pendientes

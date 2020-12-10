@@ -23,10 +23,10 @@
         },
 		{
 			"name":"go",
-			"default":"x", 
+			"default":"»", 
 			"input":"input","type":"button",
 			"events":{
-				"click":"console.log(this);"
+				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"
 			}
 		}
 
