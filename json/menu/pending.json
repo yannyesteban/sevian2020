@@ -1,0 +1,69 @@
+{
+	"name":"pending",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"items":[
+		{
+			"caption":"Actualizar",
+			"dataUser":{
+				"async": true,
+				"panel":"&P_panelId",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":{
+							
+							
+                            "mainId":"&EX_ID_"
+							
+							
+						}
+					}
+			
+				]}
+		},
+		{
+			"caption":"Eliminar",
+			"dataUser":{
+				"async": true,
+				"id":"&P_panelId",
+				"form":"&P_panelId",
+				"valid":false,
+				"confirm": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"form",
+						"method":"delete",
+						"name":"&P_elementName",
+						"eparams":{
+							
+							
+                            "mainId":"&EX_ID_"
+							
+							
+						}
+					},
+					{
+						"t":"setMethod",
+						"id":"&P_panelId",
+						"element":"form",
+						"method":"list",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+			
+				]}
+		}
+	]
+}	

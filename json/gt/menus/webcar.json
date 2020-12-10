@@ -46,7 +46,7 @@
 			"propertys":{
 				"title":"Ver conexiones de las Unidades"
 			},
-			"action":"S.getElement('gt-unit-10').showConnected()"
+			"action":"S.getElement('comm').showConnected()"
 		},
 		{
 			"caption":"",

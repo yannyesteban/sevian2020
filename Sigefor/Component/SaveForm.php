@@ -249,7 +249,7 @@ class SaveForm {
                 }else{
                     
                     foreach($record as $k => $v){
-                        hr($k);exit;
+                        //hr($k);exit;
                         if(isset($this->fields[$k]) and $this->fields[$k]->table == $table){
                             $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($this->fields[$k]->field)."='".$cn->addSlashes($v)."'";    
                         }
@@ -268,7 +268,7 @@ class SaveForm {
                     continue;
                 }
               
-                if(($field->serial) and $field->notNull and $data->$name == '' and $mode == 1){
+                if(($field->serial) and $field->notNull and $data->$name??false and $data->$name == '' and $mode == 1){
 					$serial = $field->field;
                     continue;
                 }
@@ -363,8 +363,8 @@ class SaveForm {
                     $this->error = true;
                     $this->errno = $q_errno = $cn->errno;
                     $q_error = $cn->error;
-                    hr("ERROR ".$q, "RED");	
-                    hr($q_error, "green");	
+                    //hr("ERROR ".$q, "RED");	
+                    //hr($q_error, "green");	
                 }
                 
                 if($serial){

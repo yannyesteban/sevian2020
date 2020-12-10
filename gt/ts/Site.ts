@@ -145,7 +145,7 @@ var GTSite = (($) => {
 			this.menu = this.createMenu();
 
 			this._win["menu-site"] = new Float.Window({
-                visible:true,
+                visible:false,
                 caption: this.caption,
                 left:10,
                 top:100,

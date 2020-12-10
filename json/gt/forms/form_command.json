@@ -2,7 +2,7 @@
 	"name":"form_command",
 	"caption":"",
 	"className":"gt-command-main",
-	"query":"SELECT '' as command_idx, '' as b1, '' as b2, '' as b3, '' as b4",
+	"query":"SELECT '' as command_idx, '' as b1, '' as b2, '' as b3, '' as b4, '' as p",
 	"menuName_":"grid_menu",
 	"methods":{
 		"request":{
@@ -60,6 +60,14 @@
 			"propertys":{"title":"Ver Todos los Comandos Guardados"},
 			"className":["gt-button", ""],
 			"events":{"click":"this.getContext().loadHistory()"}
+		},
+		{
+			"name":"p",
+			"caption":"",
+			"input": "input", "type":"button","default":"P", "mode_value":1,
+			"propertys":{"title":"Ver Todos los Comandos Pendientes por enviar"},
+			"className":["gt-button", ""],
+			"events":{"click":"this.getContext().loadPending()"}
 		}
 
 	],

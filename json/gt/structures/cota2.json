@@ -50,6 +50,30 @@
 
 		},
 		{
+			"id":3,
+			"element":"form",
+			"name":"/gt/forms/main_unit",
+			"method":"request",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":5,
+			"element":"s-menu",
+			"name":"/menu/tool",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
 			"id":"gt-info-11",
 			"element":"gt-info",
 			"name":"gt-info",

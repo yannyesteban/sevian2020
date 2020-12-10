@@ -131,6 +131,10 @@ var GTCommunication = (($) => {
             this._grid = null;
             this.callOnMessage = (messaje) => { };
             this._win = [];
+            this.showConnectedUnit = true;
+            this._timer2 = null;
+            this.delay2 = 12000;
+            this.statusId = null;
             this.socketServer = {
                 host: "127.0.0.1",
                 port: 3310
@@ -151,24 +155,30 @@ var GTCommunication = (($) => {
                 main = $.create("div").attr("id", this.id);
             }
             this._create(main);
-            this._ws = new Socket({
-                user: this.user,
-                url: this.socketServer.host,
-                port: this.socketServer.port,
-                onmessage: (event) => {
-                    const server_message = event.data;
-                    console.log(server_message);
-                    try {
-                        let json = JSON.parse(server_message);
-                        //console.log(json);
-                        //alert(json.message)
-                        db(json.message);
-                        this.callOnMessage(json);
-                        this._grid.createRow(json);
+            $(window).on("load", () => {
+                // newMenus();
+                this._ws = new Socket({
+                    user: this.user,
+                    url: this.socketServer.host,
+                    port: this.socketServer.port,
+                    onmessage: (event) => {
+                        const server_message = event.data;
+                        //console.log(server_message)
+                        try {
+                            let json = JSON.parse(server_message);
+                            //console.log(json);
+                            //alert(json.message)
+                            //db (json.message);
+                            this.callOnMessage(json);
+                            this._grid.createRow(json);
+                        }
+                        catch (e) {
+                            //alert(e)
+                        }
                     }
-                    catch (e) {
-                        //alert(e)
-                    }
+                });
+                if (this.showConnectedUnit) {
+                    this.play2();
                 }
             });
         }
@@ -192,7 +202,7 @@ var GTCommunication = (($) => {
             this.mainPanel = main.create("div").addClass("mainPanel");
             this._aux = main.create("div").addClass("command-panel").id("aux3");
             this._commandPanel = main.create("div").addClass("command-panel").id(this.commandPanelId);
-            this._bodyPanel = main.create("div").addClass("body-panel").id(this.bodyPanelId);
+            this._bodyPanel = main.create("form").addClass("body-panel").id(this.bodyPanelId);
             this._formCommand = main.create("div").addClass("formCommand").id(this.formCommandId);
             this.historyPanel = main.create("div").addClass("historyPanel").id("his");
             //this.paramCommandId = "xxx1";
@@ -219,6 +229,19 @@ var GTCommunication = (($) => {
             if (this.unitId) {
                 this.loadUnit(this.unitId);
             }
+            this.statusId = "yasta2";
+            const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
+            this._win["status-unit"] = new Float.Window({
+                visible: this.showConnectedUnit,
+                caption: "Conected Units",
+                left: 10 + 280 + 20,
+                top: 100,
+                width: "380px",
+                height: "300px",
+                mode: "auto",
+                className: ["sevian"],
+                child: _statusUnit.get()
+            });
         }
         show() {
             this._win["main"].show();
@@ -264,6 +287,35 @@ var GTCommunication = (($) => {
                     }
                 ]
             });
+        }
+        showConnected() {
+            this._win["status-unit"].show();
+        }
+        showStatusWin() {
+            S.send3({
+                "async": 1,
+                "params": [
+                    {
+                        "t": "setMethod",
+                        'mode': 'element',
+                        "id": this.statusId,
+                        "element": "form",
+                        "method": "list",
+                        "name": "/form/status_unit",
+                        "eparams": { "mainId": this.statusId }
+                    }
+                ],
+                onRequest: (x) => {
+                }
+            });
+        }
+        play2() {
+            if (this._timer2) {
+                clearTimeout(this._timer2);
+            }
+            this._timer2 = setInterval(() => {
+                this.showStatusWin();
+            }, this.delay2);
         }
         test2() {
             let f = this.form.getFormData();
@@ -362,7 +414,8 @@ var GTCommunication = (($) => {
                         "id": this.bodyPanelId,
                         "element": "form",
                         "method": "list",
-                        "name": "/gt/forms/h_commands",
+                        //"name":"/gt/forms/h_commands",
+                        "name": "/gt/forms/pending",
                         "eparams": {
                             "a": 'yanny',
                             "mainId": this.bodyPanelId,
@@ -452,6 +505,7 @@ var GTCommunication = (($) => {
             this.s('GET');
         }
         getConfigParam(commandId) {
+            alert(1);
             let unitId = this.form.getInput("unit_idx").getValue();
             let f = this.form.getFormData();
             S.send3({
@@ -496,6 +550,35 @@ var GTCommunication = (($) => {
                         "element": "form",
                         "method": "list",
                         "name": "/gt/forms/h_commands",
+                        "eparams": {
+                            "a": 'yanny',
+                            "mainId": this.bodyPanelId,
+                            "unitId": 5555555,
+                        }
+                    }
+                ],
+                onRequest: (x) => {
+                    //S.getElement(this.commandPanelId).setContext(this);
+                    S.getElement(this.bodyPanelId).setContext(this);
+                    // alert(x)
+                }
+            });
+        }
+        loadPending() {
+            let unitId = this.form.getInput("unit_idx").getValue();
+            let f = this.form.getFormData();
+            S.send3({
+                "async": 1,
+                "form": f,
+                //id:4,
+                "params": [
+                    {
+                        "t": "setMethod",
+                        'mode': 'element',
+                        "id": this.bodyPanelId,
+                        "element": "form",
+                        "method": "list",
+                        "name": "/gt/forms/pending",
                         "eparams": {
                             "a": 'yanny',
                             "mainId": this.bodyPanelId,
@@ -634,6 +717,26 @@ var GTCommunication = (($) => {
                 useTag: 0
             });
             this._ws.send(str1);
+        }
+        sendCommand(unitId, type = "RC") {
+            let commandId = 0;
+            //let unitId = this.getUnitId();
+            let values = [];
+            let str = JSON.stringify({
+                type: type,
+                deviceId: 1,
+                deviceName: "",
+                commandId: commandId,
+                unitId: unitId,
+                comdValues: values,
+                msg: "",
+                name: "",
+                level: 1,
+                user: this.user,
+                mode: 1,
+                useTag: 0
+            });
+            this._ws.send(str);
         }
     }
     return Communication;

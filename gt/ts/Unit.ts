@@ -142,7 +142,7 @@ var GTUnit = (($) => {
 		
 		public oninfo:Function = (info, name)=>{};
 		public delay:number = 10000;
-		public delay2:number = 12000;
+		
 		private main:any = null; 
 		private marks:any[] = [];
 
@@ -150,7 +150,9 @@ var GTUnit = (($) => {
 		private _winInfo:any = null;
 		
 		private _timer:any = null;
+
 		private _timer2:any = null;
+		public delay2:number = 12000;
 		
 		private _lastUnitId = null;
 

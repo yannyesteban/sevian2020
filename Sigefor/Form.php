@@ -59,7 +59,12 @@ class Form extends \sevian\element {
 				
 				$this->save([(object)\Sevian\S::getVReq()]);
 				
-			break;
+				break;
+			case 'delete':
+				\Sevian\S::setReq('__mode_', 3);
+				$this->save([(object)\Sevian\S::getVReq()]);
+				
+				break;	
             case 'get_data':
                 $this->createGrid($this->eparams->page, $this->eparams->q ?? '');
 				break;

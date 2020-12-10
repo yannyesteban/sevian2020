@@ -117,13 +117,13 @@ var GTUnit = (($) => {
 		</div>`;
             this.oninfo = (info, name) => { };
             this.delay = 10000;
-            this.delay2 = 12000;
             this.main = null;
             this.marks = [];
             this._info = null;
             this._winInfo = null;
             this._timer = null;
             this._timer2 = null;
+            this.delay2 = 12000;
             this._lastUnitId = null;
             this._traces = [];
             this.infoId = null;
