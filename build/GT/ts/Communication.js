@@ -9,7 +9,6 @@ var GTCommunication = (($) => {
             this.key = "";
             this.error = null;
             this.onmessage = (event) => {
-                alert(1.001);
                 var server_message = event.data;
                 db(server_message);
                 try {
@@ -505,7 +504,6 @@ var GTCommunication = (($) => {
             this.s('GET');
         }
         getConfigParam(commandId) {
-            alert(1);
             let unitId = this.form.getInput("unit_idx").getValue();
             let f = this.form.getFormData();
             S.send3({

@@ -1,8 +1,8 @@
 {
 	"name":"h_commands",
-	"caption":"Historial Comandos @unit_idx",
+	"caption":"Comandos Preconfigurados",
 	"className":"webcar",
-	"query":"SELECT 8 as ddd, id, /*device_id,*/ unit_id, command_id, description, status, pending, '' as d, '' as get_info  FROM h_commands WHERE unit_id='@unit_idx'",
+	"query":"SELECT id, /*device_id,*/ unit_id, command_id, description, status, pending, '' as d, '' as get_info  FROM h_commands WHERE unit_id='@unit_idx'",
 	"menuName":"/menu/h_commands",
 	"subforms":
 	[
@@ -29,7 +29,7 @@
 	"pages":[],
 	"groups":{},
 	"infoFields":[
-		{"name":"ddd", "caption":"xxxxxddd","sqlValue":"123456"},
+		{"name":"unit_id", "caption":"unitId","input": "hidden", "type":"hidden"},
 		{"name":"id","caption":"Código A", "input": "hidden", "type":"hidden"},
 		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
 		"data":[

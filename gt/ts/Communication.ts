@@ -13,7 +13,7 @@ var GTCommunication = (($) => {
 
         onmessage:Function = (event)=>{
 
-            alert(1.001)
+            
             var server_message = event.data;
             db (server_message);
 
@@ -653,7 +653,7 @@ var GTCommunication = (($) => {
 
         getConfigParam(commandId){
 
-alert(1)
+
             let unitId = this.form.getInput("unit_idx").getValue();
             
 

@@ -21,7 +21,7 @@
 		{
 			"name":"command_idx","caption":"", "input": "list", "type": "text",
 			"data":["SELECT c.id, c.command FROM devices_commands as c INNER JOIN devices as d on d.version_id = c.version_id INNER JOIN units as u ON u.device_id = d.id WHERE u.id = '@unit_idx' ORDER BY 2"],
-			"params":{"placeholder":"...COMANDO @unit_idx",
+			"params":{"placeholder":"...COMANDO",
 			"events":{
 				"change":"this.getContext().paramLoad(this.getInput('command_idx').getValue())"
 			}}
