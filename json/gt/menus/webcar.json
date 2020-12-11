@@ -42,7 +42,7 @@
 		},
 		{
 			"caption":"",
-			"imageClass":"icon-command",
+			"imageClass":"icon-connection",
 			"propertys":{
 				"title":"Ver conexiones de las Unidades"
 			},
@@ -50,7 +50,7 @@
 		},
 		{
 			"caption":"",
-			"imageClass":"icon-command",
+			"imageClass":"icon-timelapse",
 			"propertys":{
 				"title":"Ver Ventana de Inmediato"
 			},

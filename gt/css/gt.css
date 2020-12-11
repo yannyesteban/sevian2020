@@ -198,6 +198,14 @@ form {
   background-position: center center;
 }
 
+.icon-timelapse {
+  background-image: url(../../images/timelapse.png);
+}
+
+.icon-connection {
+  background-image: url(../../images/connection.png);
+}
+
 .gt-button {
   background-color: #0d838b;
   width: 26px;
