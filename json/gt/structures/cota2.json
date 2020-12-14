@@ -74,6 +74,18 @@
 
 		},
 		{
+			"id":6,
+			"element":"s-menu",
+			"name":"/gt/menus/comm_tool",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
 			"id":"gt-info-11",
 			"element":"gt-info",
 			"name":"gt-info",

@@ -164,6 +164,7 @@ var GTUnit = (($) => {
 
 		public showConnectedUnit:boolean = false;
 		
+		private msgErrorUnit = "Unit not Found!!!";
 		static _instances:object[] = []; 
 		
 		static getInstance(name){
@@ -622,6 +623,12 @@ var GTUnit = (($) => {
 		}
 
 		showUnit(id, value){
+
+			if(!this.dataUnits[id]){
+				alert(this.msgErrorUnit);
+				return;
+			}
+
 			if(!this.marks[id]){
 				
 				this.marks[id] = this.getMap().createMark({
@@ -689,6 +696,9 @@ var GTUnit = (($) => {
 			}
 		}
 		setInfo(id:number){
+			if(!this.dataUnits[id]){
+				return;
+			}
 			//this._info.text(this.loadInfo(id));
 			//this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
 			this.oninfo(this.loadInfo(id), this.dataUnits[id].vehicle_name);
@@ -700,6 +710,10 @@ var GTUnit = (($) => {
         }
 
 		loadInfo(id){
+			if(!this.dataUnits[id]){
+				
+				return;
+			}
 			let input = "";
 			for(let x in this.dataUnits[id].input){
 				input += x + ": " +this.dataUnits[id].input[x];

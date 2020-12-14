@@ -376,6 +376,25 @@
   }
 }
 
+.button-connect{
+  &.connected{
+    background-color: rgb(19, 187, 75)!important;
+    >.image{
+      background-image: url(../../images/connected.png);
+    }
+  }
+
+  &.disconnected {
+    background-color: rgb(245, 103, 21)!important;
+    >.image{
+      background-image: url(../../images/disconnected.png);
+    }
+  }
+  
+  
+
+  
+}
 .debug{
   background-color: white;;
 }

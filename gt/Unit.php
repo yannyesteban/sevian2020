@@ -155,7 +155,8 @@ private $infoTemplate = '
 			'followMe'		=> true,
 			'delay'			=> 10000,	
 			'infoId'		=> $this->eparams->infoId ?? false,	
-			'statusId'		=> $this->eparams->statusId ?? false,	
+			'statusId'		=> $this->eparams->statusId ?? false,
+			'msgErrorUnit'	=> "Unidad no encontrada!!!"
 		];
 
 		$this->setInit($this->info);

@@ -10,7 +10,27 @@ var GTCommunication = (($) => {
         user:string = "juan";
         key:string = "";
         error:any = null;
+        onopen:Function = function(event){
+            let openMessage = JSON.stringify({
+				type:"connect",
+				clientName: this.user,
+				config:[]
+                
 
+            });
+
+            this.send(openMessage);
+            db ("Websockect Connected...!");
+        };
+
+        onclose:Function = function(event){
+            db ("Connection lost...!!!");
+            // Try to reconnect in 5 seconds
+            setTimeout(() => {
+                //db ("Connection lost...!!!");
+                this.connect();
+            }, 5000);
+        }
         onmessage:Function = (event)=>{
 
             
@@ -66,7 +86,7 @@ var GTCommunication = (($) => {
                 }
                 this.socket = new WebSocket('ws://' + this.url + ':' + this.port);
             
-
+                
                 this.socket.onopen = $.bind(this.onopen, this);
                 this.socket.onmessage = $.bind(this.onmessage, this);//this.onmessage;
                 this.socket.onclose  = $.bind(this.onclose, this);//this.onclose ;
@@ -87,14 +107,7 @@ var GTCommunication = (($) => {
             
         }
 		
-		onclose (event){
-            db ("Connection lost...!!!");
-            // Try to reconnect in 5 seconds
-            setTimeout(() => {
-                //db ("Connection lost...!!!");
-                this.connect();
-            }, 5000);
-        }
+		
 
         send(msg){
             //console.log( this.socket);
@@ -108,20 +121,7 @@ var GTCommunication = (($) => {
             
         }
 		
-		onopen(event){
-			
-			
-			let openMessage = JSON.stringify({
-				type:"connect",
-				clientName: this.user,
-				config:[]
-                
-
-            });
-
-            this.send(openMessage);
-            db ("Websockect Connected...!");
-        }
+		
 		
 		onmessage1(event){
 			alert(1.001)
@@ -172,6 +172,7 @@ var GTCommunication = (($) => {
 
         private _commandPanel:any = null;
         private commandPanelId:string = "gtcomm-panel-1";
+        private mainPanelId = "gtcomm-panel-0";
 
         private _bodyPanel:any = null;
         private bodyPanelId:string = "gtcomm-panel-2";
@@ -190,7 +191,11 @@ var GTCommunication = (($) => {
         private _timer2:any = null;
         public delay2:number = 12000;
         private statusId:string = null;
+        private connectionId = "button-connect";
+        private _form:any = null;
 
+        private mode:string = "";
+        public onSetMode = (mode)=>{return this.mode};
         private socketServer = {
             host:"127.0.0.1",
             port:3310
@@ -224,6 +229,32 @@ var GTCommunication = (($) => {
                     user:this.user,
                     url:this.socketServer.host,
                     port:this.socketServer.port,
+
+                    onopen:(event)=>{
+			
+			
+                        let openMessage = JSON.stringify({
+                            type:"connect",
+                            clientName: this.user,
+                            config:[]
+                            
+            
+                        });
+            
+                        this.send(openMessage);
+                        this.setMode('connected');
+                        //db ("Websockect Connected...!");
+                    },
+
+                    onclose: (event) => {
+                        //db ("----Connection lost...!!!");
+                        this.setMode("disconnected");
+                        // Try to reconnect in 5 seconds
+                        setTimeout(() => {
+                            //db ("Connection lost...!!!");
+                            this.connect();
+                        }, 5000);
+                    },
                     onmessage:(event)=>{
                         
                         const server_message = event.data;
@@ -248,7 +279,16 @@ var GTCommunication = (($) => {
                     this.play2();
                 }
          
-         
+                if(this.connectionId){
+                    const connectionButton = $(this.connectionId);
+                    connectionButton.addClass("button-connect");
+                    this.onSetMode = (mode:string)=>{
+
+                        connectionButton.removeClass(this.mode);
+                        connectionButton.addClass(mode);
+                        return mode;
+                    }
+                }
                 
              });
             
@@ -279,7 +319,7 @@ var GTCommunication = (($) => {
 			});
 
 
-            this.mainPanel = main.create("div").addClass("mainPanel");
+            this.mainPanel = main.create("div").addClass("mainPanel").id(this.mainPanelId);
 
             this._aux = main.create("div").addClass("command-panel").id("aux3");
 
@@ -293,7 +333,7 @@ var GTCommunication = (($) => {
 
             this.mainForm.id = this.mainPanel;
             this.mainForm.parentContext =  this;
-            this.form = new Form2(this.mainForm);
+            this._form = new Form2(this.mainForm);
           
             const _formDiv = $().create("form").id(this.gridId);
             this.responseForm.id = this.gridId;
@@ -334,6 +374,11 @@ var GTCommunication = (($) => {
 			
         }
         show(){
+
+            if(this.unitId){
+                this.init(this.unitId);
+
+            }
 			this._win["main"].show();
         }
         show2(){
@@ -432,7 +477,7 @@ var GTCommunication = (($) => {
 
         test2(){
             
-            let f  = this.form.getFormData();
+            let f  = this._form.getFormData();
             f.set("super","man");
             console.log(f);
             for(let [name, value] of f){
@@ -496,8 +541,11 @@ var GTCommunication = (($) => {
 
         }
 
-        loadUnit(unitId){
-            let f  = this.form.getFormData();
+        setUnit(unitId){
+            this.unitId = unitId;
+        }
+        init(unitId){
+            let f  = this._form.getFormData();
             
             S.send3({
                 "async":1,
@@ -506,6 +554,85 @@ var GTCommunication = (($) => {
                
 				
 				"params":[
+                    
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						//"id":this.formCommandId,
+						"element":"gt-communication",
+						"method":"load-unit",
+						"name":"",
+						"eparams":{
+							"a":'yanny',
+                            //"mainId":this.formCommandId,
+                            "unitId":unitId,
+						}
+
+                    },
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.mainPanelId,
+						"element":"form",
+						"method":"load",
+						"name":"/gt/forms/main_command",
+						"eparams":{
+							
+                            "mainId":this.mainPanelId,
+                            "record":{unit_idx:unitId},
+						}
+
+                    },
+                    {
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.commandPanelId,
+						"element":"form",
+						"method":"request",
+						"name":"/gt/forms/form_command",
+						"eparams":{
+							"a":'yanny',
+                            "mainId":this.commandPanelId,
+                            "unitId":5555555,
+						}
+
+                    },
+					{
+                        "t":"setMethod",
+                        'mode':'element',
+						"id":this.bodyPanelId,
+						"element":"form",
+						"method":"list",
+                        //"name":"/gt/forms/h_commands",
+                        "name":"/gt/forms/pending",
+						"eparams":{
+							"a":'yanny',
+                            "mainId":this.bodyPanelId,
+                            "unitId":5555555,
+						}
+
+                    }
+                ],
+                onRequest:(x)=>{
+                    $(this.bodyPanelId).removeClass("sg-form");
+                    S.getElement(this.mainPanelId).setContext(this);
+                    S.getElement(this.commandPanelId).setContext(this);
+                    this._form = S.getElement(this.mainPanelId);
+                   // alert(x)
+                }
+			});
+        }
+        loadUnit(unitId){
+            let f  = this._form.getFormData();
+            
+            S.send3({
+                "async":1,
+                "form":f,
+                //id:4,
+               
+				
+				"params":[
+                    
                     {
                         "t":"setMethod",
                         'mode':'element',
@@ -551,9 +678,11 @@ var GTCommunication = (($) => {
                     }
                 ],
                 onRequest:(x)=>{
+                    $(this.bodyPanelId).removeClass("sg-form");
                     
+                    //S.getElement(this.mainPanelId).setContext(this);
                     S.getElement(this.commandPanelId).setContext(this);
-                    
+                    //this._form = S.getElement(this.mainPanelId);
                    // alert(x)
                 }
 			});
@@ -573,9 +702,9 @@ var GTCommunication = (($) => {
         }
 
         paramLoad(commandId, request){
-            let unitId = this.form.getInput("unit_idx").getValue();
+            let unitId = this._form.getInput("unit_idx").getValue();
 
-            let f  = this.form.getFormData();
+            let f  = this._form.getFormData();
             S.send3({
                 "async":1,
                 "form":f,
@@ -611,9 +740,9 @@ var GTCommunication = (($) => {
         paramReadLoad(commandId){
 
             if((this.getTypeCommand() == "A" || this.getTypeCommand() == "R") && this.getQParams() > 0){
-                let unitId = this.form.getInput("unit_idx").getValue();
+                let unitId = this._form.getInput("unit_idx").getValue();
 
-                let f  = this.form.getFormData();
+                let f  = this._form.getFormData();
                 S.send3({
                     "async":1,
                     "form":f,
@@ -654,10 +783,10 @@ var GTCommunication = (($) => {
         getConfigParam(commandId){
 
 
-            let unitId = this.form.getInput("unit_idx").getValue();
+            let unitId = this._form.getInput("unit_idx").getValue();
             
 
-            let f  = this.form.getFormData();
+            let f  = this._form.getFormData();
             S.send3({
                 "async":1,
                 "form":f,
@@ -692,9 +821,9 @@ var GTCommunication = (($) => {
         
         loadHistory(){
             
-            let unitId = this.form.getInput("unit_idx").getValue();
+            let unitId = this._form.getInput("unit_idx").getValue();
 
-            let f  = this.form.getFormData();
+            let f  = this._form.getFormData();
             S.send3({
                 "async":1,
                 "form":f,
@@ -728,9 +857,9 @@ var GTCommunication = (($) => {
 
         loadPending(){
             
-            let unitId = this.form.getInput("unit_idx").getValue();
+            let unitId = this._form.getInput("unit_idx").getValue();
 
-            let f  = this.form.getFormData();
+            let f  = this._form.getFormData();
             S.send3({
                 "async":1,
                 "form":f,
@@ -763,9 +892,9 @@ var GTCommunication = (($) => {
         }
 
         loadCmdResponse(){
-            let unitId = this.form.getInput("unit_idx").getValue();
+            let unitId = this._form.getInput("unit_idx").getValue();
 
-            let f  = this.form.getFormData();
+            let f  = this._form.getFormData();
             S.send3({
                 "async":1,
                 "form":f,
@@ -830,7 +959,7 @@ var GTCommunication = (($) => {
 
         }
         getUnitId(){
-            return this.form.getInput("unit_idx").getValue()*1;
+            return this._form.getInput("unit_idx").getValue()*1;
         }
         getCommandId(){
             return S.getElement(this.commandPanelId).getInput("command_idx").getValue()*1;
@@ -845,7 +974,7 @@ var GTCommunication = (($) => {
         save(commandId){
             this.getDetail();
 
-            let unitId = this.form.getInput("unit_idx").getValue();
+            let unitId = this._form.getInput("unit_idx").getValue();
 
             let f  = S.getElement(this.bodyPanelId).getFormData();
             S.send3({
@@ -890,6 +1019,15 @@ var GTCommunication = (($) => {
 
         }
         
+        setMode(mode:string){
+            this.main.removeClass(this.mode)
+            
+            this.main.addClass(mode);
+            this.onSetMode(mode);
+
+            this.mode = mode;
+            
+        }
 
         s(type:string = "SET"){
             let commandId = this.getCommandId();

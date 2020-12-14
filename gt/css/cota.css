@@ -316,6 +316,19 @@
   padding: 6px;
 }
 
+.button-connect.connected {
+  background-color: #13bb4b !important;
+}
+.button-connect.connected > .image {
+  background-image: url(../../images/connected.png);
+}
+.button-connect.disconnected {
+  background-color: #f56715 !important;
+}
+.button-connect.disconnected > .image {
+  background-image: url(../../images/disconnected.png);
+}
+
 .debug {
   background-color: white;
 }
