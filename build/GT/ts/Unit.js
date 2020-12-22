@@ -76,6 +76,7 @@ var GTUnit = (($) => {
             this.dataClients = null;
             this.dataAccounts = null;
             this.dataUnits = null;
+            this.indexUnit = [];
             this.tracking = null;
             this.menu = null;
             this.win = null;
@@ -131,6 +132,7 @@ var GTUnit = (($) => {
             this._win = [];
             this.showConnectedUnit = false;
             this.msgErrorUnit = "Unit not Found!!!";
+            this.msgErrortracking = "data tracking not Found!!!";
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -408,6 +410,94 @@ var GTUnit = (($) => {
             }, this.delay2);
         }
         createMenu() {
+            //console.log(this.dataUnits);return;
+            let info = [];
+            let cacheClient = [];
+            let cacheAccount = [];
+            let clientId = null;
+            let accountId = null;
+            let unitId = null;
+            for (let x in this.dataUnits) {
+                clientId = this.dataUnits[x].client_id;
+                accountId = this.dataUnits[x].account_id;
+                unitId = this.dataUnits[x].unit_id;
+                this.indexUnit[unitId] = x;
+                //console.log(clientId, this.dataUnits[x].client);
+                if (!cacheClient[clientId]) {
+                    cacheClient[clientId] = {
+                        id: clientId,
+                        caption: this.dataUnits[x].client,
+                        items: [],
+                        useCheck: true,
+                        useIcon: false,
+                        checkValue: x,
+                        checkDs: { "level": "client", "clientId": clientId },
+                        ds: { "clientId": clientId },
+                        check: (item, event) => {
+                            this.showAccountUnits(clientId, event.currentTarget.checked);
+                        },
+                    };
+                    info.push(cacheClient[clientId]);
+                }
+                if (!cacheAccount[accountId]) {
+                    cacheAccount[accountId] = {
+                        id: accountId,
+                        caption: this.dataUnits[x].account,
+                        items: [],
+                        useCheck: true,
+                        useIcon: false,
+                        checkValue: accountId,
+                        checkDs: { "level": "account", "accountId": accountId },
+                        ds: { "accountId": accountId },
+                        check: (item, event) => {
+                            this.showUnits(accountId, event.currentTarget.checked);
+                        },
+                    };
+                    cacheClient[clientId].items.push(cacheAccount[accountId]);
+                }
+                cacheAccount[accountId].items.push({
+                    id: this.dataUnits[x].unit_id,
+                    caption: this.dataUnits[x].vehicle_name,
+                    useCheck: true,
+                    value: x,
+                    checkValue: x,
+                    checkDs: { "level": "units", "unitId": unitId },
+                    ds: { "unitId": unitId },
+                    check: (item, event) => {
+                        this.showUnit(x, event.currentTarget.checked);
+                    },
+                    action: (item, event) => {
+                        let ch = item.getCheck();
+                        ch.get().checked = true;
+                        this.showUnit(x, true);
+                        this._lastUnitId = x;
+                        this.setInfo(x);
+                        this.flyTo(x);
+                        return;
+                        this._traces[x] = new GTTrace({ map: this.map.map });
+                        this._traces[x].play();
+                    }
+                });
+            }
+            //console.log(info);
+            const menu2 = new Menu({
+                caption: "",
+                autoClose: false,
+                target: this.main,
+                items: info,
+                useCheck: true,
+                check: (item) => {
+                    let ch = item.getCheck();
+                    let checked = ch.get().checked;
+                    let list = item.queryAll("input[type='checkbox']");
+                    for (let x of list) {
+                        x.checked = checked;
+                    }
+                }
+            });
+            //console.log(info);
+            return menu2;
+            return;
             let infoMenu = [];
             for (let x in this.dataClients) {
                 infoMenu[this.dataClients[x].id] = {
@@ -478,22 +568,31 @@ var GTUnit = (($) => {
                     }
                 }
             });
+            console.log(infoMenu);
             return menu;
             //console.log(check);
         }
         getInfoLayer() {
             return this._info;
         }
+        showUnit2(unitId, value) {
+            this.showUnit(this.indexUnit[unitId], value);
+        }
         showUnit(id, value) {
             if (!this.dataUnits[id]) {
                 alert(this.msgErrorUnit);
                 return;
             }
+            const unitId = this.dataUnits[id].unit_id;
+            if (!this.tracking[unitId]) {
+                alert(this.msgErrortracking);
+                return;
+            }
             if (!this.marks[id]) {
                 this.marks[id] = this.getMap().createMark({
-                    lat: this.tracking[id].latitude,
-                    lng: this.tracking[id].longitude,
-                    heading: this.tracking[id].heading,
+                    lat: this.tracking[unitId].latitude,
+                    lng: this.tracking[unitId].longitude,
+                    heading: this.tracking[unitId].heading,
                     image: this.pathImages + this.dataUnits[id].icon + ".png",
                     popupInfo: this.loadPopupInfo(id)
                 });
@@ -593,9 +692,10 @@ var GTUnit = (($) => {
             });
         }
         findUnit(unitId) {
-            this.showUnit(unitId, true);
-            this.setInfo(unitId);
-            this.flyTo(unitId);
+            const index = this.indexUnit[unitId];
+            this.showUnit(index, true);
+            this.setInfo(index);
+            this.flyTo(index);
         }
     }
     Unit._instances = [];

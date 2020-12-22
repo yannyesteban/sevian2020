@@ -137,7 +137,7 @@ private $infoTemplate = '
 		$this->panel->innerHTML = 'gt-unit-'.$this->id;
 		$this->typeElement = 'GTUnit';
 		$this->jsClassName = 'GTUnit';
-		
+		//hx($this->loadUnits());
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
@@ -156,7 +156,8 @@ private $infoTemplate = '
 			'delay'			=> 10000,	
 			'infoId'		=> $this->eparams->infoId ?? false,	
 			'statusId'		=> $this->eparams->statusId ?? false,
-			'msgErrorUnit'	=> "Unidad no encontrada!!!"
+			'msgErrorUnit'	=> "Unidad no encontrada!!!",
+			'msgErrortracking'=> "La Unidad no presenta datos de Posición!!!"
 		];
 
 		$this->setInit($this->info);

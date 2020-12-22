@@ -51,14 +51,14 @@
 		opacity: 0;
 	}
 	100%{
-		max-height: 600px;
+		max-height: 1200px;
 		opacity: 1;
 	}
 }
 
 @keyframes acc-close{
 	0%{
-		max-height: 600px;
+		max-height: 1200px;
 		opacity: 1;
 	}
 
@@ -166,7 +166,8 @@
 			}
 			&.open{
 				>.submenu{
-					max-height: 600px;
+					max-height: 3000px;
+					overflow: auto;
 					opacity: 1;
 					transition-duration: 0.5s;
 					transition-property: all;

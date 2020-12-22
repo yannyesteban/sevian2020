@@ -6,7 +6,7 @@
 truncate clients;
 
 INSERT INTO  gt.clients (id2, client, status)
-SELECT c.codcliente,c.nombre,c.situacion
+SELECT c.codcliente,ucase(c.nombre),c.situacion
 FROM cota.clientes as c;
 
 /* tabla accounts*/
@@ -14,7 +14,7 @@ truncate accounts;
 
 INSERT INTO gt.accounts
 (id2, client_id, type_id, person_id, name, state_id, city, address, email, comment, phone, fax, status)
-SELECT coddato, 0, tipo_persona, codpersona, nombre, codestado, ciudad, direccion, email, observaciones, telefono, fax, status
+SELECT coddato, 0, tipo_persona, codpersona, ucase(nombre), codestado, ciudad, direccion, email, observaciones, telefono, fax, status
 FROM datos_administrativos as d;
 
 UPDATE gt.accounts as a
@@ -87,3 +87,21 @@ LEFT JOIN cota.vehiculos as v2 ON v2.codvehiculo = c.codvehiculo
 LEFT JOIN gt.accounts as a ON a.id2= c.coddato
 LEFT JOIN vehiculo_inputs as vi ON vi.codvehiculo = c.codvehiculo
 LEFT JOIN gt.units_names as n ON n.id2 = v2.codigo
+
+insert into tracks_2020a ( codequipo, id_equipo, fecha_hora, longitud, latitud, velocidad, heading, altitud, satelites, event_id, input, millas, analog_input_1, analog_input_2, analog_output, output, counter_1, counter_2, accuracy, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8, field_9, field_10, fh_server)
+select  codequipo, id_equipo, fecha_hora, longitud, latitud, velocidad, heading, altitud, satelites, event_id, input, millas, analog_input_1, analog_input_2, analog_output, output, counter_1, counter_2, accuracy, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8, field_9, field_10, fh_server
+from tracks_2020
+
+order by id desc limit 1000000
+
+
+update tracks_2020a as t
+inner join devices as d on d.id2 = t.codequipo
+inner join units as u on u.device_id = d.id
+set t.unit_id = u.id
+
+insert into tracks_2020a ( codequipo, id_equipo, fecha_hora, longitud, latitud, velocidad, heading, altitud, satelites, event_id, input, millas, analog_input_1, analog_input_2, analog_output, output, counter_1, counter_2, accuracy, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8, field_9, field_10, fh_server)
+
+select  t.codequipo, id_equipo, fecha_hora, longitud, latitud, velocidad, heading, altitud, satelites, event_id, input, millas, analog_input_1, analog_input_2, analog_output, output, counter_1, counter_2, accuracy, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8, field_9, field_10, fh_server
+from equipos as e
+inner join tracks_2020 as t on t.id = id_track2
