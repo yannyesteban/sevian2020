@@ -1,6 +1,108 @@
 
 
 
+TRUNCATE gt.input;
+
+
+INSERT INTO gt.input (id2, name, type)
+
+SELECT
+i.codtipo, ucase(i.tipo_input) as name, i.clasificacion
+FROM cota.tipos_inputs i
+LEFT JOIN gt.input as i2 ON i2.id2 = i.codtipo
+WHERE i2.id2 IS NULL
+ORDER BY 2;
+
+UPDATE gt.input as i2
+INNER JOIN cota.inputs as i ON i.codtipo = i2.id2
+SET i2.value_on = ucase(input)
+WHERE i.codinput % 2 !=0;
+
+UPDATE gt.input as i2
+INNER JOIN cota.inputs as i ON i.codtipo = i2.id2
+SET i2.value_off = ucase(input)
+WHERE i.codinput % 2 =0;
+
+UPDATE gt.input as i2
+SET i2.clasificacion = type;
+
+
+/*unit input*/
+
+INSERT INTO gt.unit_input (unit_id, number, type, input_id, mode)
+
+(SELECT
+u.id as unit_id,
+x.pos,
+1 as type,
+i2.id as input_id,
+1 as mode
+
+FROM cota.vehiculo_inputs vi
+INNER JOIN gt.index_aux as x
+INNER JOIN gt.vehicles as v ON v.id2=vi.codvehiculo
+INNER JOIN gt.units as u ON u.vehicle_id = v.id
+INNER JOIN gt.input as i2 ON i2.id2 = CASE x.pos
+WHEN 1 THEN input_1
+WHEN 2 THEN input_2
+WHEN 3 THEN input_3
+WHEN 4 THEN input_4
+WHEN 5 THEN input_5
+WHEN 6 THEN input_6
+WHEN 7 THEN input_7
+WHEN 8 THEN input_8
+END
+
+LEFT JOIN gt.unit_input as ui ON ui.unit_id = u.id AND ui.number = x.pos AND ui.type = 1
+WHERE ui.unit_id IS NULL# AND input_id IS NOT NULL;
+
+ORDER BY unit_id, pos
+)
+UNION
+(SELECT
+u.id as unit_id,
+x.pos,
+2 as type,
+i2.id as input_id,
+1 as mode
+
+FROM cota.vehiculo_inputs vi
+INNER JOIN gt.index_aux as x
+INNER JOIN gt.vehicles as v ON v.id2=vi.codvehiculo
+INNER JOIN gt.units as u ON u.vehicle_id = v.id
+INNER JOIN gt.input as i2 ON i2.id2 = CASE x.pos
+WHEN 1 THEN output_1
+WHEN 2 THEN output_2
+WHEN 3 THEN output_3
+WHEN 4 THEN output_4
+WHEN 5 THEN output_5
+WHEN 6 THEN output_6
+WHEN 7 THEN output_7
+WHEN 8 THEN output_8
+END
+
+LEFT JOIN gt.unit_input as ui ON ui.unit_id = u.id AND ui.number = x.pos AND ui.type = 2
+WHERE ui.unit_id IS NULL# AND input_id IS NOT NULL;
+ORDER BY unit_id, pos
+)
+
+
+
+
+
+
+
+
+
+TRUNCATE models;
+INSERT INTO models (id2, model, brand_id )
+
+SELECT mm.codmodelo, mm.modelo, b.id
+FROM cota.modelos as mm
+INNER JOIN gt.brands as b ON b.id2 = mm.codmarca
+LEFT JOIN models as m ON m.id2 = mm.codmodelo
+WHERE m.id2 IS NULL
+
 
 /* tabla clients*/
 truncate clients;
@@ -27,6 +129,23 @@ SET client_id = c.id
 version = modelos_equipos
 linea_celular = lineas
 */
+
+TRUNCATE gt.contacts;
+
+INSERT INTO gt.contacts
+(id2, client_id, name, last_name, number_id,
+position,
+address, phone, phone2, phone3, email, email2, email3)
+
+
+SELECT codcontacto, cc.id, c.nombres, c.apellidos, c.cedula,
+c.cargo,
+c.direccion, c.telefono, c.telefono2, c.telefono3, c.email1, c.email2, c.email3
+FROM cota.contactos c
+LEFT JOIN gt.clients as cc ON cc.id2 = c.codcliente
+LEFT JOIN gt.contacts as c2 ON c2.id2 = c.codcontacto
+WHERE c2.id2 IS NULL
+
 
 truncate phone_numbers;
 
@@ -105,3 +224,51 @@ insert into tracks_2020a ( codequipo, id_equipo, fecha_hora, longitud, latitud, 
 select  t.codequipo, id_equipo, fecha_hora, longitud, latitud, velocidad, heading, altitud, satelites, event_id, input, millas, analog_input_1, analog_input_2, analog_output, output, counter_1, counter_2, accuracy, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8, field_9, field_10, fh_server
 from equipos as e
 inner join tracks_2020 as t on t.id = id_track2
+
+
+
+update
+gt.devices d
+inner join cota.modelos_equipos as v ON v.codmodelo = version2
+inner join cota.marca_equipos as ma on ma.codmarca = v.codmarca
+SET version_id =40
+where marca_equipo='X1'
+
+
+update
+gt.devices d
+inner join cota.modelos_equipos as v ON v.codmodelo = version2
+inner join cota.marca_equipos as ma on ma.codmarca = v.codmarca
+SET version_id =42
+where marca_equipo='X1 PLUS'
+
+update
+gt.devices d
+inner join cota.modelos_equipos as v ON v.codmodelo = version2
+inner join cota.marca_equipos as ma on ma.codmarca = v.codmarca
+SET version_id =3
+where marca_equipo='X1 PRO'
+
+update
+gt.devices d
+inner join cota.modelos_equipos as v ON v.codmodelo = version2
+inner join cota.marca_equipos as ma on ma.codmarca = v.codmarca
+SET version_id =39
+where marca_equipo='VT-200'
+
+
+update
+gt.devices d
+
+inner join cota.modelos_equipos as v ON v.codmodelo = version2
+inner join cota.marca_equipos as ma on ma.codmarca = v.codmarca
+SET version_id =17
+where marca_equipo='VT-10S900'
+
+update
+gt.devices d
+
+inner join cota.modelos_equipos as v ON v.codmodelo = version2
+inner join cota.marca_equipos as ma on ma.codmarca = v.codmarca
+SET version_id =17
+where marca_equipo='VT-10EG'

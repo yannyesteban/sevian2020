@@ -1,3 +1,10 @@
+comprobar, abrir y cerrar puertos en Windows
+netstat -ab
+netstat -aon
+netstat -aon | findstr :443
+taskkill /pid 10720 /F
+
+
 $WP+UNCFG=0000,?
 $WP+UNCFG=0000,2024000100,0000,,10,10,10,10
 
