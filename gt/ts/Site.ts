@@ -401,7 +401,7 @@ var GTSite = (($) => {
 
 			if(this.editId){
 				
-				this.marks[this.editId].setLngLat([this.dataSite[this.editId].longitude,this.dataSite[this.editId].latitude );
+				this.marks[this.editId].setLngLat([this.dataSite[this.editId].longitude,this.dataSite[this.editId].latitude ]);
 				this.marks[this.editId].setImage(this.dataSite[this.editId].image);
 				this.showSite(this.editId, true);
 			}

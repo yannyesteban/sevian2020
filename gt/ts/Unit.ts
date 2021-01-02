@@ -737,6 +737,7 @@ var GTUnit = (($) => {
 			}
 
 			const unitId = this.dataUnits[id].unit_id;
+			
 			if(!this.tracking[unitId]){
 				alert(this.msgErrortracking);
 				return;
@@ -817,29 +818,80 @@ var GTUnit = (($) => {
 
 			
 		}
-		loadPopupInfo(id){
-            return this.evalHTML(this.evalHTML(this.popupTemplate, this.dataUnits[id]), this.tracking[id]);
-        }
 
-		loadInfo(id){
+		getDataInfo(id:number){
 			if(!this.dataUnits[id]){
-				
 				return;
 			}
-			let input = "";
-			for(let x in this.dataUnits[id].input){
-				input += x + ": " +this.dataUnits[id].input[x];
+			let data = this.dataUnits[id];
+			const tracking = this.tracking[data.unit_id];
+			for(let x in tracking){
+				this.dataUnits[id][x] = tracking[x];
 			}
-			this.dataUnits[id].input1 = input;
+			return data;
+		}
+		loadPopupInfo(id:number){
+			const data = this.getDataInfo(id);
 
-			input = "";
-			for(let x in this.dataUnits[id].input){
-				input += x + ": " +this.dataUnits[id].input[x];
-			}
-			this.dataUnits[id].output1 = input;
+					
 			
-			console.log(this.dataUnits[id])
-            return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataUnits[id]), this.tracking[id]);
+			data.input1 = " -";
+			data.output1 = " -";
+			if(data.input){
+				let _input = $.create("div");
+				data.input.forEach((e, index)=>{
+					_input.create("div").text(e.name+":"+e.value);
+					//_input.add("div").text(e.value);
+				});
+				data.input1 = _input.text();
+			}
+			
+			if(data.output){
+				let _input = $.create("div");
+				data.output.forEach((e, index)=>{
+					_input.create("div").text(e.name+":"+e.value);
+					//_input.add("div").text(e.value);
+				});
+				data.output1 = _input.text();
+			}
+			
+			
+			return this.evalHTML(this.popupTemplate, data)
+            //return this.evalHTML(, this.tracking[this.dataUnits[id].unit_id]);
+        }
+
+		loadInfo(id:number){
+			
+			if(!this.dataUnits[id]){
+				return;
+			}
+
+			const data = this.getDataInfo(id);
+			
+			
+			data.input1 = " -";
+			data.output1 = " -";
+			if(data.input){
+				let _input = $.create("div");
+				data.input.forEach((e, index)=>{
+					_input.create("div").text(e.name+":"+e.value);
+					//_input.add("div").text(e.value);
+				});
+				data.input1 = _input.text();
+			}
+			
+			if(data.output){
+				let _input = $.create("div");
+				data.output.forEach((e, index)=>{
+					_input.create("div").text(e.name+":"+e.value);
+					//_input.add("div").text(e.value);
+				});
+				data.output1 = _input.text();
+			}
+			
+	
+			return this.evalHTML(this.infoTemplate, data)
+            //return this.evalHTML(this.evalHTML(this.infoTemplate, this.dataUnits[id]), this.tracking[this.dataUnits[id].unit_id]);
 		}
 		
 		setFollowMe(value:boolean){

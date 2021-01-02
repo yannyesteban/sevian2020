@@ -94,13 +94,13 @@ ORDER BY unit_id, pos
 
 
 
-TRUNCATE models;
-INSERT INTO models (id2, model, brand_id )
+TRUNCATE gt.vehicle_model;
+INSERT INTO gt.vehicle_model (id2, model, brand_id )
 
 SELECT mm.codmodelo, mm.modelo, b.id
 FROM cota.modelos as mm
-INNER JOIN gt.brands as b ON b.id2 = mm.codmarca
-LEFT JOIN models as m ON m.id2 = mm.codmodelo
+INNER JOIN gt.vehicle_brand as b ON b.id2 = mm.codmarca
+LEFT JOIN vehicle_model as m ON m.id2 = mm.codmodelo
 WHERE m.id2 IS NULL
 
 
@@ -177,9 +177,12 @@ INSERT INTO gt.vehicles
 (id2, account_id, device_id, type_id, name_id, aux_name, plate, brand_id, model_id, status, year, color, color_id, serial, picture, servicio_ini, comment, admin_status)
 
 
-SELECT codvehiculo, null, null, null, null,  codigo2,  placa, codmarca, codmodelo, status, ano, v.color,c.id, serial, foto, servicio_ini, observaciones, status_admin
+SELECT codvehiculo, null, null, null, null,  codigo2,  placa, b.id as codmarca, m.id as codmodelo, v.status, ano, v.color,c.id, v.serial, foto, v.servicio_ini, observaciones, status_admin
 FROM cota.vehiculos as v
+LEFT JOIN vehicle_brand as b ON b.id2 = v.codmarca
+LEFT JOIN vehicle_model as m ON m.id2 = v.codmodelo
 left join gt.vehicle_color as c on c.color = v.color
+ORDER BY 1
 
 /*table UNITS*/
 truncate units_names;
@@ -195,7 +198,7 @@ status_id, admin_status_id)
 
 
 SELECT UCASE(codigo2) as name,n.id as name_id ,d.id as device_id, v.id as vehicle_id,
-null as person_id,vi.icono as icon_id,
+null as person_id,IFNULL(vi.icono,1) as icon_id,
 a.id as account_id, fecha_instalacion as contract_start, fecha_desinstalacion as contract_end,
 1 as status_id, v2.status_admin
 
@@ -205,7 +208,18 @@ LEFT JOIN gt.vehicles as v ON v.id2 = c.codvehiculo
 LEFT JOIN cota.vehiculos as v2 ON v2.codvehiculo = c.codvehiculo
 LEFT JOIN gt.accounts as a ON a.id2= c.coddato
 LEFT JOIN vehiculo_inputs as vi ON vi.codvehiculo = c.codvehiculo
-LEFT JOIN gt.units_names as n ON n.id2 = v2.codigo
+LEFT JOIN gt.units_names as n ON n.id2 = v2.codigo;
+/* update tracking_id*/
+UPDATE units as u
+INNER JOIN (
+
+select t.id, unit_id, date_time, max(id) as m
+from tracking as t
+group by unit_id
+) as x ON x.unit_id=u.id
+set u.tracking_id=x.id, u.tracking_date=x.date_time;
+
+
 
 insert into tracks_2020a ( codequipo, id_equipo, fecha_hora, longitud, latitud, velocidad, heading, altitud, satelites, event_id, input, millas, analog_input_1, analog_input_2, analog_output, output, counter_1, counter_2, accuracy, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8, field_9, field_10, fh_server)
 select  codequipo, id_equipo, fecha_hora, longitud, latitud, velocidad, heading, altitud, satelites, event_id, input, millas, analog_input_1, analog_input_2, analog_output, output, counter_1, counter_2, accuracy, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8, field_9, field_10, fh_server

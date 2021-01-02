@@ -37,8 +37,8 @@ trait DBClient{
         LEFT JOIN units_names as vn ON vn.id = u.name_id
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
 
-        LEFT JOIN brands as br ON br.id = ve.brand_id
-        LEFT JOIN models as mo ON mo.id = ve.model_id
+        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN devices as de ON de.id = u.device_id
         INNER JOIN devices_names as dn ON dn.name = de.device_name
@@ -83,8 +83,8 @@ trait DBAccount{
         LEFT JOIN users_units as uu ON uu.unit_id = u.id
         LEFT JOIN units_names as vn ON vn.id = u.name_id
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
-        LEFT JOIN brands as br ON br.id = ve.brand_id
-        LEFT JOIN models as mo ON mo.id = ve.model_id
+        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN devices as de ON de.id = u.device_id
         INNER JOIN devices_names as dn ON dn.name = de.device_name
@@ -121,9 +121,7 @@ trait DBUnit{
     public function loadUnits(){
         $cn = $this->cn;
 		
-        $cn->query = "
-        
-        SELECT
+        $cn->query = "SELECT
             u.id as unit_id,
             ac.client_id as client_id,
             cl.client,
@@ -132,38 +130,42 @@ trait DBUnit{
             u.device_id,
             de.device_name,
             u.vehicle_id,
-            vn.name as vehicle_name,
-            ic.icon, ve.plate, br.brand, mo.model, ve.color, 
-            t.id as trackId
+            CONCAT(CASE WHEN t.id IS NULL THEN '* ' ELSE '' END, vn.name) as vehicle_name,
+            ic.icon, ve.plate, br.brand, mo.model, ve.color,#,
+            ' - ' as date_time, ' -' as longitude, ' -' as latitude, 
+            ' -' as heading, ' -' as satellite, '- ' as speed
+            #t.id as trackId,
+            #t.longitude, t.latitude
 
 
-        FROM units as u
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
+            FROM units as u
+            LEFT JOIN units_names as vn ON vn.id = u.name_id
 
-        LEFT JOIN users_units as uu ON uu.unit_id = u.id
+            LEFT JOIN users_units as uu ON uu.unit_id = u.id
 
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+            LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
 
-        LEFT JOIN brands as br ON br.id = ve.brand_id
-        LEFT JOIN models as mo ON mo.id = ve.model_id
+            LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+            LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
-        INNER JOIN devices as de ON de.id = u.device_id
-        INNER JOIN devices_names as dn ON dn.name = de.device_name
+            INNER JOIN devices as de ON de.id = u.device_id
+            INNER JOIN devices_names as dn ON dn.name = de.device_name
 
 
-        LEFT JOIN icon as ic ON ic.id = u.icon_id
+            LEFT JOIN icon as ic ON ic.id = u.icon_id
 
-        LEFT JOIN accounts as ac ON ac.id = u.account_id
-        LEFT JOIN clients as cl ON cl.id = ac.client_id
-        INNER JOIN tracking as t ON t.id = u.tracking_id
-        ORDER BY client, account, vehicle_name
-        #LIMIT 10
+            LEFT JOIN accounts as ac ON ac.id = u.account_id
+            LEFT JOIN clients as cl ON cl.id = ac.client_id
+            #INNER JOIN tracking as t ON t.id = u.tracking_id
+            LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
+            ORDER BY client, account, vehicle_name
+            #LIMIT 10
         ";
 		$result = $cn->execute();
 		
-        
+        return $cn->getDataAll($result);
         $data = $cn->getDataAll($result);
-		
+		//hx($data);
 
         $s = [];
         foreach($data as $unitId => $v){
@@ -204,8 +206,8 @@ trait DBUnit{
 
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
 
-        LEFT JOIN brands as br ON br.id = ve.brand_id
-        LEFT JOIN models as mo ON mo.id = ve.model_id
+        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN devices as de ON de.id = u.device_id
         INNER JOIN devices_names as dn ON dn.name = de.device_name
@@ -265,8 +267,8 @@ trait DBUnit{
 
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
 
-        LEFT JOIN brands as br ON br.id = ve.brand_id
-        LEFT JOIN models as mo ON mo.id = ve.model_id
+        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN devices as de ON de.id = u.device_id
         INNER JOIN devices_names as dn ON dn.name = de.device_name
@@ -359,6 +361,63 @@ trait DBUnit{
 trait DBTracking{
 	private $cn = null;
 
+    private function loadTracking2(){
+
+        $cn = $this->cn;
+		
+        $cn->query = "SELECT u.id as unit_id, i.type, number as 'index', i.name,
+            longitude, latitude, heading, speed, satellite,
+            date_format(t.date_time, '%d/%m/%Y %T') as date_time,
+            CASE i.type WHEN 1 THEN 'input' ELSE 'output' end ctype,
+            CASE i.type
+            WHEN 1 THEN CASE (input_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END
+            WHEN 2 THEN CASE (output_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END END as value
+            FROM units as u
+            
+            INNER JOIN tracking as t ON u.id = t.unit_id AND u.tracking_date = t.date_time
+            LEFT JOIN unit_input as ui ON ui.unit_id = u.id
+            LEFT JOIN input as i ON i.id = ui.input_id
+            
+            ORDER BY u.id#, ui.type
+                
+        ";
+		$result = $cn->execute();
+		
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            
+            if(!isset($data[$rs['unit_id']])){
+                $data[$rs['unit_id']] = [
+                    'unitId'=>$rs['unit_id'],
+                    'latitude'=>$rs['latitude'],
+                    'longitude'=>$rs['longitude'],
+                    'date_time'=>$rs['date_time'],
+                    'heading'=>$rs['heading'],
+                    'speed'=>$rs['speed'],
+                    'satellite'=>$rs['satellite']
+                    
+                ];
+            }
+            $data[$rs['unit_id']][$rs['ctype']][] = [
+                //'type'=>$rs['type'],
+                'name'=>$rs['name'],
+                'value'=>$rs['value'],
+            ];
+        }
+        //hx($data);
+        
+        /*$s = [];
+        foreach($data as $unitId => $v){
+            $s[] = $v['id'];
+        }
+        
+        $this->getUnitInput($data, $s);
+        
+        //hx(json_encode($data,JSON_PRETTY_PRINT));
+        */
+        return $data;
+    }
+
 	private function loadTracking(){
 
         $cn = $this->cn;
@@ -392,6 +451,78 @@ trait DBTracking{
         return $data;
     }
 
+    private function getInfoTracking($unitId, $dateTime = null){
+        
+        
+        $cn = $this->cn;
+		if($dateTime){
+            $cn->query = 
+                "SELECT tk.unit_id, i.name as des, m.name, number, 'input' as type
+                FROM tracking as tk
+                INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=1
+                INNER JOIN input as i on i.id = ui.input_id
+                INNER JOIN input_mode as m on m.input_id=i.id and (input_status & POW(2, number-1)) div POW(2, number-1) = m.mode
+                WHERE tk.unit_id = '$unitId' and tk.date_time='$dateTime'
+        
+                UNION
+        
+                SELECT tk.unit_id, i.name as des, m.name, number, 'ouput' as type
+                FROM tracking as tk
+                INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=2
+                INNER JOIN input as i on i.id = ui.input_id
+                INNER JOIN input_mode as m on m.input_id=i.id and (output_status & POW(2, number-1)) div POW(2, number-1) = m.mode
+                WHERE tk.unit_id = '$unitId' and tk.date_time='$dateTime'
+                ;";
+            
+        }else{
+            $cn->query = 
+            "SELECT tk.unit_id, i.name as des, m.name, number, 'input' as type
+            FROM units as u
+            #INNER JOIN tracking as tk ON tk.id = u.tracking_id
+            INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
+            INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=1
+            INNER JOIN input as i on i.id = ui.input_id
+            INNER JOIN input_mode as m on m.input_id=i.id and (input_status & POW(2, number-1)) div POW(2, number-1) = m.mode
+            
+    
+            UNION
+    
+            SELECT tk.unit_id, i.name as des, m.name, number, 'ouput' as type
+            FROM units as u
+            INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
+            INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=2
+            INNER JOIN input as i on i.id = ui.input_id
+            INNER JOIN input_mode as m on m.input_id=i.id and (input_status & POW(2, number-1)) div POW(2, number-1) = m.mode
+            
+            ;";
+
+
+            $cn->query = "SELECT u.id as unit_id, i.type, number as 'index', i.name,
+            longitude, latitude,
+            CASE i.type
+            WHEN 1 THEN CASE (input_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END
+            WHEN 2 THEN CASE (output_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END END as value
+            FROM units as u
+            
+            LEFT JOIN tracking as t ON u.id = t.unit_id AND u.tracking_date = t.date_time
+            LEFT JOIN unit_input as ui ON ui.unit_id = u.id
+            LEFT JOIN input as i ON i.id = ui.input_id
+            ORDER BY u.id#, ui.type";
+        }
+
+        
+
+        //hx($cn->query);
+        $result = $cn->execute();
+        
+		while($rs = $cn->getDataAssoc($result)){
+            //$data[$rs['unit_id']][$rs['type']][] = $rs;
+            $data[$rs['unit_id']][$rs['type']][$rs['name']] = $rs['value'];
+        }
+        hx($data);
+        return $data;
+        
+    }
 
     private function getUnitInput(&$data, $trackIds){
         if(!$trackIds){
@@ -409,7 +540,7 @@ trait DBTracking{
         FROM tracking as tk
         INNER JOIN unit_input as u on u.unit_id = tk.unit_id and u.type=1
         INNER JOIN input as i on i.id = u.input_id
-        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & d) div d = m.mode
+        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & POW(2, number-1)) div POW(2, number-1) = m.mode
         WHERE tk.id IN ($ids)
 
         UNION 
@@ -419,7 +550,7 @@ trait DBTracking{
         FROM tracking as tk
         INNER JOIN unit_input as u on u.unit_id = tk.unit_id and u.type=2
         INNER JOIN input as i on i.id = u.input_id
-        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & d) div d = m.mode
+        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & POW(2, number-1)) div POW(2, number-1) = m.mode
         WHERE tk.id IN ($ids)
         ;";
 
@@ -430,8 +561,8 @@ trait DBTracking{
         INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
         INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=1
         INNER JOIN input as i on i.id = ui.input_id
-        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & d) div d = m.mode
-        #WHERE tk.id IN ($ids)
+        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & POW(2, number-1)) div POW(2, number-1) = m.mode
+        
 
         UNION
 
@@ -440,8 +571,8 @@ trait DBTracking{
         INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
         INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=2
         INNER JOIN input as i on i.id = ui.input_id
-        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & d) div d = m.mode
-        #WHERE tk.id IN ($ids)
+        INNER JOIN input_mode as m on m.input_id=i.id and (input_status & POW(2, number-1)) div POW(2, number-1) = m.mode
+        
         ;";
 
         //hx($cn->query);
@@ -790,8 +921,8 @@ trait DBHistory{
 
         LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
 
-        LEFT JOIN brands as br ON br.id = ve.brand_id
-        LEFT JOIN models as mo ON mo.id = ve.model_id
+        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN devices as de ON de.id = u.device_id
         INNER JOIN devices_names as dn ON dn.name = de.device_name
