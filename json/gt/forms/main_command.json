@@ -3,7 +3,7 @@
 	"caption":"",
 	"className":"gt-command-main",
     "query_":"SELECT '' as client_idx, '' as account_idx, '' as unit_idx, '' as connect, '' as v",
-    "query": "SELECT c.id as client_idx, a.id as account_idx, u.id as unit_idx/*, '' as connect, '' as v*/ FROM units as u INNER JOIN accounts as a ON a.id = u.account_id INNER JOIN clients as c ON c.id = a.client_id",
+    "query": "SELECT c.id as client_idx, a.id as account_idx, u.id as unit_idx/*, '' as connect, '' as v*/ FROM unit as u INNER JOIN account as a ON a.id = u.account_id INNER JOIN client as c ON c.id = a.client_id",
 	"_menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -23,7 +23,7 @@
             "caption":"",
             "input":"list",
             "type":"text","mode_value":"0",
-            "data":[["","","*"],"SELECT id, client FROM clients ORDER BY 2"],
+            "data":[["","","*"],"SELECT id, name as client FROM client ORDER BY 2"],
             "childs":true,
             "params":{"placeholder":"...CLIENTE"}
         },
@@ -32,7 +32,7 @@
             "caption":"",
             "input":"list",
             "type":"text","mode_value":"0",
-            "data":[["",". seleccione","*"], "SELECT id, name, client_id FROM accounts a ORDER BY name;"],
+            "data":[["",". seleccione","*"], "SELECT id, name, client_id FROM account a ORDER BY name;"],
             "childs":true,
             "parent":"client_idx",
             "params":{"placeholder":"...CUENTA"}
@@ -42,7 +42,7 @@
             "caption":"",
             "input":"list",
             "type":"text","mode_value":"0",
-            "data":[["","","*"], "SELECT u.id as unit_id, un.name as unit_name, account_id, device_id FROM units as u INNER JOIN units_names as un on un.id = u.name_id ORDER BY /*account_id,*/ unit_name"],
+            "data":[["","","*"], "SELECT u.id as unit_id, un.name as unit_name, account_id, device_id FROM unit as u INNER JOIN unit_name as un on un.id = u.name_id ORDER BY /*account_id,*/ unit_name"],
             "parent_":"account_idx",
             "params":{"placeholder":"...UNIDAD"},
             "events":{

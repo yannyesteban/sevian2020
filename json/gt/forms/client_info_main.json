@@ -20,7 +20,7 @@
         {
 			"name":"client_id","caption":"nnn","input":"list","type":"text",
 			
-			"data":[["","","*"],"SELECT id, client FROM clients ORDER BY 2"],
+			"data":[["","","*"],"SELECT id, name  as client FROM client ORDER BY 2"],
 			"params":{"placeholder":"...CLIENTE"},
 			"events":{"change":"S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{clientId:this.getForm().getValue('client_id')}}],});"}
 		},

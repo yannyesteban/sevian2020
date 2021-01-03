@@ -30,27 +30,27 @@ trait DBClient{
 	private function loadClients(){
         $cn = $this->cn;
 		
-        $cn->query = "SELECT cl.id, cl.client
+        $cn->query = "SELECT cl.id, cl.name as client
 
-        FROM units as u
-        LEFT JOIN users_units as uu ON uu.unit_id = u.id
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+        FROM unit as u
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
 
         LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
         LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
-        INNER JOIN devices as de ON de.id = u.device_id
-        INNER JOIN devices_names as dn ON dn.name = de.device_name
+        INNER JOIN device as de ON de.id = u.device_id
+        INNER JOIN device_name as dn ON dn.name = de.name
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
 
-        LEFT JOIN accounts as ac ON ac.id = u.account_id
-        LEFT JOIN clients as cl ON cl.id = ac.client_id
+        LEFT JOIN account as ac ON ac.id = u.account_id
+        LEFT JOIN client as cl ON cl.id = ac.client_id
         #INNER JOIN tracking as t ON t.id = u.tracking_id
 
-		GROUP BY cl.client
+		GROUP BY cl.name
 		ORDER BY 2
         
         ";
@@ -79,25 +79,25 @@ trait DBAccount{
         
         SELECT ac.id, ac.name as account, cl.id as client_id
 
-        FROM units as u
-        LEFT JOIN users_units as uu ON uu.unit_id = u.id
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+        FROM unit as u
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
         LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
         LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
-        INNER JOIN devices as de ON de.id = u.device_id
-        INNER JOIN devices_names as dn ON dn.name = de.device_name
+        INNER JOIN device as de ON de.id = u.device_id
+        INNER JOIN device_name as dn ON dn.name = de.name
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
 
-        LEFT JOIN accounts as ac ON ac.id = u.account_id
-        LEFT JOIN clients as cl ON cl.id = ac.client_id
+        LEFT JOIN account as ac ON ac.id = u.account_id
+        LEFT JOIN client as cl ON cl.id = ac.client_id
         #INNER JOIN tracking as t ON t.id = u.tracking_id
 
 
-        ORDER BY cl.client, account
+        ORDER BY cl.name, account
         
         ";
 		$result = $cn->execute();
@@ -122,44 +122,44 @@ trait DBUnit{
         $cn = $this->cn;
 		
         $cn->query = "SELECT
-            u.id as unit_id,
-            ac.client_id as client_id,
-            cl.client,
-            u.account_id,
-            ac.name as account,
-            u.device_id,
-            de.device_name,
-            u.vehicle_id,
-            CONCAT(CASE WHEN t.id IS NULL THEN '* ' ELSE '' END, vn.name) as vehicle_name,
-            ic.icon, ve.plate, br.brand, mo.model, ve.color,#,
-            ' - ' as date_time, ' -' as longitude, ' -' as latitude, 
-            ' -' as heading, ' -' as satellite, '- ' as speed
-            #t.id as trackId,
-            #t.longitude, t.latitude
+        u.id as unit_id,
+        ac.client_id as client_id,
+        cl.name as client,
+        u.account_id,
+        ac.name as account,
+        u.device_id,
+        de.name as device_name,
+        u.vehicle_id,
+        CONCAT(CASE WHEN t.id IS NULL THEN '* ' ELSE '' END, vn.name) as vehicle_name,
+        ic.icon, ve.plate, br.name as brand, mo.name as model, ve.color,#,
+        ' - ' as date_time, ' -' as longitude, ' -' as latitude, 
+        ' -' as heading, ' -' as satellite, '- ' as speed
+        #t.id as trackId,
+        #t.longitude, t.latitude
 
 
-            FROM units as u
-            LEFT JOIN units_names as vn ON vn.id = u.name_id
+        FROM unit as u
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
 
-            LEFT JOIN users_units as uu ON uu.unit_id = u.id
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
 
-            LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
 
-            LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
-            LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
+        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
-            INNER JOIN devices as de ON de.id = u.device_id
-            INNER JOIN devices_names as dn ON dn.name = de.device_name
+        INNER JOIN device as de ON de.id = u.device_id
+        INNER JOIN device_name as dn ON dn.name = de.name
 
 
-            LEFT JOIN icon as ic ON ic.id = u.icon_id
+        LEFT JOIN icon as ic ON ic.id = u.icon_id
 
-            LEFT JOIN accounts as ac ON ac.id = u.account_id
-            LEFT JOIN clients as cl ON cl.id = ac.client_id
-            #INNER JOIN tracking as t ON t.id = u.tracking_id
-            LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
-            ORDER BY client, account, vehicle_name
-            #LIMIT 10
+        LEFT JOIN account as ac ON ac.id = u.account_id
+        LEFT JOIN client as cl ON cl.id = ac.client_id
+        #INNER JOIN tracking as t ON t.id = u.tracking_id
+        LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
+        ORDER BY client, account, vehicle_name
+        #LIMIT 10
         ";
 		$result = $cn->execute();
 		
@@ -183,43 +183,41 @@ trait DBUnit{
 	public function loadUnits2(){
         $cn = $this->cn;
 		
-        $cn->query = "
-        
-        SELECT
+        $cn->query = "SELECT
             u.id as unit_id,
             ac.client_id as client_id,
-            cl.client,
+            cl.name as client,
             u.account_id,
             ac.name as account,
             u.device_id,
-            de.device_name,
+            de.name as device_name,
             u.vehicle_id,
             vn.name as vehicle_name,
-            ic.icon, ve.plate, br.brand, mo.model, ve.color, 
+            ic.icon, ve.plate, br.name as brand, mo.name as model, ve.color, 
             t.id as trackId
 
 
-        FROM units as u
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
+            FROM unit as u
+            LEFT JOIN unit_name as vn ON vn.id = u.name_id
 
-        LEFT JOIN users_units as uu ON uu.unit_id = u.id
+            LEFT JOIN user_unit as uu ON uu.unit_id = u.id
 
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+            LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
 
-        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
-        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
+            LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+            LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
-        INNER JOIN devices as de ON de.id = u.device_id
-        INNER JOIN devices_names as dn ON dn.name = de.device_name
+            INNER JOIN device as de ON de.id = u.device_id
+            INNER JOIN device_name as dn ON dn.name = de.name
 
 
-        LEFT JOIN icon as ic ON ic.id = u.icon_id
+            LEFT JOIN icon as ic ON ic.id = u.icon_id
 
-        LEFT JOIN accounts as ac ON ac.id = u.account_id
-        LEFT JOIN clients as cl ON cl.id = ac.client_id
-        LEFT JOIN tracking as t ON t.id = u.tracking_id
-        ORDER BY client, account, vehicle_name
-        #LIMIT 10
+            LEFT JOIN account as ac ON ac.id = u.account_id
+            LEFT JOIN client as cl ON cl.id = ac.client_id
+            LEFT JOIN tracking as t ON t.id = u.tracking_id
+            ORDER BY client, account, vehicle_name
+            #LIMIT 10
         ";
 		$result = $cn->execute();
 		
@@ -250,34 +248,34 @@ trait DBUnit{
         SELECT
             u.id as unit_id,
             ac.client_id as client_id,
-            cl.client,
+            cl.name as client,
             u.account_id,
             ac.name as account,
             u.device_id,
-            de.device_name,
+            de.name as device_name,
             u.vehicle_id,
             vn.name as vehicle_name,
-            ic.icon, ve.plate, br.brand, mo.model, ve.color, t.id as trackId
+            ic.icon, ve.plate, br.name as brand, mo.name as model, ve.color, t.id as trackId
 
 
-        FROM units as u
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
+        FROM unit as u
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
 
-        LEFT JOIN users_units as uu ON uu.unit_id = u.id
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
 
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
 
         LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
         LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
-        INNER JOIN devices as de ON de.id = u.device_id
-        INNER JOIN devices_names as dn ON dn.name = de.device_name
+        INNER JOIN device as de ON de.id = u.device_id
+        INNER JOIN device_name as dn ON dn.name = de.name
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
 
-        LEFT JOIN accounts as ac ON ac.id = u.account_id
-        LEFT JOIN clients as cl ON cl.id = ac.client_id
+        LEFT JOIN account as ac ON ac.id = u.account_id
+        LEFT JOIN client as cl ON cl.id = ac.client_id
         INNER JOIN tracking as t ON t.id = u.tracking_id
         WHERE u.id = '$unitId'
         ORDER BY u.id
@@ -338,9 +336,9 @@ trait DBUnit{
             u.id as unit_id,
             COALESCE(vn.name, '  -- undefined --') as vehicle_name
 
-        FROM units as u
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+        FROM unit as u
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
 
         ORDER BY vehicle_name
         ";
@@ -372,8 +370,8 @@ trait DBTracking{
             CASE i.type
             WHEN 1 THEN CASE (input_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END
             WHEN 2 THEN CASE (output_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END END as value
-            FROM units as u
-            
+            FROM unit as u
+
             INNER JOIN tracking as t ON u.id = t.unit_id AND u.tracking_date = t.date_time
             LEFT JOIN unit_input as ui ON ui.unit_id = u.id
             LEFT JOIN input as i ON i.id = ui.input_id
@@ -429,7 +427,7 @@ trait DBTracking{
         t.*, date_format(date_time, '%d/%m/%Y %T') as date_time
 
         FROM tracking as t
-        INNER JOIN units as u ON u.tracking_id = t.id
+        INNER JOIN unit as u ON u.tracking_id = t.id
         ORDER BY unit_id
                 
         ";
@@ -477,7 +475,7 @@ trait DBTracking{
         }else{
             $cn->query = 
             "SELECT tk.unit_id, i.name as des, m.name, number, 'input' as type
-            FROM units as u
+            FROM unit as u
             #INNER JOIN tracking as tk ON tk.id = u.tracking_id
             INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
             INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=1
@@ -488,7 +486,7 @@ trait DBTracking{
             UNION
     
             SELECT tk.unit_id, i.name as des, m.name, number, 'ouput' as type
-            FROM units as u
+            FROM unit as u
             INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
             INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=2
             INNER JOIN input as i on i.id = ui.input_id
@@ -502,7 +500,7 @@ trait DBTracking{
             CASE i.type
             WHEN 1 THEN CASE (input_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END
             WHEN 2 THEN CASE (output_status >> (number-1)) % 2 WHEN 1 THEN value_on ELSE value_off END END as value
-            FROM units as u
+            FROM unit as u
             
             LEFT JOIN tracking as t ON u.id = t.unit_id AND u.tracking_date = t.date_time
             LEFT JOIN unit_input as ui ON ui.unit_id = u.id
@@ -556,7 +554,7 @@ trait DBTracking{
 
         $cn->query = 
         "SELECT tk.unit_id, i.name as des, m.name, number, 'input' as type
-        FROM units as u
+        FROM unit as u
         #INNER JOIN tracking as tk ON tk.id = u.tracking_id
         INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
         INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=1
@@ -567,7 +565,7 @@ trait DBTracking{
         UNION
 
         SELECT tk.unit_id, i.name as des, m.name, number, 'ouput' as type
-        FROM units as u
+        FROM unit as u
         INNER JOIN tracking as tk ON tk.unit_id = u.id and tk.date_time=u.tracking_date
         INNER JOIN unit_input as ui on ui.unit_id = tk.unit_id and ui.type=2
         INNER JOIN input as i on i.id = ui.input_id
@@ -595,7 +593,7 @@ trait DBTracking{
         t.*, date_format(date_time, '%d/%m/%Y %T') as date_time
 
         FROM tracking as t
-        INNER JOIN units as u ON u.tracking_id = t.id
+        INNER JOIN unit as u ON u.tracking_id = t.id
         ORDER BY unit_id
                 
         ";
@@ -899,42 +897,39 @@ trait DBHistory{
 	public function __loadUnits(){
         $cn = $this->cn;
 		
-        $cn->query = "
-        
-        SELECT
+        $cn->query = "SELECT
             u.id as unit_id,
             ac.client_id as client_id,
-            cl.client,
+            cl.name as client,
             u.account_id,
             ac.name as account,
             u.device_id,
-            de.device_name,
+            de.name as device_name,
             u.vehicle_id,
             vn.name as vehicle_name,
-            ic.icon, ve.plate, br.brand, mo.model, ve.color, t.id as trackId
+            ic.icon, ve.plate, br.name as brand, mo.name as model, ve.color, t.id as trackId
 
 
-        FROM units as u
-        LEFT JOIN units_names as vn ON vn.id = u.name_id
+            FROM unit as u
+            LEFT JOIN unit_name as vn ON vn.id = u.name_id
 
-        LEFT JOIN users_units as uu ON uu.unit_id = u.id
+            LEFT JOIN user_unit as uu ON uu.unit_id = u.id
 
-        LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id
+            LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
 
-        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
-        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
+            LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+            LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
-        INNER JOIN devices as de ON de.id = u.device_id
-        INNER JOIN devices_names as dn ON dn.name = de.device_name
+            INNER JOIN device as de ON de.id = u.device_id
+            INNER JOIN device_name as dn ON dn.name = de.name
 
 
-        LEFT JOIN icon as ic ON ic.id = u.icon_id
+            LEFT JOIN icon as ic ON ic.id = u.icon_id
 
-        LEFT JOIN accounts as ac ON ac.id = u.account_id
-        LEFT JOIN clients as cl ON cl.id = ac.client_id
-        INNER JOIN tracking as t ON t.id = u.tracking_id
-        ORDER BY u.id
-        ";
+            LEFT JOIN account as ac ON ac.id = u.account_id
+            LEFT JOIN client as cl ON cl.id = ac.client_id
+            INNER JOIN tracking as t ON t.id = u.tracking_id
+            ORDER BY u.id";
 		$result = $cn->execute();
 		
         

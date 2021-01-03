@@ -98,7 +98,7 @@ class Mysql extends DBase{
 		if($this->c->errno){
 			$this->error = $this->c->error;
 			$this->errno = $this->c->errno;
-			//hr($this->error);
+			hr($this->error);
 			
 			return true;
 		}

@@ -2,7 +2,7 @@
 	"form":"client",
 	"caption":"Clientes",
 	"class":"basic",
-	"query":"SELECT * FROM clients",
+	"query":"SELECT * FROM client",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -22,7 +22,7 @@
 	"groups":{},
 	"infoFields":[
 		{"name":"id","caption":"Código"},
-		{"name":"client","caption":"Nombre"}
+		{"name":"name","caption":"Nombre"}
 
 	],
 	

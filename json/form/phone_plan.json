@@ -1,8 +1,8 @@
 {
-	"form":"phone_plans",
+	"form":"phone_plan",
 	"caption":"Planes GSM",
 	"class":"",
-	"query":"SELECT * FROM phone_plans",
+	"query":"SELECT * FROM phone_plan",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{

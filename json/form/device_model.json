@@ -1,8 +1,8 @@
 {
-	"form":"brands",
-	"caption":"Operadoras Telefónicas",
+	"form":"device_model",
+	"caption":"Modelos",
 	"class":"",
-	"query":"SELECT * FROM phone_carriers",
+	"query":"SELECT * FROM device_model",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -18,7 +18,7 @@
 	"groups":{},
 	"infoFields":[
 		{"name":"id","caption":"Código"},
-		{"name":"brand","caption":"Marca"}
+		{"name":"name","caption":"Modelo"}
 
 	],
 	

@@ -19,7 +19,7 @@
 	"groups":{},
 	"infoFields":[
         {"name":"unit_id","caption":"","input":"list","type":"text",
-			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM units as u LEFT JOIN units_names as vn ON vn.id = u.name_id LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
+			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM unit as u LEFT JOIN unit_name as vn ON vn.id = u.name_id LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
 			"events":{
 				"change":"S.getElement('comm').setUnit(this.getInput('unit_id').getValue());"
 			},

@@ -2,7 +2,7 @@
 	"form":"phone_number",
 	"caption":"Líneas Telefónicas",
 	"class":"",
-	"query":"SELECT phone_numbers.* FROM clients as cl INNER JOIN accounts as ac ON ac.client_id = cl.id INNER JOIN units as u ON u.account_id = ac.id INNER JOIN devices as d ON d.id = u.device_id INNER JOIN phone_numbers ON phone_numbers.id = d.phone_number_id WHERE cl.id = @clientIdx ORDER BY 2",
+	"query":"SELECT phone_number.* FROM client as cl INNER JOIN account as ac ON ac.client_id = cl.id INNER JOIN unit as u ON u.account_id = ac.id INNER JOIN device as d ON d.id = u.device_id INNER JOIN phone_number ON phone_number.id = d.phone_number_id WHERE cl.id = @clientIdx ORDER BY 2",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{

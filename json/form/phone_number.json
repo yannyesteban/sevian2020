@@ -1,8 +1,8 @@
 {
-	"form":"devices_models",
-	"caption":"Modelos",
+	"form":"phone_number",
+	"caption":"Líneas Telefónicas",
 	"class":"",
-	"query":"SELECT * FROM devices_models",
+	"query":"SELECT * FROM phone_number",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{

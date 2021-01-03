@@ -2,7 +2,7 @@
 	"form":"client",
 	"caption":"Cuentas 2020",
 	"class":"basic",
-	"query":"SELECT * FROM accounts",
+	"query":"SELECT * FROM account",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -26,7 +26,7 @@
 		{"name":"client_id","caption":"Client", "input": "input", "type": "select",
 			"data":[
 				[0, "seleccione", "*"],
-				"select id, client from clients ORDER BY 2"
+				"select id, name from client ORDER BY 2"
 				
 			  ]}
 

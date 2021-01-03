@@ -20,7 +20,7 @@
         {
 			"name":"vehicle_id","caption":"nnn","input":"list","type":"text",
 			
-			"data":[["","","*"],"SELECT id, coalesce(plate, 'sin matricula') as vehicle FROM vehicles as d ORDER BY 2"],
+			"data":[["","","*"],"SELECT id, coalesce(plate, 'sin matricula') as vehicle FROM vehicle as d ORDER BY 2"],
 			"params":{"placeholder":"...VEHICLE"},
 			"events":{"change":"S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{vehicleId:this.getForm().getValue('vehicle_id')}}],});"}
 		},

@@ -1,8 +1,8 @@
 {
-	"form":"vehicles",
+	"form":"vehicle",
 	"caption":"Vehículos",
 	"className":"",
-	"query":"SELECT vehicles.id, vehicles.type_id, plate, brand_id, model_id, color_id, year, picture, serial, comment, status, admin_status  FROM vehicles",
+	"query":"SELECT vehicle.id, vehicle.type_id, plate, brand_id, model_id, color_id, year, picture, serial, comment, status, admin_status  FROM vehicle",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{
@@ -23,13 +23,13 @@
 		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select", "childs": true,
 		"data":[
 			["", "seleccione", "*"],
-			"select id, brand from brands ORDER BY 2"
+			"select id, name from brand ORDER BY 2"
 			
 		]},
 		{"name":"model_id","caption":"Modelo", "input": "input", "type": "select", "parent": "brand_id",
 		"data":[
 			["", "seleccione", "*"],
-			"select id, model, brand_id from models ORDER BY 2"
+			"select id, name, brand_id from model ORDER BY 2"
 			
 		]},
 		{"name":"color_id","caption":"Color", "input": "input", "type": "select",

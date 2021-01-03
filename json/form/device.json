@@ -2,7 +2,7 @@
 	"form":"devices",
 	"caption":"Modelos",
 	"class":"",
-	"query":"SELECT * FROM devices",
+	"query":"SELECT * FROM device",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{

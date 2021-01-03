@@ -2,7 +2,7 @@
 	"form":"brands",
 	"caption":"Marca de Vehículos",
 	"class":"",
-	"query":"SELECT * FROM brands",
+	"query":"SELECT * FROM vehicle_brand",
 	"menuName":"/menu/grid",
 	"methods":{
 		"request":{

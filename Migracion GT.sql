@@ -87,42 +87,36 @@ ORDER BY unit_id, pos
 )
 
 
-
-
-
-
-
-
-
+/* vehicle_model */
 TRUNCATE gt.vehicle_model;
-INSERT INTO gt.vehicle_model (id2, model, brand_id )
+INSERT INTO gt.vehicle_model (id2, name, brand_id )
 
 SELECT mm.codmodelo, mm.modelo, b.id
 FROM cota.modelos as mm
 INNER JOIN gt.vehicle_brand as b ON b.id2 = mm.codmarca
 LEFT JOIN vehicle_model as m ON m.id2 = mm.codmodelo
-WHERE m.id2 IS NULL
+WHERE m.id2 IS NULL;
 
 
-/* tabla clients*/
-truncate clients;
+/* tabla client*/
+truncate client;
 
-INSERT INTO  gt.clients (id2, client, status)
+INSERT INTO  gt.client (id2, name, status)
 SELECT c.codcliente,ucase(c.nombre),c.situacion
 FROM cota.clientes as c;
 
-/* tabla accounts*/
-truncate accounts;
+/* tabla account*/
+truncate account;
 
-INSERT INTO gt.accounts
+INSERT INTO gt.account
 (id2, client_id, type_id, person_id, name, state_id, city, address, email, comment, phone, fax, status)
 SELECT coddato, 0, tipo_persona, codpersona, ucase(nombre), codestado, ciudad, direccion, email, observaciones, telefono, fax, status
-FROM datos_administrativos as d;
+FROM cota.datos_administrativos as d;
 
-UPDATE gt.accounts as a
+UPDATE gt.account as a
 INNER JOIN cota.datos_administrativos as DA ON da.coddato=a.id2
 #INNER JOIN cota.clientes as CL ON cl.codcliente= DA.codcliente
-INNER JOIN gt.clients as c ON c.id2 = DA.codcliente
+INNER JOIN gt.client as c ON c.id2 = DA.codcliente
 SET client_id = c.id
 /* equipos:*/
 /*modulo= marca_equipos
@@ -144,7 +138,7 @@ c.direccion, c.telefono, c.telefono2, c.telefono3, c.email1, c.email2, c.email3
 FROM cota.contactos c
 LEFT JOIN gt.clients as cc ON cc.id2 = c.codcliente
 LEFT JOIN gt.contacts as c2 ON c2.id2 = c.codcontacto
-WHERE c2.id2 IS NULL
+WHERE c2.id2 IS NULL;
 
 
 truncate phone_numbers;
@@ -155,34 +149,31 @@ insert into gt.phone_numbers
 SELECT codlinea, codplan, codoperadora, codcuenta, numero_voz, numero_datos, serial_sim, status FROM cota.lineas l;
 
 
-INSERT INTO gt.devices
-(id2, device_name, version_id,  serial, imei, password, phone_number_id, installed, comment, activo, status)
-
-
 truncate devices;
+INSERT INTO gt.device
+(id2, name, version_id,  serial, imei, password, phone_number_id, installed, comment, activo, status)
+
 SELECT codequipo, CE.codigo, 0, serial, imei,  password, linea_celular, fecha_instalacion, concat(ifnull(observaciones,''),' ', ifnull(ficha_equipo,'')), activo, e.status
 FROM cota.equipos as  E
-LEFT join cota.codigos_equipos CE on CE.id = E.codigo_und
-
-;
+LEFT join cota.codigos_equipos CE on CE.id = E.codigo_und;
 
 
-/* table vehicles*/
+/* table vehicle*/
 
-TRUNCATE vehicles;
+TRUNCATE gt.vehicle;
 
-SELECT * FROM vehiculos v;
+SELECT * FROM cota.vehiculos v;
 
-INSERT INTO gt.vehicles
+INSERT INTO gt.vehicle
 (id2, account_id, device_id, type_id, name_id, aux_name, plate, brand_id, model_id, status, year, color, color_id, serial, picture, servicio_ini, comment, admin_status)
 
 
 SELECT codvehiculo, null, null, null, null,  codigo2,  placa, b.id as codmarca, m.id as codmodelo, v.status, ano, v.color,c.id, v.serial, foto, v.servicio_ini, observaciones, status_admin
 FROM cota.vehiculos as v
-LEFT JOIN vehicle_brand as b ON b.id2 = v.codmarca
-LEFT JOIN vehicle_model as m ON m.id2 = v.codmodelo
+LEFT JOIN gt.vehicle_brand as b ON b.id2 = v.codmarca
+LEFT JOIN gt.vehicle_model as m ON m.id2 = v.codmodelo
 left join gt.vehicle_color as c on c.color = v.color
-ORDER BY 1
+ORDER BY 1;
 
 /*table UNITS*/
 truncate units_names;

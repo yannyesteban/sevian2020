@@ -2,7 +2,7 @@
 	"form":"geofence",
 	"caption":"Geocercas",
 	"className":"webcar",
-	"query":"SELECT * FROM geofences",
+	"query":"SELECT * FROM geofence",
 	"menuName":"/menu/geofence_menu",
 	"methods":{
 		"request":{
