@@ -80,7 +80,7 @@ class HCommand extends \sevian\element {
     }
 	
 	
-	private function paramsLoad($dataType = 1, $commandId, $unitId, $h_id=0, $description = ''){
+	private function paramsLoad($dataType, $commandId, $unitId, $h_id=0, $description = ''){
 		//$dataType = 4;
 		
 		$command = '';

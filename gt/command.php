@@ -575,7 +575,7 @@ class Command extends \Sevian\Element{
 	}
 
 
-	private function paramsLoad($dataType = 1, $commandId, $unitId, $h_id=0, $description = ''){
+	private function paramsLoad($dataType, $commandId, $unitId, $h_id=0, $description = ''){
 		$command = '';
 
 		$cn = $this->cn;

@@ -8,7 +8,7 @@ $cn = [
 		'port'		=> '3306',
 		'user'		=> 'root',
 		'pass'		=> '123456',
-		'dbase'		=> 'gt',
+		'dbase'		=> 'gt2',
 		'charset'	=> 'utf-8'],
 	
 	'sevian' => [

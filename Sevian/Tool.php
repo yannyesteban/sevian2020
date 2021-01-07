@@ -282,7 +282,7 @@ class Tool{
 		return $q;		
 	}
 	
-	static function param($q = "", &$p){
+	static function param($q, &$p){
 
 		if(trim($q) == ""){
 			return "";	
