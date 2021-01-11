@@ -737,7 +737,7 @@ var GTCommunication = (($) => {
         }
         
         paramReadLoad(commandId){
-
+alert(33)
             if((this.getTypeCommand() == "A" || this.getTypeCommand() == "R") && this.getQParams() > 0){
                 let unitId = this._form.getInput("unit_idx").getValue();
 
