@@ -2,7 +2,7 @@
 	"name":"pending",
 	"caption":"Comandos Pendientes",
 	"className":"webcar",
-	"query":"SELECT pending.id,pending.unit_id, c.command as name, pending.command, CASE pending.type WHEN 1 THEN 'SET' ELSE 'GET' END as type, pending.datetime, (TIMEDIFF(now(), datetime)) as delay FROM pending INNER JOIN devices_commands as c ON c.id = pending.command_id WHERE pending.unit_id='@unit_idx'",
+	"query":"SELECT pending.id,pending.unit_id, c.command as name, pending.command, CASE pending.type WHEN 1 THEN 'SET' ELSE 'GET' END as type, pending.datetime, (TIMEDIFF(now(), datetime)) as delay FROM pending INNER JOIN device_command as c ON c.id = pending.command_id WHERE pending.unit_id='@unit_idx'",
 	"menuName":"/menu/pending",
 	
 	"methods":{

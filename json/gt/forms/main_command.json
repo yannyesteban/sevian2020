@@ -46,7 +46,8 @@
             "parent_":"account_idx",
             "params":{"placeholder":"...UNIDAD"},
             "events":{
-                "change":"this.getContext().loadUnit(this.getContext()._form.getInput('unit_idx').getValue());"
+                "change2":"console.log(this);this.getContext().loadUnit(this.getContext()._form.getInput('unit_idx').getValue());",
+                "change":"this.loadUnit(this._form.getInput('unit_idx').getValue());"
             }
         },
         {

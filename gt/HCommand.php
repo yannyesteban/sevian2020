@@ -91,8 +91,8 @@ class HCommand extends \sevian\element {
 		$cn = $this->cn;
 		$cn->query = 
 		"SELECT c.*,sum(case when mode='Q' then 1 else 0 end) as qparams
-			FROM devices_commands as c
-			LEFT JOIN devices_comm_params as p ON c.id = p.command_id
+			FROM device_command as c
+			LEFT JOIN device_comm_param as p ON c.id = p.command_id
 			WHERE c.id = '$commandId';";
 		$result = $cn->execute();
 		if($rs = $cn->getDataAssoc($result)){
@@ -104,9 +104,9 @@ class HCommand extends \sevian\element {
 
 		$cn->query = 
 			"SELECT v.param_id, v.value, v.title, p.param, c.command, type_value
-			FROM devices_params_value as v
-			INNER JOIN devices_comm_params as p ON p.id = v.param_id
-			INNER JOIN devices_commands as c ON c.id = command_id
+			FROM device_param_value as v
+			INNER JOIN device_comm_param as p ON p.id = v.param_id
+			INNER JOIN device_command as c ON c.id = command_id
 			WHERE c.id = '$commandId'
 		";
 
@@ -128,8 +128,8 @@ class HCommand extends \sevian\element {
 			$cn->query = 
 			"SELECT p.*, '' as value, 1 param_mode, 0 as exist,
 			'' as h_command_id, '' as param_id
-			FROM devices_comm_params as p
-			INNER JOIN devices_commands as c ON c.id = p.command_id and c.type = p.type
+			FROM device_comm_param as p
+			INNER JOIN device_command as c ON c.id = p.command_id and c.type = p.type
 			
 			WHERE p.command_id = '$commandId'
 			ORDER by `order`;";
@@ -138,11 +138,11 @@ class HCommand extends \sevian\element {
 			
 			$cn->query = "SELECT p.*, co.value, 1 as param_mode,
 					CASE WHEN co.param_id IS NOT NULL THEN 1 ELSE 0 END as exist
-				FROM units as u
-				INNER JOIN devices as d ON d.id = u.device_id
-				INNER JOIN devices_commands as c ON c.version_id = d.version_id
-				INNER JOIN devices_comm_params as p ON p.command_id = c.id and c.type = p.type
-				LEFT JOIN devices_config as co ON co.param_id = p.id AND co.unit_id = u.id
+				FROM unit as u
+				INNER JOIN device as d ON d.id = u.device_id
+				INNER JOIN device_command as c ON c.version_id = d.version_id
+				INNER JOIN device_comm_param as p ON p.command_id = c.id and c.type = p.type
+				LEFT JOIN device_config as co ON co.param_id = p.id AND co.unit_id = u.id
 				WHERE c.id = '$commandId' AND u.id = '$unitId'
 				ORDER BY `order`;";
 
@@ -151,8 +151,8 @@ class HCommand extends \sevian\element {
 			$cn->query = 
 			"SELECT p.*, '' as value, 1 param_mode, 0 as exist,
 			'' as h_command_id, '' as param_id
-			FROM devices_comm_params as p
-			INNER JOIN devices_commands as c ON c.id = p.command_id 
+			FROM device_comm_param as p
+			INNER JOIN device_command as c ON c.id = p.command_id 
 			
 			WHERE p.command_id = '$commandId' and p.mode = 'Q'
 			ORDER by `order`;";
@@ -163,7 +163,7 @@ class HCommand extends \sevian\element {
 				"SELECT p.*, co.value, CASE WHEN co.param_id IS NOT NULL THEN 2 ELSE 1 END as param_mode,
 				CASE WHEN co.param_id IS NOT NULL THEN 1 ELSE 0 END as exist,
 				co.h_command_id, co.param_id
-				FROM devices_comm_params as p
+				FROM device_comm_param as p
 				LEFT JOIN h_commands as h ON h.command_id = p.command_id and h.id = '$h_id'
 				LEFT JOIN h_commands_values as co ON co.param_id = p.id AND co.h_command_id = h.id
 				WHERE p.command_id = '$commandId'
@@ -172,11 +172,11 @@ class HCommand extends \sevian\element {
 		}elseif($dataType == 3){
 			$cn->query = "SELECT p.*, co.value, 1 as param_mode,
 					CASE WHEN co.param_id IS NOT NULL THEN 1 ELSE 0 END as exist
-				FROM units as u
-				INNER JOIN devices as d ON d.id = u.device_id
-				INNER JOIN devices_commands as c ON c.version_id = d.version_id
-				INNER JOIN devices_comm_params as p ON p.command_id = c.id
-				LEFT JOIN devices_config as co ON co.param_id = p.id AND co.unit_id = u.id
+				FROM unit as u
+				INNER JOIN device as d ON d.id = u.device_id
+				INNER JOIN device_command as c ON c.version_id = d.version_id
+				INNER JOIN device_comm_param as p ON p.command_id = c.id
+				LEFT JOIN device_config as co ON co.param_id = p.id AND co.unit_id = u.id
 				WHERE c.id = '$commandId' AND u.id = '$unitId'
 				ORDER BY `order`;";
 				
@@ -184,8 +184,8 @@ class HCommand extends \sevian\element {
 			$cn->query = 
 			"SELECT p.*, '' as value, 1 param_mode, 0 as exist,
 			'' as h_command_id, '' as param_id
-			FROM devices_comm_params as p
-			INNER JOIN devices_commands as c ON c.id = p.command_id and c.type = p.type
+			FROM device_comm_param as p
+			INNER JOIN device_command as c ON c.id = p.command_id and c.type = p.type
 			
 			WHERE p.command_id = '$commandId'
 			ORDER by `order`;";
