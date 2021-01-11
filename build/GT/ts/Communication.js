@@ -26,6 +26,7 @@ var GTCommunication = (($) => {
                 }, 5000);
             };
             this.onmessage = (event) => {
+                alert(99);
                 var server_message = event.data;
                 db(server_message);
                 try {
@@ -171,7 +172,7 @@ var GTCommunication = (($) => {
                             clientName: this.user,
                             config: []
                         });
-                        this.send(openMessage);
+                        this._ws.send(openMessage);
                         this.setMode('connected');
                         //db ("Websockect Connected...!");
                     },
@@ -185,6 +186,7 @@ var GTCommunication = (($) => {
                         }, 5000);
                     },
                     onmessage: (event) => {
+                        //db ("     onmessage !!!!");
                         const server_message = event.data;
                         //console.log(server_message)
                         try {
@@ -194,6 +196,7 @@ var GTCommunication = (($) => {
                             //db (json.message);
                             this.callOnMessage(json);
                             this._grid.createRow(json);
+                            //db(server_message);
                         }
                         catch (e) {
                             //alert(e)

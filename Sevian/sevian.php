@@ -210,7 +210,7 @@ class S{
 		
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
-		\Sevian\S::setSes("nombre1", "f-2000");
+		//\Sevian\S::setSes("nombre1", "f-2000");
 		
 		if(!self::$onAjax){
 

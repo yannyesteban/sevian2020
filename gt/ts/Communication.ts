@@ -33,7 +33,7 @@ var GTCommunication = (($) => {
         }
         onmessage:Function = (event)=>{
 
-            
+            alert(99)
             var server_message = event.data;
             db (server_message);
 
@@ -232,7 +232,6 @@ var GTCommunication = (($) => {
 
                     onopen:(event)=>{
 			
-			
                         let openMessage = JSON.stringify({
                             type:"connect",
                             clientName: this.user,
@@ -240,8 +239,7 @@ var GTCommunication = (($) => {
                             
             
                         });
-            
-                        this.send(openMessage);
+                        this._ws.send(openMessage);
                         this.setMode('connected');
                         //db ("Websockect Connected...!");
                     },
@@ -256,7 +254,7 @@ var GTCommunication = (($) => {
                         }, 5000);
                     },
                     onmessage:(event)=>{
-                        
+                        //db ("     onmessage !!!!");
                         const server_message = event.data;
     
                         //console.log(server_message)
@@ -267,6 +265,7 @@ var GTCommunication = (($) => {
                             //db (json.message);
                             this.callOnMessage(json);
                             this._grid.createRow(json);
+                            //db(server_message);
     
                         }catch(e){
                             //alert(e)
