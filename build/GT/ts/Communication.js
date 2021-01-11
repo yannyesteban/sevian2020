@@ -820,6 +820,7 @@ var GTCommunication = (($) => {
                     values.push(inputs[i].getValue());
                 }
             }
+            alert(8);
             let str1 = JSON.stringify({
                 type: type,
                 deviceId: 1,
