@@ -26,7 +26,6 @@ var GTCommunication = (($) => {
                 }, 5000);
             };
             this.onmessage = (event) => {
-                alert(99);
                 var server_message = event.data;
                 db(server_message);
                 try {
@@ -584,7 +583,6 @@ var GTCommunication = (($) => {
             });
         }
         paramReadLoad(commandId) {
-            alert(33);
             if ((this.getTypeCommand() == "A" || this.getTypeCommand() == "R") && this.getQParams() > 0) {
                 let unitId = this._form.getInput("unit_idx").getValue();
                 let f = this._form.getFormData();
@@ -821,7 +819,6 @@ var GTCommunication = (($) => {
                     values.push(inputs[i].getValue());
                 }
             }
-            alert(8);
             let str1 = JSON.stringify({
                 type: type,
                 deviceId: 1,
