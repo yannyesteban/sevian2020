@@ -2,6 +2,7 @@
 namespace Sevian;
 
 date_default_timezone_set ( 'America/Caracas' );
+ini_set("session.gc_maxlifetime","18000");
 
 include 'Types.php';
 include 'info.php';
