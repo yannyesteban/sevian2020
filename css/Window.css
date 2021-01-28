@@ -25,15 +25,19 @@
   -webkit-transition: 0.5s ease-in background-color;
   transition: 0.5s ease-in background-color;
 }
+
 .sgWin.sevian:hover {
   background-color: rgba(1, 1, 1, 0.8);
 }
+
 .sgWin.sevian.hidden {
   visibility: hidden;
 }
+
 .sgWin.sevian.hidden > .body > * {
   display: none;
 }
+
 .sgWin.sevian > .caption {
   background-color: rgba(185, 6, 0, 0.719);
   -webkit-box-flex: 0;
@@ -50,6 +54,7 @@
   font-size: 13px;
   cursor: default;
 }
+
 .sgWin.sevian > .caption > .win-btn {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
@@ -59,31 +64,40 @@
   height: 20px;
   display: inline-block;
 }
+
 .sgWin.sevian > .caption > .win-btn.min {
   background-position: 0px -20px;
 }
+
 .sgWin.sevian > .caption > .win-btn.min:HOVER {
   background-position: 0px -200px;
 }
+
 .sgWin.sevian > .caption > .win-btn.max {
   background-position: -40px -20px;
 }
+
 .sgWin.sevian > .caption > .win-btn.max:HOVER {
   background-position: -40px -200px;
 }
+
 .sgWin.sevian > .caption > .win-btn.auto {
   background-position: -20px -20px;
 }
+
 .sgWin.sevian > .caption > .win-btn.auto:HOVER {
   background-position: -20px -200px;
 }
+
 .sgWin.sevian > .caption > .win-btn.close {
   margin-right: 4px;
   background-position: -60px -20px;
 }
+
 .sgWin.sevian > .caption > .win-btn.close:HOVER {
   background-position: -60px -200px;
 }
+
 .sgWin.sevian > .caption > .icon {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 auto;
@@ -94,6 +108,7 @@
   pointer-events: none;
   margin-left: 4px;
 }
+
 .sgWin.sevian > .caption > .text {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
@@ -103,63 +118,79 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .sgWin.sevian > .body {
   overflow: auto !important;
 }
+
 .sgWin.sevian.min {
   height: auto !important;
   max-width: 160px !important;
 }
+
 .sgWin.sevian.min > .caption > .win-btn.min {
   display: none;
 }
+
 .sgWin.sevian.min > .body {
   -webkit-box-flex: 0 !important;
       -ms-flex: 0 0 0px !important;
           flex: 0 0 0px !important;
   height: 0px;
 }
+
 .sgWin.sevian.auto {
   height: auto !important;
   width: auto !important;
 }
+
 .sgWin.sevian.auto > .caption > .win-btn.auto {
   display: none;
 }
+
 .sgWin.sevian.auto > .body {
   height: auto !important;
   width: auto !important;
 }
+
 .sgWin.sevian.w-auto {
   width: auto !important;
 }
+
 .sgWin.sevian.w-auto > .body {
   width: auto !important;
 }
+
 .sgWin.sevian.h-auto {
   height: auto !important;
 }
+
 .sgWin.sevian.h-auto > .body {
   height: auto !important;
 }
+
 .sgWin.sevian.max {
   width: calc(100% - 20px) !important;
   height: calc(100% - 20px) !important;
   top: 10px !important;
   left: 10px !important;
 }
+
 .sgWin.sevian.max > .caption > .win-btn.max {
   display: none;
 }
+
 .sgWin.sevian.close {
   visibility: hidden;
 }
+
 .sgWin.sevian.moving {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
 }
+
 .sgWin.sevian.resizing {
   -webkit-user-select: none;
      -moz-user-select: none;

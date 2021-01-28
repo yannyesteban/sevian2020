@@ -1,3 +1,6 @@
+$path_font:fonts\/;
+
+$path_images:"../images/";
 
 
 .cota-main{
@@ -104,32 +107,38 @@
   
   
    
-    padding: 4px;
+    padding: 2px;
     //color:rgb(29, 117, 158);
-    font-size: 11px;
+    font-size: 9px;
     //min-width: 240px;
     display: grid;
     height: 100%;
     overflow: auto;
     grid-gap: 5px;
     text-transform: uppercase;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    //grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: 1fr;
     align-content: start; 
     >div{
       background-color: rgba(87, 87, 87, 0.555);
       //
-      padding: 5px;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      //padding: 2px;
       >:nth-child(1){
-        padding-left: 10px;
+        //padding-left: 10px;
         color:rgb(253, 238, 32);
 
-        font-size: 11px;
+        font-size: 9px;
+        grid-column: 1;
       }
       >:nth-child(2){
         color:rgb(182, 182, 182);
-        font-size: 13px;
+        font-size: 10px;
         //font-weight: bold;
-        margin-top: 5px;
+        //margin-top: 2px;
+        grid-column: 2;
+        text-align: left;
       }
     }
     
@@ -380,14 +389,14 @@
   &.connected{
     background-color: rgb(19, 187, 75)!important;
     >.image{
-      background-image: url(../../images/connected.png);
+      background-image: url(#{$path_images}connected.png);
     }
   }
 
   &.disconnected {
     background-color: rgb(245, 103, 21)!important;
     >.image{
-      background-image: url(../../images/disconnected.png);
+      background-image: url(#{$path_images}disconnected.png);
     }
   }
   

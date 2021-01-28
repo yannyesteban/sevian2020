@@ -23,8 +23,8 @@ html, body {
   min-width: 80px;
   min-height: 50px;
   /*max-width:500px;
-  max-height: 500px;
-  */
+		max-height: 500px;
+		*/
   background-color: #267203;
   _overflow: hidden;
 }
@@ -93,17 +93,20 @@ html, body {
   min-width: 50px;
   min-height: 60px;
 }
+
 #m11 .sss {
   -moz-user-select: none;
   -webkit-user-select: none;
       -ms-user-select: none;
           user-select: none;
 }
+
 #m11 .hand {
   overflow: hidden;
   min-height: 50px;
   background-color: #582121;
 }
+
 #m11 .hand > * {
   -webkit-user-select: none;
       -ms-user-select: none;
@@ -111,6 +114,7 @@ html, body {
   -moz-user-select: none;
   pointer-events: none;
 }
+
 #m11 ul {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;

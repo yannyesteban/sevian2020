@@ -21,20 +21,22 @@ html, body{
 	
 }
 
-body{
-	
-}
+
 
 form{
 
-height: 100%;
-margin: 0px;
-padding: 0px;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
 }
 
 
 .sg-menu{
-	font-size: 12px;
+	
+	.text{
+		font-size: 9px;
+		margin: 2px;	
+	}
 	.icon{
 		display: none;
 	}

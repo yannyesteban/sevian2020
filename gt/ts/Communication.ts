@@ -350,6 +350,22 @@ var GTCommunication = (($) => {
                 mode:"auto",
 				className:["sevian"],
 				child:_formDiv.get()
+            });
+            
+
+            const _formDiv2 = $().create("form").id("aas");
+            
+            
+            this._win["main3"] = new Float.Window({
+                visible:true,
+                caption: "Ventana Inmediato II",
+                left:10+280+20+390-300,
+                top:100,
+                width: "600px",
+                height: "250px",
+                mode:"auto",
+				className:["sevian"],
+				child:_formDiv2.get()
 			});
 
             if(this.unitId){

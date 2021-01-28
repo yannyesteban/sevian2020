@@ -1,2 +1,2 @@
-@font-face{font-family:Hemihead;src:url(../../../fonts/HEMIHEAD.TTF)}@font-face{font-family:airstrike;src:url(../../fonts/airstrike.ttf)}*{-webkit-box-sizing:border-box;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}html,body{margin:0px;height:100%}form{height:100%;margin:0px;padding:0px}.sg-menu{font-size:12px}.sg-menu .icon{display:none}
+@font-face{font-family:Hemihead;src:url(../../../fonts/HEMIHEAD.TTF)}@font-face{font-family:airstrike;src:url(../../fonts/airstrike.ttf)}*{-webkit-box-sizing:border-box;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}body,html{margin:0;height:100%}form{height:100%;margin:0;padding:0}.sg-menu .text{font-size:9px;margin:2px}.sg-menu .icon{display:none}
 /*# sourceMappingURL=cota_main.min.css.map */

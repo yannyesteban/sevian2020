@@ -44,6 +44,7 @@ html, body {
             transform: translate(-10%, -210%);
   }
 }
+
 @-webkit-keyframes close_fly {
   0% {
     -webkit-transform-origin: 0% 0%;
@@ -74,6 +75,7 @@ html, body {
             transform: translate(-10%, 110%);
   }
 }
+
 @keyframes close_fly {
   0% {
     -webkit-transform-origin: 0% 0%;
@@ -104,6 +106,7 @@ html, body {
             transform: translate(-10%, 110%);
   }
 }
+
 @-webkit-keyframes close_fly2 {
   0% {
     -webkit-transform-origin: 0% 0%;
@@ -120,6 +123,7 @@ html, body {
     _        transform: translate(-10%, 110%);
   }
 }
+
 @keyframes close_fly2 {
   0% {
     -webkit-transform-origin: 0% 0%;
@@ -136,6 +140,7 @@ html, body {
     _        transform: translate(-10%, 110%);
   }
 }
+
 #x1.fly {
   background-color: chocolate;
   -webkit-transition-property: opacity;
@@ -160,8 +165,8 @@ html, body {
   background-color: aqua;
   -webkit-transform: translate(-10%, -110%);
           transform: translate(-10%, -110%);
-  -webkit-animation: close_fly 4s ease-in 6s forwards;
-          animation: close_fly 4s ease-in 6s forwards;
+  -webkit-animation: close_fly  4s ease-in 6s forwards;
+          animation: close_fly  4s ease-in 6s forwards;
 }
 
 #x1[data-sg-mode=close] {
@@ -197,8 +202,8 @@ html, body {
   background-color: #d0d0d0;
   -webkit-transform: translate(-10%, -10%);
           transform: translate(-10%, -10%);
-  -webkit-animation: close_fly2 3s ease-out 4s forwards;
-          animation: close_fly2 3s ease-out 4s forwards;
+  -webkit-animation: close_fly2  3s ease-out 4s forwards;
+          animation: close_fly2  3s ease-out 4s forwards;
 }
 
 #x2[data-sg-mode=close] {

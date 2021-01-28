@@ -240,10 +240,16 @@ $cls_elements['gt-communication'] = [
 	'file' 	=> MAIN_PATH.'gt/Communication.php',
 	'class' => '\GT\Communication',
 	'enable' => true,
-	'js'=>[[
+	'js'=>[
+		[
 		'file' 	=> MAIN_PATH.'build/GT/ts/Communication.js',
 		'begin'=> false
-	]],
+		],
+		[
+			'file' 	=> MAIN_PATH.'build/GT/ts/InfoComm.js',
+			'begin'=> false
+		]
+	],
 	'css'=>[],
 	'init'=>[
 		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',

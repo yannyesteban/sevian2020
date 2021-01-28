@@ -13,12 +13,14 @@
   background-color: #8fa1bb;
   overflow: auto;
 }
+
 .gtxxx ._body {
   height: 100%;
   border: 2px solid green;
   padding: 10px;
   overflow: auto;
 }
+
 .gtxxx ._body > * {
   border: 3px solid #0866b3;
   margin: 2px;
@@ -29,26 +31,32 @@
   max-height: 300px;
   overflow: scroll;
 }
+
 .gtxxx ._body > * > * {
   border: 2px solid #da0782;
   overflow: auto;
   max-height: 200px;
 }
+
 .gtxxx fform {
   overflow: auto;
   border: 2px solid #63a000;
 }
+
 .gtxxx fform > * {
   overflow: auto;
 }
+
 .gtxxx fform > * > * {
   overflow: auto;
   border: 0px solid blue;
 }
+
 .gtxxx fform > * > * > * {
   overflow: auto;
   border: 0px solid #a04cb9;
 }
+
 .gtxxx > .body {
   height: 100%;
   width: 100%;
@@ -61,6 +69,7 @@
           flex-direction: row;
   overflow: auto;
 }
+
 .gtxxx > .body > * {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
@@ -69,9 +78,11 @@
   margin: 10px;
   overflow: auto;
 }
+
 .gtxxx > .body .p5 {
   display: none;
 }
+
 .gtxxx .command_name {
   color: #474747;
   font-weight: bold;
@@ -80,6 +91,7 @@
 .gt-command-main {
   background-color: #e7e7e7;
 }
+
 .gt-command-main .page {
   overflow: auto;
   display: -webkit-box;
@@ -95,6 +107,7 @@
       -ms-flex-align: center;
           align-items: center;
 }
+
 .gt-command-main .page .field {
   margin: 2px;
   display: -webkit-box;
@@ -108,9 +121,11 @@
       -ms-flex-align: center;
           align-items: center;
 }
+
 .gt-command-main .page .field label {
   margin-right: 5px;
 }
+
 .gt-command-main .page .field input {
   padding: 4px;
 }
