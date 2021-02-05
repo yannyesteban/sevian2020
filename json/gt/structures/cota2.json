@@ -74,6 +74,18 @@
 
 		},
 		{
+			"id":7,
+			"element":"s-menu",
+			"name":"/gt/menus/comm_menu",
+			"method":"create",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
 			"id":6,
 			"element":"s-menu",
 			"name":"/gt/menus/comm_tool",

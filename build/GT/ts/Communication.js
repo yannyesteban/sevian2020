@@ -131,6 +131,7 @@ var GTCommunication = (($) => {
             this._grid = null;
             this.callOnMessage = (messaje) => { };
             this._win = [];
+            this._infoWin = null;
             this.showConnectedUnit = true;
             this._timer2 = null;
             this.delay2 = 12000;
@@ -139,6 +140,7 @@ var GTCommunication = (($) => {
             this._form = null;
             this.mode = "";
             this.onSetMode = (mode) => { return this.mode; };
+            this._infoMenu = null;
             this.socketServer = {
                 host: "127.0.0.1",
                 port: 3310
@@ -190,11 +192,22 @@ var GTCommunication = (($) => {
                         //console.log(server_message)
                         try {
                             let json = JSON.parse(server_message);
-                            //console.log(json);
+                            console.log(json);
                             //alert(json.message)
                             //db (json.message);
                             this.callOnMessage(json);
                             this._grid.createRow(json);
+                            //info.add({name:"L-V06", time:"8:00am", type:"C", message:"CONECTING"});
+                            this._infoWin.add({
+                                name: json.name,
+                                type: 4,
+                                message: json.message,
+                                info: {
+                                    user: json.user,
+                                    date: json.date,
+                                    delay: json.delay
+                                }
+                            });
                             //db(server_message);
                         }
                         catch (e) {
@@ -260,17 +273,76 @@ var GTCommunication = (($) => {
                 className: ["sevian"],
                 child: _formDiv.get()
             });
+            this._infoMenu = S.getElement(7);
+            const typeGroup = {
+                1: 2,
+                2: 2,
+                3: 2,
+                4: 2,
+                7: 2,
+                8: 2,
+                5: 1,
+                6: 0
+            };
             const _formDiv2 = $().create("form").id("aas");
+            _formDiv2.create("div").id("div2");
+            const infoMenu = new InfoMenu({
+                menu: this._infoMenu,
+                id: "div2"
+            });
+            this._infoWin = new InfoComm({
+                onread: (info) => {
+                    const counts = this._infoWin.getCounts();
+                    const sums = [0, 0, 0];
+                    for (let x in counts) {
+                        sums[typeGroup[x]] += counts[x];
+                    }
+                    for (let x in sums) {
+                        infoMenu.updateType(x, sums[x]);
+                    }
+                    console.log(counts);
+                    //infoMenu.updateType(info.type, counts[info.type]);
+                },
+                onadd: (info) => {
+                    const counts = this._infoWin.getCounts();
+                    const sums = [0, 0, 0];
+                    for (let x in counts) {
+                        sums[typeGroup[x]] += counts[x];
+                    }
+                    console.log(counts);
+                    console.log(sums);
+                    for (let x in sums) {
+                        console.log(x + " " + sums[x]);
+                        infoMenu.updateType(x, sums[x]);
+                    }
+                    //infoMenu.updateType(info.type, counts[info.type]);
+                }
+            });
+            _formDiv2.append(this._infoWin.get());
+            this._infoWin.add({ name: "L-V06", time: "8:00am", type: 5, cType: "SYNC", message: "CONECTING" });
+            this._infoWin.add({ name: "L-V08", time: "5:00am", type: 2, cType: "POS", message: "CONECTING" });
+            this._infoWin.add({ name: "x-U06", time: "4:00am", type: 3, cType: "CNN", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V99", time: "1:00am", type: 4, cType: "DIS", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V100", time: "1:00am", type: 2, cType: "DIS", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V101", time: "1:00am", type: 2, cType: "DIS", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V101", time: "1:00am", type: 5, cType: "DIS", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V101", time: "1:00am", type: 5, cType: "DIS", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V101", time: "1:00am", type: 5, cType: "DIS", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V101", time: "1:00am", type: 6, cType: "DIS", message: "CONECTING" });
+            this._infoWin.add({ name: "V-V101", time: "1:00am", type: 6, cType: "DIS", message: "CONECTING" });
             this._win["main3"] = new Float.Window({
                 visible: true,
                 caption: "Ventana Inmediato II",
-                left: 10 + 280 + 20 + 390 - 300,
+                left: 10 + 280 + 20 + 390 - 300 + 200,
                 top: 100,
-                width: "600px",
+                width: "400px",
                 height: "250px",
                 mode: "auto",
                 className: ["sevian"],
-                child: _formDiv2.get()
+                child: _formDiv2.get(),
+                resizable: true,
+                draggable: true,
+                closable: false
             });
             if (this.unitId) {
                 this.loadUnit(this.unitId);
@@ -866,6 +938,9 @@ var GTCommunication = (($) => {
                 useTag: 0
             });
             this._ws.send(str);
+        }
+        updateType(type, text) {
+            this.menu.getByValue(type).getCaption().text(text);
         }
     }
     return Communication;

@@ -1,0 +1,41 @@
+{
+	"name":"comm_menu",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal","comm-menu"],
+	"autoClose":false,
+	"params":false,
+	"onDataUser_":"S.send3(dataUser);",
+	"items":[
+		{
+			"caption":"100",
+			"value":"0",
+			"imageClass":"icon-comm-alert",
+			"propertys":{
+				"title":"",
+				"id":"button-connect2"
+			},
+			"action":"S.getElement('gt-info-11').show()"
+		},
+		{
+			"caption":"15",
+			"value":1,
+			"imageClass":"icon-comm-alarm",
+			"propertys":{
+				"title":""
+			},
+			"action":"S.getElement('gt-unit-10').showMenu()"
+		},
+		{
+			"caption":"",
+			"value":2,
+			"imageClass":"icon-comm-message",
+			"propertys":{
+				"title":""
+			},
+			"action":"S.getElement('gt-unit-10').showMenu()"
+		}
+
+	]
+}	

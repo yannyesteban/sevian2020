@@ -100,6 +100,15 @@ _sgObjet.prototype = {
 		return this.append(_sgQuery.create(tagName));
 		
 	},
+	createFirst: function(tagName){
+        if(tagName === false){
+            return this;
+        }
+        const ele = _sgQuery.create(tagName);
+		this.insertFirst(ele);
+		return ele;
+		
+	},
 
 	add: function(tagName){
 		this.append(_sgQuery.create(tagName));
@@ -198,7 +207,6 @@ _sgObjet.prototype = {
 		if(typeof(obj) === "object"){
 			if(obj instanceof _sgObjet){
 				//this.e.appendChild(obj.get());
-				
 				this.e.insertBefore(obj.get(), this.e.firstChild);
 				//return obj;
 				

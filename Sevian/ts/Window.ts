@@ -906,6 +906,7 @@ Float.Window = (($) => {
 
         resizable:boolean = true;
         draggable:boolean = true;
+        closable:boolean = true;
 
         autoClose:boolean = false;
         
@@ -954,8 +955,9 @@ Float.Window = (($) => {
                 this._create(main);
 
             }
-            
-            $(main.query(".win-btn.close")).on("click", () => this.setVisible(false));
+            if(this.closable){
+                $(main.query(".win-btn.close")).on("click", () => this.setVisible(false));
+            }
             main.on("mousedown", () => setActive(this));
 
             Float.Float.init(main.get());
@@ -1076,9 +1078,9 @@ Float.Window = (($) => {
                 caption.create("span").addClass(["win-btn", "auto"]).text("");
                 caption.create("span").addClass(["win-btn", "max"]).text("");
             }
-            
-            caption.create("span").addClass(["win-btn", "close"]).text("");
-
+            if(this.closable){
+                caption.create("span").addClass(["win-btn", "close"]).text("");
+            }    
             let body = main.create("div").addClass("body");
             if(this.child){
                 let child = $(this.child);
