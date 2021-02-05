@@ -113,15 +113,20 @@ function humanDiff (t1, t2) {
 
 
         types = {
+            0:"unk",
             1:"unit conected",
             2:"unit disconected",
             3:"unit sync message",
             4:"unit get position",
             5:"unit alarm",
             6:"unit event",
-            7:"unit message",
+            7:"unit receiving",
             8:"unit command"
         }
+
+        cTypes:string[] = [
+            "UNK", "CONN", "DISC", "SYNC", "POS", "ALARM", "EVENT","MSG","CMD"
+        ];
         constructor(info){
             
             //console.di(info);
@@ -167,18 +172,23 @@ function humanDiff (t1, t2) {
                 div.removeClass("new");
                 this.onread(message);
             });
-            div.create("div").text(message.name || "")
-            .on("click", ()=>{
+
+            div.create("div").text("+").addClass("btn-new").on("click", ()=>{
                 div.toggleClass("open");
                 
             });
+
+            div.create("div").text(message.name || "");
 
             const date = new Date();
             const start = date.getTime(); 
 
             div.create("div").text("Ahora").addClass("date").ds("date",date.toISOString()).ds("time", start);
-            div.create("div").text(message.cType || "");
+            div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
             div.create("div").text(message.message || "");
+            div.create("div").text("x").addClass("btn-delete").on("click", (event)=>{
+                this.deleteLine(event.currentTarget);
+            });
 
 
             if(typeof(message.info) === "object"){
@@ -232,6 +242,20 @@ function humanDiff (t1, t2) {
             
             return this.counts;
             
+        }
+
+        public deleteLine(e){
+            
+            e.parentNode.remove();
+            return;
+            
+            const ele = this.main.query(".main[data-line='${line}']");
+            alert(line)
+            if(ele){
+                ele.remove();
+                alert(8)
+            }
+
         }
     }
 

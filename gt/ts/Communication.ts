@@ -269,17 +269,18 @@ var GTCommunication = (($) => {
                             //alert(json.message)
                             //db (json.message);
                             this.callOnMessage(json);
-                            this._grid.createRow(json);
+                            //this._grid.createRow(json);
                             //info.add({name:"L-V06", time:"8:00am", type:"C", message:"CONECTING"});
 
                             this._infoWin.add({
                                 name:json.name,
-                                type:4,
+                                type:7,
                                 message: json.message,
                                 info:{
                                     user:json.user,
                                     date:json.date,
-                                    delay:json.delay
+                                    delay:json.delay,
+                                    message:json.message
                                 }
                             });
                             //db(server_message);
@@ -358,7 +359,7 @@ var GTCommunication = (($) => {
             this._grid = new Grid2(this.responseForm);
             
             this._win["main2"] = new Float.Window({
-                visible:true,
+                visible:false,
                 caption: "Ventana Inmediato",
                 left:10+280+20+390,
                 top:100,
@@ -402,7 +403,7 @@ var GTCommunication = (($) => {
                     for(let x in sums){
                         infoMenu.updateType(x, sums[x]); 
                     }
-                    console.log(counts);
+                    
                     //infoMenu.updateType(info.type, counts[info.type]);
                    
                 },
@@ -413,10 +414,9 @@ var GTCommunication = (($) => {
                         sums[typeGroup[x]] +=counts[x];
                     
                     }
-                    console.log(counts);
-                    console.log(sums);
+                    
                     for(let x in sums){
-                        console.log (x+" "+sums[x])
+                        //console.log (x+" "+sums[x])
                         infoMenu.updateType(x, sums[x]); 
                     }
                     //infoMenu.updateType(info.type, counts[info.type]);
@@ -425,27 +425,38 @@ var GTCommunication = (($) => {
             });
             _formDiv2.append(this._infoWin.get());
 
-            this._infoWin.add({name:"L-V06", time:"8:00am", type:5, cType:"SYNC", message:"CONECTING"});
-            this._infoWin.add({name:"L-V08", time:"5:00am", type:2, cType:"POS", message:"CONECTING"});
-            this._infoWin.add({name:"x-U06", time:"4:00am", type:3, cType:"CNN", message:"CONECTING"});
-            this._infoWin.add({name:"V-V99", time:"1:00am", type:4, cType:"DIS", message:"CONECTING"});
-            this._infoWin.add({name:"V-V100", time:"1:00am", type:2, cType:"DIS", message:"CONECTING"});
-            this._infoWin.add({name:"V-V101", time:"1:00am", type:2, cType:"DIS", message:"CONECTING"});
+            let info ={
+                user:"panda",
+                date:"2021-02-05",
+                delay:"0",
+                message:"TEST"
+            };
+            this._infoWin.add({info, name:"L-V06", time:"8:00am", type:5, cType:"SYNC", message:"ALARM INPUTS"});
+            this._infoWin.add({info, name:"L-V08", time:"5:00am", type:2, cType:"POS", message:"DISCONECTING"});
+            this._infoWin.add({info, name:"x-U06", time:"4:00am", type:3, cType:"CNN", message:"SYNC"});
+            this._infoWin.add({info, name:"V-V99", time:"1:00am", type:4, cType:"DIS", message:"10.2554, -65.4544"});
+            this._infoWin.add({info, name:"V-V100", time:"1:00am", type:2, cType:"DIS", message:"DISCONECTING"});
+            this._infoWin.add({info, name:"V-V101", time:"1:00am", type:2, cType:"DIS", message:"DISCONECTING"});
 
-            this._infoWin.add({name:"V-V101", time:"1:00am", type:5, cType:"DIS", message:"CONECTING"});
-            this._infoWin.add({name:"V-V101", time:"1:00am", type:5, cType:"DIS", message:"CONECTING"});
-            this._infoWin.add({name:"V-V101", time:"1:00am", type:5, cType:"DIS", message:"CONECTING"});
+            this._infoWin.add({info, name:"V-V101", time:"1:00am", type:5, cType:"DIS", message:"ALARM VELCOCIDAD"});
+            this._infoWin.add({info, name:"V-V101", time:"1:00am", type:6, cType:"DIS", message:"PUERTA ABIERTA"});
+            
+            this._infoWin.add({info, name:"V-V101", time:"1:00am", type:5, cType:"DIS", message:"ALARM ZONA CERO"});
+            this._infoWin.add({info, name:"V-V101", time:"1:00am", type:5, cType:"DIS", message:"ALARM VIAJE NOCTURNO"});
 
-            this._infoWin.add({name:"V-V101", time:"1:00am", type:6, cType:"DIS", message:"CONECTING"});
-            this._infoWin.add({name:"V-V101", time:"1:00am", type:6, cType:"DIS", message:"CONECTING"});
             
+            this._infoWin.add({info, name:"V-V101", time:"1:00am", type:6, cType:"DIS", message:"LUCES ENCENDIDAS"});
+
+            this._infoWin.add({info, name:"V-V106", time:"1:00am", type:1, cType:"DIS", message:"CONECTING"});
+            this._infoWin.add({info, name:"V-V107", time:"1:00am", type:2, cType:"DIS", message:"DISCONECTING"});
             
+            this._infoWin.add({info, name:"V-V101", time:"1:00am", type:8, cType:"SEND", message:"SENDING"});
 
 
             this._win["main3"] = new Float.Window({
                 visible:true,
-                caption: "Ventana Inmediato II",
-                left:10+280+20+390-300+200,
+                caption: "Ventana Inmediato",
+                left:10+280+20+390+200+150,
                 top:100,
                 width: "400px",
                 height: "250px",
