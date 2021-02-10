@@ -354,6 +354,22 @@ trait DBUnit{
         return $data;
     }
 
+    public function statusUnits(){
+        
+        $cn = $this->cn;
+		
+        $cn->query = "SELECT u.id, vn.name as vehicle_name, de.name as device_name, CASE u.conn_status WHEN 1 THEN 'Conectado' ELSE '-' END as status, date_format(u.conn_date,'%d/%m/%Y') as date, date_format(u.conn_date,'%H:%m:%s') as time 
+        FROM unit as u 
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id 
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id 
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id  
+        INNER JOIN device as de ON de.id = u.device_id 
+        INNER JOIN tracking as t ON t.id = u.tracking_id 
+        WHERE u.conn_date > DATE_SUB(NOW(), INTERVAL 12 HOUR) /*AND u.conn_status = 1*/ ORDER BY 2";
+        $result = $cn->execute();
+                
+        return $cn->getDataAll($result);        
+    }
 }
 
 trait DBTracking{

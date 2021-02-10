@@ -99,13 +99,16 @@ private $infoTemplate = '
 					'popupTemplate' => $this->popupTemplate,
 					'infoTemplate'	=> $this->infoTemplate,
 					'pathImages'	=> PATH_IMAGES,
-					'caption'		=> 'Unidades',
+					'caption'		=> 'Unidades 2',
 					'id'            => 'k',
 					'followMe'		=> true,
 					'delay'			=> 60000,
 				];
 			case 'tracking':
 				$this->setRequest($this->updateTracking());
+				break;
+			case 'status-units':
+				$this->setRequest($this->statusUnits());
 				break;
 			default:
 				break;

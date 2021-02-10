@@ -36,10 +36,10 @@ var GTInfo = (($) => {
             this._win["info-main"] = new Float.Window({
                 visible: true,
                 caption: this.caption,
-                left: 10,
-                top: 100 + 250 + 10,
+                left: 1180,
+                top: 100,
                 width: "280px",
-                height: "250px",
+                height: "200px",
                 mode: "auto",
                 className: ["sevian"],
                 child: main.get()

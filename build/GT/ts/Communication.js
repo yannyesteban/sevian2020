@@ -132,6 +132,7 @@ var GTCommunication = (($) => {
             this.callOnMessage = (messaje) => { };
             this._win = [];
             this._infoWin = null;
+            this._infoWin2 = null;
             this.showConnectedUnit = true;
             this._timer2 = null;
             this.delay2 = 12000;
@@ -267,9 +268,9 @@ var GTCommunication = (($) => {
                 visible: false,
                 caption: "Ventana Inmediato",
                 left: 10 + 280 + 20 + 390,
-                top: 100,
-                width: "600px",
-                height: "250px",
+                top: 500,
+                width: "500px",
+                height: "200px",
                 mode: "auto",
                 className: ["sevian"],
                 child: _formDiv.get()
@@ -291,6 +292,7 @@ var GTCommunication = (($) => {
                 menu: this._infoMenu,
                 id: "div2"
             });
+            this._infoWin2 = new InfoUnits({});
             this._infoWin = new InfoComm({
                 onread: (info) => {
                     const counts = this._infoWin.getCounts();
@@ -340,10 +342,10 @@ var GTCommunication = (($) => {
             this._win["main3"] = new Float.Window({
                 visible: true,
                 caption: "Ventana Inmediato",
-                left: 10 + 280 + 20 + 390 + 200 + 150,
-                top: 100,
-                width: "400px",
-                height: "250px",
+                left: 1130,
+                top: 540,
+                width: "330px",
+                height: "120px",
                 mode: "auto",
                 className: ["sevian"],
                 child: _formDiv2.get(),
@@ -359,13 +361,16 @@ var GTCommunication = (($) => {
             this._win["status-unit"] = new Float.Window({
                 visible: this.showConnectedUnit,
                 caption: "Conected Units",
-                left: 10 + 280 + 20,
-                top: 100,
-                width: "380px",
-                height: "300px",
+                left: 1130,
+                top: 390,
+                width: "330px",
+                height: "120px",
                 mode: "auto",
                 className: ["sevian"],
-                child: _statusUnit.get()
+                child: _statusUnit.get(),
+                resizable: true,
+                draggable: true,
+                closable: false
             });
         }
         show() {
@@ -419,7 +424,45 @@ var GTCommunication = (($) => {
         showConnected() {
             this._win["status-unit"].show();
         }
+        requestFun(xhr) {
+            let json = JSON.parse(xhr.responseText);
+            this._infoWin2.reset();
+            json.forEach(e => {
+                this._infoWin2.add({
+                    name: e.vehicle_name,
+                    time: "8:00am",
+                    type: 10,
+                    device_name: e.device_name,
+                    message: e.status
+                });
+            });
+            console.log(json);
+            const div = $(this.statusId);
+            div.append(this._infoWin2.get());
+        }
         showStatusWin() {
+            S.send3({
+                async: true,
+                panel: 2,
+                valid: false,
+                confirm_: 'seguro?',
+                requestFunction: $.bind(this.requestFun, this),
+                params: [
+                    {
+                        t: 'setMethod',
+                        id: 2,
+                        element: 'gt_unit',
+                        method: 'status-units',
+                        name: 'x',
+                        eparams: {
+                            record: { codpersona: 16386 },
+                            token: "yanny",
+                            page: 2
+                        }
+                    }
+                ]
+            });
+            return;
             S.send3({
                 "async": 1,
                 "params": [

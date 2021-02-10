@@ -649,6 +649,9 @@ form{
 	
 	.item{
 		
+		&[data-value="2"]{
+			display:none !important;
+		}
 		a{
 			
 			.image{
@@ -768,10 +771,138 @@ form{
 		background-color: #3a3a3aa9;
 		
 		display: grid;
-		grid-gap: 4px;
-		grid-template-columns: 20px repeat(3, 70px) auto 20px;
-		grid-template-rows: auto auto;
+		grid-gap: 2px;
+		grid-template-columns: 20px 70px 50px 50px auto 20px;
+		grid-template-rows: 1.4em auto;
 		overflow: hidden;
+		.btn-new{
+			color: #1cbaf8;
+			text-align: center;
+			font-size: 10pt;
+			font-weight: bold;
+		}
+		.btn-delete{
+			color: #f0fa9a;
+			text-align: center;
+			font-size: 10pt;
+			//font-weight: bold;
+		}
+		&:hover{
+			cursor: pointer;
+			background-color: #000000;
+			//color:rgb(174, 236, 255);
+
+		}
+		&.new{
+			background-color: #a10c0ca9;
+		}
+		.type{
+			&[data-type="1"]{
+				background-color: #49e202;
+				color:white;
+			}
+			&[data-type="2"]{
+				background-color: #d1d1d1;
+				color:rgb(119, 119, 119);
+			}
+			&[data-type="3"]{
+				background-color: #0d838b;
+				color:white;
+			}
+			&[data-type="4"]{
+				background-color: #18e4f3;
+				color:rgb(94, 94, 94);
+			}
+			&[data-type="5"]{
+				background-color: #f8f41c;
+				color:rgb(255, 0, 0);
+			}
+			&[data-type="6"]{
+				background-color: #ff7f07;
+				color:white;
+			}
+			&[data-type="7"]{
+				background-color: #f34bd7;
+				color:white;
+			}
+			&[data-type="8"]{
+				background-color: #0d838b;
+				color:white;
+			}
+		}
+
+		
+		
+		>*{
+			padding: 2px;
+			//border:1px solid yellow;
+		}
+		>:nth-child(1){
+			
+			//background-color: rgba(0, 0, 0, 0.637);
+		}
+		>:nth-child(5){
+			//word-wrap: normal;
+			white-space: nowrap;
+			overflow: hidden;
+			
+			text-overflow: ellipsis;
+		}
+		>:nth-child(7){
+			
+			
+			grid-column: 1/7;
+			grid-row: 2;
+			
+			
+			background-color: rgba(209, 24, 24, 0.808);
+			
+
+		}
+		&:not(.open){
+			>:nth-child(7){
+				
+				
+				display: none;
+				
+	
+			}
+		}	
+		&.open{
+			>:nth-child(6){
+				
+				
+				
+				
+	
+			}
+		}
+
+		>.detail{
+			display: grid;
+			grid-gap: 4px;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: auto auto;
+		}
+	}
+
+
+}
+
+
+.info-comm-units{
+
+	.main{
+		font-size: 9pt;
+		color: rgb(244, 247, 224);
+		background-color: #3a3a3aa9;
+		
+		display: grid;
+		grid-gap: 2px;
+		grid-template-columns: 20px 70px 50px 90px 90px 0px;
+		grid-template-rows: 1.4em auto;
+		overflow: hidden;
+		border-bottom: 1px solid white;
 		.btn-new{
 			color: #1cbaf8;
 			text-align: center;
