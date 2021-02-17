@@ -159,6 +159,8 @@ private $infoTemplate = '
 			'delay'			=> 10000,	
 			'infoId'		=> $this->eparams->infoId ?? false,	
 			'statusId'		=> $this->eparams->statusId ?? false,
+			'searchUnitId'	=> $this->eparams->searchUnitId ?? false,
+			
 			'msgErrorUnit'	=> "Unidad no encontrada!!!",
 			'msgErrortracking'=> "La Unidad no presenta datos de Posición!!!"
 		];

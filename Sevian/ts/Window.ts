@@ -149,10 +149,10 @@ var Float = (($) => {
 				top = yy;
 			}
             if(left !== null){
-                left + (deltaX || 0)
+                left = left + (deltaX || 0)
             }
             if(top !== null){
-                top + (deltaY || 0)
+                top = top + (deltaY || 0)
             }
 			return this.showElem({e: e, left: left ,top: top,z: z});
 
@@ -895,6 +895,7 @@ Float.Window = (($) => {
 	}
 
     class Window{
+        name:string = "";
         id:any = null;
         caption:string = "";
         className:any = "sevian";
@@ -923,6 +924,8 @@ Float.Window = (($) => {
         active:boolean = null;
         _timer:number = null;
 
+        private deltaX:number = 0;
+        private deltaY:number = 0;
         public onshow:Function = (info)=>{};
         public onhide:Function = (info)=>{};
 
@@ -965,8 +968,10 @@ Float.Window = (($) => {
             Float.Float.show({
                 e: main.get(),
                 left: this.left,
-                top: this.top
+                top: this.top,
+                deltaX: this.deltaX
             });
+            
             if(this.draggable){
                 
                 Float.Move.init({
@@ -1050,9 +1055,12 @@ Float.Window = (($) => {
             this.setMode(this.mode);
 
             if(this.visible){
+                
                 this.show({
                     left:this.left,
-                    top:this.top
+                    top:this.top,
+                    deltaX: this.deltaX,
+                    deltaY: this.deltaY,
                 });
                 this._active = false;
             }

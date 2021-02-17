@@ -229,16 +229,21 @@ function humanDiff (t1, t2) {
 
         public getCounts(){
             for(let x in this.types){
-                this.counts[x] = 0;
+                //this.counts[x] = 0;
             }
+            this.counts = [];
+            const ele = this.main.queryAll(`.new[data-type]`);
+            ele.forEach(element => {
+                const type = $(element).ds("type");
 
-            for(let x in this.counts){
-                const ele = this.main.queryAll(`.new[data-type='${x}']`);
-                ele.forEach(element => {
-                        this.counts[x]++;
-                });
-                
-            }
+                if(!this.counts[type]){
+                    this.counts[type] = 0;
+                }
+                this.counts[type]++;
+            });
+
+            
+        
             
             return this.counts;
             
@@ -347,7 +352,7 @@ var InfoUnits = (($) => {
             this.lineId++;
 
             const div = this.ul.createFirst("div").addClass("main").removeClass("open").addClass("")
-            .ds("line", this.lineId).ds("type", message.type);
+            .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
             div.on("click", ()=>{
                 div.removeClass("new");
                 this.onread(message);
@@ -363,7 +368,8 @@ var InfoUnits = (($) => {
             const date = new Date();
             const start = date.getTime(); 
 
-            div.create("div").text("Ahora").addClass("date").ds("date",date.toISOString()).ds("time", start);
+            //div.create("div").text("Ahora").addClass("date").ds("date",date.toISOString()).ds("time", start);
+            div.create("div").addClass("delay").text(message.delay || "1");;
             div.create("div").addClass("type").ds("xtype", message.type).text(message.device_name || "");
             div.create("div").text(message.message || "");
             div.create("div").text("x").addClass("btn-delete").on("click", (event)=>{

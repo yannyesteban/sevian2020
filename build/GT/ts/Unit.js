@@ -133,6 +133,8 @@ var GTUnit = (($) => {
             this.showConnectedUnit = false;
             this.msgErrorUnit = "Unit not Found!!!";
             this.msgErrortracking = "data tracking not Found!!!";
+            this.searchUnitId = null;
+            this.searchUnit = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -218,6 +220,7 @@ var GTUnit = (($) => {
         }
         _create(main) {
             this.main = main;
+            this.searchUnit = S.getElement(this.searchUnitId);
             main.addClass("unit-main");
             this.createMenu();
             //this.menu = this.createMenu();
@@ -730,6 +733,13 @@ var GTUnit = (($) => {
                 onRequest: (x) => {
                 }
             });
+        }
+        setUnit(unitId) {
+            this._lastUnitId = unitId;
+            if (this.searchUnit) {
+                this.searchUnit.setValue({ unit_id: unitId });
+            }
+            this.findUnit(unitId);
         }
         findUnit(unitId) {
             const index = this.indexUnit[unitId];

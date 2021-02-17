@@ -110,7 +110,7 @@ class Communication extends
 
         //$info->id = $this->containerId;
 
-        //$this->host = '127.0.0.1';
+        $this->host = '127.0.0.1';
         $this->eparams->gridId="eres";
         $this->setInit([
             //'id'=>$this->eparams->targetId,
@@ -120,6 +120,7 @@ class Communication extends
             'mainForm'      => $form,
             'responseForm'  => $form2,
             'unitId'        => $unitId,
+            'unitPanelId'	=> $this->eparams->unitPanelId ?? false,
             'gridId'        => $this->eparams->gridId??'',
             'user'          => $this->_userInfo->user,
             'socketServer'  => [

@@ -167,6 +167,10 @@ var GTUnit = (($) => {
 		
 		private msgErrorUnit = "Unit not Found!!!";
 		private msgErrortracking = "data tracking not Found!!!";
+
+
+		private searchUnitId:any = null;
+		private searchUnit:any = null;
 		static _instances:object[] = []; 
 		
 		static getInstance(name){
@@ -273,6 +277,8 @@ var GTUnit = (($) => {
 		_create(main:any){
 			
 			this.main = main;
+
+			this.searchUnit = S.getElement(this.searchUnitId);
 
 			main.addClass("unit-main");
 			
@@ -925,6 +931,14 @@ var GTUnit = (($) => {
 			});
 		}
 
+		setUnit(unitId:number){
+			this._lastUnitId = unitId;
+			if(this.searchUnit){
+				this.searchUnit.setValue({unit_id:unitId});
+			}
+			this.findUnit(unitId);
+
+		}
 
 		findUnit(unitId:number){
 			const index = this.indexUnit[unitId];

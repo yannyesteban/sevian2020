@@ -358,7 +358,14 @@ trait DBUnit{
         
         $cn = $this->cn;
 		
-        $cn->query = "SELECT u.id, vn.name as vehicle_name, de.name as device_name, CASE u.conn_status WHEN 1 THEN 'Conectado' ELSE '-' END as status, date_format(u.conn_date,'%d/%m/%Y') as date, date_format(u.conn_date,'%H:%m:%s') as time 
+        $cn->query = "SELECT u.id as unit_id, 
+        CONCAT(
+            TIMESTAMPDIFF(DAY, TIMESTAMP(u.conn_date), NOW()) ,'d ',
+            MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(u.conn_date), NOW()), 24), ':',
+            MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(u.conn_date), NOW()), 60), ':',
+            MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(u.conn_date), NOW()), 60),'' ) AS delay,
+        
+            vn.name as vehicle_name, de.name as device_name, CASE u.conn_status WHEN 1 THEN 'Conectado' ELSE '-' END as status, date_format(u.conn_date,'%d/%m/%Y') as date, date_format(u.conn_date,'%H:%m:%s') as time 
         FROM unit as u 
         LEFT JOIN unit_name as vn ON vn.id = u.name_id 
         LEFT JOIN user_unit as uu ON uu.unit_id = u.id 

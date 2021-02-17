@@ -115,7 +115,8 @@
 			"name":"gt_unit",
 			"method":"load",
 			"eparams":{
-				"infoId":"gt-info-11"
+				"infoId":"gt-info-11",
+				"searchUnitId": 3
 			},
 			"type":0,
 			"class":"",
@@ -143,7 +144,7 @@
 			"name":"gt-communication",
 			"method":"load",
 			"eparams":{
-				
+				"unitPanelId":"gt-unit-10"
 			},
 			"type":0,
 			"class":"",

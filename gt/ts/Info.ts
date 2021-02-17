@@ -51,11 +51,17 @@ var GTInfo = (($)=>{
 			this._win["info-main"] = new Float.Window({
                 visible:true,
                 caption: this.caption,
-                left:1180,
-                top:100,
-                width: "280px",
+                //left:1180 -160,
+                //top:100,
+
+                left:"right",
+                top:"top",
+                deltaX: -50,
+                deltaY: 100,
+
+                width: "330px",
                 height: "200px",
-                mode:"auto",
+                mode:"custom",
 				className:["sevian"],
 				child:main.get()
 			});

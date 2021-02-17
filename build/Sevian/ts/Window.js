@@ -113,10 +113,10 @@ var Float = (($) => {
                 top = yy;
             }
             if (left !== null) {
-                left + (deltaX || 0);
+                left = left + (deltaX || 0);
             }
             if (top !== null) {
-                top + (deltaY || 0);
+                top = top + (deltaY || 0);
             }
             return this.showElem({ e: e, left: left, top: top, z: z });
         }
@@ -655,6 +655,7 @@ Float.Window = (($) => {
     };
     class Window {
         constructor(info) {
+            this.name = "";
             this.id = null;
             this.caption = "";
             this.className = "sevian";
@@ -676,6 +677,8 @@ Float.Window = (($) => {
             this._active = false;
             this.active = null;
             this._timer = null;
+            this.deltaX = 0;
+            this.deltaY = 0;
             this.onshow = (info) => { };
             this.onhide = (info) => { };
             for (var x in info) {
@@ -707,7 +710,8 @@ Float.Window = (($) => {
             Float.Float.show({
                 e: main.get(),
                 left: this.left,
-                top: this.top
+                top: this.top,
+                deltaX: this.deltaX
             });
             if (this.draggable) {
                 Float.Move.init({
@@ -779,7 +783,9 @@ Float.Window = (($) => {
             if (this.visible) {
                 this.show({
                     left: this.left,
-                    top: this.top
+                    top: this.top,
+                    deltaX: this.deltaX,
+                    deltaY: this.deltaY,
                 });
                 this._active = false;
             }
