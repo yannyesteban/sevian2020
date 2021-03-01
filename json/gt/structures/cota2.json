@@ -150,6 +150,17 @@
 			"class":"",
 			"debug":0,
 			"design":0
+		},
+		{
+			"id":"event",
+			"element":"gt-event",
+			"name":"gt-event",
+			"method":"load",
+			"eparams":{},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
 		}
 
 	]

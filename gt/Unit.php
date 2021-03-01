@@ -108,7 +108,12 @@ private $infoTemplate = '
 				$this->setRequest($this->updateTracking());
 				break;
 			case 'status-units':
-				$this->setRequest($this->statusUnits());
+				if($this->eparams->lastDate ?? false){
+					$this->setRequest($this->statusUnits($this->eparams->lastDate));
+				}else{
+					$this->setRequest($this->statusUnits());
+				}
+				
 				break;
 			default:
 				break;
@@ -178,7 +183,7 @@ private $infoTemplate = '
 		];  
 	}
 
-	public function setRequest($data){
+	public function setRequest($data=[]){
 		$this->_jsonRequest = $data;
 	}
 	

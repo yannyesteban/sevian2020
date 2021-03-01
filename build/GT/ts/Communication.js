@@ -137,7 +137,11 @@ var GTCommunication = (($) => {
             this._infoWin2 = null;
             this.showConnectedUnit = true;
             this._timer2 = null;
-            this.delay2 = 12000;
+            this.delay2 = 5000;
+            this._timer3 = null;
+            this.delay3 = 5000;
+            this.lastEventId = 0;
+            this.lastDate = null;
             this.statusId = null;
             this.connectionId = "button-connect";
             this._form = null;
@@ -196,13 +200,14 @@ var GTCommunication = (($) => {
                         //console.log(server_message)
                         try {
                             let json = JSON.parse(server_message);
-                            console.log(json);
+                            //console.log(json);
                             //alert(json.message)
                             //db (json.message);
                             this.callOnMessage(json);
                             //this._grid.createRow(json);
                             //info.add({name:"L-V06", time:"8:00am", type:"C", message:"CONECTING"});
-                            this._infoWin.add({
+                            this.addInfo(0, {
+                                unitId: json.unitId || '',
                                 name: json.name,
                                 type: 7,
                                 message: json.message,
@@ -213,6 +218,19 @@ var GTCommunication = (($) => {
                                     message: json.message
                                 }
                             });
+                            /*
+                            this._infoWin2.add({
+                                name:json.name,
+                                type:7,
+                                message: json.message,
+                                info:{
+                                    user:json.user,
+                                    date:json.date,
+                                    delay:json.delay,
+                                    message:json.message
+                                }
+                            });
+                            */
                             //db(server_message);
                         }
                         catch (e) {
@@ -248,53 +266,59 @@ var GTCommunication = (($) => {
                 menu: this._infoMenu,
                 id: "div2"
             });
-            this.createInfoWindow(0, {
+            this.createInfoWindow(1, {
                 onread: (info) => {
                     console.log(info);
                     if (info.unitId) {
                         this.unitPanel.setUnit(info.unitId);
                     }
+                    this.updateEventStatus(info.id, 1, 1);
                 },
                 onadd: (info) => {
+                },
+                ondelete: (info) => {
+                    this.updateEventStatus(info.id, 2, 1);
                 }
             }, { caption: "Inmediato", top: "bottom", deltaX: -50, deltaY: -20 });
-            this.createInfoWindow(6, {
+            this.createInfoWindow(2, {
+                showType: false,
                 onread: (info) => {
-                    const counts = this.getInfoWin(6).getCounts();
+                    if (info.unitId) {
+                        this.unitPanel.setUnit(info.unitId);
+                    }
+                    const counts = this.getInfoWin(2).getCounts();
                     infoMenu.updateType(1, counts[info.type] || "");
-                    console.log(info);
+                    //console.log(info);
+                    this.updateEventStatus(info.id, 1, 2);
                 },
                 onadd: (info) => {
-                    const counts = this.getInfoWin(6).getCounts();
+                    const counts = this.getInfoWin(2).getCounts();
                     infoMenu.updateType(1, counts[info.type] || "");
+                },
+                ondelete: (info) => {
+                    this.updateEventStatus(info.id, 2, 2);
                 }
             }, { caption: "Eventos", left: "left", top: "bottom", deltaX: 10, deltaY: -20 });
-            this.createInfoWindow(5, {
+            this.createInfoWindow(3, {
+                showType: false,
                 onread: (info) => {
-                    const counts = this.getInfoWin(5).getCounts();
+                    if (info.unitId) {
+                        this.unitPanel.setUnit(info.unitId);
+                    }
+                    const counts = this.getInfoWin(3).getCounts();
                     infoMenu.updateType(0, counts[info.type] || "");
+                    this.updateEventStatus(info.id, 1, 3);
                 },
                 onadd: (info) => {
-                    const counts = this.getInfoWin(5).getCounts();
+                    const counts = this.getInfoWin(3).getCounts();
                     infoMenu.updateType(0, counts[info.type] || "");
+                },
+                ondelete: (info) => {
+                    this.updateEventStatus(info.id, 2, 3);
                 }
             }, { caption: "Alarmas", left: "left", top: "bottom", deltaX: 10, deltaY: -140 - 20 });
             //this.createInfoWindow(3, {}, {caption:"Message"});
             let info1 = {};
-            this.addInfo(5, { info1, name: "L-V06", time: "8:00am", type: 5, cType: "SYNC", message: "ALARM INPUTS" });
-            this.addInfo(0, { info1, unitId: 2002, name: "L-V08", time: "5:00am", type: 2, cType: "POS", message: "DISCONECTING" });
-            this.addInfo(0, { info1, unitId: 2003, name: "x-U06", time: "4:00am", type: 3, cType: "CNN", message: "SYNC" });
-            this.addInfo(0, { info1, name: "V-V99", time: "1:00am", type: 4, cType: "DIS", message: "10.2554, -65.4544" });
-            this.addInfo(0, { info1, name: "V-V100", time: "1:00am", type: 2, cType: "DIS", message: "DISCONECTING" });
-            this.addInfo(0, { info1, name: "V-V101", time: "1:00am", type: 2, cType: "DIS", message: "DISCONECTING" });
-            this.addInfo(5, { info1, name: "V-V101", time: "1:00am", type: 5, cType: "DIS", message: "ALARM VELCOCIDAD" });
-            this.addInfo(6, { info1, name: "V-V101", time: "1:00am", type: 6, cType: "DIS", message: "PUERTA ABIERTA" });
-            this.addInfo(5, { info1, name: "V-V101", time: "1:00am", type: 5, cType: "DIS", message: "ALARM ZONA CERO" });
-            this.addInfo(5, { info1, name: "V-V101", time: "1:00am", type: 5, cType: "DIS", message: "ALARM VIAJE NOCTURNO" });
-            this.addInfo(0, { info1, name: "V-V101", time: "1:00am", type: 7, cType: "DIS", message: "LUCES ENCENDIDAS" });
-            this.addInfo(0, { info1, name: "V-V106", time: "1:00am", type: 1, cType: "DIS", message: "CONECTING" });
-            this.addInfo(0, { info1, name: "V-V107", time: "1:00am", type: 2, cType: "DIS", message: "DISCONECTING" });
-            this.addInfo(0, { info1, name: "V-V101", time: "1:00am", type: 8, cType: "SEND", message: "SENDING" });
             this._win["main"] = new Float.Window({
                 visible: false,
                 caption: this.caption,
@@ -333,7 +357,16 @@ var GTCommunication = (($) => {
                 className: ["sevian"],
                 child: _formDiv.get()
             });
-            this._infoWin2 = new InfoUnits({});
+            this._infoWin2 = new InfoUnits({
+                onread: (info) => {
+                    if (info.id) {
+                        this.unitPanel.setUnit(info.id);
+                    }
+                    const counts = this.getInfoWin(2).getCounts();
+                    infoMenu.updateType(1, counts[info.type] || "");
+                    //console.log(info);
+                }
+            });
             if (this.unitId) {
                 this.loadUnit(this.unitId);
             }
@@ -408,10 +441,13 @@ var GTCommunication = (($) => {
         showConnected() {
             this._win["status-unit"].show();
         }
-        requestFun(xhr) {
+        reqStatusWin(xhr) {
             let json = JSON.parse(xhr.responseText);
-            this._infoWin2.reset();
+            //this._infoWin2.reset();
+            //console.log(json);
             json.forEach(e => {
+                console.log("....", e.unit_id, e.vehicle_name);
+                this.lastDate = e.last_date;
                 this._infoWin2.add({
                     id: e.unit_id,
                     name: e.vehicle_name,
@@ -425,14 +461,86 @@ var GTCommunication = (($) => {
             const div = $(this.statusId);
             div.append(this._infoWin2.get());
         }
-        showStatusWin() {
-            return;
+        reqDataEvent(xhr) {
+            const json = JSON.parse(xhr.responseText);
+            let i = 0;
+            const modes = [1, 2, 4, 8, 16, 32, 64, 128, 256];
+            for (let x in json) {
+                i++;
+                modes.forEach((m, index) => {
+                    //console.log(json[x]);
+                    //console.log(json[x].mode, m, json[x].mode & m, index+1);
+                    if (json[x].mode & m) {
+                        //console.log(m, index+1);
+                        this.addInfo(index + 1, json[x]);
+                    }
+                });
+                this.lastEventId = json[x].id;
+            }
+            /*
+            json.forEach((e)=>{
+                this.addInfo(e.mode*1,e);
+            });
+            */
+            //this.addInfo(5,{info1, name:"L-V06", time:"8:00am", type:5, cType:"SYNC", message:"ALARM INPUTS"});
+            // console.log(json);
+        }
+        reqEventStatus(xhr) {
+            const json = JSON.parse(xhr.responseText);
+            this.getInfoWin(json.windowId).setStatus(json.eventId, json.status);
+            console.log(json);
+        }
+        updateEventStatus(eventId, status, windowId) {
             S.send3({
                 async: true,
                 panel: 2,
                 valid: false,
                 confirm_: 'seguro?',
-                requestFunction: $.bind(this.requestFun, this),
+                requestFunction: $.bind(this.reqEventStatus, this),
+                params: [
+                    {
+                        t: 'setMethod',
+                        id: 2,
+                        element: 'gt-event',
+                        method: 'update-status',
+                        name: 'x',
+                        eparams: {
+                            eventId: eventId,
+                            status: status,
+                            windowId: windowId
+                        }
+                    }
+                ]
+            });
+        }
+        getDataEvent() {
+            S.send3({
+                async: true,
+                panel: 2,
+                valid: false,
+                confirm_: 'seguro?',
+                requestFunction: $.bind(this.reqDataEvent, this),
+                params: [
+                    {
+                        t: 'setMethod',
+                        id: 2,
+                        element: 'gt-event',
+                        method: 'load',
+                        name: 'x',
+                        eparams: {
+                            lastEventId: this.lastEventId
+                        }
+                    }
+                ]
+            });
+        }
+        showStatusWin() {
+            S.send3({
+                async: true,
+                panel: 2,
+                valid: false,
+                confirm_: 'seguro?',
+                requestFunction: $.bind(this.reqStatusWin, this),
                 params: [
                     {
                         t: 'setMethod',
@@ -441,7 +549,7 @@ var GTCommunication = (($) => {
                         method: 'status-units',
                         name: 'x',
                         eparams: {
-                            record: { codpersona: 16386 },
+                            lastDate: this.lastDate,
                             token: "yanny",
                             page: 2
                         }
@@ -473,6 +581,12 @@ var GTCommunication = (($) => {
             this._timer2 = setInterval(() => {
                 this.showStatusWin();
             }, this.delay2);
+            if (this._timer3) {
+                clearTimeout(this._timer3);
+            }
+            this._timer3 = setInterval(() => {
+                this.getDataEvent();
+            }, this.delay3);
         }
         test2() {
             let f = this._form.getFormData();

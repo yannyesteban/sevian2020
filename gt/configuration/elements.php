@@ -342,6 +342,24 @@ $cls_elements['gt-geofence'] = [
 	],
 	
 ];
+
+$cls_elements['gt-event'] = [
+	
+	'file' 	=> MAIN_PATH.'gt/Event.php',
+	'class' => '\GT\Event',
+	'enable' => true,
+	'_js'=>[[
+		'file' 	=> MAIN_PATH.'build/GT/ts/Geofence.js',
+		'begin'=> false
+	]],
+	'css'=>[],
+	'init'=>[
+		'patternJsonFile'=>MAIN_PATH.'json/{name}.json',
+		//'patternTemplateFile'=>MAIN_PATH.'templates/{name}.html'
+	],
+	
+];
+
 $cls_elements['gt_geofence'] = [
 	
 	'file' 	=> MAIN_PATH.'gt/Geofence.php',

@@ -699,11 +699,11 @@ form {
 }
 
 .info-comm .main {
-  font-size: 9pt;
+  font-size: 11px;
   color: #f4f7e0;
   background-color: #3a3a3aa9;
   display: grid;
-  grid-gap: 2px;
+  grid-gap: 0px;
   grid-template-columns: 20px 70px 50px 50px auto 20px;
   grid-template-rows: 1.4em auto;
   overflow: hidden;
@@ -782,11 +782,11 @@ form {
 }
 
 .info-comm-units .main {
-  font-size: 9pt;
+  font-size: 11px;
   color: #f4f7e0;
   background-color: #3a3a3aa9;
   display: grid;
-  grid-gap: 2px;
+  grid-gap: 0px;
   grid-template-columns: 20px 100px 100px 90px 90px 0px;
   grid-template-rows: 1.4em auto;
   overflow: hidden;

@@ -67,7 +67,9 @@ var InfoComm = (($) => {
             this.counts = [];
             this.onread = (info) => { };
             this.onadd = (info) => { };
+            this.ondelete = (info) => { };
             this.lineId = 0;
+            this.showType = true;
             /*
             types
             1:unit conected
@@ -119,10 +121,13 @@ var InfoComm = (($) => {
         }
         add(message) {
             this.lineId++;
-            const div = this.ul.createFirst("div").addClass("main").removeClass("open").addClass("new")
-                .ds("line", this.lineId).ds("type", message.type);
+            const div = this.ul.createFirst("div").addClass("main").removeClass("open")
+                .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
+            if (message.status == 0) {
+                div.addClass("new");
+            }
             div.on("click", () => {
-                div.removeClass("new");
+                //div.removeClass("new");
                 this.onread(message);
             });
             div.create("div").text("+").addClass("btn-new").on("click", () => {
@@ -132,10 +137,13 @@ var InfoComm = (($) => {
             const date = new Date();
             const start = date.getTime();
             div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
-            div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
+            if (this.showType) {
+                div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
+            }
             div.create("div").text(message.message || "");
             div.create("div").text("x").addClass("btn-delete").on("click", (event) => {
-                this.deleteLine(event.currentTarget);
+                //this.deleteLine(event.currentTarget);
+                this.ondelete(message);
             });
             if (typeof (message.info) === "object") {
                 const detail = div.create("div").addClass("detail");
@@ -145,6 +153,22 @@ var InfoComm = (($) => {
                 }
             }
             this.onadd(message);
+        }
+        setStatus(id, status) {
+            //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
+            const ele = $(this.ul.query(`.main[data-id='${id}']`));
+            if (ele) {
+                if (status == 0) {
+                    ele.addClass("new");
+                }
+                else if (status == 1) {
+                    ele.removeClass("new");
+                }
+                else if (status == 2) {
+                    ele.removeClass("new");
+                    ele.get().remove();
+                }
+            }
         }
         get() {
             return this.main;
@@ -188,6 +212,9 @@ var InfoComm = (($) => {
                 ele.remove();
                 alert(8);
             }
+        }
+        reset() {
+            this.ul.text("");
         }
     }
     return InfoComm;
@@ -253,8 +280,17 @@ var InfoUnits = (($) => {
             let mainPanel = this.ul = main.create("div").addClass("info-comm-units").id("xxy");
         }
         add(message) {
+            const e = this.main.query(`.main[data-id='${message.id}']`);
+            //console.log(message);
+            //console.log(message.id, message.name);
+            if (e) {
+                this.deleteLine(e);
+                //console.log("borrando ",message.id);
+            }
+            else {
+            }
             this.lineId++;
-            const div = this.ul.createFirst("div").addClass("main").removeClass("open").addClass("")
+            const div = this.ul.createFirst("div").addClass("main").removeClass("open").addClass("ID-" + message.id)
                 .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
             div.on("click", () => {
                 div.removeClass("new");
@@ -317,7 +353,9 @@ var InfoUnits = (($) => {
             return this.counts;
         }
         deleteLine(e) {
-            e.parentNode.remove();
+            const parent = e.parentNode;
+            parent.removeChild(e);
+            $(parent).addClass("borrada");
             return;
             const ele = this.main.query(".main[data-line='${line}']");
             alert(line);

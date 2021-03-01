@@ -432,8 +432,8 @@ class S{
 			self::$_windows = $windows;
 		}
 
-		if($e instanceof \Sevian\JsonRequest and $_jsonRequest = $e->getRequest()){
-			self::$_jsonRequest = $_jsonRequest;
+		if($e instanceof \Sevian\JsonRequest){// and $_jsonRequest = $e->getRequest()
+			self::$_jsonRequest = $e->getRequest();
 		}
 
 		if($e instanceof \Sevian\PanelsAdmin and $panels = $e->getPanels()){
@@ -1069,7 +1069,7 @@ class S{
 		}
 
 		
-		if(self::$_jsonRequest){
+		if(self::$_jsonRequest !== null){
 			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT);	
 		}
 

@@ -354,11 +354,11 @@ trait DBUnit{
         return $data;
     }
 
-    public function statusUnits(){
+    public function statusUnits($lastDate = '0000-00-00 00:00:00'){
         
         $cn = $this->cn;
 		
-        $cn->query = "SELECT u.id as unit_id, 
+        $cn->query = "SELECT u.id as unit_id, NOW() as last_date,
         CONCAT(
             TIMESTAMPDIFF(DAY, TIMESTAMP(u.conn_date), NOW()) ,'d ',
             MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(u.conn_date), NOW()), 24), ':',
@@ -372,9 +372,14 @@ trait DBUnit{
         LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id  
         INNER JOIN device as de ON de.id = u.device_id 
         INNER JOIN tracking as t ON t.id = u.tracking_id 
-        WHERE u.conn_date > DATE_SUB(NOW(), INTERVAL 12 HOUR) /*AND u.conn_status = 1*/ ORDER BY 2";
+        WHERE u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR) 
+        AND u.conn_date > '$lastDate'
+        /*AND u.conn_status = 1*/ 
+        ORDER BY 2";
+        //hx($cn->query);
+        
         $result = $cn->execute();
-                
+        //    hr($cn->getDataAll($result));    
         return $cn->getDataAll($result);        
     }
 }
@@ -1025,4 +1030,55 @@ trait DBHistory{
     }
 
 
+}
+
+
+trait DBEvent{
+    private $cn = null;
+    
+    private function loadDataEvent($lastId=0){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT e.id, e.event_id, e.status,
+        vn.name, 1 as type, 'x' as cType, info as message,
+        t.id as track_id, e.date_time, u.id as unitId, 
+        e.mode, 
+        #bin(e.mode) as mode,
+        dn.name as device_name,
+        
+        #e.*, bin(e.mode) as mode
+                CONCAT(
+                    TIMESTAMPDIFF(DAY, TIMESTAMP(e.date_time), NOW()) ,'d ',
+                    MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.date_time), NOW()), 24), ':',
+                    MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.date_time), NOW()), 60), ':',
+                    MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.date_time), NOW()), 60),'' ) AS time
+        FROM event as e
+        LEFT JOIN unit as u ON u.id = e.unit_id
+        LEFT JOIN device as de ON de.id = u.device_id
+        LEFT JOIN device_name as dn ON dn.name = de.name
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
+        LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = e.date_time 
+        WHERE 
+        #e.id = 0 
+        e.status != 2
+        AND '$lastId'= 0 or e.id > '$lastId'
+        LIMIT 1900, 10
+        ";
+
+        //hx($cn->query);
+
+        $result = $this->cn->execute();
+        //hx($cn->getDataAll($result));
+        return $cn->getDataAll($result);
+        
+    }
+
+    private function setStatus($eventId, $status=0){
+        $cn = $this->cn;
+        $cn->query = "UPDATE event SET status='$status' WHERE id='$eventId'";
+        $this->cn->execute();
+    }
+
+    
 }

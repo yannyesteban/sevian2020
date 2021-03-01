@@ -9,7 +9,7 @@
 	"onDataUser_":"S.send3(dataUser);",
 	"items":[
 		{
-			"caption":"100",
+			"caption":"",
 			"value":"0",
 			"imageClass":"icon-comm-alert",
 			"propertys":{
@@ -19,7 +19,7 @@
 			"action":"S.getElement('gt-info-11').show()"
 		},
 		{
-			"caption":"15",
+			"caption":"",
 			"value":1,
 			"imageClass":"icon-comm-alarm",
 			"propertys":{
