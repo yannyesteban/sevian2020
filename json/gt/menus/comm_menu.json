@@ -10,7 +10,7 @@
 	"items":[
 		{
 			"caption":"",
-			"value":"0",
+			"value":2,
 			"imageClass":"icon-comm-alert",
 			"propertys":{
 				"title":"",
@@ -20,7 +20,7 @@
 		},
 		{
 			"caption":"",
-			"value":1,
+			"value":4,
 			"imageClass":"icon-comm-alarm",
 			"propertys":{
 				"title":""
@@ -29,7 +29,7 @@
 		},
 		{
 			"caption":"",
-			"value":2,
+			"value":1,
 			"imageClass":"icon-comm-message",
 			"propertys":{
 				"title":""

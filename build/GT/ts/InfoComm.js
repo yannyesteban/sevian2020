@@ -122,7 +122,8 @@ var InfoComm = (($) => {
         add(message) {
             this.lineId++;
             const div = this.ul.createFirst("div").addClass("main").removeClass("open")
-                .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
+                .ds("id", message.id).ds("line", this.lineId).ds("type", message.type)
+                .ds("mode", message.mode);
             if (message.status == 0) {
                 div.addClass("new");
             }
@@ -189,6 +190,13 @@ var InfoComm = (($) => {
             }
         }
         getCounts() {
+            const ele = this.main.queryAll(`.new`);
+            if (ele) {
+                return ele.length;
+            }
+            return 0;
+        }
+        getCounts1() {
             for (let x in this.types) {
                 //this.counts[x] = 0;
             }

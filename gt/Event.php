@@ -53,7 +53,12 @@ class Event
 				break;
 			case 'update-status':
 				$this->setStatus($this->eparams->eventId?? 0, $this->eparams->status?? 0);
-				$this->setRequest(["eventId"=>$this->eparams->eventId?? 0, "status"=>$this->eparams->status?? null, "windowId"=>$this->eparams->windowId?? 0]);
+				$this->setRequest([
+					"eventId"=>$this->eparams->eventId?? 0,
+					"status"=>$this->eparams->status?? null,
+					"windowId"=>$this->eparams->windowId?? 0,
+					'mode'=>$this->eparams->mode?? 0
+					]);
 				break;	
             case 'load-sites':
                 

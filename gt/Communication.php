@@ -111,7 +111,7 @@ class Communication extends
         //$info->id = $this->containerId;
 
         //$this->host = '127.0.0.1';
-        $this->eparams->gridId="eres";
+        $this->eparams->gridId='eres';
         $this->setInit([
             //'id'=>$this->eparams->targetId,
 
@@ -126,6 +126,44 @@ class Communication extends
             'socketServer'  => [
                 'host'  => $this->host,// ='bests.no-ip.info',//'localhost',//'bests.no-ip.info',
                 'port'  => 3321
+            ],
+            'winNow'=>[
+                'caption'=>'Inmediato',
+                'top'=>'bottom',
+                'deltaX'=>-50,
+                'deltaY'=>-20
+            ],
+            'winEvent'=>[
+                'caption'=>'Eventos',
+                'left'=>'left',
+                'top'=>'bottom',
+                'deltaX'=>10,
+                'deltaY'=>-20
+            ],
+            'winAlarm'=>[
+                'caption'=>'Alarmas',
+                'left'=>'left',
+                'top'=>'bottom',
+                'deltaX'=>10,
+                'deltaY'=>-140-20
+            ],
+            'winStatus'=>[
+                //'visible'=>this.showConnectedUnit,
+                'caption'=> 'Unidades Conectadas',
+                'left'=>'right',
+                'top'=>'bottom',
+                'deltaX'=> -50,
+                'deltaY'=>-140-20,
+                //top:390,
+                'width'=> '330px',
+                'height'=> '120px',
+                'mode'=>'auto',
+				'className'=>['sevian'],
+				//'child'=>_statusUnit.get(),
+                'resizable'=> true,
+                'draggable'=> true,
+                'closable'=> false
+
             ]
         ]);
         

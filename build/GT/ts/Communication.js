@@ -1,4 +1,11 @@
 var GTCommunication = (($) => {
+    let WNames;
+    (function (WNames) {
+        WNames[WNames["now"] = 1] = "now";
+        WNames[WNames["event"] = 2] = "event";
+        WNames[WNames["alarm"] = 4] = "alarm";
+        WNames[WNames["synch"] = 8] = "synch";
+    })(WNames || (WNames = {}));
     let n = 0;
     class Socket {
         constructor(info) {
@@ -148,7 +155,13 @@ var GTCommunication = (($) => {
             this.mode = "";
             this.onSetMode = (mode) => { return this.mode; };
             this._infoMenu = null;
+            this.infoMenu = null;
+            this.winStatus = null;
+            this.winNow = null;
+            this.winEvent = null;
+            this.winAlarm = null;
             this.unitPanel = null;
+            this.winNames = WNames;
             this.socketServer = {
                 host: "127.0.0.1",
                 port: 3310
@@ -262,61 +275,61 @@ var GTCommunication = (($) => {
             main.removeClass("sg-form");
             //const _formDiv2 = $().create("form").id("aas");
             //_formDiv2.create("div").id("div2");
-            const infoMenu = new InfoMenu({
+            const infoMenu = this.infoMenu = new InfoMenu({
                 menu: this._infoMenu,
                 id: "div2"
             });
-            this.createInfoWindow(1, {
+            /* winNow */
+            this.createInfoWindow(this.winNames.now, {
                 onread: (info) => {
-                    console.log(info);
                     if (info.unitId) {
                         this.unitPanel.setUnit(info.unitId);
                     }
-                    this.updateEventStatus(info.id, 1, 1);
+                    this.updateEventStatus(info, 1, this.winNames.now);
                 },
-                onadd: (info) => {
-                },
+                onadd: (info) => { },
                 ondelete: (info) => {
-                    this.updateEventStatus(info.id, 2, 1);
+                    this.updateEventStatus(info, 2, this.winNames.now);
                 }
-            }, { caption: "Inmediato", top: "bottom", deltaX: -50, deltaY: -20 });
-            this.createInfoWindow(2, {
+            }, this.winNow);
+            /* winEvent */
+            this.createInfoWindow(this.winNames.event, {
                 showType: false,
                 onread: (info) => {
                     if (info.unitId) {
                         this.unitPanel.setUnit(info.unitId);
                     }
-                    const counts = this.getInfoWin(2).getCounts();
-                    infoMenu.updateType(1, counts[info.type] || "");
+                    //infoMenu.updateType(1, counts[info.type] || "");
                     //console.log(info);
-                    this.updateEventStatus(info.id, 1, 2);
+                    this.updateEventStatus(info, 1, this.winNames.event);
                 },
                 onadd: (info) => {
-                    const counts = this.getInfoWin(2).getCounts();
-                    infoMenu.updateType(1, counts[info.type] || "");
+                    const counts = this.getInfoWin(this.winNames.event).getCounts();
+                    this.infoMenu.updateType(this.winNames.event, counts || "");
                 },
                 ondelete: (info) => {
-                    this.updateEventStatus(info.id, 2, 2);
+                    this.updateEventStatus(info, 2, this.winNames.event);
                 }
-            }, { caption: "Eventos", left: "left", top: "bottom", deltaX: 10, deltaY: -20 });
-            this.createInfoWindow(3, {
+            }, this.winEvent);
+            /* winAlarm */
+            this.createInfoWindow(this.winNames.alarm, {
                 showType: false,
                 onread: (info) => {
                     if (info.unitId) {
                         this.unitPanel.setUnit(info.unitId);
                     }
-                    const counts = this.getInfoWin(3).getCounts();
-                    infoMenu.updateType(0, counts[info.type] || "");
-                    this.updateEventStatus(info.id, 1, 3);
+                    //const counts = this.getInfoWin(this.winNames.alarm).getCounts();
+                    //infoMenu.updateType(0, counts[info.type] || "");
+                    this.updateEventStatus(info, 1, this.winNames.alarm);
                 },
                 onadd: (info) => {
-                    const counts = this.getInfoWin(3).getCounts();
-                    infoMenu.updateType(0, counts[info.type] || "");
+                    const counts = this.getInfoWin(this.winNames.alarm).getCounts();
+                    this.infoMenu.updateType(this.winNames.alarm, counts || "");
                 },
                 ondelete: (info) => {
-                    this.updateEventStatus(info.id, 2, 3);
+                    this.updateEventStatus(info, 2, this.winNames.alarm);
                 }
-            }, { caption: "Alarmas", left: "left", top: "bottom", deltaX: 10, deltaY: -140 - 20 });
+            }, this.winAlarm);
             //this.createInfoWindow(3, {}, {caption:"Message"});
             let info1 = {};
             this._win["main"] = new Float.Window({
@@ -364,6 +377,7 @@ var GTCommunication = (($) => {
                     }
                     const counts = this.getInfoWin(2).getCounts();
                     infoMenu.updateType(1, counts[info.type] || "");
+                    alert(77);
                     //console.log(info);
                 }
             });
@@ -372,7 +386,7 @@ var GTCommunication = (($) => {
             }
             this.statusId = "yasta2";
             const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
-            this._win["status-unit"] = new Float.Window({
+            const winStatus = {
                 visible: this.showConnectedUnit,
                 caption: "Conected Units",
                 left: "right",
@@ -388,7 +402,10 @@ var GTCommunication = (($) => {
                 resizable: true,
                 draggable: true,
                 closable: false
-            });
+            };
+            this.winStatus.visible = this.showConnectedUnit;
+            this.winStatus.child = _statusUnit.get();
+            this._win["status-unit"] = new Float.Window(this.winStatus);
         }
         show() {
             if (this.unitId) {
@@ -472,7 +489,7 @@ var GTCommunication = (($) => {
                     //console.log(json[x].mode, m, json[x].mode & m, index+1);
                     if (json[x].mode & m) {
                         //console.log(m, index+1);
-                        this.addInfo(index + 1, json[x]);
+                        this.addInfo(m, json[x]);
                     }
                 });
                 this.lastEventId = json[x].id;
@@ -487,10 +504,15 @@ var GTCommunication = (($) => {
         }
         reqEventStatus(xhr) {
             const json = JSON.parse(xhr.responseText);
-            this.getInfoWin(json.windowId).setStatus(json.eventId, json.status);
+            const infoWin = this.getInfoWin(json.windowId);
+            infoWin.setStatus(json.eventId, json.status);
             console.log(json);
+            const counts = infoWin.getCounts(); //counts[info.type]
+            console.log(json.windowId, counts);
+            this.infoMenu.updateType(json.windowId, counts);
+            //this.infoMenu.updateType(1, 9);
         }
-        updateEventStatus(eventId, status, windowId) {
+        updateEventStatus(info, status, windowId) {
             S.send3({
                 async: true,
                 panel: 2,
@@ -505,9 +527,10 @@ var GTCommunication = (($) => {
                         method: 'update-status',
                         name: 'x',
                         eparams: {
-                            eventId: eventId,
+                            eventId: info.id,
                             status: status,
-                            windowId: windowId
+                            windowId: windowId,
+                            mode: info.mode
                         }
                     }
                 ]

@@ -223,7 +223,14 @@ class S{
 		}
 		
 		self::$_str->ins = self::$ins;
+		//hr($_SESSION);
+		//hr(isset(self::$cfg['INIT']));
+		//unset(self::$cfg['INIT']);
+		//hx($_REQUEST);
 
+		if(isset($_REQUEST['__sg_ins']) && !isset(self::$cfg['INIT'])){
+			self::reset();
+		}
 		if(!isset(self::$cfg['INIT'])){
 			self::$userInfo = new InfoUser();
 
@@ -1100,6 +1107,11 @@ class S{
 		//hr($json);
 		return "Sevian.action.send($json)";
 
+	}
+
+	public static function reset(){
+		header("Location: ".$_SERVER["PHP_SELF"]);
+		exit;
 	}
 }
 

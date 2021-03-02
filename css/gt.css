@@ -592,7 +592,7 @@ form {
   display: none;
 }
 
-.sg-menu.comm-menu .item[data-value="2"] {
+.sg-menu.comm-menu .item[data-value="1"] {
   display: none !important;
 }
 .sg-menu.comm-menu .item a .image {

@@ -170,7 +170,8 @@ function humanDiff (t1, t2) {
             this.lineId++;
 
             const div = this.ul.createFirst("div").addClass("main").removeClass("open")
-            .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
+            .ds("id", message.id).ds("line", this.lineId).ds("type", message.type)
+            .ds("mode", message.mode);
 
             if(message.status == 0){
                 div.addClass("new");
@@ -259,6 +260,18 @@ function humanDiff (t1, t2) {
         }
 
         public getCounts(){
+            
+            
+            const ele = this.main.queryAll(`.new`);
+            
+            if(ele){
+                return ele.length;
+            }
+            return 0;
+            
+        }
+
+        public getCounts1(){
             for(let x in this.types){
                 //this.counts[x] = 0;
             }
@@ -279,7 +292,6 @@ function humanDiff (t1, t2) {
             return this.counts;
             
         }
-
         public deleteLine(e){
             
             e.parentNode.remove();
