@@ -505,7 +505,7 @@ var GTCommunication = (($) => {
         reqEventStatus(xhr) {
             const json = JSON.parse(xhr.responseText);
             const infoWin = this.getInfoWin(json.windowId);
-            infoWin.setStatus(json.eventId, json.status);
+            infoWin.setStatus(json.eventId, json.status, json.user);
             console.log(json);
             const counts = infoWin.getCounts(); //counts[info.type]
             console.log(json.windowId, counts);

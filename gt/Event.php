@@ -7,7 +7,8 @@ class Event
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
-		\sevian\JsonRequest
+		\sevian\JsonRequest,
+		\Sevian\UserInfo
 	
 {
 
@@ -52,12 +53,14 @@ class Event
 
 				break;
 			case 'update-status':
-				$this->setStatus($this->eparams->eventId?? 0, $this->eparams->status?? 0);
+				$userInfo = $this->getUserInfo();
+				$this->setStatus($this->eparams->eventId?? 0, $this->eparams->status?? 0, $userInfo->user);
 				$this->setRequest([
 					"eventId"=>$this->eparams->eventId?? 0,
 					"status"=>$this->eparams->status?? null,
 					"windowId"=>$this->eparams->windowId?? 0,
-					'mode'=>$this->eparams->mode?? 0
+					'mode'=>$this->eparams->mode?? 0,
+					'user'=>$userInfo->user?? '',
 					]);
 				break;	
             case 'load-sites':
@@ -148,6 +151,11 @@ class Event
 		return $this->_jsonRequest;
 	}
 
-	
+	public function setUserInfo($info){
+        $this->_userInfo = $info;
+    }
+    public function getUserInfo(){
+        return $this->_userInfo;
+    }
 
 }

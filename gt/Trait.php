@@ -1039,14 +1039,14 @@ trait DBEvent{
     private function loadDataEvent($lastId=0){
 
         $cn = $this->cn;
-        $cn->query = "SELECT e.id, e.event_id, e.status,
-        vn.name, 1 as type, 'x' as cType, info as message,
+        $cn->query = "SELECT e.id, e.event_id, e.user, e.status,
+        vn.name, 1 as type, 'x' as cType, e.info,
         t.id as track_id, e.date_time, u.id as unitId, 
-        e.mode, 
-        #bin(e.mode) as mode,
+        e.mode, e.title,
+        
         dn.name as device_name,
         
-        #e.*, bin(e.mode) as mode
+        
                 CONCAT(
                     TIMESTAMPDIFF(DAY, TIMESTAMP(e.date_time), NOW()) ,'d ',
                     MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.date_time), NOW()), 24), ':',
@@ -1060,10 +1060,12 @@ trait DBEvent{
         LEFT JOIN user_unit as uu ON uu.unit_id = u.id
         LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = e.date_time 
         WHERE 
-        #e.id = 0 
+        
         e.status != 2
-        AND '$lastId'= 0 or e.id > '$lastId'
-        LIMIT 1900, 10
+        AND ('$lastId'= 0 or e.id > '$lastId')
+        
+        ORDER BY 1 desc
+        LIMIT 5
         ";
 
         //hx($cn->query);
@@ -1074,9 +1076,9 @@ trait DBEvent{
         
     }
 
-    private function setStatus($eventId, $status=0){
+    private function setStatus($eventId, $status=0, $user=""){
         $cn = $this->cn;
-        $cn->query = "UPDATE event SET status='$status' WHERE id='$eventId'";
+        $cn->query = "UPDATE event SET status='$status', `user`='$user' WHERE id='$eventId'";
         $this->cn->execute();
     }
 

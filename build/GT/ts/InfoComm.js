@@ -131,6 +131,10 @@ var InfoComm = (($) => {
                 //div.removeClass("new");
                 this.onread(message);
             });
+            div.on("dblclick", () => {
+                //div.removeClass("new");
+                this.ondelete(message);
+            });
             div.create("div").text("+").addClass("btn-new").on("click", () => {
                 div.toggleClass("open");
             });
@@ -139,13 +143,20 @@ var InfoComm = (($) => {
             const start = date.getTime();
             div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
             if (this.showType) {
-                div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
+                //div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
+                div.create("div").addClass("type").ds("type", message.type).text(message.title || "");
             }
-            div.create("div").text(message.message || "");
-            div.create("div").text("x").addClass("btn-delete").on("click", (event) => {
+            div.create("div").text(message.info || "");
+            div.create("div").text(message.user || "").addClass("user").on("click", (event) => {
                 //this.deleteLine(event.currentTarget);
-                this.ondelete(message);
+                //this.ondelete(message);
             });
+            /*
+            div.create("div").text("x").addClass("btn-delete").on("click", (event)=>{
+                //this.deleteLine(event.currentTarget);
+                //this.ondelete(message);
+            });
+            */
             if (typeof (message.info) === "object") {
                 const detail = div.create("div").addClass("detail");
                 for (let x in message.info) {
@@ -155,7 +166,7 @@ var InfoComm = (($) => {
             }
             this.onadd(message);
         }
-        setStatus(id, status) {
+        setStatus(id, status, user) {
             //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
             const ele = $(this.ul.query(`.main[data-id='${id}']`));
             if (ele) {
@@ -164,6 +175,8 @@ var InfoComm = (($) => {
                 }
                 else if (status == 1) {
                     ele.removeClass("new");
+                    const cellUser = $((ele).query(`.user`));
+                    cellUser.text(user || "");
                 }
                 else if (status == 2) {
                     ele.removeClass("new");
