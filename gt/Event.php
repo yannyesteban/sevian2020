@@ -62,6 +62,17 @@ class Event
 					'mode'=>$this->eparams->mode?? 0,
 					'user'=>$userInfo->user?? '',
 					]);
+				break;
+			case 'update-all-status':
+				$userInfo = $this->getUserInfo();
+				$this->setStatusAll($this->eparams->eventId?? 0, $this->eparams->status?? 0, $userInfo->user, $this->eparams->windowId?? 0);
+				$this->setRequest([
+					"eventId"=>$this->eparams->eventId?? 0,
+					"status"=>$this->eparams->status?? null,
+					"windowId"=>$this->eparams->windowId?? 0,
+					'mode'=>$this->eparams->mode?? 0,
+					'user'=>$userInfo->user?? '',
+					]);
 				break;	
             case 'load-sites':
                 

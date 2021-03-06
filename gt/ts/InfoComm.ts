@@ -199,9 +199,9 @@ function humanDiff (t1, t2) {
             
             if(this.showType){
                 //div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
-                div.create("div").addClass("type").ds("type", message.type).text(message.title || "");
+                
             }
-            
+            div.create("div").addClass("_type").ds("type", message.type).text(message.title || "");
             div.create("div").text(message.info || "");
             div.create("div").text(message.user || "").addClass("user").on("click", (event)=>{
                 //this.deleteLine(event.currentTarget);
@@ -242,13 +242,42 @@ function humanDiff (t1, t2) {
 
                 }else if(status == 2){
                     
-                    ele.removeClass("new");
+                    
                     ele.get().remove();
                 }
             
             }
             
         }
+
+        public setElementStatus(ele, status, user){
+            if(ele){
+                if(status == 0){
+                    ele.addClass("new");
+                    
+                }else if(status == 1){
+                    ele.removeClass("new");
+                    const cellUser = $((ele).query(`.user`));
+                    cellUser.text(user || "");
+
+                }else if(status == 2){
+                    ele.get().remove();
+                }
+            
+            }
+        }
+        public setAllStatus(eventId, status, user?){
+            
+            //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
+            const list = this.ul.queryAll(`.main[data-id]`);
+            
+            for(let item of list){
+                if($(item).ds("id")*1 <= eventId){
+                    this.setElementStatus($(item), status, user)
+                }
+            }
+        }
+
         public get(){
             return this.main;
         }

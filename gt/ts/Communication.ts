@@ -395,13 +395,13 @@ var GTCommunication = (($) => {
                         this.unitPanel.setUnit(info.unitId);
                     }
 
-                    this.updateEventStatus(info, 1, this.winNames.now);
+                    //this.updateEventStatus(info, 1, this.winNames.now);
                 },
 
                 onadd: (info)=>{},
                 
                 ondelete: (info)=>{
-                    this.updateEventStatus(info, 2, this.winNames.now);
+                    //this.updateEventStatus(info, 2, this.winNames.now);
                 }
             
             }, this.winNow);
@@ -702,6 +702,8 @@ var GTCommunication = (($) => {
             //this.infoMenu.updateType(1, 9);
            
         }
+
+        
         updateEventStatus(info, status, windowId){
             S.send3(
 				{
@@ -723,6 +725,48 @@ var GTCommunication = (($) => {
                             status:status,
                             windowId:windowId,
                             mode: info.mode
+						}
+					}
+			
+				]
+				
+			});
+        }
+        reqAllEventStatus(xhr){
+            const json = JSON.parse(xhr.responseText);
+            const infoWin = this.getInfoWin(json.windowId);
+
+            infoWin.setAllStatus(json.eventId, json.status, json.user);
+            //console.log(json);
+
+            const counts = infoWin.getCounts();//counts[info.type]
+
+            //console.log(json.windowId, counts);
+            this.infoMenu.updateType(json.windowId, counts);
+            //this.infoMenu.updateType(1, 9);
+           
+        }
+        updateAllEventStatus(info, status, windowId){
+            S.send3(
+				{
+				
+				async: true,
+				panel:2,
+				valid:false,
+				confirm_: 'seguro?',
+				requestFunction: $.bind(this.reqAllEventStatus, this),
+				params:	[
+					{
+						t:'setMethod',
+						id:2,
+						element:'gt-event',
+						method:'update-all-status',
+						name:'x',
+						eparams:{
+                            eventId: this.lastEventId,
+                            status:status,
+                            windowId:windowId,
+                            mode: 1
 						}
 					}
 			
@@ -1508,6 +1552,15 @@ var GTCommunication = (($) => {
                this._infoControl[type].add(info); 
             }
             
+        }
+
+        public readAll(windowId){
+            this.updateAllEventStatus({}, 1, windowId);
+            
+
+        }
+        public deleteAll(windowId){
+            this.updateAllEventStatus({}, 2, windowId);
         }
 	}
 	

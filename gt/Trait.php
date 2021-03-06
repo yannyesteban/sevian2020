@@ -1063,9 +1063,9 @@ trait DBEvent{
         
         e.status != 2
         AND ('$lastId'= 0 or e.id > '$lastId')
-        
-        ORDER BY 1 desc
-        LIMIT 5
+        ORDER BY 1
+        #ORDER BY 1 desc
+        #LIMIT 5
         ";
 
         //hx($cn->query);
@@ -1081,6 +1081,10 @@ trait DBEvent{
         $cn->query = "UPDATE event SET status='$status', `user`='$user' WHERE id='$eventId'";
         $this->cn->execute();
     }
-
+    private function setStatusAll($eventId, $status=0, $user="", $mode=""){
+        $cn = $this->cn;
+        $cn->query = "UPDATE event SET status='$status', `user`='$user' WHERE id<='$eventId' AND mode & '$mode'>0";
+        $this->cn->execute();
+    }
     
 }

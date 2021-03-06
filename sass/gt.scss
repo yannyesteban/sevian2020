@@ -647,14 +647,17 @@ form{
 
 .sg-menu.comm-menu{
 	
-	.item{
+	>.item{
 		
 		&[data-value="1"]{
 			display:none !important;
 		}
-		a{
+		.submenu{
+			width: 300px;
+		}
+		>a{
 			
-			.image{
+			>.image{
 				
 				background-repeat: no-repeat;
 				background-position: center center;	
@@ -662,7 +665,7 @@ form{
 				width: 30px;
 				height: 24px;	
 			}
-			.text{
+			>.text{
 				background-color: #fdfa30;
 				border-radius: 20%;
 				padding: 1px;

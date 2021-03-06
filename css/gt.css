@@ -592,17 +592,20 @@ form {
   display: none;
 }
 
-.sg-menu.comm-menu .item[data-value="1"] {
+.sg-menu.comm-menu > .item[data-value="1"] {
   display: none !important;
 }
-.sg-menu.comm-menu .item a .image {
+.sg-menu.comm-menu > .item .submenu {
+  width: 300px;
+}
+.sg-menu.comm-menu > .item > a > .image {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 16px 16px;
   width: 30px;
   height: 24px;
 }
-.sg-menu.comm-menu .item a .text {
+.sg-menu.comm-menu > .item > a > .text {
   background-color: #fdfa30;
   border-radius: 20%;
   padding: 1px;
@@ -615,7 +618,7 @@ form {
   text-align: center;
   font-size: 10px;
 }
-.sg-menu.comm-menu .item a .text:empty {
+.sg-menu.comm-menu > .item > a > .text:empty {
   display: none;
 }
 

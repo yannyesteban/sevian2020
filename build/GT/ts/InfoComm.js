@@ -144,8 +144,8 @@ var InfoComm = (($) => {
             div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
             if (this.showType) {
                 //div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
-                div.create("div").addClass("type").ds("type", message.type).text(message.title || "");
             }
+            div.create("div").addClass("_type").ds("type", message.type).text(message.title || "");
             div.create("div").text(message.info || "");
             div.create("div").text(message.user || "").addClass("user").on("click", (event) => {
                 //this.deleteLine(event.currentTarget);
@@ -179,8 +179,31 @@ var InfoComm = (($) => {
                     cellUser.text(user || "");
                 }
                 else if (status == 2) {
-                    ele.removeClass("new");
                     ele.get().remove();
+                }
+            }
+        }
+        setElementStatus(ele, status, user) {
+            if (ele) {
+                if (status == 0) {
+                    ele.addClass("new");
+                }
+                else if (status == 1) {
+                    ele.removeClass("new");
+                    const cellUser = $((ele).query(`.user`));
+                    cellUser.text(user || "");
+                }
+                else if (status == 2) {
+                    ele.get().remove();
+                }
+            }
+        }
+        setAllStatus(eventId, status, user) {
+            //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
+            const list = this.ul.queryAll(`.main[data-id]`);
+            for (let item of list) {
+                if ($(item).ds("id") * 1 <= eventId) {
+                    this.setElementStatus($(item), status, user);
                 }
             }
         }
