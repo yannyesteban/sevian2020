@@ -202,7 +202,7 @@ function humanDiff (t1, t2) {
                 
             }
             div.create("div").addClass("_type").ds("type", message.type).text(message.title || "");
-            div.create("div").text(message.info || "");
+            //div.create("div").text(message.info || "");
             div.create("div").text(message.user || "").addClass("user").on("click", (event)=>{
                 //this.deleteLine(event.currentTarget);
                 //this.ondelete(message);
@@ -221,6 +221,8 @@ function humanDiff (t1, t2) {
                     detail.create("span").text(message.info[x]);
                 }
 
+            }else{
+                div.create("div").addClass("detail").text(message.info);
             }
 
             this.onadd(message);
@@ -285,7 +287,7 @@ function humanDiff (t1, t2) {
         public initTimer(){
             setInterval(()=>{
                 this.updateTime();
-            }, 60000);
+            }, 5000);
         }
 
         public updateTime(){

@@ -176,16 +176,38 @@ class History
 	}
 	
 	private function load(){
+		$form =  new \Sigefor\Component\Form2([
+
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/history', self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 1,
+			'userData'=> [],
+			
+			//'record'=>$this->getRecord()
+		]);
+
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-history-'.$this->id;
 		$this->panel->innerHTML = 'gt-history-'.$this->id;
-		$this->typeElement = 'GTHistory';
+		//$this->typeElement = 'GTHistory';
+		$this->jsClassName = 'GTHistory';
 
 		$this->info = [
-			'id'=>$this->panel->id,
-			'panel'=>$this->id,
-			'tapName'=>'yanny'
+			'form'     => $form,
+			
+			'popupTemplate' => $this->popupTemplate,
+			'infoTemplate'	=> $this->infoTemplate,
+			'pathImages'	=> PATH_IMAGES."sites/",
+			'caption'		=> 'Historial',
+			'id'            => $this->id,
+			'followMe'		=> true,
+			'delay'			=> 60000,
 		];
+
+		
+		$this->setInit($this->info);
 
     }
 	
@@ -238,11 +260,11 @@ class History
 			],
 			[
 				'method'	=> 'setInfoUnit',
-				'value'		=> $this->infoUnit($unitId)
+				//'value'		=> $this->infoUnit($unitId)
 			],
 			[
 				'method'	=> 'setInfoUnitInfo',
-				'value'		=> $this->infoUnitInput($unitId)
+				//'value'		=> $this->infoUnitInput($unitId)
 			],
 			[
 				'method'	=> 'uPlay',

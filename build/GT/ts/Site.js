@@ -123,7 +123,7 @@ var GTSite = (($) => {
             this._win["form-site"] = new Float.Window({
                 visible: false,
                 caption: this.caption,
-                left: 10 + 280 + 10,
+                left: 10,
                 top: 100,
                 width: "280px",
                 height: "250px",

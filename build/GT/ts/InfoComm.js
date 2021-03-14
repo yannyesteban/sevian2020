@@ -146,7 +146,7 @@ var InfoComm = (($) => {
                 //div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
             }
             div.create("div").addClass("_type").ds("type", message.type).text(message.title || "");
-            div.create("div").text(message.info || "");
+            //div.create("div").text(message.info || "");
             div.create("div").text(message.user || "").addClass("user").on("click", (event) => {
                 //this.deleteLine(event.currentTarget);
                 //this.ondelete(message);
@@ -163,6 +163,9 @@ var InfoComm = (($) => {
                     detail.create("span").text(x);
                     detail.create("span").text(message.info[x]);
                 }
+            }
+            else {
+                div.create("div").addClass("detail").text(message.info);
             }
             this.onadd(message);
         }
@@ -213,7 +216,7 @@ var InfoComm = (($) => {
         initTimer() {
             setInterval(() => {
                 this.updateTime();
-            }, 60000);
+            }, 5000);
         }
         updateTime() {
             const x = this.main.queryAll(".date");

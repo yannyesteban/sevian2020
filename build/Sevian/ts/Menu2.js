@@ -167,6 +167,7 @@ var Menu = (function ($, Float) {
             this.autoClose = true;
             this.items = [];
             this.context = null;
+            this.parentContext = null;
             this._main = null;
             this.context = this;
             let x;
@@ -365,6 +366,9 @@ var Menu = (function ($, Float) {
         }
         getSubType() {
             return this.subType;
+        }
+        getParentContext() {
+            return this.parentContext;
         }
     }
     return Menu;

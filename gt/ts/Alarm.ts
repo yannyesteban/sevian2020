@@ -121,6 +121,19 @@ var GTAlarm = (($) => {
 			this.createMenu();
 			this._info = $().create("div").addClass("win-alarm-info");
 			//this._info = $().create("div").addClass("win-units-info");
+
+
+			this.win = new Float.Window({
+                visible:false,
+                caption: this.caption,
+                child:main,
+                left:10,
+                top:100,
+                width: "280px",
+                height: "250px",
+                mode:"auto",
+                className:["sevian"]
+			});
 			return;
 
 			this.win = new Float.Window({
@@ -202,6 +215,9 @@ var GTAlarm = (($) => {
 
 		} 
 		
+		showMenu(){
+			this.win.show();
+		}
 		
         _load(main:any){
 

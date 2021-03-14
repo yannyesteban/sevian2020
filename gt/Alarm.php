@@ -131,16 +131,41 @@ class Alarm
 	}
 	
 	private function load(){
+
+		$form =  new \Sigefor\Component\Form2([
+			
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/alarm', self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 1,
+			'userData'=> [],
+
+			
+			
+			//'record'=>$this->getRecord()
+		]);
+
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-alarm-'.$this->id;
 		$this->panel->innerHTML = 'gt-alarm-'.$this->id;
-		$this->typeElement = 'GTAlarm';
-
+		//$this->typeElement = 'GTAlarm';
+		$this->jsClassName = 'GTAlarm';
 		$this->info = [
 			'id'=>$this->panel->id,
 			'panel'=>$this->id,
-			'tapName'=>'yanny'
+			'tapName'=>'yanny',
+			'caption'		=> 'Alarmas',
+
+			'form'     => $form,
+			'dataMain'     => $this->loadAlarms(),
+
+			'popupTemplate' => $this->popupTemplate,
+			'infoTemplate'	=> $this->infoTemplate,
+			'pathImages'	=> PATH_IMAGES."sites/",
 		];
+
+		$this->setInit($this->info);
 
     }
     

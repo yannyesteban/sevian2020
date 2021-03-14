@@ -2,8 +2,8 @@
 	"form":"gt_cota_unit",
 	"caption":"",
 	"className":["cota-unit","flat"],
-    "query":"SELECT '' as unit_id,'' as go",
-    "query2":"SELECT '' as unit_id, '' as go, '' as info, '' as cmd, '' as t1, '' as t2, '' as t3, '' as c, '' as h",
+    "query":"SELECT '' as unit_id,'' as go,'' as follow_me",
+    "query2":"SELECT '' as unit_id, '' as go, '' as go2, '' as info, '' as cmd, '' as t1, '' as t2, '' as t3, '' as c, '' as h",
 	"menuName":"",
 	"methods":{
 		"request":{
@@ -29,6 +29,16 @@
 			"name":"go",
 			"default":"»", 
 			"input":"input","type":"button",
+			"events":{
+				
+				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"
+			}
+		},
+		{
+			"name":"follow_me",
+			"default":"»", 
+			"title":"hola",
+			"input":"input","type":"checkbox",
 			"events":{
 				
 				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"

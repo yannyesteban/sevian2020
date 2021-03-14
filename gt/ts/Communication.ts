@@ -1472,6 +1472,36 @@ var GTCommunication = (($) => {
 
             
         }
+
+        sendTo(pendingId){
+           
+            let commandId = this.getCommandId();
+			let unitId = this.getUnitId();
+
+           
+     
+            let str1 = JSON.stringify({
+                type:"rr",
+                deviceId: 1,
+                deviceName: "",
+                commandId: commandId,
+				unitId: unitId,
+                comdValues: [],
+                msg : "",
+                name: "",
+                level:1,
+                user:this.user,
+                mode:1,
+                useTag:0,
+                id:pendingId*1
+                
+
+            });
+            
+			this._ws.send(str1);            
+
+            
+        }
         
 
         sendCommand(unitId:number, type:string = "RC"){

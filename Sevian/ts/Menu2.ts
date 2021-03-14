@@ -200,7 +200,7 @@ var Menu =
 
         private items:any[] = []; 
         private context:any = null; 
-        
+        private parentContext:any = null;
         
         _main:any = null;
 
@@ -442,7 +442,9 @@ var Menu =
             return this.subType;
         }
         
-        
+        getParentContext(){
+            return this.parentContext;
+        }
     }
    
 

@@ -457,6 +457,7 @@ trait DBTracking{
         FROM tracking as t
         INNER JOIN unit as u ON u.tracking_id = t.id
         ORDER BY unit_id
+        limit 10
                 
         ";
 		$result = $cn->execute();
@@ -803,7 +804,7 @@ trait DBGeofence{
         */
         $cn->query = "SELECT g.*
             #, concat(name, ' ', type) as name
-            FROM geofences as g
+            FROM geofence as g
             WHERE type='polygon'
             #WHERE g.user = 'Rmartinez'
             ";
@@ -1010,14 +1011,15 @@ trait DBHistory{
         
         SELECT
 
-        t.*, date_format(date_time, '%d/%m/%Y %T') as date_time, UNIX_TIMESTAMP(date_time) as ts, e.name as event
+        t.*, date_format(t.date_time, '%d/%m/%Y %T') as date_time, UNIX_TIMESTAMP(t.date_time) as ts, 'e.name' as event
 
         FROM tracking as t
-        LEFT JOIN unit_event as ue ON ue.unit_id = t.unit_id and ue.event = t.event_id
-        LEFT JOIN event as e on e.id = ue.event_id
+        #LEFT JOIN unit_event as ue ON ue.unit_id = t.unit_id and ue.event = t.event_id
+        #LEFT JOIN device_event as e on e.id = ue.event_id
 
         WHERE t.id >= 12699
-        ORDER BY unit_id
+        ORDER BY t.id
+LIMIT 150
         
         
                 

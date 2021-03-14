@@ -17,7 +17,7 @@ var GTGeofence = (($) => {
 		win:any = null;
 		form:any = null;
 
-		caption:string = "u";
+		caption:string = "";
 		winCaption:string = "";
 		pathImages:string = "";
 		followMe:boolean = false;
@@ -118,13 +118,13 @@ var GTGeofence = (($) => {
 			this.main = main;
 
 			this.menu = this.createMenu();
-			this._win["geofence"] = new Float.Window({
+			this._win["main-menu"] = new Float.Window({
                 visible:false,
                 caption: this.caption,
-                left:300,
+                left:10,
                 top:100,
-                width: "300px",
-                height: "200px",
+                width: "280px",
+                height: "250px",
                 mode:"auto",
 				className:["sevian"],
 				child:this.main.get()
@@ -134,10 +134,10 @@ var GTGeofence = (($) => {
 			this._win["form"] = new Float.Window({
                 visible:false,
                 caption: this.caption,
-                left:700,
+                left:10,
                 top:100,
-                width: "300px",
-                height: "200px",
+                width: "280px",
+                height: "250px",
                 mode:"auto",
 				className:["sevian"],
 				child:formMain
@@ -152,6 +152,10 @@ var GTGeofence = (($) => {
 			
 		} 
 		
+		showMenu(){
+			this._win["main-menu"].show();
+		}
+
         _load(main:any){
 
 		}

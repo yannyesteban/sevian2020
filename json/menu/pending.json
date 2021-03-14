@@ -30,6 +30,9 @@
 					}
 			
 				]}
+		},{
+			"caption":"send",
+			"action":"const value=this.context.getParentContext().getValue();if(!value.id){alert('error');return};this.context.getParentContext().getContext().sendTo(value.id);"
 		},
 		{
 			"caption":"Eliminar",

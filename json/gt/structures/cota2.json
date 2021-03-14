@@ -139,10 +139,52 @@
 
 		},
 		{
+			"id":"gt-geofence-11",
+			"element":"gt-geofence",
+			"name":"gt-geofence",
+			"method":"load",
+			"eparams":{
+				"infoId":""
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":"gt-history-11",
+			"element":"gt_history",
+			"name":"gt-history",
+			"method":"load",
+			"eparams":{
+				"infoId":""
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
+			"id":"gt-alarm-11",
+			"element":"gt_alarm",
+			"name":"gt_alarm",
+			"method":"load",
+			"eparams":{
+				"infoId":""
+			},
+			"type":0,
+			"class":"",
+			"debug":0,
+			"design":0
+
+		},
+		{
 			"id":"comm",
 			"element":"gt-communication",
 			"name":"gt-communication",
-			"method":"load",
+			"method":"load______________",
 			"eparams":{
 				"unitPanelId":"gt-unit-10"
 			},

@@ -30,7 +30,31 @@
 			"propertys":{
 				"title":"Mostrar Markadores / Sitios"
 			},
-			"action":"S.getElement('gt-site-11').showMenu()"
+			"action":"S.getElement('gt-site-11').showMenu();"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-pentagon",
+			"propertys":{
+				"title":"Geocercas"
+			},
+			"action":"S.getElement('gt-geofence-11').showMenu();"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-alarm",
+			"propertys":{
+				"title":"Alarmas"
+			},
+			"action":"S.getElement('gt-alarm-11').showMenu();"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-history",
+			"propertys":{
+				"title":"Herramienta Historial"
+			},
+			"action":"S.getElement('gt-history-11').showMenu();"
 		},
 		{
 			"caption":"",

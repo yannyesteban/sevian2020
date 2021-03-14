@@ -593,8 +593,14 @@ form{
 .icon-pentagon{
 	background-image: url(#{$path_images}pentagon.png);
 }
+.icon-alarm{
+	background-image: url(#{$path_images}clock_001.png);
+}
 .icon-clock_001{
 	background-image: url(#{$path_images}clock_001.png);
+}
+.icon-history{
+	background-image: url(#{$path_images}calendar.png);
 }
 .icon-calendar{
 	background-image: url(#{$path_images}calendar.png);
@@ -775,7 +781,7 @@ form{
 		
 		display: grid;
 		grid-gap: 0px;
-		grid-template-columns: 20px 70px 50px 50px auto 20px;
+		grid-template-columns: 20px 70px 50px 90px auto;
 		grid-template-rows: 1.4em auto;
 		overflow: hidden;
 		.btn-new{
@@ -844,14 +850,14 @@ form{
 			
 			//background-color: rgba(0, 0, 0, 0.637);
 		}
-		>:nth-child(5){
+		>:nth-child(4){
 			//word-wrap: normal;
 			white-space: nowrap;
 			overflow: hidden;
 			
 			text-overflow: ellipsis;
 		}
-		>:nth-child(7){
+		>:nth-child(6){
 			
 			
 			grid-column: 1/7;
@@ -863,7 +869,7 @@ form{
 
 		}
 		&:not(.open){
-			>:nth-child(7){
+			>:nth-child(6){
 				
 				
 				display: none;

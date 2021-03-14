@@ -20,14 +20,14 @@
 		{
 			"name":"unit_id","caption":"nnn","input":"list","type":"text",
 			
-			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM units as u LEFT JOIN units_names as vn ON vn.id = u.name_id LEFT JOIN vehicles as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
+			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM unit as u LEFT JOIN unit_name as vn ON vn.id = u.name_id LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
 			"params":{"placeholder":"...UNITS"},
 			"_events":{"change":"S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{unitId:this.getForm().getValue('unit_id')}}],});"}
 		},
 		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
 		"data":[
 			[0, "seleccione", "*"],
-			"select id, brand from brands ORDER BY brand"
+			"select id, brand from brand ORDER BY brand"
 			
 		  ]},
 		{"name":"model","caption":"Modelo"}

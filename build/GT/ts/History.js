@@ -8,7 +8,7 @@ var GTHistory = (($) => {
             this.menu = null;
             this.win = null;
             this.form = null;
-            this.caption = "u";
+            this.caption = "";
             this.winCaption = "";
             this.pathImages = "";
             this.followMe = false;
@@ -81,6 +81,12 @@ var GTHistory = (($) => {
                 main = $.create("div").attr("id", this.id);
                 this._create(main);
             }
+            GTMap.load((map, s) => {
+                this.setMap(map);
+                //this.play();
+                //map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
+                //map.getControl("mark").onsave = ((info)=>{}
+            });
         }
         static getInstance(name) {
             return Unit._instances[name];
@@ -91,6 +97,17 @@ var GTHistory = (($) => {
             this.form.id = this.main;
             this.form.parentContext = this;
             this._form = new Form2(this.form);
+            this.win = new Float.Window({
+                visible: true,
+                caption: this.caption,
+                child: this._form.get(),
+                left: 10,
+                top: 100,
+                width: "280px",
+                height: "250px",
+                mode: "auto",
+                className: ["sevian"]
+            });
             return;
             this.createMenu();
             this._info = $().create("div").addClass("win-history-info");
@@ -164,6 +181,9 @@ var GTHistory = (($) => {
                 mode: "auto",
                 className: ["sevian"]
             });
+        }
+        showMenu() {
+            this.win.show();
         }
         _load(main) {
         }
