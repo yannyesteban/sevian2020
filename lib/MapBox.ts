@@ -336,11 +336,14 @@ var MapBox = (($, turf) => {
         }
         length:number = 0;
 
+        private groups:any[] = null;
+
         private _trace:Trace = null;
         private _playButton:any = null;
         private _factorIndex = 0;
         private _factorValue = [0.005, 0.01, 0.05, 0.09, 0.13, 0.20];
 
+        public onCheckLayer:Function = (layerId:number, checked:boolean) => {};
         constructor(object){
             this._parent = object;
         }
@@ -366,17 +369,14 @@ var MapBox = (($, turf) => {
             this._group2 = this._container.create("div").style("display","none");
             this._group2.addClass(["trace-nav"]);
             this._group_a = this._group2.create("div").addClass(["mapboxgl-ctrl","trace-nav"]);
-
+            this._group_speed = this._group2.create("div").addClass(["mapboxgl-ctrl","trace-speed-nav"]);
+            this.speedBar(this._group_speed);
             this._group = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "trace-layer"])
             .style("display","none");
-            this._length = this._group.create("span").addClass("rule-tool-value");
-            this._length.text("Layers");
-            this._unit = this._group.create("span");
-            this._unit.addClass("rule-tool-unit").text(" +")
-            .on("click", ()=>{
-                //this.toggleUnit();
-            })
-            ;
+            //this._length = this._group.create("span").addClass("rule-tool-value");
+            //this._length.text("Layers");
+            //this._unit = this._group.create("span");
+            
 
             this._group_b = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group"]);
             this._group_a.create("button").prop({"type": "button", "title":"+"}).addClass("icon-fb")
@@ -435,11 +435,25 @@ var MapBox = (($, turf) => {
                 this.stop();
             });
 
-            this.showLayers();
+            //this.showLayers();
             return this._container.get();
             
         }
 
+        speedBar(bar:any, value?:number){
+            bar.create("div").addClass(["speed6", "r16"]);
+            bar.create("div").addClass(["speed", "r8"]);
+            bar.create("div").addClass(["speed", "r4"]);
+            bar.create("div").addClass(["speed", "r2"]);
+            bar.create("div").addClass(["speed", "r"]).text("&laquo;");
+            bar.create("div").addClass(["speed", "x"]).text("&raquo;");;
+            bar.create("div").addClass(["speed", "x2"]);
+            bar.create("div").addClass(["speed", "x4"]);
+            bar.create("div").addClass(["speed", "x8"]);
+            bar.create("div").addClass(["speed", "x16"]);
+
+
+        }
         onRemove(){
             this._container.parentNode.removeChild(this._container);
             this._map = undefined;
@@ -467,6 +481,7 @@ var MapBox = (($, turf) => {
                 this._playButton.addClass("icon-pause"); 
             }
         }
+        
         
 
         cmdTrace(cmd){
@@ -517,36 +532,160 @@ var MapBox = (($, turf) => {
         setTrace(trace){
             this._trace = trace;
             this.init();
+            this.showLayers();
+        }
+
+        getTrace(){
+            return this._trace;
+        }
+
+        getTraceLayers(){
+            return this.getTrace().layers;
+        }
+
+        getTraceGroupLayers(){
+            return this.getTrace().groups;
         }
 
         showLayers(){
-            let layers = [
+            
+            this.groups = [
                 {
-                    title:"10 a 20 Km/h"
+                    caption:"Capas",
+                    className:"x",
+                    mode:"close"
                 },
                 {
-                    title:"20 a 30 Km/h"
+                    caption:"Velocidad",
+                    className:"x",
+                    mode:"close"
                 },
                 {
-                    title:"30 a 40 Km/h"
+                    caption:"Input",
+                    className:"x",
+                    mode:"close"
                 },
                 {
-                    title:"40 a 50 Km/h"
-                },
-                {
-                    title:"50 a 60 Km/h"
-                },
-                {
-                    title:"Evento Activo"
+                    caption:"Opuput",
+                    className:"x",
+                    mode:"close"
                 }
             ];
 
+            let layers:any[] = [
+                {
+                    caption:"10 a 20 Km/h",
+                    type:"circle",
+                    color:"red",
+                    group:1
+                },
+                {
+                    caption:"20 a 30 Km/h",
+                    type:"circle",
+                    color:"blue",
+                    group:1
+                },
+                {
+                    caption:"30 a 40 Km/h",
+                    type:"circle",
+                    color:"black",
+                    group:1
+                },
+                {
+                    caption:"40 a 50 Km/h",
+                    type:"circle",
+                    color:"white",
+                    group:1
+                },
+                {
+                    caption:"50 a 60 Km/h",
+                    type:"circle",
+                    color:"green",
+                    group:1
+                },
+                {
+                    caption:"Evento Activo",
+                    type:"circle",
+                    color:"blue",
+                    group:3
+                },
+                {
+                    caption:"Puerta Abierta",
+                    type:"circle",
+                    color:"green",
+                    group:2
+                },
+                {
+                    caption:"Luces Encendidas",
+                    type:"circle",
+                    color:"yellow",
+                    group:2
+                }
+            ];
 
-            for(let x in layers){
-                let line = this._group.create("div").addClass("line");
-                let check = line.create("input").attr("type","checkbox");
-                let text = line.create("span").text(layers[x].title);
+            this.groups = this.getTraceGroupLayers();
+            layers = this.getTraceLayers();
+            //console.log(this.groups, layers);
+            //alert(889);
+            //return;
+            let items = [];
+
+           
+            let _menu:any = null;
+            let index = 0;
+            for(let layer of layers){
+                if(layer.group !== "" && layer.group !== 0){
+                    if(!items[layer.group]){
+                        items[layer.group] = {
+                            caption:this.groups[layer.group].caption,
+                            useCheck:true,
+                            items:[]
+                        }
+                    }
+
+                    _menu = items[layer.group];
+                }else{
+                    
+                    if(!items[0]){
+                        items[0].items = items[layer.group] = {
+                            caption:this.groups[layer.group].caption,
+                            useCheck:true,
+                            items:[]
+                        };
+                    }
+                    _menu = items[0];
+                    
+                }
+
+                _menu.items.push({
+                    caption:layer.caption,
+                    //className:layer.className,
+                    useCheck:true,
+                    className:[layer.type, layer.color],
+                    imageClass:[layer.type, layer.color],
+                    value:""+index++,
+                    check:(x, event)=>{
+                        this.onCheckLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
+                    }
+                });
+            
+
             }
+
+            let menu = new Menu({
+				
+				autoClose: false,
+				target:this._group,
+				items: items,
+				type:"accordion",
+				useCheck:true,
+				subType:"",
+			});
+
+
+            
+
+            
         }
         setLength(length){
             this.length = length;
@@ -3651,6 +3790,7 @@ var MapBox = (($, turf) => {
 
 
         layers:any = [];
+        groups:any = [];
         _layers:any = [];
 
         maxLines:number = 0;
@@ -3751,7 +3891,7 @@ var MapBox = (($, turf) => {
                 
             }
             this.coordinatesInit = this.coordinates.slice();
-
+console.log(this.data)
             //let index = this.data.findIndex((e)=>e.ts>=885);
             
             this.drawLineA();
@@ -4150,7 +4290,9 @@ var MapBox = (($, turf) => {
                 //e.range = [null, null];
                 //e.source = this.layerSourceId;
                 //this._layers[index] = new TraceLayer(e);
-                this.createLayer(index, e);
+               
+               
+                //this.createLayer(index, e);
                 
                 
             });

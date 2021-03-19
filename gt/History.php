@@ -7,12 +7,14 @@ class History
     extends \Sevian\Element
 	implements 
 		\sevian\JasonComponent,
-		\sevian\JsonRequest
+		\sevian\JsonRequest,
+		\Sevian\UserInfo
 	
 {
 
 	use DBUnit;
     use DBHistory;
+	use DBConfig;
    
     
 
@@ -236,17 +238,75 @@ class History
 		hx($rr);
 	}
 	private function loadHistory(){
-
-
-		//$this->loadTest();
-		
-
 		$unitId = \SEVIAN\S::getReq('unit_id');
 		$dateFrom = \SEVIAN\S::getReq('date_from');
 		$hourFrom = \SEVIAN\S::getReq('hour_from');
 		$dateTo = \SEVIAN\S::getReq('date_to');
 		$hourTo = \SEVIAN\S::getReq('hour_to');
 		$filter = \SEVIAN\S::getReq('filter');
+
+		//$this->loadTest();
+		$config = $this->loadUserConfig($this->_userInfo->user);
+		$layerInputData = $this->getInputLayers($unitId, $dateFrom, $dateTo);
+		$layerOutputData = $this->getOutputLayers($unitId, $dateFrom, $dateTo);
+		$layerEventData = $this->getEventLayers($unitId, $dateFrom, $dateTo);
+		$layerAlarmData = $this->getAlarmLayers($unitId, $dateFrom, $dateTo);
+		
+
+		$layerInput = [];
+		
+		foreach($layerInputData as $k => $v){
+			$layerInput[] = [
+				"caption"	=> $v["layer"],
+				"type"		=> "circle",
+				"color"		=> $config->colors[$k],
+				"value"		=> $v["number"],
+				"group"		=> 2
+			];
+		}
+		$config->layers = array_merge($config->layers, $layerInput);
+
+		$layerOutput = [];
+		
+		foreach($layerOutputData as $k => $v){
+			$layerOutput[] = [
+				"caption"	=> $v["layer"],
+				"type"		=> "circle",
+				"color"		=> $config->colors[$k],
+				"value"		=> $v["number"],
+				"group"		=> 3
+			];
+		}
+		$config->layers = array_merge($config->layers, $layerOutput);
+
+		$layerEvent = [];
+		
+		foreach($layerEventData as $k => $v){
+			$layerEvent[] = [
+				"caption"	=> $v["name"],
+				"type"		=> "circle",
+				"color"		=> $config->colors[$k],
+				"value"		=> $v["event_id"],
+				"group"		=> 4
+			];
+		}
+		$config->layers = array_merge($config->layers, $layerEvent);
+
+
+		$layerAlarm = [];
+		
+		foreach($layerAlarmData as $k => $v){
+			$layerAlarm[] = [
+				"caption"	=> $v["name"],
+				"type"		=> "circle",
+				"color"		=> $config->colors[$k],
+				"value"		=> $v["event_id"],
+				"group"		=> $v["group"]
+			];
+		}
+		$config->layers = array_merge($config->layers, $layerAlarm);
+
+		//hx($config);
 		if($dateFrom){
 			//$dateForm .= ' '
 		}
@@ -265,6 +325,11 @@ class History
 			[
 				'method'	=> 'setInfoUnitInfo',
 				//'value'		=> $this->infoUnitInput($unitId)
+			],
+			
+			[
+				'method'	=> 'setLayerConfig',
+				'value'		=> $config
 			],
 			[
 				'method'	=> 'uPlay',
@@ -290,6 +355,11 @@ class History
 		return $this->_jsonRequest;
 	}
 
-	
+	public function setUserInfo($info){
+        $this->_userInfo = $info;
+    }
+    public function getUserInfo(){
+        return $this->_userInfo;
+    }
 
 }

@@ -923,6 +923,7 @@ trait DBImage{
 trait DBHistory{
 	private $cn = null;
 
+
 	public function __loadUnits(){
         $cn = $this->cn;
 		
@@ -1019,7 +1020,7 @@ trait DBHistory{
 
         WHERE t.id >= 12699
         ORDER BY t.id
-LIMIT 235
+        LIMIT 235
         
         
                 
@@ -1031,6 +1032,115 @@ LIMIT 235
         return $data;
     }
 
+    private function getInputLayers($unitId, $dateFrom = null, $dateTo = null, $input = null){
+
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT DISTINCT u.number, CONCAT(i.name, ' ', i.value_on) as layer
+
+        #,t.id,t.input_status,t.input_status & u.number,u.*, i.name, i.value_on,t.input_status
+
+        FROM tracking as t
+        INNER JOIN unit_input as u ON u.unit_id = t.unit_id AND t.input_status & u.number AND u.type = 1
+        INNER JOIN input as i ON i.id = u.input_id
+
+
+        #WHERE t.id=1
+        WHERE
+        t.unit_id=17
+        #t.input_status & 100
+        #ORDER BY t.id
+        LIMIT 1000
+        
+        
+                
+        ";
+        
+		$result = $cn->execute();
+		$data = $cn->getDataAll($result);
+       
+        return $data;
+    }
+
+    private function getOutputLayers($unitId, $dateFrom = null, $dateTo = null, $input = null){
+
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT u.number, CONCAT(i.name, ' ', i.value_on) as layer
+
+        #,t.id,t.input_status,t.input_status & u.number,u.*, i.name, i.value_on,t.output_status
+
+        FROM tracking as t
+        INNER JOIN unit_input as u ON u.unit_id = t.unit_id AND t.output_status & u.number AND u.type = 2
+        INNER JOIN input as i ON i.id = u.input_id
+
+
+        WHERE t.unit_id = 27
+        #WHERE
+        #t.unit_id=17
+        #t.input_status & 100
+        #ORDER BY t.id
+        LIMIT 1000
+        
+        
+                
+        ";
+        
+		$result = $cn->execute();
+		$data = $cn->getDataAll($result);
+       
+        return $data;
+    }
+
+    private function getEventLayers($unitId, $dateFrom = null, $dateTo = null, $input = null){
+
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT e.event_id, e.name
+        FROM tracking as t
+        INNER JOIN unit as u ON u.id = t.unit_id
+        INNER JOIN device as v ON v.id = u.device_id
+        INNER JOIN device_event e ON e.version_id = v.version_id AND e.event_id = t.event_id
+        WHERE
+        t.unit_id=2002
+        AND t.date_time >='2001-07-12 17:41:00'
+        GROUP BY t.event_id
+
+        
+        
+                
+        ";
+        
+		$result = $cn->execute();
+		$data = $cn->getDataAll($result);
+       
+        return $data;
+    }
+
+    private function getAlarmLayers($unitId, $dateFrom = null, $dateTo = null, $input = null){
+
+        $cn = $this->cn;
+		
+        $cn->query = "
+        
+        SELECT DISTINCT e.event_id, title as name, CASE e.event_id WHEN 205 THEN 5 WHEN 206 THEN 6 ELSE 5 END 'group' 
+
+        FROM tracking as t
+        INNER JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
+        #WHERE e.event_id = 205 OR e.event_id = 206
+        ;";
+        
+		$result = $cn->execute();
+		$data = $cn->getDataAll($result);
+       
+        return $data;
+    }
 
 }
 
@@ -1088,5 +1198,27 @@ trait DBEvent{
         $cn->query = "UPDATE event SET status='$status', `user`='$user' WHERE id<='$eventId' AND mode & '$mode'>0";
         $this->cn->execute();
     }
+    
+}
+
+trait DBConfig{
+    private $cn = null;
+    private function loadUserConfig($user){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT * FROM user_config WHERE user='$user'";
+
+        $result = $this->cn->execute();
+        $json = null;
+		if($rs = $cn->getDataAssoc($result)){
+            $json = json_decode($rs['layer']);
+
+            
+        }
+
+
+        return $json;
+    }
+
     
 }

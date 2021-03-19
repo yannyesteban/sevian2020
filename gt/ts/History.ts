@@ -70,7 +70,7 @@ var GTHistory = (($) => {
 		private dataInput:any = null;
 		private unitInfo:any = null;
 		private data:any = null;
-		
+		private layerConfig:any = null;
 		static _instances:object[] = []; 
 		
 		static getInstance(name){
@@ -336,12 +336,35 @@ var GTHistory = (($) => {
 		
 		uPlay(){
 			
+
+			const layes = [
+				{
+					prop:"speed",
+					caption: "Velocidad 45-60",
+					from:45,
+					to:60,
+					type:"circle",
+					color:"red",
+					size:4,
+					group: "Velocidad"
+				}
+			];
 			if(this._trace){
+				alert(91)
 				this._trace.restart();
 				this._trace.play();
 			}else{
-
 				this.layers = [
+					{
+						type:"circle",
+						color:"blue",
+						filter:{
+							s: 2
+						}
+							
+					}];
+
+				this.layers_ = [
 					{
 						type:"circle",
 						color:"red",
@@ -422,9 +445,134 @@ var GTHistory = (($) => {
 					}
 				];
 				let data = this.formateData(this.data);
+				//console.log(data);return;
+
+				this.groups = [
+					{
+						caption:"Capas",
+						className:"x",
+						mode:"close"
+					},
+					{
+						caption:"Velocidad",
+						className:"x",
+						mode:"close"
+					},
+					
+					{
+						caption:"Inputs",
+						className:"x",
+						mode:"close"
+					},
+					{
+						caption:"Opuputs",
+						className:"x",
+						mode:"close"
+					},
+					{
+						caption:"Eventos",
+						className:"x",
+						mode:"close"
+					},
+					{
+						caption:"Mis Alarmas",
+						className:"x",
+						mode:"close"
+					},
+					{
+						caption:"Mis Eventos",
+						className:"x",
+						mode:"close"
+					}
+				];
+	
+				this.layers = [
+					{
+						caption:"10 a 20 Km/h",
+						type:"circle",
+						color:"red",
+						group:1
+					},
+					{
+						caption:"20 a 30 Km/h",
+						type:"circle",
+						color:"blue",
+						group:1
+					},
+					{
+						caption:"30 a 40 Km/h",
+						type:"circle",
+						color:"black",
+						group:1
+					},
+					{
+						caption:"40 a 50 Km/h",
+						type:"circle",
+						color:"white",
+						group:1
+					},
+					{
+						caption:"50 a 60 Km/h",
+						type:"circle",
+						color:"green",
+						group:1
+					},
+					{
+						caption:"Evento Activo",
+						type:"circle",
+						color:"blue",
+						group:3
+					},
+					{
+						caption:"Puerta Abierta",
+						type:"circle",
+						color:"green",
+						group:2
+					},
+					{
+						caption:"Luces Encendidas",
+						type:"circle",
+						color:"yellow",
+						group:2
+					},
+					{
+						caption:"Boton Pánico",
+						type:"circle",
+						color:"yellow",
+						group:4
+					},
+					{
+						caption:"Exceso de Velocidad",
+						type:"circle",
+						color:"yellow",
+						group:5
+					},
+					{
+						caption:"Llegó a Caracas",
+						type:"circle",
+						color:"blue",
+						group:5
+					},
+					{
+						caption:"Detenido/Puerta Abierta",
+						type:"circle",
+						color:"yellow",
+						group:6
+					},
+					{
+						caption:"Detenido/Luces Encendidas",
+						type:"circle",
+						color:"red",
+						group:6
+					}
+
+				];
+
+
 				this._trace = this.getMap().draw('traza2', 'trace', {
 					data:data,
-					layers:this.layers,
+					layers:this.layerConfig.layers,
+					groups:this.layerConfig.groups
 				});
 				this.getMap().getControl('trace').setTrace(this._trace);
 				//this._trace.play();
@@ -819,6 +967,10 @@ var GTHistory = (($) => {
 		}
 		getFollowMe(){
 			return this.followMe;
+		}
+		setLayerConfig(config){
+			this.layerConfig = config;
+			console.log(config);
 		}
 	}
 	

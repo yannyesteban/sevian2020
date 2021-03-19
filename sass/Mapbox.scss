@@ -1,0 +1,153 @@
+.trace-speed-nav{
+	//height: 20px;
+	background-color: rgb(34, 180, 180);
+	float: left;
+	padding: 0px;
+	display: grid;
+	grid-template-columns: repeat(10,1fr);
+    grid-template-rows: 12px;
+	width: 200px;
+	grid-gap: 2px;
+	>*{
+		//display: block;
+		//width: 15px;
+		//height: 20px;
+		text-align: center;
+		line-height: 100%;
+		vertical-align: middle;
+		font-size: 12px;
+
+	}
+	>.r16,.x16{
+		background-color: rgb(77, 77, 77);
+	}
+	>.r8,.x8{
+		background-color: rgb(141, 141, 141);
+	}
+	>.r4,.x4{
+		background-color: rgb(190, 190, 190);
+	}
+	>.r2,.x2{
+		background-color: rgb(221, 221, 221);
+	}
+	>.r,.x{
+		background-color: rgb(255, 255, 255);
+	}
+
+
+}
+
+
+.trace-layer{
+	padding: 3px;
+	.text{
+		font-size: 11px;
+	}
+	
+	
+	.sg-menu{
+		
+		.image{
+			width: 10px;
+			min-width: 10px;
+			height: 10px;
+			//background-color: rgb(255, 145, 1);
+		}
+		.option{
+			background-color: rgb(250, 250, 250);
+			color: rgb(151, 151, 151);
+		}
+
+		.circle{
+			.image{
+				border-radius: 10px;
+			}
+		}
+		.image {
+			&.red{ 
+				background-color: rgb(235, 29, 80);
+			}
+			&.yellow{
+				background-color: #fcff33;
+				border:1px solid rgb(187, 187, 187);
+			}
+			&.blue{
+				background-color: rgb(0, 45, 248);
+			}
+			&.green{
+				background-color: rgb(72, 197, 0);
+			}
+			&.purple{
+				background-color: rgb(187, 29, 235);
+			}
+			&.orange{
+				background-color: rgb(236, 103, 13);
+			}
+			&.black{
+				background-color: rgb(85, 85, 85);
+			}
+			&.white{
+				background-color: rgb(245, 245, 245);
+				border:1px solid rgb(187, 187, 187);
+			}
+			&.aquamarine{
+				background-color: aquamarine;
+				
+			}
+			&.brown{
+				background-color: brown;
+				
+			}
+			&.cyan{
+				background-color: cyan;
+				
+			}
+			&.fuchsia{
+				background-color: fuchsia;
+			}
+			&.greenyellow{
+				background-color: greenyellow;
+			}
+			&.greenyellow{
+				background-color: lime;
+			}
+			&.magenta{
+				background-color: magenta;
+			}
+			&.darkblue{
+				background-color: darkblue;
+			}
+		}
+			.item{
+			&.open{
+				.ind{
+					float:right;
+					margin:10px;
+					width:6px;
+					height:3px;
+					margin-right: 6px;
+					background-size: 100%;
+					background-color: rgb(235, 9, 9);
+				}
+			}
+		
+			&.close{
+				.ind{
+					float:right;
+					//margin:10px;
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-width: 6px 4px 0 4px;
+					border-color: #0590a8 transparent transparent transparent;
+					//background-repeat:no-repeat;
+					background-color: transparent;
+					margin-right: 6px;
+		
+				}
+			}
+		}
+		
+		
+	}
+}

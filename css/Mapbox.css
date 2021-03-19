@@ -1,0 +1,120 @@
+.trace-speed-nav {
+  background-color: #22b4b4;
+  float: left;
+  padding: 0px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: 12px;
+  width: 200px;
+  grid-gap: 2px;
+}
+.trace-speed-nav > * {
+  text-align: center;
+  line-height: 100%;
+  vertical-align: middle;
+  font-size: 12px;
+}
+.trace-speed-nav > .r16, .trace-speed-nav .x16 {
+  background-color: #4d4d4d;
+}
+.trace-speed-nav > .r8, .trace-speed-nav .x8 {
+  background-color: #8d8d8d;
+}
+.trace-speed-nav > .r4, .trace-speed-nav .x4 {
+  background-color: #bebebe;
+}
+.trace-speed-nav > .r2, .trace-speed-nav .x2 {
+  background-color: #dddddd;
+}
+.trace-speed-nav > .r, .trace-speed-nav .x {
+  background-color: white;
+}
+
+.trace-layer {
+  padding: 3px;
+}
+.trace-layer .text {
+  font-size: 11px;
+}
+.trace-layer .sg-menu .image {
+  width: 10px;
+  min-width: 10px;
+  height: 10px;
+}
+.trace-layer .sg-menu .option {
+  background-color: #fafafa;
+  color: #979797;
+}
+.trace-layer .sg-menu .circle .image {
+  border-radius: 10px;
+}
+.trace-layer .sg-menu .image.red {
+  background-color: #eb1d50;
+}
+.trace-layer .sg-menu .image.yellow {
+  background-color: #fcff33;
+  border: 1px solid #bbbbbb;
+}
+.trace-layer .sg-menu .image.blue {
+  background-color: #002df8;
+}
+.trace-layer .sg-menu .image.green {
+  background-color: #48c500;
+}
+.trace-layer .sg-menu .image.purple {
+  background-color: #bb1deb;
+}
+.trace-layer .sg-menu .image.orange {
+  background-color: #ec670d;
+}
+.trace-layer .sg-menu .image.black {
+  background-color: #555555;
+}
+.trace-layer .sg-menu .image.white {
+  background-color: whitesmoke;
+  border: 1px solid #bbbbbb;
+}
+.trace-layer .sg-menu .image.aquamarine {
+  background-color: aquamarine;
+}
+.trace-layer .sg-menu .image.brown {
+  background-color: brown;
+}
+.trace-layer .sg-menu .image.cyan {
+  background-color: cyan;
+}
+.trace-layer .sg-menu .image.fuchsia {
+  background-color: fuchsia;
+}
+.trace-layer .sg-menu .image.greenyellow {
+  background-color: greenyellow;
+}
+.trace-layer .sg-menu .image.greenyellow {
+  background-color: lime;
+}
+.trace-layer .sg-menu .image.magenta {
+  background-color: magenta;
+}
+.trace-layer .sg-menu .image.darkblue {
+  background-color: darkblue;
+}
+.trace-layer .sg-menu .item.open .ind {
+  float: right;
+  margin: 10px;
+  width: 6px;
+  height: 3px;
+  margin-right: 6px;
+  background-size: 100%;
+  background-color: #eb0909;
+}
+.trace-layer .sg-menu .item.close .ind {
+  float: right;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 4px 0 4px;
+  border-color: #0590a8 transparent transparent transparent;
+  background-color: transparent;
+  margin-right: 6px;
+}
+/*# sourceMappingURL=Mapbox.css.map */

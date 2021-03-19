@@ -35,7 +35,7 @@ $css = array(
 
 );
 
-$css = array(
+$css = [
 	"{$PATH}css/gt.css",
 	"{$PATH}css/cota_main.css",
 	"{$PATH}css/cota.css",
@@ -48,7 +48,8 @@ $css = array(
 	"{$PATH}css/Paginator.css",
 	"{$PATH}css/gt_command.css",
 	"{$PATH}css/gt_catalogue.css",
-	"{$PATH}css/sgTab.css"
+	"{$PATH}css/sgTab.css",
+	"{$PATH}css/Mapbox.css"
 	//"{$PATH}css/flyPopup.css",
 	/*
 	"{$PATH}css/gt_main.css",
@@ -80,7 +81,7 @@ $css = array(
 	//"{$PATH}css/Form.css",
 	//"{$PATH}css/MenuAlpha.css",
 
-);
+];
 
 Sevian\S::cssInit($css);
 

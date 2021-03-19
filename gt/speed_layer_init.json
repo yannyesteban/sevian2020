@@ -1,0 +1,118 @@
+{
+	"colors":[
+		"red",
+		"yellow",
+		"blue",
+		"green",
+		"red",
+		"orange",
+		"black",
+		"white",
+		"aquamarine",
+		"brown",
+		"fuchsia",
+		"greenyellow",
+		"lime",
+		"magenta",
+		"darkblue"],
+	"groups":[
+		{
+			"caption":"Capas",
+			"className":"x",
+			"mode":"close"
+		},
+		{
+			"caption":"Velocidad",
+			"className":"x",
+			"mode":"close"
+		},
+		
+		{
+			"caption":"Inputs",
+			"className":"x",
+			"mode":"close"
+		},
+		{
+			"caption":"Opuputs",
+			"className":"x",
+			"mode":"close"
+		},
+		{
+			"caption":"Eventos",
+			"className":"x",
+			"mode":"close"
+		},
+		{
+			"caption":"Mis Alarmas",
+			"className":"x",
+			"mode":"close"
+		},
+		{
+			"caption":"Mis Eventos",
+			"className":"x",
+			"mode":"close"
+		},
+		{
+			"caption":"Detenido",
+			"type":"circle",
+			"color":"red",
+			"value":0,
+			"group":1
+		}
+	],
+	"layers":[	
+		{
+			"prop":"speed",
+			"caption":"0+ a 20 Km/h",
+			"type":"circle",
+			"color":"white",
+			"from":0,
+			"to_e":20,
+			"group":1
+		},
+		{
+			"prop":"speed",
+			"caption":"20 a 40 Km/h",
+			"type":"circle",
+			"color":"yellow",
+			"from":20,
+			"to_e":40,
+			"group":1
+		},
+		{
+			"prop":"speed",
+			"caption":"40 a 60 Km/h",
+			"type":"circle",
+			"color":"blue",
+			"from":40,
+			"to_e":60,
+			"group":1
+		},
+		{
+			"prop":"speed",
+			"caption":"60 a 80 Km/h",
+			"type":"circle",
+			"color":"green",
+			"from":60,
+			"to_e":80,
+			"group":1
+		},
+		{
+			"prop":"speed",
+			"caption":"80 a 100 Km/h",
+			"type":"circle",
+			"color":"orange",
+			"from":80,
+			"to_e":100,
+			"group":1
+		},
+		{
+			"prop":"speed",
+			"caption":"100+ Km/h",
+			"type":"circle",
+			"color":"red",
+			"from":100,
+			"group":1
+		}
+	]
+}
