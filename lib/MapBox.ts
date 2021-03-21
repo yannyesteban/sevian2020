@@ -489,7 +489,6 @@ var MapBox = (($, turf) => {
             bar.create("button").prop({"type": "button", "title":"+"}).addClass("icon-fb")
             .on("click", ()=>{
 
-
                 this.dir = -1;
                 let speed = this.speed - 1;// % this.speedRange.length;
                 if(speed > 6){
