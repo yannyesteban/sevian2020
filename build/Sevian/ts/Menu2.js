@@ -17,6 +17,7 @@ var Menu = (function ($, Float) {
             this.ds = null;
             this.checkDs = null;
             this.check = null;
+            this.checked = false;
             this.caption = null;
             this.imageClass = null;
             this.items = null;
@@ -95,6 +96,7 @@ var Menu = (function ($, Float) {
             }
             if (this.menu.useCheck && (this.useCheck === true)) {
                 let chk = link.create("input").attr("type", "checkbox");
+                chk.attr("checked", this.checked);
                 if (this.checkValue) {
                     chk.value(this.checkValue);
                 }

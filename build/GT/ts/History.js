@@ -87,6 +87,9 @@ var GTHistory = (($) => {
                 //this.play();
                 //map.map.addImage('t1', new TraceMarker(map.map, 30), { pixelRatio: 1 });
                 //map.getControl("mark").onsave = ((info)=>{}
+                this.form.id = this.getMap().getControl('trace').getPage(0);
+                this.form.parentContext = this;
+                this._form = new Form2(this.form);
             });
         }
         static getInstance(name) {
@@ -95,6 +98,12 @@ var GTHistory = (($) => {
         _create(main) {
             this.main = main;
             main.addClass("history-main");
+            return;
+            this.form.id = this.getMap().getControl('trace').getPage(1);
+            this.form.parentContext = this;
+            this._form = new Form2(this.form);
+            //this.find(1);
+            return;
             this.form.id = this.main;
             this.form.parentContext = this;
             this._form = new Form2(this.form);
@@ -266,238 +275,120 @@ var GTHistory = (($) => {
             });
         }
         uPlay() {
-            const layes = [
+            this.layers_ = [
                 {
-                    prop: "speed",
-                    caption: "Velocidad 45-60",
-                    from: 45,
-                    to: 60,
                     type: "circle",
                     color: "red",
-                    size: 4,
-                    group: "Velocidad"
+                    filter: {
+                        s: 1
+                    }
+                },
+                {
+                    type: "circle",
+                    color: "#43f3f7",
+                    filter: {
+                        s: 2
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "#00d4ff",
+                    filter: {
+                        s: 3
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "#007dff",
+                    filter: {
+                        s: 4
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "#0005ff",
+                    filter: {
+                        s: 5
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "#6f00ff",
+                    filter: {
+                        s: 6
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "#e200ff",
+                    filter: {
+                        s: 7
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "#ff8400",
+                    filter: {
+                        s: 8
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "#00ff80",
+                    filter: {
+                        s: 9
+                    },
+                },
+                {
+                    type: "circle",
+                    color: "black",
+                    filter: {
+                        s: 10
+                    },
+                },
+                {
+                    type: "pulsing",
+                    color: "black",
+                    filter: {
+                        p: 1
+                    }
                 }
             ];
+            //console.log(this.data);return;
+            let data = this.formateData(this.data);
+            //console.log(data);return;
+            const layer2 = this.layerConfig.groups;
+            this.layerConfig.layers.forEach((e, index) => {
+                if (e.group !== undefined && layer2[e.group]) {
+                    if (!layer2[e.group].features) {
+                        layer2[e.group].features = [];
+                    }
+                    layer2[e.group].features.push(e);
+                }
+            });
+            console.log(data);
+            this._trace = this.getMap().draw('traza2', 'trace', {
+                data: data,
+                layers: this.layerConfig.layers,
+                groups: this.layerConfig.groups,
+                layers2: layer2,
+            });
+            this.getMap().getControl('trace').setTrace(this._trace);
+            this.getMap().getControl('trace').setData(this.data);
+            this.getMap().getControl('trace').setConfigData({
+                className: "speed",
+                fields: ["utime", "speed", "event"],
+                labels: ["Hora", "Km/h", "Evento"],
+            });
+            //this.getMap().getControl('trace').setFilterPage(this._form.get());
+            //this._trace.play();
+            this.getMap().getControl('trace').createList();
             if (this._trace) {
-                alert(91);
-                this._trace.restart();
-                this._trace.play();
+                //alert(91)
+                //this._trace.restart();
+                //this._trace.play();
             }
             else {
-                this.layers = [
-                    {
-                        type: "circle",
-                        color: "blue",
-                        filter: {
-                            s: 2
-                        }
-                    }
-                ];
-                this.layers_ = [
-                    {
-                        type: "circle",
-                        color: "red",
-                        filter: {
-                            s: 1
-                        }
-                    },
-                    {
-                        type: "circle",
-                        color: "#43f3f7",
-                        filter: {
-                            s: 2
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "#00d4ff",
-                        filter: {
-                            s: 3
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "#007dff",
-                        filter: {
-                            s: 4
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "#0005ff",
-                        filter: {
-                            s: 5
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "#6f00ff",
-                        filter: {
-                            s: 6
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "#e200ff",
-                        filter: {
-                            s: 7
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "#ff8400",
-                        filter: {
-                            s: 8
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "#00ff80",
-                        filter: {
-                            s: 9
-                        },
-                    },
-                    {
-                        type: "circle",
-                        color: "black",
-                        filter: {
-                            s: 10
-                        },
-                    },
-                    {
-                        type: "pulsing",
-                        color: "black",
-                        filter: {
-                            p: 1
-                        }
-                    }
-                ];
-                let data = this.formateData(this.data);
-                //console.log(data);return;
-                this.groups = [
-                    {
-                        caption: "Capas",
-                        className: "x",
-                        mode: "close"
-                    },
-                    {
-                        caption: "Velocidad",
-                        className: "x",
-                        mode: "close"
-                    },
-                    {
-                        caption: "Inputs",
-                        className: "x",
-                        mode: "close"
-                    },
-                    {
-                        caption: "Opuputs",
-                        className: "x",
-                        mode: "close"
-                    },
-                    {
-                        caption: "Eventos",
-                        className: "x",
-                        mode: "close"
-                    },
-                    {
-                        caption: "Mis Alarmas",
-                        className: "x",
-                        mode: "close"
-                    },
-                    {
-                        caption: "Mis Eventos",
-                        className: "x",
-                        mode: "close"
-                    }
-                ];
-                this.layers = [
-                    {
-                        caption: "10 a 20 Km/h",
-                        type: "circle",
-                        color: "red",
-                        group: 1
-                    },
-                    {
-                        caption: "20 a 30 Km/h",
-                        type: "circle",
-                        color: "blue",
-                        group: 1
-                    },
-                    {
-                        caption: "30 a 40 Km/h",
-                        type: "circle",
-                        color: "black",
-                        group: 1
-                    },
-                    {
-                        caption: "40 a 50 Km/h",
-                        type: "circle",
-                        color: "white",
-                        group: 1
-                    },
-                    {
-                        caption: "50 a 60 Km/h",
-                        type: "circle",
-                        color: "green",
-                        group: 1
-                    },
-                    {
-                        caption: "Evento Activo",
-                        type: "circle",
-                        color: "blue",
-                        group: 3
-                    },
-                    {
-                        caption: "Puerta Abierta",
-                        type: "circle",
-                        color: "green",
-                        group: 2
-                    },
-                    {
-                        caption: "Luces Encendidas",
-                        type: "circle",
-                        color: "yellow",
-                        group: 2
-                    },
-                    {
-                        caption: "Boton Pánico",
-                        type: "circle",
-                        color: "yellow",
-                        group: 4
-                    },
-                    {
-                        caption: "Exceso de Velocidad",
-                        type: "circle",
-                        color: "yellow",
-                        group: 5
-                    },
-                    {
-                        caption: "Llegó a Caracas",
-                        type: "circle",
-                        color: "blue",
-                        group: 5
-                    },
-                    {
-                        caption: "Detenido/Puerta Abierta",
-                        type: "circle",
-                        color: "yellow",
-                        group: 6
-                    },
-                    {
-                        caption: "Detenido/Luces Encendidas",
-                        type: "circle",
-                        color: "red",
-                        group: 6
-                    }
-                ];
-                this._trace = this.getMap().draw('traza2', 'trace', {
-                    data: data,
-                    layers: this.layerConfig.layers,
-                    groups: this.layerConfig.groups
-                });
-                this.getMap().getControl('trace').setTrace(this._trace);
-                //this._trace.play();
             }
         }
         initTrace() {
@@ -539,6 +430,7 @@ var GTHistory = (($) => {
                     ts: data[x].ts - data[0].ts,
                     heading: data[x].heading * 1,
                     event: data[x].event,
+                    mainEvent: data[x].main_event,
                     event_id: data[x].event_id,
                     iconImage: (data[x].event_id) ? "pulsing-dot" : "pulsing-dot2",
                     s: 0,

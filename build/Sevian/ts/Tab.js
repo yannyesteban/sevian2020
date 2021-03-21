@@ -123,7 +123,7 @@ const Tab = (function ($) {
                 .text(opt.caption || "")
                 .attr("href", "javascript:void(0);")
                 .ds("tabIndex", index);
-            let body = this._page.create("div").addClass("tab-body")
+            let body = this._page.create(opt.tagName || "div").addClass("tab-body")
                 .ds("tabIndex", index);
             if (opt.child) {
                 body.append(opt.child);

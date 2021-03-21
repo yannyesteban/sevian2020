@@ -1012,15 +1012,21 @@ trait DBHistory{
         
         SELECT
 
-        t.*, date_format(t.date_time, '%d/%m/%Y %T') as date_time, UNIX_TIMESTAMP(t.date_time) as ts, 'e.name' as event
+        e.event_id as main_event,        t.*, date_format(t.date_time, '%d/%m/%Y %T') as date_time,
+        date_format(t.date_time, '%T') as utime,
+        date_format(t.date_time, '%d/%m/%Y') as udate,
+        UNIX_TIMESTAMP(t.date_time) as ts, e.title as my_event, de.name as event
 
         FROM tracking as t
-        #LEFT JOIN unit_event as ue ON ue.unit_id = t.unit_id and ue.event = t.event_id
-        #LEFT JOIN device_event as e on e.id = ue.event_id
 
+        LEFT JOIN unit as u ON u.id = t.unit_id
+        LEFT JOIN device as v ON v.id = u.device_id
+        LEFT JOIN device_event de ON de.version_id = v.version_id AND de.event_id = t.event_id
+
+        LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
         WHERE t.id >= 12699
         ORDER BY t.id
-        LIMIT 235
+            LIMIT 235
         
         
                 

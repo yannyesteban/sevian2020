@@ -1,18 +1,62 @@
+.trace-tool[data-mode-speed="0"] .speed-0 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="1"] .speed-1 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="2"] .speed-2 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="3"] .speed-3 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="4"] .speed-4 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="5"] .speed-5 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="6"] .speed-6 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="7"] .speed-7 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="8"] .speed-8 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="9"] .speed-9 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="10"] .speed-10 {
+  background-color: red;
+}
+.trace-tool[data-mode-speed="11"] .speed-11 {
+  background-color: red;
+}
+
 .trace-speed-nav {
-  background-color: #22b4b4;
+  background: #343434;
+  background: -webkit-gradient(linear, left top, right top, from(#01b32d), color-stop(50%, white), to(#06a7f1));
+  background: linear-gradient(90deg, #01b32d 0%, white 50%, #06a7f1 100%);
   float: left;
   padding: 0px;
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: 12px;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 1em;
   width: 200px;
-  grid-gap: 2px;
+  grid-gap: 1px;
 }
 .trace-speed-nav > * {
   text-align: center;
-  line-height: 100%;
+  line-height: 1em;
   vertical-align: middle;
-  font-size: 12px;
+  font-size: 1em;
+  color: azure;
+  background-color: rgba(46, 46, 46, 0.205);
+}
+.trace-speed-nav > *:hover {
+  background-color: #2e2e2e;
 }
 .trace-speed-nav > .r16, .trace-speed-nav .x16 {
   background-color: #4d4d4d;
@@ -71,7 +115,7 @@
   background-color: #555555;
 }
 .trace-layer .sg-menu .image.white {
-  background-color: whitesmoke;
+  background-color: lightgray;
   border: 1px solid #bbbbbb;
 }
 .trace-layer .sg-menu .image.aquamarine {
@@ -116,5 +160,71 @@
   border-color: #0590a8 transparent transparent transparent;
   background-color: transparent;
   margin-right: 6px;
+}
+
+.trace-tool .trace-nav {
+  display: block;
+  white-space: nowrap;
+  background-color: rgba(255, 255, 255, 0.288);
+}
+.trace-tool .trace-nav button {
+  width: 29px;
+  height: 29px;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0;
+  outline: none;
+  border: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: transparent;
+  cursor: pointer;
+  line-height: 29px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+.trace-tool .trace-layer {
+  width: 200px;
+  height: 300px;
+  overflow: auto;
+}
+
+.trace-control {
+  height: 100%;
+}
+.trace-control.sg-tab {
+  overflow: auto;
+}
+.trace-control.sg-tab > .menu {
+  display: none;
+}
+.trace-control.sg-tab > .body {
+  overflow: auto;
+  height: 100%;
+}
+
+.trace-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  width: 100%;
+  grid-gap: 0px;
+  overflow: auto;
+  height: 100%;
+  color: #919191;
+}
+.trace-list :nth-child(1), .trace-list :nth-child(2), .trace-list :nth-child(3) {
+  background-color: #056b72;
+  text-align: center;
+  color: white;
+}
+.trace-list :nth-child(6n+7), .trace-list :nth-child(6n+8), .trace-list :nth-child(6n+9) {
+  background-color: #f1f1f1;
+}
+.trace-list :nth-child(3n+4) {
+  text-align: center;
+}
+.trace-list :nth-child(3n+5), .trace-list :nth-child(3n+6) {
+  text-align: right;
 }
 /*# sourceMappingURL=Mapbox.css.map */

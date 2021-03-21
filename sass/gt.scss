@@ -743,33 +743,7 @@ form{
 }
 
 
-.trace-tool{
-	
-	.trace-nav{
-		display: block;
-		//display: inline-block;
-		white-space: nowrap;
-		background-color: rgba(255, 255, 255, 0.288);
-		button{
-			width: 29px;
-			height: 29px;
-			display: inline-block;
-			white-space: nowrap;
-			padding: 0;
-			outline: none;
-			border: 0;
-			box-sizing: border-box;
-			background-color: transparent;
-			cursor: pointer;	
-		}	
-	}
 
-	.trace-layer{
-		width:200px;
-		min-height: 200px;
-	}
-	
-}
 
 
 .info-comm{

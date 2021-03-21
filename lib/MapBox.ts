@@ -308,6 +308,7 @@ var createGeoJSONCircle = function(center, radiusInKm, points) {
     return json;
 };
 var MapBox = (($, turf) => {
+    
     class TraceControl{
         id:string = 'mapboxgl-ctrl-trace';
         _map:any = null;
@@ -344,10 +345,25 @@ var MapBox = (($, turf) => {
         private _factorValue = [0.005, 0.01, 0.05, 0.09, 0.13, 0.20];
 
         public onCheckLayer:Function = (layerId:number, checked:boolean) => {};
+        
+        private mainTab:any = null;
+        private data:any[] = [];
+        private configData:any = null;
+
+        private mode:string = "reset";
+        private speed: number = 8;
+        private speedRange: number[] = [-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6];
+        private dir = 1;
         constructor(object){
             this._parent = object;
         }
 
+        setData(data){
+            this.data = data;
+        }
+        setConfigData(config){
+            this.configData = config;
+        }
         onAdd(map){
             
             this._map = map;
@@ -368,62 +384,46 @@ var MapBox = (($, turf) => {
 
             this._group2 = this._container.create("div").style("display","none");
             this._group2.addClass(["trace-nav"]);
-            this._group_a = this._group2.create("div").addClass(["mapboxgl-ctrl","trace-nav"]);
+            //this._group_a = this._group2.create("div").addClass(["mapboxgl-ctrl","trace-nav"]);
+
+            this.playBar(this._group2.create("div").addClass(["mapboxgl-ctrl","trace-nav"]));
+
             this._group_speed = this._group2.create("div").addClass(["mapboxgl-ctrl","trace-speed-nav"]);
             this.speedBar(this._group_speed);
             this._group = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "trace-layer"])
             .style("display","none");
+
+            const tab = this.mainTab = new Tab({
+                id:this._group,
+                className:"trace-control",
+                
+
+            });
+            
+            tab.add({tagName:"form", active:true});
+            tab.add({});
+            tab.add({});
+            
             //this._length = this._group.create("span").addClass("rule-tool-value");
             //this._length.text("Layers");
             //this._unit = this._group.create("span");
             
 
             this._group_b = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group"]);
-            this._group_a.create("button").prop({"type": "button", "title":"+"}).addClass("icon-fb")
+            
+            this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Filtro"}).addClass(["icon-stop"])
             .on("click", ()=>{
-                if(this._factorIndex <=0){
-                    this._factorIndex = this._factorValue.length;
-                }
-
-                this._factorIndex = (this._factorIndex - 1 ) % this._factorValue.length;
-                
-                this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
-
+                this.mainTab.show(0);
             });
-            this._playButton = this._group_a.create("button").prop({"type": "button", "title":"-"}).addClass("icon-play")
+            this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Mostrar Capas"}).addClass(["icon-stop"])
             .on("click", ()=>{
-                if(this._trace.getStatus() == 1){
-                    this.cmdTrace('pause');
-                }else{
-                    this.cmdTrace('play');
-                }
-                
-            });
-            this._group_a.create("button").prop({"type": "button", "title":"Play"}).addClass("icon-ff")
-            .on("click", ()=>{
-                this._factorIndex = (this._factorIndex + 1 ) % this._factorValue.length;
-                
-                this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
+                this.mainTab.show(1);
             });
 
-            this._group_a.create("button").prop({"type": "button", "title":"+"}).addClass("icon-go_begin")
+            this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Mostrar Puntos"}).addClass(["icon-stop"])
             .on("click", ()=>{
-                this.cmdTrace('go-begin');
+                this.mainTab.show(2);
             });
-            this._group_a.create("button").prop({"type": "button", "title":"+"}).addClass("icon-sb")
-            .on("click", ()=>{
-                this.cmdTrace('sb');
-            });
-            this._group_a.create("button").prop({"type": "button", "title":"-"}).addClass("icon-sf")
-            .on("click", ()=>{
-                this.cmdTrace('sf');
-            });
-            this._group_a.create("button").prop({"type": "button", "title":"Play"}).addClass("icon-go_end")
-            .on("click", ()=>{
-                this.cmdTrace('go-end');
-            });
-
-
 
 
             this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Descarta la medición actual"}).addClass(["icon-stop"])
@@ -435,22 +435,175 @@ var MapBox = (($, turf) => {
                 this.stop();
             });
 
+            
             //this.showLayers();
+            this.setSpeed(this.speed);
+            this.setMode(this.mode);
             return this._container.get();
             
         }
 
+        setMode(mode){
+            this.mode = mode;
+            this._container.ds("mode", mode);
+        }
+        setModeSpeed(speed){
+            this._container.ds("modeSpeed", speed);
+        }
+        setSpeed(speed){
+            this.speed = speed;
+            this.setModeSpeed(speed);
+        }
+        setFilterPage(form){
+            this.getPage(0).append(form);
+        }
+        getPage(index){
+            return this.mainTab.getPage(index)
+        }
+        createList(){
+            let main = this.mainTab.getPage(2);
+
+            const body = main.create("div").addClass("trace-list");
+            this.configData.labels.forEach((line)=>{
+                body.create("div").text(line);
+                
+            });
+            this.data.forEach((data, index) => {
+                //body.create("span").text(index);
+                
+                this.configData.fields.forEach((line)=>{
+                    body.create("div").ds("value", index).text(data[line]).on("click", (event)=>{
+
+                        alert($(event.currentTarget).ds("value"));
+                    });
+                    
+                });
+                
+                
+            });
+        }
+        playBar(bar){
+            //bar.create("button").prop({"type": "button", "title":"+"}).addClass("").text("16x");
+            //bar.create("button").prop({"type": "button", "title":"+"}).addClass("").text("&raquo;");
+            
+            bar.create("button").prop({"type": "button", "title":"+"}).addClass("icon-fb")
+            .on("click", ()=>{
+
+
+                this.dir = -1;
+                let speed = this.speed - 1;// % this.speedRange.length;
+                if(speed > 6){
+                    speed -= 6;
+                }
+                if(speed < 0){
+                    speed = 5
+                }
+                this.setSpeed(speed);
+
+                if(this._factorIndex <=0){
+                    //this._factorIndex = this._factorValue.length;
+                }
+                //this.speed = (this.speed - 1 ) % this.speedRange.length+6;
+
+                //this._factorIndex = (this._factorIndex - 1 ) % this._factorValue.length;
+                
+                //this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
+
+            });
+            /*
+
+            
+            */
+
+            bar.create("button").prop({"type": "button", "title":"+"}).addClass("icon-sb")
+            .on("click", ()=>{
+                this.cmdTrace('sb');
+            });
+
+            bar.create("button").prop({"type": "button", "title":"+"}).addClass("icon-go_begin")
+            .on("click", ()=>{
+                this.cmdTrace('go-begin');
+            });
+            
+            
+
+           this._playButton = bar.create("button").prop({"type": "button", "title":"-"}).addClass("icon-play")
+            .on("click", ()=>{
+                if(this._trace.getStatus() == 1){
+                    this.cmdTrace('pause');
+                }else{
+                    this.cmdTrace('play');
+                }
+                
+            });
+
+            
+            bar.create("button").prop({"type": "button", "title":"Play"}).addClass("icon-go_end")
+            .on("click", ()=>{
+                this.cmdTrace('go-end');
+            });
+
+
+            bar.create("button").prop({"type": "button", "title":"-"}).addClass("icon-sf")
+            .on("click", ()=>{
+                this.cmdTrace('sf');
+            });
+
+            bar.create("button").prop({"type": "button", "title":"Play"}).addClass("icon-ff")
+            .on("click", ()=>{
+
+                this.dir = 1;
+
+                
+                let speed = (this.speed + 1 );// % this.speedRange.length;
+                if(speed < 6){
+                    speed += 6;
+                }
+                if(speed==12){
+                    speed = 6
+                }
+
+                //this.speed = (this.speed + 1 ) % this.speedRange.length;
+                this.setSpeed(speed);
+                //this._factorIndex = (this._factorIndex + 1 ) % this._factorValue.length;
+                
+                //this._trace.setSpeedFactor(this._factorValue[this._factorIndex]);
+            });
+        }
         speedBar(bar:any, value?:number){
-            bar.create("div").addClass(["speed6", "r16"]);
+
+            
+
+            this.speedRange.forEach((e, index)=>{
+                bar.create("div").addClass(["speed", `speed-${index}`])
+                .on("click", ()=>{
+                    this.setSpeed(index);
+                });
+                //.text((index<7)?"&laquo;":"&raquo;")
+
+                ;
+            });
+            return;
+            bar.create("div").addClass(["speed", "r16"]);
             bar.create("div").addClass(["speed", "r8"]);
             bar.create("div").addClass(["speed", "r4"]);
             bar.create("div").addClass(["speed", "r2"]);
             bar.create("div").addClass(["speed", "r"]).text("&laquo;");
-            bar.create("div").addClass(["speed", "x"]).text("&raquo;");;
-            bar.create("div").addClass(["speed", "x2"]);
-            bar.create("div").addClass(["speed", "x4"]);
-            bar.create("div").addClass(["speed", "x8"]);
-            bar.create("div").addClass(["speed", "x16"]);
+            bar.create("div").addClass(["speed", "x"]).text("&raquo;").on("click",()=>{
+                this._trace.setSpeedFactor(this._factorValue[0]);
+            });
+            bar.create("div").addClass(["speed", "x2"]).text("x2").on("click",()=>{
+                this._trace.setSpeedFactor(this._factorValue[1]);
+            });
+            bar.create("div").addClass(["speed", "x4"]).text("x4").on("click",()=>{
+                this._trace.setSpeedFactor(this._factorValue[2]);
+            });
+            bar.create("div").addClass(["speed", "x8"]).text("x8").on("click",()=>{
+                this._trace.setSpeedFactor(this._factorValue[3]);
+            });
+            bar.create("div").addClass(["speed", "x16"]).text("x16").on("click",()=>{
+                this._trace.setSpeedFactor(this._factorValue[4]);
+            });
 
 
         }
@@ -549,82 +702,10 @@ var MapBox = (($, turf) => {
 
         showLayers(){
             
-            this.groups = [
-                {
-                    caption:"Capas",
-                    className:"x",
-                    mode:"close"
-                },
-                {
-                    caption:"Velocidad",
-                    className:"x",
-                    mode:"close"
-                },
-                {
-                    caption:"Input",
-                    className:"x",
-                    mode:"close"
-                },
-                {
-                    caption:"Opuput",
-                    className:"x",
-                    mode:"close"
-                }
-            ];
-
-            let layers:any[] = [
-                {
-                    caption:"10 a 20 Km/h",
-                    type:"circle",
-                    color:"red",
-                    group:1
-                },
-                {
-                    caption:"20 a 30 Km/h",
-                    type:"circle",
-                    color:"blue",
-                    group:1
-                },
-                {
-                    caption:"30 a 40 Km/h",
-                    type:"circle",
-                    color:"black",
-                    group:1
-                },
-                {
-                    caption:"40 a 50 Km/h",
-                    type:"circle",
-                    color:"white",
-                    group:1
-                },
-                {
-                    caption:"50 a 60 Km/h",
-                    type:"circle",
-                    color:"green",
-                    group:1
-                },
-                {
-                    caption:"Evento Activo",
-                    type:"circle",
-                    color:"blue",
-                    group:3
-                },
-                {
-                    caption:"Puerta Abierta",
-                    type:"circle",
-                    color:"green",
-                    group:2
-                },
-                {
-                    caption:"Luces Encendidas",
-                    type:"circle",
-                    color:"yellow",
-                    group:2
-                }
-            ];
+            
 
             this.groups = this.getTraceGroupLayers();
-            layers = this.getTraceLayers();
+            const layers = this.getTraceLayers();
             //console.log(this.groups, layers);
             //alert(889);
             //return;
@@ -664,8 +745,10 @@ var MapBox = (($, turf) => {
                     className:[layer.type, layer.color],
                     imageClass:[layer.type, layer.color],
                     value:""+index++,
+                    checked:layer.visible,
                     check:(x, event)=>{
                         this.onCheckLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
+                        this.getTrace().showLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
                     }
                 });
             
@@ -675,7 +758,7 @@ var MapBox = (($, turf) => {
             let menu = new Menu({
 				
 				autoClose: false,
-				target:this._group,
+				target:this.getPage(1),//this._group,
 				items: items,
 				type:"accordion",
 				useCheck:true,
@@ -3790,6 +3873,7 @@ var MapBox = (($, turf) => {
 
 
         layers:any = [];
+        layers2:any = [];
         groups:any = [];
         _layers:any = [];
 
@@ -3837,6 +3921,7 @@ var MapBox = (($, turf) => {
         _events:any[] = [];
         _play:boolean = false;
         _lastIndex = null;
+        private layerIndex = 0;
 
         callmove:Function = ()=>{};
         callresize:Function = ()=>{};
@@ -3891,7 +3976,7 @@ var MapBox = (($, turf) => {
                 
             }
             this.coordinatesInit = this.coordinates.slice();
-console.log(this.data)
+            console.log(this.data)
             //let index = this.data.findIndex((e)=>e.ts>=885);
             
             this.drawLineA();
@@ -4075,17 +4160,42 @@ console.log(this.data)
                 case "pulsing":
                     this.pulsingLayer(index, info);
                     break;
-                }
+            }
         }
+
+        createLayerFilter(info){
+            let filter = [];
+
+            if(info.in !== undefined){
+                info.in.forEach((value)=>{
+                    filter = ['in', info.prop, value];
+                    
+                });
+                return filter;
+
+            }
+            filter.push("all");
+            if(info.from !== undefined){
+                filter.push([">", ["get",info.prop], info.from]);
+            }else if(info.from_e !== undefined){
+                filter.push([">=", ["get",info.prop], info.from_e]);
+            }else{
+                filter.push(true);
+            }
+
+            if(info.to !== undefined){
+                filter.push(["<", ["get",info.prop], info.to]);
+            }else if(info.to_e !== undefined){
+                filter.push(["<=", ["get",info.prop], info.to_e]);
+            }
+
+            return filter;
+
+        }
+        
         circleLayer(index, info){
             
-            let geojson = {
-                "type": "geojson",
-                "data": {
-                    "type": "FeatureCollection",
-                    "features": []
-                }
-            };
+           
 
             let paint = {
                 'circle-radius': info.radius || 4,
@@ -4101,21 +4211,25 @@ console.log(this.data)
                 }
             }
             
+            paint['circle-' + "color"] = info.color || "blue";
+            paint['circle-' + "opacity"] = 0.9
+            let filter = this.createLayerFilter(info);
 
-            let filter = [];
-            if(info.filter){
+            console.log(filter);
+            /*if(info.filter){
                 for(let x in info.filter){
                     filter = ['in', x, info.filter[x]]
                 } 
-            }
-                      
+            }*/
+            
+            
             this.map.addLayer({
-                'id': this.layerId + index,
+                'id': this.layerId + this.layerIndex++,
                 'type': 'circle',
                 'minzoom': 13,
                 'source': this.layerSourceId,
                 'layout': {
-                    'visibility':'visible'
+                    'visibility':info.visible?'visible':"none"
                 },
                 'paint': paint,
                 //filter: ['in', '$type', 'Point']
@@ -4129,30 +4243,26 @@ console.log(this.data)
             });
             
         }
+        createCircleFeature(info){
+            
+        }
+        createPulsingFeature(info){
+
+        }
         pulsingLayer(index, info){
             
-            let geojson = {
-                "type": "geojson",
-                "data": {
-                    "type": "FeatureCollection",
-                    "features": []
-                }
-            };
-
-            let filter = [];
-            if(info.filter){
-                for(let x in info.filter){
-                    filter = ['in', x, info.filter[x]]
-                } 
-            }
             
+
+            
+            let filter = this.createLayerFilter(info);
             this.map.addLayer({
-                'id': this.layerId + index,
+                'id': this.layerId + this.layerIndex++,
                 'type': 'symbol',
                 'source': this.layerSourceId,
                 'layout': {
                     //visibility:['get', 'visible'],
-                    'icon-image': 'pulsing-01',
+                    'visibility':info.visible?'visible':"none",
+                    'icon-image': `pulsing-${info.color}`,
                     'icon-size': 0.4,
                     'icon-rotate':['get', 'heading'],
                     'icon-allow-overlap': true,
@@ -4188,6 +4298,7 @@ console.log(this.data)
 
         
         drawLineA(){
+            
             let geojson = {
                 "type": "geojson",
                 "data": {
@@ -4210,12 +4321,6 @@ console.log(this.data)
             geojson.data.features.push(lineString);
             this.map.addSource(this.lineIdA, geojson);
 
-
-
-            
-            
-
-            //console.log(this.data);
             
             let polygon = {
                 
@@ -4225,65 +4330,76 @@ console.log(this.data)
                     "coordinates": [[]]
                 }
             
-        }
-        this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [polygon]
             }
-        };
+            this._line = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [polygon]
+                }
+            };
         
-        this.map.addSource(this.lineId, this._line);
-        this.map.addLayer({
-            'id': this.lineIdA,
-            'type': 'line',
-            'source': this.lineIdA,
-            'layout': {
-                'line-join': 'round',
-                'line-cap': 'round',
-                'visibility':(this.visible)? 'visible': 'none'
-                
-            },
-            'paint': {
-                'line-color': '#ff9900',
-                'line-width': 2,
-                'line-opacity': 0.8,
-                //'line-gap-width':4,
-                'line-dasharray':[2,2]
-            },
-            'filter': ['==', '$type', 'LineString']
-        });
+            this.map.addSource(this.lineId, this._line);
+            this.map.addLayer({
+                'id': this.lineIdA,
+                'type': 'line',
+                'source': this.lineIdA,
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                    'visibility':(this.visible)? 'visible': 'none'
+                    
+                },
+                'paint': {
+                    'line-color': '#ff9900',
+                    'line-width': 2,
+                    'line-opacity': 0.8,
+                    //'line-gap-width':4,
+                    'line-dasharray':[2,2]
+                },
+                'filter': ['==', '$type', 'LineString']
+            });
 
 
-        this.map.addLayer({
-            'id': this.lineId,
-            'type': 'line',
-            'source': this.lineId,
-            'layout': {
-                'line-join': 'round',
-                'line-cap': 'round',
-                visibility:(this.visible)? 'visible': 'none'
-                
-            },
-            'paint': {
-                'line-color': ['get', 'color'],
-                'line-width': 3,
-                //'line-opacity': 0.9,
-                //'line-gap-width':4,
-                //'line-dasharray':[2,2]
-                //'line-dasharray':[1,1]
-                
-            },
-            'filter': ['==', '$type', 'LineString']
-        });
+            this.map.addLayer({
+                'id': this.lineId,
+                'type': 'line',
+                'source': this.lineId,
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                    visibility:(this.visible)? 'visible': 'none'
+                    
+                },
+                'paint': {
+                    'line-color': ['get', 'color'],
+                    'line-width': 3,
+                    //'line-opacity': 0.9,
+                    //'line-gap-width':4,
+                    //'line-dasharray':[2,2]
+                    //'line-dasharray':[1,1]
+                    
+                },
+                'filter': ['==', '$type', 'LineString']
+            });
 
             //this.map.addSource(this.layerSourceId, this.dataFilter(this.coordinatesInit));
             this.map.addSource(this.layerSourceId, this.dataFilter([]));
 
 
 
-            this.layers.forEach((e, index)=>{
+            this.layers2.forEach((layer, index)=>{
+
+                console.log(layer);
+                if(layer.features && Array.isArray(layer.features)){
+                    layer.features.forEach((feature, index)=>{
+                        this.createLayer(index, feature);
+                        
+                    });
+                }
+                
+
+                
                 //e.id = 't_layer'+index;
                 //e.map = this.map;
                 //e.data = this.data;
@@ -4731,6 +4847,11 @@ console.log(this.data)
             
 
             this.map.panTo(centroid.geometry.coordinates, {duration: duration || this.panDuration });
+        }
+
+        showLayer(index, value){
+            this.map.setLayoutProperty(this.layerId + index, 'visibility', (value)?"visible":"none");
+            
         }
     }
 
@@ -5846,6 +5967,30 @@ console.log(this.data)
                     });
 
                 }
+                map.addImage('pulsing-blue', new Pulsing(map, {
+                    rgb:[0, 255, 255],
+                    center:[0, 128, 255]
+                }), { pixelRatio: 3 });
+                map.addImage('pulsing-yellow', new Pulsing(map, {
+                    rgb:[255,76,0],
+                    center:[255, 255, 102]
+                }), { pixelRatio: 3 });
+                map.addImage('pulsing-orange', new Pulsing(map, {
+                    rgb:[255,76,0],
+                    center:[255, 128, 0]
+                }), { pixelRatio: 3 });
+                map.addImage('pulsing-red', new Pulsing(map, {
+                    rgb:[255, 255, 204],
+                    center:[255, 0, 0]
+                }), { pixelRatio: 3 });
+                map.addImage('pulsing-pink', new Pulsing(map, {
+                    rgb:[247,67,183],
+                    center:[247,67,216]
+                }), { pixelRatio: 3 });
+                map.addImage('pulsing-green', new Pulsing(map, {
+                    rgb:[204, 255, 220],
+                    center:[102, 255, 153]
+                }), { pixelRatio: 3 });
 
                 map.addImage('pulsing-dot', new Pulsing(map, {
                     rgb:[153, 255, 51],

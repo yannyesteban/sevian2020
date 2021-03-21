@@ -51,16 +51,21 @@
 			"caption":"Mis Eventos",
 			"className":"x",
 			"mode":"close"
-		},
-		{
-			"caption":"Detenido",
-			"type":"circle",
-			"color":"red",
-			"value":0,
-			"group":1
 		}
 	],
 	"layers":[	
+		{
+			"prop":"speed",
+			"caption":"Detenido",
+			"type":"circle",
+			"color":"black",
+			"cond":"==",
+			"in":[0],
+			"group":1,
+			"visible":true,
+			"exp":"{speed}=="
+			
+		},
 		{
 			"prop":"speed",
 			"caption":"0+ a 20 Km/h",
@@ -68,7 +73,8 @@
 			"color":"white",
 			"from":0,
 			"to_e":20,
-			"group":1
+			"group":1,
+			"visible":true
 		},
 		{
 			"prop":"speed",
@@ -77,7 +83,8 @@
 			"color":"yellow",
 			"from":20,
 			"to_e":40,
-			"group":1
+			"group":1,
+			"visible":true
 		},
 		{
 			"prop":"speed",
@@ -86,7 +93,8 @@
 			"color":"blue",
 			"from":40,
 			"to_e":60,
-			"group":1
+			"group":1,
+			"visible":true
 		},
 		{
 			"prop":"speed",
@@ -95,7 +103,8 @@
 			"color":"green",
 			"from":60,
 			"to_e":80,
-			"group":1
+			"group":1,
+			"visible":true
 		},
 		{
 			"prop":"speed",
@@ -104,15 +113,17 @@
 			"color":"orange",
 			"from":80,
 			"to_e":100,
-			"group":1
+			"group":1,
+			"visible":true
 		},
 		{
 			"prop":"speed",
 			"caption":"100+ Km/h",
-			"type":"circle",
+			"type":"pulsing",
 			"color":"red",
 			"from":100,
-			"group":1
+			"group":1,
+			"visible":true
 		}
 	]
 }

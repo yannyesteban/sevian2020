@@ -483,7 +483,7 @@ var List = (($) => {
                 name:this.name,
                 input: this._input,
                 data : _data,
-                target: this._main,
+                target: document.body,//this._main,
                 value: this.value,
                 onactive: (value) => {
                    

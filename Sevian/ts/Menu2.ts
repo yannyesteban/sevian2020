@@ -21,6 +21,7 @@ var Menu =
         ds:any = null;
         checkDs:any = null;
         check:Function = null;
+        checked:boolean = false;
         caption:any = null;
         imageClass:any = null;
         items:any[] = null;
@@ -111,7 +112,9 @@ var Menu =
 
             if(this.menu.useCheck && (this.useCheck === true)){
                 let chk = link.create("input").attr("type", "checkbox");
-
+                
+                chk.attr("checked", this.checked);
+                
                 if(this.checkValue){
                     chk.value(this.checkValue);
                 }

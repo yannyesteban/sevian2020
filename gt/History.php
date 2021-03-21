@@ -264,7 +264,7 @@ class History
 				"group"		=> 2
 			];
 		}
-		$config->layers = array_merge($config->layers, $layerInput);
+		
 
 		$layerOutput = [];
 		
@@ -277,7 +277,8 @@ class History
 				"group"		=> 3
 			];
 		}
-		$config->layers = array_merge($config->layers, $layerOutput);
+		
+		
 
 		$layerEvent = [];
 		
@@ -290,7 +291,8 @@ class History
 				"group"		=> 4
 			];
 		}
-		$config->layers = array_merge($config->layers, $layerEvent);
+
+		
 
 
 		$layerAlarm = [];
@@ -304,8 +306,12 @@ class History
 				"group"		=> $v["group"]
 			];
 		}
+/*
+		$config->layers = array_merge($config->layers, $layerInput);
+		$config->layers = array_merge($config->layers, $layerOutput);
+		$config->layers = array_merge($config->layers, $layerEvent);
 		$config->layers = array_merge($config->layers, $layerAlarm);
-
+*/
 		//hx($config);
 		if($dateFrom){
 			//$dateForm .= ' '

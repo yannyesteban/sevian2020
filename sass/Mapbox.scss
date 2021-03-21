@@ -1,23 +1,104 @@
+
+.trace-tool{
+
+	&[data-mode-speed="0"]{
+		.speed-0{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="1"]{
+		.speed-1{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="2"]{
+		.speed-2{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="3"]{
+		.speed-3{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="4"]{
+		.speed-4{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="5"]{
+		.speed-5{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="6"]{
+		.speed-6{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="7"]{
+		.speed-7{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="8"]{
+		.speed-8{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="9"]{
+		.speed-9{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="10"]{
+		.speed-10{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="11"]{
+		.speed-11{
+			background-color: red;
+		}
+	}
+	
+	
+}
+
+
 .trace-speed-nav{
 	//height: 20px;
-	background-color: rgb(34, 180, 180);
+	//background-color: rgb(34, 180, 180);
+	background: rgb(52,52,52);
+	background: linear-gradient(90deg, rgb(1, 179, 45) 0%, rgba(255,255,255) 50%, rgb(6, 167, 241) 100%);
 	float: left;
 	padding: 0px;
 	display: grid;
-	grid-template-columns: repeat(10,1fr);
-    grid-template-rows: 12px;
+	grid-template-columns: repeat(12, 1fr);
+    grid-template-rows:1em;
 	width: 200px;
-	grid-gap: 2px;
+	grid-gap: 1px;
 	>*{
 		//display: block;
 		//width: 15px;
 		//height: 20px;
 		text-align: center;
-		line-height: 100%;
+		line-height: 1em;
 		vertical-align: middle;
-		font-size: 12px;
+		font-size: 1em;
+		color:azure;
+		//border:1px solid rgb(243, 243, 243);
+		background-color: rgba(46, 46, 46, 0.205);
+		&:hover{
+			background-color: rgba(46, 46, 46, 1);
+
+		}
+		
 
 	}
+
+	
+
 	>.r16,.x16{
 		background-color: rgb(77, 77, 77);
 	}
@@ -87,7 +168,7 @@
 				background-color: rgb(85, 85, 85);
 			}
 			&.white{
-				background-color: rgb(245, 245, 245);
+				background-color: rgb(211, 211, 211);
 				border:1px solid rgb(187, 187, 187);
 			}
 			&.aquamarine{
@@ -150,4 +231,84 @@
 		
 		
 	}
+}
+
+
+.trace-tool{
+	
+	.trace-nav{
+		display: block;
+		//display: inline-block;
+		white-space: nowrap;
+		background-color: rgba(255, 255, 255, 0.288);
+		button{
+			width: 29px;
+			height: 29px;
+			display: inline-block;
+			white-space: nowrap;
+			padding: 0;
+			outline: none;
+			border: 0;
+			box-sizing: border-box;
+			background-color: transparent;
+			cursor: pointer;
+			line-height: 29px;
+			font-size: 12px;
+			vertical-align: middle;	
+		}	
+	}
+
+	.trace-layer{
+		width:200px;
+		height: 300px;
+		overflow: auto;
+	}
+	
+}
+
+.trace-control{
+	height: 100%;
+	&.sg-tab{
+		overflow: auto;
+		
+		
+		>.menu{
+			display: none;
+		}
+		>.body{
+			overflow: auto;
+			height: 100%;
+		}
+	}
+	
+}
+.trace-list{
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+    grid-template-rows:auto;
+	width: 100%;
+	grid-gap: 0px;
+	overflow: auto;
+	height: 100%;
+	color:rgb(145, 145, 145);
+
+	:nth-child(1), :nth-child(2), :nth-child(3){
+		background-color: rgb(5, 107, 114);
+		text-align: center;
+		color:white;
+	}
+	:nth-child(6n+7),:nth-child(6n+8),:nth-child(6n+9){
+		background-color: rgb(241, 241, 241);
+	}
+	:nth-child(3n+4){
+		
+		
+		text-align: center;
+		
+	}
+	:nth-child(3n+5),:nth-child(3n+6){
+		text-align: right;
+		
+	}
+	
 }

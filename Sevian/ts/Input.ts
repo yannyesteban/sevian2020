@@ -82,6 +82,9 @@ var Input = (($) => {
                 case "submit":
                 case "color":
                 case "checkbox":
+                case "date":
+                case "time":
+                case "number":
                 case "range":	
                     info.tagName = "input";
                     info.type = this.type;

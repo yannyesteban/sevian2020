@@ -12,12 +12,6 @@
 			"events":{
 				"click":"this.find();"
 			}
-		},
-		{
-			"caption":"Enviar CMD",
-			"events":{
-				"click":"alert(this);"
-			}
 		}
 		
 	]
