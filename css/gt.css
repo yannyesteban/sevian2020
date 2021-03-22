@@ -11,8 +11,7 @@
   src: url(fonts\/FUTURABI.TTF);
 }
 * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif, tahoma;
 }
 
@@ -46,16 +45,9 @@ form {
   grid-row: 2;
   grid-column: 1;
   background-color: #0d838b;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  flex-direction: row;
+  justify-content: space-between;
   justify-items: stretch;
 }
 .gt-layout > .body {
@@ -248,12 +240,9 @@ form {
   width: 300px;
 }
 .mark-tool-value .mark-tool-g1 {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   padding: 2px;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
 }
 .mark-tool-value .mark-tool-g1 input {
   width: 100px;
@@ -268,13 +257,9 @@ form {
   border: 3px solid white;
   height: 120px;
   overflow: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -ms-flex-line-pack: stretch;
-      align-content: stretch;
+  flex-wrap: wrap;
+  align-content: stretch;
   /*
   display: grid;
   grid-template-columns: repeat(8, 30px);
@@ -282,9 +267,7 @@ form {
   */
 }
 .mark-tool-value .mark-tool-g2 * > {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 .mark-tool-value .mark-tool-g2 div {
   width: 30px;
@@ -318,20 +301,14 @@ form {
 }
 
 .gt-webcar-login {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   height: 100%;
   background-image: url(../../../wallpaper/001.webp);
   background-size: auto 1080px;
   background-position-x: center;
   background-position-y: bottom;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   padding: 100px;
 }
 .gt-webcar-login .main {
@@ -367,13 +344,11 @@ form {
   font-family: andreab;
   justify-self: center;
   text-align: center;
-  -ms-flex-item-align: end;
-      align-self: flex-end;
+  align-self: flex-end;
 }
 .gt-webcar-login .main > .left-side .gtrack-logo {
   justify-self: center;
-  -ms-flex-item-align: center;
-      align-self: center;
+  align-self: center;
   width: 180px;
 }
 .gt-webcar-login .main > .left-side .webcar-foot {
@@ -391,12 +366,8 @@ form {
   display: grid;
   grid-template-columns: 2fr;
   grid-template-rows: 100px auto 120px;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .gt-webcar-login .main > .right-side .webcar-name {
   font-size: 20pt;
@@ -405,13 +376,11 @@ form {
   font-family: andreab;
   justify-self: center;
   text-align: center;
-  -ms-flex-item-align: end;
-      align-self: flex-end;
+  align-self: flex-end;
 }
 .gt-webcar-login .main > .right-side form {
   justify-self: center;
-  -ms-flex-item-align: center;
-      align-self: center;
+  align-self: center;
 }
 .gt-webcar-login .main > .right-side form .menu {
   background-color: #1aa35e;
@@ -429,41 +398,25 @@ form {
 }
 .gt-webcar-login .main > .right-side .gtrack-logo {
   justify-self: center;
-  -ms-flex-item-align: center;
-      align-self: center;
+  align-self: center;
   width: 180px;
 }
 
 .sg-form.flat {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
 }
 .sg-form.flat > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 .sg-form.flat .caption {
   display: none;
 }
 .sg-form.flat .page {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
 }
 .sg-form.flat .page > .field *:not(.option) {
   height: 100%;
@@ -520,13 +473,11 @@ form {
 }
 ._sg-menu- .item.open > .sub-menu {
   border: 3px solid #0077ff;
-  -webkit-animation: acc-open 0.5s ease-out forwards;
-          animation: acc-open 0.5s ease-out forwards;
+  animation: acc-open 0.5s ease-out forwards;
 }
 ._sg-menu- .item.close > .sub-menu {
   border: 3px solid red;
-  -webkit-animation: acc-close 0.5s ease-out forwards;
-          animation: acc-close 0.5s ease-out forwards;
+  animation: acc-close 0.5s ease-out forwards;
 }
 
 .icon-unit {
@@ -618,8 +569,7 @@ form {
   border-radius: 20%;
   padding: 1px;
   position: absolute;
-  -webkit-transform: translate(15px, -10px);
-          transform: translate(15px, -10px);
+  transform: translate(15px, -10px);
   color: #777777;
   font-weight: bold;
   min-width: 12px;
@@ -631,40 +581,29 @@ form {
 }
 
 .banner {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
   justify-items: stretch;
 }
 .banner > * {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 .banner .logo-bestsecurity {
   padding-left: 10px;
-  -ms-flex-item-align: center;
-      align-self: center;
+  align-self: center;
 }
 .banner .logo-bestsecurity img {
   height: 50px;
 }
 .banner .logo-webcar {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1;
-          flex: 1 1;
+  flex: 1 1;
   text-align: right;
   font-size: 20pt;
   color: white;
   text-transform: capitalize;
   font-family: andreab;
   justify-self: right;
-  -ms-flex-item-align: center;
-      align-self: center;
+  align-self: center;
   padding-right: 10px;
 }
 
@@ -676,13 +615,8 @@ form {
 }
 
 .unit-main {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
   height: 100%;
 }
 
@@ -852,4 +786,5 @@ form {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto;
 }
+
 /*# sourceMappingURL=gt.css.map */

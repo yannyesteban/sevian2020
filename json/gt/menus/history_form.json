@@ -8,7 +8,7 @@
 	"onDataUser":"(dataUser)=>{}",
 	"items":[
 		{
-			"caption":"Go",
+			"caption":"Buscar",
 			"events":{
 				"click":"this.find();"
 			}

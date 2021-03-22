@@ -448,7 +448,10 @@ return;
 				layers2:layer2,
 				
 			});
+			
 			this.getMap().getControl('trace').setTrace(this._trace);
+			this.getMap().getControl('trace').reset();
+			this.getMap().getControl('trace').showLayers();
 			this.getMap().getControl('trace').setData(this.data);
 			this.getMap().getControl('trace').setConfigData({
 				className:"speed",

@@ -284,18 +284,20 @@
 }
 .trace-list{
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: 40px 30px 1fr;
     grid-template-rows:auto;
 	width: 100%;
 	grid-gap: 0px;
 	overflow: auto;
 	height: 100%;
 	color:rgb(145, 145, 145);
+	font-size: 9px;
 
 	:nth-child(1), :nth-child(2), :nth-child(3){
 		background-color: rgb(5, 107, 114);
 		text-align: center;
 		color:white;
+		
 	}
 	:nth-child(6n+7),:nth-child(6n+8),:nth-child(6n+9){
 		background-color: rgb(241, 241, 241);
@@ -311,4 +313,91 @@
 		
 	}
 	
+}
+
+.trace-tool{
+	.sg-form{
+
+		background-color: rgba(255, 255, 255, 0.664);
+		//border:1px solid white;
+		width: auto;
+		display: grid;
+		grid-template-rows: 0px 1fr auto;
+		.caption{
+			//display: none;
+			color:rgb(255, 255, 255);
+			text-align: center;
+			background-color: rgba(99, 99, 99, 0.7);
+			line-height: 2em;
+			vertical-align: middle;
+			.text{
+				font-size: 12pt;
+				text-transform: uppercase;
+				font-family: futurab!important;
+			}
+			
+		}
+		.page{
+			//border: 10px solid transparent;
+			overflow: auto;
+			display: grid;
+			grid-gap: 1px;
+			padding: 1px;
+			grid-template-columns: repeat(auto-fit,  [cc-start] minmax(180px, 1fr) [cc-end]);
+			align-content: start;   
+			justify-content: center; 
+			
+		
+			.field{
+		
+		
+				padding: 2px;
+				background-color: rgba(255, 255, 255, 0.8);
+				border-radius: 4px;
+		
+				.label{
+					color: rgb(145, 145, 145);
+					text-transform: uppercase;
+					font-size: 0.8em;
+					padding-bottom: 10px;
+					font-family: futurab;
+					padding-left: 10px;
+					
+				}
+				input, textarea, select{
+					background-color: rgb(248, 248, 248);
+					color: rgb(109, 109, 109);
+					border: 0px;
+					//height: 30px;
+					font-size: 0.8em;
+					//padding: 4px;
+					font-family: futurab;
+					width: 100%;
+				}
+		
+			}
+
+		}
+	
+		.sg-menu{
+			//background-color: rgb(226, 8, 8);
+
+			//color:white;
+			padding: 1px;
+			li{
+				width:100%;
+			}
+			text-align: center;
+			a{
+				background-color: rgb(9, 105, 97);
+				color:white;
+				&:active{
+					background-color: rgb(47, 90, 4);
+				}
+			}
+			.text{
+				margin: 0px;
+			}
+		}
+	}
 }

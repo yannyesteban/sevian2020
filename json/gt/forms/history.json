@@ -1,7 +1,7 @@
 {
 	"name":"history",
 	"caption":"Filtro",
-	"className":"webcar",
+	"className":"history",
 	"query":"SELECT '' as unit_id, now() as date_from, '' as hour_from, now() as date_to, '' as hour_to",
 	"menuName":"/gt/menus/history_form",
 	"methods":{

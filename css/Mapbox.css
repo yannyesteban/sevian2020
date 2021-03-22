@@ -37,7 +37,6 @@
 
 .trace-speed-nav {
   background: #343434;
-  background: -webkit-gradient(linear, left top, right top, from(#01b32d), color-stop(50%, white), to(#06a7f1));
   background: linear-gradient(90deg, #01b32d 0%, white 50%, #06a7f1 100%);
   float: left;
   padding: 0px;
@@ -175,8 +174,7 @@
   padding: 0;
   outline: none;
   border: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   background-color: transparent;
   cursor: pointer;
   line-height: 29px;
@@ -205,13 +203,14 @@
 
 .trace-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 40px 30px 1fr;
   grid-template-rows: auto;
   width: 100%;
   grid-gap: 0px;
   overflow: auto;
   height: 100%;
   color: #919191;
+  font-size: 9px;
 }
 .trace-list :nth-child(1), .trace-list :nth-child(2), .trace-list :nth-child(3) {
   background-color: #056b72;
@@ -227,4 +226,71 @@
 .trace-list :nth-child(3n+5), .trace-list :nth-child(3n+6) {
   text-align: right;
 }
+
+.trace-tool .sg-form {
+  background-color: rgba(255, 255, 255, 0.664);
+  width: auto;
+  display: grid;
+  grid-template-rows: 0px 1fr auto;
+}
+.trace-tool .sg-form .caption {
+  color: white;
+  text-align: center;
+  background-color: rgba(99, 99, 99, 0.7);
+  line-height: 2em;
+  vertical-align: middle;
+}
+.trace-tool .sg-form .caption .text {
+  font-size: 12pt;
+  text-transform: uppercase;
+  font-family: futurab !important;
+}
+.trace-tool .sg-form .page {
+  overflow: auto;
+  display: grid;
+  grid-gap: 1px;
+  padding: 1px;
+  grid-template-columns: repeat(auto-fit, [cc-start] minmax(180px, 1fr) [cc-end]);
+  align-content: start;
+  justify-content: center;
+}
+.trace-tool .sg-form .page .field {
+  padding: 2px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+}
+.trace-tool .sg-form .page .field .label {
+  color: #919191;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  padding-bottom: 10px;
+  font-family: futurab;
+  padding-left: 10px;
+}
+.trace-tool .sg-form .page .field input, .trace-tool .sg-form .page .field textarea, .trace-tool .sg-form .page .field select {
+  background-color: #f8f8f8;
+  color: #6d6d6d;
+  border: 0px;
+  font-size: 0.8em;
+  font-family: futurab;
+  width: 100%;
+}
+.trace-tool .sg-form .sg-menu {
+  padding: 1px;
+  text-align: center;
+}
+.trace-tool .sg-form .sg-menu li {
+  width: 100%;
+}
+.trace-tool .sg-form .sg-menu a {
+  background-color: #096961;
+  color: white;
+}
+.trace-tool .sg-form .sg-menu a:active {
+  background-color: #2f5a04;
+}
+.trace-tool .sg-form .sg-menu .text {
+  margin: 0px;
+}
+
 /*# sourceMappingURL=Mapbox.css.map */

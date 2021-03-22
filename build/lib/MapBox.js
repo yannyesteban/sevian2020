@@ -353,6 +353,14 @@ var MapBox = (($, turf) => {
             this.setMode(this.mode);
             return this._container.get();
         }
+        reset() {
+            this.mainTab.getPage(1).text("");
+            this.mainTab.getPage(2).text("");
+            this.setSpeed(8);
+            this.setModeSpeed(8);
+            this.setMode("reset");
+            this.getTrace().reset();
+        }
         setMode(mode) {
             this.mode = mode;
             this._container.ds("mode", mode);
@@ -410,13 +418,13 @@ var MapBox = (($, turf) => {
 
             
             */
-            bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-sb")
-                .on("click", () => {
-                this.cmdTrace('sb');
-            });
             bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-go_begin")
                 .on("click", () => {
                 this.cmdTrace('go-begin');
+            });
+            bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-sb")
+                .on("click", () => {
+                this.cmdTrace('sb');
             });
             this._playButton = bar.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-play")
                 .on("click", () => {
@@ -427,13 +435,13 @@ var MapBox = (($, turf) => {
                     this.cmdTrace('play');
                 }
             });
-            bar.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-go_end")
-                .on("click", () => {
-                this.cmdTrace('go-end');
-            });
             bar.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-sf")
                 .on("click", () => {
                 this.cmdTrace('sf');
+            });
+            bar.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-go_end")
+                .on("click", () => {
+                this.cmdTrace('go-end');
             });
             bar.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-ff")
                 .on("click", () => {
@@ -550,7 +558,7 @@ var MapBox = (($, turf) => {
         setTrace(trace) {
             this._trace = trace;
             this.init();
-            this.showLayers();
+            //this.showLayers();
         }
         getTrace() {
             return this._trace;
