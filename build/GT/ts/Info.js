@@ -34,7 +34,7 @@ var GTInfo = (($) => {
             this._main = main;
             main.addClass("gt-info-main");
             this._win["info-main"] = new Float.Window({
-                visible: true,
+                visible: false,
                 caption: this.caption,
                 //left:1180 -160,
                 //top:100,

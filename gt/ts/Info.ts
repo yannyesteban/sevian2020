@@ -49,7 +49,7 @@ var GTInfo = (($)=>{
             main.addClass("gt-info-main");
 
 			this._win["info-main"] = new Float.Window({
-                visible:true,
+                visible:false,//true
                 caption: this.caption,
                 //left:1180 -160,
                 //top:100,

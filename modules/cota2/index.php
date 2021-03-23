@@ -1,4 +1,5 @@
 <?php
+ini_set('memory_limit','512M');
 //set_include_path(get_include_path().":"."/path/to/new/folder");
 define("MAIN_PATH", "../../");
 define("MODULE_PATH", "../../");

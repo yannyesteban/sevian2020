@@ -37,14 +37,14 @@ var createGeoJSONRectangle = function (p1, p2 = null) {
             return;
         }
         let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': item
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": item
             },
-            'properties': {
-                'index': index,
-                'type': 'h',
+            "properties": {
+                "index": index,
+                "type": "h",
             }
         };
         json.data.features.push(point);
@@ -63,14 +63,14 @@ var createGeoJSONRectangle = function (p1, p2 = null) {
             return;
         }
         let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': midpoint.geometry.coordinates
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": midpoint.geometry.coordinates
             },
-            'properties': {
-                'index': 3 + index,
-                'type': 'm',
+            "properties": {
+                "index": 3 + index,
+                "type": "m",
             }
         };
         json.data.features.push(point);
@@ -96,14 +96,14 @@ var createGeoJSONPoly = function (coords, ini) {
     };
     coords.forEach((item, index) => {
         let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': item
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": item
             },
-            'properties': {
-                'index': index,
-                'type': 'h',
+            "properties": {
+                "index": index,
+                "type": "h",
             }
         };
         json.data.features.push(point);
@@ -120,14 +120,14 @@ var createGeoJSONPoly = function (coords, ini) {
             return;
         }
         let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': midpoint.geometry.coordinates
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": midpoint.geometry.coordinates
             },
-            'properties': {
-                'index': index,
-                'type': 'm',
+            "properties": {
+                "index": index,
+                "type": "m",
             }
         };
         json.data.features.push(point);
@@ -151,14 +151,14 @@ var createGeoJSONLine = function (coords, ini) {
     };
     coords.forEach((item, index) => {
         let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': item
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": item
             },
-            'properties': {
-                'index': index,
-                'type': 'h',
+            "properties": {
+                "index": index,
+                "type": "h",
             }
         };
         json.data.features.push(point);
@@ -175,14 +175,14 @@ var createGeoJSONLine = function (coords, ini) {
             return;
         }
         let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': midpoint.geometry.coordinates
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": midpoint.geometry.coordinates
             },
-            'properties': {
-                'index': index,
-                'type': 'm',
+            "properties": {
+                "index": index,
+                "type": "m",
             }
         };
         json.data.features.push(point);
@@ -226,27 +226,27 @@ var createGeoJSONCircle = function (center, radiusInKm, points) {
         }
     };
     let point = {
-        'type': 'Feature',
-        'geometry': {
-            'type': 'Point',
-            'coordinates': center
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": center
         },
-        'properties': {
-            'index': -1,
-            'type': 'c',
+        "properties": {
+            "index": -1,
+            "type": "c",
         }
     };
     json.data.features.push(point);
     hands.forEach((item, index) => {
         let point = {
-            'type': 'Feature',
-            'geometry': {
-                'type': 'Point',
-                'coordinates': item
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": item
             },
-            'properties': {
-                'index': index,
-                'type': 'h',
+            "properties": {
+                "index": index,
+                "type": "h",
             }
         };
         json.data.features.push(point);
@@ -256,7 +256,7 @@ var createGeoJSONCircle = function (center, radiusInKm, points) {
 var MapBox = (($, turf) => {
     class TraceControl {
         constructor(object) {
-            this.id = 'mapboxgl-ctrl-trace';
+            this.id = "mapboxgl-ctrl-trace";
             this._map = null;
             this._container = null;
             this._line = null;
@@ -328,21 +328,22 @@ var MapBox = (($, turf) => {
             //this._length.text("Layers");
             //this._unit = this._group.create("span");
             this._group_b = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group"]);
-            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Filtro" }).addClass(["icon-stop"])
+            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Filtro" }).addClass(["icon-filter"])
                 .on("click", () => {
                 this.mainTab.show(0);
             });
-            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Mostrar Capas" }).addClass(["icon-stop"])
+            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Mostrar Capas" }).addClass(["icon-layer2"])
                 .on("click", () => {
                 this.mainTab.show(1);
             });
-            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Mostrar Puntos" }).addClass(["icon-stop"])
+            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Mostrar Puntos" }).addClass(["icon-grid"])
                 .on("click", () => {
                 this.mainTab.show(2);
             });
-            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Descarta la medición actual" }).addClass(["icon-stop"])
+            this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Descarta la medición actual" }).addClass(["icon-trash"])
                 .on("click", () => {
-                this.cmdTrace('stop');
+                this.reset();
+                //this.cmdTrace("stop");
             });
             this._btnExit = this._group_b.create("button").prop({ "type": "button", "title": "Salir de la herramienta de medición" }).addClass(["icon-exit"])
                 .on("click", () => {
@@ -354,12 +355,14 @@ var MapBox = (($, turf) => {
             return this._container.get();
         }
         reset() {
+            this.setIconPlay(true);
             this.mainTab.getPage(1).text("");
             this.mainTab.getPage(2).text("");
             this.setSpeed(8);
             this.setModeSpeed(8);
             this.setMode("reset");
-            this.getTrace().reset();
+            this.getTrace().delete();
+            this.mainTab.show(0);
         }
         setMode(mode) {
             this.mode = mode;
@@ -420,28 +423,28 @@ var MapBox = (($, turf) => {
             */
             bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-go_begin")
                 .on("click", () => {
-                this.cmdTrace('go-begin');
+                this.cmdTrace("go-begin");
             });
             bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-sb")
                 .on("click", () => {
-                this.cmdTrace('sb');
+                this.cmdTrace("sb");
             });
             this._playButton = bar.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-play")
                 .on("click", () => {
                 if (this._trace.getStatus() == 1) {
-                    this.cmdTrace('pause');
+                    this.cmdTrace("pause");
                 }
                 else {
-                    this.cmdTrace('play');
+                    this.cmdTrace("play");
                 }
             });
             bar.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-sf")
                 .on("click", () => {
-                this.cmdTrace('sf');
+                this.cmdTrace("sf");
             });
             bar.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-go_end")
                 .on("click", () => {
-                this.cmdTrace('go-end');
+                this.cmdTrace("go-end");
             });
             bar.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-ff")
                 .on("click", () => {
@@ -517,39 +520,39 @@ var MapBox = (($, turf) => {
         }
         cmdTrace(cmd) {
             switch (cmd) {
-                case 'play':
+                case "play":
                     this.setIconPlay(false);
                     this._trace.play();
                     break;
-                case 'pause':
+                case "pause":
                     this.setIconPlay(true);
                     this._trace.pause();
                     break;
-                case 'fb':
+                case "fb":
                     this.setIconPlay(true);
-                    this._trace.play('fb');
+                    this._trace.play("fb");
                     break;
-                case 'ff':
+                case "ff":
                     this.setIconPlay(true);
-                    this._trace.play('ff');
+                    this._trace.play("ff");
                     break;
-                case 'go-begin':
+                case "go-begin":
                     this.setIconPlay(true);
                     this._trace.goBegin();
                     break;
-                case 'go-end':
+                case "go-end":
                     this.setIconPlay(true);
                     this._trace.goEnd();
                     break;
-                case 'sb':
+                case "sb":
                     this.setIconPlay(true);
                     this._trace.step(-1);
                     break;
-                case 'sf':
+                case "sf":
                     this.setIconPlay(true);
                     this._trace.step(1);
                     break;
-                case 'stop':
+                case "stop":
                     this.setIconPlay(true);
                     this._trace.stop();
                     break;
@@ -625,11 +628,11 @@ var MapBox = (($, turf) => {
         setLength(length) {
             this.length = length;
             if (this._meter == 0) {
-                this._length.text((this.length / 1000).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._length.text((this.length / 1000).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 this._unit.text("Km");
             }
             else {
-                this._length.text(this.length.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._length.text(this.length.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 this._unit.text("m");
             }
         }
@@ -652,13 +655,14 @@ var MapBox = (($, turf) => {
                 this._group.style("display", "none");
                 this._group1.style("display", "");
                 this._group2.style("display", "none");
+                this.setIconPlay(true);
                 this._mode = 0;
             }
         }
     }
     class InfoRuleControl {
         constructor(object) {
-            this.id = 'mapboxgl-ctrl-rule';
+            this.id = "mapboxgl-ctrl-rule";
             this._map = null;
             this._container = null;
             this._line = null;
@@ -741,13 +745,13 @@ var MapBox = (($, turf) => {
                 this._group2.style("display", "");
                 this._mode = 1;
             }
-            this._line = this._parent.draw(this.id, 'rule', {
+            this._line = this._parent.draw(this.id, "rule", {
                 maxLines: 1,
                 ondraw: (coordinates) => {
                     if (coordinates.length > 1) {
                         let line = turf.lineString(coordinates);
                         //turf.length(linestring).toLocaleString()
-                        this.setLength(turf.length(line, { units: 'meters' }));
+                        this.setLength(turf.length(line, { units: "meters" }));
                         //this.length = ;
                         //this._length.text(this.length.toLocaleString());
                     }
@@ -758,11 +762,11 @@ var MapBox = (($, turf) => {
         setLength(length) {
             this.length = length;
             if (this._meter == 0) {
-                this._length.text((this.length / 1000).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._length.text((this.length / 1000).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 this._unit.text("Km");
             }
             else {
-                this._length.text(this.length.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                this._length.text(this.length.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                 this._unit.text("m");
             }
         }
@@ -953,10 +957,10 @@ var MapBox = (($, turf) => {
         printArea(area) {
             if (area > 1000000) {
                 area = area / 1000000;
-                this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km<sup>2</sup>");
+                this._length.text(area.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km<sup>2</sup>");
             }
             else {
-                this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " m<sup>2</sup>");
+                this._length.text(area.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " m<sup>2</sup>");
             }
         }
         setCircle() {
@@ -970,7 +974,7 @@ var MapBox = (($, turf) => {
             this._line.ondraw = (coordinates) => {
                 let radio = this._line.getRadio();
                 let area = Math.PI * Math.pow(radio, 2);
-                this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km<sup>2</sup>" + " (R: " + radio.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km)");
+                this._length.text(area.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km<sup>2</sup>" + " (R: " + radio.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km)");
                 return;
                 if (coordinates.length > 2) {
                     let coord = coordinates.slice();
@@ -979,11 +983,11 @@ var MapBox = (($, turf) => {
                     let area = turf.area(polygon);
                     if (area > 1000000) {
                         area = area / 1000000;
-                        this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        this._length.text(area.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                         this._unit.text("Km<sup>2</sup>");
                     }
                     else {
-                        this._length.text(area.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                        this._length.text(area.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
                         this._unit.text("m<sup>2</sup>");
                     }
                 }
@@ -1176,7 +1180,7 @@ var MapBox = (($, turf) => {
                 this.defaultCoordinates = this.coordinates.slice();
             }
             this.image = this.defaultImage;
-            this._line = this._parent.draw(this.id, 'mark', {
+            this._line = this._parent.draw(this.id, "mark", {
                 coordinates: this.defaultCoordinates,
                 height: 30,
                 image: this.image,
@@ -1261,14 +1265,14 @@ var MapBox = (($, turf) => {
             let markerRadius = 0;
             let linearOffset = 0;
             let popupOffsets = {
-                'top': [0, 0],
-                'top-left': [0, 0],
-                'top-right': [0, 0],
-                'bottom': [0, -this.height / 2 + 5],
-                'bottom-left': [linearOffset, (this.height - markerRadius + linearOffset) * -1],
-                'bottom-right': [-linearOffset, (this.height - markerRadius + linearOffset) * -1],
-                'left': [markerRadius, (this.height - markerRadius) * -1],
-                'right': [-markerRadius, (this.height - markerRadius) * -1]
+                "top": [0, 0],
+                "top-left": [0, 0],
+                "top-right": [0, 0],
+                "bottom": [0, -this.height / 2 + 5],
+                "bottom-left": [linearOffset, (this.height - markerRadius + linearOffset) * -1],
+                "bottom-right": [-linearOffset, (this.height - markerRadius + linearOffset) * -1],
+                "left": [markerRadius, (this.height - markerRadius) * -1],
+                "right": [-markerRadius, (this.height - markerRadius) * -1]
             };
             let popup = new mapboxgl.Popup({
                 offset: popupOffsets,
@@ -1302,8 +1306,8 @@ var MapBox = (($, turf) => {
         }
         setImage(image) {
             if (!this._image) {
-                this._image = document.createElement('img');
-                this._image.className = 'marker';
+                this._image = document.createElement("img");
+                this._image.className = "marker";
                 this._image.style.height = this.height + "px";
             }
             this._image.src = this.parent.getImage(image);
@@ -1344,11 +1348,11 @@ var MapBox = (($, turf) => {
             this._play = true;
             this.setVisible(true);
             this._marker.setDraggable(true);
-            this._marker.on('drag', this._drag = () => {
+            this._marker.on("drag", this._drag = () => {
                 this.ondrag(this._marker.getLngLat());
                 this.ondraw([this._marker.getLngLat().lng, this._marker.getLngLat().lat]);
             });
-            this.map.on('click', this._click = (e) => {
+            this.map.on("click", this._click = (e) => {
                 this.setLngLat(e.lngLat);
                 this.onplace(e.lngLat);
                 this.ondraw([e.lngLat.lng, e.lngLat.lat]);
@@ -1358,8 +1362,8 @@ var MapBox = (($, turf) => {
             if (this._play) {
                 this._marker.setDraggable(false);
                 this._play = false;
-                this.map.off('click', this._click);
-                this.map.off('drag', this._drag);
+                this.map.off("click", this._click);
+                this.map.off("drag", this._drag);
                 this._play = false;
             }
         }
@@ -1456,7 +1460,7 @@ var MapBox = (($, turf) => {
         }
         init() {
             let map = this.map;
-            //let polygon = turf.polygon([coo], { name: 'poly1' });
+            //let polygon = turf.polygon([coo], { name: "poly1" });
             //polygon = turf.bezierSpline(polygon);
             //            console.log(polygon)
             let polygon = {
@@ -1475,71 +1479,71 @@ var MapBox = (($, turf) => {
             };
             this.map.addSource(this.lineId, this._line);
             this.map.addLayer({
-                'id': this.lineId,
-                'type': 'line',
-                'source': this.lineId,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.lineId,
+                "type": "line",
+                "source": this.lineId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                    'line-color': '#ff3300',
-                    'line-width': 4,
+                "paint": {
+                    "line-color": "#ff3300",
+                    "line-width": 4,
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             this.map.addLayer({
-                'id': this.circleId,
-                'type': 'fill',
-                'source': this.lineId,
-                'layout': {
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.circleId,
+                "type": "fill",
+                "source": this.lineId,
+                "layout": {
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                //'fill-color': '#ff9900',
-                //'fill-opacity': 0.4,
+                "paint": {
+                //"fill-color": "#ff9900",
+                //"fill-opacity": 0.4,
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             //this.setLine(this.line);
             //this.setFill(this.fill);
             map.addLayer({
                 id: this.nodesId,
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility: 'none'
+                    visibility: "none"
                 },
                 paint: {
-                    'circle-radius': 4,
-                    'circle-opacity': ["case", ["==", ['get', 'type'], 'm'], 0.0, 0.8],
-                    'circle-color': 'white',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
+                    "circle-radius": 4,
+                    "circle-opacity": ["case", ["==", ["get", "type"], "m"], 0.0, 0.8],
+                    "circle-color": "white",
+                    "circle-stroke-color": "#ff3300",
+                    "circle-stroke-width": 1
                 },
-                filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
+                filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
             });
             /*
             map.addLayer({
                 id: this.nodesId+"2",
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility:'visible'
+                    visibility:"visible"
                 },
                 paint: {
-                    'circle-radius': 3,
-                    'circle-opacity':0.5,
-                    'circle-color': '#000',
-                    'circle-stroke-color':"#ff3300",
-                    'circle-stroke-width':1
+                    "circle-radius": 3,
+                    "circle-opacity":0.5,
+                    "circle-color": "#000",
+                    "circle-stroke-color":"#ff3300",
+                    "circle-stroke-width":1
                 },
-                //filter: ['in', '$type', 'Point']
-                filter: ["in", 'type', 'm']
-                //filter: ["in", 'type']
+                //filter: ["in", "$type", "Point"]
+                filter: ["in", "type", "m"]
+                //filter: ["in", "type"]
             });
             */
             this.setLine(this.line);
@@ -1582,14 +1586,14 @@ var MapBox = (($, turf) => {
             }
         }
         setVisible(value) {
-            let visible = 'none';
+            let visible = "none";
             if (value) {
-                visible = 'visible';
+                visible = "visible";
             }
-            this.map.setLayoutProperty(this.lineId, 'visibility', visible);
-            this.map.setLayoutProperty(this.circleId, 'visibility', visible);
+            this.map.setLayoutProperty(this.lineId, "visibility", visible);
+            this.map.setLayoutProperty(this.circleId, "visibility", visible);
             if (this._play) {
-                this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
+                this.map.setLayoutProperty(this.nodesId, "visibility", visible);
             }
         }
         add(lngLat) {
@@ -1617,18 +1621,18 @@ var MapBox = (($, turf) => {
             this.parent.stop();
             this._play = true;
             let map = this.map;
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setVisible(true);
             this.setFill(this.fillEdit);
             this.setLine(this.lineEdit);
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'visible');
-            //this.map.setPaintProperty(this.lineId, 'line-dasharray', [2,2]);
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
+            //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
             let place = null;
             let type = null;
             let place_one = null;
             let down1 = false;
             let fnUp = (e) => {
-                map.off('mousemove', fnMove);
+                map.off("mousemove", fnMove);
                 type = null;
                 down1 = false;
             };
@@ -1637,7 +1641,7 @@ var MapBox = (($, turf) => {
                 this.draw();
             };
             let fnUp2 = (e) => {
-                map.off('mousemove', fnMove2);
+                map.off("mousemove", fnMove2);
             };
             let fnMove2 = (e) => {
                 //this.move(place_one, e.lngLat);
@@ -1653,7 +1657,7 @@ var MapBox = (($, turf) => {
                 place_one = e.lngLat;
                 this.draw();
             };
-            map.on('mousedown', this.nodesId, this._mousedown = (e) => {
+            map.on("mousedown", this.nodesId, this._mousedown = (e) => {
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 down1 = true;
@@ -1666,27 +1670,27 @@ var MapBox = (($, turf) => {
                     this.split(place, [e.lngLat.lng, e.lngLat.lat]);
                     this.draw();
                 }
-                map.on('mousemove', fnMove);
-                map.once('mouseup', fnUp);
+                map.on("mousemove", fnMove);
+                map.once("mouseup", fnUp);
             });
-            map.on('mousedown', this.circleId, this._mousedown2 = (e) => {
+            map.on("mousedown", this.circleId, this._mousedown2 = (e) => {
                 if (down1) {
                     return;
                 }
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 place_one = e.lngLat;
-                map.on('mousemove', fnMove2);
-                map.once('mouseup', fnUp2);
+                map.on("mousemove", fnMove2);
+                map.once("mouseup", fnUp2);
             });
-            map.on('click', this._click = (e) => {
+            map.on("click", this._click = (e) => {
                 //db (e.originalEvent.button+".........", "red","yellow")
                 var features = this.map.queryRenderedFeatures(e.point, {
                     layers: [this.nodesId]
                 });
                 this.add(e.lngLat);
             });
-            map.on('contextmenu', this._contextmenu = (e) => {
+            map.on("contextmenu", this._contextmenu = (e) => {
                 e.preventDefault();
                 this.coordinates.pop();
                 this.draw();
@@ -1696,16 +1700,16 @@ var MapBox = (($, turf) => {
         }
         stop() {
             if (this._play) {
-                this.map.off('click', this._click);
-                this.map.off('contextmenu', this._contextmenu);
-                this.map.off('mousedown', this.nodesId, this._mousedown);
-                this.map.off('mousedown', this.circleId, this._mousedown2);
-                // this.map.setPaintProperty(this.lineId, 'line-dasharray', [1]);
-                //'line-dasharray':[2,2]
-                //this.map.setPaintProperty(this.lineId, 'line-color', "#fd8d3c");
-                //map.on('mousemove', fnMove);
+                this.map.off("click", this._click);
+                this.map.off("contextmenu", this._contextmenu);
+                this.map.off("mousedown", this.nodesId, this._mousedown);
+                this.map.off("mousedown", this.circleId, this._mousedown2);
+                // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+                //"line-dasharray":[2,2]
+                //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
+                //map.on("mousemove", fnMove);
             }
-            this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setFill(this.fill);
             this.setLine(this.line);
             //this._mode = 0;
@@ -1765,12 +1769,12 @@ var MapBox = (($, turf) => {
         }
         createCircle(center, radio) {
             let length;
-            if (typeof radio === 'number') {
+            if (typeof radio === "number") {
                 length = radio;
             }
             else {
                 var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
-                length = turf.length(line, { units: 'kilometers' });
+                length = turf.length(line, { units: "kilometers" });
             }
             this.radio = length;
             let data = createGeoJSONCircle([center.lng, center.lat], length);
@@ -1881,7 +1885,7 @@ var MapBox = (($, turf) => {
         }
         init() {
             let map = this.map;
-            //let polygon = turf.polygon([coo], { name: 'poly1' });
+            //let polygon = turf.polygon([coo], { name: "poly1" });
             //polygon = turf.bezierSpline(polygon);
             //            console.log(polygon)
             let polygon = {
@@ -1900,71 +1904,71 @@ var MapBox = (($, turf) => {
             };
             this.map.addSource(this.lineId, this._line);
             this.map.addLayer({
-                'id': this.lineId,
-                'type': 'line',
-                'source': this.lineId,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.lineId,
+                "type": "line",
+                "source": this.lineId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                    'line-color': '#ff3300',
-                    'line-width': 4,
+                "paint": {
+                    "line-color": "#ff3300",
+                    "line-width": 4,
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             this.map.addLayer({
-                'id': this.circleId,
-                'type': 'fill',
-                'source': this.lineId,
-                'layout': {
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.circleId,
+                "type": "fill",
+                "source": this.lineId,
+                "layout": {
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                //'fill-color': '#ff9900',
-                //'fill-opacity': 0.4,
+                "paint": {
+                //"fill-color": "#ff9900",
+                //"fill-opacity": 0.4,
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             //this.setLine(this.line);
             //this.setFill(this.fill);
             map.addLayer({
                 id: this.nodesId,
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility: 'none'
+                    visibility: "none"
                 },
                 paint: {
-                    'circle-radius': 4,
-                    'circle-opacity': ["case", ["==", ['get', 'type'], 'm'], 0.0, 0.8],
-                    'circle-color': 'white',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
+                    "circle-radius": 4,
+                    "circle-opacity": ["case", ["==", ["get", "type"], "m"], 0.0, 0.8],
+                    "circle-color": "white",
+                    "circle-stroke-color": "#ff3300",
+                    "circle-stroke-width": 1
                 },
-                filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
+                filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
             });
             /*
             map.addLayer({
                 id: this.nodesId+"2",
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility:'visible'
+                    visibility:"visible"
                 },
                 paint: {
-                    'circle-radius': 3,
-                    'circle-opacity':0.5,
-                    'circle-color': '#000',
-                    'circle-stroke-color':"#ff3300",
-                    'circle-stroke-width':1
+                    "circle-radius": 3,
+                    "circle-opacity":0.5,
+                    "circle-color": "#000",
+                    "circle-stroke-color":"#ff3300",
+                    "circle-stroke-width":1
                 },
-                //filter: ['in', '$type', 'Point']
-                filter: ["in", 'type', 'm']
-                //filter: ["in", 'type']
+                //filter: ["in", "$type", "Point"]
+                filter: ["in", "type", "m"]
+                //filter: ["in", "type"]
             });
             */
             this.setLine(this.line);
@@ -2007,14 +2011,14 @@ var MapBox = (($, turf) => {
             }
         }
         setVisible(value) {
-            let visible = 'none';
+            let visible = "none";
             if (value) {
-                visible = 'visible';
+                visible = "visible";
             }
-            this.map.setLayoutProperty(this.lineId, 'visibility', visible);
-            this.map.setLayoutProperty(this.circleId, 'visibility', visible);
+            this.map.setLayoutProperty(this.lineId, "visibility", visible);
+            this.map.setLayoutProperty(this.circleId, "visibility", visible);
             if (this._play) {
-                this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
+                this.map.setLayoutProperty(this.nodesId, "visibility", visible);
             }
         }
         add(lngLat) {
@@ -2055,18 +2059,18 @@ var MapBox = (($, turf) => {
             this.parent.stop();
             this._play = true;
             let map = this.map;
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setVisible(true);
             this.setFill(this.fillEdit);
             this.setLine(this.lineEdit);
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'visible');
-            //this.map.setPaintProperty(this.lineId, 'line-dasharray', [2,2]);
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
+            //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
             let place = null;
             let type = null;
             let place_one = null;
             let down1 = false;
             let fnUp = (e) => {
-                map.off('mousemove', fnMove);
+                map.off("mousemove", fnMove);
                 type = null;
                 down1 = false;
             };
@@ -2115,7 +2119,7 @@ var MapBox = (($, turf) => {
                 this.draw();
             };
             let fnUp2 = (e) => {
-                map.off('mousemove', fnMove2);
+                map.off("mousemove", fnMove2);
             };
             let fnMove2 = (e) => {
                 //this.move(place_one, e.lngLat);
@@ -2130,7 +2134,7 @@ var MapBox = (($, turf) => {
                 this.draw();
                 place_one = e.lngLat;
             };
-            map.on('mousedown', this.nodesId, this._mousedown = (e) => {
+            map.on("mousedown", this.nodesId, this._mousedown = (e) => {
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 down1 = true;
@@ -2144,27 +2148,27 @@ var MapBox = (($, turf) => {
                     //this.split(place, [e.lngLat.lng, e.lngLat.lat]);
                     //this.draw();
                 }
-                map.on('mousemove', fnMove);
-                map.once('mouseup', fnUp);
+                map.on("mousemove", fnMove);
+                map.once("mouseup", fnUp);
             });
-            map.on('mousedown', this.circleId, this._mousedown2 = (e) => {
+            map.on("mousedown", this.circleId, this._mousedown2 = (e) => {
                 if (down1) {
                     return;
                 }
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 place_one = e.lngLat;
-                map.on('mousemove', fnMove2);
-                map.once('mouseup', fnUp2);
+                map.on("mousemove", fnMove2);
+                map.once("mouseup", fnUp2);
             });
-            map.on('click', this._click = (e) => {
+            map.on("click", this._click = (e) => {
                 //db (e.originalEvent.button+".........", "red","yellow")
                 var features = this.map.queryRenderedFeatures(e.point, {
                     layers: [this.nodesId]
                 });
                 this.add(e.lngLat);
             });
-            map.on('contextmenu', this._contextmenu = (e) => {
+            map.on("contextmenu", this._contextmenu = (e) => {
                 e.preventDefault();
                 this.coordinates.pop();
                 this.draw();
@@ -2174,16 +2178,16 @@ var MapBox = (($, turf) => {
         }
         stop() {
             if (this._play) {
-                this.map.off('click', this._click);
-                this.map.off('contextmenu', this._contextmenu);
-                this.map.off('mousedown', this.nodesId, this._mousedown);
-                this.map.off('mousedown', this.circleId, this._mousedown2);
-                // this.map.setPaintProperty(this.lineId, 'line-dasharray', [1]);
-                //'line-dasharray':[2,2]
-                //this.map.setPaintProperty(this.lineId, 'line-color', "#fd8d3c");
-                //map.on('mousemove', fnMove);
+                this.map.off("click", this._click);
+                this.map.off("contextmenu", this._contextmenu);
+                this.map.off("mousedown", this.nodesId, this._mousedown);
+                this.map.off("mousedown", this.circleId, this._mousedown2);
+                // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+                //"line-dasharray":[2,2]
+                //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
+                //map.on("mousemove", fnMove);
             }
-            this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setFill(this.fill);
             this.setLine(this.line);
             //this._mode = 0;
@@ -2235,12 +2239,12 @@ var MapBox = (($, turf) => {
         }
         createCircle(center, radio) {
             let length;
-            if (typeof radio === 'number') {
+            if (typeof radio === "number") {
                 length = radio;
             }
             else {
                 var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
-                length = turf.length(line, { units: 'kilometers' });
+                length = turf.length(line, { units: "kilometers" });
             }
             this.radio = length;
             let data = createGeoJSONCircle([center.lng, center.lat], length);
@@ -2361,51 +2365,51 @@ var MapBox = (($, turf) => {
             };
             this.map.addSource(this.lineId, this._line);
             this.map.addLayer({
-                'id': this.lineId,
-                'type': 'line',
-                'source': this.lineId,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.lineId,
+                "type": "line",
+                "source": this.lineId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                //'line-color': '#ff3300',
-                //'line-width': this.lineWidth,
-                //'line-opacity': 0.9,
-                //'line-gap-width':4,
-                //'line-dasharray':[2,2]
+                "paint": {
+                //"line-color": "#ff3300",
+                //"line-width": this.lineWidth,
+                //"line-opacity": 0.9,
+                //"line-gap-width":4,
+                //"line-dasharray":[2,2]
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             this.map.addLayer({
-                'id': this.circleId,
-                'type': 'fill',
-                'source': this.lineId,
-                'layout': {
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.circleId,
+                "type": "fill",
+                "source": this.lineId,
+                "layout": {
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                //'fill-color': '#ff9900',
-                //'fill-opacity': 0.4,
+                "paint": {
+                //"fill-color": "#ff9900",
+                //"fill-opacity": 0.4,
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             map.addLayer({
                 id: this.nodesId,
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility: 'none'
+                    visibility: "none"
                 },
                 paint: {
-                    'circle-radius': 4,
-                    'circle-opacity': 0.0,
-                    'circle-color': '#000',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
+                    "circle-radius": 4,
+                    "circle-opacity": 0.0,
+                    "circle-color": "#000",
+                    "circle-stroke-color": "#ff3300",
+                    "circle-stroke-width": 1
                 },
-                filter: ['in', '$type', 'Point']
+                filter: ["in", "$type", "Point"]
             });
             this.setLine(this.line);
             this.setFill(this.fill);
@@ -2431,14 +2435,14 @@ var MapBox = (($, turf) => {
             }
         }
         setVisible(value) {
-            let visible = 'none';
+            let visible = "none";
             if (value) {
-                visible = 'visible';
+                visible = "visible";
             }
-            this.map.setLayoutProperty(this.lineId, 'visibility', visible);
-            this.map.setLayoutProperty(this.circleId, 'visibility', visible);
+            this.map.setLayoutProperty(this.lineId, "visibility", visible);
+            this.map.setLayoutProperty(this.circleId, "visibility", visible);
             if (this._play) {
-                this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
+                this.map.setLayoutProperty(this.nodesId, "visibility", visible);
             }
         }
         test() {
@@ -2467,19 +2471,19 @@ var MapBox = (($, turf) => {
             this.parent.stop();
             this._play = true;
             let map = this.map;
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setVisible(true);
             this.setFill(this.fillEdit);
             this.setLine(this.lineEdit);
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'visible');
-            //this.map.setPaintProperty(this.lineId, 'line-dasharray', [2,2]);
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
+            //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
             let place = null;
             if (this.radio == 0) {
                 this._mode = 1;
             }
             let fnUp = (e) => {
                 //point = null;
-                map.off('mousemove', fnMove);
+                map.off("mousemove", fnMove);
             };
             let fnMove = (e) => {
                 //this.coordinates[point] = [e.lngLat.lng, e.lngLat.lat];
@@ -2496,7 +2500,7 @@ var MapBox = (($, turf) => {
                     this.callresize();
                 }
             };
-            map.on('mousedown', this.nodesId, this._mousedown = (e) => {
+            map.on("mousedown", this.nodesId, this._mousedown = (e) => {
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 var features = map.queryRenderedFeatures(e.point, {
@@ -2506,23 +2510,23 @@ var MapBox = (($, turf) => {
                     var id = features[0].properties.id;
                 }
                 place = features[0].properties.type;
-                map.on('mousemove', fnMove);
-                map.once('mouseup', fnUp);
+                map.on("mousemove", fnMove);
+                map.once("mouseup", fnUp);
             });
-            map.on('click', this._fnclick(this.map));
+            map.on("click", this._fnclick(this.map));
         }
         pause() {
         }
         stop() {
             if (this._play) {
-                this.map.off('click', this._click);
-                this.map.off('mousedown', this.nodesId, this._mousedown);
-                // this.map.setPaintProperty(this.lineId, 'line-dasharray', [1]);
-                //'line-dasharray':[2,2]
-                //this.map.setPaintProperty(this.lineId, 'line-color', "#fd8d3c");
-                //map.on('mousemove', fnMove);
+                this.map.off("click", this._click);
+                this.map.off("mousedown", this.nodesId, this._mousedown);
+                // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+                //"line-dasharray":[2,2]
+                //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
+                //map.on("mousemove", fnMove);
             }
-            this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setFill(this.fill);
             this.setLine(this.line);
             //this._mode = 0;
@@ -2560,12 +2564,12 @@ var MapBox = (($, turf) => {
         }
         createCircle(center, radio) {
             let length;
-            if (typeof radio === 'number') {
+            if (typeof radio === "number") {
                 length = radio;
             }
             else {
                 var line = turf.lineString([center, radio]);
-                length = turf.length(line, { units: 'kilometers' });
+                length = turf.length(line, { units: "kilometers" });
             }
             this.radio = length;
             let data = createGeoJSONCircle(center, length);
@@ -2695,7 +2699,7 @@ var MapBox = (($, turf) => {
         }
         init() {
             let map = this.map;
-            //let polygon = turf.polygon([coo], { name: 'poly1' });
+            //let polygon = turf.polygon([coo], { name: "poly1" });
             //polygon = turf.bezierSpline(polygon);
             //            console.log(polygon)
             let polygon = {
@@ -2714,71 +2718,71 @@ var MapBox = (($, turf) => {
             };
             this.map.addSource(this.lineId, this._line);
             this.map.addLayer({
-                'id': this.lineId,
-                'type': 'line',
-                'source': this.lineId,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.lineId,
+                "type": "line",
+                "source": this.lineId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                    'line-color': '#ff3300',
-                    'line-width': 4,
+                "paint": {
+                    "line-color": "#ff3300",
+                    "line-width": 4,
                 },
-                'filter': ['==', '$type', 'LineString']
+                "filter": ["==", "$type", "LineString"]
             });
             this.map.addLayer({
-                'id': this.circleId,
-                'type': 'fill',
-                'source': this.lineId,
-                'layout': {
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.circleId,
+                "type": "fill",
+                "source": this.lineId,
+                "layout": {
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                //'fill-color': '#ff9900',
-                //'fill-opacity': 0.4,
+                "paint": {
+                //"fill-color": "#ff9900",
+                //"fill-opacity": 0.4,
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             //this.setLine(this.line);
             //this.setFill(this.fill);
             map.addLayer({
                 id: this.nodesId,
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility: 'none'
+                    visibility: "none"
                 },
                 paint: {
-                    'circle-radius': 4,
-                    'circle-opacity': ["case", ["==", ['get', 'type'], 'm'], 0.0, 0.8],
-                    'circle-color': 'white',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
+                    "circle-radius": 4,
+                    "circle-opacity": ["case", ["==", ["get", "type"], "m"], 0.0, 0.8],
+                    "circle-color": "white",
+                    "circle-stroke-color": "#ff3300",
+                    "circle-stroke-width": 1
                 },
-                filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
+                filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
             });
             /*
             map.addLayer({
                 id: this.nodesId+"2",
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility:'visible'
+                    visibility:"visible"
                 },
                 paint: {
-                    'circle-radius': 3,
-                    'circle-opacity':0.5,
-                    'circle-color': '#000',
-                    'circle-stroke-color':"#ff3300",
-                    'circle-stroke-width':1
+                    "circle-radius": 3,
+                    "circle-opacity":0.5,
+                    "circle-color": "#000",
+                    "circle-stroke-color":"#ff3300",
+                    "circle-stroke-width":1
                 },
-                //filter: ['in', '$type', 'Point']
-                filter: ["in", 'type', 'm']
-                //filter: ["in", 'type']
+                //filter: ["in", "$type", "Point"]
+                filter: ["in", "type", "m"]
+                //filter: ["in", "type"]
             });
             */
             this.setLine(this.line);
@@ -2821,14 +2825,14 @@ var MapBox = (($, turf) => {
             }
         }
         setVisible(value) {
-            let visible = 'none';
+            let visible = "none";
             if (value) {
-                visible = 'visible';
+                visible = "visible";
             }
-            this.map.setLayoutProperty(this.lineId, 'visibility', visible);
-            this.map.setLayoutProperty(this.circleId, 'visibility', visible);
+            this.map.setLayoutProperty(this.lineId, "visibility", visible);
+            this.map.setLayoutProperty(this.circleId, "visibility", visible);
             if (this._play) {
-                this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
+                this.map.setLayoutProperty(this.nodesId, "visibility", visible);
             }
         }
         add(lngLat) {
@@ -2856,18 +2860,18 @@ var MapBox = (($, turf) => {
             this.parent.stop();
             this._play = true;
             let map = this.map;
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setVisible(true);
             this.setFill(this.fillEdit);
             this.setLine(this.lineEdit);
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'visible');
-            //this.map.setPaintProperty(this.lineId, 'line-dasharray', [2,2]);
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
+            //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
             let place = null;
             let type = null;
             let place_one = null;
             let down1 = false;
             let fnUp = (e) => {
-                map.off('mousemove', fnMove);
+                map.off("mousemove", fnMove);
                 type = null;
                 down1 = false;
             };
@@ -2876,7 +2880,7 @@ var MapBox = (($, turf) => {
                 this.draw();
             };
             let fnUp2 = (e) => {
-                map.off('mousemove', fnMove2);
+                map.off("mousemove", fnMove2);
             };
             let fnMove2 = (e) => {
                 //this.move(place_one, e.lngLat);
@@ -2892,7 +2896,7 @@ var MapBox = (($, turf) => {
                 place_one = e.lngLat;
                 this.draw();
             };
-            map.on('mousedown', this.nodesId, this._mousedown = (e) => {
+            map.on("mousedown", this.nodesId, this._mousedown = (e) => {
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 var features = map.queryRenderedFeatures(e.point, {
@@ -2904,20 +2908,20 @@ var MapBox = (($, turf) => {
                 if (type == "m" && !this.split(place, [e.lngLat.lng, e.lngLat.lat])) {
                     return;
                 }
-                map.on('mousemove', fnMove);
-                map.once('mouseup', fnUp);
+                map.on("mousemove", fnMove);
+                map.once("mouseup", fnUp);
             });
-            map.on('mousedown', this.circleId, this._mousedown2 = (e) => {
+            map.on("mousedown", this.circleId, this._mousedown2 = (e) => {
                 if (down1) {
                     return;
                 }
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 place_one = e.lngLat;
-                map.on('mousemove', fnMove2);
-                map.once('mouseup', fnUp2);
+                map.on("mousemove", fnMove2);
+                map.once("mouseup", fnUp2);
             });
-            map.on('click', this._click = (e) => {
+            map.on("click", this._click = (e) => {
                 //db (e.originalEvent.button+".........", "red","yellow")
                 var features = this.map.queryRenderedFeatures(e.point, {
                     layers: [this.nodesId]
@@ -2937,7 +2941,7 @@ var MapBox = (($, turf) => {
                 }
                 return;
             });
-            map.on('contextmenu', this._contextmenu = (e) => {
+            map.on("contextmenu", this._contextmenu = (e) => {
                 e.preventDefault();
                 this.coordinates.pop();
                 this.draw();
@@ -2947,16 +2951,16 @@ var MapBox = (($, turf) => {
         }
         stop() {
             if (this._play) {
-                this.map.off('click', this._click);
-                this.map.off('contextmenu', this._contextmenu);
-                this.map.off('mousedown', this.nodesId, this._mousedown);
-                this.map.off('mousedown', this.circleId, this._mousedown2);
-                // this.map.setPaintProperty(this.lineId, 'line-dasharray', [1]);
-                //'line-dasharray':[2,2]
-                //this.map.setPaintProperty(this.lineId, 'line-color', "#fd8d3c");
-                //map.on('mousemove', fnMove);
+                this.map.off("click", this._click);
+                this.map.off("contextmenu", this._contextmenu);
+                this.map.off("mousedown", this.nodesId, this._mousedown);
+                this.map.off("mousedown", this.circleId, this._mousedown2);
+                // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+                //"line-dasharray":[2,2]
+                //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
+                //map.on("mousemove", fnMove);
             }
-            this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setFill(this.fill);
             this.setLine(this.line);
             //this._mode = 0;
@@ -3011,12 +3015,12 @@ var MapBox = (($, turf) => {
         }
         createCircle(center, radio) {
             let length;
-            if (typeof radio === 'number') {
+            if (typeof radio === "number") {
                 length = radio;
             }
             else {
                 var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
-                length = turf.length(line, { units: 'kilometers' });
+                length = turf.length(line, { units: "kilometers" });
             }
             this.radio = length;
             let data = createGeoJSONCircle([center.lng, center.lat], length);
@@ -3070,6 +3074,7 @@ var MapBox = (($, turf) => {
         }
     }
     class Trace {
+        //private pause:boolean = false;
         constructor(info) {
             this.map = null;
             this.type = "trace";
@@ -3136,140 +3141,394 @@ var MapBox = (($, turf) => {
             this.startTime = 0;
             this.progress = 0; // progress = timestamp - startTime
             this.resetTime = false; // indicator of whether time reset is needed for the animation
+            this.layersId = [];
+            this.roadLayerId = "";
+            this.roadSourceId = "";
+            this.lineLayerId = "";
+            this.lineSourceId = "";
+            this.nodeSourceId = "";
+            this.mobilLayerId = "";
+            this.mobilSourceId = "";
+            this.traceLayerId = "";
+            this.traceSourceId = "";
             for (let x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
                 }
             }
-            this.lineIdA = "la-" + this.id;
-            this.layerMobilId = "n-" + this.id;
-            this.lineId = "l-" + this.id;
-            this.circleId = "c-" + this.id;
-            this.mobileId = "m-" + this.id;
-            this.pulsingId = "p-" + this.id;
-            this.layerSourceId = "lt-" + this.id;
-            this.layerId = "ly-" + this.id;
+            //this.lineIdA = "la-"+this.id;
+            //this.layerMobilId = "n-"+this.id;
+            //this.lineId = "l-"+this.id;
+            //this.circleId = "c-"+this.id;
+            //this.mobileId = "m-"+this.id;
+            //this.pulsingId = "p-"+this.id;
+            //this.layerSourceId = "lt-" + this.id;
+            //this.layerId = "ly-" + this.id;
+            //this.lineSourceId = "ls-" + this.id;
+            this.roadSourceId = "rs-" + this.id;
+            this.traceSourceId = "ts-" + this.id;
+            this.nodeSourceId = "ns-" + this.id;
+            //this.mobilSourceId = "ms-" + this.id;
+            this.roadLayerId = "rl-" + this.id;
+            this.traceLayerId = "tl-" + this.id;
+            this.mobilLayerId = "ml-" + this.id;
+            //this.lineLayerId = "ll-" + this.id;
             this.init();
         }
         init() {
-            this.coordinates = [];
+            /*this.coordinates = [];
             let fixDelay = 0;
             let ts = [];
-            for (let x in this.data) {
+            for(let x in this.data){
                 this.coordinates.push(this.data[x].coordinates);
+                
                 ts[x] = this.data[x].ts;
-                if (x > 0) {
-                    if (ts[x] - ts[x - 1] > 120) {
-                        fixDelay += (ts[x] - ts[x - 1]) - 120;
+                if(x>0){
+                    if(ts[x] - ts[x-1]>120){
+                        fixDelay += (ts[x] - ts[x-1]) - 120;
                     }
                 }
+                
+                
                 this.data[x].ts = this.data[x].ts - ts[0] - fixDelay;
+                
             }
             this.coordinatesInit = this.coordinates.slice();
-            console.log(this.data);
+            console.log(this.data)
             //let index = this.data.findIndex((e)=>e.ts>=885);
+            */
+            this.setData(this.data);
             this.drawLineA();
-            let map = this.map;
+            //let map = this.map;
             this.flyTo();
-            //return;
-            //let polygon = turf.polygon([coo], { name: 'poly1' });
+            return;
+            //let polygon = turf.polygon([coo], { name: "poly1" });
             //polygon = turf.bezierSpline(polygon);
             //            console.log(polygon)
             /*
             this.map.addLayer({
-                'id': this.circleId,
-                'type': 'fill',
-                'source': this.lineId,
-                'layout': {
-                    visibility:(this.visible)? 'visible': 'none'
+                "id": this.circleId,
+                "type": "fill",
+                "source": this.lineId,
+                "layout": {
+                    visibility:(this.visible)? "visible": "none"
                 },
-                'paint': {
-                    //'fill-color': '#ff9900',
-                    //'fill-opacity': 0.4,
+                "paint": {
+                    //"fill-color": "#ff9900",
+                    //"fill-opacity": 0.4,
                 },
-                'filter': ['==', '$type', 'Polygon']
+                "filter": ["==", "$type", "Polygon"]
             });
             */
             //this.setLine(this.line);
             //this.setFill(this.fill);
             map.addLayer({
                 id: this.pulsingId,
-                type: 'symbol',
+                type: "symbol",
                 source: this.lineId,
                 layout: {
-                    //visibility:['get', 'visible'],
-                    'icon-image': 'pulsing-dot',
-                    'icon-size': 0.4,
-                    'icon-rotate': ['get', 'heading'],
-                    'icon-allow-overlap': true,
-                    'icon-ignore-placement': true,
+                    //visibility:["get", "visible"],
+                    "icon-image": "pulsing-dot",
+                    "icon-size": 0.4,
+                    "icon-rotate": ["get", "heading"],
+                    "icon-allow-overlap": true,
+                    "icon-ignore-placement": true,
                 },
                 paint: {},
-                //filter: ['in', '$type', 'Point']
-                filter: ['in', 'dot', 'dot']
-            });
-            map.addLayer({
-                id: this.layerMobilId,
-                type: 'symbol',
-                source: this.lineId,
-                layout: {
-                    visibility: 'visible',
-                    'icon-image': 'vehiculo_004',
-                    'icon-size': 0.4,
-                    'icon-rotate': ['get', 'heading'],
-                    'icon-allow-overlap': true,
-                    'icon-ignore-placement': true,
-                },
-                paint: {
-                    //'icon-color':'#4d0000',
-                    'icon-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['get', 'speed'],
-                        0,
-                        'green',
-                        25,
-                        'yellow',
-                        50,
-                        'blue',
-                        75,
-                        'green',
-                        100,
-                        'rgb(209,229,240)',
-                        120,
-                        'orange',
-                        140,
-                        'red',
-                        160,
-                        'black'
-                    ],
-                },
-                filter: ["in", 'dot', '']
-                //filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
+                //filter: ["in", "$type", "Point"]
+                filter: ["in", "dot", "dot"]
             });
             map.addLayer({
                 id: this.nodesId + "2",
-                type: 'circle',
+                type: "circle",
                 source: this.lineIdA,
                 layout: {
-                    visibility: 'visible'
+                    visibility: "visible"
                 },
                 paint: {
-                    'circle-radius': 5,
-                    'circle-opacity': 0.8,
-                    'circle-color': 'green',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
+                    "circle-radius": 5,
+                    "circle-opacity": 0.8,
+                    "circle-color": "green",
+                    "circle-stroke-color": "#ff3300",
+                    "circle-stroke-width": 1
                 },
-                //filter: ['in', '$type', 'Point']
-                filter: ["in", 'type', 'm']
-                //filter: ["in", 'type']
+                //filter: ["in", "$type", "Point"]
+                filter: ["in", "type", "m"]
+                //filter: ["in", "type"]
             });
             //this.setLine(this.line);
             //this.setFill(this.fill);
             this.coordinates = [];
+        }
+        setData(data) {
+            this.data = data;
+            this.coordinates = [];
+            let fixDelay = 0;
+            let ts = [];
+            this.data.forEach((data, index) => {
+                this.coordinates.push(data.coordinates);
+                ts[index] = data.ts;
+                if (index > 0) {
+                    if (ts[index] - ts[index - 1] > 120) {
+                        fixDelay += (ts[index] - ts[index - 1]) - 120;
+                    }
+                }
+                this.data[index].ts = data.ts - ts[0] - fixDelay;
+            });
+            /*
+            for(let x in this.data){
+                this.coordinates.push(this.data[x].coordinates);
+                
+                ts[x] = this.data[x].ts;
+                if(x>0){
+                    if(ts[x] - ts[x-1]>120){
+                        fixDelay += (ts[x] - ts[x-1]) - 120;
+                    }
+                }
+                
+                
+                this.data[x].ts = this.data[x].ts - ts[0] - fixDelay;
+                
+            }
+            */
+            this.coordinatesInit = this.coordinates.slice();
+            console.log(this.data);
+            //let index = this.data.findIndex((e)=>e.ts>=885);            
+        }
+        drawLineA() {
+            const roadSource = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [{
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "LineString",
+                                "coordinates": this.coordinatesInit
+                            }
+                        }] //[polygon, point]
+                }
+            };
+            this.map.addSource(this.roadSourceId, roadSource);
+            this.map.addLayer({
+                "id": this.roadLayerId,
+                "type": "line",
+                "source": this.roadSourceId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    "visibility": (this.visible) ? "visible" : "none"
+                },
+                "paint": {
+                    "line-color": "#ff9900",
+                    "line-width": 2,
+                    "line-opacity": 0.8,
+                    //"line-gap-width":4,
+                    "line-dasharray": [2, 2]
+                },
+                "filter": ["==", "$type", "LineString"]
+            });
+            /*
+            let lineString = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": this.coordinatesInit
+                }
+            
+            };
+
+            mainSource.data.features.push(lineString);
+            */
+            const traceSource = this._line = {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [
+                        {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "LineString",
+                                "coordinates": [[]]
+                            }
+                        }
+                    ]
+                }
+            };
+            this.map.addSource(this.traceSourceId, traceSource);
+            this.map.addLayer({
+                "id": this.traceLayerId,
+                "type": "line",
+                "source": this.traceSourceId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    visibility: (this.visible) ? "visible" : "none"
+                },
+                "paint": {
+                    "line-color": ["get", "color"],
+                    "line-width": 5,
+                },
+                "filter": ["==", "$type", "LineString"]
+            });
+            //this.map.addSource(this.layerSourceId, this.dataFilter(this.coordinatesInit));
+            this.map.addSource(this.nodeSourceId, this.dataFilter([]));
+            this.layers2.forEach((layer, index) => {
+                console.log(layer);
+                if (layer.features && Array.isArray(layer.features)) {
+                    layer.features.forEach((feature, index) => {
+                        this.createLayer(index, feature);
+                    });
+                }
+                //e.id = "t_layer"+index;
+                //e.map = this.map;
+                //e.data = this.data;
+                //e.range = [null, null];
+                //e.source = this.layerSourceId;
+                //this._layers[index] = new TraceLayer(e);
+                //this.createLayer(index, e);
+            });
+            //this.map.setFilter("t_layer"+0,[">=",["get","i"],100]);
+            //this.map.setFilter("t_layer"+1,[">=",["get","i"],100]);
+            //this.map.setFilter("t_layer"+2,[">=",["get","i"],100]);
+            //this.map.setFilter("t_layer"+10,["<=",["get","i"],30]);
+            this.map.addLayer({
+                id: this.mobilLayerId,
+                type: "symbol",
+                source: this.traceSourceId,
+                layout: {
+                    visibility: "visible",
+                    "icon-image": "vehiculo_004",
+                    "icon-size": 0.4,
+                    "icon-rotate": ["get", "heading"],
+                    "icon-allow-overlap": true,
+                    "icon-ignore-placement": true,
+                },
+                paint: {
+                    //"icon-color":"#4d0000",
+                    "icon-color": [
+                        "interpolate",
+                        ["linear"],
+                        ["get", "speed"],
+                        0,
+                        "green",
+                        25,
+                        "yellow",
+                        50,
+                        "blue",
+                        75,
+                        "green",
+                        100,
+                        "rgb(209,229,240)",
+                        120,
+                        "orange",
+                        140,
+                        "red",
+                        160,
+                        "black"
+                    ],
+                },
+                filter: ["in", "dot", '']
+                //filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
+            });
+            return;
+            this.coordinatesInit.forEach((element, index) => {
+                let point = {
+                    type: "Feature",
+                    "properties": {
+                        "iconImage": this.data[index].iconImage,
+                        "speed": this.data[index].speed,
+                        "heading": this.data[index].heading,
+                        "event": this.data[index].event,
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: element
+                    }
+                };
+                geojson.data.features.push(point);
+            });
+            this.map.addSource(this.lineIdA, geojson);
+            this.map.addLayer({
+                "id": this.lineIdA,
+                "type": "line",
+                "source": this.lineIdA,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    visibility: (this.visible) ? "visible" : "none"
+                },
+                "paint": {
+                    "line-color": "#ff9900",
+                    "line-width": 2,
+                    "line-opacity": 0.8,
+                    //"line-gap-width":4,
+                    "line-dasharray": [2, 2]
+                },
+                "filter": ["==", "$type", "LineString"]
+            });
+            this.map.addLayer({
+                id: this.lineIdA + "3",
+                type: "circle",
+                "minzoom": 13,
+                "source": this.lineIdA,
+                layout: {
+                    visibility: "visible"
+                },
+                paint: {
+                    "circle-radius": 4,
+                    //"circle-opacity":["case",["=>",["get","type"],30] , 0.0, 0.8],
+                    //"circle-color": "white",
+                    "circle-color": ["case", [">=", ["get", "speed"], 31], "red", [">=", ["get", "speed"], 21], "yellow", [">=", ["get", "speed"], 11], '#00d4ff', [">=", ["get", "speed"], 1], '#f743b7', "purple"],
+                    "circle-stroke-color": "#ffffff",
+                    "circle-stroke-width": 1
+                },
+                //filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
+                //filter:['>=',"speed",31]
+                //filter:["case",[">=",["get","speed"],31], true,false]
+                filter: ["any", ['>=', "speed", 31], ['>=', "speed", 30]]
+            });
+            return;
+            this.map.addLayer({
+                id: this.lineIdA + "3",
+                type: "symbol",
+                "source": this.lineIdA,
+                layout: {
+                    //visibility:["get", "visible"],
+                    "icon-image": ["get", "iconImage"],
+                    "icon-size": 0.4,
+                    "icon-rotate": ["get", "heading"],
+                    "icon-allow-overlap": true,
+                    "icon-ignore-placement": true,
+                },
+                paint: {},
+                //filter: ["in", "$type", "Point"]
+                //filter:["in","dot", "dot"]
+                "filter": ['==', "$type", "Point"]
+            });
+            return;
+            this.map.addLayer({
+                id: this.nodesId + "cc",
+                type: "circle",
+                source: this.lineIdA,
+                layout: {
+                    visibility: "none"
+                },
+                paint: {
+                    "circle-radius": 3,
+                    "circle-opacity": 0.5,
+                    "circle-color": "white",
+                    "circle-stroke-color": "#ff3300",
+                    "circle-stroke-width": 1
+                },
+                filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
+            });
         }
         setLine(info) {
             for (let p in info) {
@@ -3282,14 +3541,14 @@ var MapBox = (($, turf) => {
             }
         }
         setVisible(value) {
-            let visible = 'none';
+            let visible = "none";
             if (value) {
-                visible = 'visible';
+                visible = "visible";
             }
-            this.map.setLayoutProperty(this.lineId, 'visibility', visible);
-            this.map.setLayoutProperty(this.circleId, 'visibility', visible);
+            this.map.setLayoutProperty(this.lineId, "visibility", visible);
+            this.map.setLayoutProperty(this.circleId, "visibility", visible);
             if (this._play) {
-                this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
+                this.map.setLayoutProperty(this.nodesId, "visibility", visible);
             }
         }
         add(lngLat) {
@@ -3313,7 +3572,7 @@ var MapBox = (($, turf) => {
             let filter = [];
             if (info.in !== undefined) {
                 info.in.forEach((value) => {
-                    filter = ['in', info.prop, value];
+                    filter = ["in", info.prop, value];
                 });
                 return filter;
             }
@@ -3337,63 +3596,63 @@ var MapBox = (($, turf) => {
         }
         circleLayer(index, info) {
             let paint = {
-                'circle-radius': info.radius || 4,
-                //'circle-opacity':["case",["=>",['get','type'],30] , 0.0, 0.8],
-                'circle-color': info.color || "red",
-                //'circle-color':["case",[">=",['get','speed'],31] , 'red',[">=",['get','speed'],21],'yellow' ,[">=",['get','speed'],11],'#00d4ff',[">=",['get','speed'],1],'#f743b7','purple'],
-                'circle-stroke-color': info.borderColor || "white",
-                'circle-stroke-width': info.borderWidth || 2
+                "circle-radius": info.radius || 4,
+                //"circle-opacity":["case",["=>",["get","type"],30] , 0.0, 0.8],
+                "circle-color": info.color || "red",
+                //"circle-color":["case",[">=",["get","speed"],31] , "red",[">=",["get","speed"],21],"yellow" ,[">=",["get","speed"],11],'#00d4ff',[">=",["get","speed"],1],'#f743b7',"purple"],
+                "circle-stroke-color": info.borderColor || "white",
+                "circle-stroke-width": info.borderWidth || 2
             };
             if (info.paint) {
                 for (let x in info.paint) {
-                    paint['circle-' + x] = info.paint[x];
+                    paint["circle-" + x] = info.paint[x];
                 }
             }
-            paint['circle-' + "color"] = info.color || "blue";
-            paint['circle-' + "opacity"] = 0.9;
+            paint["circle-" + "color"] = info.color || "blue";
+            paint["circle-" + "opacity"] = 0.9;
             let filter = this.createLayerFilter(info);
             console.log(filter);
             /*if(info.filter){
                 for(let x in info.filter){
-                    filter = ['in', x, info.filter[x]]
+                    filter = ["in", x, info.filter[x]]
                 }
             }*/
+            const id = this.layerId + this.layerIndex++;
+            this.layersId.push(id);
             this.map.addLayer({
-                'id': this.layerId + this.layerIndex++,
-                'type': 'circle',
-                'minzoom': 13,
-                'source': this.layerSourceId,
-                'layout': {
-                    'visibility': info.visible ? 'visible' : "none"
+                "id": id,
+                "type": "circle",
+                "minzoom": 13,
+                "source": this.nodeSourceId,
+                "layout": {
+                    "visibility": info.visible ? "visible" : "none"
                 },
-                'paint': paint,
-                //filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
-                //filter:['>=','speed',31]
-                //filter:["case",[">=",['get','speed'],31], true,false]
-                //filter:['any',['>=','speed',31],['>=','speed',30]]
+                "paint": paint,
+                //filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
+                //filter:['>=',"speed",31]
+                //filter:["case",[">=",["get","speed"],31], true,false]
+                //filter:["any",['>=',"speed",31],['>=',"speed",30]]
                 filter: filter
             });
         }
-        createCircleFeature(info) {
-        }
-        createPulsingFeature(info) {
-        }
         pulsingLayer(index, info) {
+            const id = this.layerId + this.layerIndex++;
+            this.layersId.push(id);
             let filter = this.createLayerFilter(info);
             this.map.addLayer({
-                'id': this.layerId + this.layerIndex++,
-                'type': 'symbol',
-                'source': this.layerSourceId,
-                'layout': {
-                    //visibility:['get', 'visible'],
-                    'visibility': info.visible ? 'visible' : "none",
-                    'icon-image': `pulsing-${info.color}`,
-                    'icon-size': 0.4,
-                    'icon-rotate': ['get', 'heading'],
-                    'icon-allow-overlap': true,
-                    'icon-ignore-placement': true,
+                "id": id,
+                "type": "symbol",
+                "source": this.nodeSourceId,
+                "layout": {
+                    //visibility:["get", "visible"],
+                    "visibility": info.visible ? "visible" : "none",
+                    "icon-image": `pulsing-${info.color}`,
+                    "icon-size": 0.4,
+                    "icon-rotate": ["get", "heading"],
+                    "icon-allow-overlap": true,
+                    "icon-ignore-placement": true,
                 },
                 filter: filter
             });
@@ -3408,199 +3667,16 @@ var MapBox = (($, turf) => {
             };
             data.forEach((element, index) => {
                 let point = {
-                    'type': "Feature",
-                    'properties': this.data[index],
-                    'geometry': {
-                        'type': "Point",
-                        'coordinates': element
+                    "type": "Feature",
+                    "properties": this.data[index],
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": element
                     }
                 };
                 geojson.data.features.push(point);
             });
             return geojson;
-        }
-        drawLineA() {
-            let geojson = {
-                "type": "geojson",
-                "data": {
-                    "type": "FeatureCollection",
-                    "features": [] //[polygon, point]
-                }
-            };
-            let lineString = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": this.coordinatesInit
-                }
-            };
-            geojson.data.features.push(lineString);
-            this.map.addSource(this.lineIdA, geojson);
-            let polygon = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": [[]]
-                }
-            };
-            this._line = {
-                "type": "geojson",
-                "data": {
-                    "type": "FeatureCollection",
-                    "features": [polygon]
-                }
-            };
-            this.map.addSource(this.lineId, this._line);
-            this.map.addLayer({
-                'id': this.lineIdA,
-                'type': 'line',
-                'source': this.lineIdA,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    'visibility': (this.visible) ? 'visible' : 'none'
-                },
-                'paint': {
-                    'line-color': '#ff9900',
-                    'line-width': 2,
-                    'line-opacity': 0.8,
-                    //'line-gap-width':4,
-                    'line-dasharray': [2, 2]
-                },
-                'filter': ['==', '$type', 'LineString']
-            });
-            this.map.addLayer({
-                'id': this.lineId,
-                'type': 'line',
-                'source': this.lineId,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    visibility: (this.visible) ? 'visible' : 'none'
-                },
-                'paint': {
-                    'line-color': ['get', 'color'],
-                    'line-width': 3,
-                },
-                'filter': ['==', '$type', 'LineString']
-            });
-            //this.map.addSource(this.layerSourceId, this.dataFilter(this.coordinatesInit));
-            this.map.addSource(this.layerSourceId, this.dataFilter([]));
-            this.layers2.forEach((layer, index) => {
-                console.log(layer);
-                if (layer.features && Array.isArray(layer.features)) {
-                    layer.features.forEach((feature, index) => {
-                        this.createLayer(index, feature);
-                    });
-                }
-                //e.id = 't_layer'+index;
-                //e.map = this.map;
-                //e.data = this.data;
-                //e.range = [null, null];
-                //e.source = this.layerSourceId;
-                //this._layers[index] = new TraceLayer(e);
-                //this.createLayer(index, e);
-            });
-            //this.map.setFilter('t_layer'+0,['>=',['get','i'],100]);
-            //this.map.setFilter('t_layer'+1,['>=',['get','i'],100]);
-            //this.map.setFilter('t_layer'+2,['>=',['get','i'],100]);
-            //this.map.setFilter('t_layer'+10,['<=',['get','i'],30]);
-            return;
-            this.coordinatesInit.forEach((element, index) => {
-                let point = {
-                    type: "Feature",
-                    'properties': {
-                        'iconImage': this.data[index].iconImage,
-                        'speed': this.data[index].speed,
-                        'heading': this.data[index].heading,
-                        "event": this.data[index].event,
-                    },
-                    geometry: {
-                        type: "Point",
-                        coordinates: element
-                    }
-                };
-                geojson.data.features.push(point);
-            });
-            this.map.addSource(this.lineIdA, geojson);
-            this.map.addLayer({
-                'id': this.lineIdA,
-                'type': 'line',
-                'source': this.lineIdA,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    visibility: (this.visible) ? 'visible' : 'none'
-                },
-                'paint': {
-                    'line-color': '#ff9900',
-                    'line-width': 2,
-                    'line-opacity': 0.8,
-                    //'line-gap-width':4,
-                    'line-dasharray': [2, 2]
-                },
-                'filter': ['==', '$type', 'LineString']
-            });
-            this.map.addLayer({
-                id: this.lineIdA + "3",
-                type: 'circle',
-                'minzoom': 13,
-                'source': this.lineIdA,
-                layout: {
-                    visibility: 'visible'
-                },
-                paint: {
-                    'circle-radius': 4,
-                    //'circle-opacity':["case",["=>",['get','type'],30] , 0.0, 0.8],
-                    //'circle-color': 'white',
-                    'circle-color': ["case", [">=", ['get', 'speed'], 31], 'red', [">=", ['get', 'speed'], 21], 'yellow', [">=", ['get', 'speed'], 11], '#00d4ff', [">=", ['get', 'speed'], 1], '#f743b7', 'purple'],
-                    'circle-stroke-color': "#ffffff",
-                    'circle-stroke-width': 1
-                },
-                //filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
-                //filter:['>=','speed',31]
-                //filter:["case",[">=",['get','speed'],31], true,false]
-                filter: ['any', ['>=', 'speed', 31], ['>=', 'speed', 30]]
-            });
-            return;
-            this.map.addLayer({
-                id: this.lineIdA + "3",
-                type: 'symbol',
-                'source': this.lineIdA,
-                layout: {
-                    //visibility:['get', 'visible'],
-                    'icon-image': ['get', 'iconImage'],
-                    'icon-size': 0.4,
-                    'icon-rotate': ['get', 'heading'],
-                    'icon-allow-overlap': true,
-                    'icon-ignore-placement': true,
-                },
-                paint: {},
-                //filter: ['in', '$type', 'Point']
-                //filter:['in','dot', 'dot']
-                'filter': ['==', '$type', 'Point']
-            });
-            return;
-            this.map.addLayer({
-                id: this.nodesId + "cc",
-                type: 'circle',
-                source: this.lineIdA,
-                layout: {
-                    visibility: 'none'
-                },
-                paint: {
-                    'circle-radius': 3,
-                    'circle-opacity': 0.5,
-                    'circle-color': 'white',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
-                },
-                filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
-            });
         }
         draw(nextPoint, nextBearing) {
             this.coordinates = this.coordinatesInit.slice(0, this._lastIndex);
@@ -3608,11 +3684,11 @@ var MapBox = (($, turf) => {
             if (this._lastIndex > 0) {
                 // creating the trace line of fixed length
                 let line = turf.lineString(this.coordinates);
-                let totalLength = turf.length(line, { units: 'meters' });
+                let totalLength = turf.length(line, { units: "meters" });
                 var start = totalLength - 1000;
                 var stop = totalLength;
                 if (start > 0) {
-                    var sliced = turf.lineSliceAlong(line, start, stop, { units: 'meters' });
+                    var sliced = turf.lineSliceAlong(line, start, stop, { units: "meters" });
                     this.coordinates = turf.getCoords(sliced);
                 }
             }
@@ -3623,8 +3699,8 @@ var MapBox = (($, turf) => {
                     "features": [
                         {
                             "type": "Feature",
-                            'properties': {
-                                'color': '#f743d8'
+                            "properties": {
+                                "color": "#f743d8"
                             },
                             "geometry": {
                                 "type": "LineString",
@@ -3642,8 +3718,8 @@ var MapBox = (($, turf) => {
             let point = {
                 type: "Feature",
                 properties: {
-                    'heading': nextBearing,
-                    'speed': speed,
+                    "heading": nextBearing,
+                    "speed": speed,
                     dot: '',
                 },
                 geometry: {
@@ -3652,8 +3728,8 @@ var MapBox = (($, turf) => {
                 }
             };
             geojson.data.features.push(point);
-            this.map.getSource(this.lineId).setData(geojson.data);
-            this.map.getSource(this.layerSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex)).data);
+            this.map.getSource(this.traceSourceId).setData(geojson.data);
+            this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex)).data);
             this.ondraw(this.coordinates);
         }
         restart() {
@@ -3661,16 +3737,16 @@ var MapBox = (($, turf) => {
             this.play();
         }
         setStatus(status) {
+            this._status = status;
             if (status == 0) {
-                this.map.setLayoutProperty(this.lineId, "visibility", "none");
-                this.map.setLayoutProperty(this.layerMobilId, "visibility", "none");
-                this.map.getSource(this.layerSourceId).setData(this.dataFilter(this.coordinatesInit).data);
+                this.map.setLayoutProperty(this.traceLayerId, "visibility", "none");
+                this.map.setLayoutProperty(this.mobilLayerId, "visibility", "none");
+                this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit).data);
             }
             else {
-                this.map.setLayoutProperty(this.lineId, "visibility", "visible");
-                this.map.setLayoutProperty(this.layerMobilId, "visibility", "visible");
+                this.map.setLayoutProperty(this.traceLayerId, "visibility", "visible");
+                this.map.setLayoutProperty(this.mobilLayerId, "visibility", "visible");
             }
-            this._status = status;
         }
         getStatus() {
             return this._status;
@@ -3709,8 +3785,8 @@ var MapBox = (($, turf) => {
             this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
         }
         pause() {
-            this.setStatus(2);
             cancelAnimationFrame(this.animation);
+            this.setStatus(2);
             this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
         }
         play() {
@@ -3743,8 +3819,8 @@ var MapBox = (($, turf) => {
                     let pointFrom = this.coordinatesInit[index - 1];
                     let pointTo = this.coordinatesInit[index];
                     let line = turf.lineString([pointFrom, pointTo]);
-                    let totalLength = turf.length(line, { units: 'meters' });
-                    nextPoint = turf.getCoords(turf.along(line, totalLength - delta * totalLength / totalTime, { units: 'meters' }));
+                    let totalLength = turf.length(line, { units: "meters" });
+                    nextPoint = turf.getCoords(turf.along(line, totalLength - delta * totalLength / totalTime, { units: "meters" }));
                     // calculating simulated bearing
                     let point1 = turf.point(pointFrom);
                     let point2 = turf.point(pointTo);
@@ -3799,15 +3875,27 @@ var MapBox = (($, turf) => {
         }
         delete() {
             this.stop();
-            let map = this.map;
-            if (map.getLayer(this.circleId))
-                map.removeLayer(this.circleId);
-            if (map.getLayer(this.lineId))
-                map.removeLayer(this.lineId);
-            if (map.getLayer(this.nodesId))
-                map.removeLayer(this.nodesId);
-            if (map.getSource(this.lineId))
-                map.removeSource(this.lineId);
+            const map = this.map;
+            /* Delete Custom Layers */
+            this.layersId.forEach((id) => {
+                if (map.getLayer(id)) {
+                    map.removeLayer(id);
+                }
+            });
+            /* Delete Layers */
+            if (map.getLayer(this.mobilLayerId))
+                map.removeLayer(this.mobilLayerId);
+            if (map.getLayer(this.traceLayerId))
+                map.removeLayer(this.traceLayerId);
+            if (map.getLayer(this.roadLayerId))
+                map.removeLayer(this.roadLayerId);
+            /* Delete Sources */
+            if (map.getSource(this.nodeSourceId))
+                map.removeSource(this.nodeSourceId);
+            if (map.getSource(this.traceSourceId))
+                map.removeSource(this.traceSourceId);
+            if (map.getSource(this.roadSourceId))
+                map.removeSource(this.roadSourceId);
         }
         flyTo(zoom, speed) {
             var coordinates = this.coordinates;
@@ -3842,7 +3930,7 @@ var MapBox = (($, turf) => {
             this.map.panTo(centroid.geometry.coordinates, { duration: duration || this.panDuration });
         }
         showLayer(index, value) {
-            this.map.setLayoutProperty(this.layerId + index, 'visibility', (value) ? "visible" : "none");
+            this.map.setLayoutProperty(this.layerId + index, "visibility", (value) ? "visible" : "none");
         }
     }
     class Trace2 {
@@ -3915,7 +4003,7 @@ var MapBox = (($, turf) => {
         }
         init() {
             let map = this.map;
-            //let polygon = turf.polygon([coo], { name: 'poly1' });
+            //let polygon = turf.polygon([coo], { name: "poly1" });
             //polygon = turf.bezierSpline(polygon);
             //            console.log(polygon)
             let geojson = {
@@ -3927,37 +4015,37 @@ var MapBox = (($, turf) => {
             };
             this.map.addSource(this.lineId, geojson);
             this.map.addLayer({
-                'id': this.lineId,
-                'type': 'line',
-                'source': this.lineId,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round',
-                    visibility: (this.visible) ? 'visible' : 'none'
+                "id": this.lineId,
+                "type": "line",
+                "source": this.lineId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round",
+                    visibility: (this.visible) ? "visible" : "none"
                 },
-                'paint': {
-                    'line-color': '#ff3300',
-                    'line-width': 4,
+                "paint": {
+                    "line-color": "#ff3300",
+                    "line-width": 4,
                 },
-                'filter': ['==', '$type', 'LineString']
+                "filter": ["==", "$type", "LineString"]
             });
             map.addLayer({
                 id: this.nodesId,
-                type: 'circle',
+                type: "circle",
                 source: this.lineId,
                 layout: {
-                    visibility: 'none'
+                    visibility: "none"
                 },
                 paint: {
-                    'circle-radius': 4,
-                    'circle-opacity': ["case", ["==", ['get', 'type'], 'm'], 0.0, 0.8],
-                    'circle-color': 'white',
-                    'circle-stroke-color': "#ff3300",
-                    'circle-stroke-width': 1
+                    "circle-radius": 4,
+                    "circle-opacity": ["case", ["==", ["get", "type"], "m"], 0.0, 0.8],
+                    "circle-color": "white",
+                    "circle-stroke-color": "#ff3300",
+                    "circle-stroke-width": 1
                 },
-                filter: ['in', '$type', 'Point']
-                //filter: ["in", 'type', 'h', 'm']
-                //filter: ["in", 'type']
+                filter: ["in", "$type", "Point"]
+                //filter: ["in", "type", "h", "m"]
+                //filter: ["in", "type"]
             });
             this.setLine(this.line);
             this.coordinates_ = [
@@ -3991,12 +4079,12 @@ var MapBox = (($, turf) => {
             this.coordinates.push(coordinates);
             this.features[0].geometry.coordinates = this.coordinates;
             let point = {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': coordinates
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": coordinates
                 },
-                'properties': properties
+                "properties": properties
             };
             this.features.push(point);
         }
@@ -4013,12 +4101,12 @@ var MapBox = (($, turf) => {
             }
         }
         setVisible(value) {
-            let visible = 'none';
+            let visible = "none";
             if (value) {
-                visible = 'visible';
+                visible = "visible";
             }
-            this.map.setLayoutProperty(this.lineId, 'visibility', visible);
-            this.map.setLayoutProperty(this.nodesId, 'visibility', visible);
+            this.map.setLayoutProperty(this.lineId, "visibility", visible);
+            this.map.setLayoutProperty(this.nodesId, "visibility", visible);
         }
         add(lngLat) {
             this.coordinates.push([lngLat.lng, lngLat.lat]);
@@ -4035,18 +4123,18 @@ var MapBox = (($, turf) => {
             this.parent.stop();
             this._play = true;
             let map = this.map;
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setVisible(true);
             this.setFill(this.fillEdit);
             this.setLine(this.lineEdit);
-            //this.map.setLayoutProperty(this.nodesId, 'visibility', 'visible');
-            //this.map.setPaintProperty(this.lineId, 'line-dasharray', [2,2]);
+            //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
+            //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
             let place = null;
             let type = null;
             let place_one = null;
             let down1 = false;
             let fnUp = (e) => {
-                map.off('mousemove', fnMove);
+                map.off("mousemove", fnMove);
                 type = null;
                 down1 = false;
             };
@@ -4055,7 +4143,7 @@ var MapBox = (($, turf) => {
                 this.draw();
             };
             let fnUp2 = (e) => {
-                map.off('mousemove', fnMove2);
+                map.off("mousemove", fnMove2);
             };
             let fnMove2 = (e) => {
                 //this.move(place_one, e.lngLat);
@@ -4071,7 +4159,7 @@ var MapBox = (($, turf) => {
                 place_one = e.lngLat;
                 this.draw();
             };
-            map.on('mousedown', this.nodesId, this._mousedown = (e) => {
+            map.on("mousedown", this.nodesId, this._mousedown = (e) => {
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 var features = map.queryRenderedFeatures(e.point, {
@@ -4083,20 +4171,20 @@ var MapBox = (($, turf) => {
                 if (type == "m" && !this.split(place, [e.lngLat.lng, e.lngLat.lat])) {
                     return;
                 }
-                map.on('mousemove', fnMove);
-                map.once('mouseup', fnUp);
+                map.on("mousemove", fnMove);
+                map.once("mouseup", fnUp);
             });
-            map.on('mousedown', this.circleId, this._mousedown2 = (e) => {
+            map.on("mousedown", this.circleId, this._mousedown2 = (e) => {
                 if (down1) {
                     return;
                 }
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 place_one = e.lngLat;
-                map.on('mousemove', fnMove2);
-                map.once('mouseup', fnUp2);
+                map.on("mousemove", fnMove2);
+                map.once("mouseup", fnUp2);
             });
-            map.on('click', this._click = (e) => {
+            map.on("click", this._click = (e) => {
                 //db (e.originalEvent.button+".........", "red","yellow")
                 var features = this.map.queryRenderedFeatures(e.point, {
                     layers: [this.nodesId]
@@ -4119,7 +4207,7 @@ var MapBox = (($, turf) => {
                 }
                 return;
             });
-            map.on('contextmenu', this._contextmenu = (e) => {
+            map.on("contextmenu", this._contextmenu = (e) => {
                 e.preventDefault();
                 this.coordinates.pop();
                 this.draw();
@@ -4129,16 +4217,16 @@ var MapBox = (($, turf) => {
         }
         stop() {
             if (this._play) {
-                this.map.off('click', this._click);
-                this.map.off('contextmenu', this._contextmenu);
-                this.map.off('mousedown', this.nodesId, this._mousedown);
-                this.map.off('mousedown', this.circleId, this._mousedown2);
-                // this.map.setPaintProperty(this.lineId, 'line-dasharray', [1]);
-                //'line-dasharray':[2,2]
-                //this.map.setPaintProperty(this.lineId, 'line-color', "#fd8d3c");
-                //map.on('mousemove', fnMove);
+                this.map.off("click", this._click);
+                this.map.off("contextmenu", this._contextmenu);
+                this.map.off("mousedown", this.nodesId, this._mousedown);
+                this.map.off("mousedown", this.circleId, this._mousedown2);
+                // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+                //"line-dasharray":[2,2]
+                //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
+                //map.on("mousemove", fnMove);
             }
-            this.map.setLayoutProperty(this.nodesId, 'visibility', 'none');
+            this.map.setLayoutProperty(this.nodesId, "visibility", "none");
             this.setFill(this.fill);
             this.setLine(this.line);
             //this._mode = 0;
@@ -4193,12 +4281,12 @@ var MapBox = (($, turf) => {
         }
         createCircle(center, radio) {
             let length;
-            if (typeof radio === 'number') {
+            if (typeof radio === "number") {
                 length = radio;
             }
             else {
                 var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
-                length = turf.length(line, { units: 'kilometers' });
+                length = turf.length(line, { units: "kilometers" });
             }
             this.radio = length;
             let data = createGeoJSONCircle([center.lng, center.lat], length);
@@ -4251,18 +4339,6 @@ var MapBox = (($, turf) => {
             this.map.panTo(centroid.geometry.coordinates, { duration: duration || this.panDuration });
         }
     }
-    //map.addSource("polygon", createGeoJSONCircle([-93.6248586, 41.58527859], 0.5));
-    /*
-    map.addLayer({
-    "id": "polygon",
-    "type": "fill",
-    "source": "polygon",
-    "layout": {},
-    "paint": {
-        "fill-color": "blue",
-        "fill-opacity": 0.6
-    }
-}); */
     let ii = 0;
     class Pulsing {
         constructor(map, option) {
@@ -4284,10 +4360,10 @@ var MapBox = (($, turf) => {
             this.data = new Uint8Array(this.width * this.height * 4);
         }
         onAdd() {
-            let canvas = document.createElement('canvas');
+            let canvas = document.createElement("canvas");
             canvas.width = this.width;
             canvas.height = this.height;
-            this.context = canvas.getContext('2d');
+            this.context = canvas.getContext("2d");
         }
         render() {
             let duration = 1000;
@@ -4309,7 +4385,7 @@ var MapBox = (($, turf) => {
             //context.fillStyle = 'rgba(255, 100, 100, 1)';
             context.fillStyle = `rgb(${this.center[0]},${this.center[1]},${this.center[2]})`;
             //242, 255, 62
-            context.strokeStyle = 'white';
+            context.strokeStyle = "white";
             context.lineWidth = 2 + 4 * (1 - t);
             context.fill();
             context.stroke();
@@ -4342,17 +4418,17 @@ var MapBox = (($, turf) => {
             }
             let map = this.map;
             this._nodes = {
-                'type': 'FeatureCollection',
-                'features': []
+                "type": "FeatureCollection",
+                "features": []
             };
             this._line = {
-                'type': 'geojson',
-                'data': {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': this.coordinates
+                "type": "geojson",
+                "data": {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": this.coordinates
                     }
                 }
             };
@@ -4360,104 +4436,104 @@ var MapBox = (($, turf) => {
             this.coordinates.forEach((el, index) => {
                 ii = ii + 5;
                 let point = {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': [el[0], el[1]]
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [el[0], el[1]]
                     },
-                    'properties': {
-                        'id': String(new Date().getTime()),
-                        'index': index,
-                        'angle': ii
+                    "properties": {
+                        "id": String(new Date().getTime()),
+                        "index": index,
+                        "angle": ii
                     }
                 };
                 this._nodes.features.push(point);
             });
             map.addSource(this.nodesId, {
-                'type': 'geojson',
-                'data': this._nodes
+                "type": "geojson",
+                "data": this._nodes
             });
             this.map.addSource(this.lineId, this._line);
             this.map.addLayer({
-                'id': this.lineId,
-                'type': 'line',
-                'source': this.lineId,
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round'
+                "id": this.lineId,
+                "type": "line",
+                "source": this.lineId,
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round"
                 },
-                'paint': {
-                    'line-color': 'green',
-                    'line-width': this.lineWidth / 2,
-                    'line-opacity': 0.4,
-                    //'line-gap-width':4,
-                    'line-dasharray': [2, 2]
+                "paint": {
+                    "line-color": "green",
+                    "line-width": this.lineWidth / 2,
+                    "line-opacity": 0.4,
+                    //"line-gap-width":4,
+                    "line-dasharray": [2, 2]
                 }
             });
             /*map.addLayer({
                 id: this.nodesId,
-                type: 'circle',
+                type: "circle",
                 source: this.nodesId,
                 paint: {
-                    'circle-radius': 4,
-                    'circle-opacity':0.0,
-                    'circle-color': '#000',
-                    'circle-stroke-color':"red",
-                    'circle-stroke-width':2
+                    "circle-radius": 4,
+                    "circle-opacity":0.0,
+                    "circle-color": '#000',
+                    "circle-stroke-color":"red",
+                    "circle-stroke-width":2
                 },
-                filter: ['in', '$type', 'Point']
+                filter: ["in", "$type", "Point"]
             });*/
             map.addLayer({
                 id: this.nodesId,
-                type: 'symbol',
+                type: "symbol",
                 source: this.nodesId,
                 layout: {
-                    'icon-image': 't1',
-                    'icon-size': 0.5,
-                    'icon-rotate': ['get', 'angle'],
-                    'text-field': ["format",
+                    "icon-image": "t1",
+                    "icon-size": 0.5,
+                    "icon-rotate": ["get", "angle"],
+                    "text-field": ["format",
                         "foo", { "font-scale": 1.0 },
                         "bar", { "font-scale": 1.0 }
                     ],
-                    'text-font': [
-                        'Open Sans Bold',
-                        'Arial Unicode MS Bold'
+                    "text-font": [
+                        "Open Sans Bold",
+                        "Arial Unicode MS Bold"
                     ],
-                    'text-size': 12,
-                    'text-offset': [0, 1.5]
+                    "text-size": 12,
+                    "text-offset": [0, 1.5]
                 },
-                filter: ['in', '$type', 'Point']
+                filter: ["in", "$type", "Point"]
             });
         }
         setCoordinates(coordinates) {
             this.coordinates = coordinates;
             this._nodes = {
-                'type': 'FeatureCollection',
-                'features': []
+                "type": "FeatureCollection",
+                "features": []
             };
             this._line = {
-                'type': 'geojson',
-                'data': {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': this.coordinates
+                "type": "geojson",
+                "data": {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": this.coordinates
                     }
                 }
             };
             this.coordinates.forEach((el, index) => {
                 ii = ii + 5;
                 let point = {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': [el[0], el[1]]
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [el[0], el[1]]
                     },
-                    'properties': {
-                        'id': String(new Date().getTime()),
-                        'index': index,
-                        'angle': ii
+                    "properties": {
+                        "id": String(new Date().getTime()),
+                        "index": index,
+                        "angle": ii
                     }
                 };
                 this._nodes.features.push(point);
@@ -4483,9 +4559,9 @@ var MapBox = (($, turf) => {
             };
             let fnUp = (e) => {
                 point = null;
-                map.off('mousemove', fnMove);
+                map.off("mousemove", fnMove);
             };
-            map.on('mousedown', this.nodesId, (e) => {
+            map.on("mousedown", this.nodesId, (e) => {
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 var features = map.queryRenderedFeatures(e.point, {
@@ -4495,23 +4571,23 @@ var MapBox = (($, turf) => {
                     var id = features[0].properties.id;
                 }
                 point = features[0].properties.index;
-                //canvas.style.cursor = 'grab';
-                map.on('mousemove', fnMove);
-                map.once('mouseup', fnUp);
+                //canvas.style.cursor = "grab";
+                map.on("mousemove", fnMove);
+                map.once("mouseup", fnUp);
             });
-            map.on('mousedown', (e) => {
+            map.on("mousedown", (e) => {
                 // Prevent the default map drag behavior.
                 //e.preventDefault();
             });
-            map.on('mouseup', (e) => {
+            map.on("mouseup", (e) => {
                 // Prevent the default map drag behavior.
                 //e.preventDefault();
             });
-            map.on('mousemove', (e) => {
+            map.on("mousemove", (e) => {
                 // Prevent the default map drag behavior.
                 //e.preventDefault();
             });
-            map.on('click', (e) => {
+            map.on("click", (e) => {
                 ii++;
                 var features = map.queryRenderedFeatures(e.point, {
                     layers: [this.nodesId]
@@ -4520,10 +4596,10 @@ var MapBox = (($, turf) => {
                     //return;
                 }
                 this.add(e.lngLat);
-                //map.getSource('geojson').setData(this.geojson);
+                //map.getSource("geojson").setData(this.geojson);
             });
             return;
-            map.on('mousedown', (e) => {
+            map.on("mousedown", (e) => {
                 // Prevent the default map drag behavior.
                 e.preventDefault();
                 this.data.data.geometry.coordinates.push([e.lngLat.lng, e.lngLat.lat]);
@@ -4571,24 +4647,24 @@ var MapBox = (($, turf) => {
             }
             let markerHeight = 24, markerRadius = 0, linearOffset = 0;
             let popupOffsets = {
-                'top': [0, 0],
-                'top-left': [0, 0],
-                'top-right': [0, 0],
-                'bottom': [0, -markerHeight / 2 + 5],
-                'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-                'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-                'left': [markerRadius, (markerHeight - markerRadius) * -1],
-                'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+                "top": [0, 0],
+                "top-left": [0, 0],
+                "top-right": [0, 0],
+                "bottom": [0, -markerHeight / 2 + 5],
+                "bottom-left": [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                "bottom-right": [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                "left": [markerRadius, (markerHeight - markerRadius) * -1],
+                "right": [-markerRadius, (markerHeight - markerRadius) * -1]
             };
             let popup = new mapboxgl.Popup({
                 offset: popupOffsets,
-                className: 'my-class'
+                className: "my-class"
             })
                 //.setLngLat(e.lngLat)
                 .setHTML(this.popupInfo)
                 .setMaxWidth("300px"); //.addTo(map);
-            let el = document.createElement('img');
-            el.className = 'marker';
+            let el = document.createElement("img");
+            el.className = "marker";
             el.src = this.image;
             //el.style.width = this.width;
             el.style.height = this.height;
@@ -4690,15 +4766,15 @@ var MapBox = (($, turf) => {
             });
         }
         _create(main) {
-            mapboxgl.accessToken = 'pk.eyJ1IjoieWFubnkyNCIsImEiOiJjazYxZnM5dzMwMzk1M21xbjUyOHVmdjV0In0.4ifqDgs5_PqZd58N1DcVaQ';
+            mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJjazYxZnM5dzMwMzk1M21xbjUyOHVmdjV0In0.4ifqDgs5_PqZd58N1DcVaQ";
             let map = this.map = new mapboxgl.Map({
                 container: this.id,
-                style: 'mapbox://styles/mapbox/streets-v10',
+                style: "mapbox://styles/mapbox/streets-v10",
                 zoom: 10,
                 center: this.latlng,
                 attributionControl: true
             });
-            map.on('load', (event) => {
+            map.on("load", (event) => {
                 if (this.iconImages) {
                     this.iconImages.forEach((e) => {
                         map.loadImage(e.source, (error, image) => {
@@ -4709,39 +4785,39 @@ var MapBox = (($, turf) => {
                         });
                     });
                 }
-                map.addImage('pulsing-blue', new Pulsing(map, {
+                map.addImage("pulsing-blue", new Pulsing(map, {
                     rgb: [0, 255, 255],
                     center: [0, 128, 255]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-yellow', new Pulsing(map, {
+                map.addImage("pulsing-yellow", new Pulsing(map, {
                     rgb: [255, 76, 0],
                     center: [255, 255, 102]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-orange', new Pulsing(map, {
+                map.addImage("pulsing-orange", new Pulsing(map, {
                     rgb: [255, 76, 0],
                     center: [255, 128, 0]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-red', new Pulsing(map, {
+                map.addImage("pulsing-red", new Pulsing(map, {
                     rgb: [255, 255, 204],
                     center: [255, 0, 0]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-pink', new Pulsing(map, {
+                map.addImage("pulsing-pink", new Pulsing(map, {
                     rgb: [247, 67, 183],
                     center: [247, 67, 216]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-green', new Pulsing(map, {
+                map.addImage("pulsing-green", new Pulsing(map, {
                     rgb: [204, 255, 220],
                     center: [102, 255, 153]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-dot', new Pulsing(map, {
+                map.addImage("pulsing-dot", new Pulsing(map, {
                     rgb: [153, 255, 51],
                     center: [0, 204, 0]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-dot2', new Pulsing(map, {
+                map.addImage("pulsing-dot2", new Pulsing(map, {
                     rgb: [247, 67, 183],
                     center: [247, 67, 216]
                 }), { pixelRatio: 3 });
-                map.addImage('pulsing-01', new Pulsing(map, {
+                map.addImage("pulsing-01", new Pulsing(map, {
                     rgb: [255, 76, 0],
                     center: [255, 255, 102]
                 }), { pixelRatio: 3 });
@@ -4749,11 +4825,11 @@ var MapBox = (($, turf) => {
                     "url": "mapbox://mapbox.mapbox-traffic-v1",
                     "type": "vector"
                 };
-                this.map.addSource('mapbox-traffic', traffic);
+                this.map.addSource("mapbox-traffic", traffic);
                 this.map.addLayer({
-                    'id': 'traffic',
-                    'type': 'line',
-                    'source': 'mapbox-traffic',
+                    "id": "traffic",
+                    "type": "line",
+                    "source": "mapbox-traffic",
                     "source-layer": "traffic",
                     "paint": {
                         "line-width": 2.5,
@@ -4800,15 +4876,15 @@ var MapBox = (($, turf) => {
                     }
                 });
             });
-            //map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
-            //map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
-            //map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
+            //map.addControl(this._controls["rule"] = new InfoRuleControl(this), "top-right");
+            //map.addControl(this._controls["poly"] = new PolyControl(this), "top-right");
+            //map.addControl(this._controls["mark"] = new MarkControl(this), "top-right");
             //this.controls = ["rule"];
             function LayerControl() { }
             LayerControl.prototype.onAdd = function (map) {
                 this._map = map;
-                this._container = document.createElement('div');
-                this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+                this._container = document.createElement("div");
+                this._container.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
                 this._container.innerHTML = "<button type='button' class='icon-layer'></button>";
                 return this._container;
             };
@@ -4821,19 +4897,19 @@ var MapBox = (($, turf) => {
             this.controls.forEach((e) => {
                 switch (e) {
                     case "trace":
-                        map.addControl(this._controls["trace"] = new TraceControl(this), 'top-right');
+                        map.addControl(this._controls["trace"] = new TraceControl(this), "top-right");
                         break;
                     case "poly":
-                        map.addControl(this._controls["poly"] = new PolyControl(this), 'top-right');
+                        map.addControl(this._controls["poly"] = new PolyControl(this), "top-right");
                         break;
                     case "rule":
-                        map.addControl(this._controls["rule"] = new InfoRuleControl(this), 'top-right');
+                        map.addControl(this._controls["rule"] = new InfoRuleControl(this), "top-right");
                         break;
                     case "mark":
-                        map.addControl(this._controls["mark"] = new MarkControl(this), 'top-right');
+                        map.addControl(this._controls["mark"] = new MarkControl(this), "top-right");
                         break;
                     case "layer":
-                        //map.addControl(this._controls["layer"] = new LayerControl(), 'top-right');
+                        //map.addControl(this._controls["layer"] = new LayerControl(), "top-right");
                         break;
                 }
             });
@@ -4844,10 +4920,10 @@ var MapBox = (($, turf) => {
                 trackUserLocation: true
             }));
             //map.addControl(new mapboxgl.AttributionControl({compact: true}));    
-            map.addControl(new mapboxgl.FullscreenControl({ container: document.querySelector('body') }));
-            mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
+            map.addControl(new mapboxgl.FullscreenControl({ container: document.querySelector("body") }));
+            mapboxgl.setRTLTextPlugin("https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js");
             map.addControl(new MapboxLanguage({
-                defaultLanguage: 'es'
+                defaultLanguage: "es"
             }));
             map.addControl(new mapboxgl.NavigationControl());
             return;
@@ -4860,88 +4936,88 @@ var MapBox = (($, turf) => {
                 }
             });
             map.addControl(draw);
-            draw.add({ type: 'Point', coordinates: [-66.903603, 10.480594] });
-            draw.add({ type: 'Point', coordinates: [-66.87957040722598, 10.561268658842579] });
-            map.on('load', (event) => {
+            draw.add({ type: "Point", coordinates: [-66.903603, 10.480594] });
+            draw.add({ type: "Point", coordinates: [-66.87957040722598, 10.561268658842579] });
+            map.on("load", (event) => {
                 //this.load(event);
-                map.addImage('pulsing-dot', new Pulsing(map, 200), { pixelRatio: 2 });
-                map.addImage('pulsing-dot2', new Pulsing(map, 100), { pixelRatio: 2 });
-                map.addImage('pulsing-dot3', new Pulsing(map, 300), { pixelRatio: 2 });
+                map.addImage("pulsing-dot", new Pulsing(map, 200), { pixelRatio: 2 });
+                map.addImage("pulsing-dot2", new Pulsing(map, 100), { pixelRatio: 2 });
+                map.addImage("pulsing-dot3", new Pulsing(map, 300), { pixelRatio: 2 });
                 //return;
-                map.addSource('points', {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'FeatureCollection',
-                        'features': [
+                map.addSource("points", {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": [
                             {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [0, 0]
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [0, 0]
                                 }
                             }
                         ]
                     }
                 });
-                map.addSource('points2', {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'FeatureCollection',
-                        'features': [
+                map.addSource("points2", {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": [
                             {
-                                'type': 'Feature',
-                                'properties': {
-                                    'micon': "pulsing-dot3"
+                                "type": "Feature",
+                                "properties": {
+                                    "micon": "pulsing-dot3"
                                 },
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-71.65522800, 10.59577000]
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [-71.65522800, 10.59577000]
                                 }
                             },
                             {
-                                'type': 'Feature',
-                                'properties': {
-                                    'micon': "pulsing-dot2"
+                                "type": "Feature",
+                                "properties": {
+                                    "micon": "pulsing-dot2"
                                 },
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-69.39774800, 10.06782300]
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [-69.39774800, 10.06782300]
                                 }
                             }
                         ]
                     }
                 });
                 map.addLayer({
-                    'id': 'points2',
-                    'type': 'symbol',
-                    'source': 'points2',
-                    'layout': {
-                        'icon-image': ['get', 'micon']
+                    "id": "points2",
+                    "type": "symbol",
+                    "source": "points2",
+                    "layout": {
+                        "icon-image": ["get", "micon"]
                     }
                 });
                 map.addLayer({
-                    'id': 'points',
-                    'type': 'symbol',
-                    'source': 'points',
-                    'layout': {
-                        'icon-image': 'pulsing-dot'
+                    "id": "points",
+                    "type": "symbol",
+                    "source": "points",
+                    "layout": {
+                        "icon-image": "pulsing-dot"
                     }
                 });
                 map.getSource("points").setData({
-                    'type': 'FeatureCollection',
-                    'features': [
+                    "type": "FeatureCollection",
+                    "features": [
                         {
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-66.903603, 10.480594]
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-66.903603, 10.480594]
                             }
                         },
                         {
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-67.52839800, 10.22430800]
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-67.52839800, 10.22430800]
                             }
                         }
                     ]
@@ -4988,99 +5064,99 @@ var MapBox = (($, turf) => {
         addPulse(layerId, sourceId) {
             let map = this.map;
             this.map.addLayer({
-                'id': layerId,
-                'type': 'symbol',
-                'source': sourceId,
-                'layout': {
-                    'icon-image': ['get', 'micon']
+                "id": layerId,
+                "type": "symbol",
+                "source": sourceId,
+                "layout": {
+                    "icon-image": ["get", "micon"]
                 }
             });
             return;
-            map.addSource('points', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': [
+            map.addSource("points", {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [
                         {
-                            'type': 'Feature',
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [0, 0]
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [0, 0]
                             }
                         }
                     ]
                 }
             });
-            map.addSource('points2', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': [
+            map.addSource("points2", {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": [
                         {
-                            'type': 'Feature',
-                            'properties': {
-                                'micon': "pulsing-dot3"
+                            "type": "Feature",
+                            "properties": {
+                                "micon": "pulsing-dot3"
                             },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-71.65522800, 10.59577000]
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-71.65522800, 10.59577000]
                             }
                         },
                         {
-                            'type': 'Feature',
-                            'properties': {
-                                'micon': "pulsing-dot2"
+                            "type": "Feature",
+                            "properties": {
+                                "micon": "pulsing-dot2"
                             },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [-69.39774800, 10.06782300]
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [-69.39774800, 10.06782300]
                             }
                         }
                     ]
                 }
             });
             map.addLayer({
-                'id': 'points2',
-                'type': 'symbol',
-                'source': 'points2',
-                'layout': {
-                    'icon-image': ['get', 'micon']
+                "id": "points2",
+                "type": "symbol",
+                "source": "points2",
+                "layout": {
+                    "icon-image": ["get", "micon"]
                 }
             });
             map.addLayer({
-                'id': 'points',
-                'type': 'symbol',
-                'source': 'points',
-                'layout': {
-                    'icon-image': 'pulsing-dot'
+                "id": "points",
+                "type": "symbol",
+                "source": "points",
+                "layout": {
+                    "icon-image": "pulsing-dot"
                 }
             });
             map.getSource("points").setData({
-                'type': 'FeatureCollection',
-                'features': [
+                "type": "FeatureCollection",
+                "features": [
                     {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-66.903603, 10.480594]
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [-66.903603, 10.480594]
                         }
                     },
                     {
-                        'type': 'Feature',
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-67.52839800, 10.22430800]
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [-67.52839800, 10.22430800]
                         }
                     }
                 ]
             });
             return;
             this.map.addLayer({
-                'id': layerId,
-                'type': 'symbol',
-                'source': sourceId,
-                'layout': {
-                    'icon-image': ['get', 'micon']
+                "id": layerId,
+                "type": "symbol",
+                "source": sourceId,
+                "layout": {
+                    "icon-image": ["get", "micon"]
                 }
             });
             alert(layerId);

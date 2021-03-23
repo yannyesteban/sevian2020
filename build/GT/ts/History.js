@@ -367,6 +367,7 @@ var GTHistory = (($) => {
                 }
             });
             console.log(data);
+            this.getMap().delete('traza2');
             this._trace = this.getMap().draw('traza2', 'trace', {
                 data: data,
                 layers: this.layerConfig.layers,
@@ -374,7 +375,7 @@ var GTHistory = (($) => {
                 layers2: layer2,
             });
             this.getMap().getControl('trace').setTrace(this._trace);
-            this.getMap().getControl('trace').reset();
+            //this.getMap().getControl('trace').reset();
             this.getMap().getControl('trace').showLayers();
             this.getMap().getControl('trace').setData(this.data);
             this.getMap().getControl('trace').setConfigData({
