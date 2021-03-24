@@ -401,6 +401,9 @@ var MapBox = (($, turf) => {
             //bar.create("button").prop({"type": "button", "title":"+"}).addClass("").text("&raquo;");
             bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-fb")
                 .on("click", () => {
+                this.getTrace().setReverse(true);
+                console.log("reverse");
+                return;
                 this.dir = -1;
                 let speed = this.speed - 1; // % this.speedRange.length;
                 if (speed > 6) {
@@ -448,6 +451,9 @@ var MapBox = (($, turf) => {
             });
             bar.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-ff")
                 .on("click", () => {
+                this.getTrace().setReverse(false);
+                console.log("foward");
+                return;
                 this.dir = 1;
                 let speed = (this.speed + 1); // % this.speedRange.length;
                 if (speed < 6) {
@@ -3139,6 +3145,7 @@ var MapBox = (($, turf) => {
             this.ondraw = (coordinates) => { };
             this.speedFactor = 0.05; // number of frames per longitude degree
             this.startTime = 0;
+            this.endTime = -1;
             this.progress = 0; // progress = timestamp - startTime
             this.resetTime = false; // indicator of whether time reset is needed for the animation
             this.layersId = [];
@@ -3151,6 +3158,7 @@ var MapBox = (($, turf) => {
             this.mobilSourceId = "";
             this.traceLayerId = "";
             this.traceSourceId = "";
+            this.reverse = false;
             for (let x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -3265,6 +3273,7 @@ var MapBox = (($, turf) => {
             this.coordinates = [];
             let fixDelay = 0;
             let ts = [];
+            //console.log(this.data)
             this.data.forEach((data, index) => {
                 this.coordinates.push(data.coordinates);
                 ts[index] = data.ts;
@@ -3377,7 +3386,7 @@ var MapBox = (($, turf) => {
                 console.log(layer);
                 if (layer.features && Array.isArray(layer.features)) {
                     layer.features.forEach((feature, index) => {
-                        this.createLayer(index, feature);
+                        //this.createLayer(index, feature);
                     });
                 }
                 //e.id = "t_layer"+index;
@@ -3767,6 +3776,7 @@ var MapBox = (($, turf) => {
                 index = this.coordinatesInit.length - 1;
             }
             this._lastIndex = index;
+            console.log("lastIndex", index, this.data[this._lastIndex].ts);
             this.progress = this.data[this._lastIndex].ts / this.speedFactor;
             this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
         }
@@ -3774,7 +3784,7 @@ var MapBox = (($, turf) => {
             this.setStatus(2);
             cancelAnimationFrame(this.animation);
             this._lastIndex = 0;
-            this.progress = this.data[this._lastIndex].ts / this.speedFactor;
+            this.progress = 0; //this.data[this._lastIndex].ts/this.speedFactor;
             this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
         }
         goEnd() {
@@ -3789,11 +3799,83 @@ var MapBox = (($, turf) => {
             this.setStatus(2);
             this.draw(this.coordinatesInit[this._lastIndex], this.data[this._lastIndex].heading);
         }
+        setReverse(value) {
+            this.reverse = value;
+        }
         play() {
+            this.setStatus(1);
+            this.startTime = performance.now();
+            this.rStartTime = this.startTime;
+            //this.startTime = performance.now() - this.progress;
+            this.resetTime = true;
+            console.log("Play progress", this.progress);
+            console.log("Play startTime", this.startTime);
+            let ini = this.progress;
+            let animateLine = (timestamp) => {
+                if (timestamp == 0) {
+                    this.animation = requestAnimationFrame(animateLine);
+                    return;
+                }
+                console.log("===", this.progress);
+                //let deltaTime = timestamp - this.startTime;
+                console.log("**timestamp", timestamp, timestamp - this.startTime);
+                if (this.reverse) {
+                    console.log("endTime", this.endTime);
+                    this.progress = this.endTime - (timestamp - this.rStartTime);
+                    this.startTime = performance.now();
+                    ini = this.progress;
+                }
+                else {
+                    this.progress = ini + timestamp - this.startTime;
+                    //ini = 0;
+                    this.endTime = this.progress;
+                    this.rStartTime = performance.now();
+                }
+                console.log("...", this.progress);
+                if (this.progress < 0) {
+                    console.log("******error");
+                    this.progress = 0;
+                }
+                let speed = this.progress * this.speedFactor;
+                console.log(" Factor ", this.speedFactor, " Speed ", speed);
+                let index = this.data.findIndex((e) => e.ts >= speed);
+                this._lastIndex = index;
+                if (this._lastIndex + 1 == this.data.length) {
+                    cancelAnimationFrame(this.animation);
+                    return;
+                }
+                let nextPoint = null;
+                let nextBearing = null;
+                if (index > 0) {
+                    let delta = this.data[index].ts - speed;
+                    let totalTime = this.data[index].ts - this.data[index - 1].ts;
+                    //calculating next point
+                    let pointFrom = this.coordinatesInit[index - 1];
+                    let pointTo = this.coordinatesInit[index];
+                    let line = turf.lineString([pointFrom, pointTo]);
+                    let totalLength = turf.length(line, { units: "meters" });
+                    nextPoint = turf.getCoords(turf.along(line, totalLength - delta * totalLength / totalTime, { units: "meters" }));
+                    // calculating simulated bearing
+                    let point1 = turf.point(pointFrom);
+                    let point2 = turf.point(pointTo);
+                    nextBearing = turf.bearing(point1, point2);
+                }
+                else {
+                    nextPoint = this.coordinatesInit[0];
+                    nextBearing = this.data[0].heading;
+                }
+                this.draw(nextPoint, nextBearing);
+                // Request the next frame of the animation.
+                this.animation = requestAnimationFrame(animateLine);
+            };
+            animateLine(0);
+        }
+        playOriginal() {
             this.setStatus(1);
             this.startTime = performance.now();
             this.resetTime = true;
             let animateLine = (timestamp) => {
+                let deltaTime = timestamp - this.startTime;
                 if (this.resetTime) {
                     // resume previous progress
                     this.startTime = performance.now() - this.progress;
@@ -3801,7 +3883,17 @@ var MapBox = (($, turf) => {
                     this.resetTime = false;
                 }
                 else {
-                    this.progress = timestamp - this.startTime;
+                    if (this.reverse) {
+                        this.progress = this.endTime - (timestamp - this.endTime);
+                    }
+                    else {
+                        this.progress = timestamp - this.startTime;
+                        this.endTime = this.progress;
+                    }
+                }
+                console.log(this.progress);
+                if (this.progress < 0) {
+                    this.progress = 0;
                 }
                 let speed = this.progress * this.speedFactor;
                 let index = this.data.findIndex((e) => e.ts >= speed);

@@ -366,7 +366,7 @@ var GTHistory = (($) => {
                     layer2[e.group].features.push(e);
                 }
             });
-            console.log(data);
+            //console.log(data);
             this.getMap().delete('traza2');
             this._trace = this.getMap().draw('traza2', 'trace', {
                 data: data,
