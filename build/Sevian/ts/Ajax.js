@@ -16,6 +16,7 @@ if (oWebSocket) {
     }
 }
 */
+import { _sgQuery } from './Query.js';
 function onSocketOpen(evt) {
     console.log("Socket is now open.");
     mySocket.send("Hello from my first live web socket!");
@@ -38,7 +39,7 @@ function closeSocket() {
     else
         console.log("Socket was already closed (timer).");
 }
-var sgAjax = false, sgFragment = false;
+export var sgAjax = false, sgFragment = false;
 var SgAjax = (function ($) {
     var index = 0;
     var active = [];

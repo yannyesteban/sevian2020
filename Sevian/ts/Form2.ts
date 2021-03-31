@@ -1,11 +1,14 @@
 //import { Query as $} from './Query.js';
+import {_sgQuery}  from './Query.js';
+import {I, Input, Hidden, InputDate, InputInfo, Multi}  from './Input.js';
+import {List}  from './List.js';
+import {Menu}  from './Menu2.js';
 
-
-var Form2 = (($) => {
+    
+export var Form2 = (($) => {
 
     
 
-    
     class Field{
         caption:string = "";
         input:string = "input";
@@ -573,59 +576,59 @@ var Form2 = (($) => {
     }
 
 
-let json = {
-    caption:"Formulario Uno",
-    className:"summer",
-    elements:[
-        {
-            element:"input",
-            input:"ssInput",
-            type:"text",
-            id:"",
-            name:"cedula",
-            caption:"Cédula",
-            value:"12474737",
-            data:[],
-            parent:false,
-            propertys: {},
-		    style: {},
-            rules:{},
-            events:{},
-        },
-        {
-            element:"page",
-            caption:"Datos Personales",
-            elements:[
-                {input:"text"},
-                {input:"text"},
-            ]
-        },
-        {
-            element:"tab",
-            caption:"categorias",
-            pages:[
-                {
-                    caption:"pagina Uno",
-                    elements:[
-                        {input:"text"},
-                        {input:"text"},
-                    ]
-                },
-                {
-                    caption:"pagina Dos",
-                    elements:[
-                        {input:"text"},
-                        {input:"text"},
-                    ]
-                },
+    let json = {
+        caption:"Formulario Uno",
+        className:"summer",
+        elements:[
+            {
+                element:"input",
+                input:"ssInput",
+                type:"text",
+                id:"",
+                name:"cedula",
+                caption:"Cédula",
+                value:"12474737",
+                data:[],
+                parent:false,
+                propertys: {},
+                style: {},
+                rules:{},
+                events:{},
+            },
+            {
+                element:"page",
+                caption:"Datos Personales",
+                elements:[
+                    {input:"text"},
+                    {input:"text"},
+                ]
+            },
+            {
+                element:"tab",
+                caption:"categorias",
+                pages:[
+                    {
+                        caption:"pagina Uno",
+                        elements:[
+                            {input:"text"},
+                            {input:"text"},
+                        ]
+                    },
+                    {
+                        caption:"pagina Dos",
+                        elements:[
+                            {input:"text"},
+                            {input:"text"},
+                        ]
+                    },
 
-            ]
-        }
-    ],
-    
+                ]
+            }
+        ],
+        
 
-}
-$(window).on("load", function(){
+    };
+    _sgQuery(window).on("load", function(){
 
     Form.init();
 

@@ -1,5 +1,18 @@
-var S = (($) => {
-	
+import {_sgQuery}  from './Query.js';
+import {sgAjax, sgFragment} from './Ajax.js';
+import {Form2 as Form2} from './Form2.js';
+import {Menu as Menu} from './Menu2.js';
+import {Float}  from './Window.js';
+import {GTInfo}  from '../../gt/ts/Info.js';
+import {GTUnit}  from '../../gt/ts/Unit.js';
+import {GTHistory}  from '../../gt/ts/History.js';
+
+export var S = (($) => {
+	interface InfoElement {
+		id:any,
+		option:any,
+		type:string
+	}	
 	interface  InfoParam {
 		async: boolean,
 		panel:number,
@@ -30,9 +43,18 @@ var S = (($) => {
 	};
     class Sevian{
 
-		public static instance = null;
-		public static sw = 0;
-		public static sw2 = 0;
+		private static instance = null;
+		private static sw = 0;
+		private static sw2 = 0;
+
+		private static wins:any[] = [];
+		private static elements:any[] = [];
+		private static request:any[] = [];
+		private static jsComponents:any[] = [];
+		private static components:any[] = [];
+		private static modules:any[] = [];
+
+		
 		
 		static _e:object[] = [];
 		static _w:object[] = [];
@@ -40,8 +62,25 @@ var S = (($) => {
 		static defaultPanel:any = 0;
 		
 		static msg:object = null;
-		
 
+		
+		static test(){
+			alert("hello i am sevian");
+		}
+
+		static load(info:any){
+			for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+			this.winInit(this.wins);
+			this.init(this.elements);
+			this.requestPanel(this.request);
+			this.setComponents(this.jsComponents);
+			this.setModules(this.modules);
+		}
 		static winInit(info:any){
 			for(let win of info){
 				
@@ -117,11 +156,37 @@ var S = (($) => {
 				
 			}
         }
-
-		static init(info:object[]){
+		static setModules(modules){
+			modules.forEach(element => {
+				this.register(element.name, element.component);
+			});
+				
 			
+		}
+		static register(name, component){
+			this.components[name] = component;
+		}
+		static init(info:InfoElement[]){
+			console.log(this.components);
             for(var x of info){
 				
+                if(this.components[x.type] && x.option !== null){
+					
+					if(this._e[x.id]){
+						
+						delete this._e[x.id];
+					}
+					
+					
+					this._e[x.id] = new this.components[x.type](x.option);//x.option
+					
+                }	
+            }
+        }
+		static init2(info:object[]){
+			
+            for(var x of info){
+				alert(x.type)
                 if(window[x.type] && x.option !== null){
 					
 					if(this._e[x.id]){
@@ -846,3 +911,9 @@ var S = (($) => {
 
     return Sevian;
 })(_sgQuery);
+
+S.register("Form2", Form2);
+S.register("Menu", Menu);
+S.register("GTInfo", GTInfo);
+S.register("GTUnit", GTUnit);
+S.register("GTHistory", GTHistory);

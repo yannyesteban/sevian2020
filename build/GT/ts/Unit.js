@@ -1,4 +1,8 @@
-var GTTrace = (($) => {
+import { _sgQuery } from '../../Sevian/ts/Query.js';
+//import {Form2 as Form2} from './Form2.js';
+import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
+import { Float } from '../../Sevian/ts/Window.js';
+export var GTTrace = (($) => {
     class Trace {
         constructor(info) {
             this.id = "";
@@ -67,7 +71,7 @@ var GTTrace = (($) => {
     }
     return Trace;
 })(_sgQuery);
-var GTUnit = (($) => {
+export var GTUnit = (($) => {
     let n = 0;
     class Unit {
         constructor(info) {

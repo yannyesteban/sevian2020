@@ -36,6 +36,14 @@
 		{
 			"name":"hour_to","caption":"Hora Final","input":"input","type":"time"
 		},
+		{
+			"name":"mode","caption":"Modo","input":"input","type":"select","default":0,
+			"data":[
+				[0, "Traza Completa"],
+				[1, "Traza  Ajustada al Recorrido"]
+				
+			  ]
+		},
 		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
 		"data":[
 			[0, "seleccione", "*"],

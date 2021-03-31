@@ -1,4 +1,7 @@
-class I{
+import {_sgQuery}  from './Query.js';
+import {List}  from './List.js';
+
+export class I{
     static _ele_ = [];
     static create(name, info){
         return new I._ele_[name](info);
@@ -7,9 +10,9 @@ class I{
         I._ele_[name] = classInput;
     }
 }
-
-var $I = {};
-var Input = (($) => {  
+I.register("list", List);
+export var $I = {};
+export var Input = (($) => {  
  
     class Input{
         target:object = null;
@@ -250,7 +253,7 @@ var Input = (($) => {
     return Input;
 })(_sgQuery);
 
-var Hidden = (($) => {  
+export var Hidden = (($) => {  
  
     class Hidden{
         target:object = null;
@@ -409,7 +412,7 @@ var Hidden = (($) => {
     return Hidden;
 })(_sgQuery);
 
-var InputDate = (($) => {
+export var InputDate = (($) => {
     
     class InputCalendar{
         target:object = null;
@@ -637,7 +640,7 @@ var InputDate = (($) => {
     return InputCalendar;
 })(_sgQuery);
 
-var InputInfo = (($) => {  
+export var InputInfo = (($) => {  
  
     class InputInfo{
         target:object = null;
@@ -859,7 +862,7 @@ var InputInfo = (($) => {
     return InputInfo;
 })(_sgQuery);
 
-var Multi = (($) => {
+export var Multi = (($) => {
     class Multi1{
         target:object = null;
         id:string = "";

@@ -1,37 +1,37 @@
-.trace-tool[data-mode-speed="0"] .speed-0 {
+.trace-tool[data-mode-speed=r-0] .r-0 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="1"] .speed-1 {
+.trace-tool[data-mode-speed=r-1] .r-1 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="2"] .speed-2 {
+.trace-tool[data-mode-speed=r-2] .r-2 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="3"] .speed-3 {
+.trace-tool[data-mode-speed=r-3] .r-3 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="4"] .speed-4 {
+.trace-tool[data-mode-speed=r-4] .r-4 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="5"] .speed-5 {
+.trace-tool[data-mode-speed=r-5] .r-5 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="6"] .speed-6 {
+.trace-tool[data-mode-speed=f-1] .f-1 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="7"] .speed-7 {
+.trace-tool[data-mode-speed=f-2] .f-2 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="8"] .speed-8 {
+.trace-tool[data-mode-speed=f-3] .f-3 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="9"] .speed-9 {
+.trace-tool[data-mode-speed=f-4] .f-4 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="10"] .speed-10 {
+.trace-tool[data-mode-speed=f-5] .f-5 {
   background-color: red;
 }
-.trace-tool[data-mode-speed="11"] .speed-11 {
+.trace-tool[data-mode-speed=f-0] .f-0 {
   background-color: red;
 }
 

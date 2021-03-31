@@ -1,0 +1,1 @@
+export var tiza = {a:1};

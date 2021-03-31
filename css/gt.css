@@ -135,6 +135,13 @@ form {
   background-position: center center;
 }
 
+.icon-setting-2 {
+  background-image: url(../images/setting-2.png);
+  background-size: 80% 80%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 .icon-layers {
   background-image: url(../images/layers2.png);
 }

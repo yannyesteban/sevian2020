@@ -383,7 +383,7 @@ _sgObjet.prototype = {
         }
     },
 };
-var _sgQuery = function (obj) {
+export var _sgQuery = function (obj) {
     if (obj instanceof _sgObjet) {
         return obj;
     }
@@ -426,7 +426,11 @@ _sgQuery.create = function (opt) {
                     this.prop(e[x], opt[x]);
                 }
                 else {
-                    e[x] = opt[x];
+                    try {
+                        e[x] = opt[x];
+                    }
+                    catch (error) {
+                    }
                 }
             }
         }
@@ -548,4 +552,5 @@ _sgQuery("#e1").on("click", function(){alert(8);});
 
 
 */
+//export _sgQuery;
 //# sourceMappingURL=Query.js.map

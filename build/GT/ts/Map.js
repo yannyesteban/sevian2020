@@ -1,5 +1,9 @@
-var MAPBOX_IMAGES = 1;
-var GTMap = (($) => {
+import { S } from '../../Sevian/ts/Sevian.js';
+import { _sgQuery } from '../../Sevian/ts/Query.js';
+import { MapBox } from '../../lib/MapBox.js';
+export var MAPBOX_IMAGES = 1;
+export var GTMap = (($) => {
+    window.GTMap = GTMap;
     class Map {
         constructor(info) {
             this.id = null;
@@ -79,4 +83,5 @@ var GTMap = (($) => {
     Map._loadFuntions = [];
     return Map;
 })(_sgQuery);
+S.register("GTMap", GTMap);
 //# sourceMappingURL=Map.js.map

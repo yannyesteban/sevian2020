@@ -1,0 +1,58 @@
+[
+	{
+		"file": "{@BUILD}Sevian/ts/Query.js",
+		"begin": true
+	},
+	{
+		"file": "{@BUILD}Sevian/ts/Window.js",
+		"begin": true
+	},
+	{
+		"file": "{@BUILD}Sevian/ts/Ajax.js",
+		"begin": true
+	},
+	{
+		"file": "{@BUILD}Sevian/ts/DB.js",
+		"begin": true
+	},
+	{
+		"file": "{@BUILD}Sevian/ts/Valid.js",
+		"__attrib": {
+			"_type": "module"
+		}
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Sevian.js",
+		"begin": true
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Page.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Menu2.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Tab.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Input.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/FormDetail.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Form2.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Grid2.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/Calendar.js"
+	},
+	{
+		"file": "{@PATH}build/Sevian/ts/List.js"
+	},
+	{
+		"file": "{@PATH}build/GT/ts/Actions.js"
+	}
+]

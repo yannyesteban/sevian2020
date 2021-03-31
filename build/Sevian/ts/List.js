@@ -1,4 +1,7 @@
-var List = (($) => {
+import { _sgQuery } from './Query.js';
+import { Float } from './Window.js';
+//import {I}  from './Input.js';
+export var List = (($) => {
     let acute = function (str) {
         if (str === undefined) {
             return false;
@@ -471,7 +474,7 @@ var List = (($) => {
             this.setValue(this.default);
         }
     }
-    I.register("list", List);
+    //I.register("list", List);
     return List;
 })(_sgQuery);
 //# sourceMappingURL=List.js.map

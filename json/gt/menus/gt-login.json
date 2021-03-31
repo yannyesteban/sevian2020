@@ -17,7 +17,7 @@
 					{
 						"t":"setMethod",
 						"id":"22",
-						"element":"structure3",
+						"element":"s-structure",
 						"method":"login",
 						"name":"/gt/structures/@structure",
 						"eparams":null

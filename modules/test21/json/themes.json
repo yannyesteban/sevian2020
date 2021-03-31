@@ -1,0 +1,15 @@
+{
+	"sevian" : {
+		"css" : [],
+		"js" : [
+			"uno.js"
+        ],
+		"templates"	: {
+			"main"	: "{@PATH}sevian/html/main.html",
+			"main2"	: "{@PATH}sevian/html/main2.html",
+			"main3"	: "{@PATH}sevian/html/main3.php",
+			"main4"	: "{@PATH}sevian/html/main4.php",
+			"login"	: "{@PATH}sevian/html/login.html"
+        }
+    }
+}

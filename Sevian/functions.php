@@ -1,7 +1,7 @@
 <?php
 
 
-function hr($msg_x, $color_x='black',$back_x=''){
+function hr($msg_x, $color_x='black',$back_x='inherit'){
 	
 	//echo '**('.$GLOBALS['debug'].')**__';
 	
@@ -28,7 +28,7 @@ function hr($msg_x, $color_x='black',$back_x=''){
 	
 }// end function
 
-function hx($msg_x, $color_x='black',$back_x=''){
+function hx($msg_x, $color_x='black',$back_x='inherit'){
 
 	hr($msg_x, $color_x,$back_x);
 	exit;

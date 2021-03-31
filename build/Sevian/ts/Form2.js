@@ -1,5 +1,8 @@
 //import { Query as $} from './Query.js';
-var Form2 = (($) => {
+import { _sgQuery } from './Query.js';
+import { I, Input } from './Input.js';
+import { Menu } from './Menu2.js';
+export var Form2 = (($) => {
     class Field {
         constructor() {
             this.caption = "";
@@ -494,7 +497,7 @@ var Form2 = (($) => {
             }
         ],
     };
-    $(window).on("load", function () {
+    _sgQuery(window).on("load", function () {
         Form.init();
         if (false) {
             let p = new Form({
@@ -560,6 +563,7 @@ var Form2 = (($) => {
                                 items: [
                                     {
                                         caption: "Guardar",
+                                        //useCheck:true,
                                     },
                                     {
                                         caption: "Volver"

@@ -1,5 +1,5 @@
-
-const Tab = (function($){
+import {_sgQuery}  from '../../Sevian/ts/Query.js';
+export const Tab = (function($){
     
 class Tab{
 

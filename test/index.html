@@ -12,6 +12,24 @@
 import fn from './uno.js'
 import {number} from './uno.js'
 
+
+let speedRange = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
+let speed = 8;
+speed = (speed + 1) % (speedRange.length/2);
+console.log("speed" , speed);
+speed = (speed + 1) % (speedRange.length/2);
+console.log("speed" , speed);
+speed = (speed + 1) % (speedRange.length/2);
+console.log("speed" , speed);
+speed = (speed + 1) % (speedRange.length/2);
+console.log("speed" , speed);
+speed = (speed + 1) % (speedRange.length/2);
+console.log("speed" , speed);
+speed = (speed + 1) % (speedRange.length/2);
+console.log("speed" , speed);
+
+
+
 let f1 = (a, b)=> {
 	
 	setTimeout((x)=>{

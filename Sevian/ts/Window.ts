@@ -1,4 +1,6 @@
-var Float = (($) => {
+import {_sgQuery}  from './Query.js';
+
+export var Float = (($) => {
     
     class InfoElem {
         e = false;

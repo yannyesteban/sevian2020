@@ -1,0 +1,58 @@
+{
+	"name":"history_config",
+	"caption":"Filtro",
+	"className":"history",
+	"query":"SELECT '' as nodes, '' as length_trace, '' as speed_factor ",
+	"menuName":"/gt/menus/history_config",
+	"methods":{
+		"request":{
+			"menuName_":"/gt/menus/history_form"
+		},
+		"load":{
+			"menuName_":"/gt/menus/history_form"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{
+			"name":"nodes","caption":"Marcas","input":"input","type":"select","default":0,
+			"data":[
+				[0, "Traza completa"],
+                [1, "Traza ajustada al Recorrido"],
+				[2, "Traza hasta al Recorrido"]
+				
+			  ],
+              "events":{
+                  "change":"this.getTrace().setTraceMode(event.currentTarget.value);"
+              }
+		},
+        {
+			"name":"length_trace","caption":"Longitud del rastro","input":"input","type":"select","default":0,
+			"data":[
+				[1000, "500m"],
+                [1000, "1000m"],
+                [1000, "1500m"],
+                [1000, "2000m"],
+                [1000, "2500m"],
+                [1000, "3000m"]
+			  ]
+		},
+        {
+			"name":"speed_factor","caption":"Factor de Velocidad","input":"input","type":"select","default":0,
+			"data":[
+				[0.001, "0.001"],
+                [0.002, "0.002"],
+                [0.005, "0.005"]
+			  ]
+		}
+
+	],
+	
+	"searchFor":[
+		"brand", "model"
+	]
+
+}

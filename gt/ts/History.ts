@@ -1,5 +1,10 @@
+import {_sgQuery}  from '../../Sevian/ts/Query.js';
+import {Form2 as Form2} from '../../Sevian/ts/Form2.js';
+import {Menu as Menu} from '../../Sevian/ts/Menu2.js';
+import {Float}  from '../../Sevian/ts/Window.js';
 
-var GTHistory = (($) => {
+
+export var GTHistory = (($) => {
    
 	let n=0;
 
@@ -14,7 +19,7 @@ var GTHistory = (($) => {
 		menu:any = null;
 		win:any = null;
 		form:any = null;
-		
+		formHistoryConfig:any = null;
 		caption:string = "";
 		winCaption:string = "";
 		pathImages:string = "";
@@ -63,9 +68,11 @@ var GTHistory = (($) => {
 		
 		private _lastUnitId = null;
 
-		private _traces:any[] = [];
+		private _traceModes:any[] = [];
 		private layers:any[] = [];
 		private _form:any = null;
+		private _trace:any = null;		
+		private _formHistoryConfig:any = null;
 		private _parentContext :any = null;
 		private dataInput:any = null;
 		private unitInfo:any = null;
@@ -118,6 +125,11 @@ var GTHistory = (($) => {
 				this.form.parentContext =  this;
 			
 				this._form = new Form2(this.form);
+
+				this.formHistoryConfig.id = this.getMap().getControl('trace').getPage(3);
+				this.formHistoryConfig.parentContext =  this;
+			
+				this._formHistoryConfig = new Form2(this.formHistoryConfig);
 			});
 			
 
@@ -875,6 +887,9 @@ return;
 		setLayerConfig(config){
 			this.layerConfig = config;
 			console.log(config);
+		}
+		getTrace(){
+			return this._trace;
 		}
 	}
 	

@@ -7,6 +7,7 @@ include MAIN_PATH.'Sevian/DB/Postgres.php';
 
 class Info{
 	
+	public $name	= false;
 	public $driver	= false;
 	public $host	= false;
 	public $port	= false;
@@ -15,7 +16,8 @@ class Info{
 	public $dbase	= false;
 	public $charset	= false;
 		
-	public function __construct($opt = array()){
+	public function __construct($opt = []){
+		//hx($opt);
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
 				$this->$k = $v;
@@ -31,13 +33,14 @@ class Connection{
 	static $_connections = [];
 	
 	static function load($conn = []){
-		foreach($conn as $name => $info){
-			self::set($name, new Info($info));
+		foreach($conn as $info){
+			
+			self::set(new Info($info));
 		}
 		
 	}
-	static function set($name, $info){
-		self::$_connections[$name] = new Info($info);
+	static function set($info){
+		self::$_connections[$info->name] = new Info($info);
 	}
 	static function get($name = false){
 		
@@ -48,6 +51,7 @@ class Connection{
 		if(!isset(self::$_connections[$name])){
 			return false;
 		}
+		
 		$info = self::$_connections[$name];
 
 		switch(strtolower(trim($info->driver))){

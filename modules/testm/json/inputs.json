@@ -1,0 +1,63 @@
+[
+    {
+        "input": "text",
+        "file": "Input.php",
+        "class": "Sevian\\Input",
+        "type": "text"
+    },
+    {
+        "input": "hidden",
+        "class": "Sevian\\Input",
+        "type": "hidden"
+    },
+    {
+        "input": "password",
+        "class": "Sevian\\Input",
+        "type": "password"
+    },
+    {
+        "input": "text2",
+        "class": "Sevian\\Input",
+        "type": "text"
+    },
+    {
+        "input": "button",
+        "class": "Sevian\\Input",
+        "type": "button"
+    },
+    {
+        "input": "submit",
+        "class": "Sevian\\Input",
+        "type": "submit"
+    },
+    {
+        "input": "color",
+        "class": "Sevian\\Input",
+        "type": "color"
+    },
+    {
+        "input": "range",
+        "class": "Sevian\\Input",
+        "type": "range"
+    },
+    {
+        "input": "image",
+        "class": "Sevian\\Input",
+        "type": "image"
+    },
+    {
+        "input": "select",
+        "class": "Sevian\\Input",
+        "type": "select"
+    },
+    {
+        "input": "multiple",
+        "class": "Sevian\\Input",
+        "type": "multiple"
+    },
+    {
+        "input": "date",
+        "class": "Sevian\\DateInput",
+        "type": "calendar"
+    }
+]

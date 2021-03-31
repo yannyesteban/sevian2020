@@ -1,4 +1,5 @@
-const Page = (($) => {
+import {_sgQuery}  from './Query.js';
+export const Page = (($) => {
     /*
     @date: September 01, 2019
     */

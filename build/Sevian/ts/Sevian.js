@@ -1,4 +1,12 @@
-var S = (($) => {
+import { _sgQuery } from './Query.js';
+import { sgAjax } from './Ajax.js';
+import { Form2 as Form2 } from './Form2.js';
+import { Menu as Menu } from './Menu2.js';
+import { Float } from './Window.js';
+import { GTInfo } from '../../gt/ts/Info.js';
+import { GTUnit } from '../../gt/ts/Unit.js';
+import { GTHistory } from '../../gt/ts/History.js';
+export var S = (($) => {
     ;
     let _winOptions = {
         visible: true,
@@ -10,6 +18,21 @@ var S = (($) => {
         mode: "custom"
     };
     class Sevian {
+        static test() {
+            alert("hello i am sevian");
+        }
+        static load(info) {
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.winInit(this.wins);
+            this.init(this.elements);
+            this.requestPanel(this.request);
+            this.setComponents(this.jsComponents);
+            this.setModules(this.modules);
+        }
         static winInit(info) {
             for (let win of info) {
                 this._w[win.name] = new Float.Window(win);
@@ -71,8 +94,28 @@ var S = (($) => {
                 }
             }
         }
+        static setModules(modules) {
+            modules.forEach(element => {
+                this.register(element.name, element.component);
+            });
+        }
+        static register(name, component) {
+            this.components[name] = component;
+        }
         static init(info) {
+            console.log(this.components);
             for (var x of info) {
+                if (this.components[x.type] && x.option !== null) {
+                    if (this._e[x.id]) {
+                        delete this._e[x.id];
+                    }
+                    this._e[x.id] = new this.components[x.type](x.option); //x.option
+                }
+            }
+        }
+        static init2(info) {
+            for (var x of info) {
+                alert(x.type);
                 if (window[x.type] && x.option !== null) {
                     if (this._e[x.id]) {
                         delete this._e[x.id];
@@ -663,6 +706,12 @@ var S = (($) => {
     Sevian.instance = null;
     Sevian.sw = 0;
     Sevian.sw2 = 0;
+    Sevian.wins = [];
+    Sevian.elements = [];
+    Sevian.request = [];
+    Sevian.jsComponents = [];
+    Sevian.components = [];
+    Sevian.modules = [];
     Sevian._e = [];
     Sevian._w = [];
     Sevian._components = [];
@@ -670,4 +719,9 @@ var S = (($) => {
     Sevian.msg = null;
     return Sevian;
 })(_sgQuery);
+S.register("Form2", Form2);
+S.register("Menu", Menu);
+S.register("GTInfo", GTInfo);
+S.register("GTUnit", GTUnit);
+S.register("GTHistory", GTHistory);
 //# sourceMappingURL=Sevian.js.map

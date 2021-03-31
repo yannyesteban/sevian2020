@@ -1,4 +1,9 @@
-var List = (($) => {  
+import {_sgQuery}  from './Query.js';
+import {Float}  from './Window.js';
+//import {I}  from './Input.js';
+
+
+export var List = (($) => {  
 
     let acute = function(str){
 
@@ -616,6 +621,7 @@ var List = (($) => {
         }
     }
     
-    I.register("list", List);
+    //I.register("list", List);
+    
     return List;
 })(_sgQuery);

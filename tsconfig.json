@@ -6,6 +6,12 @@
         "sourceMap": true,
         "outDir": "./build",
         "moduleResolution": "classic",
+        "typeRoots": [
+          ],
+        "baseUrl": ".",
+        "paths": {
+            "ti":["./erase/tiza.js"]
+        }
         //"outDir": "js",
         //"rootDir": "./ts"
        

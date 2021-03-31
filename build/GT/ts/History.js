@@ -1,4 +1,8 @@
-var GTHistory = (($) => {
+import { _sgQuery } from '../../Sevian/ts/Query.js';
+import { Form2 as Form2 } from '../../Sevian/ts/Form2.js';
+import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
+import { Float } from '../../Sevian/ts/Window.js';
+export var GTHistory = (($) => {
     let n = 0;
     class History {
         constructor(info) {
@@ -8,6 +12,7 @@ var GTHistory = (($) => {
             this.menu = null;
             this.win = null;
             this.form = null;
+            this.formHistoryConfig = null;
             this.caption = "";
             this.winCaption = "";
             this.pathImages = "";
@@ -52,9 +57,11 @@ var GTHistory = (($) => {
             this._winInfo = null;
             this._timer = null;
             this._lastUnitId = null;
-            this._traces = [];
+            this._traceModes = [];
             this.layers = [];
             this._form = null;
+            this._trace = null;
+            this._formHistoryConfig = null;
             this._parentContext = null;
             this.dataInput = null;
             this.unitInfo = null;
@@ -90,6 +97,9 @@ var GTHistory = (($) => {
                 this.form.id = this.getMap().getControl('trace').getPage(0);
                 this.form.parentContext = this;
                 this._form = new Form2(this.form);
+                this.formHistoryConfig.id = this.getMap().getControl('trace').getPage(3);
+                this.formHistoryConfig.parentContext = this;
+                this._formHistoryConfig = new Form2(this.formHistoryConfig);
             });
         }
         static getInstance(name) {
@@ -264,6 +274,8 @@ var GTHistory = (($) => {
                         "name": "/form/h_commands",
                         "eparams": {
                             "a": 'yanny',
+                            //"mainId":this.bodyPanelId,
+                            //"unitId":unitId,
                         }
                     }
                 ],
@@ -723,6 +735,9 @@ var GTHistory = (($) => {
         setLayerConfig(config) {
             this.layerConfig = config;
             console.log(config);
+        }
+        getTrace() {
+            return this._trace;
         }
     }
     History._instances = [];

@@ -1,0 +1,19 @@
+{
+	"name":"history_config",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"onDataUser":"(dataUser)=>{}",
+	"items":[
+		{
+			"caption":"Guardar",
+			"events":{
+
+				"click":"alert('configuracion guardada !');"
+			}
+		}
+		
+	]
+}	

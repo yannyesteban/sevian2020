@@ -1,6 +1,11 @@
+import {S}  from '../../Sevian/ts/Sevian.js';
+import {_sgQuery}  from '../../Sevian/ts/Query.js';
+import {MapBox}  from '../../lib/MapBox.js';
 
-var MAPBOX_IMAGES = 1;
-var GTMap = (($) => {
+export var MAPBOX_IMAGES = 1;
+export var GTMap = (($) => {
+    
+   window.GTMap = GTMap;
    
     class Map{
 
@@ -106,6 +111,8 @@ var GTMap = (($) => {
 
 	}
 
-
+    
 	return Map;
 })(_sgQuery);
+
+S.register("GTMap", GTMap);

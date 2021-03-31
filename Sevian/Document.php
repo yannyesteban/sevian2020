@@ -114,15 +114,24 @@ class Document{
 		}
 	}// end function
 
-	public function appendScript($code, $toEnd = false){
-		if(!$this->script){
-			$this->script = new HTML("script");
-		}
+	public function appendScript($code, $toEnd = false, $attrib = []){
 		if(!$toEnd){
-			$this->script->appendChild($code."\n");
+			$script = $this->script;
 		}else{
-			$this->scriptEnd->appendChild($code."\n");
+			$script = $this->scriptEnd;
 		}
+		
+		if(!$script){
+			$script = new HTML("script");
+		}
+
+		
+		foreach($attrib as $k => $v){
+			$script->$k = $v;	
+		}
+		
+
+		$script->appendChild($code."\n");
 	}
 	
 	public function render(){

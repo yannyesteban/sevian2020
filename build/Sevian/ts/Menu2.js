@@ -4,7 +4,9 @@ document.dispatchEvent(ev);
 
 
 */
-var Menu = (function ($, Float) {
+import { _sgQuery } from './Query.js';
+import { Float } from './Window.js';
+export var Menu = (function ($, Float) {
     class Item {
         constructor(info) {
             this.main = null;

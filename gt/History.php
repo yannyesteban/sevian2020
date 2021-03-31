@@ -136,10 +136,22 @@ class History
 			//'record'=>$this->getRecord()
 		]);
 
+		$formHistoryConfig =  new \Sigefor\Component\Form2([
+
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/history_config', self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 1,
+			'userData'=> [],
+			
+			//'record'=>$this->getRecord()
+		]);
+
 		
 		$this->setInit([
 			'form'     => $form,
-			
+			'formHistoryConfig'=>$formHistoryConfig,
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
@@ -190,6 +202,18 @@ class History
 			//'record'=>$this->getRecord()
 		]);
 
+		$formHistoryConfig =  new \Sigefor\Component\Form2([
+
+			'id'		=> $this->containerId,
+			'panelId'	=> $this->id,
+			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/history_config', self::$patternJsonFile),
+			'method'	=> $this->method,
+			'mode'		=> 1,
+			'userData'=> [],
+			
+			//'record'=>$this->getRecord()
+		]);
+
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-history-'.$this->id;
 		$this->panel->innerHTML = 'gt-history-'.$this->id;
@@ -198,7 +222,7 @@ class History
 
 		$this->info = [
 			'form'     => $form,
-			
+			'formHistoryConfig' =>$formHistoryConfig,
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",

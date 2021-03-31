@@ -3,7 +3,7 @@ namespace Sevian;
 
 date_default_timezone_set ( 'America/Caracas' );
 ini_set("session.gc_maxlifetime","18000");
-
+include 'JasonFileInfo.php';
 include 'Types.php';
 include 'info.php';
 
@@ -56,6 +56,8 @@ class S{
 	private static $_f = [];
     // save all js Elements
 	private static $_jsElement = [];
+	// save all js modules
+	private static $_modules = [];
 	// save all js Componets
 	private static $_jsComponets = [];
     // save all js main Elements
@@ -108,6 +110,56 @@ class S{
 	private static $lamda = false;
 
 	private static $_db = [];
+
+	private static $config = [];
+	private static $moduleMode = false;
+
+	public static function setConfigInit($file, $userData = null){
+		$info = JasonFileInfo::load($file, $userData);
+
+		foreach($info as $config){
+
+			self::$config[$config->type] = (array)JasonFileInfo::load($config->file, $userData);
+		}
+		//hx(self::$config);
+		self::loadConfigInit(self::$config);
+
+	}
+	public static function loadConfigInit($config){
+		foreach($config as $key => $config){
+			switch($key){
+				case "css":
+					self::cssInit($config);
+					break;
+				case "js":
+					self::jsInit($config);
+					break;	
+				case "command":
+					self::commandsLoad($config);
+					break;	
+				case "inputs":
+					self::inputsLoad($config);
+					break;	
+				case "commands":
+					self::commandsLoad($config);
+					break;	
+				case "themes":
+					self::themesLoad($config);
+					break;	
+				case "bd":
+					Connection::load($config);
+					break;	
+				case "elements":
+					self::elementsLoad($config, true);
+					break;	
+				case "init":
+					self::configInit($config);
+					break;	
+	
+				}
+		}
+
+	}
 
 	public static function setSes($key, $value){
 		self::$ses[$key] = $value;
@@ -179,7 +231,7 @@ class S{
 				self::$$k = $v;
 			}
 		}
-
+		
 		self::$_init = new InfoInit($opt);
 		
 	}
@@ -588,22 +640,59 @@ class S{
 
 
 	public static function init($opt = []){}
+	
 	public static function inputsLoad($inputs){
 		foreach($inputs as $k => $v){
 			self::addClassInput($k, $v);
 		}
 	}
-
+	public static function inputsLoad2($inputs){
+		foreach($inputs as $k => $v){
+			self::addClassInput($k, $v);
+		}
+	}
+	public static function addClassInput2($name, $info){
+		if($info->file ?? '' != ''){
+			require_once($info->file);
+		}
+		self::$_inputs[$name] = $info;
+	}
 	public static function addClassInput($name, $info){
+		$info = (array)$info;
 		if($info['file'] ?? '' != ''){
 			require_once($info['file']);
 		}
 		self::$_inputs[$name] = $info;
 	}
 
-	public static function elementsLoad($elements){
+	public static function elementsLoad($elements, $v2=false){
 
+		if($v2){
+			
+			foreach($elements as $info){
+				$info = (array)$info;
+				$name = $info['name'];
+				if($info['enable']){
+					self::setClassElement($name, $info);
+	
+					if($info['js']??false){
+						self::addJs($info['js']);
+					}
+					if($info['css']??false){
+						self::addCss($info['css']);
+					}
+					if($info['module']??false){
+						self::$_modules[] = [
+							"name"=>$info['module']->name,
+							"src"=>$info['module']->src
+						];
+					}
+				}
+			}
+			return;
+		}
 		
+
 
 		foreach($elements as $name => $info){
 			if($info['enable']){
@@ -615,9 +704,10 @@ class S{
 				if($info['css']??false){
 					self::addCss($info['css']);
 				}
+				if($info['module']??false){
+					self::$_modules[] = $info['module'];
+				}
 			}
-			
-			
 		}
 	}
 
@@ -861,6 +951,10 @@ class S{
 	} 
 
 	public static function htmlDoc(){
+
+		if(self::$moduleMode){
+			return self::htmlDoc2();
+		}
 		global $sevian;
 		
 		
@@ -962,7 +1056,148 @@ class S{
 		return $doc->render();
 		
 	}
+	public static function htmlDoc2(){
 
+		global $sevian;
+		
+		
+		$doc = new Document();
+		
+
+		$doc->setTitle(self::$title);
+		
+		foreach(self::$_css as $v){
+			$doc->appendCssSheet($v);
+		}
+		$modules = [];
+		foreach(self::$_js as $k=> $v){
+
+			$v = (object)$v;
+			if(isset($v->file)){
+				$doc->appendScriptDoc($v->file, $v->begin?? true, $v->attrib?? []);
+			}
+			if(isset($v->module)){
+			//	$modules[] = ["name"=>]
+			
+			}
+		}
+
+		$templates = [];
+		
+		if(isset(self::$_themes[self::$theme])){
+			$theme = new InfoThemes(self::$_themes[self::$theme]);
+			foreach($theme->css as $css){
+				$doc->appendCssSheet($css);
+			}
+			foreach($theme->templates as $k => $v){
+				self::$_templates[$k] = $v;
+			}
+			$templates = $theme->templates;
+		}
+		
+		if(!self::getTemplate()){
+			if(self::$templateName and isset($templates[self::$templateName])){
+				self::setTemplate(@file_get_contents($templates[self::$templateName]));
+			}else{
+				self::setTemplate(self::$template);
+			}
+		}
+		
+
+		self::$_str->setTemplate(self::vars(self::getTemplate()));
+		
+		//if(self::$_templateChanged){
+
+		/*	
+		self::$_strPanels = self::$_str->getStrPanels();
+		foreach(self::$_strPanels as $panel){
+			
+			if(!isset(self::$_info[$panel])){
+				self::$_str->addPanel($panel, new \Sevian\HTML(''));
+			}
+		}
+		*/
+		//}
+
+		
+		
+		$js = []; 
+		
+		foreach(self::$_e as $k => $v){
+			if($v->getInit())
+			$js[] = [
+				'id'=>$k,
+				'type'=>$v->getJSClass(),
+				'option'=>$v->getInit()
+
+			];
+			//hr($v->getInit());
+		}
+		
+		
+		$doc->body->add(self::$_str);
+				
+		$doc->appendScript(self::$script, true);
+		//hr(self::$_mainPanels, "green");
+		//$json = json_encode(self::$_mainPanels, JSON_PRETTY_PRINT);
+		//$script = "//Sevian.loadPanels($json)";
+		$win = json_encode(self::$_windows, JSON_PRETTY_PRINT);
+		$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
+
+		$json = json_encode($js, JSON_PRETTY_PRINT);
+		
+		$data = [];
+		$data['instance'] = self::$ins;
+		$data['sw'] = self::$cfg['SW'];
+		$data['sw2'] = self::$cfg['SW'];
+		$data['defaultPanel'] = self::$defaultPanel;
+		$data['win'] = self::$_windows;
+		$data['elements'] = $js;
+		$data['request'] = [
+			//'panels'=>$p,
+			//'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			//'update'=> self::getJsConfigPanel(),
+			'fragments'=>self::$_f,
+			'debug'=>self::$_db
+		];
+		$data['jsComponents'] = self::getJsComponents();
+
+		$json = json_encode($data, JSON_PRETTY_PRINT);
+		$mainPath = MAIN_PATH;
+		$script = "\nimport {S} from '{$mainPath}build/Sevian/ts/Sevian.js';";
+		$script .= "\nwindow.S = S;";
+		foreach(self::$_modules as $module){
+			
+			$script .= "\nimport { $module[name] } from '$module[src]';";
+			$script .= "\nwindow.$module[name] = $module[name];";
+		}
+		$script .= "\nS.load($json);";
+		$doc->appendScript($script, true, ["type"=>"module"]);
+		
+		return $doc->render();
+
+		$script = "Sevian.action.initPanel($json)";
+		$script = "import * as sev from '../../build/Sevian/ts/Sevian.js';let S = sev.S;window.S = S;";
+		$script .= "S.instance = '".self::$ins."';S.sw = '".self::$cfg['SW']."';S.sw2 = '".self::$cfg['SW']."';S.defaultPanel= '".self::$defaultPanel."';S.winInit($win);S.init($json);";
+		
+		$response = [
+			//'panels'=>$p,
+			//'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			//'update'=> self::getJsConfigPanel(),
+			'fragments'=>self::$_f,
+			'debug'=>self::$_db
+			];
+		$json = json_encode($response, JSON_PRETTY_PRINT);	
+		$json2 = json_encode(self::getJsComponents(), JSON_PRETTY_PRINT);
+		$script .= "
+		
+		
+		S.requestPanel($json);S.setComponents($json2)";	
+		$doc->appendScript($script, true, ["type"=>"module"]);
+		
+		return $doc->render();
+		
+	}
 	public static function jsonDoc(){
 		
 

@@ -5,9 +5,10 @@ document.dispatchEvent(ev);
 
 */
 
+import {_sgQuery}  from './Query.js';
+import {Float}  from './Window.js';
 
-
-var Menu = 
+export var Menu = 
 (function($, Float){
 
     class Item{

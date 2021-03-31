@@ -159,7 +159,13 @@ class InfoInit{
 			if(property_exists($this, $k)){
 				
 				if($k == 'elements'){
+					
+					//$v = \json_decode(\json_encode($v));
+					//hx($v);
+					
 					foreach($v as $kk => $vv){
+						$vv = (array)$vv;
+					//hx($vv);
 						//$this->$k[$vv['id']] = new InfoElement($vv);
 						$this->$k[$vv['id']] = new InfoParam($vv);
 					}
