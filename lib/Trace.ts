@@ -389,7 +389,7 @@ export class Trace {
             console.log(layer);
             if (layer.features && Array.isArray(layer.features)) {
                 layer.features.forEach((feature, index) => {
-                    //this.createLayer(index, feature);
+                    this.createLayer(index, feature);
 
                 });
             }
