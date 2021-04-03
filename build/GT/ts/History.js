@@ -2,6 +2,7 @@ import { _sgQuery } from '../../Sevian/ts/Query.js';
 import { Form2 as Form2 } from '../../Sevian/ts/Form2.js';
 import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
 import { Float } from '../../Sevian/ts/Window.js';
+import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 export var GTHistory = (($) => {
     let n = 0;
     class History {
@@ -53,6 +54,8 @@ export var GTHistory = (($) => {
             this.delay = 30000;
             this.main = null;
             this.marks = [];
+            this.infoForm = null;
+            this._infoForm = null;
             this._info = null;
             this._winInfo = null;
             this._timer = null;
@@ -67,6 +70,8 @@ export var GTHistory = (($) => {
             this.unitInfo = null;
             this.data = null;
             this.layerConfig = null;
+            this.tracePopup = null;
+            this.popupInfoForm = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -100,6 +105,18 @@ export var GTHistory = (($) => {
                 this.formHistoryConfig.id = this.getMap().getControl('trace').getPage(3);
                 this.formHistoryConfig.parentContext = this;
                 this._formHistoryConfig = new Form2(this.formHistoryConfig);
+                if (this.infoForm) {
+                    this.infoForm.id = this.getMap().getControl('trace').getPage(4);
+                    this._infoForm = new InfoForm(this.infoForm);
+                }
+                this.tracePopup = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false
+                });
+                let divInfo = $.create("div");
+                this.tracePopup.setDOMContent(divInfo.get());
+                this.infoForm.id = divInfo;
+                this.popupInfoForm = new InfoForm(this.infoForm);
             });
         }
         static getInstance(name) {
@@ -378,13 +395,23 @@ export var GTHistory = (($) => {
                     layer2[e.group].features.push(e);
                 }
             });
-            //console.log(data);
+            //console.log(layer2);
             this.getMap().delete('traza2');
             this._trace = this.getMap().draw('traza2', 'trace', {
                 data: data,
                 layers: this.layerConfig.layers,
                 groups: this.layerConfig.groups,
                 layers2: layer2,
+                images: this.layerConfig.images,
+                popup: this.tracePopup,
+                onShowInfo: (info) => {
+                    info = Object.assign(this.data[info.i], info);
+                    console.log(info);
+                    this.popupInfoForm.setMode(info.layerType);
+                    this.popupInfoForm.setData(info);
+                    this._infoForm.setMode(info.layerType);
+                    this._infoForm.setData(info);
+                }
             });
             this.getMap().getControl('trace').setTrace(this._trace);
             //this.getMap().getControl('trace').reset();

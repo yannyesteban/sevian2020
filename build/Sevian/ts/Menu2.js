@@ -32,6 +32,7 @@ export var Menu = (function ($, Float) {
             this.menu = null;
             this.infoElement = null;
             this.className = null;
+            this.customIcon = null;
             let x;
             for (x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -116,7 +117,10 @@ export var Menu = (function ($, Float) {
                 }
             }
             link.create("span").addClass("image").addClass(this.imageClass || "");
-            link.create("span").addClass("text").text(this.caption);
+            if (this.customIcon) {
+                link.append(this.customIcon);
+            }
+            link.create("span").addClass("text").append(this.caption);
             if (this.infoElement) {
                 link.append(this.infoElement);
             }

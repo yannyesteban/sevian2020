@@ -1,3 +1,8 @@
+import {_sgQuery as $}  from '../Sevian/ts/Query.js';
+import {Arrow}  from './Arrow.js';
+import {Pulsing}  from './Pulsing.js';
+import {Point}  from './Point.js';
+
 interface MobilInfo {
     coordinates: number[],
     speed: number,
@@ -102,8 +107,12 @@ export class Trace {
 
     private mobil: MobilInfo = null;
     //private pause:boolean = false;
-    private traceMode = 0;
+    private traceMode = 1;
+    private images:any[] = [];
+    private iImages:any[] = [];
 
+    private popup:any = null;
+    public onShowInfo:Function = (info)=>{};
     constructor(info: object) {
 
         for (let x in info) {
@@ -133,11 +142,12 @@ export class Trace {
         this.mobilLayerId = "ml-" + this.id;
 
         //this.lineLayerId = "ll-" + this.id;
+        
         this.init();
     }
 
     init() {
-
+        this.registerImages(this.images);
         /*this.coordinates = [];
         let fixDelay = 0;
         let ts = [];
@@ -162,10 +172,12 @@ export class Trace {
         this.setData(this.data);
         this.drawLineA();
         //let map = this.map;
+        
+
+
+        this.startSetPosition();
+        //this.playPopup();
         this.flyTo();
-
-
-
         return;
 
 
@@ -250,6 +262,37 @@ export class Trace {
 
     }
 
+    registerImages(images:any[]){
+        images.forEach((image)=>{
+
+            const info = image;
+            info.map = this.map;
+            switch(image.type){
+            case "arrow":
+                //info.width = 100;
+                //info.height = 160;
+                this.iImages[image.name] = new Arrow(info);
+                this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
+                break;
+            case "circle":
+                this.iImages[image.name] = new Point(info);
+                this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
+                break;
+            case "rombo":
+                break;
+            case "pulsing":
+                this.iImages[image.name] = new Pulsing(info);
+                this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
+                break;
+            }
+            
+
+        });
+        
+    }
+    getImageObj(name:string){
+        return this.iImages[name];
+    }
     setData(data) {
         this.data = data;
         this.coordinates = [];
@@ -291,6 +334,26 @@ export class Trace {
         //let index = this.data.findIndex((e)=>e.ts>=885);            
     }
     drawLineA() {
+        /*
+        let ele = $("mycanvas");
+        //console.log(ele.get());
+        let arrow = new Point({
+            map:this.map,
+            rgb:[255,76,0],
+            center:[255, 255, 102],
+            color:"rgba(128, 255, 0, 1)",
+            borderWidth: 10,
+            width:80, height:110
+        });
+        let imageData =  arrow.getCanvas();
+        ele.get().getContext("2d").putImageData(imageData.getContext("2d").getImageData(
+            0,
+            0,
+            80,
+            110
+        ), 20, 20);
+        */
+        //arrow.draw(ele.get().getContext("2d"));
 
         const roadSource = {
             "type": "geojson",
@@ -385,11 +448,14 @@ export class Trace {
         this.map.addSource(this.nodeSourceId, this.dataFilter([]));
 
         this.layers2.forEach((layer, index) => {
-
-            console.log(layer);
+            
+            
             if (layer.features && Array.isArray(layer.features)) {
                 layer.features.forEach((feature, index) => {
-                    this.createLayer(index, feature);
+                    //this.createLayer(index, feature);
+                    console.log(feature)
+                    const id = this.imageLayer(index, feature);
+                    this.playPopup(id, feature.type);
 
                 });
             }
@@ -804,7 +870,12 @@ export class Trace {
         this.draw();
     }
     createLayer(index, info) {
+
+        //return this.imageLayer(index, info);
         switch (info.type) {
+            case "arrow":
+                this.arrowLayer(index, info);
+                break;
             case "circle":
                 this.circleLayer(index, info);
                 break;
@@ -841,6 +912,53 @@ export class Trace {
         }
 
         return filter;
+
+    }
+
+    arrowLayer(index, info) {
+
+
+        let filter = this.createLayerFilter(info);
+
+        console.log(filter);
+        /*if(info.filter){
+            for(let x in info.filter){
+                filter = ["in", x, info.filter[x]]
+            } 
+        }*/
+
+        const id = this.layerId + this.layerIndex++;
+        this.layersId.push(id);
+        this.map.addLayer({
+            "id": id,
+            
+            "minzoom": 13,
+            "source": this.nodeSourceId,
+            
+
+            "type": "symbol",
+            
+            "layout": {
+                "visibility": "visible",
+                "icon-image": "arrow_002",
+                "icon-size": 0.4,
+                "icon-rotate": ["get", "heading"],
+                "icon-allow-overlap": true,
+                "icon-ignore-placement": true,
+                //"text-field":["get","speed"],
+                //"text-offset":[0,5],
+                //"text-ignore-placement": true,
+            },
+            //"paint": paint,
+            //filter: ["in", "$type", "Point"]
+            //filter: ["in", "type", "h", "m"]
+            //filter: ["in", "type"]
+            //filter:['>=',"speed",31]
+            //filter:["case",[">=",["get","speed"],31], true,false]
+            //filter:["any",['>=',"speed",31],['>=',"speed",30]]
+            filter: filter
+
+        });
 
     }
 
@@ -894,6 +1012,37 @@ export class Trace {
 
         });
 
+    }
+
+    imageLayer(index, info) {
+
+
+        const id = this.layerId + this.layerIndex++;
+        this.layersId.push(id);
+
+        let filter = this.createLayerFilter(info);
+        
+        if(!this.map.hasImage(info.image)){
+            console.log("errror");
+        }
+
+        this.map.addLayer({
+            "id": id,
+            "type": "symbol",
+            "source": this.nodeSourceId,
+            "layout": {
+                //visibility:["get", "visible"],
+                "visibility": info.visible ? "visible" : "none",
+                "icon-image": info.image,
+                "icon-size": 1.0 * (info.scale || 1),
+                "icon-rotate": ["get", "heading"],
+                "icon-allow-overlap": true,
+                "icon-ignore-placement": true,
+            },
+            filter: filter
+        });
+
+        return id;
     }
 
     pulsingLayer(index, info) {
@@ -1172,7 +1321,20 @@ export class Trace {
         return this._status;
     }
     goTo(index) {
+        //this.setStatus(2);
+        //cancelAnimationFrame(this.animation);
 
+        //let index = this._lastIndex + n;
+        if (index < 0) {
+            index = 0;
+        }
+        if (index > this.coordinatesInit.length - 1) {
+            index = this.coordinatesInit.length - 1;
+        }
+
+        this._lastIndex = index;
+
+        this.setProgress(this.data[this._lastIndex].ts);
     }
     setSpeed(speed) {
         this.speedFactor = speed;
@@ -1441,5 +1603,66 @@ export class Trace {
               //this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex)).data);
         //this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit).data);
 
+    }
+
+    startSetPosition(){
+        this.map.on("contextmenu", (e)=>{
+            
+            let line = turf.lineString(this.coordinatesInit);
+            let snapped = turf.nearestPointOnLine(line,[e.lngLat.lng, e.lngLat.lat],  { units: "meters" });
+            this.goTo(snapped.properties.index);
+        });
+    }
+
+    setPopup(popup){
+        this.popup = popup;
+    }
+    getPopup(popup){
+        return this.popup;
+    }
+    playPopup(layerId, type){
+        /*
+        var popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+            });
+            */
+        const map = this.map;     
+            map.on("mouseenter", layerId, (e) => {
+                map.getCanvas().style.cursor = 'pointer';
+                const info = e.features[0].properties;
+                info.layerId = layerId;
+                info.layerType = type;
+
+                let line = turf.lineString(this.coordinatesInit);
+                info.total_length = turf.length(line, {units: 'meters'}).toFixed(2);
+
+                let line2 = turf.lineString(this.coordinatesInit.slice(0, info.i));
+                info.length = turf.length(line2, {units: 'meters'}).toFixed(2);
+                // Change the cursor style as a UI indicator.
+                
+                //console.log(e.features[0].properties)
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = "Hola";//e.features[0].properties.description;
+                
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                //popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                this.onShowInfo(info);
+                this.popup.setLngLat(coordinates).addTo(map);
+            });
+             
+            map.on('mouseleave', layerId, () => {
+                map.getCanvas().style.cursor = '';
+                this.popup.remove();
+                //popup.remove();
+            });        
     }
 }

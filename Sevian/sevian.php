@@ -1095,6 +1095,7 @@ class S{
 			$templates = $theme->templates;
 		}
 		
+		$templates = (array)$templates;
 		if(!self::getTemplate()){
 			if(self::$templateName and isset($templates[self::$templateName])){
 				self::setTemplate(@file_get_contents($templates[self::$templateName]));

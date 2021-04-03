@@ -2,6 +2,7 @@ import {_sgQuery}  from '../../Sevian/ts/Query.js';
 import {Form2 as Form2} from '../../Sevian/ts/Form2.js';
 import {Menu as Menu} from '../../Sevian/ts/Menu2.js';
 import {Float}  from '../../Sevian/ts/Window.js';
+import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 
 
 export var GTHistory = (($) => {
@@ -61,7 +62,8 @@ export var GTHistory = (($) => {
 		public delay:number = 30000;
 		private main:any = null; 
 		private marks:any[] = [];
-
+		private infoForm:any = null;
+		private _infoForm:any = null;
 		private _info:any = null;
 		private _winInfo:any = null;
 		private _timer:any = null;
@@ -78,6 +80,9 @@ export var GTHistory = (($) => {
 		private unitInfo:any = null;
 		private data:any = null;
 		private layerConfig:any = null;
+		private tracePopup:any = null;
+		private popupInfoForm:any = null;
+
 		static _instances:object[] = []; 
 		
 		static getInstance(name){
@@ -130,6 +135,25 @@ export var GTHistory = (($) => {
 				this.formHistoryConfig.parentContext =  this;
 			
 				this._formHistoryConfig = new Form2(this.formHistoryConfig);
+				if(this.infoForm){
+
+					this.infoForm.id = this.getMap().getControl('trace').getPage(4);
+					this._infoForm = new InfoForm(this.infoForm);
+				}
+
+
+				this.tracePopup = new mapboxgl.Popup({
+					closeButton: false,
+					closeOnClick: false
+				});
+				let divInfo = $.create("div");
+				this.tracePopup.setDOMContent(divInfo.get());
+
+
+				this.infoForm.id = divInfo;
+					this.popupInfoForm = new InfoForm(this.infoForm);
+				
+
 			});
 			
 
@@ -452,13 +476,25 @@ return;
 					layer2[e.group].features.push(e);
 				}
 			});
-			//console.log(data);
+			//console.log(layer2);
 			this.getMap().delete('traza2');
 			this._trace = this.getMap().draw('traza2', 'trace', {
 				data:data,
 				layers:this.layerConfig.layers,
 				groups:this.layerConfig.groups,
 				layers2:layer2,
+				images:this.layerConfig.images,
+				popup:this.tracePopup,
+				onShowInfo:(info)=>{
+
+					info = Object.assign(this.data[info.i], info);
+					console.log(info)
+					this.popupInfoForm.setMode(info.layerType);
+					this.popupInfoForm.setData(info);
+					
+					this._infoForm.setMode(info.layerType);
+					this._infoForm.setData(info);
+				}
 				
 			});
 			

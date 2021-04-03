@@ -6,6 +6,7 @@ import { Float } from './Window.js';
 import { GTInfo } from '../../gt/ts/Info.js';
 import { GTUnit } from '../../gt/ts/Unit.js';
 import { GTHistory } from '../../gt/ts/History.js';
+import { InfoForm } from '../../sevian/ts/InfoForm.js';
 export var S = (($) => {
     ;
     let _winOptions = {
@@ -724,4 +725,5 @@ S.register("Menu", Menu);
 S.register("GTInfo", GTInfo);
 S.register("GTUnit", GTUnit);
 S.register("GTHistory", GTHistory);
+S.register("InfoForm", InfoForm);
 //# sourceMappingURL=Sevian.js.map

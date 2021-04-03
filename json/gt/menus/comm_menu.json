@@ -1,61 +1,64 @@
 {
-	"name":"comm_menu",
-	"caption":"",
-	"type":"popup",
-	"subType":"dropdown",
-	"className":["sevian","horizontal","comm-menu"],
-	"autoClose":true,
-	"params":false,
-	"onDataUser_":"S.send3(dataUser);",
-	"items":[
+	"name": "comm_menu",
+	"caption": "",
+	"type": "popup",
+	"subType": "dropdown",
+	"className": [
+		"sevian",
+		"horizontal",
+		"comm-menu"
+	],
+	"autoClose": true,
+	"params": false,
+	"onDataUser_": "S.send3(dataUser);",
+	"items": [
 		{
-			"caption":"",
-			"value":2,
-			"imageClass":"icon-comm-alert",
-			"propertys":{
-				"title":"",
-				"id":"button-connect2"
+			"caption": "",
+			"value": 2,
+			"imageClass": "icon-comm-alert",
+			"propertys": {
+				"title": "",
+				"id": "button-connect2"
 			},
-			"action":"",
-			"items":[
+			"action": "",
+			"items": [
 				{
-					"caption":"Leer Todos",
-					"action":"S.getElement('comm').readAll(S.getElement('comm').winNames.event)"
+					"caption": "Leer Todos",
+					"action": "S.getElement('comm').readAll(S.getElement('comm').winNames.event)"
 				},
 				{
-					"caption":"Eliminar Todos",
-					"action":"S.getElement('comm').deleteAll(S.getElement('comm').winNames.event)"
+					"caption": "Eliminar Todos",
+					"action": "S.getElement('comm').deleteAll(S.getElement('comm').winNames.event)"
 				}
 			]
 		},
 		{
-			"caption":"",
-			"value":4,
-			"imageClass":"icon-comm-alarm",
-			"propertys":{
-				"title":""
+			"caption": "",
+			"value": 4,
+			"imageClass": "icon-comm-alarm",
+			"propertys": {
+				"title": ""
 			},
-			"action":"",
-			"items":[
+			"action": "",
+			"items": [
 				{
-					"caption":"Leer Todos",
-					"action":"S.getElement('comm').readAll(S.getElement('comm').winNames.alarm)"
+					"caption": "Leer Todos",
+					"action": "S.getElement('comm').readAll(S.getElement('comm').winNames.alarm)"
 				},
 				{
-					"caption":"Eliminar Todos",
-					"action":"S.getElement('comm').deleteAll(S.getElement('comm').winNames.alarm)"
+					"caption": "Eliminar Todos",
+					"action": "S.getElement('comm').deleteAll(S.getElement('comm').winNames.alarm)"
 				}
 			]
 		},
 		{
-			"caption":"",
-			"value":1,
-			"imageClass":"icon-comm-message",
-			"propertys":{
-				"title":""
+			"caption": "",
+			"value": 1,
+			"imageClass": "icon-comm-message",
+			"propertys": {
+				"title": ""
 			},
-			"action":"S.getElement('gt-unit-10').showMenu()"
+			"action": "S.getElement('gt-unit-10').showMenu()"
 		}
-
 	]
-}	
+}

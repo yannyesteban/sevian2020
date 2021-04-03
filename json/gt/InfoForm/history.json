@@ -1,0 +1,13 @@
+{
+	"name":"history",
+	"caption":"Info..",
+	"type":"popup",
+	"subType":"dropdown",
+	"className":["aaa","bbb","ccc"],
+	"autoClose":true,
+	"params":false,
+    "template" :"/gt/info-history",
+    "templateName" :"/gt/info-history"
+
+	
+}	

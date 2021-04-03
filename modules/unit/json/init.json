@@ -1,0 +1,24 @@
+{
+	"theme": "sevian",
+	"title": "Webcar 3.0",
+	"templateName": "main",
+	"defaultPanel": 4,
+	"moduleMode": true,
+	"elements": [
+		{
+			"id": 4,
+			"element": "s-info-form",
+			"name": "/gt/infoForm/history",
+			"method": "load",
+			"designMode": true,
+			"fixed": true,
+			"type":0,
+			"mode":"panel"
+		}
+	],
+	"panels": [],
+	"sequences": [],
+	"actions": [],
+	"css": [],
+	"js": []
+}

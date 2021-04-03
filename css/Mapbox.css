@@ -79,10 +79,18 @@
 .trace-layer .text {
   font-size: 11px;
 }
+.trace-layer .sg-menu .layer-icon {
+  width: 18px;
+  height: 18px;
+}
+.trace-layer .sg-menu .layer-icon[class*=ddarrow] {
+  width: 10px;
+  height: 10px;
+}
 .trace-layer .sg-menu .image {
   width: 10px;
-  min-width: 10px;
   height: 10px;
+  display: none;
 }
 .trace-layer .sg-menu .option {
   background-color: #fafafa;
@@ -291,6 +299,28 @@
 }
 .trace-tool .sg-form .sg-menu .text {
   margin: 0px;
+}
+
+.info-form {
+  font-size: 9px;
+  line-height: 1.5em;
+  color: white;
+  padding: 4px;
+}
+.info-form > div > div {
+  display: inline-block;
+}
+
+[data-info-mode=pulsing] .info-form {
+  background-color: #077067;
+}
+
+[data-info-mode=circle] .info-form {
+  background-color: #dd2fc6;
+}
+
+[data-info-mode=arrow] .info-form {
+  background-color: #b31e43;
 }
 
 /*# sourceMappingURL=Mapbox.css.map */

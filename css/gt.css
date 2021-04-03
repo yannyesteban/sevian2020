@@ -153,6 +153,13 @@ form {
   background-position: center center;
 }
 
+.icon-info-2 {
+  background-image: url(../images/info_002.png);
+  background-size: 60% 60%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 .icon-line {
   background-image: url(../images/line.png);
 }

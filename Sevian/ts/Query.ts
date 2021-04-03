@@ -160,7 +160,7 @@ _sgObjet.prototype = {
 	
 	append: function(obj){
 		
-		if(!this.e || !this.e.appendChild || obj === false){
+		if(!this.e || !this.e.appendChild || obj === false || obj === null || obj === undefined){
 			return this;
 		}
 
@@ -171,7 +171,7 @@ _sgObjet.prototype = {
 				
 			}else if(obj instanceof HTMLElement){
 				this.e.appendChild(obj);
-			}else if(typeof obj.get === "function"){
+			}else if(obj.get && typeof obj.get === "function"){
 				this.e.appendChild(obj.get());
 				return obj;
 			}else{

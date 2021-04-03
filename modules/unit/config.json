@@ -1,0 +1,38 @@
+[
+    {
+        "type": "css",
+        "file": "json/css.json"
+    },
+    {
+        "type": "js",
+        "file": "json/js.json"
+    },
+    {
+        "type": "themes",
+        "file": "json/themes.json"
+    },
+    {
+        "type": "bd",
+        "file": "json/bd.json"
+    },
+    {
+        "type": "inputs",
+        "file": "json/inputs.json"
+    },
+    {
+        "type": "actions",
+        "file": "json/actions.json"
+    },
+    {
+        "type": "elements",
+        "file": "json/elements.json"
+    },
+    {
+        "type": "commands",
+        "file": "json/commands.json"
+    },
+    {
+        "type": "init",
+        "file": "json/init.json"
+    }
+]

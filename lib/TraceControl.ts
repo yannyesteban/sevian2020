@@ -99,6 +99,7 @@ export class TraceControl{
         tab.add({});
         tab.add({});
         tab.add({tagName:"form"});
+        tab.add({tagName:"form"});
         
         //this._length = this._group.create("span").addClass("rule-tool-value");
         //this._length.text("Layers");
@@ -126,6 +127,10 @@ export class TraceControl{
             this.mainTab.show(3);
         });
 
+        this._group_b.create("button").prop({"type": "button", "title":"Info"}).addClass(["icon-info-2"])
+        .on("click", ()=>{
+            this.mainTab.show(4);
+        });
 
         this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Descarta la medición actual"}).addClass(["icon-trash"])
         .on("click", ()=>{
@@ -295,7 +300,7 @@ export class TraceControl{
         });
     }
     speedBar(bar:any, value?:number){
-
+        
         
         this.speedRange.forEach((e, index)=>{
             const speed = this.speedRange.length - index - 1;  
@@ -450,13 +455,16 @@ export class TraceControl{
                 _menu = items[0];
                 
             }
+            let icon = $(this.getTrace().getImageObj(layer.image).getCanvas());
+            icon.addClass(["layer-icon", layer.image]);
 
             _menu.items.push({
-                caption:layer.caption,
+                caption: layer.caption,
+                customIcon:icon,
                 //className:layer.className,
                 useCheck:true,
                 className:[layer.type, layer.color],
-                imageClass:[layer.type, layer.color],
+                //imageClass:[layer.type, layer.color],
                 value:""+index++,
                 checked:layer.visible,
                 check:(x, event)=>{

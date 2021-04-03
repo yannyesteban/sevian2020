@@ -190,6 +190,23 @@ class History
 	}
 	
 	private function load(){
+
+
+		$info = new \Sigefor\InfoForm([
+
+			//'id'		=> $this->containerId,
+			'containerId'=>null,
+			'panelId'	=> $this->id,
+			'name'		=> '/gt/infoForm/history',
+			'method'	=> 'load',
+			'mode'		=> 1,
+			'userData'=> [],
+			
+			//'record'=>$this->getRecord()
+		]);
+		$info->load();
+		
+
 		$form =  new \Sigefor\Component\Form2([
 
 			'id'		=> $this->containerId,
@@ -230,6 +247,7 @@ class History
 			'id'            => $this->id,
 			'followMe'		=> true,
 			'delay'			=> 60000,
+			'infoForm'		=> $info->getInit()
 		];
 
 		

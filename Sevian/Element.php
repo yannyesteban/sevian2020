@@ -10,7 +10,7 @@ class Element{
 	public $updated = false;
 
 	protected $_panel = null;
-	private $_init = null;
+	protected $_init = null;
 	private $_jsActions = [];
 
 	protected $onDesing = true;

@@ -1,5 +1,16 @@
 [
-    {
+	{
+        "name": "s-info-form",
+        "enable": true,
+        "file": "{@MAIN_PATH}Sigefor/InfoForm.php",
+        "class": "\\Sigefor\\InfoForm",
+        "init": {
+            "patternJsonFile": "{@JSON_PATH}/{name}.json",
+            "patternTemplateFile": "{@TEMPLATES_PATH}/{name}.html"
+        },
+        "js": [],
+        "css": []
+    },    {
         "name": "s-structure",
         "enable": true,
         "file": "{@MAIN_PATH}Sigefor/Structure3.php",

@@ -11,13 +11,8 @@ trait JasonFileInfo{
 			if($pattern){
 				$name = str_replace('{name}', $name, $pattern);
 			}
-			
 			$file = \Sevian\S::varCustom(@file_get_contents($name, true), $this->userData, '&P_');
-			
 			$file = \Sevian\S::vars($file);
-			
-			//hr(file_get_contents($file, true),"red");
-			//hr(8888888888888);
 			return json_decode($file);
 		}
 
