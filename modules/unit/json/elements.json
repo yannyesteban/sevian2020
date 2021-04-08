@@ -72,7 +72,7 @@
         "name": "sgMap",
         "file": "{@MAIN_PATH}Sigefor/Map.php",
         "class": "\\Sevian\\Sigefor\\Map",
-        "enable": true,
+        "enable": false,
         "js": [
             {
                 "file": "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js",
@@ -105,7 +105,7 @@
         "name": "gt_map",
         "file": "{@MAIN_PATH}gt/Map.php",
         "class": "\\GT\\Map",
-        "enable": true,
+        "enable": false,
         "module":{
             "name":"GTMap",
             "src":"{@MAIN_PATH}build/GT/ts/Map.js"

@@ -64,6 +64,12 @@ export class Trace {
         this.callmove = () => { };
         this.callresize = () => { };
         this.ondraw = (coordinates) => { };
+        this.onAddLayer = (layerInfo) => { console.log(layerInfo); };
+        this.onUpdateLayer = (layerInfo) => { console.log(layerInfo); };
+        this.onRemoveLayer = (id) => { console.log(id); };
+        this.onAddImage = (imageInfo) => { console.log(imageInfo); };
+        this.onUpdateImage = (imageInfo) => { console.log(imageInfo); };
+        this.onRemoveImage = (id) => { console.log(id); };
         this.speedFactor = 0.05; // number of frames per longitude degree
         this.startTime = 0;
         this.endTime = -1;
@@ -108,6 +114,7 @@ export class Trace {
         this.roadLayerId = "rl-" + this.id;
         this.traceLayerId = "tl-" + this.id;
         this.mobilLayerId = "ml-" + this.id;
+        this.layerId = `${this.id}-i-`;
         //this.lineLayerId = "ll-" + this.id;
         this.init();
     }
@@ -135,7 +142,12 @@ export class Trace {
         //let index = this.data.findIndex((e)=>e.ts>=885);
         */
         this.setData(this.data);
-        this.drawLineA();
+        //this.drawLineA();
+        this.initSource(this.coordinatesInit);
+        this.createRoadLayer();
+        this.createMobilLayer();
+        this.createMarksLayer(this.layers2);
+        this.setTraceMode(this.traceMode, true);
         //let map = this.map;
         this.startSetPosition();
         //this.playPopup();
@@ -202,28 +214,47 @@ export class Trace {
         //this.setFill(this.fill);
         this.coordinates = [];
     }
+    getLayerId() {
+        return this.layerId + this.layerIndex++;
+    }
+    createImage(info) {
+        if (info.type == "arrow") {
+            return new Arrow(info);
+        }
+        if (info.type == "circle") {
+            return new Point(info);
+        }
+        if (info.type == "pulsing") {
+            return new Pulsing(info);
+        }
+    }
+    addImage(info) {
+        this.iImages[info.name] = this.createImage(Object.assign({ map: this.map }, info));
+        this.map.addImage(info.name, this.iImages[info.name], { pixelRatio: 3 });
+        this.onAddImage(info);
+    }
+    updateImage(info) {
+        if (this.map.hasImage(info.name)) {
+            this.map.removeImage(info.name);
+            this.onUpdateImage(info);
+        }
+        this.addImage(info);
+    }
+    removeImage(info) {
+        if (this.map.hasImage(info.name)) {
+            this.map.removeImage(info.name);
+            this.onRemoveImage(info);
+        }
+    }
     registerImages(images) {
         images.forEach((image) => {
+            this.addImage(image);
+            /*
             const info = image;
             info.map = this.map;
-            switch (image.type) {
-                case "arrow":
-                    //info.width = 100;
-                    //info.height = 160;
-                    this.iImages[image.name] = new Arrow(info);
-                    this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
-                    break;
-                case "circle":
-                    this.iImages[image.name] = new Point(info);
-                    this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
-                    break;
-                case "rombo":
-                    break;
-                case "pulsing":
-                    this.iImages[image.name] = new Pulsing(info);
-                    this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
-                    break;
-            }
+            this.iImages[image.name] = this.createImage(info);
+            this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
+            */
         });
     }
     getImageObj(name) {
@@ -264,6 +295,139 @@ export class Trace {
         this.coordinatesInit = this.coordinates.slice();
         console.log(this.data);
         //let index = this.data.findIndex((e)=>e.ts>=885);            
+    }
+    initSource(coordinates) {
+        this.map.addSource(this.roadSourceId, {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": coordinates
+                        }
+                    }
+                ]
+            }
+        });
+        this.map.addSource(this.traceSourceId, this._line = {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": [[]]
+                        }
+                    }
+                ]
+            }
+        });
+        this.map.addSource(this.nodeSourceId, {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [] //this.dataFilter(this.coordinatesInit)
+            }
+        });
+    }
+    createRoadLayer() {
+        const roadLayerInfo = {
+            color: "#ff9900",
+            width: 2,
+            opacity: 0.8,
+            dasharray: 2,
+            visible: true
+        };
+        this.map.addLayer({
+            "id": this.roadLayerId,
+            "type": "line",
+            "source": this.roadSourceId,
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round",
+                "visibility": (roadLayerInfo.visible) ? "visible" : "none"
+            },
+            "paint": {
+                "line-color": roadLayerInfo.color,
+                "line-width": roadLayerInfo.width,
+                "line-opacity": roadLayerInfo.opacity,
+                //"line-gap-width":4,
+                "line-dasharray": [roadLayerInfo.dasharray, roadLayerInfo.dasharray]
+            },
+            "filter": ["==", "$type", "LineString"]
+        });
+    }
+    createTraceLayer() {
+        const traceLayerInfo = {
+            color: "#ff9900",
+            width: 2,
+            opacity: 1.0,
+            dasharray: 2,
+            visible: true
+        };
+        this.map.addLayer({
+            "id": this.traceLayerId,
+            "type": "line",
+            "source": this.traceSourceId,
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round",
+                visibility: (traceLayerInfo.visible) ? "visible" : "none"
+            },
+            "paint": {
+                "line-color": traceLayerInfo.color,
+                "line-width": traceLayerInfo.width,
+                "line-opacity": traceLayerInfo.opacity,
+                //"line-gap-width":4,
+                "line-dasharray": [traceLayerInfo.dasharray, traceLayerInfo.dasharray]
+                //"line-dasharray":[1,1]
+            },
+            "filter": ["==", "$type", "LineString"]
+        });
+    }
+    createMobilLayer() {
+        const mobilLayerInfo = {
+            color: "#ff9900",
+            image: "vehiculo_004",
+            size: 0.4,
+            width: 2,
+            opacity: 1.0,
+            dasharray: 2,
+            visible: true
+        };
+        this.map.addLayer({
+            id: this.mobilLayerId,
+            type: "symbol",
+            source: this.traceSourceId,
+            layout: {
+                "visibility": (mobilLayerInfo.visible) ? "visible" : "none",
+                "icon-image": mobilLayerInfo.image,
+                "icon-size": mobilLayerInfo.size,
+                "icon-rotate": ["get", "heading"],
+                "icon-allow-overlap": true,
+                "icon-ignore-placement": true,
+                //"text-field":["get","speed"],
+                //"text-offset":[0,5],
+                //"text-ignore-placement": true,
+            },
+            paint: {},
+            filter: ["in", "dot", '']
+        });
+    }
+    createMarksLayer(layers) {
+        layers.forEach((layer, index) => {
+            if (layer.features && Array.isArray(layer.features)) {
+                layer.features.forEach((feature) => {
+                    const id = this.imageLayer(feature);
+                    this.playPopup(id, feature.className);
+                });
+            }
+        });
     }
     drawLineA() {
         /*
@@ -370,11 +534,10 @@ export class Trace {
         this.map.addSource(this.nodeSourceId, this.dataFilter([]));
         this.layers2.forEach((layer, index) => {
             if (layer.features && Array.isArray(layer.features)) {
-                layer.features.forEach((feature, index) => {
+                layer.features.forEach((feature) => {
                     //this.createLayer(index, feature);
-                    console.log(feature);
-                    const id = this.imageLayer(index, feature);
-                    this.playPopup(id, feature.type);
+                    //console.log(feature)
+                    const id = this.imageLayer(feature);
                 });
             }
             //e.id = "t_layer"+index;
@@ -734,6 +897,78 @@ export class Trace {
         }
     }
     createLayerFilter(info) {
+        const t = [
+            ["==", "=="],
+            ["!=", "<>"],
+            ["in", "In [a, b, c...]"],
+            ["not-in", "NOT In [a, b, c...]"],
+            [">=", ">="],
+            [">", ">"],
+            ["<=", "<="],
+            ["<", "<"],
+            ["()", "(n, m)"],
+            ["[)", "[n, m)"],
+            ["[]", "[n, m]"],
+            ["(]", "(n, m]"]
+        ];
+        const property = ["get", info.prop];
+        const value = (info.value || "").toString();
+        let values = value.split(",");
+        if (typeof this.data[0][info.prop] === "number") {
+            values = values.map(e => {
+                return Number(e);
+            });
+        }
+        else if (typeof this.data[0][info.prop] === "string") {
+            values = values.map(e => {
+                return String(e);
+            });
+        }
+        switch (info.valueType) {
+            case "==":
+                return ["==", property, values[0]];
+            case "!=":
+                return ["!=", property, values[0]];
+            case "in":
+                return ["in", info.prop].concat(values);
+            case "not-in":
+                return ["!in", info.prop].concat(values);
+            case ">=":
+                return [">=", property, values[0]];
+            case ">":
+                return [">", property, values[0]];
+            case "<=":
+                return ["<=", property, values[0]];
+            case "<":
+                return ["<", property, values[0]];
+            case "()":
+                return [
+                    "all",
+                    [">", property, values[0]],
+                    ["<", property, values[1]]
+                ];
+            case "[)":
+                return [
+                    "all",
+                    [">=", property, values[0]],
+                    ["<", property, values[1]]
+                ];
+            case "[]":
+                return [
+                    "all",
+                    [">=", property, values[0]],
+                    ["<=", property, values[1]]
+                ];
+            case "(]":
+                return [
+                    "all",
+                    [">", property, values[0]],
+                    ["<=", property, values[1]]
+                ];
+        }
+        return ["==", "2", "1"];
+    }
+    createLayerFilter2(info) {
         let filter = [];
         if (info.in !== undefined) {
             info.in.forEach((value) => {
@@ -838,10 +1073,12 @@ export class Trace {
             filter: filter
         });
     }
-    imageLayer(index, info) {
-        const id = this.layerId + this.layerIndex++;
+    imageLayer(info) {
+        const id = this.getLayerId();
+        info.id = id;
         this.layersId.push(id);
         let filter = this.createLayerFilter(info);
+        console.log(filter);
         if (!this.map.hasImage(info.image)) {
             console.log("errror");
         }
@@ -859,8 +1096,25 @@ export class Trace {
                 "icon-ignore-placement": true,
             },
             filter: filter
-        });
+        }, this.mobilLayerId);
+        this.playPopup(id, info.className);
+        this.onAddLayer(info);
         return id;
+    }
+    updateImageLayer(info) {
+        const layout = {
+            "visibility": "visible",
+            "icon-image": info.image,
+            "icon-size": 1.0 * (info.scale || 1),
+            "icon-rotate": ["get", "heading"]
+        };
+        for (let key in layout) {
+            this.map.setLayoutProperty(info.id, key, layout[key]);
+        }
+        console.log(this.createLayerFilter(info));
+        this.map.setFilter(info.id, this.createLayerFilter(info));
+        this.onUpdateLayer(info);
+        return info.id;
     }
     pulsingLayer(index, info) {
         const id = this.layerId + this.layerIndex++;
@@ -930,7 +1184,7 @@ export class Trace {
         if (index < 0) {
             index = this.data.length - 1;
         }
-        let coordinates = this.coordinates = this.coordinatesInit.slice(0, index);
+        let coordinates = this.coordinates = this.coordinatesInit.slice(0, index + 1);
         let nextPoint = null;
         let nextBearing = null;
         if (index > 0) {
@@ -1005,7 +1259,7 @@ export class Trace {
         this.ondraw(coordinates);
     }
     draw(nextPoint, nextBearing) {
-        this.coordinates = this.coordinatesInit.slice(0, this._lastIndex);
+        this.coordinates = this.coordinatesInit.slice(0, this._lastIndex + 1);
         this.coordinates.push(nextPoint);
         if (this._lastIndex > 0) {
             // creating the trace line of fixed length
@@ -1055,7 +1309,7 @@ export class Trace {
         };
         geojson.data.features.push(point);
         this.map.getSource(this.traceSourceId).setData(geojson.data);
-        this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex)).data);
+        this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex + 1)).data);
         this.ondraw(this.coordinates);
     }
     play() {
@@ -1297,8 +1551,8 @@ export class Trace {
         let centroid = turf.centroid(polygon);
         this.map.panTo(centroid.geometry.coordinates, { duration: duration || this.panDuration });
     }
-    showLayer(index, value) {
-        this.map.setLayoutProperty(this.layerId + index, "visibility", (value) ? "visible" : "none");
+    showLayer(id, value) {
+        this.map.setLayoutProperty(id, "visibility", (value) ? "visible" : "none");
     }
     setTraceMode(mode, init) {
         if (this.traceMode == mode && mode == 0 && init === undefined) {
@@ -1309,7 +1563,7 @@ export class Trace {
             this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit).data);
         }
         else if (mode == 1) {
-            this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex)).data);
+            this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex + 1)).data);
         }
         else if (mode == 2) {
         }
@@ -1329,7 +1583,13 @@ export class Trace {
     getPopup(popup) {
         return this.popup;
     }
-    playPopup(layerId, type) {
+    removeLayer(id) {
+        if (this.map.getLayer(id)) {
+            this.map.removeLayer(id);
+            this.onRemoveLayer(id);
+        }
+    }
+    playPopup(layerId, className) {
         /*
         var popup = new mapboxgl.Popup({
             closeButton: false,
@@ -1341,12 +1601,15 @@ export class Trace {
             map.getCanvas().style.cursor = 'pointer';
             const info = e.features[0].properties;
             info.layerId = layerId;
-            info.layerType = type;
+            info.className = className;
             let line = turf.lineString(this.coordinatesInit);
             info.total_length = turf.length(line, { units: 'meters' }).toFixed(2);
-            let line2 = turf.lineString(this.coordinatesInit.slice(0, info.i));
-            info.length = turf.length(line2, { units: 'meters' }).toFixed(2);
-            // Change the cursor style as a UI indicator.
+            info.length = 0;
+            if (info.i > 0) {
+                let line2 = turf.lineString(this.coordinatesInit.slice(0, info.i + 1));
+                info.length = turf.length(line2, { units: 'meters' }).toFixed(2);
+                // Change the cursor style as a UI indicator.
+            }
             //console.log(e.features[0].properties)
             var coordinates = e.features[0].geometry.coordinates.slice();
             var description = "Hola"; //e.features[0].properties.description;

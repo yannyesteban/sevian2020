@@ -39,6 +39,20 @@ export class InfoForm {
         this.main.addClass(this.className);
         this.main.ds("infoMode", this.mode);
         this.main.text(this.html);
+        /*
+        const layerTool = new LayerTool({id:"xx99"});
+                const win = new Float.Window({
+                    visible:true,
+                    caption: "Layer Control",
+                    child:layerTool.get(),
+                    left:10,
+                    top:40,
+                    width: "300px",
+                    height: "300px",
+                    mode:"auto",
+                    className:["sevian"]
+                });
+        */
     }
     setData(data) {
         let elems = this.main.queryAll("[data-id]");

@@ -1,0 +1,57 @@
+{
+	"name":"history_layer",
+	"caption":"Layer",
+	"className":"history",
+	"query":"SELECT '' as name, '' as prop, '' as caption, '' as image, '' as scale, '' as value_type, '' as value, '' as group, '' as visible",
+	"menuName":"/gt/menus/history_form",
+	"methods":{
+		"request":{
+			"menuName":"/gt/menus/history_form"
+		},
+		"load":{
+			"menuName":"/gt/menus/history_form"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{
+			"name":"unit_id","caption":"Unidad","input":"list","type":"text",
+			
+			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM unit as u LEFT JOIN unit_name as vn ON vn.id = u.name_id LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
+			"params":{"placeholder":"...UNIDAD"},
+			"_events":{"change":"S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{unitId:this.getForm().getValue('unit_id')}}],});"}
+		},
+		{
+			"name":"date_from","caption":"Desde","input":"input","type":"date", "placeholder":"...UNIDAD"
+		},
+		{
+			"name":"date_to","caption":"Hasta","input":"input","type":"date"
+		},
+		{
+			"name":"hour_from","caption":"Hora inicio","input":"input","type":"time"
+		},
+		{
+			"name":"hour_to","caption":"Hora Final","input":"input","type":"time"
+		},
+		{
+			"name":"mode","caption":"Modo","input":"input","type":"select","default":0,
+			"data":[
+				[0, "Traza Completa"],
+				[1, "Traza  Ajustada al Recorrido"]
+				
+			  ]
+		},
+		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
+		"data":[
+			[0, "seleccione", "*"],
+			"select id, brand from brand ORDER BY brand"
+			
+		  ]},
+		{"name":"model","caption":"Modelo"}
+
+	]
+
+}

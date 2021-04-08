@@ -4,6 +4,7 @@ import {Menu as Menu} from '../../Sevian/ts/Menu2.js';
 import {Float}  from '../../Sevian/ts/Window.js';
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 
+import { LayerTool } from './LayerTool.js';
 
 export var GTHistory = (($) => {
    
@@ -151,7 +152,9 @@ export var GTHistory = (($) => {
 
 
 				this.infoForm.id = divInfo;
-					this.popupInfoForm = new InfoForm(this.infoForm);
+				this.popupInfoForm = new InfoForm(this.infoForm);
+
+				
 				
 
 			});
@@ -383,92 +386,14 @@ return;
 		}
 		
 		uPlay(){
-			this.layers_ = [
-				{
-					type:"circle",
-					color:"red",
-					filter:{
-						s: 1
-					}
-						
-				},
-				{
-					type:"circle",
-					color:"#43f3f7",
-					filter:{
-						s: 2
-					},
-				},
-				{
-					type:"circle",
-					color:"#00d4ff",
-					filter:{
-						s: 3
-					},
-				},
-				{
-					type:"circle",
-					color:"#007dff",
-					filter:{
-						s: 4
-					},
-				},
-				{
-					type:"circle",
-					color:"#0005ff",
-					filter:{
-						s: 5
-					},
-				},
-				{
-					type:"circle",
-					color:"#6f00ff",
-					filter:{
-						s: 6
-					},
-				},
-				{
-					type:"circle",
-					color:"#e200ff",
-					filter:{
-						s: 7
-					},
-				},
-				{
-					type:"circle",
-					color:"#ff8400",
-					filter:{
-						s: 8
-					},
-				},
-				{
-					type:"circle",
-					color:"#00ff80",
-					filter:{
-						s: 9
-					},
-				},
-				{
-					type:"circle",
-					color:"black",
-					filter:{
-						s: 10
-					},
-				},
-				{
-					type:"pulsing",
-					color:"black",
-					filter:{
-						p: 1
-					}
-				}
-			];
+			
 			//console.log(this.data);return;
 			let data = this.formateData(this.data);
 			//console.log(data);return;
-
+			//this.layerConfig = this.getInfo();
 			const layer2 = this.layerConfig.groups;
 			this.layerConfig.layers.forEach((e, index)=>{
+				//console.log(e);
 				if(e.group !== undefined && layer2[e.group]){
 					if(!layer2[e.group].features){
 						layer2[e.group].features = [];
@@ -476,7 +401,7 @@ return;
 					layer2[e.group].features.push(e);
 				}
 			});
-			//console.log(layer2);
+			//console.log(layer2);return;
 			this.getMap().delete('traza2');
 			this._trace = this.getMap().draw('traza2', 'trace', {
 				data:data,
@@ -488,11 +413,11 @@ return;
 				onShowInfo:(info)=>{
 
 					info = Object.assign(this.data[info.i], info);
-					console.log(info)
-					this.popupInfoForm.setMode(info.layerType);
+					//console.log(info)
+					this.popupInfoForm.setMode(info.className);
 					this.popupInfoForm.setData(info);
 					
-					this._infoForm.setMode(info.layerType);
+					this._infoForm.setMode(info.className);
 					this._infoForm.setData(info);
 				}
 				
@@ -510,6 +435,42 @@ return;
 			});
 
 
+			const layerTool = new LayerTool({
+				data:this.layerConfig,
+				onNewLayer:(id, info)=>{
+					layerTool.setNewIdLayer(this._trace.imageLayer(info));
+				},
+				onEditLayer:(id, info)=>{
+					this._trace.updateImageLayer(info);
+				},
+				onDeleteLayer:(id, info)=>{
+					this._trace.removeLayer(id);
+				},
+
+				onNewImage:(id, info)=>{
+					this._trace.addImage(info);
+				},
+				onEditImage:(id, info)=>{
+					this._trace.updateImage(info);
+				},
+				onDeleteImage:(id, info)=>{
+					this._trace.removeImage(info);
+				}
+			});
+
+
+			
+			const win = new Float.Window({
+				visible:true,
+				caption: "Layer Control",
+				child:layerTool.get(),
+				left:10,
+				top:40,
+				width: "300px",
+				height: "300px",
+				mode:"auto",
+				className:["sevian"]
+			});
 			
 			//this.getMap().getControl('trace').setFilterPage(this._form.get());
 
@@ -926,6 +887,240 @@ return;
 		}
 		getTrace(){
 			return this._trace;
+		}
+
+		getInfo(){
+			return {
+				"images":[
+					{
+						"name":"pulsing-1",
+						"type":"pulsing",
+						"color":"#ff6464",
+						"border":"#ffffff",
+						"halo":"#FFC8C8"
+					},
+					{
+						"name":"pulsing-2",
+						"type":"pulsing",
+						"color":"#12AAC8",
+						"border":"#ffffff",
+						"halo":"#CCF2F9"
+					},
+					{
+						"name":"pulsing-3",
+						"type":"pulsing",
+						"color":"#FFFC84",
+						"border":"#FF4500",
+						"halo":"#FFD3C6"
+					},
+					{
+						"name":"circle-0",
+						"type":"circle",
+						"color":"#000000",
+						"border":"#ffffff"
+					},
+					{
+						"name":"circle-1",
+						"type":"circle",
+						"color":"#FFFF00",
+						"border":"#ffffff"
+					},
+					{
+						"name":"circle-2",
+						"type":"circle",
+						"color":"#339966",
+						"border":"#ffffff"
+					},
+					{
+						"name":"circle-3",
+						"type":"circle",
+						"color":"#FF0000",
+						"border":"#ffffff"
+					},
+					{
+						"name":"circle-4",
+						"type":"circle",
+						"color":"#3366cc",
+						"border":"#ffffff"
+					},
+					{
+						"name":"arrow-1",
+						"type":"arrow",
+						"color":"#ff99ff",
+						"border":"#ffffff"
+					},
+					{
+						"name":"arrow-2",
+						"type":"arrow",
+						"color":"#FF0000",
+						"border":"#ffffff"
+					},
+					{
+						"name":"arrow-3",
+						"type":"arrow",
+						"color":"#008000",
+						"border":"#ffffff"
+					},
+					{
+						"name":"arrow-4",
+						"type":"arrow",
+						"color":"#66ffff",
+						"border":"#ffffff"
+					},
+					{
+						"name":"arrow-5",
+						"type":"arrow",
+						"color":"#ffccff",
+						"border":"#ffffff"
+					},
+					{
+						"name":"arrow-6",
+						"type":"arrow",
+						"color":"#ff9900",
+						"border":"#ffffff"
+					},
+					{
+						"name":"arrow-7",
+						"type":"arrow",
+						"color":"#cc3399",
+						"border":"#FFC0CB"
+					}
+				],
+				
+				"colors":[
+					"#FF0000",
+					"#FFFF00",
+					"#0000FF",
+					"#008000",
+					"#FF0000",
+					"#FF4500",
+					"#000000",
+					"#ffffff",
+					"aquamarine",
+					"brown",
+					"fuchsia",
+					"#008000#FFFF00",
+					"lime",
+					"magenta",
+					"dark#0000FF"],
+				"groups":[
+					{
+						"caption":"Capas",
+						"className":"x",
+						"mode":"close"
+					},
+					{
+						"caption":"Velocidad",
+						"className":"x",
+						"mode":"close"
+					},
+					
+					{
+						"caption":"Inputs",
+						"className":"x",
+						"mode":"close"
+					},
+					{
+						"caption":"Opuputs",
+						"className":"x",
+						"mode":"close"
+					},
+					{
+						"caption":"Eventos",
+						"className":"x",
+						"mode":"close"
+					},
+					{
+						"caption":"Mis Alarmas",
+						"className":"x",
+						"mode":"close"
+					},
+					{
+						"caption":"Mis Eventos",
+						"className":"x",
+						"mode":"close"
+					}
+				],
+				"layers":[	
+					{
+						"prop":"speed",
+						"caption":"Detenido",
+						"image":"pulsing-1",
+						"scale" : 1.0,
+						"valueType":"==",
+						"value":0,
+						"className":"",
+						"group":1,
+						"visible":true
+					},
+					{
+						"prop":"speed",
+						"caption":"0+ a 20 Km/h",
+						"image":"pulsing-2",
+						"scale" : 1.0,
+						"valueType":"(]",
+						"value":"0,20",
+						"className":"",
+						"group":1,
+						"visible":true
+					},
+					{
+						"prop":"speed",
+						"caption":"20 a 40 Km/h",
+						"image":"pulsing-3",
+						"scale" : 1.0,
+						"valueType":"(]",
+						"value":"20,40",
+						"className":"",
+						"group":1,
+						"visible":true
+					},
+					{
+						"prop":"speed",
+						"caption":"40 a 60 Km/h",
+						"image":"arrow-3",
+						"scale" : 1.0,
+						"valueType":"(]",
+						"value":"40,60",
+						"className":"",
+						"group":1,
+						"visible":true
+					},
+					{
+						"prop":"speed",
+						"caption":"60 a 80 Km/h",
+						"image":"arrow-4",
+						"scale" : 1.0,
+						"valueType":"(]",
+						"value":"60,80",
+						"className":"",
+						"group":1,
+						"visible":true
+					},
+					{
+						"prop":"speed",
+						"caption":"80 a 100 Km/h",
+						"image":"arrow-5",
+						"scale" : 1.0,
+						"valueType":"(]",
+						"value":"80,100",
+						"className":"",
+						"group":1,
+						"visible":true
+					},
+					{
+						"prop":"speed",
+						"caption":"100+ Km/h",
+						"image":"arrow-6",
+						"scale" : 1.0,
+						"valueType":">",
+						"value":"100",
+						"className":"",
+						"group":1,
+						"visible":true
+					}
+				]
+			};
 		}
 	}
 	

@@ -1,239 +1,230 @@
 {
-	"images":[
-        {
-            "name":"pulsing-1",
-            "type":"pulsing",
-            "color":"#ff6464",
-            "border":"white",
-            "halo":"#FFC8C8"
-        },
-        {
-            "name":"pulsing-2",
-            "type":"pulsing",
-            "color":"#12AAC8",
-            "border":"white",
-            "halo":"#CCF2F9"
-        },
-        {
-            "name":"pulsing-3",
-            "type":"pulsing",
-            "color":"#FFFC84",
-            "border":"orange",
-            "halo":"#FFD3C6"
-        },
-        {
-            "name":"circle-0",
-            "type":"circle",
-            "color":"black",
-            "border":"white"
-        },
-        {
-            "name":"circle-1",
-            "type":"circle",
-            "color":"yellow",
-            "border":"white"
-        },
-        {
-            "name":"circle-2",
-            "type":"circle",
-            "color":"#339966",
-            "border":"white"
-        },
-        {
-            "name":"circle-3",
-            "type":"circle",
-            "color":"red",
-            "border":"white"
-        },
-        {
-            "name":"circle-4",
-            "type":"circle",
-            "color":"#3366cc",
-            "border":"white"
-        },
-        {
-            "name":"arrow-1",
-            "type":"arrow",
-            "color":"#ff99ff",
-            "border":"white"
-        },
-        {
-            "name":"arrow-2",
-            "type":"arrow",
-            "color":"red",
-            "border":"white"
-        },
-        {
-            "name":"arrow-3",
-            "type":"arrow",
-            "color":"green",
-            "border":"white"
-        },
-        {
-            "name":"arrow-4",
-            "type":"arrow",
-            "color":"#66ffff",
-            "border":"white"
-        },
-        {
-            "name":"arrow-5",
-            "type":"arrow",
-            "color":"#ffccff",
-            "border":"white"
-        },
-        {
-            "name":"arrow-6",
-            "type":"arrow",
-            "color":"#ff9900",
-            "border":"white"
-        },
-        {
-            "name":"arrow-7",
-            "type":"arrow",
-            "color":"#cc3399",
-            "border":"pink"
-        }
-    ],
-    
-    "colors":[
-		"red",
-		"yellow",
-		"blue",
-		"green",
-		"red",
-		"orange",
-		"black",
-		"white",
+	"images": [
+		{
+			"name": "pulsing-1",
+			"type": "pulsing",
+			"color": "#ff6464",
+			"border": "#ffffff",
+			"halo": "#FFC8C8"
+		},
+		{
+			"name": "pulsing-2",
+			"type": "pulsing",
+			"color": "#12AAC8",
+			"border": "#ffffff",
+			"halo": "#CCF2F9"
+		},
+		{
+			"name": "pulsing-3",
+			"type": "pulsing",
+			"color": "#FFFC84",
+			"border": "#FF4500",
+			"halo": "#FFD3C6"
+		},
+		{
+			"name": "circle-0",
+			"type": "circle",
+			"color": "#000000",
+			"border": "#ffffff"
+		},
+		{
+			"name": "circle-1",
+			"type": "circle",
+			"color": "#FFFF00",
+			"border": "#ffffff"
+		},
+		{
+			"name": "circle-2",
+			"type": "circle",
+			"color": "#339966",
+			"border": "#ffffff"
+		},
+		{
+			"name": "circle-3",
+			"type": "circle",
+			"color": "#FF0000",
+			"border": "#ffffff"
+		},
+		{
+			"name": "circle-4",
+			"type": "circle",
+			"color": "#3366cc",
+			"border": "#ffffff"
+		},
+		{
+			"name": "arrow-1",
+			"type": "arrow",
+			"color": "#ff99ff",
+			"border": "#ffffff"
+		},
+		{
+			"name": "arrow-2",
+			"type": "arrow",
+			"color": "#FF0000",
+			"border": "#ffffff"
+		},
+		{
+			"name": "arrow-3",
+			"type": "arrow",
+			"color": "#008000",
+			"border": "#ffffff"
+		},
+		{
+			"name": "arrow-4",
+			"type": "arrow",
+			"color": "#66ffff",
+			"border": "#ffffff"
+		},
+		{
+			"name": "arrow-5",
+			"type": "arrow",
+			"color": "#ffccff",
+			"border": "#ffffff"
+		},
+		{
+			"name": "arrow-6",
+			"type": "arrow",
+			"color": "#ff9900",
+			"border": "#ffffff"
+		},
+		{
+			"name": "arrow-7",
+			"type": "arrow",
+			"color": "#cc3399",
+			"border": "#FFC0CB"
+		}
+	],
+	"colors": [
+		"#FF0000",
+		"#FFFF00",
+		"#0000FF",
+		"#008000",
+		"#FF0000",
+		"#FF4500",
+		"#000000",
+		"#ffffff",
 		"aquamarine",
 		"brown",
 		"fuchsia",
-		"greenyellow",
+		"#008000#FFFF00",
 		"lime",
 		"magenta",
-		"darkblue"],
-	"groups":[
+		"dark#0000FF"
+	],
+	"groups": [
 		{
-			"caption":"Capas",
-			"className":"x",
-			"mode":"close"
+			"caption": "General One",
+			"className": "x",
+			"mode": "close"
 		},
 		{
-			"caption":"Velocidad",
-			"className":"x",
-			"mode":"close"
-		},
-		
-		{
-			"caption":"Inputs",
-			"className":"x",
-			"mode":"close"
+			"caption": "Velocidad",
+			"className": "x",
+			"mode": "close"
 		},
 		{
-			"caption":"Opuputs",
-			"className":"x",
-			"mode":"close"
+			"caption": "Inputs",
+			"className": "x",
+			"mode": "close"
 		},
 		{
-			"caption":"Eventos",
-			"className":"x",
-			"mode":"close"
+			"caption": "Opuputs",
+			"className": "x",
+			"mode": "close"
 		},
 		{
-			"caption":"Mis Alarmas",
-			"className":"x",
-			"mode":"close"
+			"caption": "Eventos",
+			"className": "x",
+			"mode": "close"
 		},
 		{
-			"caption":"Mis Eventos",
-			"className":"x",
-			"mode":"close"
+			"caption": "Mis Alarmas",
+			"className": "x",
+			"mode": "close"
+		},
+		{
+			"caption": "Mis Eventos",
+			"className": "x",
+			"mode": "close"
 		}
 	],
-	"layers":[	
+	"layers": [
 		{
-			"prop":"speed",
-			"caption":"Detenido",
-            "image":"pulsing-1",
-            "scale" : 1.0,
-			"type":"circle",
-			"color":"black",
-			"cond":"==",
-			"in":[0],
-			"group":1,
-			"visible":true,
-			"exp":"{speed}=="
-			
+			"prop": "speed",
+			"caption": "Detenido",
+			"image": "pulsing-1",
+			"scale": 1.0,
+			"valueType": "==",
+			"value": 0,
+			"className": "pulsing",
+			"group": 1,
+			"visible": true
 		},
 		{
-			"prop":"speed",
-			"caption":"0+ a 20 Km/h",
-            "image":"pulsing-2",
-            "scale" : 1.0,
-			"type":"circle",
-			"color":"fuchsia",
-			"from":0,
-			"to_e":20,
-			"group":1,
-			"visible":true
+			"prop": "speed",
+			"caption": "0+ a 20 Km/h",
+			"image": "pulsing-2",
+			"scale": 1.0,
+			"valueType": "(]",
+			"value": "0,20",
+			"className": "pulsing",
+			"group": 1,
+			"visible": true
 		},
 		{
-			"prop":"speed",
-			"caption":"20 a 40 Km/h",
-            "image":"pulsing-3",
-            "scale" : 1.0,
-			"type":"arrow",
-			"color":"yellow",
-			"from":20,
-			"to_e":40,
-			"group":1,
-			"visible":true
+			"prop": "speed",
+			"caption": "20 a 40 Km/h",
+			"image": "pulsing-3",
+			"scale": 1.0,
+			"valueType": "(]",
+			"value": "20,40",
+			"className": "pulsing",
+			"group": 1,
+			"visible": true
 		},
 		{
-			"prop":"speed",
-			"caption":"40 a 60 Km/h",
-            "image":"arrow-3",
-            "scale" : 1.0,
-			"type":"pulsing",
-			"color":"blue",
-			"from":40,
-			"to_e":60,
-			"group":1,
-			"visible":true
+			"prop": "speed",
+			"caption": "40 a 60 Km/h",
+			"image": "arrow-3",
+			"scale": 1.0,
+			"valueType": "(]",
+			"value": "40,60",
+			"className": "arrow",
+			"group": 1,
+			"visible": true
 		},
 		{
-			"prop":"speed",
-			"caption":"60 a 80 Km/h",
-            "image":"arrow-4",
-            "scale" : 1.0,
-			"type":"pulsing",
-			"color":"green",
-			"from":60,
-			"to_e":80,
-			"group":1,
-			"visible":true
+			"prop": "speed",
+			"caption": "60 a 80 Km/h",
+			"image": "arrow-4",
+			"scale": 1.0,
+			"valueType": "(]",
+			"value": "60,80",
+			"className": "arrow",
+			"group": 1,
+			"visible": true
 		},
 		{
-			"prop":"speed",
-			"caption":"80 a 100 Km/h",
-            "image":"arrow-5",
-            "scale" : 1.0,
-			"type":"pulsing",
-			"color":"orange",
-			"from":80,
-			"to_e":100,
-			"group":1,
-			"visible":true
+			"prop": "speed",
+			"caption": "80 a 100 Km/h",
+			"image": "arrow-5",
+			"scale": 1.0,
+			"valueType": "(]",
+			"value": "80,100",
+			"className": "arrow",
+			"group": 1,
+			"visible": true
 		},
 		{
-			"prop":"speed",
-			"caption":"100+ Km/h",
-            "image":"arrow-6",
-            "scale" : 1.0,
-			"type":"pulsing",
-			"color":"red",
-			"from":100,
-			"group":1,
-			"visible":true
+			"prop": "speed",
+			"caption": "100+ Km/h",
+			"image": "arrow-6",
+			"scale": 1.0,
+			"valueType": ">",
+			"value": "100",
+			"className": "arrow",
+			"group": 1,
+			"visible": true
 		}
 	]
 }

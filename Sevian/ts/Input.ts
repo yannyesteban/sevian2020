@@ -179,7 +179,7 @@ export var Input = (($) => {
             }
             return false;
         }
-        createOptions(parentValue:any){
+        createOptions(parentValue?:any){
             
             
 
@@ -217,7 +217,10 @@ export var Input = (($) => {
 			}
 			
         }
-        
+        setOptionsData(data:any[]){
+            this.data = data;
+            this.createOptions(this.getParentValue());
+        }
         evalOptions(parentValue:any){
 
         }

@@ -320,7 +320,7 @@ export var Form2 = (($) => {
             return this._inputs[info.name];
            
         }
-        createField(input:string, info:any){
+        createField(input:string, info?:any){
 			info = input;
             
             if(input.type === "hidden"){

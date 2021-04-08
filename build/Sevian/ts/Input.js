@@ -168,6 +168,10 @@ export var Input = (($) => {
                 }
             }
         }
+        setOptionsData(data) {
+            this.data = data;
+            this.createOptions(this.getParentValue());
+        }
         evalOptions(parentValue) {
         }
         getName() {

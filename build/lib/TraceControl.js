@@ -317,6 +317,21 @@ export class TraceControl {
     setTrace(trace) {
         this._trace = trace;
         this._trace.setSpeed(this.dir * this.factorSpeed * this.speedRange[this.speed]);
+        this._trace.onAddLayer = (layer) => {
+            this.showLayers();
+        };
+        this._trace.onUpdateLayer = (layer) => {
+            this.showLayers();
+        };
+        this._trace.onRemoveLayer = (id) => {
+            this.showLayers();
+        };
+        this._trace.onRemoveImage = (info) => {
+            this.showLayers();
+        };
+        this._trace.onUpdateImage = (info) => {
+            this.showLayers();
+        };
         this.init();
         //this.showLayers();
     }
@@ -330,6 +345,7 @@ export class TraceControl {
         return this.getTrace().groups;
     }
     showLayers() {
+        this.getPage(1).text("");
         this.groups = this.getTraceGroupLayers();
         const layers = this.getTraceLayers();
         //console.log(this.groups, layers);
@@ -342,6 +358,7 @@ export class TraceControl {
             if (layer.group !== "" && layer.group !== 0) {
                 if (!items[layer.group]) {
                     items[layer.group] = {
+                        ds: { group: layer.group },
                         caption: this.groups[layer.group].caption,
                         useCheck: true,
                         items: []
@@ -372,7 +389,7 @@ export class TraceControl {
                 checked: layer.visible,
                 check: (x, event) => {
                     this.onCheckLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
-                    this.getTrace().showLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
+                    this.getTrace().showLayer(layer.id, event.currentTarget.checked);
                 }
             });
         }
@@ -384,6 +401,24 @@ export class TraceControl {
             useCheck: true,
             subType: "",
         });
+        return;
+        this.getTrace().onAddLayer = (layer) => {
+            let icon = $(this.getTrace().getImageObj(layer.image).getCanvas());
+            menu.add({
+                caption: layer.caption,
+                customIcon: icon,
+                //className:layer.className,
+                useCheck: true,
+                className: [layer.type, layer.color],
+                //imageClass:[layer.type, layer.color],
+                value: "" + index++,
+                checked: layer.visible,
+                check: (x, event) => {
+                    this.onCheckLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
+                    this.getTrace().showLayer(layer.id, event.currentTarget.checked);
+                }
+            });
+        };
     }
     setLength(length) {
         this.length = length;
