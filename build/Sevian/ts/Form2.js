@@ -44,7 +44,7 @@ export var Form2 = (($) => {
             this._page = null;
             this._pg = [];
             this._tab = null;
-            this._inputs = [];
+            this._inputs = {};
             this.parentContext = null;
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -563,7 +563,6 @@ export var Form2 = (($) => {
                                 items: [
                                     {
                                         caption: "Guardar",
-                                        //useCheck:true,
                                     },
                                     {
                                         caption: "Volver"

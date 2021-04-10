@@ -151,7 +151,6 @@
                         visibility: "hidden",
                         overflow: "none",
                         zIndex: 150000000,
-                        //border:"4px solid red",
                     });
                 }
                 main.addClass("close");

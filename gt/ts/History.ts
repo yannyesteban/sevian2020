@@ -455,7 +455,14 @@ return;
 				},
 				onDeleteImage:(id, info)=>{
 					this._trace.removeImage(info);
-				}
+				},
+
+				onSaveRoad:(data=>{
+					this._trace.updateRoadLayer(data);
+				}),
+				onSaveTrace:(data=>{
+					this._trace.updateTraceLayer(data);
+				}),
 			});
 
 

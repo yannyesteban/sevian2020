@@ -292,8 +292,6 @@ export var GTHistory = (($) => {
                         "name": "/form/h_commands",
                         "eparams": {
                             "a": 'yanny',
-                            //"mainId":this.bodyPanelId,
-                            //"unitId":unitId,
                         }
                     }
                 ],
@@ -365,7 +363,13 @@ export var GTHistory = (($) => {
                 },
                 onDeleteImage: (id, info) => {
                     this._trace.removeImage(info);
-                }
+                },
+                onSaveRoad: (data => {
+                    this._trace.updateRoadLayer(data);
+                }),
+                onSaveTrace: (data => {
+                    this._trace.updateTraceLayer(data);
+                }),
             });
             const win = new Float.Window({
                 visible: true,

@@ -238,7 +238,7 @@
 		"visible":true
 	},
 	"traceLayer":{
-		"caption":"Rastro",s
+		"caption":"Rastro",
 		"color":"#451363",
 		"width":"2",
 		"opacity":1.0,

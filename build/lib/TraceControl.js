@@ -339,7 +339,7 @@ export class TraceControl {
         return this._trace;
     }
     getTraceLayers() {
-        return this.getTrace().layers;
+        return this.getTrace().getAllLayers(); //.layers;
     }
     getTraceGroupLayers() {
         return this.getTrace().groups;
@@ -348,14 +348,14 @@ export class TraceControl {
         this.getPage(1).text("");
         this.groups = this.getTraceGroupLayers();
         const layers = this.getTraceLayers();
-        //console.log(this.groups, layers);
+        console.log(layers);
         //alert(889);
         //return;
         let items = [];
         let _menu = null;
         let index = 0;
         for (let layer of layers) {
-            if (layer.group !== "" && layer.group !== 0) {
+            if (layer.group >= 0) {
                 if (!items[layer.group]) {
                     items[layer.group] = {
                         ds: { group: layer.group },
@@ -376,8 +376,11 @@ export class TraceControl {
                 }
                 _menu = items[0];
             }
-            let icon = $(this.getTrace().getImageObj(layer.image).getCanvas());
-            icon.addClass(["layer-icon", layer.image]);
+            let icon = null;
+            if (layer.image) {
+                icon = $(this.getTrace().getImageObj(layer.image).getCanvas());
+                icon.addClass(["layer-icon", layer.image]);
+            }
             _menu.items.push({
                 caption: layer.caption,
                 customIcon: icon,

@@ -28,9 +28,13 @@ export class LayerTool{
     public onEditImage:Function = (index, data)=>{};
     public onDeleteImage:Function = (index, data)=>{};
 
-    public onNewgroup:Function = (index, data)=>{};
+    public onNewGroup:Function = (index, data)=>{};
     public onEditGroup:Function = (index, data)=>{};
     public onDeletegroup:Function = (index, data)=>{};
+
+    public onSaveRoad:Function = (data)=>{};
+    public onSaveTrace:Function = (data)=>{};
+    public onSaveMobil:Function = (data)=>{};
 
     constructor(info){
 			
@@ -73,15 +77,20 @@ export class LayerTool{
             id:main
         });
         
-        tab.add({caption:"Layers", tagName:"form", active:true});
-        tab.add({caption:"Images",tagName:"form"});
-        tab.add({caption:"groups", tagName:"form"});
+        tab.add({caption:"Ly", tagName:"form", active:true});
+        tab.add({caption:"Img",tagName:"form"});
+        tab.add({caption:"grp", tagName:"form"});
+        tab.add({caption:"Rd", tagName:"form"});
+        tab.add({caption:"Tr", tagName:"form"});
         
 
 
         this.createLayerForm(tab.getPage(0));
         this.createImageForm(tab.getPage(1));
         this.createGroupForm(tab.getPage(2));
+
+        this.createRoadForm(tab.getPage(3));
+        this.createTraceForm(tab.getPage(4));
     }
 
     createLayerForm(id: any){
@@ -403,6 +412,212 @@ export class LayerTool{
         });
 
     }
+
+    createRoadForm(id: any){
+       
+        this.forms["road"] = new Form({
+            caption:"Road Layer",
+            id:id,
+            fields:[
+                {
+                    input:"input",
+                    type:"hidden",
+                    name:"layerId",
+                    value:"",
+                    caption:"Layers"
+                },
+                {
+                    input:"input",
+                    type:"hidden",
+                    name:"id",
+                    value:"",
+                    caption:"id"
+                },
+                
+                {
+                    input:"input",
+                    type:"text",
+                    name:"caption",
+                    value:"Ruta Completa",
+                    caption:"Caption"
+                },
+                {
+                    input:"input",
+                    type:"color",
+                    name:"color",
+                    value:"",
+                    caption:"Line Color",
+                    
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"width",
+                    value:"2",
+                    caption:"Line Width",
+                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(e => [e, e])
+                    
+                    
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"opacity",
+                    value:1.0,
+                    caption:"Opacity",
+                    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(e => [e/10, e/10])
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"dash",
+                    value: 2,
+                    caption:"Dash",
+                    data:[0, 1, 2, 3, 4].map(e => [e, e])
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"visible",
+                    value:1,
+                    caption:"Visible",
+                    data:[
+                        [true, "yes"],
+                        [false, "no"]
+                    ]
+                }
+            ],
+            menu:{
+                caption:"", 
+				autoClose: false,
+				className: ["sevian","horizontal"],
+				items: [
+					
+                    {
+                		caption:"Save",
+                		action:(item, event) => {
+							this.onSaveRoad(this.forms["road"].getValue());
+						}
+					}
+                ]
+            }
+        });
+
+        this.forms["road"].setValue(this.data.roadLayer);
+    }
+
+    createTraceForm(id: any){
+        /*
+        const input = new Input({target:id,
+            input:"input",
+                    type:"select",
+                    name:"id",
+                    value:"",
+                    caption:"layers"
+        });
+
+        return;
+        */
+        this.forms["trace"] = new Form({
+            caption:"Trace Layer",
+            id:id,
+            fields:[
+                {
+                    input:"input",
+                    type:"hidden",
+                    name:"layerId",
+                    value:"",
+                    caption:"Layers"
+                },
+                {
+                    input:"input",
+                    type:"hidden",
+                    name:"id",
+                    value:"",
+                    caption:"id"
+                },
+                
+                {
+                    input:"input",
+                    type:"text",
+                    name:"caption",
+                    value:"Ruta Completa",
+                    caption:"Caption"
+                },
+                {
+                    input:"input",
+                    type:"color",
+                    name:"color",
+                    value:"",
+                    caption:"Line Color"
+                    
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"width",
+                    value:"2",
+                    caption:"Line Width",
+                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(e => [e, e])
+                    
+                    
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"opacity",
+                    value:1.0,
+                    caption:"Opacity",
+                    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(e => [e/10, e/10])
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"dash",
+                    value: 2,
+                    caption:"Dash",
+                    data:[0, 1, 2, 3, 4].map(e => [e, e])
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"length",
+                    value: 1000,
+                    caption:"Length",
+                    data:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(e => [e*1000/2, e*1000/2])
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"visible",
+                    value:1,
+                    caption:"Visible",
+                    data:[
+                        [true, "yes"],
+                        [false, "no"]
+                    ]
+                }
+            ],
+            menu:{
+                caption:"", 
+				autoClose: false,
+				className: ["sevian","horizontal"],
+				items: [
+					
+                    {
+                		caption:"Save",
+                		action:(item, event) => {
+							this.onSaveTrace(this.forms["trace"].getValue());
+						}
+					},                    
+                ]
+            }
+        });
+
+        this.forms["trace"].setValue(this.data.traceLayer);
+    }
+
+
     showLayer(){
 
     }

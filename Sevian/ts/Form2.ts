@@ -59,7 +59,7 @@ export var Form2 = (($) => {
         _page:object = null;
         _pg:object = [];
         _tab:object = null;
-        _inputs:object[] = [];
+        _inputs:object = {};
 
         parentContext:any = null;
 
