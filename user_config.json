@@ -111,9 +111,11 @@
 		"magenta",
 		"dark#0000FF"
 	],
+
+
 	"groups": [
 		{
-			"caption": "General One",
+			"caption": "Principales",
 			"className": "x",
 			"mode": "close"
 		},
@@ -226,5 +228,22 @@
 			"group": 1,
 			"visible": true
 		}
-	]
+	],
+	"roadLayer":{
+		"caption":"Camino Recorrido",
+		"color":"#451363",
+		"width":"2",
+		"opacity":1.0,
+		"dash":0,
+		"visible":true
+	},
+	"traceLayer":{
+		"caption":"Rastro",s
+		"color":"#451363",
+		"width":"2",
+		"opacity":1.0,
+		"dash":0,
+		"length":1000,
+		"visible":true
+	}
 }
