@@ -1014,7 +1014,7 @@ trait DBHistory{
         return $data;
     }
 
-    private function loadTracking($unitId, $dateFrom = null, &$fieldsName){
+    private function loadTracking($unitId, $dateFrom = null, $fieldsName = null){
 
         $cn = $this->cn;
 		

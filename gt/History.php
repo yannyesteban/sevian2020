@@ -369,7 +369,7 @@ class History
 			//$dateForm .= ' '
 		}
 
-		$data = $this->loadTracking($unitId, $dateFrom, $fieldName);
+		$data = $this->loadTracking($unitId, $dateFrom);
 		//print_r(json_encode($data, JSON_NUMERIC_CHECK));exit;
 		$this->setJSActions([
 			[
