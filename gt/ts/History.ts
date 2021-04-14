@@ -165,116 +165,8 @@ export var GTHistory = (($) => {
 		
 
 		_create(main:any){
-			
 			this.main = main;
 			main.addClass("history-main");
-			return;
-			this.form.id = this.getMap().getControl('trace').getPage(1);
-			this.form.parentContext =  this;
-			
-			this._form = new Form2(this.form);
-			//this.find(1);
-return;
-			this.form.id = this.main;
-			this.form.parentContext =  this;
-
-			this._form = new Form2(this.form);
-			this.win = new Float.Window({
-                visible:true,
-                caption: this.caption,
-                child:this._form.get(),
-                left:10,
-                top:100,
-                width: "280px",
-                height: "250px",
-                mode:"auto",
-                className:["sevian"]
-			});
-			return;
-			
-			
-			this.createMenu();
-			this._info = $().create("div").addClass("win-history-info");
-			//this._info = $().create("div").addClass("win-units-info");
-			return;
-
-			this.win = new Float.Window({
-                visible:true,
-                caption: this.caption,
-                child:main,
-                left:10,
-                top:40,
-                width: "300px",
-                height: "300px",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-			this._winInfo = new Float.Window({
-                visible:true,
-                caption:"Info",
-                child:this._info,
-                left:10,
-                top:"bottom",
-                width: "300px",
-                height: "auto",
-                mode:"auto",
-                className:["sevian"]
-			});
-			let _info2 = $().create("div").addClass("win-units-info");
-			/* OJO
-			
-			//console.log(this.map)
-			let t = new GTTrace({map: this.map.map});
-			
-			*/
-
-
-			
-			let menu = new Menu({
-				caption:"uuuu", 
-				autoClose: false,
-				target:_info2,
-				items: [
-					{
-						id: 1,
-                		caption:"o",
-                		action:(item, event) => {
-							t.play()
-						}
-					},
-					{
-						id: 1,
-                		caption:"x",
-                		action:(item, event) => {
-							t.addPoint()
-						}
-					},
-					{
-						id: 3,
-                		caption:"z",
-                		action:(item, event) => {
-							this.z()
-						}
-					}
-				]
-			 });
-			let _winInfo2 = new Float.Window({
-                visible:true,
-                caption:"Info 2",
-                child:_info2,
-                left:"center",
-                top:"top",
-                width: "300px",
-                height: "auto",
-                mode:"auto",
-                className:["sevian"]
-			});
-			
-
-			
-			
-
 		} 
 		
 		showMenu(){
@@ -299,49 +191,7 @@ return;
 		setMap(map){
 			this.map = map;
 		}
-		updateTracking(data){
-			let unitId;
-			n = n + 0.001;
-			let a=0, b=0;
-			for(let x of data){
-				if(Math.floor(Math.random() * 10)>=8){
-					a = Math.random()/100;
-					b = Math.random()/300;
-				}else{
-					a = -Math.random()/100;
-					b = -Math.random()/300;
-				}
-				
-				
-				unitId = x.unit_id;
-				this.tracking[unitId].latitude = x.latitude*1.0+a;
-				this.tracking[unitId].longitude = x.longitude*1.0+b;
-				this.tracking[unitId].heading = x.heading;
-				if(this.marks[unitId]){
-					this.marks[unitId].setLngLat([this.tracking[unitId].longitude, this.tracking[unitId].latitude]);
-
-					this.marks[unitId].setPopup(this.loadPopupInfo(unitId));
-					this.setInfo(unitId);
-					
-					//let popup = this.evalHTML(this.popupTemplate, this.dataUnits[id]);
-					//popup = this.evalHTML(popup, this.tracking[id]);
-				}
-			}
-			if(this.followMe && this._lastUnitId){
-				this.panTo(this._lastUnitId);
-				this._traces[this._lastUnitId].addPoint([this.tracking[this._lastUnitId].longitude, this.tracking[this._lastUnitId].latitude]);
-			
-			}
-			if(this._traces[unitId]){
-			}
-		}
-
-		requestFun(xhr){
-			let json = JSON.parse(xhr.responseText);
-			this.updateTracking(json);
-
-			
-		}
+		
 		
 		setContext(context){
 			this._parentContext =  context;
@@ -385,7 +235,7 @@ return;
 			});
 		}
 		
-		uPlay(){
+		play(){
 			
 			//console.log(this.data);return;
 			let data = this.formateData(this.data);
@@ -411,8 +261,14 @@ return;
 				images:this.layerConfig.images,
 				popup:this.tracePopup,
 				onShowInfo:(info)=>{
-
+					
 					info = Object.assign(this.data[info.i], info);
+
+					let xInputs = "";
+					info.iInputs.forEach(element => {
+						xInputs += `<div>${element.name} ${element.value}</div>`;
+					});
+					info.xinputs = xInputs;
 					//console.log(info)
 					this.popupInfoForm.setMode(info.className);
 					this.popupInfoForm.setData(info);
@@ -429,7 +285,7 @@ return;
 			this.getMap().getControl('trace').setData(this.data);
 			this.getMap().getControl('trace').setConfigData({
 				className:"speed",
-				fields:	["utime", "speed", "event"],
+				fields:	["uTime", "speed", "event"],
 				labels:	["Hora", "Km/h", "Evento"],
 			
 			});
@@ -487,48 +343,21 @@ return;
 			//this._trace.play();
 
 			this.getMap().getControl('trace').createList();
-			if(this._trace){
-				//alert(91)
-				//this._trace.restart();
-				//this._trace.play();
-			}else{
-				
-
-				
-			}
+			
 		}
 
-		initTrace(){
-			alert("initTrace")
-			let layers = [
-				{
-					type:"circle",
-					color:"red",
-					filter:(e=>e.speed > 0 && e.speed <=20),
-				},
-				{
-					type:"circle",
-					color:"blue",
-					filter:(e=>e.speed> 20 && e.speed <= 30),
-				},
-				{
-					type:"pulsing",
-					color:"orange",
-					filter:(e=>e.event != null),
-				},
-				{
-					type:"pulsing",
-					color:"green",
-					filter:(e=>e.event != null),
-				},
-				{
-					type:"circle",
-					color:"orange",
-					filter:(e=>e.input != null),
-				}
-			]
-		}
+		
 		formateData(data){
+			console.log(data)
+
+			data.forEach((e, index) => {
+				e.coordinates = [e.longitude, e.latitude];
+				e.i = index;
+
+
+			});
+
+			return data;
 			let result = []
 			for(let x in data){
 				result.push({
@@ -539,9 +368,9 @@ return;
 					event:data[x].event,
 					mainEvent:data[x].main_event,
 					event_id:data[x].event_id,
-					iconImage:(data[x].event_id)?"pulsing-dot":"pulsing-dot2",
-					s:0,
-					p:0,
+					
+					
+					
 					i:x*1
 				});
 			}
@@ -579,94 +408,7 @@ return;
 		setInfoUnitInfo(info){
 			this.dataInput = info;
 		}
-		play(){
-			let map = this.getMap().map;
-
-			map.loadImage(
-				'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
-				function(error, image) {
-				if (error) throw error;
-				map.addImage('cat', image);
-				map.addSource('point', {
-				'type': 'geojson',
-				'data': {
-				'type': 'FeatureCollection',
-				'features': [
-				{
-				'type': 'Feature',
-				'properties':{
-					'rotacion':45
-				},
-				'geometry': {
-				'type': 'Point',
-				'coordinates': [-69.39874800, 10.06882300]	
-				}
-				},
-				{
-					'type': 'Feature',
-					'properties':{
-						'rotacion':120
-					},
-					'geometry': {
-					'type': 'Point',
-					'coordinates': [-69.39674800, 10.06682300]	
-					}
-					}
-				]
-				}
-				});
-				map.addLayer({
-				'id': 'points',
-				'type': 'symbol',
-				'source': 'point',
-				'layout': {
-				'icon-image': 'cat',
-				'icon-size': 0.10,
-				'icon-rotate':['get','rotacion']
-				}
-				});
-				}
-				);
-			
-
-			
-
-			if(this._timer){
-				clearTimeout(this._timer);	
-			}
-			
-			this._timer = setInterval(()=>{
-
-				S.send(
-					{
-					
-					async: true,
-					panel:2,
-					valid:false,
-					confirm_: 'seguro?',
-					requestFunction: $.bind(this.requestFun, this),
-					params:	[
-						{
-							t:'setMethod',
-							id:2,
-							element:'gt_unit',
-							method:'tracking',
-							name:'x',
-							eparams:{
-								record:{codpersona:16386},
-								token:"yanny",
-								page:2
-							}
-						}
-				
-					]
-					
-
-				});
-
-				
-			}, this.delay);
-		}
+		
 		
 		createMenu(){
 			let infoMenu = [];
@@ -724,76 +466,7 @@ return;
 					}
 			 });
 			 
-			 return menu;
-            
-            
-            for(let x in this.dataAccounts){
-                infoMenu[this.dataAccounts[x].client_id].items[this.dataAccounts[x].id] = {
-                    id: this.dataAccounts[x].id,
-                    caption:this.dataAccounts[x].account,
-                    items:[],
-					useCheck:true,
-					checkValue:x,
-					checkDs:{"level":"account","accountId":this.dataAccounts[x].id},
-					ds:{"accountId":this.dataAccounts[x].id},
-					check:(item, event)=>{
-						this.showUnits(this.dataAccounts[x].id, event.currentTarget.checked);
-
-					},
-                };
-            }
-
-           for(let x in this.dataUnits){
-			
-            infoMenu[this.dataUnits[x].client_id].items[this.dataUnits[x].account_id].items[this.dataUnits[x].unit_id] = {
-                id: this.dataUnits[x].unit_id,
-                caption:this.dataUnits[x].vehicle_name,
-				useCheck:true,
-				value: x,
-				checkValue:x,
-				checkDs:{"level":"units","unitId":x},
-				ds:{"unitId":x},
-				check:(item, event)=>{
-					this.showUnit(x, event.currentTarget.checked);
-				},
-                action:(item, event) => {
-					let ch = menu.getCheck(item);
-					ch.get().checked = true;
-					this.showUnit(x, true);
-					this._lastUnitId = x;
-					this.setInfo(x);
-					this.flyTo(x);
-						return;
-					this._traces[x] = new GTTrace({map:this.map.map});
-					
-					this._traces[x].play();
-					
-
-				}
-                
-            };
-            
-
-
-           }
-
-           let menu1 = new Menu({
-               caption:"", 
-               autoClose: false,
-			   target:this.main,
-			   items: infoMenu,
-			   check:(item) => {
-					let ch = menu.getCheck(item);
-					let checked = ch.get().checked;   
-					let list = item.queryAll("input[type='checkbox']");
-					for(let x of list){
-						x.checked = checked;
-					}
-			   	}
-			});
-			
-			return menu1;
-			//console.log(check);
+			 
 		}
 
 		getInfoLayer(){
@@ -801,49 +474,10 @@ return;
 			return this._info;
 		}
 
-		showGeofence(id, value){
-			if(!this.marks[id]){
-				
-				this.marks[id] = this.getMap().draw(id, this.dataMain[id].type,{
-					coordinates:this.dataMain[id].config,
-					popupInfo: this.loadPopupInfo(id)
-				});
-
-				
-				
-				
-				
-			}else{
-				this.marks[id].setVisible(value);
-			}
-		}
 		
-		showUnits(accountId, value){
-			
-			let e;
-
-			for(let x in this.dataSite){
-				e = this.dataSite[x];
-				
-				if(accountId == e.account_id){
-					this.showUnit(x, value);
-					
-				}
-				
-			}
-		}
-		showAccountUnits(clientId, value){
-			
-			let e;
-
-			for(let x in this.dataUnits){
-				e = this.dataUnits[x];
-				
-				if(clientId == e.client_id){
-					this.showUnits(e.account_id, value);
-				}
-			}
-		}
+		
+		
+		
 		evalHTML(html, data){
 
 			function auxf(str, p, p2, offset, s){

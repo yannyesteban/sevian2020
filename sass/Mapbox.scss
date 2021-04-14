@@ -415,9 +415,15 @@
 	line-height: 1.5em;
 	color:white;
 	padding:4px;
-	>div{
-		>div{
+	.row{
+		>*{
 			display: inline-block;
+		}
+		&.inputs{
+			background-color: rgba(0, 0, 0, 0.205);
+			>*{
+				display: block;
+			}
 		}
 	}
 

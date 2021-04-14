@@ -196,11 +196,13 @@ export class TraceControl{
             body.create("div").text(line);
             
         });
+        
         this.data.forEach((data, index) => {
-            //body.create("span").text(index);
+            
             
             this.configData.fields.forEach((line)=>{
-                body.create("div").ds("value", index).text(data[line]).on("click", (event)=>{
+                body.create("div").ds("value", index).text(data[line])
+                .on("click", (event)=>{
 
                     alert($(event.currentTarget).ds("value"));
                 });
@@ -440,7 +442,7 @@ export class TraceControl{
 
         this.groups = this.getTraceGroupLayers();
         const layers = this.getTraceLayers();
-        console.log(layers);
+        //console.log(layers);
         //alert(889);
         //return;
         let items = [];

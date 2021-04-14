@@ -111,8 +111,6 @@
 		"magenta",
 		"dark#0000FF"
 	],
-
-
 	"groups": [
 		{
 			"caption": "Principales",
@@ -231,16 +229,16 @@
 	],
 	"roadLayer":{
 		"caption":"Camino Recorrido",
-		"color":"#451363",
+		"color":"#ff9900",
 		"width":"2",
-		"opacity":1.0,
-		"dash":0,
+		"opacity":0.8,
+		"dash":2,
 		"visible":true
 	},
 	"traceLayer":{
 		"caption":"Rastro",
-		"color":"#451363",
-		"width":"2",
+		"color":"#f743d8",
+		"width":"4",
 		"opacity":1.0,
 		"dash":0,
 		"length":1000,

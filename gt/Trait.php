@@ -384,6 +384,16 @@ trait DBUnit{
     }
 }
 
+trait DBInput{
+    private $cn = null;  
+
+    public function getInputs(){
+        $cn = $this->cn;
+		
+        $cn->query = "SELECT";
+    }
+}
+
 trait DBTracking{
 	private $cn = null;
 
@@ -1004,18 +1014,41 @@ trait DBHistory{
         return $data;
     }
 
-    private function loadTracking($unitId, $dateFrom = null, $dateTo = null, $input = null){
+    private function loadTracking($unitId, $dateFrom = null, &$fieldsName){
 
         $cn = $this->cn;
 		
         $cn->query = "
         
         SELECT
+            t.unit_id as unitId, t.device_id as deviceId, t.date_time,
+            t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
+            t.event_id as eventId, t.mileage, t.input_status as inputStatus, t.voltage_level_i1 as voltageI1, t.voltage_level_i2 as voltageI2,
+            t.output_status as outputStatus, t.battery_voltage as batteryVoltage,
 
-        e.event_id as main_event,        t.*, date_format(t.date_time, '%d/%m/%Y %T') as date_time,
-        date_format(t.date_time, '%T') as utime,
-        date_format(t.date_time, '%d/%m/%Y') as udate,
-        UNIX_TIMESTAMP(t.date_time) as ts, e.title as my_event, de.name as event
+            e.event_id as mainEvent,
+            date_format(t.date_time, '%d/%m/%Y %T') as dateTime,
+            date_format(t.date_time, '%T') as uTime,
+            date_format(t.date_time, '%d/%m/%Y') as uDate,
+            UNIX_TIMESTAMP(t.date_time) as ts, e.title as myEvent, de.name as event,
+        
+         (input_status >> (1-1)) % 2 as i1,
+         (input_status >> (2-1)) % 2 as i2,
+         (input_status >> (3-1)) % 2 as i3,
+         (input_status >> (4-1)) % 2 as i4,
+         (input_status >> (5-1)) % 2 as i5,
+         (input_status >> (6-1)) % 2 as i6,
+         (input_status >> (7-1)) % 2 as i7,
+         (input_status >> (8-1)) % 2 as i8,
+
+         (output_status >> (1-1)) % 2 as o1,
+         (output_status >> (2-1)) % 2 as o2,
+         (output_status >> (3-1)) % 2 as o3,
+         (output_status >> (4-1)) % 2 as o4,
+         (output_status >> (5-1)) % 2 as o5,
+         (output_status >> (6-1)) % 2 as o6,
+         (output_status >> (7-1)) % 2 as o7,
+         (output_status >> (8-1)) % 2 as o8
 
         FROM tracking as t
 
@@ -1034,7 +1067,28 @@ trait DBHistory{
         
 		$result = $cn->execute();
 		$data = $cn->getDataAll($result);
-       
+        $data2 = $this->getConfigInput(2336);
+        
+        $data = array_map(function($item) use($data2){
+            $item['iInputs'] = [];
+            foreach($data2 as $k => $v){
+                if(isset($item[$k]) && $item[$k]==1){
+                    $item['in'.$v['input_id']] = "on";
+                }else{
+                    $item['in'.$v['input_id']] = "off";
+                }
+            
+                $item['iInputs'][] = [
+                    'name'=>$v['name'],
+                    'value'=>(isset($item[$k]) && $item[$k]==1)? $v['value_on']: $v['value_off']
+                ];
+            }
+            return $item;
+        }, $data);
+
+        //hx($f);
+        //$fields = $cn->fieldsName($result);
+        
         return $data;
     }
 
@@ -1146,6 +1200,56 @@ trait DBHistory{
 		$data = $cn->getDataAll($result);
        
         return $data;
+    }
+
+    private function getInputName($unitId){
+        $cn = $this->cn;
+		
+        $cn->query = "SELECT CASE i.type WHEN 1 THEN 'i' ELSE 'o' END as ctype, i.type, i.id as input_id, i.name, value_on, value_off
+
+        FROM input as i
+
+        ORDER BY i.type, name";
+        $result = $cn->execute();
+		$data = $cn->getDataAll($result);
+        $f = array_map(fn($item)=>[
+            'name'=>'in'.$item['input_id'],
+            'caption'=>$item['ctype'].'-'.$item['name'],
+            'options'=>[
+                $item['value_on'], $item['value_off']
+            ]
+        ], $data);
+        
+        return $f;
+		
+    }
+
+    private function getConfigInput($unitId){
+        $cn = $this->cn;
+		
+        $cn->query = "SELECT CASE i.type WHEN 1 THEN 'i' ELSE 'o' END as ctype, i.type,ui.number, i.id as input_id, i.name,ui.unit_id, value_on, value_off
+        FROM unit_input as ui
+        INNER JOIN input as i ON i.id = ui.input_id
+        WHERE ui.unit_id = '$unitId'
+        ORDER BY i.type, number";
+        $result = $cn->execute();
+		$data = $cn->getDataAll($result);
+        $data2 = [];
+
+        foreach($data as $k=>$v){
+            $data2[$v['ctype'].$v['number']] = $v;
+        }
+        /*
+        $f = array_map(fn($item)=>[
+            'name'=>$item['itype'],
+            'caption'=>$item['name'],
+            'options'=>[
+                $item['value_on'], $item['value_off']
+            ]
+        ], $data);
+        */
+        return $data2;
+		
     }
 
 }

@@ -1249,7 +1249,7 @@ class S{
 			//echo $script;exit;
 
 		//echo	$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
-		return json_encode($response, JSON_PRETTY_PRINT);
+		return json_encode($response, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
 		
 	}
 	public static function evalElement($info){}
@@ -1313,11 +1313,11 @@ class S{
 
 		
 		if(self::$_jsonRequest !== null){
-			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT);	
+			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);	
 		}
 
 		if(self::$onAjax == 2){
-			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT);	
+			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);	
 		}
 
 		if(self::$onAjax){

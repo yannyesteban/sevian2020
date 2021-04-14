@@ -231,6 +231,9 @@ class History
 			//'record'=>$this->getRecord()
 		]);
 
+
+		
+
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-history-'.$this->id;
 		$this->panel->innerHTML = 'gt-history-'.$this->id;
@@ -293,8 +296,15 @@ class History
 		$layerOutputData = $this->getOutputLayers($unitId, $dateFrom, $dateTo);
 		$layerEventData = $this->getEventLayers($unitId, $dateFrom, $dateTo);
 		$layerAlarmData = $this->getAlarmLayers($unitId, $dateFrom, $dateTo);
-		
+		//hr($this->getInputName($unitId));
+		//$config->propertys[] = $this->getInputName($unitId);
+		//hx($config);
+		//$layerInputPropertys = $this->getInputName($unitId);
 
+		$config->propertys = $this->getPropertysInfo();
+		
+		$config->propertys = array_merge($config->propertys, $this->getInputName(1626));
+		
 		$layerInput = [];
 		
 		foreach($layerInputData as $k => $v){
@@ -359,8 +369,8 @@ class History
 			//$dateForm .= ' '
 		}
 
-		$data = $this->loadTracking($unitId, $dateFrom, $dateTo, $filter);
-		
+		$data = $this->loadTracking($unitId, $dateFrom, $fieldName);
+		//print_r(json_encode($data, JSON_NUMERIC_CHECK));exit;
 		$this->setJSActions([
 			[
             	'method'	=> 'setData',
@@ -380,7 +390,7 @@ class History
 				'value'		=> $config
 			],
 			[
-				'method'	=> 'uPlay',
+				'method'	=> 'play',
 				'value'		=> null
 			]
 		]);
@@ -410,4 +420,83 @@ class History
         return $this->_userInfo;
     }
 
+	private function getPropertysInfo(){
+		return 
+		[
+
+			[
+				"name"=>"speed",
+				"caption"=>"Velocidad",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"heading",
+				"caption"=>"Orientación",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"satellite",
+				"caption"=>"Satélites",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"voltage_level_i2",
+				"caption"=>"Voltaje I1",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"voltage_level_i2",
+				"caption"=>"Voltaje I2",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"longitude",
+				"caption"=>"Longitud",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"latitude",
+				"caption"=>"Latitud",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"altitude",
+				"caption"=>"Altitud",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"eventId",
+				"caption"=>"Evento",
+				"type"=>"text",
+				"options"=>null
+			],
+			[
+				"name"=>"mileage",
+				"caption"=>"Millas",
+				"type"=>"text",
+				"options"=>null
+			],
+			/*[
+				"name"=>"inputStatus",
+				"caption"=>"inputStatus",
+				"type"=>"text",
+				"options"=>null
+			],*/
+			[
+				"name"=>"batteryVoltage",
+				"caption"=>"Voltaje de la Batería",
+				"type"=>"text",
+				"options"=>null
+			]
+		
+		];
+	}
 }

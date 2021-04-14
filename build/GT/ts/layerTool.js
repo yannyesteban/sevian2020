@@ -5,6 +5,7 @@ export class LayerTool {
     constructor(info) {
         this.id = null;
         this.data = null;
+        this.propertys = [];
         this.layers = [];
         this.groups = [];
         this.images = [];
@@ -28,6 +29,7 @@ export class LayerTool {
             }
         }
         //this.data = this.getInfo();
+        this.propertys = this.data.propertys;
         this.layers = this.data.layers;
         this.groups = this.data.groups;
         this.images = this.data.images;
@@ -103,7 +105,7 @@ export class LayerTool {
                     name: "prop",
                     value: "",
                     caption: "Property",
-                    data: this.getPropertysData()
+                    data: this.propertys.map(e => [e.name, e.caption]) //this.getPropertysData()
                 },
                 {
                     input: "input",

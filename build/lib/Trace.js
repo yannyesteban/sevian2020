@@ -64,12 +64,12 @@ export class Trace {
         this.callmove = () => { };
         this.callresize = () => { };
         this.ondraw = (coordinates) => { };
-        this.onAddLayer = (layerInfo) => { console.log(layerInfo); };
-        this.onUpdateLayer = (layerInfo) => { console.log(layerInfo); };
-        this.onRemoveLayer = (id) => { console.log(id); };
-        this.onAddImage = (imageInfo) => { console.log(imageInfo); };
-        this.onUpdateImage = (imageInfo) => { console.log(imageInfo); };
-        this.onRemoveImage = (id) => { console.log(id); };
+        this.onAddLayer = (layerInfo) => { };
+        this.onUpdateLayer = (layerInfo) => { };
+        this.onRemoveLayer = (id) => { };
+        this.onAddImage = (imageInfo) => { };
+        this.onUpdateImage = (imageInfo) => { };
+        this.onRemoveImage = (id) => { };
         this.speedFactor = 0.05; // number of frames per longitude degree
         this.startTime = 0;
         this.endTime = -1;
@@ -96,7 +96,7 @@ export class Trace {
             color: "#f743d8",
             width: 4,
             opacity: 1.0,
-            dasharray: 2,
+            dash: 0,
             visible: true
         };
         this.traceLength = 1000;
@@ -330,6 +330,9 @@ export class Trace {
         if (Number(roadLayerInfo.dash) > 0) {
             paint["line-dasharray"] = [Number(roadLayerInfo.dash), Number(roadLayerInfo.dash)];
         }
+        else {
+            paint["line-dasharray"] = [1];
+        }
         for (let key in paint) {
             this.map.setPaintProperty(this.roadLayerId, key, paint[key]);
         }
@@ -346,6 +349,9 @@ export class Trace {
         if (Number(roadLayerInfo.dash) > 0) {
             paint["line-dasharray"] = [Number(roadLayerInfo.dash), Number(roadLayerInfo.dash)];
         }
+        else {
+            paint["line-dasharray"] = [1];
+        }
         this.map.addLayer({
             "id": this.roadLayerId,
             "type": "line",
@@ -360,7 +366,6 @@ export class Trace {
         });
     }
     updateTraceLayer(traceLayerInfo) {
-        console.log(traceLayerInfo);
         const paint = {
             "line-color": traceLayerInfo.color,
             "line-width": Number(traceLayerInfo.width),
@@ -368,6 +373,9 @@ export class Trace {
         };
         if (Number(traceLayerInfo.dash) > 0) {
             paint["line-dasharray"] = [Number(traceLayerInfo.dash), Number(traceLayerInfo.dash)];
+        }
+        else {
+            paint["line-dasharray"] = [1];
         }
         for (let key in paint) {
             this.map.setPaintProperty(this.traceLayerId, key, paint[key]);
@@ -385,6 +393,9 @@ export class Trace {
         };
         if (Number(traceLayerInfo.dash) > 0) {
             paint["line-dasharray"] = [Number(traceLayerInfo.dash), Number(traceLayerInfo.dash)];
+        }
+        else {
+            paint["line-dasharray"] = [1];
         }
         this.map.addLayer({
             "id": this.traceLayerId,
@@ -1054,7 +1065,6 @@ export class Trace {
         info.id = id;
         this.layersId.push(id);
         let filter = this.createLayerFilter(info);
-        console.log(filter);
         if (!this.map.hasImage(info.image)) {
             console.log("errror");
         }
@@ -1574,7 +1584,7 @@ export class Trace {
         const map = this.map;
         map.on("mouseenter", layerId, (e) => {
             map.getCanvas().style.cursor = 'pointer';
-            const info = e.features[0].properties;
+            const info = this.data[e.features[0].properties.i];
             info.layerId = layerId;
             info.className = className;
             let line = turf.lineString(this.coordinatesInit);

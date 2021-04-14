@@ -79,14 +79,14 @@ export class Trace {
     callmove: Function = () => { };
     callresize: Function = () => { };
 
-    private ondraw: Function = (coordinates) => { };
-    public onAddLayer: Function = (layerInfo)=>{console.log(layerInfo)};
-    public onUpdateLayer: Function = (layerInfo)=>{console.log(layerInfo)};
-    public onRemoveLayer: Function = (id)=>{console.log(id)};
+    private ondraw: Function = (coordinates) => {};
+    public onAddLayer: Function = (layerInfo)=>{};
+    public onUpdateLayer: Function = (layerInfo)=>{};
+    public onRemoveLayer: Function = (id)=>{};
 
-    public onAddImage: Function = (imageInfo)=>{console.log(imageInfo)};
-    public onUpdateImage: Function = (imageInfo)=>{console.log(imageInfo)};
-    public onRemoveImage: Function = (id)=>{console.log(id)};
+    public onAddImage: Function = (imageInfo)=>{};
+    public onUpdateImage: Function = (imageInfo)=>{};
+    public onRemoveImage: Function = (id)=>{};
 
 
     private speedFactor = 0.05; // number of frames per longitude degree
@@ -124,7 +124,7 @@ export class Trace {
         color:"#f743d8",
         width: 4,
         opacity:1.0,
-        dasharray: 2,
+        dash: 0,
         visible: true
     };
 
@@ -387,7 +387,7 @@ export class Trace {
         this.setProgress(this.progress);
     }
     updateRoadLayer(roadLayerInfo){
-
+        
         const paint = {
             "line-color": roadLayerInfo.color,
             "line-width": Number(roadLayerInfo.width),
@@ -396,6 +396,8 @@ export class Trace {
 
         if(Number(roadLayerInfo.dash) > 0){
             paint["line-dasharray"] = [Number(roadLayerInfo.dash), Number(roadLayerInfo.dash)];
+        }else{
+            paint["line-dasharray"] = [1];
         }
 
         for(let key in paint){
@@ -415,6 +417,8 @@ export class Trace {
         }
         if(Number(roadLayerInfo.dash) > 0){
             paint["line-dasharray"] = [Number(roadLayerInfo.dash), Number(roadLayerInfo.dash)];
+        }else{
+            paint["line-dasharray"] = [1];
         }
         this.map.addLayer({
             "id": this.roadLayerId,
@@ -431,7 +435,7 @@ export class Trace {
     }
 
     updateTraceLayer(traceLayerInfo){
-        console.log(traceLayerInfo)
+        
         const paint = {
             "line-color": traceLayerInfo.color,
             "line-width": Number(traceLayerInfo.width),
@@ -440,6 +444,8 @@ export class Trace {
 
         if(Number(traceLayerInfo.dash) > 0){
             paint["line-dasharray"] = [Number(traceLayerInfo.dash), Number(traceLayerInfo.dash)];
+        }else{
+            paint["line-dasharray"] = [1];
         }
 
         for(let key in paint){
@@ -462,6 +468,8 @@ export class Trace {
 
         if(Number(traceLayerInfo.dash) > 0){
             paint["line-dasharray"] = [Number(traceLayerInfo.dash), Number(traceLayerInfo.dash)];
+        }else{
+            paint["line-dasharray"] = [1];
         }
         
         this.map.addLayer({
@@ -1295,7 +1303,7 @@ export class Trace {
         this.layersId.push(id);
 
         let filter = this.createLayerFilter(info);
-        console.log(filter);
+        
         if(!this.map.hasImage(info.image)){
             console.log("errror");
         }
@@ -1933,7 +1941,7 @@ export class Trace {
         const map = this.map;     
             map.on("mouseenter", layerId, (e) => {
                 map.getCanvas().style.cursor = 'pointer';
-                const info = e.features[0].properties;
+                const info = this.data[e.features[0].properties.i];
                 info.layerId = layerId;
                 info.className = className;
 

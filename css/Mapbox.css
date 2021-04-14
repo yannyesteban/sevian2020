@@ -37,6 +37,7 @@
 
 .trace-speed-nav {
   background: #343434;
+  background: -webkit-gradient(linear, left top, right top, from(#01b32d), color-stop(50%, white), to(#06a7f1));
   background: linear-gradient(90deg, #01b32d 0%, white 50%, #06a7f1 100%);
   float: left;
   padding: 0px;
@@ -182,7 +183,8 @@
   padding: 0;
   outline: none;
   border: 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   background-color: transparent;
   cursor: pointer;
   line-height: 29px;
@@ -259,8 +261,11 @@
   grid-gap: 1px;
   padding: 1px;
   grid-template-columns: repeat(auto-fit, [cc-start] minmax(180px, 1fr) [cc-end]);
-  align-content: start;
-  justify-content: center;
+  -ms-flex-line-pack: start;
+      align-content: start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .trace-tool .sg-form .page .field {
   padding: 2px;
@@ -307,8 +312,14 @@
   color: white;
   padding: 4px;
 }
-.info-form > div > div {
+.info-form .row > * {
   display: inline-block;
+}
+.info-form .row.inputs {
+  background-color: rgba(0, 0, 0, 0.205);
+}
+.info-form .row.inputs > * {
+  display: block;
 }
 
 [data-info-mode=pulsing] .info-form {
@@ -322,5 +333,4 @@
 [data-info-mode=arrow] .info-form {
   background-color: #b31e43;
 }
-
 /*# sourceMappingURL=Mapbox.css.map */
