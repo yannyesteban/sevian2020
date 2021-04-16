@@ -197,15 +197,15 @@ export class TraceControl {
 
         
         */
-        bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-go_begin")
+        bar.create("button").prop({ "type": "button", "title": "Ir al Principio" }).addClass("icon-go_begin")
             .on("click", () => {
             this.cmdTrace("go-begin");
         });
-        bar.create("button").prop({ "type": "button", "title": "+" }).addClass("icon-sb")
+        bar.create("button").prop({ "type": "button", "title": "Retroceder un Paso" }).addClass("icon-sb")
             .on("click", () => {
             this.cmdTrace("sb");
         });
-        this._playButton = bar.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-play")
+        this._playButton = bar.create("button").prop({ "type": "button", "title": "Iniciar Movimiento" }).addClass("icon-play")
             .on("click", () => {
             if (this._trace.getStatus() == 1) {
                 this.cmdTrace("pause");
@@ -214,11 +214,11 @@ export class TraceControl {
                 this.cmdTrace("play");
             }
         });
-        bar.create("button").prop({ "type": "button", "title": "-" }).addClass("icon-sf")
+        bar.create("button").prop({ "type": "button", "title": "Avanzar un Paso" }).addClass("icon-sf")
             .on("click", () => {
             this.cmdTrace("sf");
         });
-        bar.create("button").prop({ "type": "button", "title": "Play" }).addClass("icon-go_end")
+        bar.create("button").prop({ "type": "button", "title": "Ir al Final" }).addClass("icon-go_end")
             .on("click", () => {
             this.cmdTrace("go-end");
         });
@@ -235,7 +235,7 @@ export class TraceControl {
     speedBar(bar, value) {
         this.speedRange.forEach((e, index) => {
             const speed = this.speedRange.length - index - 1;
-            bar.create("div").addClass(["speed", `r-${speed}`])
+            bar.create("div").addClass(["speed", `r-${speed}`]).prop("title", "x" + this.speedRange[speed])
                 .on("click", () => {
                 this.dir = -1;
                 this.setSpeed(speed);
@@ -243,7 +243,7 @@ export class TraceControl {
             });
         });
         this.speedRange.forEach((e, speed) => {
-            bar.create("div").addClass(["speed", `f-${speed}`])
+            bar.create("div").addClass(["speed", `f-${speed}`]).prop("title", "x" + this.speedRange[speed])
                 .on("click", () => {
                 this.dir = 1;
                 this.setSpeed(speed);
