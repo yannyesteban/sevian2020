@@ -288,7 +288,8 @@
   text-align: center;
 }
 .filter-form.sg-form .sg-menu li {
-  width: 100%;
+  width: 50%;
+  display: inline-block;
 }
 .filter-form.sg-form .sg-menu a {
   background-color: #096961;

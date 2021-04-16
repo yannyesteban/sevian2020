@@ -1014,8 +1014,11 @@ trait DBHistory{
         return $data;
     }
 
-    private function loadTracking($unitId, $dateFrom = null, $fieldsName = null){
-
+    private function loadTracking($unitId, $from = null, $to = null){
+/**
+ * test:2020-07-01 09:20:34
+ * 2020-07-01 12:09:50
+ */
         $cn = $this->cn;
 		
         $cn->query = "
@@ -1057,14 +1060,14 @@ trait DBHistory{
         LEFT JOIN device_event de ON de.version_id = v.version_id AND de.event_id = t.event_id
 
         LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
-        WHERE t.id >= 12699
-        ORDER BY t.id
-            LIMIT 235
+        
+        WHERE t.unit_id = '$unitId' AND t.date_time>='$from' AND t.date_time<='$to'
         
         
                 
         ";
-        
+        //#WHERE t.id >= 12699 ORDER BY t.id LIMIT 235
+        //print_r( $cn->query);exit;
 		$result = $cn->execute();
 		$data = $cn->getDataAll($result);
         $data2 = $this->getConfigInput(2336);

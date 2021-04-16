@@ -83,9 +83,16 @@ class History
 				$this->load();
 				break;
 			case 'load-data':
-				$this->loadHistory();
+				$unitId = \SEVIAN\S::getReq('unit_id');
+				$dateFrom = \SEVIAN\S::getReq('date_from');
+				$hourFrom = \SEVIAN\S::getReq('hour_from');
+				$dateTo = \SEVIAN\S::getReq('date_to');
+				$hourTo = \SEVIAN\S::getReq('hour_to');
+				$this->loadHistory($unitId, $dateFrom, $hourFrom, $dateTo, $hourTo);
+			case 'load-test':
 				
-			break;
+				$this->loadHistory(2002, '2020-07-01', '09:20:34', '2020-07-01', '12:09:50');
+				break;
             case 'load-sites':
                 
 
@@ -282,29 +289,70 @@ class History
 		}
 		hx($rr);
 	}
-	private function loadHistory(){
-		$unitId = \SEVIAN\S::getReq('unit_id');
-		$dateFrom = \SEVIAN\S::getReq('date_from');
-		$hourFrom = \SEVIAN\S::getReq('hour_from');
-		$dateTo= \SEVIAN\S::getReq('date_to');
-		$hourTo = \SEVIAN\S::getReq('hour_to');
-		$filter = \SEVIAN\S::getReq('filter');
+	private function loadHistory($unitId, $dateFrom, $hourFrom, $dateTo, $hourTo){
 
-		//hx("$unitId: $dateFrom/$hourFrom, $dateTo/ $hourTo");
-		//$this->loadTest();
+		
+		if($hourFrom == ''){
+			$hourFrom = '00:00:00';
+		}
+		if($hourTo == ''){
+			$hourTo = '23:59:59';
+		}
+		
+		if($dateFrom == ''){
+			$dateFrom = date("Y-m-d");
+		}
+		if($dateTo == ''){
+			$dateTo = date("Y-m-d");
+		}
+
+		$from = "$dateFrom $hourFrom";
+		$to = "$dateTo $hourTo";
+
 		$config = $this->loadUserConfig($this->_userInfo->user);
-		$layerInputData = $this->getInputLayers($unitId, $dateFrom, $dateTo);
-		$layerOutputData = $this->getOutputLayers($unitId, $dateFrom, $dateTo);
-		$layerEventData = $this->getEventLayers($unitId, $dateFrom, $dateTo);
-		$layerAlarmData = $this->getAlarmLayers($unitId, $dateFrom, $dateTo);
+		$config->propertys = $this->getPropertysInfo();
+		$config->propertys = array_merge($config->propertys, $this->getInputName(1626));
+
+		$data = $this->loadTracking($unitId, $from, $to);
+		//print_r(json_encode($data, JSON_NUMERIC_CHECK));exit;
+		$this->setJSActions([
+			[
+            	'method'	=> 'setData',
+				'value'		=> $data,
+			],
+			[
+				'method'	=> 'setInfoUnit',
+				//'value'		=> $this->infoUnit($unitId)
+			],
+			[
+				'method'	=> 'setInfoUnitInfo',
+				//'value'		=> $this->infoUnitInput($unitId)
+			],
+			
+			[
+				'method'	=> 'setLayerConfig',
+				'value'		=> $config
+			],
+			[
+				'method'	=> 'play',
+				'value'		=> null
+			]
+		]);
+				
+		return;
+
+		//hx("$unitId: $from / $to");
+		//$this->loadTest();
+		
+		//$layerInputData = $this->getInputLayers($unitId, $dateFrom, $dateTo);
+		//$layerOutputData = $this->getOutputLayers($unitId, $dateFrom, $dateTo);
+		//$layerEventData = $this->getEventLayers($unitId, $dateFrom, $dateTo);
+		//$layerAlarmData = $this->getAlarmLayers($unitId, $dateFrom, $dateTo);
 		//hr($this->getInputName($unitId));
 		//$config->propertys[] = $this->getInputName($unitId);
 		//hx($config);
 		//$layerInputPropertys = $this->getInputName($unitId);
 
-		$config->propertys = $this->getPropertysInfo();
-		
-		$config->propertys = array_merge($config->propertys, $this->getInputName(1626));
 		
 		$layerInput = [];
 		
@@ -370,7 +418,7 @@ class History
 			//$dateForm .= ' '
 		}
 
-		$data = $this->loadTracking($unitId, $dateFrom);
+		$data = $this->loadTracking($unitId, $from, $to);
 		//print_r(json_encode($data, JSON_NUMERIC_CHECK));exit;
 		$this->setJSActions([
 			[

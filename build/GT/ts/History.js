@@ -1,4 +1,5 @@
 import { _sgQuery } from '../../Sevian/ts/Query.js';
+import { S } from '../../Sevian/ts/Sevian.js';
 import { Form2 as Form2 } from '../../Sevian/ts/Form2.js';
 import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
 import { Float } from '../../Sevian/ts/Window.js';
@@ -145,7 +146,7 @@ export var GTHistory = (($) => {
         setContext(context) {
             this._parentContext = context;
         }
-        find(unitId) {
+        find(test) {
             //let unitId = this.form.getInput("unit_idx").getValue();
             let f = this._form.getFormData();
             S.send3({
@@ -158,7 +159,7 @@ export var GTHistory = (($) => {
                         'mode': 'element',
                         "id": this.id,
                         "element": "gt_history",
-                        "method": "load-data",
+                        "method": (test) ? "load-test" : "load-data",
                         "name": "/form/h_commands",
                         "eparams": {
                             "a": 'yanny',
