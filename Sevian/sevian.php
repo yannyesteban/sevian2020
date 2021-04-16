@@ -265,6 +265,13 @@ class S{
 		self::$onAjax = self::getReq('__sg_async');
 		//\Sevian\S::setSes("nombre1", "f-2000");
 		
+
+
+		
+
+		self::setExp("TODAY", date("Y-m-d"));
+		self::setExp("TIME", date("H:i:s"));
+
 		if(!self::$onAjax){
 
 			//self::db(self::$req);

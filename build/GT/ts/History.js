@@ -147,7 +147,6 @@ export var GTHistory = (($) => {
         }
         find(unitId) {
             //let unitId = this.form.getInput("unit_idx").getValue();
-            this.bodyPanelId = "x888";
             let f = this._form.getFormData();
             S.send3({
                 "async": 1,

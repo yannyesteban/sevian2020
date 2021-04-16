@@ -329,19 +329,18 @@
   background-color: #b31e43;
 }
 
-.sg-form {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
-.sg-form .page {
-  overflow: auto;
-}
-
 .layer-tool {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+.layer-tool .sg-form {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+.layer-tool .sg-form .page {
+  overflow: auto;
 }
 .layer-tool.sg-tab {
   height: 100%;

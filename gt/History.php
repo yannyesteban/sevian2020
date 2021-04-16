@@ -286,10 +286,11 @@ class History
 		$unitId = \SEVIAN\S::getReq('unit_id');
 		$dateFrom = \SEVIAN\S::getReq('date_from');
 		$hourFrom = \SEVIAN\S::getReq('hour_from');
-		$dateTo = \SEVIAN\S::getReq('date_to');
+		$dateTo= \SEVIAN\S::getReq('date_to');
 		$hourTo = \SEVIAN\S::getReq('hour_to');
 		$filter = \SEVIAN\S::getReq('filter');
 
+		hx("$unitId: $dateFrom/$hourFrom, $dateTo/ $hourTo");
 		//$this->loadTest();
 		$config = $this->loadUserConfig($this->_userInfo->user);
 		$layerInputData = $this->getInputLayers($unitId, $dateFrom, $dateTo);

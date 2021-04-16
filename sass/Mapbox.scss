@@ -440,17 +440,18 @@
 	}
 }
 
-.sg-form{
-	display: grid;
-	grid-template-rows: auto 1fr auto;
-	.page{
-		overflow: auto;
-	}	
-}
+
 
 .layer-tool{
 	user-select: none; 
 	
+	.sg-form{
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		.page{
+			overflow: auto;
+		}	
+	}
 
 	
 	&.sg-tab{
