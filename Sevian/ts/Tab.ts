@@ -156,7 +156,7 @@ class Tab{
         
         let index = this._menu.get().children.length;
 
-        this._menu.create("a").addClass("tab-menu")
+        let tab = this._menu.create("a").addClass("tab-menu")
             .on("click", this._click(index))
             .on("focus", this._click(index))
             
@@ -173,6 +173,10 @@ class Tab{
             body.text(opt.html);
         }
 
+        if(opt.className){
+            tab.addClass(opt.className);
+            body.addClass(opt.className);
+        }
         if(opt.active === true){
             this.show(index);
         }
@@ -256,7 +260,7 @@ class Tab{
 
     getPage(index:number){
 
-        let page = this._main.query(".body > [data-tab-index='"+index+"']");
+        const page = this._main.query(".body > [data-tab-index='"+index+"']");
 
         if(page){
 
@@ -265,6 +269,16 @@ class Tab{
         return false;	
     }
     
+    getCaption(index:number){
+
+        const caption = this._main.query(`.menu > [data-tab-index='${index}']`);
+
+        if(caption){
+
+            return $(caption); 
+        }
+        return false;	
+    }
 }
 
 

@@ -32,7 +32,29 @@
 }
 
 $active_color : rgb(204, 83, 13);
+
 .sg-tab{
+	>.menu{
+
+		>.tab-menu{
+			cursor: pointer;
+			user-select: none;         
+			&.tab-active{
+
+			}
+		}
+	}
+	>.body{
+		>.tab-body{
+			&:not(.tab-active){
+				display: none !important;
+			}
+		}
+	}	
+}
+
+
+.sg-tab2021{
 	>.menu{
 
 		>.tab-menu{

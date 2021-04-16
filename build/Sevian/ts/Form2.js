@@ -31,7 +31,7 @@ export var Form2 = (($) => {
             this.value = "";
             this.caption = "";
             this.type = "dropdown";
-            this.className = "sevian";
+            this.className = "";
             this.iconClass = "";
             this.fields = null;
             this.pages = [];

@@ -132,12 +132,12 @@ export var GTHistory = (($) => {
 			
 				this._form = new Form2(this.form);
 
-				this.formHistoryConfig.id = this.getMap().getControl('trace').getPage(3);
+				/*this.formHistoryConfig.id = this.getMap().getControl('trace').getPage(3);
 				this.formHistoryConfig.parentContext =  this;
-			
-				this._formHistoryConfig = new Form2(this.formHistoryConfig);
-				if(this.infoForm){
+				this._formHistoryConfig = new Form2(this.formHistoryConfig);*/
 
+
+				if(this.infoForm){
 					this.infoForm.id = this.getMap().getControl('trace').getPage(4);
 					this._infoForm = new InfoForm(this.infoForm);
 				}
@@ -291,7 +291,13 @@ export var GTHistory = (($) => {
 			});
 
 
+
+			//this.formHistoryConfig.id = ;
+			
+			
 			const layerTool = new LayerTool({
+				id: this.getMap().getControl('trace').getPage(3),
+				trace:this._trace,
 				data:this.layerConfig,
 				onNewLayer:(id, info)=>{
 					layerTool.setNewIdLayer(this._trace.imageLayer(info));
@@ -321,8 +327,8 @@ export var GTHistory = (($) => {
 				}),
 			});
 
-
-			
+			this.getMap().getControl('trace').createList();
+			return;
 			const win = new Float.Window({
 				visible:true,
 				caption: "Layer Control",
@@ -342,7 +348,7 @@ export var GTHistory = (($) => {
 			
 			//this._trace.play();
 
-			this.getMap().getControl('trace').createList();
+			
 			
 		}
 

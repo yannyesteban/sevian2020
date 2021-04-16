@@ -5,15 +5,21 @@ import {Float}  from '../../Sevian/ts/Window.js';
 import {Tab}  from '../../Sevian/ts/Tab.js';
 import {I, Input, Hidden, InputDate, InputInfo, Multi}  from '../../Sevian/ts/Input.js';
 
+import {Trace}  from '../../lib/Trace.js';
+
 export class LayerTool{
 
     private id:any = null;
     private data:any = null;
 
+    private trace:Trace = null;
+
     private propertys:any[] = [];
     private layers:any[] = [];
     private groups:any[] = [];
     private images:any[] = [];
+    private config:any = {};
+    
 
     private forms:any[] = [];
 
@@ -50,6 +56,7 @@ export class LayerTool{
         this.layers = this.data.layers;
         this.groups = this.data.groups;
         this.images = this.data.images;
+        this.config = this.data.config;
 
         //this.getLayerList();
         //return;
@@ -75,14 +82,23 @@ export class LayerTool{
         main.addClass("layer-tool");
 
         const tab = new Tab({
-            id:main
+            id:main,
+            className:"layer-tool"
         });
         
-        tab.add({caption:"Ly", tagName:"form", active:true});
-        tab.add({caption:"Img",tagName:"form"});
-        tab.add({caption:"grp", tagName:"form"});
-        tab.add({caption:"Rd", tagName:"form"});
-        tab.add({caption:"Tr", tagName:"form"});
+        tab.add({caption:"L", tagName:"form", active:true});
+        tab.add({caption:"I",tagName:"form"});
+        tab.add({caption:"G", tagName:"form"});
+        tab.add({caption:"R", tagName:"form"});
+        tab.add({caption:"T", tagName:"form"});
+        tab.add({caption:"C", tagName:"form"});
+
+        tab.getCaption(0).prop("title", "Agregar/Editar Capas");
+        tab.getCaption(1).prop("title", "Agregar/Editar Imágenes");
+        tab.getCaption(2).prop("title", "Agregar/Editar Grupos");
+        tab.getCaption(3).prop("title", "Configurar Ruta");
+        tab.getCaption(4).prop("title", "Configurar Traza");
+        tab.getCaption(5).prop("title", "Configuración");
         
 
 
@@ -92,8 +108,15 @@ export class LayerTool{
 
         this.createRoadForm(tab.getPage(3));
         this.createTraceForm(tab.getPage(4));
+        this.createConfigForm(tab.getPage(5));
     }
 
+    setTrace(trace:Trace){
+        this.trace = trace;
+    }
+    getTrace():Trace{
+        return this.trace;
+    }
     createLayerForm(id: any){
         /*
         const input = new Input({target:id,
@@ -107,7 +130,7 @@ export class LayerTool{
         return;
         */
         this.forms["layer"] = new Form({
-            caption:"Layers Admin",
+            caption:"Capas",
             id:id,
             fields:[
                 {
@@ -241,7 +264,7 @@ export class LayerTool{
     }
     createImageForm(id: any){
         this.forms["image"] = new Form({
-            caption:"Images Admin",
+            caption:"Imágenes",
             id:id,
             fields:[
                 {
@@ -332,7 +355,7 @@ export class LayerTool{
 
     createGroupForm(id: any){
         this.forms["group"] = new Form({
-            caption:"Groups Admin",
+            caption:"Grupo de Capas",
             id:id,
             fields:[
                 {
@@ -417,7 +440,7 @@ export class LayerTool{
     createRoadForm(id: any){
        
         this.forms["road"] = new Form({
-            caption:"Road Layer",
+            caption:"Configuración: Ruta",
             id:id,
             fields:[
                 {
@@ -448,6 +471,9 @@ export class LayerTool{
                     name:"color",
                     value:"",
                     caption:"Line Color",
+                    events:{
+                        change: event => this.updateRoadLayer(this.forms["road"].getValue())
+                    }
                     
                 },
                 {
@@ -456,7 +482,10 @@ export class LayerTool{
                     name:"width",
                     value:"2",
                     caption:"Line Width",
-                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(e => [e, e])
+                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(e => [e, e]),
+                    events:{
+                        change: event => this.updateRoadLayer(this.forms["road"].getValue())
+                    }
                     
                     
                 },
@@ -466,7 +495,10 @@ export class LayerTool{
                     name:"opacity",
                     value:1.0,
                     caption:"Opacity",
-                    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(e => [e/10, e/10])
+                    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(e => [e/10, e/10]),
+                    events:{
+                        change: event => this.updateRoadLayer(this.forms["road"].getValue())
+                    }
                 },
                 {
                     input:"input",
@@ -474,7 +506,10 @@ export class LayerTool{
                     name:"dash",
                     value: 2,
                     caption:"Dash",
-                    data:[0, 1, 2, 3, 4].map(e => [e, e])
+                    data:[0, 1, 2, 3, 4].map(e => [e, e]),
+                    events:{
+                        change: event => this.updateRoadLayer(this.forms["road"].getValue())
+                    }
                 },
                 {
                     input:"input",
@@ -520,7 +555,7 @@ export class LayerTool{
         return;
         */
         this.forms["trace"] = new Form({
-            caption:"Trace Layer",
+            caption:"Configuración: Traza",
             id:id,
             fields:[
                 {
@@ -550,7 +585,10 @@ export class LayerTool{
                     type:"color",
                     name:"color",
                     value:"",
-                    caption:"Line Color"
+                    caption:"Line Color",
+                    events:{
+                        change: event => this.updateTraceLayer(this.forms["trace"].getValue())
+                    }
                     
                 },
                 {
@@ -559,7 +597,11 @@ export class LayerTool{
                     name:"width",
                     value:"2",
                     caption:"Line Width",
-                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(e => [e, e])
+                    data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(e => [e, e]),
+                    events:{
+                        change: event => this.updateTraceLayer(this.forms["trace"].getValue())
+                    }
+                    
                     
                     
                 },
@@ -569,7 +611,11 @@ export class LayerTool{
                     name:"opacity",
                     value:1.0,
                     caption:"Opacity",
-                    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(e => [e/10, e/10])
+                    data: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(e => [e/10, e/10]),
+                    events:{
+                        change: event => this.updateTraceLayer(this.forms["trace"].getValue())
+                    }
+                    
                 },
                 {
                     input:"input",
@@ -577,7 +623,11 @@ export class LayerTool{
                     name:"dash",
                     value: 2,
                     caption:"Dash",
-                    data:[0, 1, 2, 3, 4].map(e => [e, e])
+                    data:[0, 1, 2, 3, 4].map(e => [e, e]),
+                    events:{
+                        change: event => this.updateTraceLayer(this.forms["trace"].getValue())
+                    }
+                    
                 },
                 {
                     input:"input",
@@ -585,7 +635,11 @@ export class LayerTool{
                     name:"length",
                     value: 1000,
                     caption:"Length",
-                    data:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(e => [e*1000/2, e*1000/2])
+                    data:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(e => [e*1000/2, e*1000/2]),
+                    events:{
+                        change: event => this.updateTraceLayer(this.forms["trace"].getValue())
+                    }
+                    
                 },
                 {
                     input:"input",
@@ -618,6 +672,63 @@ export class LayerTool{
         this.forms["trace"].setValue(this.data.traceLayer);
     }
 
+    createConfigForm(id: any){
+        /*
+        const input = new Input({target:id,
+            input:"input",
+                    type:"select",
+                    name:"id",
+                    value:"",
+                    caption:"layers"
+        });
+
+        return;
+        */
+        this.forms["config"] = new Form({
+            caption:"Configuración",
+            id:id,
+            fields:[
+                
+                {
+                    input:"input",
+                    type:"select",
+                    name:"mode",
+                    value:"1",
+                    caption:"Visualizar",
+                    data: ["Traza completa","Traza ajustada al Recorrido","Traza hasta al Recorrido"].map((e, index) => [index, e]),
+                    events:{
+                        change: event => this.getTrace().setTraceMode(event.currentTarget.value)
+                    }
+                    
+                },
+                {
+                    input:"input",
+                    type:"select",
+                    name:"speedFactor",
+                    value:0.01,
+                    caption:"Factor de Velocidad",
+                    data: [0.01, 0.02, 0.03, 0.04, 0.05].map(e => [e, e])
+                }
+                
+            ],
+            menu:{
+                caption:"", 
+				autoClose: false,
+				className: ["sevian","horizontal"],
+				items: [
+					
+                    {
+                		caption:"Save",
+                		action:(item, event) => {
+							this.onSaveTrace(this.forms["trace"].getValue());
+						}
+					},                    
+                ]
+            }
+        });
+
+        this.forms["config"].setValue(this.data.config);
+    }
 
     showLayer(){
 
@@ -1091,5 +1202,12 @@ export class LayerTool{
         this.forms["layer"].reset();
         this.forms["image"].reset();
         this.forms["group"].reset();     
+    }
+
+    updateRoadLayer(data){
+        this.getTrace().updateRoadLayer(data)
+    }
+    updateTraceLayer(data){
+        this.getTrace().updateTraceLayer(data)
     }
 }

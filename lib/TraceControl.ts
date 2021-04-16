@@ -95,11 +95,13 @@ export class TraceControl{
 
         });
         
-        tab.add({tagName:"form", active:true});
+        tab.add({tagName:"form", active:true, className:"filter-form"});
         tab.add({});
         tab.add({});
         tab.add({tagName:"form"});
         tab.add({tagName:"form"});
+
+        
         
         //this._length = this._group.create("span").addClass("rule-tool-value");
         //this._length.text("Layers");
@@ -191,20 +193,21 @@ export class TraceControl{
     createList(){
         let main = this.mainTab.getPage(2);
 
-        const body = main.create("div").addClass("trace-list");
+        const table = main.create("table").addClass("trace-list");
+        const header = table.create("tr").addClass("trace-header");
         this.configData.labels.forEach((line)=>{
-            body.create("div").text(line);
+            header.create("th").text(line);
             
         });
         
         this.data.forEach((data, index) => {
             
-            
+            const row = table.create("tr").addClass("trace-row");
             this.configData.fields.forEach((line)=>{
-                body.create("div").ds("value", index).text(data[line])
+                row.create("td").ds("value", index).text(data[line])
                 .on("click", (event)=>{
 
-                    alert($(event.currentTarget).ds("value"));
+                    this._trace.goTo($(event.currentTarget).ds("value"));
                 });
                 
             });

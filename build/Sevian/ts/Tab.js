@@ -118,7 +118,7 @@ export const Tab = (function ($) {
         }
         add(opt, pos = false) {
             let index = this._menu.get().children.length;
-            this._menu.create("a").addClass("tab-menu")
+            let tab = this._menu.create("a").addClass("tab-menu")
                 .on("click", this._click(index))
                 .on("focus", this._click(index))
                 .text(opt.caption || "")
@@ -131,6 +131,10 @@ export const Tab = (function ($) {
             }
             else if (opt.html) {
                 body.text(opt.html);
+            }
+            if (opt.className) {
+                tab.addClass(opt.className);
+                body.addClass(opt.className);
             }
             if (opt.active === true) {
                 this.show(index);
@@ -194,9 +198,16 @@ export const Tab = (function ($) {
             return this.mode;
         }
         getPage(index) {
-            let page = this._main.query(".body > [data-tab-index='" + index + "']");
+            const page = this._main.query(".body > [data-tab-index='" + index + "']");
             if (page) {
                 return $(page);
+            }
+            return false;
+        }
+        getCaption(index) {
+            const caption = this._main.query(`.menu > [data-tab-index='${index}']`);
+            if (caption) {
+                return $(caption);
             }
             return false;
         }

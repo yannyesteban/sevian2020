@@ -212,50 +212,45 @@
 }
 
 .trace-list {
-  display: grid;
-  grid-template-columns: 40px 30px 1fr;
-  grid-template-rows: auto;
+  text-align: center;
   width: 100%;
-  grid-gap: 0px;
-  overflow: auto;
-  height: 100%;
   color: #919191;
   font-size: 9px;
+  line-height: 1.3em;
 }
-.trace-list :nth-child(1), .trace-list :nth-child(2), .trace-list :nth-child(3) {
+.trace-list th {
   background-color: #056b72;
-  text-align: center;
   color: white;
+  text-align: center;
 }
-.trace-list :nth-child(6n+7), .trace-list :nth-child(6n+8), .trace-list :nth-child(6n+9) {
+.trace-list tr:nth-child(2n+1) {
   background-color: #f1f1f1;
 }
-.trace-list :nth-child(3n+4) {
-  text-align: center;
-}
-.trace-list :nth-child(3n+5), .trace-list :nth-child(3n+6) {
-  text-align: right;
+.trace-list tr:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.589);
+  color: #cfcfcf;
 }
 
-.trace-tool .sg-form {
+.filter-form.sg-form {
   background-color: rgba(255, 255, 255, 0.664);
   width: auto;
   display: grid;
   grid-template-rows: 0px 1fr auto;
 }
-.trace-tool .sg-form .caption {
+.filter-form.sg-form .caption {
   color: white;
   text-align: center;
   background-color: rgba(99, 99, 99, 0.7);
   line-height: 2em;
   vertical-align: middle;
 }
-.trace-tool .sg-form .caption .text {
+.filter-form.sg-form .caption .text {
   font-size: 12pt;
   text-transform: uppercase;
   font-family: futurab !important;
 }
-.trace-tool .sg-form .page {
+.filter-form.sg-form .page {
   overflow: auto;
   display: grid;
   grid-gap: 1px;
@@ -267,12 +262,12 @@
       -ms-flex-pack: center;
           justify-content: center;
 }
-.trace-tool .sg-form .page .field {
+.filter-form.sg-form .page .field {
   padding: 2px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 4px;
 }
-.trace-tool .sg-form .page .field .label {
+.filter-form.sg-form .page .field .label {
   color: #919191;
   text-transform: uppercase;
   font-size: 0.8em;
@@ -280,7 +275,7 @@
   font-family: futurab;
   padding-left: 10px;
 }
-.trace-tool .sg-form .page .field input, .trace-tool .sg-form .page .field textarea, .trace-tool .sg-form .page .field select {
+.filter-form.sg-form .page .field input, .filter-form.sg-form .page .field textarea, .filter-form.sg-form .page .field select {
   background-color: #f8f8f8;
   color: #6d6d6d;
   border: 0px;
@@ -288,21 +283,21 @@
   font-family: futurab;
   width: 100%;
 }
-.trace-tool .sg-form .sg-menu {
+.filter-form.sg-form .sg-menu {
   padding: 1px;
   text-align: center;
 }
-.trace-tool .sg-form .sg-menu li {
+.filter-form.sg-form .sg-menu li {
   width: 100%;
 }
-.trace-tool .sg-form .sg-menu a {
+.filter-form.sg-form .sg-menu a {
   background-color: #096961;
   color: white;
 }
-.trace-tool .sg-form .sg-menu a:active {
+.filter-form.sg-form .sg-menu a:active {
   background-color: #2f5a04;
 }
-.trace-tool .sg-form .sg-menu .text {
+.filter-form.sg-form .sg-menu .text {
   margin: 0px;
 }
 
@@ -332,5 +327,173 @@
 
 [data-info-mode=arrow] .info-form {
   background-color: #b31e43;
+}
+
+.sg-form {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+.sg-form .page {
+  overflow: auto;
+}
+
+.layer-tool {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.layer-tool.sg-tab {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+.layer-tool.sg-tab > .menu {
+  grid-column: 1;
+  grid-row: 1;
+  padding: 0px !important;
+  height: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  border-bottom: 2px solid #056d64;
+}
+.layer-tool.sg-tab > .menu > .tab-menu {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  display: inline-block;
+  background-color: #e2e2e2;
+  text-decoration: none;
+  color: #969696;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis "...";
+  max-width: auto;
+  min-width: 20px;
+  border-radius: 4px 12px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  padding: 4px 2px 2px 2px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-size: 10px;
+  text-align: center;
+  height: 100%;
+}
+.layer-tool.sg-tab > .menu > .tab-menu.tab-active {
+  background-color: #056d64;
+  color: white;
+}
+.layer-tool.sg-tab > .menu > .tab-menu:hover {
+  background-color: #2ad8c9;
+  color: white;
+}
+.layer-tool.sg-tab > .body {
+  margin: 0px;
+  padding: 0px;
+  overflow: auto;
+}
+.layer-tool.sg-tab > .body > .tab-body:not(.tab-active) {
+  display: none !important;
+}
+
+.layer-tool {
+  font: 10px/15px sans-serif;
+}
+.layer-tool form {
+  margin: 0px;
+  max-width: 100%;
+  padding: 0px;
+}
+.layer-tool .sg-form {
+  border: 0px;
+  background-color: rgba(255, 255, 255, 0.664);
+}
+.layer-tool .sg-form .caption {
+  color: #929292;
+  text-align: center;
+  background-color: rgba(248, 248, 248, 0.7);
+  line-height: 1.8em;
+  vertical-align: middle;
+  border-bottom: 2px solid #ececec;
+  margin: 4px 0px 0px 0px;
+}
+.layer-tool .sg-form .caption .text {
+  text-transform: uppercase;
+  font-family: futurab !important;
+}
+.layer-tool .sg-form .page {
+  grid-gap: 0px;
+  padding: 0px;
+  grid-template-columns: repeat(auto-fit, [cc-start] minmax(180px, 1fr) [cc-end]);
+  -ms-flex-line-pack: start;
+      align-content: start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.layer-tool .sg-form .page .field {
+  margin: 0px;
+  padding: 0px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding-bottom: 8px;
+}
+.layer-tool .sg-form .page .field .input {
+  padding-left: 4px;
+}
+.layer-tool .sg-form .page .field .label {
+  color: #919191;
+  text-transform: uppercase;
+  padding-bottom: 0px;
+  font-family: futurab;
+  padding-left: 10px;
+  margin-bottom: 50px;
+}
+.layer-tool .sg-form .page .field input, .layer-tool .sg-form .page .field textarea, .layer-tool .sg-form .page .field select {
+  background-color: #eceaea;
+  color: #6d6d6d;
+  border: 0px;
+  font-size: 1.2em;
+  font-family: futurab;
+  max-width: 100%;
+  max-height: 1.8em;
+  margin: 0px;
+}
+.layer-tool .sg-form .sg-menu {
+  padding: 0px;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+.layer-tool .sg-form .sg-menu > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  line-height: 1.6em;
+}
+.layer-tool .sg-form .sg-menu a {
+  background-color: #096961;
+  color: white;
+}
+.layer-tool .sg-form .sg-menu a:active {
+  background-color: #2f5a04;
+}
+.layer-tool .sg-form .sg-menu a:hover {
+  background-color: #005035;
+}
+.layer-tool .sg-form .sg-menu .text {
+  margin: 0px;
 }
 /*# sourceMappingURL=Mapbox.css.map */

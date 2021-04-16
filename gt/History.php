@@ -499,4 +499,10 @@ class History
 		
 		];
 	}
+
+	private function getConfigHistory(){
+		
+		
+			
+	}
 }

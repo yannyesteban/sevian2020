@@ -43,7 +43,7 @@ export var Form2 = (($) => {
         value: any = "";
         caption:string = "";
         type:string = "dropdown";
-        className = "sevian";
+        className = "";
         iconClass:string = "";
 
         fields:any[] = null;
