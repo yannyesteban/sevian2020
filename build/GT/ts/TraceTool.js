@@ -48,7 +48,7 @@ export class TraceTool {
     createUnitMenu(unitData) {
         const ul = this.main.create("ul").addClass("trace-tool");
         unitData.forEach(unit => {
-            const li = ul.create("li");
+            const li = ul.create("li").ds("unitId", unit.unitId);
             li.create("a").text(unit.unitName);
             li.create("input").prop({
                 "type": "checkbox",
@@ -67,6 +67,12 @@ export class TraceTool {
                 this.onFollow(unit.unitId, event.currentTarget.checked);
             });
             ;
+        });
+    }
+    validUnit(unitId, value) {
+        const nodes = this.main.queryAll(`[data-unit-id="${unitId}"] input`);
+        nodes.forEach(ele => {
+            ele.disabled = false;
         });
     }
 }

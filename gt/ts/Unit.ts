@@ -228,6 +228,7 @@ export class Unit{
 	private timer: number = null;
 	private traceTimer: number = null;
 	private propertysInfo: any[] = [];
+	private traceTool: TraceTool = null;
 
 
 	dataClients:any[] = null;
@@ -349,6 +350,7 @@ export class Unit{
 					onValid: (valid) => {
 						const ele = $.query(`.sg-menu .item[data-unit-id="${info.unitId}"] `);
 						$(ele).ds("valid", (valid) ? "1" : "0");
+						this.traceTool.validUnit(info.unitId, valid);
 					},
 					onVisible: (value) => {
 						const ele = $.query(`.sg-menu .item[data-unit-id="${info.unitId}"] input[type="checkbox"] `);
@@ -949,7 +951,7 @@ return;
 		this.traceControl = this.map.getControl().getControl("trace") as TraceControl;//<TraceControl>
 		this.traceControl.play();
 
-		const traceTool = new TraceTool({
+		this.traceTool = new TraceTool({
 			id:this.traceControl.getPage(0),
 			dataUnits: this.dataUnits,
 			tracking: this.tracking,
