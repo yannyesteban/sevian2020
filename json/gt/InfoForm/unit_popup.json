@@ -1,0 +1,14 @@
+{
+	"name":"unit_popup",
+	"caption":"Info..",
+	"type":"popup",
+	"subType":"dropdown",
+	"className":["info-form-popup"],
+	"autoClose":true,
+	"params":false,
+    "template" :"/gt/info-unit-popup",
+    "templateName" :"/gt/info-unit-popup",
+    "modePropertys" :["speed"]
+
+
+}

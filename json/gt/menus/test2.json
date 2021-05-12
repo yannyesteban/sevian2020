@@ -1,0 +1,31 @@
+{
+	"name":"test2",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal"],
+	"autoClose":false,
+	"onDataUser":"S.send3(dataUser);",
+	"items":[
+		{
+			"caption":"GO",
+			"dataUser": {
+				"async": true,
+				"id": "4",
+				"valid": false,
+				"confirm_": "seguro?",
+				"params": [
+					{
+						"t": "setMethod",
+						"id": "4",
+						"element": "test",
+						"method": "load",
+						"name": "xxxx",
+						"eparams": null
+					}
+				]
+			}
+		}
+		
+	]
+}	

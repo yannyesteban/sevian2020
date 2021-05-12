@@ -5,14 +5,14 @@ import {Float}  from '../../Sevian/ts/Window.js';
 import {Tab}  from '../../Sevian/ts/Tab.js';
 import {I, Input, Hidden, InputDate, InputInfo, Multi}  from '../../Sevian/ts/Input.js';
 
-import {Trace}  from '../../lib/Trace.js';
+import {History}  from '../../lib/History.js';
 
 export class LayerTool{
 
     private id:any = null;
     private data:any = null;
 
-    private trace:Trace = null;
+    private trace:History = null;
 
     private propertys:any[] = [];
     private layers:any[] = [];
@@ -41,6 +41,9 @@ export class LayerTool{
     public onSaveRoad:Function = (data)=>{};
     public onSaveTrace:Function = (data)=>{};
     public onSaveMobil:Function = (data)=>{};
+
+    public onSave:Function = (data)=>{};
+    public onDelete:Function = (data)=>{};
 
     constructor(info){
 			
@@ -111,10 +114,10 @@ export class LayerTool{
         this.createConfigForm(tab.getPage(5));
     }
 
-    setTrace(trace:Trace){
+    setTrace(trace:History){
         this.trace = trace;
     }
-    getTrace():Trace{
+    getTrace():History{
         return this.trace;
     }
     createLayerForm(id: any){
@@ -159,14 +162,20 @@ export class LayerTool{
                     name:"prop",
                     value:"",
                     caption:"Property",
-                    data:this.propertys.map(e=>[e.name, e.caption])//this.getPropertysData()
+                    data:this.propertys.map(e=>[e.name, e.caption]),//this.getPropertysData()
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
                     type:"text",
                     name:"caption",
                     value:"",
-                    caption:"Caption"
+                    caption:"Caption",
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
@@ -174,7 +183,10 @@ export class LayerTool{
                     name:"image",
                     value:"circle-1",
                     caption:"Image",
-                    data:this.getImageData()
+                    data:this.getImageData(),
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
@@ -182,7 +194,10 @@ export class LayerTool{
                     name:"scale",
                     value:1.0,
                     caption:"Scale",
-                    data:this.getScalesData()
+                    data:this.getScalesData(),
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
@@ -203,14 +218,20 @@ export class LayerTool{
                         ["[)", "[n, m)"],
                         ["[]", "[n, m]"],
                         ["(]", "(n, m]"]
-                    ]
+                    ],
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
                     type:"text",
                     name:"value",
                     value:"",
-                    caption:"Value"
+                    caption:"Value",
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
@@ -218,7 +239,10 @@ export class LayerTool{
                     name:"group",
                     value:0,
                     caption:"Group",
-                    data:this.getGroupList()
+                    data:this.getGroupList(),
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
@@ -229,7 +253,10 @@ export class LayerTool{
                     data:[
                         [1, "yes"],
                         [0, "no"]
-                    ]
+                    ],
+                    rules:{
+                        required:{}
+                    }
                 }
             ],
             menu:{
@@ -248,7 +275,10 @@ export class LayerTool{
 						id: 2,
                 		caption:"Save",
                 		action:(item, event) => {
-							this.saveLayer(this.forms["layer"].getValue());
+                            if(this.forms["layer"].valid()){
+                                this.saveLayer(this.forms["layer"].getValue());
+                            }
+							
 						}
 					},
                     {
@@ -285,7 +315,10 @@ export class LayerTool{
                     type:"text",
                     name:"name",
                     value:"",
-                    caption:"Name"
+                    caption:"Name",
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
@@ -297,28 +330,40 @@ export class LayerTool{
                         ["arrow","Arrow"],
                         ["circle","Circle"],
                         ["pulsing","Pulsing"]
-                    ]
+                    ],
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
                     type:"color",
                     name:"color",
                     value:"",
-                    caption:"Color"
+                    caption:"Color",
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
                     type:"color",
                     name:"border",
                     value:"",
-                    caption:"Border Color"
+                    caption:"Border Color",
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
                     type:"color",
                     name:"halo",
                     value:"",
-                    caption:"Halo Color"
+                    caption:"Halo Color",
+                    rules:{
+                        required:{}
+                    }
                 }
             ],
             menu:{
@@ -337,7 +382,10 @@ export class LayerTool{
 						id: 2,
                 		caption:"Save",
                 		action:(item, event) => {
-							this.saveImage(this.forms["image"].getValue());
+                            if(this.forms["layer"].valid()){
+                                this.saveImage(this.forms["image"].getValue());
+                            }
+							
 						}
 					},
                     {
@@ -383,14 +431,20 @@ export class LayerTool{
                     type:"text",
                     name:"caption",
                     value:"",
-                    caption:"Caption"
+                    caption:"Caption",
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
                     type:"text",
                     name:"className",
                     value:"",
-                    caption:"Class"
+                    caption:"Class",
+                    rules:{
+                        required:{}
+                    }
                 },
                 {
                     input:"input",
@@ -402,7 +456,10 @@ export class LayerTool{
                         ["close", "close"],
                         ["open", "open"]
 
-                    ]
+                    ],
+                    rules:{
+                        required:{}
+                    }
                 }
             ],
             menu:{
@@ -421,7 +478,10 @@ export class LayerTool{
 						id: 2,
                 		caption:"Save",
                 		action:(item, event) => {
-							this.saveGroup(this.forms["group"].getValue());
+                            if(this.forms["layer"].valid()){
+                                this.saveGroup(this.forms["group"].getValue());
+                            }
+							
 						}
 					},
                     {
@@ -1078,7 +1138,8 @@ export class LayerTool{
             this.setLayer(data.layerId, data);
             this.onEditLayer(data.layerId, data);
         }
-        this.getData();
+        
+        this.onSave(this.getData());
         
     }
 
@@ -1111,6 +1172,7 @@ export class LayerTool{
         this.forms["layer"].getInput("layerId").setOptionsData(this.getLayerList());
         this.forms["layer"].reset();
         this.onDeleteLayer(data.id);
+        this.onSave(this.getData());
     }
 
 
@@ -1125,6 +1187,7 @@ export class LayerTool{
             this.onEditImage(data.imageId, data);
         }
         this.resetFormLayer();
+        this.onSave(this.getData());
     }
     addImage(data){
         data.imageId =this.layers.length;
@@ -1153,6 +1216,7 @@ export class LayerTool{
         this.forms["image"].getInput("imageId").setOptionsData(this.getImageList());
         this.forms["image"].reset();
         this.resetFormLayer();
+        this.onSave(this.getData());
     }
 
 
@@ -1165,6 +1229,7 @@ export class LayerTool{
             this.setGroup(data.groupId, data);
         }
         this.resetFormLayer();
+        this.onSave(this.getData());
     }
     addGroup(data){
         data.groupId =this.groups.length;
@@ -1193,8 +1258,10 @@ export class LayerTool{
         this.forms["group"].getInput("groupId").setOptionsData(this.getGroupList());
         this.forms["group"].reset();
         this.resetFormLayer();
+        this.onSave(this.getData());
     }
     getData(){
+        console.log(this.data);
         return this.data;
     }
     reset(){
@@ -1205,9 +1272,11 @@ export class LayerTool{
     }
 
     updateRoadLayer(data){
-        this.getTrace().updateRoadLayer(data)
+        this.getTrace().updateRoadLayer(data);
+        this.onSave(this.getData());
     }
     updateTraceLayer(data){
-        this.getTrace().updateTraceLayer(data)
+        this.getTrace().updateTraceLayer(data);
+        this.onSave(this.getData());
     }
 }

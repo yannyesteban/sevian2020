@@ -194,8 +194,9 @@ class Site
 		//$this->typeElement = 'GTSite';
 		$this->jsClassName = 'GTSite';
 		$this->info = [
-			'dataSite'     => $this->loadSites(),
-			'dataCategory' => $this->loadCategorys(),
+			'mapName'     	=> $this->eparams->mapName ?? '',
+			'dataSite'     	=> $this->loadSites(),
+			'dataCategory' 	=> $this->loadCategorys(),
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",

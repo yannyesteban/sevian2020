@@ -18,7 +18,7 @@ var _sg = {
         }
         else if (obj.attachEvent) {
             obj.attachEvent(_event, _function);
-        } // end if		
+        } // end if
     },
     _off: function (obj, _event, _function) {
         if (obj.removeEventListener) {
@@ -60,7 +60,321 @@ var _sg = {
         }
     },
 };
-var _sgObjet = function (obj) {
+export class SQObject {
+    constructor(obj) {
+        this.e = obj;
+    }
+    get() {
+        return this.e;
+    }
+    create(tagName) {
+        if (tagName === false) {
+            return this;
+        }
+        return this.append(_sgQuery.create(tagName));
+    }
+    createFirst(tagName) {
+        if (tagName === false) {
+            return this;
+        }
+        const ele = _sgQuery.create(tagName);
+        this.insertFirst(ele);
+        return ele;
+    }
+    add(tagName) {
+        this.append(_sgQuery.create(tagName));
+        return this;
+    }
+    text(text, append) {
+        if (text === undefined) {
+            return this.e.innerHTML;
+        }
+        if (append) {
+            this.e.innerHTML += text;
+        }
+        else {
+            this.e.innerHTML = text;
+        }
+        return this;
+    }
+    id(id) {
+        if (id === undefined) {
+            return this.e.id;
+        }
+        this.e.id = id;
+        return this;
+    }
+    val(value) {
+        if (value === undefined) {
+            return this.e.value;
+        }
+        this.e.value = value;
+        return this;
+    }
+    value(value) {
+        if (value === undefined) {
+            return this.e.value;
+        }
+        this.e.value = value;
+        return this;
+    }
+    append(obj) {
+        if (!this.e || !this.e.appendChild || obj === false || obj === null || obj === undefined) {
+            return this;
+        }
+        if (typeof (obj) === "object") {
+            if (obj instanceof SQObject) {
+                this.e.appendChild(obj.get());
+                return obj;
+            }
+            else if (obj instanceof HTMLElement) {
+                this.e.appendChild(obj);
+            }
+            else if (obj.get && typeof obj.get === "function") {
+                this.e.appendChild(obj.get());
+                return obj;
+            }
+            else {
+                return this;
+            }
+        } /*else if(document.querySelector(obj)){
+            this.append("error");
+            obj = document.querySelector(obj);
+            this.e.innerHTML = document.querySelector(obj);
+
+        }*/
+        else {
+            this.e.innerHTML += obj;
+            return this;
+        }
+        return _sgQuery(obj);
+    }
+    appendTo(target) {
+        if (typeof (target) === "object") {
+            if (target instanceof SQObject) {
+                target.get().appendChild(this.e);
+            }
+            else if (target instanceof HTMLElement) {
+                target.appendChild(this.e);
+            }
+        }
+        return this;
+    }
+    insertFirst(obj) {
+        if (typeof (obj) === "object") {
+            if (obj instanceof SQObject) {
+                //this.e.appendChild(obj.get());
+                this.e.insertBefore(obj.get(), this.e.firstChild);
+                //return obj;
+            }
+            else if (obj instanceof HTMLElement) {
+                this.e.insertBefore(obj, this.e.firstChild);
+            }
+            else {
+                //return this;
+            }
+        }
+        else {
+            this.e.innerHTML = obj + this.e.innerHTML;
+        }
+        return this;
+        //this.e.insertBefore(obj, this.e.firstChild);
+    }
+    replace(obj) {
+        if (typeof (obj) === "object") {
+            if (obj instanceof SQObject) {
+                //this.e.appendChild(obj.get());
+                this.e.replaceChild(obj.get(), this.e);
+                //return obj;
+            }
+            else if (obj instanceof HTMLElement) {
+                this.e.replaceChild(obj, this.e.firstChild);
+            }
+            else {
+                //return this;
+            }
+        }
+        else {
+            this.e.innerHTML = obj;
+        }
+        return this;
+        //this.e.insertBefore(obj, this.e.firstChild);
+    }
+    addClass(className) {
+        if (className) {
+            if (typeof (className) === "object") {
+                for (var x in className) {
+                    if (className[x] !== false && className[x] !== null && className[x] !== "") {
+                        this.e.classList.add(className[x]);
+                    }
+                }
+            }
+            else if (className !== false && className !== null && className !== "") {
+                this.e.classList.add(className);
+            }
+        }
+        return this;
+    }
+    removeClass(className) {
+        if (className) {
+            if (typeof (className) === "object") {
+                for (var x in className) {
+                    this.e.classList.remove(className[x]);
+                }
+            }
+            else {
+                this.e.classList.remove(className);
+            }
+        }
+        return this;
+    }
+    toggleClass(className) {
+        this.e.classList.toggle(className);
+        return this;
+    }
+    hasClass(className) {
+        return this.e.classList.contains(className);
+    }
+    attr(attr, value) {
+        if (value === undefined) {
+            return this.e[attr];
+        }
+        else {
+            _sg.prop(this.e, attr, value);
+            return this;
+        }
+    }
+    prop(prop, value) {
+        _sg.prop(this.e, prop, value);
+        return this;
+    }
+    style(prop, value) {
+        /*
+        if(typeof(prop) === "object"){
+            _sg.prop(this.e.style, prop, value);
+
+        }
+
+        console.log(prop+"..."+value)
+        if(!prop){
+            return this.e.style;
+        }
+
+        if(value === undefined){
+            return this.e.style[prop];
+        }
+        _sg.prop(this.e.style, prop, value);
+            return this;*/
+        if (prop !== undefined) {
+            _sg.prop(this.e.style, prop, value);
+            return this;
+        }
+        else {
+            return this.e.style;
+        }
+    }
+    ds(prop, value) {
+        if (typeof (prop) === "object") {
+            _sg.prop(this.e.dataset, prop, value);
+            return this;
+        }
+        else if (prop) {
+            if (value === undefined) {
+                return this.e.dataset[prop];
+            }
+            _sg.prop(this.e.dataset, prop, value);
+            return this;
+        }
+        else {
+            return this.e.dataset;
+        }
+    }
+    removeDs(prop) {
+        delete this.e.dataset[prop];
+        return this;
+    }
+    query(selector) {
+        if (this.e.querySelector(selector)) {
+            return this.e.querySelector(selector);
+        }
+        return false;
+    }
+    queryAll(selector) {
+        if (this.e.querySelectorAll(selector)) {
+            return this.e.querySelectorAll(selector);
+        }
+        return false;
+    }
+    children() {
+        return Array.from(this.e.children);
+    }
+    parent() {
+        return this.e.parentNode || null;
+    }
+    q(selector) {
+        return _sgQuery(this.e.querySelector(selector));
+    }
+    childs() {
+        var ch = this.e.childNodes;
+        var childs = [];
+        for (var x = 0; x < ch.length; x++) {
+            if (ch[x].nodeType === 1) {
+                childs.push(ch[x]);
+            }
+        }
+        return childs;
+    }
+    contains(elem) {
+        if (elem instanceof HTMLElement) {
+            return this.e.contains(elem);
+        }
+        else if (elem.get && typeof elem.get === "function") {
+            return this.e.contains(elem.get());
+        }
+    }
+    remove() {
+        if (this.e) {
+            this.e.remove();
+        }
+    }
+    on(_event, _function) {
+        _sg.on(this.e, _event, _function);
+        return this;
+        if (this.e.addEventListener) {
+            _event = _event.replace(/^\s*on/gi, "");
+            this.e.addEventListener(_event, _function, false);
+        }
+        else if (this.e.attachEvent) {
+            this.e.attachEvent(_event, _function);
+        } // end if
+    }
+    off(_event, _function) {
+        _sg.off(this.e, _event, _function);
+        return this;
+        if (this.e.removeEventListener) {
+            _event = _event.replace(/^\s*on/gi, "");
+            this.e.removeEventListener(_event, _function, false);
+        }
+        else if (this.e.detachEvent) {
+            this.e.detachEvent(_event, _function);
+        } // end if
+    }
+    fire(_event) {
+        var evt;
+        if (document.createEventObject) {
+            // dispatch for IE
+            evt = document.createEventObject();
+            return this.e.fireEvent("on" + _event, evt);
+        }
+        else {
+            // dispatch for firefox + others
+            evt = document.createEvent("HTMLEvents");
+            evt.initEvent(_event, true, true); // event type,bubbling,cancelable
+            return !this.e.dispatchEvent(evt);
+        }
+    }
+}
+export let SQObject1 = function (obj) {
     this.e = obj;
     /*
     if(obj === undefined || obj === ""){
@@ -77,7 +391,7 @@ var _sgObjet = function (obj) {
 
     */
 };
-_sgObjet.prototype = {
+SQObject1.prototype = {
     get: function () {
         return this.e;
     },
@@ -137,7 +451,7 @@ _sgObjet.prototype = {
             return this;
         }
         if (typeof (obj) === "object") {
-            if (obj instanceof _sgObjet) {
+            if (obj instanceof SQObject) {
                 this.e.appendChild(obj.get());
                 return obj;
             }
@@ -155,7 +469,7 @@ _sgObjet.prototype = {
             this.append("error");
             obj = document.querySelector(obj);
             this.e.innerHTML = document.querySelector(obj);
-            
+
         }*/
         else {
             this.e.innerHTML += obj;
@@ -165,7 +479,7 @@ _sgObjet.prototype = {
     },
     appendTo: function (target) {
         if (typeof (target) === "object") {
-            if (target instanceof _sgObjet) {
+            if (target instanceof SQObject) {
                 target.get().appendChild(this.e);
             }
             else if (target instanceof HTMLElement) {
@@ -176,7 +490,7 @@ _sgObjet.prototype = {
     },
     insertFirst: function (obj) {
         if (typeof (obj) === "object") {
-            if (obj instanceof _sgObjet) {
+            if (obj instanceof SQObject) {
                 //this.e.appendChild(obj.get());
                 this.e.insertBefore(obj.get(), this.e.firstChild);
                 //return obj;
@@ -185,18 +499,18 @@ _sgObjet.prototype = {
                 this.e.insertBefore(obj, this.e.firstChild);
             }
             else {
-                //return this;	
+                //return this;
             }
         }
         else {
             this.e.innerHTML = obj + this.e.innerHTML;
         }
         return this;
-        //this.e.insertBefore(obj, this.e.firstChild);			
+        //this.e.insertBefore(obj, this.e.firstChild);
     },
     replace: function (obj) {
         if (typeof (obj) === "object") {
-            if (obj instanceof _sgObjet) {
+            if (obj instanceof SQObject) {
                 //this.e.appendChild(obj.get());
                 this.e.replaceChild(obj.get(), this.e);
                 //return obj;
@@ -205,14 +519,14 @@ _sgObjet.prototype = {
                 this.e.replaceChild(obj, this.e.firstChild);
             }
             else {
-                //return this;	
+                //return this;
             }
         }
         else {
             this.e.innerHTML = obj;
         }
         return this;
-        //this.e.insertBefore(obj, this.e.firstChild);			
+        //this.e.insertBefore(obj, this.e.firstChild);
     },
     addClass: function (className) {
         if (className) {
@@ -266,14 +580,14 @@ _sgObjet.prototype = {
         /*
         if(typeof(prop) === "object"){
             _sg.prop(this.e.style, prop, value);
-            
+
         }
-        
+
         console.log(prop+"..."+value)
         if(!prop){
             return this.e.style;
         }
-        
+
         if(value === undefined){
             return this.e.style[prop];
         }
@@ -346,6 +660,11 @@ _sgObjet.prototype = {
             return this.e.contains(elem.get());
         }
     },
+    remove: function () {
+        if (this.e) {
+            this.e.remove();
+        }
+    },
     on: function (_event, _function) {
         _sg.on(this.e, _event, _function);
         return this;
@@ -355,7 +674,7 @@ _sgObjet.prototype = {
         }
         else if (this.e.attachEvent) {
             this.e.attachEvent(_event, _function);
-        } // end if		
+        } // end if
     },
     off: function (_event, _function) {
         _sg.off(this.e, _event, _function);
@@ -383,11 +702,11 @@ _sgObjet.prototype = {
         }
     },
 };
-export var _sgQuery = function (obj) {
-    if (obj instanceof _sgObjet) {
+export const _sgQuery = function (obj) {
+    if (obj instanceof SQObject) {
         return obj;
     }
-    var e = false;
+    let e = null;
     if (obj === undefined || obj === "") {
         e = document.body;
     }
@@ -400,12 +719,10 @@ export var _sgQuery = function (obj) {
     else if (document.getElementById(obj)) {
         e = document.getElementById(obj);
     }
-    if (e !== false && e !== null) {
-        return new _sgObjet(e);
+    if (e !== null) {
+        return new SQObject(e);
     }
-    else {
-        return e;
-    }
+    return null;
 };
 _sgQuery.byId = function (id) {
     if (document.getElementById(id)) {
@@ -518,7 +835,7 @@ _sgQuery.unSelect = function () {
 };
 /*
 function a(){
-    
+
     _sgQuery("#e1").fire("click");
 }
 
@@ -539,7 +856,7 @@ var c =_sgQuery().create("span").prop("title", "jajaja")
 
 //document.body.appendChild(c.get());
 
-//alert(c instanceof _sgObjet)
+//alert(c instanceof SQObject)
 
 //s.append("u")
 //.append(div);

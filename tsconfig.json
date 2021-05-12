@@ -14,10 +14,10 @@
         }
         //"outDir": "js",
         //"rootDir": "./ts"
-       
-    
+
+
     },
     //"include":["ts/y2/*", "ts/*"]
-    "include": ["./sevian/ts/*","./gt/ts/*","./lib/*"],
+    "include": ["./test/*.*","./sevian/ts/*","./gt/ts/*","./lib/*"],
 
 }

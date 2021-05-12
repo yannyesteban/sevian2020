@@ -1,395 +1,53 @@
-// JavaScript Document
-/*
-var mySocket    = null;
-var serverUrl   = 'ws://127.0.0.1:8083';  //  wss: is ws: but using SSL.
-var oWebSocket  = window.WebSocket || window.MozWebSocket;
-if (oWebSocket) {
-    mySocket = new oWebSocket (serverUrl);
-    if (mySocket) {
-        console.log (mySocket);
-        mySocket.onopen     = onSocketOpen;
-        mySocket.onclose    = onSocketClose;
-        mySocket.onmessage  = onSocketMessage;
-        mySocket.onerror    = onSocketError;
-
-        setTimeout (closeSocket, 8083);  //  Be polite and free socket when done.
-    }
-}
-*/
-import { _sgQuery } from './Query.js';
-function onSocketOpen(evt) {
-    console.log("Socket is now open.");
-    mySocket.send("Hello from my first live web socket!");
-}
-function onSocketClose(evt) {
-    console.log("Socket is now closed.");
-}
-function onSocketMessage(evt) {
-    console.log("Recieved from socket: ", evt.data);
-}
-function onSocketError(evt) {
-    console.log("Error with/from socket!:");
-    console.log(evt);
-}
-function closeSocket() {
-    if (mySocket.readyState !== mySocket.CLOSED) {
-        console.log("Closing socket from our end (timer).");
-        mySocket.close();
-    }
-    else
-        console.log("Socket was already closed (timer).");
-}
-export var sgAjax = false, sgFragment = false;
-var SgAjax = (function ($) {
-    var index = 0;
-    var active = [];
-    var ie = navigator.userAgent.indexOf("MSIE") > -1 || navigator.userAgent.indexOf("Trident") > -1 || navigator.userAgent.indexOf("Edge") > -1;
-    var moz = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-    var ch = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-    var nav = (ie) ? "isie" : (moz) ? "ismoz" : (ch) ? "ischr" : "";
-    sgFragment = {
-        evalJson: function (opt) {
-            var x = false;
-            var target = $(opt.targetId);
-            if (opt.targetId !== false && opt.targetId !== "") {
-                if (!target.get()) {
-                    target = $("").create({
-                        tagName: "div",
-                        style: { display: "none" },
-                        id: opt.targetId
-                    });
-                    opt.hidden = true;
-                }
-                if (target.get()) {
-                    if (opt.hidden) {
-                        target.get().style.display = "none";
-                    }
-                    else {
-                        target.get().style.display = "";
-                    }
-                    if (opt.typeAppend) {
-                        switch (opt.typeAppend) {
-                            case 1:
-                                target.text(opt.html);
-                                break;
-                            case 2:
-                                target.text(opt.html, true);
-                                break;
-                            case 3:
-                                target.insertFirst(opt.html);
-                                break;
-                        }
-                    }
-                    if (opt.options) {
-                        var option = false;
-                        target.get().length = 0;
-                        for (x in opt.options) {
-                            option = target.create("option");
-                            option.prop({
-                                value: opt.options[x].value,
-                                text: opt.options[x].text
-                            });
-                        }
-                    }
-                    if (opt.propertys) {
-                        for (var x in opt.propertys) {
-                            target.get()[x] = opt.propertys[x];
-                        }
-                    }
-                    if (opt.style) {
-                        for (x in opt.style) {
-                            target.style()[x] = opt.style[x];
-                        }
-                    }
-                }
+import { _sgQuery as $ } from './Query.js';
+var index = 0;
+var active = [];
+var ie = navigator.userAgent.indexOf("MSIE") > -1 || navigator.userAgent.indexOf("Trident") > -1 || navigator.userAgent.indexOf("Edge") > -1;
+var moz = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+var ch = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+var nav = (ie) ? "isie" : (moz) ? "ismoz" : (ch) ? "ischr" : "";
+export const sgFragment = {
+    evalJson: function (opt) {
+        var x = false;
+        var target = $(opt.targetId);
+        if (opt.targetId !== false && opt.targetId !== "") {
+            if (!target.get()) {
+                target = $("").create({
+                    tagName: "div",
+                    style: {
+                        display: "none"
+                    },
+                    id: opt.targetId
+                });
+                opt.hidden = true;
             }
-            else if (opt.targetId === false) {
-                $("").text(opt.html);
-                if (opt.title) {
-                    document.title = opt.title;
-                }
-            }
-            if (opt.script) {
-                $.appendScript(opt.script);
-            }
-            if (opt.css) {
-                $.appendStyle(opt.css);
-            }
-        },
-    };
-    var waitLayer = function (opt) {
-        this.target = false;
-        this.text = false;
-        this.className = false;
-        this._main = false;
-        this._target = false;
-        for (var x in opt) {
-            this[x] = opt[x];
-        }
-        this.create();
-        //this.show();
-    };
-    waitLayer.prototype = {
-        create: function () {
-            this._target = $(this.target);
-            if (!this._target.style().position) {
-                //this._target.style().position = "relative";
-            }
-            this._main = this._target.create("div");
-            this._main.ds("sgType", "sg-ajax");
-            this._main.style({
-                position: "absolute",
-                top: "0px",
-                bottom: "0px",
-                left: "0px",
-                right: "0px",
-                visibility: "hidden"
-            });
-            if (this.message) {
-                this._main.text(this.message);
-            }
-            if (this.className) {
-                this._main.addClass(this.className);
-            }
-            this._main.addClass(nav);
-        },
-        show: function () {
-            this._main.style().visibility = "visible";
-            this._main.removeClass("sg-wait-close");
-            this._main.addClass("sg-wait-open");
-        },
-        hide: function () {
-            this._main.style().visibility = "hidden";
-            this._main.removeClass("sg-wait-open");
-            this._main.addClass("sg-wait-close");
-        },
-    };
-    var getFormData = function (form) {
-        var f = $(form).get();
-        var str = "";
-        var n = f.elements.length;
-        for (var x = 0; x < n; x++) {
-            if (f.elements[x].name) {
-                str += f.elements[x].name + "=" + encodeURIComponent(f.elements[x].value) + "&";
-            }
-        }
-        return str;
-    };
-    var HttpRequest = function () {
-        if (window.XMLHttpRequest) {
-            return new XMLHttpRequest();
-        }
-        else if (window.ActiveXObject) {
-            return new ActiveXObject("Microsoft.XMLHTTP");
-        }
-    };
-    var onReady = function (onSucess, onError, waitLayer, index) {
-        return function () {
-            if (this.readyState === 4) {
-                //delete active[index];
-                if (waitLayer) {
-                    waitLayer.hide();
-                    //waitLayer = null;
-                }
-                if (this.status === 200) {
-                    onSucess(this);
-                    return true;
-                }
-                if (onError) {
-                    onError(this, this.status);
-                }
-                return false;
-            }
-        };
-    };
-    sgAjax = function (opt) {
-        this.url = "";
-        this.method = "GET";
-        this.charset = "utf-8";
-        this.async = true;
-        this.form = true;
-        this.params = false;
-        this.onSucess = false;
-        this.onError = false;
-        this.onAbort = false;
-        this.waitLayer = false;
-        this.priority = 0; //0:
-        this._wait = false;
-        for (var x in opt) {
-            if (this.hasOwnProperty(x)) {
-                this[x] = opt[x];
-            }
-        }
-        this.index = index++;
-        this.XHR = HttpRequest();
-        if (this.waitLayer) {
-            this._wait = new waitLayer(this.waitLayer);
-        }
-        if (this.onSucess) {
-            this.XHR.onreadystatechange = onReady(this.onSucess, this.onError, this._wait, this.index);
-        }
-        if (this.params !== false) {
-            this.send();
-        }
-    };
-    sgAjax.prototype = {
-        send: function (opt) {
-            if (opt) {
-                for (var x in opt) {
-                    if (this.hasOwnProperty(x)) {
-                        this[x] = opt[x];
-                    }
-                }
-                if (opt.onSucess) {
-                    this.XHR.onreadystatechange = onReady(this.onSucess, this.onError, this._wait, this.index);
-                }
-            }
-            if (this.XHR.readyState !== 0 && this.XHR.readyState !== 4) {
-                if (this.priority === 1) {
-                    this.XHR.abort();
+            if (target.get()) {
+                if (opt.hidden) {
+                    target.get().style.display = "none";
                 }
                 else {
-                    return this.XHR;
+                    target.get().style.display = "";
                 }
-            }
-            var date = new Date(), XHR = this.XHR, rnd = date.getTime() + (Math.random() * 100).toFixed(0);
-            //db(this._wait)
-            if (this._wait) {
-                this._wait.show();
-            }
-            var formData = "";
-            if (this.form) {
-                if (this.form instanceof FormData) {
-                    formData = this.form;
-                }
-                else {
-                    formData = new FormData($(this.form).get());
-                }
-                //formData = getFormData($(this.form).get());
-            }
-            else {
-                formData = this.params;
-            }
-            if (this.method.toUpperCase() === "GET") {
-                XHR.open("GET", this.url + "?" + "rnd=" + rnd + this.params + "&" + formData, this.async);
-                XHR.open("GET", this.url, this.async);
-                XHR.setRequestHeader("Content-Type", "text/plain;charset=utf-8");
-                XHR.send(null);
-            }
-            else {
-                //db(formData.get("cedula"),"red");
-                XHR.open("POST", this.url, this.async);
-                //XHR.setRequestHeader("Content-Type", "multipart/form-data;charset=utf-8");
-                /*multipart/form-data OR application/x-www-form-urlencoded*/
-                //XHR.send(/*"&rnd=" + rnd + this.params + "&" + */formData);
-                XHR.send(formData);
-            } // end if
-            return this.XHR;
-        },
-        getStatus: function () {
-            return this.XHR.readyState;
-        },
-        abort: function () {
-            this.XHR.abort();
-            if (this._wait) {
-                this._wait.hide();
-            }
-            if (this.onAbort) {
-                this.onAbort();
-            }
-        }
-    };
-    return {
-        create: function (opt) {
-            return new sgAjax(opt);
-        },
-        createWL: function (opt) {
-            return new waitLayer(opt);
-        },
-    };
-})(_sgQuery);
-var sgJson;
-(function ($) {
-    sgJson = {
-        iPanel: function (opt) {
-            let target = null;
-            if (typeof opt.id === "number") {
-                target = $("form_p" + opt.id);
-            }
-            else {
-                target = $(opt.id);
-            }
-            target.text(opt.html);
-            if (opt.script) {
-                $.appendScript(opt.script);
-            }
-            if (opt.css) {
-                $.appendStyle(opt.css);
-            }
-            if (opt.title) {
-                document.title = opt.title;
-            }
-        },
-        iFragment: function (opt) {
-            var target = $(opt.targetId);
-            if (opt.targetId !== false && opt.targetId !== "") {
-                if (!target.get()) {
-                    target = $("").create({
-                        tagName: "div",
-                        style: { display: "none" },
-                        id: opt.targetId
-                    });
-                    opt.hidden = true;
-                }
-                if (target.get()) {
-                    if (opt.hidden) {
-                        target.get().style.display = "none";
-                    }
-                    else {
-                        target.get().style.display = "";
-                    }
-                    if (opt.mode) {
-                        switch (opt.mode) {
-                            case 1:
-                            default:
-                                target.text(opt.html);
-                                break;
-                            case 2:
-                                target.text(opt.html, true);
-                                break;
-                            case 3:
-                                target.insertFirst(opt.html);
-                                break;
-                        }
+                if (opt.typeAppend) {
+                    switch (opt.typeAppend) {
+                        case 1:
+                            target.text(opt.html);
+                            break;
+                        case 2:
+                            target.text(opt.html, true);
+                            break;
+                        case 3:
+                            target.insertFirst(opt.html);
+                            break;
                     }
                 }
-            }
-            if (opt.script) {
-                $.appendScript(opt.script);
-            }
-            if (opt.css) {
-                $.appendStyle(opt.css);
-            }
-        },
-        iDataInput: function (opt) {
-            var target = $(opt.targetId);
-            if (target && target.get()) {
-                if (opt.data) {
+                if (opt.options) {
                     var option = false;
                     target.get().length = 0;
-                    for (var x in opt.data) {
+                    for (x in opt.options) {
                         option = target.create("option");
-                        option.prop({
-                            value: opt.data[x].value,
-                            text: opt.data[x].text
-                        });
+                        option.prop({ value: opt.options[x].value, text: opt.options[x].text });
                     }
                 }
-            }
-        },
-        iPropertyHTML: function (opt) {
-            var target = $(opt.targetId);
-            if (target) {
                 if (opt.propertys) {
                     for (var x in opt.propertys) {
                         target.get()[x] = opt.propertys[x];
@@ -401,7 +59,290 @@ var sgJson;
                     }
                 }
             }
-        },
+        }
+        else if (opt.targetId === false) {
+            $("").text(opt.html);
+            if (opt.title) {
+                document.title = opt.title;
+            }
+        }
+        if (opt.script) {
+            $.appendScript(opt.script);
+        }
+        if (opt.css) {
+            $.appendStyle(opt.css);
+        }
+    }
+};
+const waitLayer = function (opt) {
+    this.target = false;
+    this.text = false;
+    this.className = false;
+    this._main = false;
+    this._target = false;
+    for (var x in opt) {
+        this[x] = opt[x];
+    }
+    this.create();
+    // this.show();
+};
+waitLayer.prototype = {
+    create: function () {
+        this._target = $(this.target);
+        if (!this._target.style().position) { // this._target.style().position = "relative";
+        }
+        this._main = this._target.create("div");
+        this._main.ds("sgType", "sg-ajax");
+        this._main.style({
+            position: "absolute",
+            top: "0px",
+            bottom: "0px",
+            left: "0px",
+            right: "0px",
+            visibility: "hidden"
+        });
+        if (this.message) {
+            this._main.text(this.message);
+        }
+        if (this.className) {
+            this._main.addClass(this.className);
+        }
+        this._main.addClass(nav);
+    },
+    show: function () {
+        this._main.style().visibility = "visible";
+        this._main.removeClass("sg-wait-close");
+        this._main.addClass("sg-wait-open");
+    },
+    hide: function () {
+        this._main.style().visibility = "hidden";
+        this._main.removeClass("sg-wait-open");
+        this._main.addClass("sg-wait-close");
+    }
+};
+var getFormData = function (form) {
+    var f = $(form).get();
+    var str = "";
+    var n = f.elements.length;
+    for (var x = 0; x < n; x++) {
+        if (f.elements[x].name) {
+            str += f.elements[x].name + "=" + encodeURIComponent(f.elements[x].value) + "&";
+        }
+    }
+    return str;
+};
+var HttpRequest = function () {
+    if (window.XMLHttpRequest) {
+        return new XMLHttpRequest();
+    }
+    else if (window.ActiveXObject) {
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+};
+var onReady = function (onSucess, onError, waitLayer, index) {
+    return function () {
+        if (this.readyState === 4) { // delete active[index];
+            if (waitLayer) {
+                waitLayer.hide();
+                // waitLayer = null;
+            }
+            if (this.status === 200) {
+                onSucess(this);
+                return true;
+            }
+            if (onError) {
+                onError(this, this.status);
+            }
+            return false;
+        }
     };
-})(_sgQuery);
+};
+export const sgAjax = function (opt) {
+    this.url = "";
+    this.method = "GET";
+    this.charset = "utf-8";
+    this.async = true;
+    this.form = true;
+    this.params = false;
+    this.onSucess = false;
+    this.onError = false;
+    this.onAbort = false;
+    this.waitLayer = false;
+    this.priority = 0; // 0:
+    this._wait = false;
+    for (var x in opt) {
+        if (this.hasOwnProperty(x)) {
+            this[x] = opt[x];
+        }
+    }
+    this.index = index++;
+    this.XHR = HttpRequest();
+    if (this.waitLayer) {
+        this._wait = new waitLayer(this.waitLayer);
+    }
+    if (this.onSucess) {
+        this.XHR.onreadystatechange = onReady(this.onSucess, this.onError, this._wait, this.index);
+    }
+    if (this.params !== false) {
+        this.send();
+    }
+};
+sgAjax.prototype = {
+    send: function (opt) {
+        if (opt) {
+            for (var x in opt) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = opt[x];
+                }
+            }
+            if (opt.onSucess) {
+                this.XHR.onreadystatechange = onReady(this.onSucess, this.onError, this._wait, this.index);
+            }
+        }
+        if (this.XHR.readyState !== 0 && this.XHR.readyState !== 4) {
+            if (this.priority === 1) {
+                this.XHR.abort();
+            }
+            else {
+                return this.XHR;
+            }
+        }
+        var date = new Date(), XHR = this.XHR, rnd = date.getTime() + (Math.random() * 100).toFixed(0);
+        // db(this._wait)
+        if (this._wait) {
+            this._wait.show();
+        }
+        let formData = null;
+        if (this.form) {
+            if (this.form instanceof FormData) {
+                formData = this.form;
+            }
+            else {
+                formData = new FormData($(this.form).get());
+            }
+            // formData = getFormData($(this.form).get());
+        }
+        else {
+            formData = this.params;
+        }
+        if (this.method.toUpperCase() === "GET") {
+            XHR.open("GET", this.url + "?" + "rnd=" + rnd + this.params + "&" + formData, this.async);
+            XHR.open("GET", this.url, this.async);
+            XHR.setRequestHeader("Content-Type", "text/plain;charset=utf-8");
+            XHR.send(null);
+        }
+        else { // db(formData.get("cedula"),"red");
+            XHR.open("POST", this.url, this.async);
+            // XHR.setRequestHeader("Content-Type", "multipart/form-data;charset=utf-8");
+            /*multipart/form-data OR application/x-www-form-urlencoded*/
+            // XHR.send(/*"&rnd=" + rnd + this.params + "&" + */formData);
+            XHR.send(formData);
+        } // end if
+        return this.XHR;
+    },
+    getStatus: function () {
+        return this.XHR.readyState;
+    },
+    abort: function () {
+        this.XHR.abort();
+        if (this._wait) {
+            this._wait.hide();
+        }
+        if (this.onAbort) {
+            this.onAbort();
+        }
+    }
+};
+export const sgJson = {
+    iPanel: function (opt) {
+        let target = null;
+        if (typeof opt.id === "number") {
+            target = $("form_p" + opt.id);
+        }
+        else {
+            target = $(opt.id);
+        }
+        target.text(opt.html);
+        if (opt.script) {
+            $.appendScript(opt.script);
+        }
+        if (opt.css) {
+            $.appendStyle(opt.css);
+        }
+        if (opt.title) {
+            document.title = opt.title;
+        }
+    },
+    iFragment: function (opt) {
+        var target = $(opt.targetId);
+        if (opt.targetId !== false && opt.targetId !== "") {
+            if (!target.get()) {
+                target = $("").create({
+                    tagName: "div",
+                    style: {
+                        display: "none"
+                    },
+                    id: opt.targetId
+                });
+                opt.hidden = true;
+            }
+            if (target.get()) {
+                if (opt.hidden) {
+                    target.get().style.display = "none";
+                }
+                else {
+                    target.get().style.display = "";
+                }
+                if (opt.mode) {
+                    switch (opt.mode) {
+                        case 1:
+                        default:
+                            target.text(opt.html);
+                            break;
+                        case 2:
+                            target.text(opt.html, true);
+                            break;
+                        case 3:
+                            target.insertFirst(opt.html);
+                            break;
+                    }
+                }
+            }
+        }
+        if (opt.script) {
+            $.appendScript(opt.script);
+        }
+        if (opt.css) {
+            $.appendStyle(opt.css);
+        }
+    },
+    iDataInput: function (opt) {
+        var target = $(opt.targetId);
+        if (target && target.get()) {
+            if (opt.data) {
+                var option = false;
+                target.get().length = 0;
+                for (var x in opt.data) {
+                    option = target.create("option");
+                    option.prop({ value: opt.data[x].value, text: opt.data[x].text });
+                }
+            }
+        }
+    },
+    iPropertyHTML: function (opt) {
+        var target = $(opt.targetId);
+        if (target) {
+            if (opt.propertys) {
+                for (var x in opt.propertys) {
+                    target.get()[x] = opt.propertys[x];
+                }
+            }
+            if (opt.style) {
+                for (x in opt.style) {
+                    target.style()[x] = opt.style[x];
+                }
+            }
+        }
+    }
+};
 //# sourceMappingURL=Ajax.js.map

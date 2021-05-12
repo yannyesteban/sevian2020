@@ -14,12 +14,12 @@
 		}
 	},
 	"params":"",
-	
+
 	"pages":[],
 	"groups":{},
 	"infoFields":[
         {"name":"unit_id","caption":"","input":"list","type":"text",
-			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM unit as u LEFT JOIN unit_name as vn ON vn.id = u.name_id LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id ORDER BY vehicle_name"],
+			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM unit as u INNER JOIN user_unit as uu ON uu.unit_id = u.id LEFT JOIN unit_name as vn ON vn.id = u.name_id LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id WHERE uu.user = '@SS_USER' ORDER BY vehicle_name"],
 			"events":{
 				"change":"S.getElement('comm').setUnit(this.getInput('unit_id').getValue());"
 			},
@@ -27,26 +27,26 @@
         },
 		{
 			"name":"go",
-			"default":"»", 
+			"default":"»",
 			"input":"input","type":"button",
 			"events":{
-				
+
 				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"
 			}
 		},
 		{
 			"name":"follow_me",
-			"default":"»", 
+			"default":"»",
 			"title":"hola",
 			"input":"input","type":"checkbox",
 			"events":{
-				
+
 				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"
 			}
 		}
 
 	],
-	
+
 	"searchFor":[
 		"brand"
 	]

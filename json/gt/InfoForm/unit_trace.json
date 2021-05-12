@@ -1,0 +1,16 @@
+{
+    "name": "unit_trace",
+    "caption": "Info..",
+    "type": "popup",
+    "subType": "dropdown",
+    "className": [
+        "info-form-popup"
+    ],
+    "autoClose": true,
+    "params": false,
+    "template": "/gt/info-unit-trace",
+    "templateName": "/gt/info-unit-trace",
+    "modePropertys": [
+        "speed"
+    ]
+}

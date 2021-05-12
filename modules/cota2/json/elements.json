@@ -108,7 +108,8 @@
         "class": "\\GT\\Map",
         "enable": true,
         "module":{
-            "name":"GTMap",
+            "name":"Map",
+            "alias":"GTMap",
             "src":"{@MAIN_PATH}build/GT/ts/Map.js"
         },
         "js": [
@@ -142,7 +143,8 @@
         "class": "\\GT\\Unit",
         "enable": true,
         "module":{
-            "name":"GTUnit",
+            "name":"Unit",
+            "alias":"GTUnit",
             "src":"{@MAIN_PATH}build/GT/ts/Unit.js"
         },
         "js": [
@@ -158,9 +160,35 @@
         "file": "{@MAIN_PATH}gt/History.php",
         "class": "\\GT\\History",
         "enable": true,
+        "module":{
+            "name":"History",
+            "alias":"GTHistory",
+            "src":"{@MAIN_PATH}build/GT/ts/History.js"
+        },
         "js": [
             {
                 "file_": "{@MAIN_PATH}build/GT/ts/History.js",
+                "begin": false
+            }
+        ],
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-site",
+        "file": "{@MAIN_PATH}gt/Site.php",
+        "class": "\\GT\\Site",
+        "enable": true,
+        "module":{
+            "name":"Site",
+            "alias":"GTSite",
+            "src":"{@MAIN_PATH}build/GT/ts/Site.js"
+        },
+        "js": [
+            {
+                "file_": "{@MAIN_PATH}build/GT/ts/Site.js",
                 "begin": false
             }
         ],

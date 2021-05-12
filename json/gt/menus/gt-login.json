@@ -1,29 +1,32 @@
 {
-	"menu":"gt-login",
-	"caption":"Catálogo",
-	"type":"accordion",
-	"subType":"default",
-	"className":["sevian","horizontal"],
-	"autoClose":false,
-	"items":[
+	"menu": "gt-login",
+	"caption": "Catálogo",
+	"type": "accordion",
+	"subType": "default",
+	"className": [
+		"sevian",
+		"horizontal"
+	],
+	"autoClose": false,
+	"items": [
 		{
-			"caption":"Aceptar",
-			"dataUser":{
+			"caption": "Aceptar",
+			"dataUser": {
 				"async": false,
-				"id":"&P_id",
-				"valid":false,
+				"id": "&P_id",
+				"valid": false,
 				"confirm_": "seguro?",
-				"params":[
+				"params": [
 					{
-						"t":"setMethod",
-						"id":"22",
-						"element":"s-structure",
-						"method":"login",
-						"name":"/gt/structures/@structure",
-						"eparams":null
+						"t": "setMethod",
+						"id": "22",
+						"element": "s-structure",
+						"method": "login",
+						"name": "/gt/structures/@structure",
+						"eparams": null
 					}
-			
-				]}
+				]
+			}
 		}
 	]
-}	
+}

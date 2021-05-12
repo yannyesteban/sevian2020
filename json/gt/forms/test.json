@@ -1,0 +1,40 @@
+{
+	"name":"test",
+	"caption":"TEST AJAX",
+	"className":"",
+    "query":"SELECT '' as A, '' as B",
+	"menuName":"/gt/menus/test2",
+	"methods":{
+		"request":{
+			"menuName":"/gt/menus/test2"
+		},
+		"load":{
+			"menuName":""
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+       
+		{
+            "name":"unit",
+            "caption":"Unidad",
+            "default":"",
+            "input":"input",
+            "class":"btn-connect",
+            "type":"text","mode_value":"1",
+            "params":{"className":""},
+            "events":{
+               
+            }
+        }
+
+	],
+	
+	"searchFor":[
+		"brand"
+	]
+
+}

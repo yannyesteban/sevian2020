@@ -1,80 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
+	<link rel="stylesheet" href="/css/one.css">
 	<!--<script src="index.js" type="module"></script>-->
-	<script src="uno.js" type="module"></script>
+
 </head>
-<body><div id="h">hhh</div>
-<script type="module">
-import fn from './uno.js'
-import {number} from './uno.js'
 
+<body>
+	<template id="templateOne">
+		<div class="info-form-main" id="tm" data-exp="{free='gratis'}" xx="{=free}">
+			<div class="info-form">
+				<div class="name" data-id="vehicle_name">{=name}</div>
+				<div data-detail="persons" class="persons" data-tag="{=persons.name}">
+					<div>{=persons.name}</div>
+					<div>{=persons.lastName}</div>
+					<div data-detail="childs" class="childs">
+						<div>Nombre</div>
+						<div>{=persons.childs.name}</div>
+						<div>{=persons.childs.age.a}</div>
+						<div>{=persons.childs.age.m}</div>
 
-let speedRange = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
-let speed = 8;
-speed = (speed + 1) % (speedRange.length/2);
-console.log("speed" , speed);
-speed = (speed + 1) % (speedRange.length/2);
-console.log("speed" , speed);
-speed = (speed + 1) % (speedRange.length/2);
-console.log("speed" , speed);
-speed = (speed + 1) % (speedRange.length/2);
-console.log("speed" , speed);
-speed = (speed + 1) % (speedRange.length/2);
-console.log("speed" , speed);
-speed = (speed + 1) % (speedRange.length/2);
-console.log("speed" , speed);
+					</div>
 
 
 
-let f1 = (a, b)=> {
-	
-	setTimeout((x)=>{
+				</div>
+				<div class="row">
+					<div>ants</div>
+					<div data-id="uDate">{=ants}</div>
+				</div>
+				<div class="row">
+					<div>Hora</div>
+					<div data-id="uTime">{=a-b}</div>
+				</div>
+				<div class="row">
+					<div>Longitud</div>
+					<div data-id="longitude"></div>
+				</div>
+				<div class="row">
+					<div>Latitud</div>
+					<div data-id="latitude"></div>
+				</div>
+				<div class="row">
+					<div>Velocidad</div>
+					<div data-id="speed"></div>
+				</div>
+				<div class="row">
+					<div>Orientación</div>
+					<div data-id="heading"></div>
+				</div>
+				<div class="row">
+					<div>Satelites</div>
+					<div data-id="satellite"></div>
+				</div>
+				<div class="row inputs" data-detail="iInputs:ii" id="q1">
+					<div>{=ii.name}</div>
+					<div>{=ii.value} </div>
+				</div>
+				<div>
+					{=escuela.dir}:
+					{=escuela.mat.3},
+					{=escuela.mat.2}
+				</div>
+				<div>
+					<div>MI NUMERO: {=mi-numero}</div>
+					<div data-detail="b1" id="q">
+						<div>ddd</div>
+						<div>MI NUMERO: {=mi-numero}</div>
+						<div data-detail="a2" data-detail-as="item">
+							<div>445645</div>
+							<div>{=item.name}</div>
+						</div>
+					</div>
 
-		if(1>2){
-			a("es el valor de a", 1);
-		}else{
-			b(["es el valor de B", 3], 2);
-		}
-		
-	}, 10000, "two");
-	
-	
+				</div>
+
+				<div class="inputs" data-id="xInputs"
+				data-detail="comidas:food" data-detail-key="kk"
+				data-detail-exp="{d=this.pi + 1}{e=this.name+'888'}"
+				data-detail-index="pi">D: {=food.d}...E: {=food.e} {=food.kk}:{=food.pi}--{=food.name}--</div>
+				<div class="inputs" data-id="xInputs" data-detail="a1">agua</div>
+				<div class="outputs" data-id="xOutputs">fuego {=free}</div>
+
+			</div>
+		</div>
+	</template>
+
+	<div id="test_one">hhh</div>
+	<div id="test_two">
+		<div id="test_three">xxx</div>
+	</div>
+	<script type="module">
+		import { Test } from "../build/test/test.js";
+
+		let t = new Test();
 
 
-	
-};
-let p = new Promise (f1);
-let fa = (value) => {
-	console.log('perfecto ', value);
-	return 101;
-};
 
-let fb = (value) => {
-	console.log('malo ', value, ' ');
-	return 102;
-}
-
-let fc = (xx)=>{
-	//alert(xx)
-};
-p.then(fa, fb).then(fc);
-
-let h = async (d)=>{
-	console.log(8);
-	return d+"....";
-}
-
-let c=h(5);
-
-c.then((value)=>{
-	console.dir("el nuevo valor de x es "+value);
-})
-
-
-</script>	
+	</script>
 </body>
+
 </html>

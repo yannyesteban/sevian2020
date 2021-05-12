@@ -7,8 +7,8 @@ export class Mark {
         this.image = '';
         this.src = "";
         this.visible = true;
-        this.lat = 0;
-        this.lng = 0;
+        this.latitude = 0;
+        this.longitude = 0;
         this.heading = 0;
         this.popupInfo = "";
         this.flyToSpeed = 0.8;
@@ -36,15 +36,20 @@ export class Mark {
             className: "my-class"
         })
             //.setLngLat(e.lngLat)
-            .setHTML(this.popupInfo)
             .setMaxWidth("300px"); //.addTo(map);
+        if (typeof this.popupInfo === "string") {
+            popup.setHTML(this.popupInfo);
+        }
+        else {
+            popup.setDOMContent(this.popupInfo);
+        }
         let el = document.createElement("img");
         el.className = "marker";
         el.src = this.image;
         //el.style.width = this.width;
         el.style.height = this.height;
         let M = this._marker = new mapboxgl.Marker(el)
-            .setLngLat([this.lng, this.lat]);
+            .setLngLat([this.longitude, this.latitude]);
         M.setPopup(popup);
         M.setRotation(this.heading);
         if (this.visible) {
@@ -55,6 +60,7 @@ export class Mark {
         this._marker.setLngLat(lngLat);
     }
     setHeading(heading) {
+        this._marker.setRotation(heading);
     }
     setPopup(html) {
         this._marker.getPopup().setHTML(html);

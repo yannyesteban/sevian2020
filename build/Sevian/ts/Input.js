@@ -45,7 +45,7 @@ export var Input = (($) => {
                     this[x] = info[x];
                 }
             }
-            let main = this._main = (this.id) ? $(this.id) : false;
+            let main = this._main = (this.id) ? $(this.id) : null;
             if (!main) {
                 this._create(false);
             }
@@ -60,7 +60,7 @@ export var Input = (($) => {
             }
         }
         _create(target) {
-            let info = {};
+            let info = { tagName: "input", type: "text" };
             switch (this.type) {
                 case "text":
                 case "password":
@@ -82,9 +82,6 @@ export var Input = (($) => {
                 case "textarea":
                     info.tagName = this.type;
                     break;
-                default:
-                    info.tagName = "input";
-                    info.type = "text";
             }
             if (this.id) {
                 info.id = this.id;
@@ -192,7 +189,9 @@ export var Input = (($) => {
             this._main.get().focus();
         }
         select() {
-            this._main.get().select();
+            if (this._main.get().select) {
+                this._main.get().select();
+            }
         }
         reset() {
             this.setValue(this.default);

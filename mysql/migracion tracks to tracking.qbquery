@@ -1,0 +1,18 @@
+﻿INSERT into tracking (
+unit_id, device_id, date_time,
+longitude, latitude, speed,
+heading, altitude, satellite,
+event_id, mileage, input_status, output_status)
+
+SELECT
+u.id, t.id_equipo, t.fecha_hora,
+longitud, latitud, velocidad,
+heading, altitud, satelites,
+event_id,millas, t.input, output
+FROM cota.tracks_20210424 t
+INNER JOIN cota.equipos as e ON e.codequipo = t.codequipo
+INNER JOIN cota.cuenta_vehiculos as cv ON cv.codequipo = e.codequipo
+INNER JOIN cota.unit as u ON u.codvehiculo = cv.codvehiculo
+where t.fecha_hora is not null
+#where t.fecha_hora = '2021-04-12 17:27:45'
+ORDER BY t.id

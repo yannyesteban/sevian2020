@@ -1,4 +1,4 @@
-import {_sgQuery}  from '../../Sevian/ts/Query.js';
+import {_sgQuery, SQObject}  from '../../Sevian/ts/Query.js';
 export const Tab = (function($){
     
 class Tab{
@@ -17,9 +17,9 @@ class Tab{
     _onOpen = (index:number)=>{return true};
 	_onClose = (index:number)=>{return true};
     
-    _main:any = false;
-    _menu:any = false;
-    _page:any = false;
+    _main:SQObject = null;
+    _menu:SQObject = null;
+    _page:SQObject = null;
     _length:number = 0;
 
     static _objs = [];
@@ -55,27 +55,27 @@ class Tab{
             }
         }
         
-        let main = (this.id)? $(this.id): false;
+        let main:SQObject = (this.id)? $(this.id): null;
 
         if(main){
             
             if(main.ds("sgTab")){
-                return;
+                //alert(888)
+                //return;
             }
 
             if(main.hasClass("sg-tab")){
-                this._load(main);
+                //this._load(main);
             }else{
-                this._create(main);
+                //this._create(main);
             }
 
         }else{
              main = $.create("div").attr("id", this.id);
-            
-             
-           
-            this._create(main);
         }
+
+        this._create(main);
+        
         if(this.onOpen){
             this._onOpen = $.bind(this.onOpen, this, 'index');
         }
@@ -266,7 +266,7 @@ class Tab{
 
             return $(page); 
         }
-        return false;	
+        return null;	
     }
     
     getCaption(index:number){
@@ -277,7 +277,7 @@ class Tab{
 
             return $(caption); 
         }
-        return false;	
+        return null;	
     }
 }
 

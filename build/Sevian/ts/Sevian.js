@@ -1,13 +1,17 @@
 import { _sgQuery } from './Query.js';
-import { sgAjax } from './Ajax.js';
+import { BlockingLayer } from './BlockingLayer.js';
+import { sgAjax, sgJson } from './Ajax.js';
 import { Form2 as Form2 } from './Form2.js';
 import { Menu as Menu } from './Menu2.js';
 import { Float } from './Window.js';
-import { GTInfo } from '../../gt/ts/Info.js';
-import { GTUnit } from '../../gt/ts/Unit.js';
-import { GTHistory } from '../../gt/ts/History.js';
+//import {GTInfo}  from '../../gt/ts/Info.js';
+//import {GTUnit}  from '../../gt/ts/Unit.js';
+//import {Site as GTSite}  from '../../gt/ts/Site.js';
+//import {GTHistory}  from '../../gt/ts/History.js';
 import { InfoForm } from '../../sevian/ts/InfoForm.js';
 export var S = (($) => {
+    ;
+    ;
     ;
     let _winOptions = {
         visible: true,
@@ -104,7 +108,6 @@ export var S = (($) => {
             this.components[name] = component;
         }
         static init(info) {
-            console.log(this.components);
             for (var x of info) {
                 if (this.components[x.type] && x.option !== null) {
                     if (this._e[x.id]) {
@@ -145,9 +148,12 @@ export var S = (($) => {
             }
         }
         static getForm(id) {
-            return $().query("form[data-sg-type='panel'][data-sg-panel='" + id + "']");
+            return $().query(`form[data-sg-type="panel"][data-sg-panel="${id}"]`);
         }
-        static send3(info /*:InfoParam*/) {
+        static go(info) {
+            this.send3(info);
+        }
+        static send3(info) {
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
             }
@@ -155,7 +161,16 @@ export var S = (($) => {
                 this.configWin(info.window);
             }
             let elem = null;
-            if (elem = this.getElement(info.id)) {
+            if (!isNaN(info.element)) {
+                elem = this.getElement(info.element);
+            }
+            else if (typeof (info.element) === "string") {
+                elem = this.getElement(info.element);
+            }
+            else if (typeof (info.element) === "object") {
+                elem = info.element;
+            }
+            if (elem) {
                 if (info.valid && elem.valid && !elem.valid(info.valid)) {
                     return false;
                 }
@@ -214,16 +229,46 @@ export var S = (($) => {
             formData.set("__sg_params", params);
             formData.set("__sg_async", info.async);
             if (info.async) {
+                let blockingLayer = null;
+                if (info.blockingTarget !== undefined) {
+                    blockingLayer = new BlockingLayer({});
+                    blockingLayer.show((info.blockingTarget && info.blockingTarget.get()) || this.getForm(info.id));
+                }
                 let fun;
                 let _onRequest = info.onRequest || (xhr => { });
                 if (info.requestFunction) {
                     fun = info.requestFunction;
                 }
                 else {
-                    fun = (xhr) => {
+                    /*fun = (xhr) => {
                         this.requestPanel(JSON.parse(xhr.responseText));
+                    }*/
+                    fun = (json) => {
+                        this.requestPanel(json);
                     };
                 }
+                fetch("", {
+                    method: "post",
+                    body: formData,
+                    headers: {
+                    //'Content-Type': 'application/json'
+                    }
+                }).then(res => (res.json()))
+                    .catch(error => {
+                    console.error("Error:", error);
+                    if (blockingLayer) {
+                        blockingLayer.hide();
+                    }
+                })
+                    .then(json => {
+                    //this.requestPanel(json);
+                    fun(json);
+                    if (blockingLayer) {
+                        blockingLayer.hide();
+                    }
+                    _onRequest(json);
+                });
+                return;
                 var ajax = new sgAjax({
                     url: "",
                     method: "post",
@@ -330,7 +375,7 @@ export var S = (($) => {
                     win = this._w[info.window.name] = this.createWindow(info.window);
                     this._w[info.window.name].setBody(f);
                     //this._w[info.window.name].show({left:"center",top:"middle"});
-                
+
                 }else{
                     win = this._w[panel] = this.createWindow(info.window);
                     this._w[panel].setBody(f);
@@ -485,7 +530,7 @@ export var S = (($) => {
                     win = this._w[info.window.name] = this.createWindow(info.window);
                     this._w[info.window.name].setBody(f);
                     //this._w[info.window.name].show({left:"center",top:"middle"});
-                
+
                 }else{
                     win = this._w[panel] = this.createWindow(info.window);
                     this._w[panel].setBody(f);
@@ -674,12 +719,12 @@ export var S = (($) => {
         }
         static addPanel(id) {
             let form = $().create({
-                'tagName': 'form',
-                'action': '',
-                'name': `form_p${id}`,
-                'id': `form_p${id}`,
-                'method': 'GET',
-                'enctype': 'multipart/form-data'
+                "tagName": "form",
+                "action": '',
+                "name": `form_p${id}`,
+                "id": `form_p${id}`,
+                "method": "GET",
+                "enctype": 'multipart/form-data'
             }).ds("sgPanel", id).ds("sgType", "panel");
             form.create({
                 "tagName": "input",
@@ -718,12 +763,14 @@ export var S = (($) => {
     Sevian._components = [];
     Sevian.defaultPanel = 0;
     Sevian.msg = null;
+    Sevian.blockingLayer = null;
     return Sevian;
 })(_sgQuery);
 S.register("Form2", Form2);
 S.register("Menu", Menu);
-S.register("GTInfo", GTInfo);
-S.register("GTUnit", GTUnit);
-S.register("GTHistory", GTHistory);
+S; //.register("GTInfo", GTInfo);
+//S.register("GTUnit", GTUnit);
+//S.register("GTHistory", GTHistory);
 S.register("InfoForm", InfoForm);
+//S.register("GTSite", GTSite);
 //# sourceMappingURL=Sevian.js.map

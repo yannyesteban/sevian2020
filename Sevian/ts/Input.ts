@@ -1,4 +1,4 @@
-import {_sgQuery}  from './Query.js';
+import {_sgQuery, SQObject}  from './Query.js';
 import {List}  from './List.js';
 
 export class I{
@@ -38,7 +38,7 @@ export var Input = (($) => {
         parent:string = "";
         parentValue:any = null;
 
-        _main:object = null;
+        _main:SQObject = null;
         _input:object = null;
 
         status:string = "valid";
@@ -55,7 +55,7 @@ export var Input = (($) => {
                 }
             }
 
-            let main = this._main = (this.id)? $(this.id): false;
+            let main = this._main = (this.id)? $(this.id): null;
 
             if(!main){
                 
@@ -76,7 +76,7 @@ export var Input = (($) => {
         }
 
         _create(target:any){
-            let info = {};
+            let info = { tagName:"input", type: "text"};
             switch(this.type){
                 case "text":
                 case "password":
@@ -98,9 +98,6 @@ export var Input = (($) => {
                 case "textarea":
                     info.tagName = this.type;
                     break;
-                default:
-                    info.tagName = "input";
-                    info.type = "text";
 
             }
             if(this.id){
@@ -244,7 +241,10 @@ export var Input = (($) => {
             
         }
         select(){
-            this._main.get().select();
+            if(this._main.get().select){
+                this._main.get().select();
+            }
+            
         }
 
         reset(){

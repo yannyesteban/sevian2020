@@ -6,13 +6,13 @@ export class Mark{
     image:string='';
     src:string = "";
     visible:boolean = true;
-    
 
-    lat:number = 0;
-    lng:number = 0;
+
+	private latitude:number = 0;
+	private longitude:number = 0;
     heading:number = 0;
 
-    popupInfo:string = "";
+    popupInfo:string | HTMLElement = "";
     flyToSpeed:number = 0.8;
     flyToZoom:number = 14;
     panDuration:number = 5000;
@@ -20,7 +20,7 @@ export class Mark{
 
 
     constructor(info:object){
-        
+
         for(let x in info){
             if(this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -38,26 +38,32 @@ export class Mark{
             "left": [markerRadius, (markerHeight - markerRadius) * -1],
             "right": [-markerRadius, (markerHeight - markerRadius) * -1]
             };
-        let popup = new mapboxgl.Popup({ 
+        let popup = new mapboxgl.Popup({
             offset: popupOffsets,
             className: "my-class"})
              //.setLngLat(e.lngLat)
-             .setHTML(this.popupInfo)
-             .setMaxWidth("300px")
-             ;//.addTo(map);
-        
+
+             .setMaxWidth("300px");//.addTo(map);
+
+        if (typeof this.popupInfo === "string") {
+            popup.setHTML(this.popupInfo);
+        } else {
+            popup.setDOMContent(this.popupInfo);
+        }
+
+
 
         let el = document.createElement("img");
         el.className = "marker";
-        
+
         el.src = this.image;
         //el.style.width = this.width;
         el.style.height = this.height;
 
         let M = this._marker = new mapboxgl.Marker(el)
-        
-        
-        .setLngLat([this.lng, this.lat]);
+
+
+        .setLngLat([this.longitude, this.latitude]);
         M.setPopup(popup);
         M.setRotation(this.heading);
 
@@ -71,7 +77,7 @@ export class Mark{
     }
 
     setHeading(heading:number){
-       
+        this._marker.setRotation(heading);
     }
 
     setPopup(html){
@@ -93,8 +99,8 @@ export class Mark{
 
     }
 
-    flyTo(zoom, speed){
-       
+    flyTo(zoom?, speed?){
+
         this.map.flyTo({
             center: this._marker.getLngLat(),
             zoom: zoom || this.flyToZoom,
@@ -104,10 +110,10 @@ export class Mark{
               return t;
             }
           });
-            
+
     }
 
-    panTo(duration){
+    panTo(duration?){
         this.map.panTo(this._marker.getLngLat(), {duration: duration || this.panDuration });
     }
 

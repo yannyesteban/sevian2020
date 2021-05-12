@@ -1,13 +1,9 @@
-// JavaScript Document
-if(!Sevian){
-	
-	var Sevian = {};
-	
-}
+/**
+ * 
+ * @param value 
+ * @returns 
+ */
 
-//var Valid = false;
-(function(namespace, $){
-	
 	let trim = function(value){
 		
 		let re = /^\s+/i;
@@ -65,22 +61,25 @@ if(!Sevian){
 	};
 	
 	
-	Sevian.Valid = {
-		msg: [],
+	export let Valid = {
+		msg: {},
 		
-		initMsg: function(lang, msg){
-			this.msg = msg[lang];
+		
+		setErrorMessages: function(msg){
+			this.msg = msg;
 		},
+
 		evalMsg: function(key, rules, value, title){
+			
 			let msg = "";
 			
 			if(rules[key].msg){
-				msg = rules[key].msg;
+				msg = rules[key].msg || this.msg[key]["messagedefault"];
 			}else{
-				msg = this.msg[key];
+				msg = this.msg[key] || this.msg[key]["messagedefault"];
 			}
 
-			msg = msg.replace("{=title}", title);
+			msg = msg.replace("{=title}", title || this.msg[key]["titledefault"]);
 
 			if(rules[key].value){
 				msg = msg.replace("{=value}", rules[key].value);
@@ -185,8 +184,8 @@ if(!Sevian){
 		
 	};
 
-	let valid_msg = [];
-	valid_msg.spa = {
+	
+	const spanishMessage = {
 		"required": "El campo {=title} es obligatorio",
 		"alpha"			:"El campo {=title} solo debe tener caracteres alfabéticos",
 		"alphanumeric"	:"El campo {=title} solo debe tener caracteres alfanuméricos",
@@ -205,12 +204,13 @@ if(!Sevian){
 		"greatestequal"	:"El campo {=title} debe ser mayor o igual que {=value}",
 		"lessequal"		:"El campo {=title} debe ser menor o igual que {=value}",
 		"condition"		:"El campo {=title} no cumple la condición predefinida",
+		"titledefault"	:"campo",
+		"messagedefault":"El {=title} no posee un valor válido" 
 
 	};
 
 
 
-	Sevian.Valid.initMsg("spa", valid_msg);
-	
-	
-}());
+	Valid.setErrorMessages(spanishMessage);
+	//Valid.msg["spa"]= valigMessage["spa"];
+

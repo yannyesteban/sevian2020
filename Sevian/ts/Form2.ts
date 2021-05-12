@@ -3,6 +3,7 @@ import {_sgQuery}  from './Query.js';
 import {I, Input, Hidden, InputDate, InputInfo, Multi}  from './Input.js';
 import {List}  from './List.js';
 import {Menu}  from './Menu2.js';
+import {Valid}  from './Valid.js';
 
     
 export var Form2 = (($) => {
@@ -542,7 +543,7 @@ export var Form2 = (($) => {
                         return false;
                     }*/
                     
-                    msg = Sevian.Valid.send(rules, inputs[this.fields[x].name].getValue(), this.fields[x].caption, data);
+                    msg = Valid.send(rules, inputs[this.fields[x].name].getValue(), this.fields[x].caption, data);
                     if(msg){
                         alert(msg);
                         inputs[this.fields[x].name].focus();

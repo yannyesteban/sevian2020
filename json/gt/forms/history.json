@@ -34,6 +34,9 @@
 			},
 			"_events": {
 				"change": "S.send({async:true,panel:&EX_ID_,params:[{t:'setMethod',mode:'element',id: &EX_ID_,element:'&EX_ELEMENT_',method:'load_info',name:'&EX_NAME_',eparams:{unitId:this.getForm().getValue('unit_id')}}],});"
+			},
+			"rules":{
+				"required":{}
 			}
 		},
 		{

@@ -12,31 +12,32 @@ export const Tab = (function ($) {
             this.onClose = false;
             this._onOpen = (index) => { return true; };
             this._onClose = (index) => { return true; };
-            this._main = false;
-            this._menu = false;
-            this._page = false;
+            this._main = null;
+            this._menu = null;
+            this._page = null;
             this._length = 0;
             for (var x in opt) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = opt[x];
                 }
             }
-            let main = (this.id) ? $(this.id) : false;
+            let main = (this.id) ? $(this.id) : null;
             if (main) {
                 if (main.ds("sgTab")) {
-                    return;
+                    //alert(888)
+                    //return;
                 }
                 if (main.hasClass("sg-tab")) {
-                    this._load(main);
+                    //this._load(main);
                 }
                 else {
-                    this._create(main);
+                    //this._create(main);
                 }
             }
             else {
                 main = $.create("div").attr("id", this.id);
-                this._create(main);
             }
+            this._create(main);
             if (this.onOpen) {
                 this._onOpen = $.bind(this.onOpen, this, 'index');
             }
@@ -202,14 +203,14 @@ export const Tab = (function ($) {
             if (page) {
                 return $(page);
             }
-            return false;
+            return null;
         }
         getCaption(index) {
             const caption = this._main.query(`.menu > [data-tab-index='${index}']`);
             if (caption) {
                 return $(caption);
             }
-            return false;
+            return null;
         }
     }
     Tab._objs = [];

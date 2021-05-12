@@ -1,5 +1,16 @@
 [
 	{
+        "name": "test",
+        "enable": true,
+        "file": "{@MAIN_PATH}GT/Test.php",
+        "class": "\\GT\\Test",
+        "init": {
+           
+        },
+        "js": [],
+        "css": []
+    },
+    {
         "name": "s-info-form",
         "enable": true,
         "file": "{@MAIN_PATH}Sigefor/InfoForm.php",

@@ -1,29 +1,29 @@
 
-$path_font:fonts\/;
+$path_font:"fonts\/";
 
 $path_images:"../images/";
 
 @font-face {
 	font-family: Hemihead;
-	
+
 	src: url(#{$path_font}HEMIHEAD.TTF);
-	
+
 }
 @font-face {
 	font-family: andreab;
-	
+
 	src: url(#{$path_font}ADRRDB.TTF);
-	
-} 
+
+}
 
 @font-face {
 	font-family: futurab;
 	src: url(#{$path_font}FUTURABI.TTF);
    // font-weight: bold;
-	
-	
+
+
 }
-  
+
 *{
 	box-sizing: border-box;
 	font-family: Arial, Helvetica, sans-serif, tahoma;
@@ -53,11 +53,11 @@ form{
     overflow: auto;
 	//padding:4px;
 	background: rgb(0, 0, 0);
-   
+
     >.banner{
 		grid-row: 1;
 		grid-column: 1;
-        
+
         background-color: rgb(0, 59, 56);
 	}
 	>.menu{
@@ -70,7 +70,7 @@ form{
 		flex-direction: row;
 		justify-content: space-between;
 		justify-items: stretch;
-		
+
 	}
 	>.body{
 		grid-row: 3;
@@ -81,14 +81,14 @@ form{
 .rule-tool-main{
 	line-height: 2.5em;
 	//padding: 4px!important;
-	
+
 	.rule-tool-text{
 		min-width: 100px;
 		background-color: rgba(0, 0, 0, 0.61);
 		color:white;
 		text-align: right;
 	}
-	
+
 
 	.rule-tool-value{
 		margin: 4px;
@@ -97,6 +97,9 @@ form{
 		font-weight: bold;
 		margin: 4px;
 	}
+}
+.icon-trace2{
+	background-image: url(#{$path_images}search_trace.png);
 }
 .icon-trace{
 	background-image: url(#{$path_images}trace.png);
@@ -253,9 +256,9 @@ form{
 	line-height: 26px;
 	vertical-align: top;
 	padding: 0px!important;
-	
 
-	
+
+
 }
 
 .item:hover{
@@ -282,7 +285,7 @@ form{
 		display: flex;
 		padding: 2px;
 		justify-content: space-around;
-		
+
 		input{
 			width: 100px;
 			border:1px solid white;
@@ -292,19 +295,19 @@ form{
 			font-size: 13px;
 			//flex:1 1 100px;
 			line-height: 1.4em;
-			
+
 		}
 	}
 	.mark-tool-g2{
-		
+
 		border: 3px solid white;
-		
+
 		height: 120px;
-		
+
 		overflow: auto;
 		display: flex;
 		flex-wrap: wrap;
-		
+
 		//justify-content: space-around;
 		//justify-content: center;
 		align-content:stretch;
@@ -319,7 +322,7 @@ form{
 		//grid-template-rows: 60px auto 1fr;
 		//overflow: auto;
 		//max-width: 400px;
-		
+
 		div{
 			width:30px;
 			height: 30px;
@@ -329,16 +332,16 @@ form{
 				cursor: pointer;
 				//background-color: rgb(255, 255, 255);
 			}
-			
+
 			img{
 				width: 100%;
 				max-height: 100%;
-				
+
 			}
-	
+
 		}
 	}
-	
+
 
 
 }
@@ -352,10 +355,10 @@ form{
 		line-height: 2em;
 		.info{
 			text-align: right;
-		}	
+		}
 		width: 100%;
 		.propertys{
-			
+
 			display: grid;
 			grid-template-columns: 1fr 1fr;
 			gap:5px;
@@ -363,10 +366,10 @@ form{
 				width: 100%;
 			}
 		}
-	}	
-	
-	
-	
+	}
+
+
+
 
 }
 
@@ -383,10 +386,10 @@ form{
 	align-items: center;
 	//text-align: center;
 	padding: 100px;
-	
+
 	.main{
 		display: grid;
-		
+
 		//border: 8px solid rgba(165, 165, 165, 0.514);
 		border-radius: 10px;
 		//grid-gap: 4px;
@@ -394,15 +397,15 @@ form{
 		grid-template-rows:auto;
 		//gap: 10px;
 		//border:4px solid rgb(167, 167, 167);
-		
+
 		height: 100%;
 		width: 800px;
 		overflow: auto;
 		//padding:4px;
 		background: rgba(56, 56, 56, 0.356);
-		
+
 		//padding: 10px;
-		
+
 		//background-size: auto 1080px ;
 		//background-repeat: no-repeat;
 		background-position-x: center;
@@ -415,7 +418,7 @@ form{
 		>.left-side{
 			grid-row: 1;
 			grid-column: 1;
-			
+
 			background-color: rgba(0, 0, 0, 0.445);
 			overflow: auto;
 			display: grid;
@@ -438,13 +441,13 @@ form{
 				align-self: center;
 				width: 180px;
 			}
-			
+
 			.webcar-foot{
 				color: snow;
 				font-size: 8pt;
 				justify-self: center;
 				text-align: center;
-				
+
 			}
 		}
 		>.right-side{
@@ -532,22 +535,22 @@ form{
 			>.input{
 				padding:2px;
 				.sg-input{
-					
-					
+
+
 				}
 				input{
 					background-color: rgb(248, 248, 248);
 					color: rgb(109, 109, 109);
 					border: 0px;
-					
+
 					font-size: 1em;
 				}
 			}
 		}
-		
 
-		
-		
+
+
+
 
 	}
 }
@@ -565,7 +568,7 @@ form{
 			text-transform: uppercase;
 			font-family: futurab!important;
 		}
-		
+
 	}
 	.page{
 		.field{
@@ -577,7 +580,7 @@ form{
 				padding-bottom: 10px;
 				font-family: futurab;
 				padding-left: 10px;
-				
+
 			}
 			input{
 				background-color: rgb(231, 231, 231);
@@ -636,6 +639,12 @@ form{
 .icon-history{
 	background-image: url(#{$path_images}calendar.png);
 }
+.icon-calendar_001{
+	background-size: 70% 70%;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-image: url(#{$path_images}calendar_001.png);
+}
 .icon-calendar{
 	background-image: url(#{$path_images}calendar.png);
 }
@@ -662,18 +671,18 @@ form{
 	background-image: url(#{$path_images}message.png);
 }
 .sg-menu.webcar-menu{
-	
+
 	.item{
-		
+
 		a{
-			
+
 			.image{
-				
+
 				background-repeat: no-repeat;
-				background-position: center center;	
+				background-position: center center;
 				background-size: 24px 24px;
 				width: 30px;
-				height: 24px;	
+				height: 24px;
 			}
 			.text{
 				display: none;
@@ -686,9 +695,9 @@ form{
 
 
 .sg-menu.comm-menu{
-	
+
 	>.item{
-		
+
 		&[data-value="1"]{
 			display:none !important;
 		}
@@ -696,14 +705,14 @@ form{
 			width: 300px;
 		}
 		>a{
-			
+
 			>.image{
-				
+
 				background-repeat: no-repeat;
-				background-position: center center;	
+				background-position: center center;
 				background-size: 16px 16px;
 				width: 30px;
-				height: 24px;	
+				height: 24px;
 			}
 			>.text{
 				background-color: #fdfa30;
@@ -729,7 +738,7 @@ form{
 	}
 }
 .banner{
-	
+
 	display: flex;
 	flex-direction: row;
 	justify-items: stretch;
@@ -742,7 +751,7 @@ form{
 		img{
 			height: 50px;
 		}
-		
+
 	}
 	.logo-webcar{
 		flex: 1 1;
@@ -752,11 +761,11 @@ form{
 		text-transform: capitalize;
 		font-family: andreab;
 		justify-self: right;
-		
-		
+
+
 		align-self: center;
 		padding-right: 10px;
-	
+
 	}
 }
 
@@ -771,7 +780,7 @@ form{
 
 .unit-main{
 	display: flex;
-	
+
 	flex-direction: row;
 	height: 100%;
 }
@@ -786,7 +795,7 @@ form{
 		font-size: 11px;
 		color: rgb(244, 247, 224);
 		background-color: #3a3a3aa9;
-		
+
 		display: grid;
 		grid-gap: 0px;
 		grid-template-columns: 20px 70px 50px 90px auto;
@@ -848,50 +857,50 @@ form{
 			}
 		}
 
-		
-		
+
+
 		>*{
 			padding: 2px;
 			//border:1px solid yellow;
 		}
 		>:nth-child(1){
-			
+
 			//background-color: rgba(0, 0, 0, 0.637);
 		}
 		>:nth-child(4){
 			//word-wrap: normal;
 			white-space: nowrap;
 			overflow: hidden;
-			
+
 			text-overflow: ellipsis;
 		}
 		>:nth-child(6){
-			
-			
+
+
 			grid-column: 1/7;
 			grid-row: 2;
-			
-			
+
+
 			background-color: rgba(209, 24, 24, 0.808);
-			
+
 
 		}
 		&:not(.open){
 			>:nth-child(6){
-				
-				
+
+
 				display: none;
-				
-	
+
+
 			}
-		}	
+		}
 		&.open{
 			>:nth-child(6){
-				
-				
-				
-				
-	
+
+
+
+
+
 			}
 		}
 
@@ -913,7 +922,7 @@ form{
 		font-size: 11px;
 		color: rgb(244, 247, 224);
 		background-color: #3a3a3aa9;
-		
+
 		display: grid;
 		grid-gap: 0px;
 		grid-template-columns: 20px 100px 100px 90px 90px 0px;
@@ -976,50 +985,50 @@ form{
 			}
 		}
 
-		
-		
+
+
 		>*{
 			padding: 2px;
 			//border:1px solid yellow;
 		}
 		>:nth-child(1){
-			
+
 			//background-color: rgba(0, 0, 0, 0.637);
 		}
 		>:nth-child(5){
 			//word-wrap: normal;
 			white-space: nowrap;
 			overflow: hidden;
-			
+
 			text-overflow: ellipsis;
 		}
 		>:nth-child(7){
-			
-			
+
+
 			grid-column: 1/7;
 			grid-row: 2;
-			
-			
+
+
 			background-color: rgba(209, 24, 24, 0.808);
-			
+
 
 		}
 		&:not(.open){
 			>:nth-child(7){
-				
-				
+
+
 				display: none;
-				
-	
+
+
 			}
-		}	
+		}
 		&.open{
 			>:nth-child(6){
-				
-				
-				
-				
-	
+
+
+
+
+
 			}
 		}
 
@@ -1032,4 +1041,19 @@ form{
 	}
 
 
+}
+
+.blocking-layer{
+	background-color: #0000004d;
+	background-image: url(#{$path_images}loaders/oval.svg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 30px;
+}
+
+.sg-menu{
+	[data-valid="0"] .text::after{
+		color:aqua;
+		content: " **";
+	}
 }

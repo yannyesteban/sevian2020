@@ -1,118 +1,103 @@
-import {S}  from '../../Sevian/ts/Sevian.js';
-import {_sgQuery}  from '../../Sevian/ts/Query.js';
-import {MapBox}  from '../../lib/MapBox.js';
+import { S } from '../../Sevian/ts/Sevian.js';
+import { _sgQuery as $ } from '../../Sevian/ts/Query.js';
+import { MapBoxLib, MapControl as _MapControl } from '../../lib/MapBoxLib.js';
 
-export var MAPBOX_IMAGES = 1;
-export var GTMap = (($) => {
-    
-   window.GTMap = GTMap;
-   
-    class Map{
+interface MapInitFunctions {
+    [key: string]: Function[]
+}
 
-        static _instances = [];
-        static _last = null;
-        static _loadFuntions:Function[] = []
+export type MapApi = MapBoxLib;
+export type MapLib = MapBoxLib;
+export type MapControl = _MapControl;
 
-        id:any = null;
-        map:any = null;
+export class Map {
 
-        //win:any = null;
-        //data:any[] = [];
-        //units:any[] = [];
-        //main:any = null;
-        //clients:any[] = [];
-        //accounts:any[] = [];
-        //tracking:any[] = [];
-        
-        info:any = null;
-		//wInfo:any = null;
-		
-        tapName:any = null;
-        
-        markImages:string[] = [];
-        markDefaultImage:string = "";
-        iconImages:any[] = [];
-        controls:string[] = [];
+    private name: string = null;
+    private layerImages: any[] = [];
+    static _instances: { [key: string]: Map } = {};
+    static _last: Map = null;
+    static _loadFunctions: MapInitFunctions = {};
 
-        static getMap(name){
-            
-            if(name){
-               return Map._instances[name]; 
-            }if (Map._last){
-                return Map._last;
+    id: any = null;
+    map:MapApi = null;
+
+    //win:any = null;
+    //data:any[] = [];
+    //units:any[] = [];
+    //main:any = null;
+    //clients:any[] = [];
+    //accounts:any[] = [];
+    //tracking:any[] = [];
+
+    info: any = null;
+    //wInfo:any = null;
+
+    tapName: any = null;
+
+    markImages: string[] = [];
+    markDefaultImage: string = "";
+    iconImages: any[] = [];
+    controls: string[] = [];
+
+    static getMap(name) {
+
+        if (name) {
+            return Map._instances[name];
+        } if (Map._last) {
+            return Map._last;
+        }
+
+        return null;
+
+    }
+    static setMap(mapName: string, map) {
+        Map._instances[mapName] = map;
+    }
+    static load(mapName: string, fn: Function) {
+        if (!Map._loadFunctions[mapName]) {
+            Map._loadFunctions[mapName] = [];
+        }
+        Map._loadFunctions[mapName].push(fn);
+    }
+    constructor(info) {
+
+        for (var x in info) {
+            if (this.hasOwnProperty(x)) {
+                this[x] = info[x];
             }
+        }
 
-            return null;
-            
+        let main = (this.id) ? $(this.id) : false;
+
+        if (!main) {
+            main = $.create("div").attr("id", this.id);
         }
-        static setMap(name, map){
-            Map._instances[name] = map;
-        }
-        static load(fn){
-            Map._loadFuntions.push(fn);
-        }
-        constructor(info){
-            
-            for(var x in info){
-                if(this.hasOwnProperty(x)) {
-                    this[x] = info[x];
+
+        this.create(main);
+        Map.setMap(this.name, this);
+    }
+
+    create(main: any) {
+
+        main.addClass(["gt-map", "map-main", "map-layout"]);
+        this.map = new MapBoxLib({
+            id: `${this.id}`,
+            markImages: this.markImages,
+            layerImages: this.layerImages,
+            markDefaultImage: this.markDefaultImage,
+            iconImages: this.iconImages,
+            controls: this.controls
+        });
+
+        this.map.on("load", (event) => {
+            if (Map._loadFunctions[this.name]) {
+                for (let fn of Map._loadFunctions[this.name]) {
+                    fn(this.map, this);
                 }
             }
-            
-            let main = (this.id)? $(this.id): false;
-           
-            if(main){
-            
-                if(main.ds("gtMap")){
-                    return;
-                }
-    
-                if(main.hasClass("gt-map")){
-                    this._load(main);
-                }else{
-                    this._create(main);
-                }
-    
-            }else{
-                main = $.create("div").attr("id", this.id);
-                
-                this._create(main);
-			}
-			
-            Map.setMap(this.id, this);
-            
-
-		
-        }
-        _create(main:any){
-            
-            main.addClass(["map-main", "map-layout"]);
-            this.map = new MapBox({
-                id:                 `${this.id}`,
-                markImages:         this.markImages, 
-                markDefaultImage:   this.markDefaultImage,
-                iconImages:         this.iconImages,
-                controls:           this.controls
-            });
-            
-            this.map.on("load", (event)=>{
-                for(let fn of Map._loadFuntions){
-                    fn(this.map, this.id);
-
-                }
-
-            });
-			
-
-        }   
-        _load(main:any){
-
-        } 
-
-	}
-
-    
-	return Map;
-})(_sgQuery);
-
-S.register("GTMap", GTMap);
+        });
+    }
+    getControl(){
+        return this.map;
+    }
+}

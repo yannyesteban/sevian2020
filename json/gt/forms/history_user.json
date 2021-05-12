@@ -1,0 +1,29 @@
+{
+	"form":"history_user",
+	"caption":"Logín",
+	"className":"",
+	"query":"SELECT * FROM user_config",
+	"menuName_":"/menu/grid",
+	"methods_":{
+		"request":{
+			"menuName":"/gt/menus/gt-login"
+		},
+		"load":{
+			"menuName":"/gt/menus/gt-login"
+		}
+	},
+	"params":"",
+	
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+		{"name":"user","caption":"Usuario", "default":"panda"}
+		
+
+	],
+	
+	"searchFor":[
+		
+	]
+
+}

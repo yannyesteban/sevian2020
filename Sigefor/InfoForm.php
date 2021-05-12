@@ -6,11 +6,11 @@ require_once 'Sigefor.php';
 
 class InfoForm
     extends \Sevian\Element
-	implements 
+	implements
 		\sevian\JasonComponent,
 		\sevian\JsonRequest,
 		\Sevian\UserInfo
-	
+
 {
     use Sigefor;
     use DBTrait\HTMLFileInfo;
@@ -19,11 +19,12 @@ class InfoForm
     public $_type = '';
     public $_mode = '';
     public $_info = null;
-	
+
     private $templateName = null;
     private $template = '';
     private $data = '';
     private $mode = '';
+	private $modePropertys = [];
 
     public $containerId = "";
 	private $_jsonRequest = null;
@@ -37,17 +38,17 @@ class InfoForm
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-		
+
         $this->cn = \Sevian\Connection::get();
 	}
 	public function config(){}
 
 	public function evalMethod($method = false): bool{
-		
+
 		if($method === false){
             $method = $this->method;
 		}
-		
+
 		switch($method){
 			case 'load':
 				$this->load();
@@ -56,10 +57,10 @@ class InfoForm
 				break;
 
 		}
-		
+
 		return true;
 	}
-	
+
 	public function init(){
 
 		$form =  new \Sigefor\Component\Form2([
@@ -70,14 +71,14 @@ class InfoForm
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
-			
+
 			//'record'=>$this->getRecord()
 		]);
 
-		
+
 		return [
 			'form'     => $form,
-			
+
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
@@ -87,46 +88,47 @@ class InfoForm
 			'delay'			=> 60000,
 		];
 	}
-	
+
 	public function load(){
 		$this->loadConfigData($this->name, self::$patternJsonFile);
         if($this->templateName){
             $this->template = $this->loadHTMLFragment($this->templateName, self::$patternTemplateFile);
         }
-        
+
         if($this->containerId !== null){
             if($this->eparams->mainId?? false){
                 $this->containerId = $this->eparams->mainId;
             }
-    
+
             if(!$this->containerId){
                 $this->containerId = 'pan-'.$this->id;
             }
-    
+
             $this->panel = new \Sevian\HTML('div');
             $this->panel->id = $this->containerId;
         }
-        
-		
-		
+
+
+
 		$this->jsClassName = 'InfoForm';
 
 		$this->info = [
-			
+
 			'caption'   => $this->caption,
 			'id'        => $this->containerId,
             'html'      => $this->template,
             'data'      => $this->data,
             'mode'      => $this->mode,
-            'className' => $this->className
-			
+            'className' => $this->className,
+			'modePropertys'=> $this->modePropertys
+
 		];
 
-		
+
 		$this->setInit($this->info);
 
     }
-	
+
 
 	private function loadTest(){
 		$rr = json_decode(@file_get_contents("data2.json", true), true);
@@ -140,10 +142,10 @@ class InfoForm
 			$altitud = $t['altitud'];
 			$satellites = $t['satelites'];
 			$speed = $t['velocidad'];
-			
 
-			$cn->query = 
-			"INSERT INTO tracking (unit_id, device_id, date_time, longitude, latitude, speed, altitude, heading, satellite) 
+
+			$cn->query =
+			"INSERT INTO tracking (unit_id, device_id, date_time, longitude, latitude, speed, altitude, heading, satellite)
 			VALUES (2319, '2012000750', '$date_time', '$longitude', '$latitude', '$speed',
 			'$altitud', '$heading', '$satellites') ";
 			//hr($cn->query);
@@ -151,21 +153,21 @@ class InfoForm
 		}
 		hx($rr);
 	}
-	
 
-    public function jsonSerialize() {  
+
+    public function jsonSerialize() {
         return [
 			'name'	=> $this->_name,
 			'type'	=> $this->_type,
 			'mode'	=> $this->_mode,
 			'info'	=> $this->_info
-		];  
+		];
 	}
 
 	public function setRequest($data){
 		$this->_jsonRequest = $data;
 	}
-	
+
 	public function getRequest(){
 		return $this->_jsonRequest;
 	}

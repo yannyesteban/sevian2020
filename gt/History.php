@@ -5,76 +5,51 @@ require_once MAIN_PATH.'gt/Trait.php';
 
 class History
     extends \Sevian\Element
-	implements 
+	implements
 		\sevian\JasonComponent,
 		\sevian\JsonRequest,
 		\Sevian\UserInfo
-	
+
 {
 
-	use DBUnit;
+	//use DBUnit;
     use DBHistory;
 	use DBConfig;
-   
-    
+
+
 
     public $_name = '';
     public $_type = '';
     public $_mode = '';
     public $_info = null;
-	
+
 	private $_jsonRequest = null;
 
 	public $jsClassName = 'GTHistory';
 
 	static $patternJsonFile = '';
 
-	private $popupTemplate = '<div class="wecar_info">
-		<div>{=name}</div>
-		<div>Categoria: {=category}</div>
-		
+	private $popupTemplate = '';
 
-		<div>{=latitude}, {=longitude}</div>
-		<div>Telefonos {=phone1} {=phone2} {=phone3}</div>
-		<div>Web: {=web}</div>
-		<div>Dirección: {=address}</div>
-
-	</div>';
-
-	private $infoTemplate = '
-	<div class="units-info">
-
-		<div>Nombre</div><div>{=name}</div>
-		<div>Categoria</div><div>{=category}</div>
-
-		<div>Longitud</div><div>{=longitude}</div>
-		<div>Latidud</div><div>{=latitude}</div>
-
-		<div>Dirección</div><div>{=address}</div>
-		<div>Teléfonos</div><div>{=phone1} {=phone2} {=phone3}</div>
-		<div>Correo</div><div>{=email}</div>
-		<div>Web</div><div>{=web}</div>
-		<div>Observaciones</div><div>{=observations}</div>
-	
-	</div>';
+	private $infoTemplate = '';
 
     public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-		
+
         $this->cn = \Sevian\Connection::get();
 	}
 	public function config(){
-		
+
 	}
 
 	public function evalMethod($method = false): bool{
-		
+
 		if($method === false){
             $method = $this->method;
 		}
-		
+
 		switch($method){
 			case 'request':
 				$this->load2();
@@ -90,21 +65,21 @@ class History
 				$hourTo = \SEVIAN\S::getReq('hour_to');
 				$this->loadHistory($unitId, $dateFrom, $hourFrom, $dateTo, $hourTo);
 			case 'load-test':
-				
+
 				$this->loadHistory(2002, '2020-07-01', '09:20:34', '2020-07-01', '12:09:50');
 				break;
             case 'load-sites':
-                
+
 
                 $this->_name = $this->name;
                 $this->_type = 'GTHistory';
                 $this->_mode = '';
                 $this->_info = [
 					'dataMain'		=> $this->loadGeofences(),
-					
+
 					'popupTemplate' => $this->popupTemplate,
 					'infoTemplate'	=> $this->infoTemplate,
-                    
+
 					'pathImages'	=> PATH_IMAGES,
 					'caption'		=> 'Historial',
 					'id'            => $this->containerId,
@@ -112,13 +87,16 @@ class History
 					'delay'			=> 60000,
 				];
 			case 'tracking':
-				
+
+				break;
+			case 'save-config':
+				$this->updateConfig("juan", $this->eparams->config);
 				break;
 			default:
 				break;
 
 		}
-		
+
 		return true;
 	}
 	public function load2(){
@@ -139,7 +117,7 @@ class History
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
-			
+
 			//'record'=>$this->getRecord()
 		]);
 
@@ -151,11 +129,11 @@ class History
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
-			
+
 			//'record'=>$this->getRecord()
 		]);
 
-		
+
 		$this->setInit([
 			'form'     => $form,
 			'formHistoryConfig'=>$formHistoryConfig,
@@ -178,14 +156,14 @@ class History
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
-			
+
 			//'record'=>$this->getRecord()
 		]);
 
-		
+
 		return [
 			'form'     => $form,
-			
+
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
@@ -195,7 +173,7 @@ class History
 			'delay'			=> 60000,
 		];
 	}
-	
+
 	private function load(){
 
 
@@ -208,11 +186,11 @@ class History
 			'method'	=> 'load',
 			'mode'		=> 1,
 			'userData'=> [],
-			
+
 			//'record'=>$this->getRecord()
 		]);
 		$info->load();
-		
+
 
 		$form =  new \Sigefor\Component\Form2([
 
@@ -222,7 +200,7 @@ class History
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
-			
+
 			//'record'=>$this->getRecord()
 		]);
 
@@ -234,12 +212,12 @@ class History
 			'method'	=> $this->method,
 			'mode'		=> 1,
 			'userData'=> [],
-			
+
 			//'record'=>$this->getRecord()
 		]);
 
 
-		
+
 
         $this->panel = new \Sevian\HTML('div');
 		$this->panel->id = 'gt-history-'.$this->id;
@@ -248,6 +226,7 @@ class History
 		$this->jsClassName = 'GTHistory';
 
 		$this->info = [
+			'mapName'     	=> $this->eparams->mapName ?? '',
 			'form'     => $form,
 			'formHistoryConfig' =>$formHistoryConfig,
 			'popupTemplate' => $this->popupTemplate,
@@ -260,11 +239,11 @@ class History
 			'infoForm'		=> $info->getInit()
 		];
 
-		
+
 		$this->setInit($this->info);
 
     }
-	
+
 
 	private function loadTest(){
 		$rr = json_decode(@file_get_contents("data2.json", true), true);
@@ -278,10 +257,10 @@ class History
 			$altitud = $t['altitud'];
 			$satellites = $t['satelites'];
 			$speed = $t['velocidad'];
-			
 
-			$cn->query = 
-			"INSERT INTO tracking (unit_id, device_id, date_time, longitude, latitude, speed, altitude, heading, satellite) 
+
+			$cn->query =
+			"INSERT INTO tracking (unit_id, device_id, date_time, longitude, latitude, speed, altitude, heading, satellite)
 			VALUES (2319, '2012000750', '$date_time', '$longitude', '$latitude', '$speed',
 			'$altitud', '$heading', '$satellites') ";
 			//hr($cn->query);
@@ -291,14 +270,14 @@ class History
 	}
 	private function loadHistory($unitId, $dateFrom, $hourFrom, $dateTo, $hourTo){
 
-		
+
 		if($hourFrom == ''){
 			$hourFrom = '00:00:00';
 		}
 		if($hourTo == ''){
 			$hourTo = '23:59:59';
 		}
-		
+
 		if($dateFrom == ''){
 			$dateFrom = date("Y-m-d");
 		}
@@ -328,7 +307,7 @@ class History
 				'method'	=> 'setInfoUnitInfo',
 				//'value'		=> $this->infoUnitInput($unitId)
 			],
-			
+
 			[
 				'method'	=> 'setLayerConfig',
 				'value'		=> $config
@@ -338,12 +317,12 @@ class History
 				'value'		=> null
 			]
 		]);
-				
+
 		return;
 
 		//hx("$unitId: $from / $to");
 		//$this->loadTest();
-		
+
 		//$layerInputData = $this->getInputLayers($unitId, $dateFrom, $dateTo);
 		//$layerOutputData = $this->getOutputLayers($unitId, $dateFrom, $dateTo);
 		//$layerEventData = $this->getEventLayers($unitId, $dateFrom, $dateTo);
@@ -353,9 +332,9 @@ class History
 		//hx($config);
 		//$layerInputPropertys = $this->getInputName($unitId);
 
-		
+
 		$layerInput = [];
-		
+
 		foreach($layerInputData as $k => $v){
 			$layerInput[] = [
 				"caption"	=> $v["layer"],
@@ -365,10 +344,10 @@ class History
 				"group"		=> 2
 			];
 		}
-		
+
 
 		$layerOutput = [];
-		
+
 		foreach($layerOutputData as $k => $v){
 			$layerOutput[] = [
 				"caption"	=> $v["layer"],
@@ -378,11 +357,11 @@ class History
 				"group"		=> 3
 			];
 		}
-		
-		
+
+
 
 		$layerEvent = [];
-		
+
 		foreach($layerEventData as $k => $v){
 			$layerEvent[] = [
 				"caption"	=> $v["name"],
@@ -393,11 +372,11 @@ class History
 			];
 		}
 
-		
+
 
 
 		$layerAlarm = [];
-		
+
 		foreach($layerAlarmData as $k => $v){
 			$layerAlarm[] = [
 				"caption"	=> $v["name"],
@@ -433,7 +412,7 @@ class History
 				'method'	=> 'setInfoUnitInfo',
 				//'value'		=> $this->infoUnitInput($unitId)
 			],
-			
+
 			[
 				'method'	=> 'setLayerConfig',
 				'value'		=> $config
@@ -445,19 +424,19 @@ class History
 		]);
 	}
 
-    public function jsonSerialize() {  
+    public function jsonSerialize() {
         return [
 			'name'	=> $this->_name,
 			'type'	=> $this->_type,
 			'mode'	=> $this->_mode,
 			'info'	=> $this->_info
-		];  
+		];
 	}
 
 	public function setRequest($data){
 		$this->_jsonRequest = $data;
 	}
-	
+
 	public function getRequest(){
 		return $this->_jsonRequest;
 	}
@@ -470,7 +449,7 @@ class History
     }
 
 	private function getPropertysInfo(){
-		return 
+		return
 		[
 
 			[
@@ -545,13 +524,13 @@ class History
 				"type"=>"text",
 				"options"=>null
 			]
-		
+
 		];
 	}
 
 	private function getConfigHistory(){
-		
-		
-			
+
+
+
 	}
 }

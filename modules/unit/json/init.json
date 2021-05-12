@@ -7,9 +7,9 @@
 	"elements": [
 		{
 			"id": 4,
-			"element": "s-info-form",
-			"name": "/gt/infoForm/history",
-			"method": "load",
+			"element": "form",
+			"name": "/gt/forms/test",
+			"method": "request",
 			"designMode": true,
 			"fixed": true,
 			"type":0,

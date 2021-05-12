@@ -11,11 +11,21 @@ interface MobilInfo {
 
 export class Trace {
     map: any = null;
-    type: string = "trace";
+
+    private data: any[] = [];
+    private mainSourceId: string = "";
+    private mainLayerId: string = "";
+    private layers: any[] = [];
+    private maxDelay: number = 200;
+    private mapLayers: string[] = [];
+    private active: boolean = false;
+    private propertysInfo: any = {};
+
+    type: string = "history";
     parent: object = null;
     name: string = "";
     visible: boolean = true;
-    data: any = null;
+
     coordinates = null;
     coordinatesInit = null;
 
@@ -24,33 +34,14 @@ export class Trace {
     panDuration: number = 5000;
 
 
-    layers: any = [];
+
     layers2: any = [];
     groups: any = [];
     _layers: any = [];
 
-    
+
     maxLines: number = 0;
-    line: object = {
-        color: "blue",//"#FFA969",
-        width: 3,
-        opacity: 0.9,
-        dasharray: [1]
-    };
-    fill: object = {
-        color: "#f9f871",
-        opacity: 0.4
-    };
-    lineEdit: object = {
-        color: "red",//"#ff3300",
-        width: 1,
-        opacity: 0.9,
-        dasharray: [2, 2]
-    };
-    fillEdit: object = {
-        color: "#ff9933",
-        opacity: 0.4
-    };
+
     lineColor: string = "white";
     lineWidth: number = 2;
     fillColor: string = "red";
@@ -74,7 +65,7 @@ export class Trace {
     _events: any[] = [];
     _play: boolean = false;
     _lastIndex = null;
-    
+
     private layerIndex = 0;
     callmove: Function = () => { };
     callresize: Function = () => { };
@@ -96,6 +87,9 @@ export class Trace {
     private progress = 0; // progress = timestamp - startTime
     private resetTime = false; // indicator of whether time reset is needed for the animation
     private layersId: string[] = [];
+
+
+
 
     private roadLayerId: string = "";
     private roadSourceId: string = "";
@@ -139,6 +133,12 @@ export class Trace {
 
     private popup:any = null;
     public onShowInfo:Function = (info)=>{};
+
+    private funContextMenu:Function = null;
+
+    private popupInfo: any = null;
+
+
     constructor(info: object) {
 
         for (let x in info) {
@@ -158,6 +158,9 @@ export class Trace {
         //this.layerId = "ly-" + this.id;
         //this.lineSourceId = "ls-" + this.id;
 
+        this.mainSourceId = "mn-" + this.id;
+        this.mainLayerId = "mn-" + this.id;
+
         this.roadSourceId = "rs-" + this.id;
         this.traceSourceId = "ts-" + this.id;
         this.nodeSourceId = "ns-" + this.id;
@@ -169,47 +172,58 @@ export class Trace {
         this.layerId =  `${this.id}-i-`;
 
         //this.lineLayerId = "ll-" + this.id;
-        
-        this.init();
+
+        //this.init();
     }
 
-    init() {
-        this.registerImages(this.images);
-        /*this.coordinates = [];
-        let fixDelay = 0;
-        let ts = [];
-        for(let x in this.data){
-            this.coordinates.push(this.data[x].coordinates);
-            
-            ts[x] = this.data[x].ts;
-            if(x>0){
-                if(ts[x] - ts[x-1]>120){
-                    fixDelay += (ts[x] - ts[x-1]) - 120;
-                }
-            }
-            
-            
-            this.data[x].ts = this.data[x].ts - ts[0] - fixDelay;
-            
+    isActive() {
+        return this.active;
+    }
+
+    init(data?) {
+        if (data !== undefined) {
+            this.data = data;
         }
-        this.coordinatesInit = this.coordinates.slice();
-        console.log(this.data)
-        //let index = this.data.findIndex((e)=>e.ts>=885);
-        */
-        this.setData(this.data);
-        //this.drawLineA();
+        //this.registerImages(this.images);
+        //console.log(this.map);
+
+        this.popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+
+
+        if (typeof this.popupInfo === "string") {
+            this.popup.setHTML(this.popupInfo);
+        } else {
+            this.popup.setDOMContent(this.popupInfo);
+        }
+
+        this.initSource(this.data);
+
+        this.createRoadLayer(this.roadLayerInfo);
+        this.createMarksLayer(this.layers);
+        this.active = true;
+        return;
+        this.registerImages(this.images);
+
+        //this.setData(this.data);
+
 
         this.initSource(this.coordinatesInit);
+
         this.createRoadLayer(this.roadLayerInfo);
         this.createTraceLayer(this.traceLayerInfo);
+
         this.createMobilLayer();
+
         this.createMarksLayer(this.layers2);
 
         this.setTraceMode(this.traceMode, true);
 
         this.startSetPosition();
         //this.playPopup();
-        this.flyTo();
+        //this.flyTo();
     }
 
     getLayerId(){
@@ -235,15 +249,15 @@ export class Trace {
 
         if (this.map.hasImage(info.name)){
            this.map.removeImage(info.name);
-           this.onUpdateImage(info); 
-        } 
+           this.onUpdateImage(info);
+        }
         this.addImage(info);
     }
     removeImage(info){
         if (this.map.hasImage(info.name)){
            this.map.removeImage(info.name);
-           this.onRemoveImage(info); 
-        } 
+           this.onRemoveImage(info);
+        }
     }
 
     registerImages(images:any[]){
@@ -256,7 +270,7 @@ export class Trace {
             this.map.addImage(image.name, this.iImages[image.name], { pixelRatio: 3 });
             */
         });
-        
+
     }
 
     getImageObj(name:string){
@@ -286,29 +300,27 @@ export class Trace {
         /*
         for(let x in this.data){
             this.coordinates.push(this.data[x].coordinates);
-            
+
             ts[x] = this.data[x].ts;
             if(x>0){
                 if(ts[x] - ts[x-1]>120){
                     fixDelay += (ts[x] - ts[x-1]) - 120;
                 }
             }
-            
-            
+
+
             this.data[x].ts = this.data[x].ts - ts[0] - fixDelay;
-            
+
         }
         */
         this.coordinatesInit = this.coordinates.slice();
-        console.log(this.data)
-        //let index = this.data.findIndex((e)=>e.ts>=885);            
+
+        //let index = this.data.findIndex((e)=>e.ts>=885);
     }
 
-    initSource(coordinates){
+    createGeoJson(data){
 
-        
-
-        this.map.addSource(this.roadSourceId, {
+        const geojson = {
             "type": "geojson",
             "data": {
                 "type": "FeatureCollection",
@@ -317,39 +329,36 @@ export class Trace {
                         "type": "Feature",
                         "geometry": {
                             "type": "LineString",
-                            "coordinates": coordinates
+                            "coordinates": data.map(e => [e.longitude,e.latitude])
                         }
 
                     }
                 ]
             }
-        });
-        
+        };
 
-        this.map.addSource(this.traceSourceId, this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "LineString",
-                            "coordinates": [[]]
-                        }
-                    }
-                ]
-            }
+        data.forEach((e, index) => {
+
+            let point = {
+                "type": "Feature",
+                "properties": e,
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [e.longitude, e.latitude]
+                }
+            };
+            geojson.data.features.push(point);
         });
 
-        this.map.addSource(this.nodeSourceId,{
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": []//this.dataFilter(this.coordinatesInit)
-            }
-        });
-       
+        return geojson;
+    }
+
+    initSource(data){
+        this.map.addSource(this.mainSourceId, this.createGeoJson(data));
+    }
+
+    updateSource(data){
+        this.map.getSource(this.mainSourceId).setData(this.createGeoJson(data).data);
     }
 
     getAllLayers(){
@@ -387,7 +396,7 @@ export class Trace {
         this.setProgress(this.progress);
     }
     updateRoadLayer(roadLayerInfo){
-        
+
         const paint = {
             "line-color": roadLayerInfo.color,
             "line-width": Number(roadLayerInfo.width),
@@ -423,7 +432,7 @@ export class Trace {
         this.map.addLayer({
             "id": this.roadLayerId,
             "type": "line",
-            "source": this.roadSourceId,
+            "source": this.mainSourceId,
             "layout": {
                 "line-join": "round",
                 "line-cap": "round",
@@ -432,10 +441,11 @@ export class Trace {
             "paint": paint,
             "filter": ["==", "$type", "LineString"]
         });
+        this.registerLayer(this.roadLayerId);
     }
 
     updateTraceLayer(traceLayerInfo){
-        
+
         const paint = {
             "line-color": traceLayerInfo.color,
             "line-width": Number(traceLayerInfo.width),
@@ -455,7 +465,7 @@ export class Trace {
         this.setTraceLength(traceLayerInfo.length);
     }
     createTraceLayer(traceLayerInfo?){
-        
+
         if(traceLayerInfo !== undefined){
             this.roadLayerInfo = traceLayerInfo;
         }
@@ -471,7 +481,7 @@ export class Trace {
         }else{
             paint["line-dasharray"] = [1];
         }
-        
+
         this.map.addLayer({
             "id": this.traceLayerId,
             "type": "line",
@@ -520,519 +530,20 @@ export class Trace {
 
     createMarksLayer(layers){
 
-        layers.forEach((layer, index) => {
-            
-            if (layer.features && Array.isArray(layer.features)) {
+        layers.forEach((layer, index: number) => {
+            const id = this.imageLayer(layer);
+            this.registerLayer(id);
+            // this.playPopup(id, feature.className)
+            /*if (layer.features && Array.isArray(layer.features)) {
                 layer.features.forEach((feature) => {
-                    const id = this.imageLayer(feature);
-                    this.playPopup(id, feature.className);
+                    ;
 
                 });
-            }
-        });        
+            }*/
+        });
     }
 
-    drawLineA() {
-        /*
-        let ele = $("mycanvas");
-        //console.log(ele.get());
-        let arrow = new Point({
-            map:this.map,
-            rgb:[255,76,0],
-            center:[255, 255, 102],
-            color:"rgba(128, 255, 0, 1)",
-            borderWidth: 10,
-            width:80, height:110
-        });
-        let imageData =  arrow.getCanvas();
-        ele.get().getContext("2d").putImageData(imageData.getContext("2d").getImageData(
-            0,
-            0,
-            80,
-            110
-        ), 20, 20);
-        */
-        //arrow.draw(ele.get().getContext("2d"));
 
-        const roadSource = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "LineString",
-                        "coordinates": this.coordinatesInit
-                    }
-
-                }]//[polygon, point]
-            }
-        };
-        this.map.addSource(this.roadSourceId, roadSource);
-        this.map.addLayer({
-            "id": this.roadLayerId,
-            "type": "line",
-            "source": this.roadSourceId,
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round",
-                "visibility": (this.visible) ? "visible" : "none"
-            },
-            "paint": {
-                "line-color": "#ff9900",
-                "line-width": 2,
-                "line-opacity": 0.8,
-                //"line-gap-width":4,
-                "line-dasharray": [2, 2]
-            },
-            "filter": ["==", "$type", "LineString"]
-        });
-
-
-        /*
-        let lineString = {
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": this.coordinatesInit
-            }
-        
-        };
-
-        mainSource.data.features.push(lineString);
-        */
-
-
-        const traceSource = this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "LineString",
-                            "coordinates": [[]]
-                        }
-                    }
-                ]
-            }
-        };
-
-        this.map.addSource(this.traceSourceId, traceSource);
-
-        // layer of trace line
-        this.map.addLayer({
-            "id": this.traceLayerId,
-            "type": "line",
-            "source": this.traceSourceId,
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round",
-                visibility: (this.visible) ? "visible" : "none"
-            },
-            "paint": {
-                "line-color": ["get", "color"],
-                "line-width": 5,
-                //"line-opacity": 0.9,
-                //"line-gap-width":4,
-                //"line-dasharray":[2,2]
-                //"line-dasharray":[1,1]
-
-            },
-            "filter": ["==", "$type", "LineString"]
-        });
-
-        //this.map.addSource(this.layerSourceId, this.dataFilter(this.coordinatesInit));
-        this.map.addSource(this.nodeSourceId, this.dataFilter([]));
-
-        this.layers2.forEach((layer, index) => {
-            
-            
-            if (layer.features && Array.isArray(layer.features)) {
-                layer.features.forEach((feature) => {
-                    //this.createLayer(index, feature);
-                    //console.log(feature)
-                    const id = this.imageLayer(feature);
-                    
-
-                });
-            }
-
-
-
-            //e.id = "t_layer"+index;
-            //e.map = this.map;
-            //e.data = this.data;
-            //e.range = [null, null];
-            //e.source = this.layerSourceId;
-            //this._layers[index] = new TraceLayer(e);
-
-
-            //this.createLayer(index, e);
-
-
-        });
-        this.setTraceMode(this.traceMode, true);
-        
-        //this.map.setFilter("t_layer"+0,[">=",["get","i"],100]);
-        //this.map.setFilter("t_layer"+1,[">=",["get","i"],100]);
-        //this.map.setFilter("t_layer"+2,[">=",["get","i"],100]);
-        //this.map.setFilter("t_layer"+10,["<=",["get","i"],30]);
-
-        this.map.addLayer({
-            id: this.mobilLayerId,
-            type: "symbol",
-            source: this.traceSourceId,
-            layout: {
-                visibility: "visible",
-                "icon-image": "vehiculo_004",
-                "icon-size": 0.4,
-                "icon-rotate": ["get", "heading"],
-                "icon-allow-overlap": true,
-                "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
-
-            },
-            paint: {
-                //"icon-color":"#4d0000",
-                "icon-color": [
-                    "interpolate",
-                    ["linear"],
-                    ["get", "speed"],
-                    0,
-                    "green",
-                    25,
-                    "yellow",
-                    50,
-                    "blue",
-                    75,
-                    "green",
-                    100,
-                    "rgb(209,229,240)",
-                    120,
-                    "orange",
-                    140,
-                    "red",
-                    160,
-                    "black"
-                ],
-
-
-
-                //"circle-radius": 4,
-                //"circle-opacity":["case",["==",["get","type"],"m"] , 0.0, 0.8],
-                //"circle-color": "orange",
-                //"circle-stroke-color":"yellow",
-                //"circle-stroke-width":1
-            },
-            filter: ["in", "dot", '']
-            //filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type"]
-        });
-        
-
-    }
-    drawLineAA() {
-
-        const roadSource = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "LineString",
-                        "coordinates": this.coordinatesInit
-                    }
-
-                }]//[polygon, point]
-            }
-        };
-        this.map.addSource(this.roadSourceId, roadSource);
-        this.map.addLayer({
-            "id": this.roadLayerId,
-            "type": "line",
-            "source": this.roadSourceId,
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round",
-                "visibility": (this.visible) ? "visible" : "none"
-            },
-            "paint": {
-                "line-color": "#ff9900",
-                "line-width": 2,
-                "line-opacity": 0.8,
-                //"line-gap-width":4,
-                "line-dasharray": [2, 2]
-            },
-            "filter": ["==", "$type", "LineString"]
-        });
-
-
-        /*
-        let lineString = {
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": this.coordinatesInit
-            }
-        
-        };
-
-        mainSource.data.features.push(lineString);
-        */
-
-
-        const traceSource = this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "LineString",
-                            "coordinates": [[]]
-                        }
-                    }
-                ]
-            }
-        };
-
-        this.map.addSource(this.traceSourceId, traceSource);
-
-        // layer of trace line
-        this.map.addLayer({
-            "id": this.traceLayerId,
-            "type": "line",
-            "source": this.traceSourceId,
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round",
-                visibility: (this.visible) ? "visible" : "none"
-            },
-            "paint": {
-                "line-color": ["get", "color"],
-                "line-width": 5,
-                //"line-opacity": 0.9,
-                //"line-gap-width":4,
-                //"line-dasharray":[2,2]
-                //"line-dasharray":[1,1]
-
-            },
-            "filter": ["==", "$type", "LineString"]
-        });
-
-        //this.map.addSource(this.layerSourceId, this.dataFilter(this.coordinatesInit));
-        this.map.addSource(this.nodeSourceId, this.dataFilter([]));
-
-        this.layers2.forEach((layer, index) => {
-
-            console.log(layer);
-            if (layer.features && Array.isArray(layer.features)) {
-                layer.features.forEach((feature, index) => {
-                    this.createLayer(index, feature);
-
-                });
-            }
-
-
-
-            //e.id = "t_layer"+index;
-            //e.map = this.map;
-            //e.data = this.data;
-            //e.range = [null, null];
-            //e.source = this.layerSourceId;
-            //this._layers[index] = new TraceLayer(e);
-
-
-            //this.createLayer(index, e);
-
-
-        });
-        //this.map.setFilter("t_layer"+0,[">=",["get","i"],100]);
-        //this.map.setFilter("t_layer"+1,[">=",["get","i"],100]);
-        //this.map.setFilter("t_layer"+2,[">=",["get","i"],100]);
-        //this.map.setFilter("t_layer"+10,["<=",["get","i"],30]);
-
-        this.map.addLayer({
-            id: this.mobilLayerId,
-            type: "symbol",
-            source: this.traceSourceId,
-            layout: {
-                visibility: "visible",
-                "icon-image": "vehiculo_004",
-                "icon-size": 0.4,
-                "icon-rotate": ["get", "heading"],
-                "icon-allow-overlap": true,
-                "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
-
-            },
-            paint: {
-                //"icon-color":"#4d0000",
-                "icon-color": [
-                    "interpolate",
-                    ["linear"],
-                    ["get", "speed"],
-                    0,
-                    "green",
-                    25,
-                    "yellow",
-                    50,
-                    "blue",
-                    75,
-                    "green",
-                    100,
-                    "rgb(209,229,240)",
-                    120,
-                    "orange",
-                    140,
-                    "red",
-                    160,
-                    "black"
-                ],
-
-
-
-                //"circle-radius": 4,
-                //"circle-opacity":["case",["==",["get","type"],"m"] , 0.0, 0.8],
-                //"circle-color": "orange",
-                //"circle-stroke-color":"yellow",
-                //"circle-stroke-width":1
-            },
-            filter: ["in", "dot", '']
-            //filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type"]
-        });
-        return;
-
-        this.coordinatesInit.forEach((element, index) => {
-            let point = {
-                type: "Feature",
-                "properties": {
-                    "iconImage": this.data[index].iconImage,
-                    "speed": this.data[index].speed,
-                    "heading": this.data[index].heading,
-                    "event": this.data[index].event,
-                },
-                geometry: {
-                    type: "Point",
-                    coordinates: element
-                }
-            };
-            geojson.data.features.push(point);
-        });
-
-
-
-
-
-        this.map.addSource(this.lineIdA, geojson);
-
-        this.map.addLayer({
-            "id": this.lineIdA,
-            "type": "line",
-            "source": this.lineIdA,
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round",
-                visibility: (this.visible) ? "visible" : "none"
-
-            },
-            "paint": {
-                "line-color": "#ff9900",
-                "line-width": 2,
-                "line-opacity": 0.8,
-                //"line-gap-width":4,
-                "line-dasharray": [2, 2]
-
-
-            },
-            "filter": ["==", "$type", "LineString"]
-        });
-
-
-        this.map.addLayer({
-            id: this.lineIdA + "3",
-            type: "circle",
-            "minzoom": 13,
-            "source": this.lineIdA,
-            layout: {
-                visibility: "visible"
-            },
-            paint: {
-                "circle-radius": 4,
-                //"circle-opacity":["case",["=>",["get","type"],30] , 0.0, 0.8],
-                //"circle-color": "white",
-                "circle-color": ["case", [">=", ["get", "speed"], 31], "red", [">=", ["get", "speed"], 21], "yellow", [">=", ["get", "speed"], 11], '#00d4ff', [">=", ["get", "speed"], 1], '#f743b7', "purple"],
-                "circle-stroke-color": "#ffffff",
-                "circle-stroke-width": 1
-            },
-            //filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type"]
-            //filter:['>=',"speed",31]
-            //filter:["case",[">=",["get","speed"],31], true,false]
-            filter: ["any", ['>=', "speed", 31], ['>=', "speed", 30]]
-
-        });
-
-
-
-        return;
-        this.map.addLayer({
-            id: this.lineIdA + "3",
-            type: "symbol",
-            "source": this.lineIdA,
-            layout: {
-                //visibility:["get", "visible"],
-                "icon-image": ["get", "iconImage"],
-                "icon-size": 0.4,
-                "icon-rotate": ["get", "heading"],
-                "icon-allow-overlap": true,
-                "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
-
-            },
-            paint: {
-
-            },
-            //filter: ["in", "$type", "Point"]
-            //filter:["in","dot", "dot"]
-            "filter": ['==', "$type", "Point"]
-
-        });
-        return;
-        this.map.addLayer({
-            id: this.nodesId + "cc",
-            type: "circle",
-            source: this.lineIdA,
-            layout: {
-                visibility: "none"
-            },
-            paint: {
-                "circle-radius": 3,
-                "circle-opacity": 0.5,
-                "circle-color": "white",
-                "circle-stroke-color": "#ff3300",
-                "circle-stroke-width": 1
-            },
-            filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type"]
-        });
-
-    }
 
     setLine(info: object) {
         for (let p in info) {
@@ -1061,13 +572,18 @@ export class Trace {
 
     }
 
-    add(lngLat) {
-        if (!this.coordinates) {
-            this.coordinates = [];
+    add(point) {
+
+        this.data.push(point);
+
+        if (this.maxDelay) {
+            const time = Math.trunc(Date.now() / 1000);
+            this.data = this.data.filter((e) => (time - e.ts) < this.maxDelay);
         }
-        this.coordinates.push([lngLat.lng, lngLat.lat]);
-        this.draw();
+
+        this.updateSource(this.data);
     }
+
     createLayer(index, info) {
 
         //return this.imageLayer(index, info);
@@ -1086,7 +602,7 @@ export class Trace {
 
     createLayerFilter(info){
 
-        
+
         const t = [
             ["==","=="],
             ["!=","<>"],
@@ -1101,24 +617,39 @@ export class Trace {
             ["[]", "[n, m]"],
             ["(]", "(n, m]"]
         ];
-        
+
         const property = ["get", info.prop];
         const value = (info.value || "").toString();
-        
-        let values:any =  value.split(",");
-        
-        if(typeof this.data[0][info.prop] === "number"){
-            values = values.map( e =>{
-                return Number(e);
-            });
-            
-        }else if(typeof this.data[0][info.prop] === "string"){
-            values = values.map(e=>{
-                return String(e);
-            });
-        }
 
-        
+        let values: any = value.split(",");
+        let propertysInfo = {
+            type:"",
+        };
+
+        if (propertysInfo = this.propertysInfo[info.prop]) {
+
+            if (propertysInfo.type === "string") {
+                values = values.map( e =>{
+                    return String(e);
+                });
+            }else if (propertysInfo.type === "number") {
+                values = values.map( e =>{
+                    return Number(e);
+                });
+            }
+
+        } else if (typeof this.data[0]) {
+            if(typeof this.data[0][info.prop] === "number"){
+                values = values.map( e =>{
+                    return Number(e);
+                });
+
+            }else if(typeof this.data[0][info.prop] === "string"){
+                values = values.map(e=>{
+                    return String(e);
+                });
+            }
+        }
 
         switch(info.valueType){
             case "==":
@@ -1162,7 +693,7 @@ export class Trace {
                     ["<=", property, values[1]]
                 ];
         }
-        
+
         return ["==","2","1"];
     }
 
@@ -1201,24 +732,24 @@ export class Trace {
 
         let filter = this.createLayerFilter(info);
 
-        console.log(filter);
+
         /*if(info.filter){
             for(let x in info.filter){
                 filter = ["in", x, info.filter[x]]
-            } 
+            }
         }*/
 
         const id = this.layerId + this.layerIndex++;
         this.layersId.push(id);
         this.map.addLayer({
             "id": id,
-            
+
             "minzoom": 13,
             "source": this.nodeSourceId,
-            
+
 
             "type": "symbol",
-            
+
             "layout": {
                 "visibility": "visible",
                 "icon-image": "arrow_002",
@@ -1265,11 +796,11 @@ export class Trace {
         paint["circle-" + "opacity"] = 0.9
         let filter = this.createLayerFilter(info);
 
-        console.log(filter);
+
         /*if(info.filter){
             for(let x in info.filter){
                 filter = ["in", x, info.filter[x]]
-            } 
+            }
         }*/
 
         const id = this.layerId + this.layerIndex++;
@@ -1303,7 +834,7 @@ export class Trace {
         this.layersId.push(id);
 
         let filter = this.createLayerFilter(info);
-        
+
         if(!this.map.hasImage(info.image)){
             console.log("errror");
         }
@@ -1311,7 +842,7 @@ export class Trace {
         this.map.addLayer({
             "id": id,
             "type": "symbol",
-            "source": this.nodeSourceId,
+            "source": this.mainSourceId,
             "layout": {
                 //visibility:["get", "visible"],
                 "visibility": info.visible ? "visible" : "none",
@@ -1322,7 +853,7 @@ export class Trace {
                 "icon-ignore-placement": true,
             },
             filter: filter
-        }, this.mobilLayerId);
+        });//, this.mobilLayerId
         this.playPopup(id, info.className);
         this.onAddLayer(info);
         return id;
@@ -1342,7 +873,7 @@ export class Trace {
         }
 
         this.map.setFilter(info.id, this.createLayerFilter(info));
-        
+
         this.onUpdateLayer(info);
 
         return info.id;
@@ -1397,7 +928,7 @@ export class Trace {
     }
 
     addProgress(deltaTime) {
-        console.log("Speedfactor: ", this.speedFactor);
+        //console.log("Speedfactor: ", this.speedFactor);
         if (this.reverse) {
             //this.progress = this.progress - (deltaTime * this.speedFactor);
         } else {
@@ -1598,7 +1129,7 @@ export class Trace {
                 this.addProgress(delta);
             }
 
-            
+
             this.animation = requestAnimationFrame(animateLine);
         };
         animateLine(0);
@@ -1777,6 +1308,7 @@ export class Trace {
     }
 
     reset() {
+        alert("reset")
         if (!this._play) {
             return;
         }
@@ -1808,7 +1340,7 @@ export class Trace {
 
     delete() {
         this.stop();
-
+        this.stopSetPosition();
         const map = this.map;
 
         /* Delete Custom Layers */
@@ -1830,7 +1362,13 @@ export class Trace {
         if (map.getSource(this.traceSourceId)) map.removeSource(this.traceSourceId);
         if (map.getSource(this.roadSourceId)) map.removeSource(this.roadSourceId);
 
-
+        /* Delete Images */
+        for(let x in this.iImages){
+            if (this.map.hasImage(x)){
+                this.map.removeImage(x);
+             }
+        }
+        this.iImages = [];
     }
 
     flyTo(zoom, speed) {
@@ -1887,8 +1425,17 @@ export class Trace {
 
     showLayer(id, value) {
         this.map.setLayoutProperty(id, "visibility", (value) ? "visible" : "none");
-
     }
+
+    registerLayer(id) {
+        this.mapLayers.push(id);
+    }
+    showLayerIx(index, value) {
+        if (this.mapLayers[index]) {
+            this.map.setLayoutProperty(this.mapLayers[index], "visibility", (value) ? "visible" : "none");
+        }
+    }
+
 
     setTraceMode(mode, init?:boolean){
 
@@ -1897,9 +1444,9 @@ export class Trace {
         }
         this.traceMode = mode;
         if(mode == 0){
-            this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit).data);  
+            this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit).data);
         }else if(mode == 1){
-            this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex + 1)).data);           
+            this.map.getSource(this.nodeSourceId).setData(this.dataFilter(this.coordinatesInit.slice(0, this._lastIndex + 1)).data);
         }else if(mode == 2){
 
         }
@@ -1908,13 +1455,19 @@ export class Trace {
 
     }
 
+
     startSetPosition(){
-        this.map.on("contextmenu", (e)=>{
-            
+        this.map.on("contextmenu", this.funContextMenu = (e) => {
+
+            //console.log(this.coordinatesInit);
             let line = turf.lineString(this.coordinatesInit);
             let snapped = turf.nearestPointOnLine(line,[e.lngLat.lng, e.lngLat.lat],  { units: "meters" });
             this.goTo(snapped.properties.index);
         });
+    }
+
+    stopSetPosition(){
+        this.map.off("contextmenu", this.funContextMenu);
     }
 
     setPopup(popup){
@@ -1924,7 +1477,7 @@ export class Trace {
         return this.popup;
     }
     removeLayer(id){
-        
+
         if (this.map.getLayer(id)){
             this.map.removeLayer(id);
             this.onRemoveLayer(id);
@@ -1938,43 +1491,44 @@ export class Trace {
             closeOnClick: false
             });
             */
-        const map = this.map;     
-            map.on("mouseenter", layerId, (e) => {
-                map.getCanvas().style.cursor = 'pointer';
-                const info = this.data[e.features[0].properties.i];
-                info.layerId = layerId;
-                info.className = className;
+        const map = this.map;
+        map.on("mouseenter", layerId, (e) => {
 
-                let line = turf.lineString(this.coordinatesInit);
-                info.total_length = turf.length(line, {units: 'meters'}).toFixed(2);
-                info.length = 0;
-                if(info.i>0){
-                    let line2 = turf.lineString(this.coordinatesInit.slice(0, info.i + 1));
-                    info.length = turf.length(line2, {units: 'meters'}).toFixed(2);
-                    // Change the cursor style as a UI indicator.
-                }
-                //console.log(e.features[0].properties)
-                var coordinates = e.features[0].geometry.coordinates.slice();
-                var description = "Hola";//e.features[0].properties.description;
-                
-                // Ensure that if the map is zoomed out such that multiple
-                // copies of the feature are visible, the popup appears
-                // over the copy being pointed to.
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-                
-                // Populate the popup and set its coordinates
-                // based on the feature found.
-                //popup.setLngLat(coordinates).setHTML(description).addTo(map);
-                this.onShowInfo(info);
-                this.popup.setLngLat(coordinates).addTo(map);
-            });
-             
-            map.on('mouseleave', layerId, () => {
-                map.getCanvas().style.cursor = '';
-                this.popup.remove();
-                //popup.remove();
-            });        
+            const coords = this.data.map(e => [e.longitude, e.latitude]);
+            const info = e.features[0].properties;
+
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = "pointer";
+
+            info.layerId = layerId;
+            info.className = className;
+            info.length = 0;
+
+            if (coords.length > 1) {
+                let line = turf.lineString(coords);
+                info.length = turf.length(line, {units: "meters"}).toFixed(2);
+            }
+
+            var coordinates = e.features[0].geometry.coordinates.slice();
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            // Populate the popup and set its coordinates
+            // based on the feature found.
+            //popup.setLngLat(coordinates).setHTML(description).addTo(map);
+            this.onShowInfo(info);
+            this.popup.setLngLat(coordinates).addTo(map);
+        });
+
+        map.on("mouseleave", layerId, () => {
+            map.getCanvas().style.cursor = '';
+            this.popup.remove();
+            //popup.remove();
+        });
     }
 }

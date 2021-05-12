@@ -1,10 +1,5 @@
 .trace-tool{
 
-	&[data-mode-speed="r-0"]{
-		.r-0{
-			background-color: red;
-		}
-	}
 	&[data-mode-speed="r-1"]{
 		.r-1{
 			background-color: red;
@@ -15,18 +10,23 @@
 			background-color: red;
 		}
 	}
-	&[data-mode-speed="r-3"]{
-		.r-3{
-			background-color: red;
-		}
-	}
 	&[data-mode-speed="r-4"]{
 		.r-4{
 			background-color: red;
 		}
 	}
-	&[data-mode-speed="r-5"]{
-		.r-5{
+	&[data-mode-speed="r-8"]{
+		.r-8{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="r-16"]{
+		.r-16{
+			background-color: red;
+		}
+	}
+	&[data-mode-speed="r-32"]{
+		.r-32{
 			background-color: red;
 		}
 	}
@@ -40,28 +40,28 @@
 			background-color: red;
 		}
 	}
-	&[data-mode-speed="f-3"]{
-		.f-3{
-			background-color: red;
-		}
-	}
 	&[data-mode-speed="f-4"]{
 		.f-4{
 			background-color: red;
 		}
 	}
-	&[data-mode-speed="f-5"]{
-		.f-5{
+	&[data-mode-speed="f-8"]{
+		.f-8{
 			background-color: red;
 		}
 	}
-	&[data-mode-speed="f-0"]{
-		.f-0{
+	&[data-mode-speed="f-16"]{
+		.f-16{
 			background-color: red;
 		}
 	}
-	
-	
+	&[data-mode-speed="f-32"]{
+		.f-32{
+			background-color: red;
+		}
+	}
+
+
 }
 
 
@@ -92,11 +92,11 @@
 			background-color: rgba(46, 46, 46, 1);
 
 		}
-		
+
 
 	}
 
-	
+
 
 	>.r16,.x16{
 		background-color: rgb(77, 77, 77);
@@ -123,8 +123,8 @@
 	.text{
 		font-size: 11px;
 	}
-	
-	
+
+
 	.sg-menu{
 		.layer-icon{
 			width: 18px;
@@ -152,7 +152,7 @@
 			}
 		}
 		.image {
-			&.red{ 
+			&.red{
 				background-color: rgb(235, 29, 80);
 			}
 			&.yellow{
@@ -180,15 +180,15 @@
 			}
 			&.aquamarine{
 				background-color: aquamarine;
-				
+
 			}
 			&.brown{
 				background-color: brown;
-				
+
 			}
 			&.cyan{
 				background-color: cyan;
-				
+
 			}
 			&.fuchsia{
 				background-color: fuchsia;
@@ -218,7 +218,7 @@
 					background-color: rgb(235, 9, 9);
 				}
 			}
-		
+
 			&.close{
 				.ind{
 					float:right;
@@ -231,18 +231,18 @@
 					//background-repeat:no-repeat;
 					background-color: transparent;
 					margin-right: 6px;
-		
+
 				}
 			}
 		}
-		
-		
+
+
 	}
 }
 
 
 .trace-tool{
-	
+
 	.trace-nav{
 		display: block;
 		//display: inline-block;
@@ -261,8 +261,8 @@
 			cursor: pointer;
 			line-height: 29px;
 			font-size: 12px;
-			vertical-align: middle;	
-		}	
+			vertical-align: middle;
+		}
 	}
 
 	.trace-layer{
@@ -270,15 +270,15 @@
 		height: 300px;
 		overflow: auto;
 	}
-	
+
 }
 
 .trace-control{
 	height: 100%;
 	&.sg-tab{
 		overflow: auto;
-		
-		
+
+
 		>.menu{
 			display: none;
 		}
@@ -287,12 +287,12 @@
 			height: 100%;
 		}
 	}
-	
+
 }
 .trace-list{
 	text-align: center;
 	width: 100%;
-	
+
 	//height: 100%;
 	color:rgb(145, 145, 145);
 	font-size: 9px;
@@ -306,14 +306,14 @@
 	tr:nth-child(2n+1){
 		background-color: rgb(241, 241, 241);
 	}
-	
+
 	tr:hover{
 		cursor: pointer;
-		
+
 		background-color: rgba(0, 0, 0, 0.589);
 		color:rgb(207, 207, 207);
 	}
-	
+
 }
 
 .filter-form{
@@ -336,7 +336,7 @@
 				text-transform: uppercase;
 				font-family: futurab!important;
 			}
-			
+
 		}
 		.page{
 			//border: 10px solid transparent;
@@ -345,17 +345,17 @@
 			grid-gap: 1px;
 			padding: 1px;
 			grid-template-columns: repeat(auto-fit,  [cc-start] minmax(180px, 1fr) [cc-end]);
-			align-content: start;   
-			justify-content: center; 
-			
-		
+			align-content: start;
+			justify-content: center;
+
+
 			.field{
-		
-		
+
+
 				padding: 2px;
 				background-color: rgba(255, 255, 255, 0.8);
 				border-radius: 4px;
-		
+
 				.label{
 					color: rgb(145, 145, 145);
 					text-transform: uppercase;
@@ -363,7 +363,7 @@
 					padding-bottom: 10px;
 					font-family: futurab;
 					padding-left: 10px;
-					
+
 				}
 				input, textarea, select{
 					background-color: rgb(248, 248, 248);
@@ -375,11 +375,11 @@
 					font-family: futurab;
 					width: 100%;
 				}
-		
+
 			}
 
 		}
-	
+
 		.sg-menu{
 			//background-color: rgb(226, 8, 8);
 
@@ -405,14 +405,17 @@
 }
 
 .info-form{
-	
+
 	font-size: 9px;
 	line-height: 1.5em;
 	color:white;
 	padding:4px;
 	.row{
+		display: flex!important;
+		flex-direction: row;
 		>*{
-			display: inline-block;
+			flex:1 1 auto;
+			//display: inline-block;
 		}
 		&.inputs{
 			background-color: rgba(0, 0, 0, 0.205);
@@ -422,7 +425,102 @@
 		}
 	}
 
-	
+
+}
+
+.info-form-popup, .info-form{
+	text-transform: uppercase;
+	background-color: #a8059a;
+	&[data-speed*="1"]{
+		background-color: #0590a8;
+	}
+	&[data-speed*="2"]{
+		background-color: rgb(89, 190, 21);
+	}
+	&[data-speed^="0"]{
+		background-color: #b85223;
+	}
+	&[data-speed=""]{
+		background-color: #7f8081;
+	}
+	font-size: 9px;
+	line-height: 1.5em;
+	color:rgb(238, 238, 238);
+	padding:4px;
+	.name{
+		text-align: center;
+		font-weight: bold;
+	}
+	.row{
+		display: block;
+		min-width: 150px;
+		display: flex!important;
+		flex-direction: row;
+		>*{
+			flex:1 1 auto;
+			//display: inline-block;
+		}
+		>div:nth-child(1){
+			//width: 30%;
+			text-align: left;
+
+			display: inline-block;
+
+			font-weight: bold;
+		}
+		>div:nth-child(2){
+
+			//width: 30%;
+			text-align: right;
+			display: inline-block;
+
+			font-weight: bold;
+		}
+
+	}
+	.inputs, .outputs{
+		margin-top: 3px;
+		&.inputs{
+			background-color: rgba(0, 0, 0, 0.295);
+			>[data-input-value="true"]{
+				span:nth-child(2){
+					font-weight: bold;
+					color:rgb(251, 255, 9)
+				}
+			}
+		}
+		&.outputs{
+			background-color: rgba(0, 0, 0, 0.205);
+			>[data-input-value="true"]{
+				span:nth-child(2){
+					font-weight: bold;
+					color:rgb(250, 231, 56)
+				}
+			}
+		}
+		span:nth-child(1){
+			width: 50%;
+			text-align: left;
+			display: inline-block;
+
+			//font-weight: bold;
+		}
+		span:nth-child(2){
+			width: 50%;
+			text-align: right;
+			display: inline-block;
+			padding-left: 2px;
+			//font-weight: bold;
+		}
+
+
+
+		>*{
+			display: block;
+		}
+	}
+
+
 }
 
 [data-info-mode="pulsing"]{
@@ -444,26 +542,26 @@
 
 
 .layer-tool{
-	user-select: none; 
-	
+	user-select: none;
+
 	.sg-form{
 		display: grid;
 		grid-template-rows: auto 1fr auto;
 		.page{
 			overflow: auto;
-		}	
+		}
 	}
 
-	
+
 	&.sg-tab{
 		height: 100%;
 		display: grid;
-		
+
 		grid-template-rows: auto 1fr auto;
 		>.menu{
 			grid-column: 1;
 			grid-row: 1;
-			
+
 			//background-color: sandybrown;
 			padding: 0px!important;
 			height: 20px;
@@ -486,12 +584,12 @@
 				margin: 0px 0px 0px 0px;
 				padding:4px 2px 2px 2px;
 				cursor: pointer;
-				user-select: none; 
+				user-select: none;
 				font-size: 10px;
 				//line-height: 7.2em;
 				text-align: center;
-				//width:auto;      
-				height: 100%;  
+				//width:auto;
+				height: 100%;
 				&.tab-active{
 					background-color: rgb(5, 109, 100);
 					color:white;
@@ -511,7 +609,7 @@
 					display: none !important;
 				}
 			}
-		}	
+		}
 	}
 }
 
@@ -546,7 +644,7 @@
 				text-transform: uppercase;
 				font-family: futurab!important;
 			}
-			
+
 		}
 		.page{
 			//border: 10px solid transparent;
@@ -555,12 +653,12 @@
 			grid-gap: 0px;
 			padding: 0px;
 			grid-template-columns: repeat(auto-fit,  [cc-start] minmax(180px, 1fr) [cc-end]);
-			align-content: start;   
-			justify-content: center; 
-			
-		
+			align-content: start;
+			justify-content: center;
+
+
 			.field{
-		
+
 				margin: 0px;
 				padding: 0px;
 				background-color: rgba(255, 255, 255, 0.8);
@@ -568,9 +666,9 @@
 				padding-bottom: 8px;
 				.input{
 					//background: rgb(231, 231, 231);
-					
+
 					padding-left: 4px;
-					
+
 				}
 				.label{
 					color: rgb(145, 145, 145);
@@ -580,13 +678,13 @@
 					font-family: futurab;
 					padding-left: 10px;
 					margin-bottom: 50px;
-					
+
 					//-height: 2em;
 					//margin: 0px;
-					
+
 				}
 				input, textarea, select{
-					
+
 					background-color: rgb(236, 234, 234);
 					color: rgb(109, 109, 109);
 					border: 0px;
@@ -599,15 +697,15 @@
 					margin: 0px;
 					//font-weight: bold;
 				}
-		
+
 			}
 
 		}
-	
+
 		.sg-menu{
 			//border-top: 2px solid green;
 			padding: 0px;
-			
+
 			text-align: center;
 			display: flex;
 			flex-direction: row;
@@ -618,11 +716,11 @@
 				line-height: 1.6em;
 			}
 			a{
-				
+
 				background-color: rgb(9, 105, 97);
 				color:white;
 				&:active{
-					
+
 					background-color: rgb(47, 90, 4);
 				}
 				&:hover{
@@ -635,4 +733,28 @@
 			}
 		}
 	}
+}
+
+ul.trace-tool{
+	overflow: auto;
+	min-width: 200px;
+	height: 200px;
+	padding:4px;
+	margin:2px;
+	li{
+		list-style:none;
+		display: flex;
+		*>{
+			flex: 0 0 auto;
+		}
+		a{
+
+			flex-direction: row;
+			//min-width: 220px;
+
+			flex: 1 0 auto;
+
+		}
+	}
+
 }

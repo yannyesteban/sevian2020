@@ -1,5 +1,5 @@
 {
-	"structure":"webcar",
+	"structure":"cota",
 	"title":"Módulo GT",
 	"template":"gt-cota",
 	"templateName":"/gt-webcar",
@@ -26,10 +26,10 @@
 		{
 			"id":4,
 			"element":"gt_map",
-			"name":"gt_map",
+			"name":"map_01",
 			"method":"load",
 			"eparams":{
-				"controls":["trace", "rule", "poly", "mark", "layer"]
+				"controls":["trace","history", "rule", "poly", "mark", "layer"]
 			},
 			"type":0,
 			"class":"",
@@ -115,6 +115,7 @@
 			"name":"gt_unit",
 			"method":"load",
 			"eparams":{
+				"mapName": "map_01",
 				"infoId":"gt-info-11",
 				"searchUnitId": 3
 			},
@@ -130,6 +131,7 @@
 			"name":"gt-site",
 			"method":"load",
 			"eparams":{
+				"mapName": "map_01",
 				"infoId":"gt-info-11"
 			},
 			"type":0,
@@ -144,6 +146,7 @@
 			"name":"gt-geofence",
 			"method":"load",
 			"eparams":{
+				"mapName": "map_01",
 				"infoId":""
 			},
 			"type":0,
@@ -158,6 +161,7 @@
 			"name":"gt-history",
 			"method":"load",
 			"eparams":{
+				"mapName": "map_01",
 				"infoId":""
 			},
 			"type":0,
@@ -172,6 +176,7 @@
 			"name":"gt_alarm",
 			"method":"load",
 			"eparams":{
+				"mapName": "map_01",
 				"infoId":""
 			},
 			"type":0,
@@ -186,6 +191,7 @@
 			"name":"gt-communication",
 			"method":"load______________",
 			"eparams":{
+				"mapName": "map_01",
 				"unitPanelId":"gt-unit-10"
 			},
 			"type":0,
@@ -198,7 +204,9 @@
 			"element":"gt-event",
 			"name":"gt-event",
 			"method":"load",
-			"eparams":{},
+			"eparams":{
+				"mapName": "map_01"
+			},
 			"type":0,
 			"class":"",
 			"debug":0,

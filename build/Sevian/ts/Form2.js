@@ -2,6 +2,7 @@
 import { _sgQuery } from './Query.js';
 import { I, Input } from './Input.js';
 import { Menu } from './Menu2.js';
+import { Valid } from './Valid.js';
 export var Form2 = (($) => {
     class Field {
         constructor() {
@@ -421,7 +422,7 @@ export var Form2 = (($) => {
                         inputs[config.name].select();
                         return false;
                     }*/
-                    msg = Sevian.Valid.send(rules, inputs[this.fields[x].name].getValue(), this.fields[x].caption, data);
+                    msg = Valid.send(rules, inputs[this.fields[x].name].getValue(), this.fields[x].caption, data);
                     if (msg) {
                         alert(msg);
                         inputs[this.fields[x].name].focus();
