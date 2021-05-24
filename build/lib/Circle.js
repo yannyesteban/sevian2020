@@ -130,6 +130,9 @@ export class Circle {
             this.createCircle(this.center, this.hand);
         }
     }
+    getType() {
+        return Circle.TYPE;
+    }
     setLine(info) {
         for (let p in info) {
             this.map.setPaintProperty(this.lineId, "line-" + p, info[p]);
@@ -343,4 +346,5 @@ export class Circle {
             map.removeSource(this.lineId);
     }
 }
+Circle.TYPE = "circle";
 //# sourceMappingURL=Circle.js.map

@@ -277,7 +277,7 @@ export class Trace {
         return this.iImages[name];
     }
 
-    setData(data) {
+    setData2(data) {
         this.data = data;
         this.coordinates = [];
         let fixDelay = 0;
@@ -356,9 +356,17 @@ export class Trace {
     initSource(data){
         this.map.addSource(this.mainSourceId, this.createGeoJson(data));
     }
+    setData(data) {
+        if (this.map.getSource(this.mainSourceId)) {
+            this.map.getSource(this.mainSourceId).setData(this.createGeoJson(data).data);
+        }
 
-    updateSource(data){
-        this.map.getSource(this.mainSourceId).setData(this.createGeoJson(data).data);
+    }
+    updateSource(data) {
+        if (this.map.getSource(this.mainSourceId)) {
+            this.map.getSource(this.mainSourceId).setData(this.createGeoJson(data).data);
+        }
+
     }
 
     getAllLayers(){
@@ -1362,6 +1370,9 @@ export class Trace {
         if (map.getSource(this.traceSourceId)) map.removeSource(this.traceSourceId);
         if (map.getSource(this.roadSourceId)) map.removeSource(this.roadSourceId);
 
+        if (map.getSource(this.mainSourceId)) map.removeSource(this.mainSourceId);
+
+        return;
         /* Delete Images */
         for(let x in this.iImages){
             if (this.map.hasImage(x)){

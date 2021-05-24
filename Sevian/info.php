@@ -17,7 +17,7 @@ class InfoWindow{
 	public $className = false;
 	public $classImage = false;
 	public $icon = false;
-	
+
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
@@ -37,7 +37,7 @@ class InfoRequest{
 	public $typeAppend = 1;
 	public $hidden = false;
 	public $window = false;
-	
+
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			$this->$k = $v;
@@ -51,7 +51,7 @@ class InfoParam{
 	public $panel = false;
 	public $mode = 'panel';
 
-	
+
 	public $element = '';
 	public $name = '';
 	public $method = '';
@@ -63,13 +63,14 @@ class InfoParam{
 	public $fixed = false;
 
 	public $isPanel = false;
-	
+	public $token = null;
+
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
 				$this->$k = $v;
 			}
-			
+
 		}
 	}
 }
@@ -87,11 +88,11 @@ class InfoElement{
 	//public $async = false;
 	//public $update = false;
     //public $isPanel = false;
-	
+
 	//public $fixed = false;
 
 	//public $evalSigns = false;
-	
+
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
@@ -103,7 +104,7 @@ class InfoElement{
 
 				$this->$k = $v;
 			}
-			
+
 		}
 	}
 }
@@ -120,18 +121,18 @@ class InfoPanel{
 	public $fixed = false;
 
 	public $evalSigns = false;
-	
+
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
 				$this->$k = $v;
 			}
-			
+
 		}
 	}
 }
 class InfoThemes{
-	
+
 	public $css = [];
 	public $js = [];
 	public $templates = [];
@@ -150,26 +151,26 @@ class InfoInit{
 	public $templateName;
 	public $elements = [];
 	public $panels;
-	
+
 	public $css = [];
 	public $js = [];
 	public $templates = [];
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
-				
+
 				if($k == 'elements'){
-					
+
 					//$v = \json_decode(\json_encode($v));
 					//hx($v);
-					
+
 					foreach($v as $kk => $vv){
 						$vv = (array)$vv;
 					//hx($vv);
 						//$this->$k[$vv['id']] = new InfoElement($vv);
 						$this->$k[$vv['id']] = new InfoParam($vv);
 					}
-					
+
 				}else if($k == 'panels'){
 					foreach($v as $kk => $vv){
 						$this->$k[$vv['panel']] = new InfoPanel($vv);
@@ -198,7 +199,7 @@ class InfoActionParams{
 }
 
 class InfoAction{
-	
+
 	public $async = false;
 	public $panel = '0';
 	public $valid = false;

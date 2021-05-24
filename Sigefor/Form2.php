@@ -9,16 +9,16 @@ require_once "Component/Form2.php";
 
 require_once "Component/FormSave.php";
 
-class Form2 
-	extends \sevian\element 
+class Form2
+	extends \sevian\element
 	implements \sevian\JasonComponent
 
 {
-	
+
 	//use DBTrait\JasonFileInfo;
 	use DBTrait\DataRecord;
 	//use DBTrait\Form2;
-	
+
 	private $_info = null;
 	private $_mode = '';
 	private $_type = '';
@@ -29,26 +29,26 @@ class Form2
 	static public $patternFormFile = '';
 	static public $patternMenuFile = '';
 
-	
+
 	public function __construct($info = []){
-		
+
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-		
+
         $this->cn = \Sevian\Connection::get();
     }
-	
+
 	public function config(){
 		$this->initDataRecord();
 	}
 
 	public function evalMethod($method = false): bool{
-		
+
 		if($method){
             $this->method = $method;
 		}
-		
+
 		$this->userData = [
 			'panelId'=>$this->id,
 			'element'=>$this->element,
@@ -79,11 +79,15 @@ class Form2
 			case 'search':
 				$this->createGrid(1, $this->eparams->q ?? '');
 				break;
+			case 'get-records':
+
+				$records = $this->getRecords();
+				hx(getRecords);
 			default:
 				break;
 
 		}
-		
+
 		return true;
 	}
 
@@ -100,7 +104,7 @@ class Form2
 		}
 
 		//hr(JasonFile::getNameJasonFile($this->name, self::$patternJsonFile));
-		
+
 		$this->typeElement = 'Form2';
 		if($mode == 1){
 			$form =  new \Sigefor\Component\Form2([
@@ -111,7 +115,7 @@ class Form2
 				'method'	=> $this->method,
 				'mode'		=> 1,
 				'userData'=>$this->userData,
-				
+
 				//'record'=>$this->getRecord()
 			]);
 		}else if($mode == 2){
@@ -131,14 +135,14 @@ class Form2
 				'record'	=> $this->getRecord('grid', $__id_),
 				'recordIndex'=>$__id_,
 				'userData'=>$this->userData,
-				
+
 			]);
 
 			//$records[$__id_] = $form->getDataKeys()[0];
-			
+
 			//$this->setDataRecord('form', $records);
 		}else if($mode == 3){
-			
+
 			$form =  new \Sigefor\Component\Form2([
 
 				'id'		=> $this->containerId,
@@ -149,7 +153,7 @@ class Form2
 				//'record'	=> $this->getRecord('grid', $__id_),
 				//'recordIndex'=>$__id_,
 				'userData'=>$this->userData,
-				
+
 			]);
 		}
 		//print_r($form);exit;
@@ -159,9 +163,9 @@ class Form2
 		$this->_type = 'Form2';
 		$this->_mode = 'create';
 		$this->_info = $form;
-		
+
 	}
-	
+
 	public function createGrid($page = 1, $searchValue = ''){
 
 		if($this->eparams->mainId?? false){
@@ -172,7 +176,7 @@ class Form2
 			$this->containerId = $this->element.'-'.$this->id;
 			$this->panel = new \Sevian\HTML('div');
 			$this->panel->id = $this->containerId;
-			
+
 		}
 		$this->typeElement = 'Grid2';
 		//hx($this->name);
@@ -197,13 +201,13 @@ class Form2
 								q:this.getSearchValue(),
 							}
 						}
-						
+
 					]
 				});
-				
+
 			";
-		
-		
+
+
 
 		$paginator = [
 			'page'=> $page,
@@ -225,16 +229,16 @@ class Form2
 
 								page:page,
 								q:this.getSearchValue(),
-								
-							
+
+
 							}
 						}
-						
+
 					]
 				});"
 			];
-		
-		
+
+
 		$grid =  new \Sigefor\Component\Grid([
 			'asyncMode'	=> true,
 			'id'		=> $this->containerId,
@@ -248,14 +252,14 @@ class Form2
 			'userData'=>$this->userData,
 			//'patternFormFile'=>self::$patternJsonFile,
 			//'patternMenuFile'=>self::$patternMenuFile
-			
+
 		]);
 
 		//hx(json_encode($grid,JSON_PRETTY_PRINT));
-		
+
 		$records=$grid->getDataKeys();
 		$this->setDataRecord('grid', $records);
-		//hx($grid->data);	
+		//hx($grid->data);
 		$this->info = $grid;
 
 		//$grid->id = $this->panel->id;
@@ -264,7 +268,7 @@ class Form2
 		$this->_mode = 'create';
 		$this->_info = $grid;
 		//print_r(json_encode($grid,JSON_PRETTY_PRINT));exit;
-		
+
 	}
 
 	public function save(){
@@ -276,20 +280,20 @@ class Form2
 			'dataKeysId'=> 'grid',
 			'data'		=> [(object)\Sevian\S::getVReq()]
 		]);
-		
-		hx($formSave->getResult());
+
+		//hx($formSave->getResult());
 
 		foreach($formSave->getResult() as $k => $v){
-			
+
 			if(!$v->error){
-				
+
 				$this->addFragment(new \Sevian\iMessage([
 					'caption'	=> $formSave->getCaption(),
 					'text'		=> 'Record was saved!!!'
 				]));
-				
+
 			}else{
-				
+
 				$this->addFragment(new \Sevian\iMessage([
 					'caption'	=> 'Error '.$formSave->getCaption(),
 					'text'		=> "Record wasn't saved!!!"
@@ -297,7 +301,7 @@ class Form2
 
 			}
 		}
-		
+
 	}
 
 	public function jasonRender(){
@@ -309,12 +313,12 @@ class Form2
 			'info'	=> $this->_info
 		];
 	}
-	public function jsonSerialize() {  
+	public function jsonSerialize() {
         return [
 			'name'	=> $this->_name,
 			'type'	=> $this->_type,
 			'mode'	=> $this->_mode,
 			'info'	=> $this->_info
-		];  
-    }  
+		];
+    }
 }

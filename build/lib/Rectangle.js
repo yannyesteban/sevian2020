@@ -2,7 +2,6 @@ import { createGeoJSONRectangle, createGeoJSONCircle } from './Util.js';
 export class Rectangle {
     constructor(info) {
         this.map = null;
-        this.type = "rectangle";
         this.parent = null;
         this.name = "";
         this.visible = true;
@@ -58,6 +57,9 @@ export class Rectangle {
         this.lineId = "l-" + this.id;
         this.circleId = "c-" + this.id;
         this.init();
+    }
+    getType() {
+        return Rectangle.TYPE;
     }
     init() {
         let map = this.map;
@@ -469,4 +471,5 @@ export class Rectangle {
         this.map.panTo(centroid.geometry.coordinates, { duration: duration || this.panDuration });
     }
 }
+Rectangle.TYPE = "rectangle";
 //# sourceMappingURL=Rectangle.js.map

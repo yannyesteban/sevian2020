@@ -403,10 +403,10 @@ trait DBUnit{
         LEFT JOIN user_unit as uu ON uu.unit_id = u.id
         LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
         INNER JOIN device as de ON de.id = u.device_id
-        INNER JOIN tracking as t ON t.id = u.tracking_id
+        LEFT JOIN tracking as t ON t.unit_id = u.id AND u.tracking_date = t.date_time
         WHERE u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR)
         AND u.conn_date > '$lastDate'
-        /*AND u.conn_status = 1*/
+        AND u.conn_status = 1
         ORDER BY 2";
         //hx($cn->query);
 
@@ -1340,13 +1340,29 @@ trait DBGeofence{
         return $data;
     }
 
+    private function listGeofences($user=""){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT id, name
+
+            FROM geofence as g
+
+
+            ";
+
+        $result = $this->cn->execute();
+        $data = [];
+
+        return $this->cn->getDataAll();
+    }
+
     private function loadRecord($id){
 
         $cn = $this->cn;
 
         $id = $cn->addSlashes($id);
-        $cn->query = "SELECT *
-            FROM geofences as g
+        $cn->query = "SELECT g.*, g.id as geofenceId
+            FROM geofence as g
 
 
             WHERE g.id = '$id'";

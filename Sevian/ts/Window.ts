@@ -1,7 +1,7 @@
 import {_sgQuery}  from './Query.js';
 
 export var Float = (($) => {
-    
+
     class InfoElem {
         e = false;
         left=null;
@@ -12,18 +12,18 @@ export var Float = (($) => {
     }
 
     let zIndex = 10000;
-    
+
     let getIndex = () => {
         return zIndex++;
     };
-    
+
     let on = function(obj, _event, _function){
         if(obj.addEventListener){
             _event = _event.replace(/^\s*on/gi, "");
             obj.addEventListener(_event, _function, false);
         }else if(obj.attachEvent){
             obj.attachEvent(_event, _function);
-        }		
+        }
     };
 
     let off = function(obj, _event, _function) {
@@ -34,9 +34,9 @@ export var Float = (($) => {
             obj.detachEvent(_event, _function);
         }
     };
-    
+
     class Float{
-		
+
 		static init(e){
 			on(e, "mousedown", (event) => {
 				e.style.zIndex = getIndex();
@@ -49,10 +49,10 @@ export var Float = (($) => {
 		static setIndex(e){
 			e.style.zIndex = getIndex();
 		}
-			
+
 		static getXY(e){
-		
-			let 
+
+			let
 				cW = document.documentElement.clientWidth,
 				cH = document.documentElement.clientHeight,
 				sT = document.documentElement.scrollTop,
@@ -67,25 +67,25 @@ export var Float = (($) => {
 				height: rect.height,
                 cW: cW, cH: cH, sT: sT,sL: sL
 			};
-			
+
 		}
 
 
 		static showElem(opt:any){
-			
-			let 
+
+			let
 				e = opt.e,
 				left = opt.left,
 				top = opt.top,
 				z = (opt.z !== undefined)? opt.z: undefined;
-               
+
             if(top !== null){
                 e.style.top = top + "px";
             }
 			if(left !== null){
                 e.style.left = left + "px";
             }
-			
+
 			if(z !== undefined){
 				if(z > 0){
 					e.style.zIndex = z;
@@ -99,15 +99,15 @@ export var Float = (($) => {
 		}
 
 		static show(opt:any){
-			
-			let 
+
+			let
 				e = opt.e,
 				xx = (opt.left === undefined)? null: opt.left,
 				yy = (opt.top === undefined)? null: opt.top,
 				z = opt.z || undefined,
 				deltaX = opt.deltaX || 0,
 				deltaY = opt.deltaY || 0,
-				
+
 				left = null,
 				top = null;
 
@@ -117,13 +117,13 @@ export var Float = (($) => {
 				switch(xx){
 					case "center":
 						left = c.sL +(c.cW - c.width) /2;
-						break;	
+						break;
 					case "left":
 						left = c.sL;
-						break;	
+						break;
 					case "right":
 						left = c.sL + c.cW - c.width;
-						break;	
+						break;
 					case "acenter":
 						left = (c.cW - c.width) /2;
 						break;
@@ -136,10 +136,10 @@ export var Float = (($) => {
 				switch(yy){
 					case "middle":
 						top = c.sT + (c.cH - c.height) /2;
-						break;	
+						break;
 					case "top":
 						top = c.sT;
-						break;	
+						break;
 					case "bottom":
 						top = c.sT + c.cH - c.height;
 						break;
@@ -161,8 +161,8 @@ export var Float = (($) => {
 		}
 
 		static showMenu(opt){
-			
-			let 
+
+			let
 				e = opt.e,
 				context = opt.context,
 				xx = opt.left || "",
@@ -170,12 +170,12 @@ export var Float = (($) => {
 				deltaX = opt.deltaX || 0,
 				deltaY = opt.deltaY || 0,
 				z = (opt.z !== undefined)? opt.z: undefined,
-				
-				
+
+
 				left:any = null,
 				top:any = null,
 				c = this.getXY(context),
-			
+
 				fixed = (e.style.position === "fixed"),
 				width = e.offsetWidth,
 				height = e.offsetHeight,
@@ -183,14 +183,14 @@ export var Float = (($) => {
 				cH = c.cH,
 				sL = c.sL,
 				sT = c.sT;
-            
+
 			switch(xx){
 				case "center":
 					left = c.left + c.width /2 - width /2;
-					break;	
+					break;
 				case "left":
 					left = c.left;
-					break;	
+					break;
 				case "front":
 					left = c.left + c.width;
 					break;
@@ -208,10 +208,10 @@ export var Float = (($) => {
 			switch(yy){
 				case "middle":
 					top = c.top + c.height /2 - height /2;
-					break;	
+					break;
 				case "top":
 					top = c.top;
-					break;	
+					break;
 				case "bottom":
 					top = c.top + c.height - height;
 					break;
@@ -222,14 +222,14 @@ export var Float = (($) => {
 					top = c.top - height;
 					break;
 				default:
-					top = c.top + c.height - 10;	
+					top = c.top + c.height - 10;
 			}
 
 			if(!fixed){
-				top = top + sT;	
+				top = top + sT;
 				left = left + sL;
 			}
-            
+
 			left = left + deltaX;
 			top = top + deltaY;
 
@@ -242,19 +242,19 @@ export var Float = (($) => {
 			}
 
 			if ((top + height) > (cH + sT)){
-				top = cH + sT - height; 
+				top = cH + sT - height;
 			}
 
 			if (top < sT && !fixed){
-				top = sT; 
-            }	
-            
+				top = sT;
+            }
+
 			return this.showElem({e: e, left: left, top: top, z: z});
 		}
 
 		static dropDown(opt){
 
-			let 
+			let
 				e = opt.e,
 				context = opt.context,
 				xx = opt.left || "",
@@ -262,25 +262,25 @@ export var Float = (($) => {
 				deltaX = opt.deltaX || 0,
 				deltaY = opt.deltaY || 0,
 				z = (opt.z !== undefined)? opt.z: undefined,
-				
+
 				left:any = null,
 				top:any = null,
 				c = this.getXY(context),
-				
+
 				width = e.offsetWidth,
 				height = e.offsetHeight,
 				cW = c.cW,
 				cH = c.cH,
 				sL = c.sL,
 				sT = c.sT;
-			
+
 			switch(xx){
 				case "center":
 					left = c.left + c.width /2;
-					break;	
+					break;
 				case "left":
 					left = c.left;
-					break;	
+					break;
 				case "right":
 					left = c.left + c.width;
 					break;
@@ -295,10 +295,10 @@ export var Float = (($) => {
 			switch(yy){
 				case "middle":
 					top = c.top + c.height /2;
-					break;	
+					break;
 				case "top":
 					top = c.top;
-					break;	
+					break;
 				case "bottom":
 
 					top = c.top + c.height;
@@ -308,7 +308,7 @@ export var Float = (($) => {
 					top = c.top - height;
 					break;
 				default:
-					top = c.top + c.height - 10;	
+					top = c.top + c.height - 10;
 			}
 
 			left = left + deltaX;
@@ -321,11 +321,11 @@ export var Float = (($) => {
 				left = sL;
 			}
 			if ((top + height) > (cH + sT)){
-				//top = cH + sT - height; 
+				//top = cH + sT - height;
 			}
 			if (top < sT){
 
-				top = sT; 
+				top = sT;
 			}
 
 			if ((c.top + c.height + height) > (cH + sT)){
@@ -334,18 +334,18 @@ export var Float = (($) => {
 
 			return this.showElem({e: e, left: left, top: top, z: z});
 
-		}	
+		}
 
 		static center(e){
 			e.style.position = "fixed";
 			e.style.top = "50%";
 			e.style.left = "50%";
 			e.style.transform = "translate(-50%, -50%)";
-			
+
         }
-        
+
         static floatCenter(e){
-            let 
+            let
             cW = document.documentElement.clientWidth,
             cH = document.documentElement.clientHeight
             let rect = e.getBoundingClientRect();
@@ -353,25 +353,25 @@ export var Float = (($) => {
 			e.style.top = "50%";
 			e.style.left = "50%";
 			e.style.transform = "translate(-50%, -50%)";
-			
+
 		}
-		
+
 		static move(e, left, top){
 			//e.style.position = "fixed";
 			e.style.left = left;
 			e.style.top = top;
 		}
-		
+
 		static float(opt){
-			
-			
-			let 
+
+
+			let
 				e = opt.e,
 				left = opt.left,
 				top = opt.top;
-			
+
 			let tx:any = null, ty:any = null;
-			
+
 
 			switch(left){
 				default:
@@ -404,11 +404,11 @@ export var Float = (($) => {
 					ty = "-100%";
 					break;
 			}
-			
+
 			e.style.transform = "translate("+tx+","+ty+")";
 
 		}
-		
+
 		static max(e:any){
 			e.style.position = "fixed";
 			e.style.top = "0%";
@@ -417,41 +417,41 @@ export var Float = (($) => {
 			e.style.height = "100%";
 			e.style.border = "3px solid green";
 			//e.style.transform = "translate(-50%, -50%)";
-			
+
 		}
-		
+
 	}
 
 	class Drag {
-		
+
 		static iniX = 0;
         static iniY = 0;
-        
+
         static capture = null;
         static release = null;
 
 		static init(opt_x) {
-			
+
 			let opt = {
 				main: null,
 				onstart: () => {},
 				oncapture: (clientX, clientY, iniX, iniY, offsetLeft, offsetTop) => {},
 				onrelease: (clientX, clientY, iniX, iniY, offsetLeft, offsetTop) => {}
 			};
-			
+
 			for(let x in opt_x){
 				opt[x] = opt_x[x];
 			}
-			
+
 			let e:HTMLElement = opt.main;
-			
+
 			e.onmousedown = (event) => {
 
 				this.iniX = event.clientX;
 				this.iniY = event.clientY;
 				let offsetLeft = e.offsetLeft;
 				let offsetTop = e.offsetTop;
-				
+
 				opt.onstart();
 
 				if(this.capture){
@@ -459,11 +459,11 @@ export var Float = (($) => {
 				}
 
 				if(this.release){
-					off(document, "mouseup", this.release);			
+					off(document, "mouseup", this.release);
 				}
 
 				on(document, "mousemove", this.capture = (event) => {
-					opt.oncapture(event.clientX, event.clientY, this.iniX, this.iniY, offsetLeft, offsetTop);				
+					opt.oncapture(event.clientX, event.clientY, this.iniX, this.iniY, offsetLeft, offsetTop);
 				});
 
 				on(document, "mouseup", this.release = (event) => {
@@ -472,19 +472,19 @@ export var Float = (($) => {
 					off(document, "mouseup", this.release);
 					opt.onrelease(event.clientX, event.clientY, this.iniX, this.iniY, offsetLeft, offsetTop);
 				});
-				
-				
+
+
 			};
 			e.ontouchstart = (event:any) => {
 				//event.preventDefault();
 				event = event.changedTouches[0];
-				
+
 				event = event || window.event;
 				this.iniX = event.clientX;
 				this.iniY = event.clientY;
 				let offsetLeft = e.offsetLeft;
 				let offsetTop = e.offsetTop;
-				
+
 				opt.onstart();
 
 				if(this.capture){
@@ -492,14 +492,14 @@ export var Float = (($) => {
 				}
 
 				if(this.release){
-					off(document, "touchend", this.release);			
+					off(document, "touchend", this.release);
 				}
 
 				on(document, "touchmove", this.capture = (event) => {
 					event.preventDefault();
 					event = event.changedTouches[0];
 					event = event || window.event;
-					opt.oncapture(event.clientX, event.clientY, this.iniX, this.iniY, offsetLeft, offsetTop);				
+					opt.oncapture(event.clientX, event.clientY, this.iniX, this.iniY, offsetLeft, offsetTop);
 				});
 
 				on(document, "touchend", this.release = (event) => {
@@ -508,11 +508,11 @@ export var Float = (($) => {
 					off(document, "touchend", this.release);
 					opt.onrelease(event.clientX, event.clientY, this.iniX, this.iniY, offsetLeft, offsetTop);
 				});
-				
+
 			};
 		}
-	
-	}	
+
+	}
 
     class Move{
         static main = null;
@@ -531,10 +531,10 @@ export var Float = (($) => {
                 oncapture: this.capture,
                 onrelease: this.release
             });
-		
+
         }
         static start(main, info){
-		
+
             return function(){
                 this.main = main;
                 this.info = info;
@@ -545,78 +545,78 @@ export var Float = (($) => {
                 }
             };
         }
-    
+
         static restart(){
             this.sX = this.main.offsetLeft;
-            this.sY = this.main.offsetTop;		
+            this.sY = this.main.offsetTop;
         }
-    
+
         static capture(left, top, iniX, iniY){
-        
+
             this.posX = this.sX + (left - iniX);
             this.posY = this.sY + (top - iniY);
-    
+
             if(this.posX <= 0){
-                this.posX = 0;	
+                this.posX = 0;
             }
-            
+
             if(this.posY <= 0){
-                this.posY = 0;	
+                this.posY = 0;
             }
-            
+
             this.main.style.left = this.posX + "px";
             this.main.style.top = this.posY + "px";
-            
+
             if(this.info.onmove && this.info.onmove(this.posX, this.posY, left, top)){
                 this.sX = this.main.offsetLeft;
-            this.sY = this.main.offsetTop;	
+            this.sY = this.main.offsetTop;
                 //this.restart();
-            }					
-        
+            }
+
         }
-    
+
         static release(left, top, iniX, iniY){
-            
+
             let info = Float.getXY(this.main);
-            
+
             if(info.left > info.cW - 80 || info.top > info.cH - 20){
-                
-                left = (info.left > info.cW - 80)?info.cW - 80: info.left; 
-                top = (info.top > info.cH - 20)?info.cH - 20: info.top; 
-    
+
+                left = (info.left > info.cW - 80)?info.cW - 80: info.left;
+                top = (info.top > info.cH - 20)?info.cH - 20: info.top;
+
                 Float.move(this.main, left + "px", top + "px");
-            }		
-            
+            }
+
             if(this.info.onrelease){
                 this.info.onrelease(this.posX, this.posY, left, top, iniX, iniY);
-            }			
+            }
         }
 
 	};
 
     class Resize{
-        
+
         static init(opt){
-            
+
             this.setHolders(opt.main, opt);
         }
-        
+
         static start(main, info, mode){
-		
+
             return function() {
 
                 this.main = main;
                 this.info = info;
                 this.xA = main.offsetWidth;
                 this.yA = main.offsetHeight;
-                
+
                 this.mode = mode;
-    
+
                 this.cW = document.documentElement.clientWidth;
                 this.cH = document.documentElement.clientHeight;
-                
+
                 let _info = Float.getXY(main);
-               
+
                 this.width = _info.width;
 
                 let st = window.getComputedStyle(main, null);
@@ -629,16 +629,16 @@ export var Float = (($) => {
 
                 this.maxLeft = _info.left + main.clientWidth - minWidth;
                 this.maxTop = _info.top + main.clientHeight - minHeight;
-    
+
                 this.maxWidth = info.maxWidth || 500;
                 this.minWidth = info.minWidth || (_info.width - main.clientWidth + minWidth);
                 this.maxHeight = info.maxHeight || 500;
                 this.minHeight = info.minHeight || (_info.height - main.clientHeight + minHeight);
-                
+
                 if(this.info.onstart){
                     this.info.onstart({left: info.left, top: info.top, width: this.xA, height: this.yA});
                 }
-                
+
             };
         }
 
@@ -649,32 +649,32 @@ export var Float = (($) => {
             }else if(_left > this.cW){
                 _left = this.cW;
             }
-    
+
             if(_top < 0){
                 _top = 0;
             }else if(_top > this.cH){
                 _top = this.cH;
             }
-                    
+
             let dx = (_left - iniX),
                 dy = (_top - iniY),
                 W = null,
                 H = null,
                 top = null,
                 left = null;
-            
+
             switch(this.mode){
                 case "t":
                     top = this.sY + dy;
                     H = this.yA - dy;
-                    break;			
+                    break;
                 case "l":
                     left = this.sX + dx;
                     W = this.xA - dx;
-                    break;	
+                    break;
                 case "r":
                     W = this.xA + _left - iniX;
-                    break;					
+                    break;
                 case "b":
                     H = this.yA + _top - iniY;
                     break;
@@ -683,23 +683,23 @@ export var Float = (($) => {
                     top = this.sY + dy;
                     W = this.xA - dx;
                     H = this.yA - dy;
-                    break;	
+                    break;
                 case "rt":
                     top = this.sY + dy;
                     W = this.xA + _left - iniX;
                     H = this.yA - dy;
-                    break;	
+                    break;
                 case "lb":
                     left = this.sX + dx;
                     W = this.xA - dx;
                     H = this.yA + _top - iniY;
-                    break;	
+                    break;
                 case "rb":
                     W = this.xA + _left - iniX;
                     H = this.yA + _top - iniY;
-                    break;	
+                    break;
             }
-            
+
             if(W !== null){
                 if(W<this.minWidth){
                     W = this.minWidth;
@@ -728,29 +728,29 @@ export var Float = (($) => {
             if(this.info.onresize){
                 this.info.onresize(this.xA + left - iniX, this.yA + top - iniY, this.mode);
             }
-            
+
         }
 
         static release (left, top, iniX, iniY){
             var info = Float.getXY(this.main);
-            
+
             if(info.left > info.cW - 80 || info.top > info.cH - 20){
-                
-                left = (info.left > info.cW - 80)? info.cW - 80: info.left; 
-                top = (info.top > info.cH - 20)? info.cH - 20: info.top; 
-    
+
+                left = (info.left > info.cW - 80)? info.cW - 80: info.left;
+                top = (info.top > info.cH - 20)? info.cH - 20: info.top;
+
                 Float.move(this.main, left + "px", top + "px");
             }
 
             if(this.info.onrelease){
                 this.info.onrelease(left, top, iniX, iniY);
-            }					
-    
+            }
+
         }
 
         static setHolders(main, opt){
             let rs = ["t","r","b","l","lt","rt","rb","lb"];
-            
+
             let left = ["0","100%","0","0","0","100%","100%","0"];
             let top = ["0","0","100%","0","0","0%","100%","100%"];
             let width = ["100%","","100%","","10px","10px","10px","10px"];
@@ -761,37 +761,37 @@ export var Float = (($) => {
             //let bg = ["yellow","red","purple","green","brown","purple","blue","#ea1234"];
             let cursor = "s-resize,e-resize,n-resize,w-resize,nwse-resize,sw-resize,nwse-resize,ne-resize".split(",");
             let lt, k=[];
-            
+
             for(let i in rs){
                 k[i] = lt = document.createElement("div");
                 lt.style.cssText = "position:absolute;min-height:3px;min-width:3px;z-index:10";
-                
+
                 lt.className = "rs "+rs[i];
-                
+
                 lt.style.backgroundColor = bg[i];
-                
+
                 lt.style.width = width[i];
                 lt.style.height = height[i];
-                
+
                 lt.style.left = left[i];
                 lt.style.top = top[i];
                 lt.style.cursor = cursor[i];
                 lt.style.margin = margin[i];
-                
+
                 Drag.init({
                     main:k[i],
                     context:main,
                     onstart: this.start(main, opt, rs[i]),
                     oncapture: this.capture,
                     onrelease: this.release
-                });	
-                
-                
-                
+                });
+
+
+
                 main.appendChild(lt);
             }
-            
-            
+
+
         };
     }
 
@@ -806,14 +806,14 @@ export var Float = (($) => {
     $(window).on("load_", function(){
         //let div = $().create("div").addClass("drag2");
         let div2 = $().create("div").addClass("drag4");
-        
+
         //Float.init(div.get());
         //Float.show({e:div.get(), left:"center",top:"top"});
         //Move.init({main:div.get(),hand:div.get()});
 
         Float.init(div2.get());
-        
-        
+
+
         Resize.init({main:div2.get()});
         Float.show({e:div2.get(), left:"center",top:"middle"});
         //$().create("div").addClass("drag3");
@@ -864,7 +864,7 @@ export var Float = (($) => {
         });
         e.on("click",(e)=>{
             let xx= document.defaultView.getComputedStyle(div.get());
-            
+
             db (xx.gridTemplateRows)
             let rect = a.get().getBoundingClientRect();
             let _a = (a.get().offsetHeight-1)+"px";
@@ -872,7 +872,7 @@ export var Float = (($) => {
             div.get().style.gridTemplateRows = `${_a} auto`;
         });
 
-    
+
     db (document.defaultView.getComputedStyle(div.get()).gridTemplateColumns);
     });
 
@@ -884,13 +884,13 @@ Float.Window = (($) => {
 
 
     var _last = false;
-	
+
 	var setActive = function(w){
 		if(_last){
 			_last.setActive(false);
 			_last.active = false;
 			_last._main.removeClass("active");
-			
+
 		}
 		w.setActive(true);
 		_last = w;
@@ -912,11 +912,11 @@ Float.Window = (($) => {
         closable:boolean = true;
 
         autoClose:boolean = false;
-        
+
         delay:number = 3000;
         width:string = null;
         height:string = null;
-        
+
         left:any = null;
         top:any = null;
 
@@ -942,7 +942,7 @@ Float.Window = (($) => {
             let main = (this.id)? $(this.id): false;
 
             if(main){
-                
+
                 if(main.ds("sgWin")){
                     return;
                 }
@@ -950,12 +950,12 @@ Float.Window = (($) => {
                 if(main.hasClass("sg-win")){
                     this._load(main);
                 }else{
-                   
+
                     this._create(main);
                 }
 
             }else{
-                
+
                 main = $("").create("div");
                 this._create(main);
 
@@ -966,16 +966,16 @@ Float.Window = (($) => {
             main.on("mousedown", () => setActive(this));
 
             Float.Float.init(main.get());
-            
+
             Float.Float.show({
                 e: main.get(),
                 left: this.left,
                 top: this.top,
                 deltaX: this.deltaX
             });
-            
+
             if(this.draggable){
-                
+
                 Float.Move.init({
                     main:main.get(),
                     hand:main.query(".caption"),
@@ -1020,32 +1020,32 @@ Float.Window = (($) => {
 
                 $(main.query(".caption")).on("dblclick", () => {
                     if(this.mode === "max"){
-                        this.setMode("auto"); 
+                        this.setMode("auto");
                     }else{
-                        this.setMode("max"); 
+                        this.setMode("max");
                     }
                 });
             }
 
             if(this.autoClose){
-                
+
                 $().on("click", () => {
-                    
+
                     if(this._active === true || this._active === null){
                         if(this._active === null){
                             this._active = false;
                         }
-                        return;	
+                        return;
                     }
-                    
+
                     this.setVisible(false);
                 });
-                
+
                 main.on("mouseover", (event) => {
                     this._active = true;
                     this.resetTimer();
                 });
-        
+
                 main.on("mouseout", (event) => {
                     this._active = false;
                     this.setTimer();
@@ -1057,7 +1057,7 @@ Float.Window = (($) => {
             this.setMode(this.mode);
 
             if(this.visible){
-                
+
                 this.show({
                     left:this.left,
                     top:this.top,
@@ -1073,16 +1073,16 @@ Float.Window = (($) => {
 
         }
         _create(main:any){
-            
+
             this._main = main.addClass(["sgWin", "hidden"]);
             if(this.className){
 				main.addClass(this.className);
 			}
-            
+
             let caption = main.create("div").addClass("caption");
             caption.create("span").addClass("icon").addClass(this.iconClass || "");
             caption.create("span").addClass(["text"]).text(this.caption);
-            
+
             if(this.resizable){
                 caption.create("span").addClass(["win-btn", "min"]).text("");
                 caption.create("span").addClass(["win-btn", "auto"]).text("");
@@ -1090,13 +1090,13 @@ Float.Window = (($) => {
             }
             if(this.closable){
                 caption.create("span").addClass(["win-btn", "close"]).text("");
-            }    
+            }
             let body = main.create("div").addClass("body");
             if(this.child){
                 let child = $(this.child);
                 body.append(child);
             }
-            
+
         }
         get(){
             return this._main.get();
@@ -1109,7 +1109,7 @@ Float.Window = (($) => {
         }
 
         getBody(){
-            
+
             return $(this._main.query(".body"));
         }
         setCaption(text:string){
@@ -1117,7 +1117,7 @@ Float.Window = (($) => {
             caption.innerHTML = text;
         }
         setMode(mode:string){
-			
+
 			this._main.ds("sgMode", mode);
 			this._main.removeClass(this.mode);
             this._main.addClass(mode);
@@ -1126,16 +1126,16 @@ Float.Window = (($) => {
         }
 
         setVisible(value){
-           
+
             this._active = null;
             this.visible = value;
             if(value){
-                
+
                 this._main.removeClass("hidden");
                 this._main.addClass("visible");
                 this.setTimer();
                 this.onshow({});
-                
+
             }else{
                 this._main.removeClass("visible");
                 this._main.addClass("hidden");
@@ -1158,34 +1158,34 @@ Float.Window = (($) => {
         show(info = null){
             if(info !== null){
                 info.e = this._main.get();
-                
+
                 if(info.context){
                     Float.Float.showMenu(info);
                 }else{
                     Float.Float.show(info);
                 }
             }
-            
+
             Float.Float.setIndex(this._main.get());
             this.setVisible(true);
             setActive(this);
-            
+
         }
         hide(){
             if(!this.visible){
-                return false;	
+                return false;
             }
             this.setVisible(false);
         }
-        
+
         setSize(width=null, height=null){
-            
+
             if(width !== null || height !==null){
                 this.setMode("custom");
             }
-            
+
             if(width !== null){
-                this._main.get().style.width = width;								
+                this._main.get().style.width = width;
                 //this.getBody().get().style.width = "auto";
             }
             if(height !== null){
@@ -1200,27 +1200,27 @@ Float.Window = (($) => {
 				clearTimeout(this._timer);
 			}
 		}
-		
+
 		setTimer(){
 			if(this.autoClose && this.delay > 0){
 				this.resetTimer();
-				this._timer = setTimeout(() => this.setVisible(false), this.delay);				
+				this._timer = setTimeout(() => this.setVisible(false), this.delay);
 			}
 		}
 
     }
-    
+
     return Window;
 })(_sgQuery);
 
 
 Float.Popup = (($) => {
 
-    
 
 
 
-    
+
+
     class Popup{
 
         id:any = null;
@@ -1244,7 +1244,7 @@ Float.Popup = (($) => {
         _main:any = null;
         _active:boolean = false;
 		_timer:number = null;
-        
+
         constructor(info){
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
@@ -1254,7 +1254,7 @@ Float.Popup = (($) => {
 
             let main = (this.id)? $(this.id): false;
             if(main){
-                
+
                 if(main.ds("sgPopup")){
                     return;
                 }
@@ -1262,46 +1262,46 @@ Float.Popup = (($) => {
                 if(main.hasClass("sg-popup")){
                     this._load(main);
                 }else{
-                   
+
                     this._create(main);
                 }
 
             }else{
-                
+
                 main = $("").create("div");
                 this._create(main);
 
             }
-          
+
 
             if(this.autoClose){
-                
+
                 $().on("mousedown", (event) => {
-                    
+
                     if(this.modeTip){
                         this.hide();
                         return;
                     }
-                      
+
                     if(this._active === true || this._active === null){
                         if(this._active === null){
                             this._active = false;
                         }
-                        return;	
+                        return;
                     }
-                    this.hide();			
+                    this.hide();
                 });
-                
+
                 main.on("mouseover", (event) => {
                     this._active = true;
                     this.resetTimer();
                 });
-        
+
                 main.on("mouseout", (event) => {
                     this._active = false;
                     this.setTimer();
                 });
-                
+
             }
             this._main = main;
             if(this.visible){
@@ -1317,7 +1317,7 @@ Float.Popup = (($) => {
             if(this.child){
                 main.append(this.child);
             }
-            
+
             Float.Float.init(main.get());
         }
         _load(main){
@@ -1339,11 +1339,11 @@ Float.Popup = (($) => {
             this._active = null;
             this.visible = value;
             if(value){
-                
+
                 this._main.removeClass("hidden");
                 this._main.addClass("visible");
                 this.setTimer();
-                
+
             }else{
                 this._main.removeClass("visible");
                 this._main.addClass("hidden");
@@ -1353,10 +1353,10 @@ Float.Popup = (($) => {
 
         show(info = null){
 
-           
+
             if(info !== null){
 
-                
+
                 info.e = this._main.get();
 
                 info.left = info.left || this.left;
@@ -1367,19 +1367,19 @@ Float.Popup = (($) => {
                 }else{
                     Float.Float.show(info);
                 }
-                
-                
+
+
             }
-            
+
             Float.Float.setIndex(this._main.get());
             this.setVisible(true);
-            
-            
+
+
         }
 
         hide(){
             if(!this.visible){
-                return false;	
+                return false;
             }
             this.setVisible(false);
         }
@@ -1393,7 +1393,7 @@ Float.Popup = (($) => {
         setTimer(){
             if(this.autoClose && this.delay > 0){
 				this.resetTimer();
-				this._timer = setTimeout(() => this.setVisible(false), this.delay);				
+				this._timer = setTimeout(() => this.setVisible(false), this.delay);
 			}
         }
 
@@ -1409,9 +1409,9 @@ Float.Popup = (($) => {
 
     class Message extends Popup{
         caption:string = null;
-        text:any = null; 
+        text:any = null;
         constructor(info){
-            
+
             super(info);
 
             for(var x in info){
@@ -1431,7 +1431,7 @@ Float.Popup = (($) => {
             if(this.child){
                 main.append(this.child);
             }
-            
+
             Float.Float.init(main.get());
             main.create("div").addClass("caption");
             main.create("div").addClass("text");
@@ -1458,15 +1458,15 @@ Float.Popup = (($) => {
 let div = $("").create("div").addClass("popup").text("Help?");
 
         let popup = new Float.Popup({child:div});
-        
-        
+
+
         let div2 = $("#form_p4").create("input").attr("type","button").val("Help?");
-        
+
         popup.setMenu(div2.get(), {context:$.query(".drag4"), left:"right", top:"middle"} );
 
         return;
-        
-        
+
+
 
     });
     return Popup;

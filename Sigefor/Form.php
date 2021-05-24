@@ -2,6 +2,7 @@
 namespace SIGEFOR;
 
 require_once MAIN_PATH.'Sigefor/DBTrait/DataRecord.php';
+require_once 'Component/Grid.php';
 require_once MAIN_PATH.'Sigefor/Component/Form2.php';
 require_once MAIN_PATH.'Sigefor/JasonFile.php';
 require_once MAIN_PATH.'Sigefor/Component/SaveForm.php';
@@ -11,21 +12,21 @@ require_once MAIN_PATH.'Sigefor/Component/SaveForm.php';
 //require_once "Component/FormSave.php";
 
 class Form extends \sevian\element {
-    
+
     use DBTrait\DataRecord;
 
     public $jsClassName = 'Form2';
 
     private $userData = [];
-    
+
     static public $patternJsonFile = '';
 
     public function __construct($info = []){
-		
+
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-		
+
         $this->cn = \Sevian\Connection::get();
     }
 
@@ -36,7 +37,7 @@ class Form extends \sevian\element {
         if($method){
             $this->method = $this->method;
 		}
-		
+
 		$this->userData = [
 			'panelId'=>$this->id,
 			'element'=>$this->element,
@@ -56,21 +57,25 @@ class Form extends \sevian\element {
 				$this->createGrid(1, '');
 				break;
 			case 'save':
-				
+
 				$this->save([(object)\Sevian\S::getVReq()]);
-				
+
 				break;
 			case 'delete':
 				\Sevian\S::setReq('__mode_', 3);
 				$this->save([(object)\Sevian\S::getVReq()]);
-				
-				break;	
+
+				break;
             case 'get_data':
                 $this->createGrid($this->eparams->page, $this->eparams->q ?? '');
 				break;
+			case 'get-records':
+
+				$records = $this->getRecords();
+				hx(getRecords);
 			case 'search':
 				$this->createGrid(1, $this->eparams->q ?? '');
-				break;				                
+				break;
         }
 
         return true;
@@ -86,7 +91,7 @@ class Form extends \sevian\element {
         if(!$this->containerId){
             $this->containerId = 'form-main-'.$this->id;
         }
-        
+
         $form = new Component\Form2([
 
             'id'		=> $this->containerId,
@@ -102,7 +107,7 @@ class Form extends \sevian\element {
 		$this->setPanel($this->createPanel());
 		$this->title = $form->caption;
 	}
-	
+
 	public function loadRecord(){
 		if($this->eparams->mainId?? false){
             $this->containerId = $this->eparams->mainId;
@@ -121,9 +126,9 @@ class Form extends \sevian\element {
 		}else{
 			$record = $this->getRecord('grid', \Sevian\S::getReq("__id_") ?? 0);
 		}
-		
+
 		//$record = $this->getRecord('grid', \Sevian\S::getReq("__id_") ?? 0);
-		
+
 		//hx($record);
 
 		if($this->method == 'load-from'){
@@ -139,7 +144,7 @@ class Form extends \sevian\element {
 			'record'	=> $record,
 			'recordIndex'=>\Sevian\S::getReq("__id_") ?? 0,
 			'userData'	=> $this->userData,
-			
+
 		]);
 
 		$form->id = $this->containerId;
@@ -165,9 +170,9 @@ class Form extends \sevian\element {
 		//$async = ($this->asyncMode===true)?'true':'false';
         $async = true;
         $element = self::getElementName();
-		
-		
-		
+
+
+
 		//hx($paginator);
 		$form =  new \Sigefor\Component\Grid([
 			'asyncMode'	=> true,
@@ -182,11 +187,11 @@ class Form extends \sevian\element {
 			'userData'=>$this->userData,
 			//'patternFormFile'=>self::$patternJsonFile,
 			//'patternMenuFile'=>self::$patternMenuFile
-			
+
 		]);
-		
+
 		$this->setDataRecord('grid', $form->getDataKeys());
-		
+
 		$search = "
 		S.send3(
 			{
@@ -208,13 +213,13 @@ class Form extends \sevian\element {
 							$mainId
 						}
 					}
-					
+
 				]
 			});
-			
+
 		";
-	
-		
+
+
 
 		$paginator = [
 			'page'=> $page,
@@ -237,11 +242,11 @@ class Form extends \sevian\element {
                                 $mainId
 								page:page,
 								q:this.getSearchValue(),
-								
-							
+
+
 							}
 						}
-						
+
 					]
 				});"
 			];
@@ -249,13 +254,13 @@ class Form extends \sevian\element {
 		$form->paginator = $paginator;
 		$form->search = $search;
         $form->id = $this->containerId;
-        
+
 
 		//hx(json_encode($grid,JSON_PRETTY_PRINT));
-		
+
 		$records=$form->getDataKeys();
 		$this->setDataRecord('grid', $records);
-		//hx($grid->data);	
+		//hx($grid->data);
 		//$this->info = $grid;
 
 		//$grid->id = $this->panel->id;
@@ -267,7 +272,7 @@ class Form extends \sevian\element {
 		$this->setInit($form);
 		$this->setPanel($this->createPanel());
 		$this->title = $form->caption;
-		
+
 	}
 
 	public function save($data){
@@ -292,26 +297,26 @@ class Form extends \sevian\element {
 		//hx($data);
 		//hx(\Sevian\S::getVReq());
 		foreach($result as $k => $v){
-			
+
 			if(!$v->error){
-				
+
 				$this->addFragment(new \Sevian\iMessage([
 					'caption'	=> $f->getCaption(),
 					'text'		=> 'Record was saved!!!'
 				]));
-				
+
 			}else{
-				
+
 				$this->addFragment(new \Sevian\iMessage([
 					'caption'	=> 'Error '.$f->getCaption(),
 					'text'		=> "Record wasn't saved!!!"
 				]));
 
 			}
-			
-			
+
+
 		}
-		
+
 		$this->setInit(null);
 		$this->setPanel(false);
 	}
@@ -324,5 +329,5 @@ class Form extends \sevian\element {
 	public function getPanel(){
 		return $this->_panel;
 	}
-    
+
 }

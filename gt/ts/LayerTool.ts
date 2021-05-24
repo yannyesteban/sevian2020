@@ -19,7 +19,7 @@ export class LayerTool{
     private groups:any[] = [];
     private images:any[] = [];
     private config:any = {};
-    
+
 
     private forms:any[] = [];
 
@@ -46,7 +46,7 @@ export class LayerTool{
     public onDelete:Function = (data)=>{};
 
     constructor(info){
-			
+
         for(var x in info){
             if(this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -64,23 +64,23 @@ export class LayerTool{
         //this.getLayerList();
         //return;
         let main = (this.id)? $(this.id): false;
-        
+
         if(!main){
             main = $.create("div").attr("id", this.id);
         }
 
         this.create(main);
-        
+
 
     }
     get(){
         if(this.main){
             return this.main.get();
         }
-        
+
     }
     create(main:any){
-            
+
         this.main = main;
         main.addClass("layer-tool");
 
@@ -88,7 +88,7 @@ export class LayerTool{
             id:main,
             className:"layer-tool"
         });
-        
+
         tab.add({caption:"L", tagName:"form", active:true});
         tab.add({caption:"I",tagName:"form"});
         tab.add({caption:"G", tagName:"form"});
@@ -102,7 +102,7 @@ export class LayerTool{
         tab.getCaption(3).prop("title", "Configurar Ruta");
         tab.getCaption(4).prop("title", "Configurar Traza");
         tab.getCaption(5).prop("title", "Configuración");
-        
+
 
 
         this.createLayerForm(tab.getPage(0));
@@ -260,7 +260,7 @@ export class LayerTool{
                 }
             ],
             menu:{
-                caption:"", 
+                caption:"",
 				autoClose: false,
 				className: ["sevian","horizontal"],
 				items: [
@@ -278,7 +278,7 @@ export class LayerTool{
                             if(this.forms["layer"].valid()){
                                 this.saveLayer(this.forms["layer"].getValue());
                             }
-							
+
 						}
 					},
                     {
@@ -367,7 +367,7 @@ export class LayerTool{
                 }
             ],
             menu:{
-                caption:"", 
+                caption:"",
 				autoClose: false,
 				className: ["sevian","horizontal"],
 				items: [
@@ -385,7 +385,7 @@ export class LayerTool{
                             if(this.forms["layer"].valid()){
                                 this.saveImage(this.forms["image"].getValue());
                             }
-							
+
 						}
 					},
                     {
@@ -463,7 +463,7 @@ export class LayerTool{
                 }
             ],
             menu:{
-                caption:"", 
+                caption:"",
 				autoClose: false,
 				className: ["sevian","horizontal"],
 				items: [
@@ -481,7 +481,7 @@ export class LayerTool{
                             if(this.forms["layer"].valid()){
                                 this.saveGroup(this.forms["group"].getValue());
                             }
-							
+
 						}
 					},
                     {
@@ -498,7 +498,7 @@ export class LayerTool{
     }
 
     createRoadForm(id: any){
-       
+
         this.forms["road"] = new Form({
             caption:"Configuración: Ruta",
             id:id,
@@ -517,7 +517,7 @@ export class LayerTool{
                     value:"",
                     caption:"id"
                 },
-                
+
                 {
                     input:"input",
                     type:"text",
@@ -534,7 +534,7 @@ export class LayerTool{
                     events:{
                         change: event => this.updateRoadLayer(this.forms["road"].getValue())
                     }
-                    
+
                 },
                 {
                     input:"input",
@@ -546,8 +546,8 @@ export class LayerTool{
                     events:{
                         change: event => this.updateRoadLayer(this.forms["road"].getValue())
                     }
-                    
-                    
+
+
                 },
                 {
                     input:"input",
@@ -584,11 +584,11 @@ export class LayerTool{
                 }
             ],
             menu:{
-                caption:"", 
+                caption:"",
 				autoClose: false,
 				className: ["sevian","horizontal"],
 				items: [
-					
+
                     {
                 		caption:"Save",
                 		action:(item, event) => {
@@ -632,7 +632,7 @@ export class LayerTool{
                     value:"",
                     caption:"id"
                 },
-                
+
                 {
                     input:"input",
                     type:"text",
@@ -649,7 +649,7 @@ export class LayerTool{
                     events:{
                         change: event => this.updateTraceLayer(this.forms["trace"].getValue())
                     }
-                    
+
                 },
                 {
                     input:"input",
@@ -661,9 +661,9 @@ export class LayerTool{
                     events:{
                         change: event => this.updateTraceLayer(this.forms["trace"].getValue())
                     }
-                    
-                    
-                    
+
+
+
                 },
                 {
                     input:"input",
@@ -675,7 +675,7 @@ export class LayerTool{
                     events:{
                         change: event => this.updateTraceLayer(this.forms["trace"].getValue())
                     }
-                    
+
                 },
                 {
                     input:"input",
@@ -687,7 +687,7 @@ export class LayerTool{
                     events:{
                         change: event => this.updateTraceLayer(this.forms["trace"].getValue())
                     }
-                    
+
                 },
                 {
                     input:"input",
@@ -699,7 +699,7 @@ export class LayerTool{
                     events:{
                         change: event => this.updateTraceLayer(this.forms["trace"].getValue())
                     }
-                    
+
                 },
                 {
                     input:"input",
@@ -714,17 +714,17 @@ export class LayerTool{
                 }
             ],
             menu:{
-                caption:"", 
+                caption:"",
 				autoClose: false,
 				className: ["sevian","horizontal"],
 				items: [
-					
+
                     {
                 		caption:"Save",
                 		action:(item, event) => {
 							this.onSaveTrace(this.forms["trace"].getValue());
 						}
-					},                    
+					},
                 ]
             }
         });
@@ -748,7 +748,7 @@ export class LayerTool{
             caption:"Configuración",
             id:id,
             fields:[
-                
+
                 {
                     input:"input",
                     type:"select",
@@ -759,7 +759,7 @@ export class LayerTool{
                     events:{
                         change: event => this.getTrace().setTraceMode(event.currentTarget.value)
                     }
-                    
+
                 },
                 {
                     input:"input",
@@ -769,20 +769,20 @@ export class LayerTool{
                     caption:"Factor de Velocidad",
                     data: [0.01, 0.02, 0.03, 0.04, 0.05].map(e => [e, e])
                 }
-                
+
             ],
             menu:{
-                caption:"", 
+                caption:"",
 				autoClose: false,
 				className: ["sevian","horizontal"],
 				items: [
-					
+
                     {
                 		caption:"Save",
                 		action:(item, event) => {
 							this.onSaveTrace(this.forms["trace"].getValue());
 						}
-					},                    
+					},
                 ]
             }
         });
@@ -804,7 +804,7 @@ export class LayerTool{
             ["input3", "Input 3"],
             ["input4", "Input 4"],
             ["input5", "Input 5"],
-            
+
         ];
     }
 
@@ -941,7 +941,7 @@ export class LayerTool{
                     "border":"#FFC0CB"
                 }
             ],
-            
+
             "colors":[
                 "#FF0000",
                 "#FFFF00",
@@ -969,7 +969,7 @@ export class LayerTool{
                     "className":"x",
                     "mode":"close"
                 },
-                
+
                 {
                     "caption":"Inputs",
                     "className":"x",
@@ -996,7 +996,7 @@ export class LayerTool{
                     "mode":"close"
                 }
             ],
-            "layers":[	
+            "layers":[
                 {
                     "prop":"speed",
                     "caption":"Detenido",
@@ -1009,7 +1009,7 @@ export class LayerTool{
                     "group":1,
                     "visible":true,
                     "exp":"{speed}=="
-                    
+
                 },
                 {
                     "prop":"speed",
@@ -1130,7 +1130,7 @@ export class LayerTool{
     }
 
     saveLayer(data){
-        
+
         if(data.layerId === ""){
             this.addLayer(data);
             this.onNewLayer(data.layerId, data);
@@ -1138,9 +1138,9 @@ export class LayerTool{
             this.setLayer(data.layerId, data);
             this.onEditLayer(data.layerId, data);
         }
-        
+
         this.onSave(this.getData());
-        
+
     }
 
     addLayer(data){
@@ -1153,7 +1153,7 @@ export class LayerTool{
     setLayer(id, data){
         this.layers[id] = data;
         this.forms["layer"].getInput("layerId").setOptionsData(this.getLayerList());
-        
+
         this.forms["layer"].setValue(data);
     }
 
@@ -1192,16 +1192,16 @@ export class LayerTool{
     addImage(data){
         data.imageId =this.layers.length;
         this.images.push(data);
-        
+
         this.forms["image"].getInput("imageId").setOptionsData(this.getImageList());
-        
+
         this.forms["image"].setValue(data);
     }
 
     setImage(id, data){
         this.images[id] = data;
         this.forms["image"].getInput("imageId").setOptionsData(this.getImageList());
-        
+
         this.forms["image"].setValue(data);
     }
     deleteImage(id){
@@ -1234,20 +1234,20 @@ export class LayerTool{
     addGroup(data){
         data.groupId =this.groups.length;
         this.groups.push(data);
-        
+
         this.forms["group"].getInput("groupId").setOptionsData(this.getGroupList());
-        
+
         this.forms["group"].setValue(data);
-     
+
     }
     setGroup(id, data){
         this.groups[id] = data;
         this.forms["group"].getInput("groupId").setOptionsData(this.getGroupList());
-        
+
         this.forms["group"].setValue(data);
     }
     deleteGroup(id){
-        
+
         if(id === "" || id > this.groups.length){
             alert("nothing !!");
             return;
@@ -1268,7 +1268,7 @@ export class LayerTool{
         this.data = this.getInfo();
         this.forms["layer"].reset();
         this.forms["image"].reset();
-        this.forms["group"].reset();     
+        this.forms["group"].reset();
     }
 
     updateRoadLayer(data){

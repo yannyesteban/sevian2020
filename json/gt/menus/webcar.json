@@ -50,36 +50,12 @@
 		},
 		{
 			"caption":"",
-			"imageClass":"icon-history",
-			"propertys":{
-				"title":"Herramienta Historial"
-			},
-			"action":"S.getElement('gt-history-11').showMenu();"
-		},
-		{
-			"caption":"",
 			"imageClass":"icon-command",
 			"propertys":{
 				"title":"Enviar Commando"
 			},
 			"action":"S.getElement('comm').show()"
-		},
-		{
-			"caption":"",
-			"imageClass":"icon-connection",
-			"propertys":{
-				"title":"Ver conexiones de las Unidades"
-			},
-			"action":"S.getElement('comm').showConnected()"
-		},
-		{
-			"caption":"",
-			"imageClass":"icon-timelapse",
-			"propertys":{
-				"title":"Ver Ventana de Inmediato"
-			},
-			"action":"S.getElement('comm').show2()"
 		}
 
 	]
-}	
+}

@@ -1,8 +1,10 @@
 import {createGeoJSONRectangle,createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle} from './Util.js';
+import { IPoly } from './IPoly';
 
-export class Rectangle{
+export class Rectangle implements IPoly{
+    public static readonly TYPE = "rectangle";
     map:any = null;
-    type:string = "rectangle";
+
     parent:object = null;
     name:string = "";
     visible:boolean = true;
@@ -35,7 +37,7 @@ export class Rectangle{
     };
     lineColor:string = "white";
     lineWidth:number = 2;
-    fillColor:string = "red"; 
+    fillColor:string = "red";
     //radio:number = 0;
     //center:number[] = null;
     hand:number[] = null;
@@ -43,22 +45,24 @@ export class Rectangle{
     _nodes:any = null;
     _line:any = null;
     id:string = "p"+String(new Date().getTime());
-    
+
     nodesId:string = null;
     lineId:string = null;
     circleId:string = null;
-    
+
     _play:boolean = false;
 
     callmove:Function = ()=>{};
     callresize:Function = ()=>{};
-    
+
     ondraw:Function = ()=>{};
 
     private dataSource:any = null;
-    
+    public getType() {
+        return Rectangle.TYPE;
+    }
     constructor(info:object){
-        
+
         for(let x in info){
             if(this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -72,21 +76,21 @@ export class Rectangle{
 
     init(){
         let map = this.map;
-        
+
 
         //let polygon = turf.polygon([coo], { name: "poly1" });
         //polygon = turf.bezierSpline(polygon);
 //            console.log(polygon)
-        
+
 
         let polygon = {
-            
+
                 "type": "Feature",
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [[]]
                 }
-            
+
         }
         this._line = {
             "type": "geojson",
@@ -95,9 +99,9 @@ export class Rectangle{
                 "features": [polygon]
             }
         };
-        
+
         this.map.addSource(this.lineId, this._line);
-        
+
         this.map.addLayer({
             "id": this.lineId,
             "type": "line",
@@ -106,7 +110,7 @@ export class Rectangle{
                 "line-join": "round",
                 "line-cap": "round",
                 visibility:(this.visible)? "visible": "none"
-                
+
             },
             "paint": {
                 "line-color": "#ff3300",
@@ -114,11 +118,11 @@ export class Rectangle{
                 //"line-opacity": 0.9,
                 //"line-gap-width":4,
                 //"line-dasharray":[2,2]
-                
+
             },
             "filter": ["==", "$type", "Polygon"]
         });
-        
+
         this.map.addLayer({
             "id": this.circleId,
             "type": "fill",
@@ -134,7 +138,7 @@ export class Rectangle{
         });
         //this.setLine(this.line);
         //this.setFill(this.fill);
-       
+
         map.addLayer({
             id: this.nodesId,
             type: "circle",
@@ -201,17 +205,17 @@ export class Rectangle{
             this.coordinatesInit = this.coordinates.slice();
             this.draw();
         }
-       
+
     }
 
     setLine(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]); 
+            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]);
         }
     }
     setFill(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]); 
+            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]);
         }
     }
 
@@ -222,17 +226,17 @@ export class Rectangle{
         }
         this.map.setLayoutProperty(this.lineId, "visibility", visible);
         this.map.setLayoutProperty(this.circleId, "visibility", visible);
-        
+
         if(this._play){
-            
+
             this.map.setLayoutProperty(this.nodesId, "visibility", visible);
         }
-        
+
 
     }
 
     add(lngLat){
-        
+
         if(this._mode == 0){
             this.coordinates = [];
             this.coordinates[0] = [lngLat.lng, lngLat.lat];
@@ -250,36 +254,36 @@ export class Rectangle{
     draw(){
         let data = createGeoJSONRectangle(this.coordinates[0], this.coordinates[1]);
         //let data = createGeoJSONPoly(this.coordinates);
-        this.map.getSource(this.lineId).setData(data.data);  
+        this.map.getSource(this.lineId).setData(data.data);
         this.dataSource = data.data;
         this.ondraw(this.coordinates);
 
-        
+
     }
 
     getArea(){
         let coord = this.dataSource.features[0].geometry.coordinates;
-        
+
         if(coord[0].length >= 4){
             let polygon = turf.polygon(this.dataSource.features[0].geometry.coordinates);
 
             return turf.area(polygon);
         }
         return 0;
-        
+
     }
 
     _fnclick(map){
-        
+
          return ;
     }
 
     play(){
-        
+
         if(this._play){
             return;
         }
-        
+
         this.parent.stop();
         this._play = true;
         let map =  this.map;
@@ -289,17 +293,17 @@ export class Rectangle{
         this.setLine(this.lineEdit);
         //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
         //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
-        
+
         let place = null;
         let type = null;
         let place_one = null;
-        let down1 = false; 
-        
-        
+        let down1 = false;
+
+
         let fnUp = (e)=>{
             map.off("mousemove", fnMove);
             type = null;
-            down1 = false; 
+            down1 = false;
         }
         let fnMove = (e)=>{
             if(this._mode == 2){
@@ -308,7 +312,7 @@ export class Rectangle{
                 let p1X = this.coordinates[1][0];
                 let p1Y = this.coordinates[1][1];
 
-               
+
                 switch(place){
                     case 0:
                         pX = e.lngLat.lng;
@@ -341,24 +345,24 @@ export class Rectangle{
                 }
                 this.coordinates[0] = [pX, pY];
                 this.coordinates[1] = [p1X, p1Y];
-                
+
             }else{
                 this.coordinates[0] = [e.lngLat.lng, e.lngLat.lat];
-                
+
             }
             this.draw();
-            
+
         }
         let fnUp2 = (e)=>{
             map.off("mousemove", fnMove2);
-            
+
         }
         let fnMove2 = (e)=>{
-            
+
             //this.move(place_one, e.lngLat);
             let dLng = e.lngLat.lng - place_one.lng;
             let dLat = e.lngLat.lat - place_one.lat;
-            
+
             let pX = this.coordinates[0][0] + dLng;
             let pY = this.coordinates[0][1] + dLat;
             let p1X = this.coordinates[1][0] + dLng;
@@ -367,9 +371,9 @@ export class Rectangle{
             this.coordinates[1] = [p1X, p1Y];
             this.draw();
             place_one = e.lngLat;
-            
+
         }
-        
+
         map.on("mousedown", this.nodesId, this._mousedown = (e)=> {
             // Prevent the default map drag behavior.
             e.preventDefault();
@@ -378,21 +382,21 @@ export class Rectangle{
             var features = map.queryRenderedFeatures(e.point, {
                 layers: [this.nodesId]
             });
-            
+
             place = features[0].properties.index;
             type = features[0].properties.type;
-           
+
             //db (place);return;
-            
+
             if(type == "m"){
                 //this.split(place, [e.lngLat.lng, e.lngLat.lat]);
                 //this.draw();
              }
-             
+
             map.on("mousemove", fnMove);
             map.once("mouseup", fnUp);
         });
-        
+
         map.on("mousedown", this.circleId, this._mousedown2 = (e)=> {
 
             if(down1){
@@ -400,30 +404,30 @@ export class Rectangle{
             }
             // Prevent the default map drag behavior.
             e.preventDefault();
-            
+
             place_one = e.lngLat;
-            
+
             map.on("mousemove", fnMove2);
             map.once("mouseup", fnUp2);
 
         });
-        
+
         map.on("click", this._click = (e)=>{
-            
+
             //db (e.originalEvent.button+".........", "red","yellow")
             var features = this.map.queryRenderedFeatures(e.point, {
                 layers: [this.nodesId]
             });
             this.add(e.lngLat);
         });
-        
+
         map.on("contextmenu", this._contextmenu = (e) => {
             e.preventDefault();
             this.coordinates.pop();
             this.draw();
-            
+
         });
-      
+
 
     }
 
@@ -435,11 +439,11 @@ export class Rectangle{
 
             this.map.off("click", this._click);
             this.map.off("contextmenu", this._contextmenu);
-            
+
             this.map.off("mousedown", this.nodesId, this._mousedown);
             this.map.off("mousedown", this.circleId, this._mousedown2);
-            
-            
+
+
            // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
             //"line-dasharray":[2,2]
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
@@ -450,14 +454,14 @@ export class Rectangle{
         this.setLine(this.line);
         //this._mode = 0;
         this._play = false;
-        
+
 
     }
     reset(){
         if(!this._play){
             return;
         }
-        
+
         if(this.coordinatesInit){
             this.coordinates = this.coordinatesInit.slice();
             this.draw();
@@ -482,7 +486,7 @@ export class Rectangle{
         //this._line.data.features = [];
         this.map.getSource(this.lineId).setData(this._line.data);
     }
-    
+
     delete(){
         this.stop();
 
@@ -492,11 +496,11 @@ export class Rectangle{
         if (map.getLayer(this.nodesId)) map.removeLayer(this.nodesId);
 
         if (map.getSource(this.lineId)) map.removeSource(this.lineId);
-        
-        
+
+
 
     }
-    
+
     getCoordinates(){
         return this.coordinates;
     }
@@ -511,15 +515,15 @@ export class Rectangle{
             var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
             length = turf.length(line, {units: "kilometers"});
         }
-        
+
         this.radio = length;
         let data = createGeoJSONCircle([center.lng, center.lat], length);
-        
+
         this.map.getSource(this.lineId).setData(data.data);
     }
 
     split(index, value){
-        
+
         this.coordinates.splice(index, 0, value);
     }
     getHand(){
@@ -529,7 +533,7 @@ export class Rectangle{
         return this.radio;
     }
     flyTo(zoom, speed){
-       
+
         var coordinates = this.coordinates;
 
         // Pass the first coordinates in the LineString to `lngLatBounds` &
@@ -540,7 +544,7 @@ export class Rectangle{
         var bounds = coordinates.reduce(function(bounds, coord) {
         return bounds.extend(coord);
         }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-         
+
         this.map.fitBounds(bounds, {
             padding: 40
         });
@@ -552,7 +556,7 @@ export class Rectangle{
         let centroid = turf.centroid(polygon);
 
         console.log(centroid);
-        
+
         this.map.flyTo({
             center: centroid.geometry.coordinates,
             zoom: zoom || this.flyToZoom,
@@ -562,20 +566,20 @@ export class Rectangle{
               return t;
             }
           });
-            
+
     }
     panTo(duration){
 
         //this.map.setLayerZoomRange(this.circleId, 2, 5);
 
-        
+
 
 
         let polygon = turf.lineString(this.coordinates);
 
         let centroid = turf.centroid(polygon);
 
-        
+
 
         this.map.panTo(centroid.geometry.coordinates, {duration: duration || this.panDuration });
     }

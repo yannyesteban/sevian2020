@@ -93,7 +93,7 @@
             },
             {
                 "file2": "{@MAIN_PATH}build/lib/MapBox.js",
-                
+
                 "begin": true
             }
         ],
@@ -196,7 +196,78 @@
         "init": {
             "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
         }
+    },
+    {
+        "name": "gt-communication",
+        "file": "{@MAIN_PATH}gt/Communication.php",
+        "class": "\\GT\\Communication",
+        "enable": true,
+        "module":{
+            "name":"Communication",
+            "alias":"GTCommunication",
+            "src":"{@MAIN_PATH}build/GT/ts/Communication.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-event",
+        "file": "{@MAIN_PATH}gt/Event.php",
+        "class": "\\GT\\Event",
+        "enable": true,
+        "module_":{
+            "name":"Event",
+            "alias":"GTEvent",
+            "src":"{@MAIN_PATH}build/GT/ts/Event.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "h-command",
+        "file": "{@MAIN_PATH}gt/HCommand.php",
+        "class": "\\GT\\HCommand",
+        "enable": true,
+        "module_":{ },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-geofence",
+        "file": "{@MAIN_PATH}gt/Geofence.php",
+        "class": "\\GT\\Geofence",
+        "enable": true,
+        "module":{
+            "name":"Geofence",
+            "alias":"GTGeofence",
+            "src":"{@MAIN_PATH}build/GT/ts/Geofence.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-alarm",
+        "file": "{@MAIN_PATH}gt/Alarm.php",
+        "class": "\\GT\\Alarm",
+        "enable": true,
+        "module":{
+            "name":"Alarm",
+            "alias":"GTAlarm",
+            "src":"{@MAIN_PATH}build/GT/ts/Alarm.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
     }
-    
-    
+
+
 ]

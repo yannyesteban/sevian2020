@@ -1,7 +1,8 @@
 import {_sgQuery}  from './Query.js';
 import {BlockingLayer}  from './BlockingLayer.js';
 import {sgAjax, sgJson, sgFragment} from './Ajax.js';
-import {Form2 as Form2} from './Form2.js';
+import { Form2 as Form2 } from './Form2.js';
+import {Grid2 as Grid2} from './Grid2.js';
 import {Menu as Menu} from './Menu2.js';
 import {Float}  from './Window.js';
 //import {GTInfo}  from '../../gt/ts/Info.js';
@@ -14,9 +15,9 @@ export var S = (($) => {
 
 	type ParamElement = number | string | object;
 	interface InfoElement {
-		id:any,
-		option:any,
-		type:string
+		id: any;
+		option: any;
+		type: string;
 	};
 	interface  Param {
 
@@ -26,10 +27,12 @@ export var S = (($) => {
 		valid?:boolean,
 		confirm?:string,
 		params?: object,
-		form?:FormData,
-		blockingTarget: BlockingLayer,
+		form?: FormData,
+		data?: object,
+		blockingTarget?: BlockingLayer,
+		define?: { [name: string]: (config) => void },
 		//onsubmit:()=>void,
-		window:{
+		window?:{
 			name:"",
 			show:true,
 			mode:"",
@@ -41,6 +44,13 @@ export var S = (($) => {
 		},
 		onRequest?:Function
 	};
+	interface ITask{
+		t: string;
+		id: string;
+		element: string;
+		name: string;
+
+	}
 	interface  InfoParam {
 
 		async: boolean,
@@ -121,7 +131,7 @@ export var S = (($) => {
 		}
 
 		static requestPanel(p){
-
+			console.log(p)
 			//let p = JSON.parse(xhr.responseText);
 
 			if(p.panels){
@@ -198,7 +208,7 @@ export var S = (($) => {
 		static init(info:InfoElement[]){
 
             for(var x of info){
-
+				console.log(this.components[x.type])
                 if(this.components[x.type] && x.option !== null){
 
 					if(this._e[x.id]){
@@ -255,11 +265,11 @@ export var S = (($) => {
             return $().query(`form[data-sg-type="panel"][data-sg-panel="${id}"]`);
         }
 
-		static go(info: any) {
+		static go(info: Param) {
 			this.send3(info);
 		}
 		static send3(info:any){
-
+			console.log("send3");
 			if(info.confirm && !confirm(info.confirm)){
 				return false;
 			}
@@ -431,7 +441,7 @@ export var S = (($) => {
 
         }
 		static send2(info/*:InfoParam*/){
-
+			console.log("send2");
 			if(info.confirm && !confirm(info.confirm)){
 				return false;
 			}
@@ -994,9 +1004,24 @@ export var S = (($) => {
 })(_sgQuery);
 
 S.register("Form2", Form2);
+S.register("Grid2", Grid2);
 S.register("Menu", Menu);
-S//.register("GTInfo", GTInfo);
+//.register("GTInfo", GTInfo);
 //S.register("GTUnit", GTUnit);
 //S.register("GTHistory", GTHistory);
 S.register("InfoForm", InfoForm);
 //S.register("GTSite", GTSite);
+
+
+S.go({
+	async: true,
+	form: null,
+	data: {},
+	define: {
+		hola: (e)=>alert(e),
+	},
+	task: [
+		{}
+	]
+
+})

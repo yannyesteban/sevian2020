@@ -13,7 +13,7 @@
 		}
 	},
 	"params":"",
-	
+
 	"pages":[],
 	"groups":{},
 	"infoFields":[
@@ -21,9 +21,9 @@
 		{"name":"pass","caption":"Clave", "input":"input", "type":"password"}
 
 	],
-	
+
 	"searchFor":[
-		
+
 	]
 
 }

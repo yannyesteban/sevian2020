@@ -1,6 +1,7 @@
 import {createGeoJSONRectangle,createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle} from './Util.js';
-
-export class Circle{
+import { IPoly } from './IPoly';
+export class Circle implements IPoly{
+    public static readonly TYPE = "circle";
     map:any = null;
     type:string = "circle";
     parent:object = null;
@@ -33,7 +34,7 @@ export class Circle{
     };
     lineColor:string = "white";
     lineWidth:number = 2;
-    fillColor:string = "red"; 
+    fillColor:string = "red";
     coordinates:any[] = null;
     radio:number = 0;
     center:number[] = null;
@@ -42,19 +43,22 @@ export class Circle{
     _nodes:any = null;
     _line:any = null;
     id:string = "c"+String(new Date().getTime());
-    
+
     nodesId:string = null;
     lineId:string = null;
     circleId:string = null;
-    
+
     _play:boolean = false;
 
     callmove:Function = ()=>{};
     callresize:Function = ()=>{};
-    
-    ondraw:Function = ()=>{};
+
+    ondraw: Function = () => { };
+    public getType() {
+        return Circle.TYPE;
+    }
     constructor(info:object){
-        
+
         for(let x in info){
             if(this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -63,9 +67,9 @@ export class Circle{
         this.nodesId = "n-"+this.id;
         this.lineId = "l-"+this.id;
         this.circleId = "c-"+this.id;
-        
+
         let map = this.map;
-        
+
         this._line = {
             "type": "geojson",
             "data": {
@@ -79,9 +83,9 @@ export class Circle{
                 }]
             }
         };
-        
+
         this.map.addSource(this.lineId, this._line);
-        
+
         this.map.addLayer({
             "id": this.lineId,
             "type": "line",
@@ -90,7 +94,7 @@ export class Circle{
                 "line-join": "round",
                 "line-cap": "round",
                 visibility:(this.visible)? "visible": "none"
-                
+
             },
             "paint": {
                 //"line-color": "#ff3300",
@@ -98,7 +102,7 @@ export class Circle{
                 //"line-opacity": 0.9,
                 //"line-gap-width":4,
                 //"line-dasharray":[2,2]
-                
+
             },
             "filter": ["==", "$type", "Polygon"]
         });
@@ -115,7 +119,7 @@ export class Circle{
             },
             "filter": ["==", "$type", "Polygon"]
         });
-        
+
         map.addLayer({
             id: this.nodesId,
             type: "circle",
@@ -139,27 +143,27 @@ export class Circle{
         if(this.coordinates){
             this.center = this.coordinates[0];
             this.radio = this.coordinates[1]/1000;
-            
+
         }
 
         if(this.center && this.radio){
-            
+
             this.createCircle(this.center, this.radio);
         }
         if(this.center && this.hand){
             this.createCircle(this.center, this.hand);
         }
-       
+
     }
 
     setLine(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]); 
+            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]);
         }
     }
     setFill(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]); 
+            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]);
         }
     }
 
@@ -170,23 +174,23 @@ export class Circle{
         }
         this.map.setLayoutProperty(this.lineId, "visibility", visible);
         this.map.setLayoutProperty(this.circleId, "visibility", visible);
-        
+
         if(this._play){
-            
+
             this.map.setLayoutProperty(this.nodesId, "visibility", visible);
         }
-        
+
 
     }
 
     test(){
-        
 
-       
+
+
     }
 
     _fnclick(map){
-        
+
          return this._click = (e)=>{
             var features = this.map.queryRenderedFeatures(e.point, {
                 layers: [this.nodesId]
@@ -204,33 +208,33 @@ export class Circle{
                 this.createCircle(this.center, this.hand);
             }
         }
-       
+
     }
     play(){
-        
+
         if(this._play){
             return;
         }
-        
+
         this.parent.stop();
         this._play = true;
-        
+
         let map =  this.map;
-        
+
         //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
         this.setVisible(true);
         this.setFill(this.fillEdit);
         this.setLine(this.lineEdit);
         //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
         //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
-        
+
         let place = null;
         if(this.radio == 0){
             this._mode = 1;
         }
-        
-        
-        
+
+
+
         let fnUp = (e)=>{
             //point = null;
             map.off("mousemove", fnMove)
@@ -248,8 +252,8 @@ export class Circle{
                 this.createCircle(this.center, this.hand);
                 this.callresize();
             }
-            
-            
+
+
         }
         map.on("mousedown", this.nodesId, this._mousedown = (e)=> {
             // Prevent the default map drag behavior.
@@ -257,19 +261,19 @@ export class Circle{
             var features = map.queryRenderedFeatures(e.point, {
                 layers: [this.nodesId]
             });
-            
+
             if (features.length) {
                 var id = features[0].properties.id;
-                
+
             }
             place = features[0].properties.type;
-           
-           
-             
+
+
+
             map.on("mousemove", fnMove);
             map.once("mouseup", fnUp);
         });
-       
+
         map.on("click", this._fnclick(this.map));
 
     }
@@ -282,8 +286,8 @@ export class Circle{
 
             this.map.off("click", this._click);
             this.map.off("mousedown", this.nodesId, this._mousedown);
-            
-            
+
+
            // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
             //"line-dasharray":[2,2]
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
@@ -294,7 +298,7 @@ export class Circle{
         this.setLine(this.line);
         //this._mode = 0;
         this._play = false;
-       
+
 
     }
     reset(){
@@ -323,14 +327,14 @@ export class Circle{
 
     }
     setCenter(lngLat){
-        
+
         this.center = lngLat;
-        
+
     }
     setHand(lngLat){
-        
+
         this.hand = lngLat;
-        
+
     }
 
     createCircle(center, radio){
@@ -342,11 +346,11 @@ export class Circle{
             var line = turf.lineString([center, radio]);
             length = turf.length(line, {units: "kilometers"});
         }
-        
+
         this.radio = length;
         let data = createGeoJSONCircle(center, length);
-       
-        
+
+
         this.source = this.map.getSource(this.lineId).setData(data.data);
         this.ondraw(center, radio);
     }
@@ -365,21 +369,21 @@ export class Circle{
     }
 
     flyTo(zoom, speed){
-        
-       
 
-        
+
+
+
 
         var bbox = turf.bbox(this.source._data.features[0]);
-        
 
-        
+
+
         this.map.fitBounds(bbox, {
             padding: 40
         });
         return
         let data = this.map.getSource(this.lineId).getData();
-       
+
         var coordinates = data.features[0].geometry.coordinates;
 
         // Pass the first coordinates in the LineString to `lngLatBounds` &
@@ -390,7 +394,7 @@ export class Circle{
         var bounds = coordinates.reduce(function(bounds, coord) {
         return bounds.extend(coord);
         }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-         
+
         this.map.fitBounds(bounds, {
             padding: 40
         });
@@ -402,7 +406,7 @@ export class Circle{
         let centroid = turf.centroid(polygon);
 
         console.log(centroid);
-        
+
         this.map.flyTo({
             center: centroid.geometry.coordinates,
             zoom: zoom || this.flyToZoom,
@@ -412,7 +416,7 @@ export class Circle{
               return t;
             }
           });
-            
+
     }
     panTo(duration){
 
@@ -430,8 +434,8 @@ export class Circle{
         if (map.getLayer(this.nodesId)) map.removeLayer(this.nodesId);
 
         if (map.getSource(this.lineId)) map.removeSource(this.lineId);
-        
-        
+
+
 
     }
 }

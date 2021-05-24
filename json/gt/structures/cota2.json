@@ -1,218 +1,212 @@
 {
-	"structure":"cota",
-	"title":"Módulo GT",
-	"template":"gt-cota",
-	"templateName":"/gt-webcar",
-	"themeTemplate":"",
-	"class":"webcar",
-	"mainPanel":4,
-	"params":{},
-	"wins":[
+	"structure": "cota",
+	"title": "Módulo GT",
+	"template": "gt-cota",
+	"templateName": "/gt-webcar",
+	"themeTemplate": "",
+	"class": "webcar",
+	"mainPanel": 4,
+	"params": {},
+	"wins": [
 		{
-			"name":"v1",
-			"caption":"Catálogo @module_name",
-			"mode":"custom",
-			"width":"400px",
-			"height":"400px",
-			"top":"middle",
-			"left":"center",
-			"visible":false,
-			"child":"#win_001"
+			"name": "v1",
+			"caption": "Catálogo @module_name",
+			"mode": "custom",
+			"width": "400px",
+			"height": "400px",
+			"top": "middle",
+			"left": "center",
+			"visible": false,
+			"child": "#win_001"
 		}
 	],
-	"roles":[],
-	"publicRole":true,
-	"elements":[
+	"roles": [],
+	"publicRole": true,
+	"elements": [
 		{
-			"id":4,
-			"element":"gt_map",
-			"name":"map_01",
-			"method":"load",
-			"eparams":{
-				"controls":["trace","history", "rule", "poly", "mark", "layer"]
+			"id": 4,
+			"element": "gt_map",
+			"name": "map_01",
+			"method": "load",
+			"eparams": {
+				"controls": [
+					"history",
+					"trace",
+					"rule",
+					"poly",
+					"poly2",
+					"mark",
+					"layer"
+				]
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":2,
-			"element":"s-menu",
-			"name":"/gt/menus/webcar",
-			"method":"create",
-			"eparams":{},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"id": 2,
+			"element": "s-menu",
+			"name": "/gt/menus/webcar",
+			"method": "create",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":3,
-			"element":"form",
-			"name":"/gt/forms/main_unit",
-			"method":"request",
-			"eparams":{},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"id": 3,
+			"element": "form",
+			"name": "/gt/forms/main_unit",
+			"method": "request",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":5,
-			"element":"s-menu",
-			"name":"/menu/tool",
-			"method":"create",
-			"eparams":{},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"id": 5,
+			"element": "s-menu",
+			"name": "/menu/tool",
+			"method": "create",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":7,
-			"element":"s-menu",
-			"name":"/gt/menus/comm_menu",
-			"method":"create",
-			"eparams":{},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"id": 7,
+			"element": "s-menu",
+			"name": "/gt/menus/comm_menu",
+			"method": "create",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":6,
-			"element":"s-menu",
-			"name":"/gt/menus/comm_tool",
-			"method":"create",
-			"eparams":{},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"id": 6,
+			"element": "s-menu",
+			"name": "/gt/menus/comm_tool",
+			"method": "create",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"gt-info-11",
-			"element":"gt-info",
-			"name":"gt-info",
-			"method":"load",
-			"eparams":{},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"id": "gt-info-11",
+			"element": "gt-info",
+			"name": "gt-info",
+			"method": "load",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"gt-unit-10",
-			"element":"gt_unit",
-			"name":"gt_unit",
-			"method":"load",
-			"eparams":{
+			"id": "gt-unit-10",
+			"element": "gt_unit",
+			"name": "gt_unit",
+			"method": "load",
+			"eparams": {
 				"mapName": "map_01",
-				"infoId":"gt-info-11",
+				"infoId": "gt-info-11",
 				"searchUnitId": 3
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"gt-site-11",
-			"element":"gt-site",
-			"name":"gt-site",
-			"method":"load",
-			"eparams":{
+			"id": "gt-site-11",
+			"element": "gt-site",
+			"name": "gt-site",
+			"method": "load",
+			"eparams": {
 				"mapName": "map_01",
-				"infoId":"gt-info-11"
+				"infoId": "gt-info-11"
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"gt-geofence-11",
-			"element":"gt-geofence",
-			"name":"gt-geofence",
-			"method":"load",
-			"eparams":{
+			"id": "gt-geofence-11",
+			"element": "gt-geofence",
+			"name": "gt-geofence",
+			"method": "load",
+			"eparams": {
 				"mapName": "map_01",
-				"infoId":""
+				"infoId": ""
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"gt-history-11",
-			"element":"gt_history",
-			"name":"gt-history",
-			"method":"load",
-			"eparams":{
+			"id": "gt-history-11",
+			"element": "gt_history",
+			"name": "gt-history",
+			"method": "load",
+			"eparams": {
 				"mapName": "map_01",
-				"infoId":""
+				"infoId": ""
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"gt-alarm-11",
-			"element":"gt_alarm",
-			"name":"gt_alarm",
-			"method":"load",
-			"eparams":{
+			"id": "gt-alarm-11",
+			"element": "gt-alarm",
+			"name": "gt_alarm",
+			"method": "load",
+			"eparams": {
 				"mapName": "map_01",
-				"infoId":""
+				"infoId": ""
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
-
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"comm",
-			"element":"gt-communication",
-			"name":"gt-communication",
-			"method":"load______________",
-			"eparams":{
+			"id": "comm",
+			"element": "gt-communication",
+			"name": "gt-communication",
+			"method": "load",
+			"eparams": {
 				"mapName": "map_01",
-				"unitPanelId":"gt-unit-10"
+				"unitPanelId": "gt-unit-10"
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		},
 		{
-			"id":"event",
-			"element":"gt-event",
-			"name":"gt-event",
-			"method":"load",
-			"eparams":{
+			"id": "event",
+			"element": "gt-event",
+			"name": "gt-event",
+			"method": "load",
+			"eparams": {
 				"mapName": "map_01"
 			},
-			"type":0,
-			"class":"",
-			"debug":0,
-			"design":0
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		}
-
 	]
-
 }

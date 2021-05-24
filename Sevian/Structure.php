@@ -11,23 +11,23 @@ class HtmlStructure extends HTML{
 	public $formMethod = 'GET';
 	private $_ele = [];
 	private $_panel = [];
-	
+
 	public function setTemplate($template){
 		$this->html = $template;
 
 	}
-	
+
 	public function addPanel($id, $e){
 		$this->_ele[$id] = $e;
-	} 
+	}
 
 	public function getElement($panel){
 		return $this->_ele[$panel];
-		
-	} 
-	
+
+	}
+
 	public function render(){
-		
+
 		foreach($this->_ele as $id => $e){
 
 			if(is_numeric($id)){
@@ -46,9 +46,9 @@ class HtmlStructure extends HTML{
 				'data-sg-type'	=> 'panel',
 				'enctype'		=> 'multipart/form-data'
 				]);
-				
+
 			$form->add($e->getPanel());
-	
+
 			$form->add($this->configInputs([
 					'__sg_panel'	=> $id,
 					'__sg_sw'		=> $this->sw,
@@ -63,12 +63,12 @@ class HtmlStructure extends HTML{
 			$this->html = str_replace("--$id--", $form->render(), $this->html);
 
 		}
-		
+
 		$this->html = preg_replace_callback(
 			"{--(\w+)--}isx",
 			function ($c){
 				$id = $c[1];
-				
+
 				if(is_numeric($id)){
 					$formId = "form_p{$id}";
 				}else{
@@ -85,7 +85,7 @@ class HtmlStructure extends HTML{
 					'data-sg-type'	=> 'panel',
 					'enctype'		=> 'multipart/form-data'
 				]);
-		
+
 				$form->add($this->configInputs([
 						'__sg_panel'	=> $id,
 						'__sg_sw'		=> $this->sw,
@@ -105,7 +105,7 @@ class HtmlStructure extends HTML{
 
 	private function configInputs($config){
 		$div = new HTML('');
-		
+
 		foreach($config as $k => $v){
 			$input = $div->add(array(
 				'tagName'	=>	'input',
@@ -114,9 +114,9 @@ class HtmlStructure extends HTML{
 				'value'		=>	$v
 			));
 		}
-	
+
 		return $div;
-		
+
 	}
 }
 
@@ -126,27 +126,27 @@ class AsyncStructure{
 	public $ins = '';
 	private $_ele = array();
 	private $_panels = array();
-	
+
 	public function setTemplate($template){
 		$this->html = $template;
 	}
-	
+
 	public function addPanel($panel, $e){
 		$this->_ele[$panel] = $e;
-	} 
+	}
 	public function getElement($panel){
 		return $this->_ele[$panel];
-	} 
-	
+	}
+
 	public function render(){
-		
+
 		$json = [];
-		
+
 		foreach($this->_ele as $id => $e){
 			if(!$e){
 				continue;
 			}
-			
+
 			$form = new \Sevian\HTML('');
 			$form->add($e->getPanel());
 			$form->add($this->configInputs([
@@ -159,7 +159,7 @@ class AsyncStructure{
 				'__sg_action'	=> '',
 				'__sg_thread'	=> '']
 			));
-			
+
 			$html = $form->render();
 			$script = $form->getScript();
 			$css = $form->getCss();
@@ -179,13 +179,13 @@ class AsyncStructure{
 				'class'	=> $e->classPanel?? '',
 			];
 		}
-		
+
 		return $json;
 	}
 
 	private function configInputs($config){
 		$div = new HTML('');
-		
+
 		foreach($config as $k => $v){
 			$input = $div->add(array(
 				'tagName'	=>	'input',
@@ -194,17 +194,17 @@ class AsyncStructure{
 				'value'		=>	$v
 			));
 		}
-	
+
 		return $div;
 	}
 }
 
 
 
-	
+
 class Structure extends HTML{
 	public $template = '';
-	
+
 
 	public $sw = '';
 	public $ins = '';
@@ -214,7 +214,7 @@ class Structure extends HTML{
 	public function setTemplate($template){
 		$this->template = $template;
 	}
-	
+
 	public function addPanel($id, $e){
 
 		$form = new HTML([
@@ -227,7 +227,7 @@ class Structure extends HTML{
 			'data-sg-type'	=> 'panel',
 			'enctype'		=> 'multipart/form-data'
 			]);
-			
+
 		$form->add($e);
 
 		$form->add($this->configInputs([
@@ -240,22 +240,22 @@ class Structure extends HTML{
 				'__sg_action'	=> '',
 				'__sg_thread'	=> '']
 		));
-		
+
 		$this->_ele[$id] = $form;
 		$this->add($form);
 
-	} 
+	}
 
 	public function getElement($panel){
 		return $this->_ele[$panel];
-		
-	} 
+
+	}
 	public function getStrPanels($template = ''){
-		
+
 		if($template == ''){
 			$template = $this->template;
 		}
-		
+
 		$exp = '|--([0-9]+)--|';
 		$this->_panels = [];
 		if(preg_match_all($exp, $template, $c)){
@@ -266,7 +266,7 @@ class Structure extends HTML{
 		return $this->_panels;
 
 	}
-	
+
 	public function render(){
 		$template = $this->template;
 		foreach($this->_ele as $panel => $e){
@@ -278,7 +278,7 @@ class Structure extends HTML{
 
 	private function configInputs($config){
 		$div = new HTML('');
-		
+
 		foreach($config as $k => $v){
 			$input = $div->add(array(
 				'tagName'	=>	'input',
@@ -287,9 +287,9 @@ class Structure extends HTML{
 				'value'		=>	$v
 			));
 		}
-	
+
 		return $div;
-		
+
 	}
 }
 
@@ -300,32 +300,32 @@ class JsonStructure{
 	private $_ele = array();
 	private $_panels = array();
 	public function setTemplate($template){
-		
+
 		//$this->template = $template;
 	}
-	
+
 	public function addPanel($panel, $e){
-		
+
 		$this->_ele[$panel] = $e;
 		//$this->add($e);
-	} 
+	}
 	public function getElement($panel){
 		return $this->_ele[$panel];
-		
-	} 
+
+	}
 	public function getStrPanels($template = ''){
-		
+
 		if($template == ''){
 			$template = $this->template;
 		}
-		
+
 		$exp = '|--([0-9]+)--|';
 		$this->_panels = array();
 
 		return $this->_panels;
 
 	}
-	
+
 	public function render(){
 		$j = [];
 		foreach($this->_ele as $id => $e){
@@ -345,7 +345,7 @@ class JsonStructure{
 				'__sg_thread'	=> '']
 			));
 
-			
+
 			$html = $form->render();
 			$script = $form->getScript();
 			$css = $form->getCss();
@@ -367,7 +367,7 @@ class JsonStructure{
 
 	private function configInputs($config){
 		$div = new HTML('');
-		
+
 		foreach($config as $k => $v){
 			$input = $div->add(array(
 				'tagName'	=>	'input',
@@ -376,9 +376,9 @@ class JsonStructure{
 				'value'		=>	$v
 			));
 		}
-	
+
 		return $div;
-		
+
 	}
 }
 ?>

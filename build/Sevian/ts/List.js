@@ -264,7 +264,7 @@ export var List = (($) => {
                     break;
                 case 27: //escape
                     break;
-                case 38: //up arrow 
+                case 38: //up arrow
                     this.move(-1);
                     break;
                 case 40: //down arrow
@@ -377,7 +377,7 @@ export var List = (($) => {
                 name: this.name,
                 input: this._input,
                 data: _data,
-                target: document.body,
+                target: this._main,
                 value: this.value,
                 onactive: (value) => {
                     if (value) {

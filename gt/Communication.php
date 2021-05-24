@@ -2,7 +2,7 @@
 namespace GT;
 include 'CommunicationTrait.php';
 
-class Communication extends 
+class Communication extends
     \Sevian\Element implements \Sevian\JasonComponent,
     \Sevian\UserInfo
     {
@@ -30,16 +30,16 @@ class Communication extends
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-		
+
         $this->cn = \Sevian\Connection::get();
 
     }
     public function evalMethod($method = false): bool{
-		
+
 		if($method){
             $this->method = $method;
         }
-        
+
         switch($this->method){
             case 'load':
                 $this->load();
@@ -80,30 +80,30 @@ class Communication extends
         }
 
         $form =  new \Sigefor\Component\Form2([
-			
+
             //'id'		=> $this->containerId,
             //'panelId'	=> $this->id,
             'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/main_command', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
             'method'	=> $method,
             'mode'		=> $mode,
             //'userData'	=> $this->userData,
-            
+
             'record'    => $record
         ]);
 
         $form2 =  new \Sigefor\Component\Form2([
-			
+
             //'id'		=> $this->containerId,
             //'panelId'	=> $this->id,
             'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/unit_cmd_response', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
             'method'	=> $method,
             'mode'		=> $mode,
             //'userData'	=> $this->userData,
-            
+
             //'record'    => $record
         ]);
 
-       
+
         $div = new \SEVIAN\HTML('div');
         $div->id = $this->containerId;
         $this->setPanel($div);
@@ -112,6 +112,10 @@ class Communication extends
 
         $this->host = '127.0.0.1';
         $this->eparams->gridId='eres';
+
+        $this->typeElement = 'GTCommunication';
+		$this->jsClassName = 'GTCommunication';
+
         $this->setInit([
             //'id'=>$this->eparams->targetId,
 
@@ -166,20 +170,20 @@ class Communication extends
 
             ]
         ]);
-        
+
     }
 
     public function init(){
 
         $form =  new \Sigefor\Component\Form2([
-			
+
             'id'		=> $this->containerId,
             'panelId'	=> $this->id,
             'name'		=> 'main_command',
             'method'	=> 'request',
             'mode'		=> 2,
             //'userData'	=> $this->userData,
-            
+
             //'record'=>['id'=>$id]
         ]);
        // $this->_info = $
@@ -195,26 +199,26 @@ class Communication extends
 
        \sevian\s::setExp('unitId', $unitId);
         $form =  new \Sigefor\Component\Form2([
-			
+
             'id'		=> $this->containerId,
             'panelId'	=> $this->id,
             'name'		=> \Sigefor\JasonFile::getNameJasonFile('/gt/forms/gt_form_command', self::$patternJsonFile),//'/form/gt_comm_main',//'main_command',
             'method'	=> 'request',
             'mode'		=> 2,
             'userData'   => [
-              
+
             ],
             //'userData'	=> $this->userData,
-            
+
             //'record'=>['id'=>$id]
         ]);
        // $this->_info = $
-      
+
 
         $this->panelActions[] = [
             'method'  => 'setFormCommand',
             'value'=> $form,
-            
+
         ];
        return $this;
     }

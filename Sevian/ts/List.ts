@@ -3,14 +3,14 @@ import {Float}  from './Window.js';
 //import {I}  from './Input.js';
 
 
-export var List = (($) => {  
+export var List = (($) => {
 
     let acute = function(str){
 
         if(str === undefined){
             return false;
         }
-        
+
         str = str.toLowerCase()
         str = str.replace(/á/gi,"a");
         str = str.replace(/é/gi,"e");
@@ -19,7 +19,7 @@ export var List = (($) => {
         str = str.replace(/ú/gi,"u");
         str = str.replace(/ñ/gi,"n");
         return str;
-        
+
 	};
 
     class ListMenu{
@@ -37,9 +37,9 @@ export var List = (($) => {
         _active:boolean = null;
         _index:number = -1;
         _error:boolean = false;
-        
+
         constructor(info:any){
-            
+
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -49,35 +49,35 @@ export var List = (($) => {
             let main = (this.id)? $(this.id): false;
 
             if(main){
-                
+
                 if(main.ds("sgListMenu")){
                     return;
                 }
-    
+
                 if(main.hasClass("sg-list-menu")){
                     this._load(main);
                 }else{
                     this._create(main);
                 }
-    
+
             }else{
                 main = $.create("div").attr("id", this.id);
-                
+
                 this._create(main);
             }
-            
+
             if(info.onactive){
-                
+
                 this.onactive = $.bind(info.onactive, this, "value");
             }
             main.ds("sgListMenu", "list-menu");
             main.on("mousemove", event => {
                 if(event.target.classList.contains("option")){
-                    
+
                     this.setIndex(event.target.dataset.index * 1);
                 }
             });
-            
+
             main.on("click", event => {
                 if(event.target.classList.contains("option")){
                     this._index = event.target.dataset.value;
@@ -100,7 +100,7 @@ export var List = (($) => {
             });
 
             this.setInput(this.input);
-            
+
             let target = (this.target)? $(this.target): false;
             if(target){
                 target.append(this._main);
@@ -113,7 +113,7 @@ export var List = (($) => {
 
         _create(main:any){
             this._main = main.addClass("list-menu").addClass(this.className);
-            
+
         }
 
         _load(main:any){
@@ -123,59 +123,59 @@ export var List = (($) => {
         get(){
             return this._main;
         }
-        
+
         select(index){
             if(this.data[index]){
                 this._error = false;
                 this.input.val(this.data[index].text);
                 //this.setValue(this.data[index].value);
                 if(this.data[index].text !== this.value){
-                    
+
                     this.value = this.data[index].value;
                     this.input.fire("change");
                 }
                 this.active(false);
             }
         }
-        
+
         setData(data){
             this.data = data;
         }
-        
+
         setText(value:any){
 
             for(let e of this.data){
                 if(acute(e.text) == acute(value)){
-                    
+
                     this.input.val(e.text);
                     this.value = e.value;
                 }
             }
-            
+
         }
-        
+
         setValue(value:any){
 
-            let error = true;    
+            let error = true;
             for(let e of this.data){
                 if(e.value == value){
-                    
+
                     this.input.val(e.text);
-                    
+
                     this.value = e.value;
                     error = false;
                 }
             }
-            
+
             if(error){
-                
+
                 this.input.val("");
                 this.value = "";
 
-               
+
             }
             //this.input.fire("change");
-            
+
         }
 
         getValue(){
@@ -187,12 +187,12 @@ export var List = (($) => {
 
             this._error = true;
             this._index = -1;
-            
+
             let index = 0, value:number = null;
             this.data.forEach((d, i)=>{
 
                 if(showAll || filter === "" || acute(d.text).indexOf(acute(filter)) >= 0){
-					
+
                     this._main.create("div")
                     .ds("value", i)
                     .ds("index", index).addClass("option").append(d.item);
@@ -200,7 +200,7 @@ export var List = (($) => {
                     if(acute(d.text) === acute(filter)){
                         value = index;
                     }
-                    
+
 					index++;
 				}
             });
@@ -210,7 +210,7 @@ export var List = (($) => {
             }else{
                 this.setIndex(0);
             }
-           
+
             if(filter === ""){
                 this._main.get().scrollTop = "0px";
             }
@@ -223,7 +223,7 @@ export var List = (($) => {
             }
 
             this._active = value;
-            
+
             if(value){
                 this._main.addClass("active");
             }else{
@@ -237,10 +237,10 @@ export var List = (($) => {
         getActive(){
             return this._active;
         }
-        
+
         move(step){
             this.setIndex(this._index + step);
-        }  
+        }
 
         setIndex(index:number){
 
@@ -251,7 +251,7 @@ export var List = (($) => {
             let items = this._main.queryAll(".option");
 
             if(index < 0){
-                index = 0; 
+                index = 0;
             }else if(index >= items.length - 1){
                 index = items.length - 1;
             }
@@ -276,7 +276,7 @@ export var List = (($) => {
 				popup.scrollTop = offsetTop + height - popup.offsetHeight;
             }
 
-           
+
 
         }
 
@@ -300,7 +300,7 @@ export var List = (($) => {
                 let paste = (event.clipboardData || window.clipboardData).getData('text');
                 this.setFilter(paste);
                 this.active(true);
-               
+
             }).on("drop", event => {
 				event.preventDefault();
 				event.currentTarget.value = event.dataTransfer.getData('text/plain');
@@ -311,12 +311,12 @@ export var List = (($) => {
 
         _keyUp(event){
 
-            if(event.keyCode !== 13 
+            if(event.keyCode !== 13
                 && event.keyCode !== 16
                 && event.keyCode !== 17
                 && event.keyCode !== 38 && event.keyCode !== 40 && event.keyCode !== 9){
-                    
-                
+
+
                 this.setFilter(event.currentTarget.value);
                 this.active(true);
             }
@@ -333,17 +333,17 @@ export var List = (($) => {
                         let item = this._main.query(`.option[data-index='${this._index}']`);
                         if(item){
                             this.select($(item).ds("value"));
-                        } 
+                        }
                     }else{
-                        
+
                         this.setFilter(event.currentTarget.value, true);
                         this.active(true);
                     }
-                    
-                    break; 
+
+                    break;
 				case 27://escape
 					break;
-				case 38://up arrow 
+				case 38://up arrow
 					this.move(-1);
 					break;
 				case 40://down arrow
@@ -354,7 +354,7 @@ export var List = (($) => {
 				}// end switch
         }
     }
-    
+
     class List{
         target:object = null;
         id:string = "";
@@ -375,7 +375,7 @@ export var List = (($) => {
 
         context:any = false;
         parentContext:any = false;
-        
+
         childs:boolean = false;
         parent:string = "";
         parentValue:any = null;
@@ -390,7 +390,7 @@ export var List = (($) => {
         getParentValue:any = () => {};
 
         constructor(info: any){
-            
+
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -400,10 +400,10 @@ export var List = (($) => {
             let main = this._main = (this.id)? $(this.id): false;
 
             if(!main){
-                
+
                 this._create(false);
             }else{
-                
+
                 if(main.ds("sgInput")){
                     return;
                 }
@@ -414,12 +414,12 @@ export var List = (($) => {
             if(target){
                 target.append(this._main);
             }
-            
+
         }
 
         _create(target:any){
             let info = {};
-            
+
             if(this.id){
                 info.id = this.id;
             }
@@ -433,11 +433,11 @@ export var List = (($) => {
             info.tagName = "input";
             info.type = "hidden";
 
-           
+
 
             this._main = $.create("div").addClass("type-input").addClass("sg-input").addClass(this.className);
             Float.Float.init(this._main.get());
-            
+
             this.input = this._main.create(info);
 
             this._input = this._main.create({
@@ -445,23 +445,23 @@ export var List = (($) => {
                 type: "text",
                 autocomplete: "off",
                 placeholder: this.placeholder,
-                
+
 
             });
-            
-            
+
+
             let data = [];
             let _data = null;
 
             if(this.parent){
-                
+
                 this.data.forEach((d)=>{
 
                     if(!data[d[2]]){
-                        
+
                         data[d[2]] = [];
                     }
-                    
+
                     data[d[2]].push( {
                         value: d[0],
                         text: d[1],
@@ -481,19 +481,19 @@ export var List = (($) => {
                 });
                 _data = data[0];
             }
-            
+
             this._data = data;
 
             this.menu = new ListMenu({
                 name:this.name,
                 input: this._input,
                 data : _data,
-                target: document.body,//this._main,
+                target: this._main,
                 value: this.value,
                 onactive: (value) => {
-                   
-                    
-                   
+
+
+
                     if(value){
                         this.menu.get().get().style.minWidth = this._input.get().offsetWidth+"px";
 
@@ -503,14 +503,14 @@ export var List = (($) => {
                             left:"left",
                             top:"down"
                         });
-                        
+
                     }
                 },
 
-            }); 
+            });
             this._input.on("change", event => {
                 this.input.val(this.menu.getValue());
-            }); 
+            });
 
 
             for(var x in this.events){
@@ -518,11 +518,11 @@ export var List = (($) => {
                 //let action = $.bind(this.events[x], this._main);
 				this._input.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
-            
+
             if(this.childs){
                 this._main.ds("childs", "childs");
 
-                this._input.on("change", $.bind(this.evalChilds, this.context || this, "event")); 
+                this._input.on("change", $.bind(this.evalChilds, this.context || this, "event"));
             }
 
 			this._input.prop(this.propertys);
@@ -539,8 +539,8 @@ export var List = (($) => {
             if(this.parent){
                 this._main.ds("parent", this.parent);
             }
-            
-            
+
+
             this.setValue(this.value);
         }
         setValue(value:any){
@@ -550,20 +550,20 @@ export var List = (($) => {
                 if(parentValue != this.parentValue){
                     this.createOptions(parentValue);
                 }
-                
+
             }
-    
+
             this.menu.setValue(value);
             this.input.get().value = this.menu.getValue();
             //this._input.fire("change")
-            
+
         }
-        
+
         getValue(){
-            
+
             return this.menu.getValue();//this._input.get().value;
 		}
-        
+
         _load(main:any){
 
         }
@@ -574,7 +574,7 @@ export var List = (($) => {
         get(){
             return this._main.get();
         }
-        
+
         hasChilds(){
             if(this._main.ds("childs")){
                 return true;
@@ -582,14 +582,14 @@ export var List = (($) => {
             return false;
         }
         createOptions(parentValue:any){
-            
+
             this.menu.setData(this._data[parentValue] || []);
             this.menu.setValue("");
-            
-            
-			
+
+
+
         }
-        
+
         evalOptions(parentValue:any){
 
         }
@@ -610,7 +610,7 @@ export var List = (($) => {
         }
         focus(){
             this._input.get().focus();
-            
+
         }
         select(){
             this._input.get().select();
@@ -620,8 +620,8 @@ export var List = (($) => {
             this.setValue(this.default);
         }
     }
-    
+
     //I.register("list", List);
-    
+
     return List;
 })(_sgQuery);

@@ -2,6 +2,7 @@ import { _sgQuery } from './Query.js';
 import { BlockingLayer } from './BlockingLayer.js';
 import { sgAjax, sgJson } from './Ajax.js';
 import { Form2 as Form2 } from './Form2.js';
+import { Grid2 as Grid2 } from './Grid2.js';
 import { Menu as Menu } from './Menu2.js';
 import { Float } from './Window.js';
 //import {GTInfo}  from '../../gt/ts/Info.js';
@@ -47,6 +48,7 @@ export var S = (($) => {
             return this._e[id];
         }
         static requestPanel(p) {
+            console.log(p);
             //let p = JSON.parse(xhr.responseText);
             if (p.panels) {
                 for (var x in p.panels) {
@@ -109,6 +111,7 @@ export var S = (($) => {
         }
         static init(info) {
             for (var x of info) {
+                console.log(this.components[x.type]);
                 if (this.components[x.type] && x.option !== null) {
                     if (this._e[x.id]) {
                         delete this._e[x.id];
@@ -154,6 +157,7 @@ export var S = (($) => {
             this.send3(info);
         }
         static send3(info) {
+            console.log("send3");
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
             }
@@ -294,6 +298,7 @@ export var S = (($) => {
             }
         }
         static send2(info /*:InfoParam*/) {
+            console.log("send2");
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
             }
@@ -767,10 +772,22 @@ export var S = (($) => {
     return Sevian;
 })(_sgQuery);
 S.register("Form2", Form2);
+S.register("Grid2", Grid2);
 S.register("Menu", Menu);
-S; //.register("GTInfo", GTInfo);
+//.register("GTInfo", GTInfo);
 //S.register("GTUnit", GTUnit);
 //S.register("GTHistory", GTHistory);
 S.register("InfoForm", InfoForm);
 //S.register("GTSite", GTSite);
+S.go({
+    async: true,
+    form: null,
+    data: {},
+    define: {
+        hola: (e) => alert(e),
+    },
+    task: [
+        {}
+    ]
+});
 //# sourceMappingURL=Sevian.js.map

@@ -224,7 +224,7 @@ export var Float = (($) => {
                 left = sL;
             }
             if ((top + height) > (cH + sT)) {
-                //top = cH + sT - height; 
+                //top = cH + sT - height;
             }
             if (top < sT) {
                 top = sT;

@@ -28,8 +28,7 @@ class Unit
 	private $_jsonRequest = null;
 	private $popupTemplate = '';
 
-private $infoTemplate = '
-	';
+	private $infoTemplate = '';
 
 
 

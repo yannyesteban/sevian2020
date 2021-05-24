@@ -7,7 +7,36 @@
 	"autoClose":false,
 	"items":[
 		{
-			"caption":"Aplicar Cambios",
+			"caption":"Nuevo+",
+			"action":"this.newGeofence(1)",
+			"dataUser_":{
+				"async": true,
+				"panel":"",
+				"valid":false,
+				"confirm_": "seguro?",
+				"params":[
+					{
+						"t":"setMethod",
+						"id":"",
+						"element":"form",
+						"method":"request",
+						"name":"&P_elementName",
+						"eparams":null
+					},
+					{
+						"t":"setMethodx",
+						"id":"&P_panelId",
+						"element":"&P_element",
+						"method":"geofence-update",
+						"name":"&P_elementName",
+						"eparams":null
+					}
+
+				]}
+		},
+		{
+			"caption":"Guardar",
+			"action":"this.saveGeofence(1)",
 			"dataUser":{
 				"async": true,
 				"panel":"&P_panelId",
@@ -30,7 +59,7 @@
 						"name":"&P_elementName",
 						"eparams":null
 					}
-			
+
 				]}
 		},
 		{
@@ -57,8 +86,8 @@
 						"name":"&P_elementName",
 						"eparams":null
 					}
-			
+
 				]}
 		}
 	]
-}	
+}

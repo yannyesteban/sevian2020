@@ -6,6 +6,7 @@ import { HistoryControl } from './HistoryControl.js';
 import { TraceControl } from './TraceControl.js';
 import { InfoRuleControl } from './InfoRuleControl.js';
 import { PolyControl } from './PolyControl.js';
+import { PolyControl as PolyControl2 } from './PolyControl2.js';
 import { MarkControl } from './MarkControl.js';
 import { IMark } from './IMark.js';
 import { Polygon } from './Polygon.js';
@@ -165,6 +166,9 @@ export class MapBoxLib {
                     break;
                 case "history":
                     map.addControl(this._controls["history"] = new HistoryControl(this), "top-right");
+                    break;
+                case "poly2":
+                    map.addControl(this._controls["poly2"] = new PolyControl2(this), "top-right");
                     break;
                 case "poly":
                     map.addControl(this._controls["poly"] = new PolyControl(this), "top-right");

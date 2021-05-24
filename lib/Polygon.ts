@@ -1,8 +1,11 @@
 import {createGeoJSONRectangle,createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle} from './Util.js';
+import { IPoly } from './IPoly';
 
-export class Polygon{
-    map:any = null;
-    type:string = "polygon";
+export class Polygon implements IPoly{
+    public static readonly TYPE = "polygon";
+
+    map: any = null;
+
     parent:object = null;
     name:string = "";
     visible:boolean = true;
@@ -35,7 +38,7 @@ export class Polygon{
     };
     lineColor:string = "white";
     lineWidth:number = 2;
-    fillColor:string = "red"; 
+    fillColor:string = "red";
     //radio:number = 0;
     //center:number[] = null;
     hand:number[] = null;
@@ -43,19 +46,22 @@ export class Polygon{
     _nodes:any = null;
     _line:any = null;
     id:string = "p"+String(new Date().getTime());
-    
+
     nodesId:string = null;
     lineId:string = null;
     circleId:string = null;
-    
+
     _play:boolean = false;
 
     callmove:Function = ()=>{};
     callresize:Function = ()=>{};
-    
-    ondraw:Function = ()=>{};
+
+    ondraw: Function = () => { };
+    public getType() {
+        return Polygon.TYPE;
+    }
     constructor(info:object){
-        
+
         for(let x in info){
             if(this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -69,21 +75,21 @@ export class Polygon{
 
     init(){
         let map = this.map;
-        
+
 
         //let polygon = turf.polygon([coo], { name: "poly1" });
         //polygon = turf.bezierSpline(polygon);
         //            console.log(polygon)
-        
+
 
         let polygon = {
-            
+
                 "type": "Feature",
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [[]]
                 }
-            
+
         }
         this._line = {
             "type": "geojson",
@@ -92,9 +98,9 @@ export class Polygon{
                 "features": [polygon]
             }
         };
-        
+
         this.map.addSource(this.lineId, this._line);
-        
+
         this.map.addLayer({
             "id": this.lineId,
             "type": "line",
@@ -103,7 +109,7 @@ export class Polygon{
                 "line-join": "round",
                 "line-cap": "round",
                 visibility:(this.visible)? "visible": "none"
-                
+
             },
             "paint": {
                 "line-color": "#ff3300",
@@ -111,11 +117,11 @@ export class Polygon{
                 //"line-opacity": 0.9,
                 //"line-gap-width":4,
                 //"line-dasharray":[2,2]
-                
+
             },
             "filter": ["==", "$type", "Polygon"]
         });
-        
+
         this.map.addLayer({
             "id": this.circleId,
             "type": "fill",
@@ -131,7 +137,7 @@ export class Polygon{
         });
         //this.setLine(this.line);
         //this.setFill(this.fill);
-       
+
         map.addLayer({
             id: this.nodesId,
             type: "circle",
@@ -196,20 +202,20 @@ export class Polygon{
         ];
         this.coordinatesInit = this.coordinates.slice()
         if(this.coordinates.length > 0){
-            
+
             this.draw();
         }
-       
+
     }
 
     setLine(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]); 
+            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]);
         }
     }
     setFill(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]); 
+            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]);
         }
     }
 
@@ -220,12 +226,12 @@ export class Polygon{
         }
         this.map.setLayoutProperty(this.lineId, "visibility", visible);
         this.map.setLayoutProperty(this.circleId, "visibility", visible);
-        
+
         if(this._play){
-            
+
             this.map.setLayoutProperty(this.nodesId, "visibility", visible);
         }
-        
+
 
     }
 
@@ -233,20 +239,20 @@ export class Polygon{
         this.coordinates.push([lngLat.lng, lngLat.lat]);
         this.draw();
         //let data = createGeoJSONPoly(this.coordinates);
-        
-        
+
+
         //this.map.getSource(this.lineId).setData(data.data);
     }
 
 
     draw(){
         let data = createGeoJSONPoly(this.coordinates);
-        
-        
+
+
         this.map.getSource(this.lineId).setData(data.data);
         this.ondraw(this.coordinates);
 
-       
+
     }
     getArea(){
         var polygon = turf.polygon([this.coordinates]);
@@ -254,16 +260,16 @@ export class Polygon{
         return turf.area(polygon);
     }
     _fnclick(map){
-        
+
          return ;
     }
 
     play(){
-        
+
         if(this._play){
             return;
         }
-        
+
         this.parent.stop();
         this._play = true;
         let map =  this.map;
@@ -273,17 +279,17 @@ export class Polygon{
         this.setLine(this.lineEdit);
         //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
         //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
-        
+
         let place = null;
         let type = null;
         let place_one = null;
-        let down1 = false; 
-        
-        
+        let down1 = false;
+
+
         let fnUp = (e)=>{
             map.off("mousemove", fnMove);
             type = null;
-            down1 = false; 
+            down1 = false;
         }
         let fnMove = (e)=>{
             this.coordinates[place] = [e.lngLat.lng, e.lngLat.lat];
@@ -291,10 +297,10 @@ export class Polygon{
         }
         let fnUp2 = (e)=>{
             map.off("mousemove", fnMove2);
-            
+
         }
         let fnMove2 = (e)=>{
-            
+
             //this.move(place_one, e.lngLat);
             let dLng = e.lngLat.lng - place_one.lng;
             let dLat = e.lngLat.lat - place_one.lat;
@@ -309,7 +315,7 @@ export class Polygon{
             place_one = e.lngLat;
             this.draw();
         }
-        
+
         map.on("mousedown", this.nodesId, this._mousedown = (e)=> {
             // Prevent the default map drag behavior.
             e.preventDefault();
@@ -318,19 +324,19 @@ export class Polygon{
             var features = map.queryRenderedFeatures(e.point, {
                 layers: [this.nodesId]
             });
-            
+
             place = features[0].properties.index;
             type = features[0].properties.type;
-           
+
             if(type == "m"){
                 this.split(place, [e.lngLat.lng, e.lngLat.lat]);
                 this.draw();
              }
-             
+
             map.on("mousemove", fnMove);
             map.once("mouseup", fnUp);
         });
-        
+
         map.on("mousedown", this.circleId, this._mousedown2 = (e)=> {
 
             if(down1){
@@ -338,30 +344,30 @@ export class Polygon{
             }
             // Prevent the default map drag behavior.
             e.preventDefault();
-            
+
             place_one = e.lngLat;
-            
+
             map.on("mousemove", fnMove2);
             map.once("mouseup", fnUp2);
 
         });
-        
+
         map.on("click", this._click = (e)=>{
-            
+
             //db (e.originalEvent.button+".........", "red","yellow")
             var features = this.map.queryRenderedFeatures(e.point, {
                 layers: [this.nodesId]
             });
             this.add(e.lngLat);
         });
-        
+
         map.on("contextmenu", this._contextmenu = (e) => {
             e.preventDefault();
             this.coordinates.pop();
             this.draw();
-            
+
         });
-      
+
 
     }
 
@@ -373,11 +379,11 @@ export class Polygon{
 
             this.map.off("click", this._click);
             this.map.off("contextmenu", this._contextmenu);
-            
+
             this.map.off("mousedown", this.nodesId, this._mousedown);
             this.map.off("mousedown", this.circleId, this._mousedown2);
-            
-            
+
+
            // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
             //"line-dasharray":[2,2]
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
@@ -388,27 +394,27 @@ export class Polygon{
         this.setLine(this.line);
         //this._mode = 0;
         this._play = false;
-        
+
 
     }
     reset(){
-        
+
         if(!this._play){
             return;
         }
         this._mode = 1;
         if(this.coordinatesInit){
-            
+
             this.coordinates = this.coordinatesInit.slice();
             if(this.coordinates.length > 1){
                 this.draw();
                 return;
             }
-            
+
         }else{
             this.coordinates = [];
         }
-        
+
         this._line = {
             "type": "geojson",
             "data": {
@@ -425,9 +431,9 @@ export class Polygon{
         //this._line.data.features = [];
         this.map.getSource(this.lineId).setData(this._line.data);
     }
-    
+
     delete(){
-        
+
         this.stop();
 
         let map = this.map;
@@ -436,24 +442,24 @@ export class Polygon{
         if (map.getLayer(this.nodesId)) map.removeLayer(this.nodesId);
 
         if (map.getSource(this.lineId)) map.removeSource(this.lineId);
-        
-        
+
+
 
     }
-    
+
     getCoordinates(){
         return this.coordinates;
     }
-    
+
     setCenter(lngLat){
-        
+
         this.center = lngLat;
-        
+
     }
     setHand(lngLat){
-        
+
         this.hand = lngLat;
-        
+
     }
 
 
@@ -467,15 +473,15 @@ export class Polygon{
             var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
             length = turf.length(line, {units: "kilometers"});
         }
-        
+
         this.radio = length;
         let data = createGeoJSONCircle([center.lng, center.lat], length);
-        
+
         this.map.getSource(this.lineId).setData(data.data);
     }
 
     split(index, value){
-        
+
         this.coordinates.splice(index, 0, value);
     }
     getHand(){
@@ -485,7 +491,7 @@ export class Polygon{
         return this.radio;
     }
     flyTo(zoom, speed){
-       
+
         var coordinates = this.coordinates;
 
         // Pass the first coordinates in the LineString to `lngLatBounds` &
@@ -496,7 +502,7 @@ export class Polygon{
         var bounds = coordinates.reduce(function(bounds, coord) {
         return bounds.extend(coord);
         }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-         
+
         this.map.fitBounds(bounds, {
             padding: 40
         });
@@ -508,7 +514,7 @@ export class Polygon{
         let centroid = turf.centroid(polygon);
 
         console.log(centroid);
-        
+
         this.map.flyTo({
             center: centroid.geometry.coordinates,
             zoom: zoom || this.flyToZoom,
@@ -518,20 +524,20 @@ export class Polygon{
               return t;
             }
           });
-            
+
     }
     panTo(duration){
 
         //this.map.setLayerZoomRange(this.circleId, 2, 5);
 
-        
+
 
 
         let polygon = turf.lineString(this.coordinates);
 
         let centroid = turf.centroid(polygon);
 
-        
+
 
         this.map.panTo(centroid.geometry.coordinates, {duration: duration || this.panDuration });
     }

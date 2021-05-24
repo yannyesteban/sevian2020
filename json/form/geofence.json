@@ -1,8 +1,8 @@
 {
 	"form":"geofence",
 	"caption":"Geocercas",
-	"className":"webcar",
-	"query":"SELECT * FROM geofence",
+	"className":"filter-form",
+	"query":"SELECT concat('', geofence.id) as geogence_id, id, name, description, type, coordinates, color, '' as alpha FROM geofence",
 	"menuName":"/menu/geofence_menu",
 	"methods":{
 		"request":{
@@ -13,26 +13,29 @@
 		}
 	},
 	"params":"",
-	
+
 	"pages":[],
 	"groups":{},
 	"infoFields":[
-		{"name":"id","caption":"Código A", "input": "input","type":"text"},
-		
-		{"name":"brand_id","caption":"Marca", "input": "input", "type": "select",
-		"data":[
-			[0, "seleccione", "*"],
-			"select id, brand from brands ORDER BY brand"
-			
-		  ]},
-		{"name":"model","caption":"Modelo"},
-		{"name":"type","caption":"Tipo","type":"select","data":[[0,"seleccione","*"],["circle","Círculo"],["rectangle","Rectánguloa"],["polygon","Polígono"]]}
+		{"name":"geogence_id","caption":"Geocerca", "input": "input", "type": "select",
+			"events":{
+				"change":"this.loadGeofence(event.currentTarget.value)"
+			},
+			"data":[
+				[0, "seleccione", "*"],
+				"select id, name from geofence ORDER BY name"
+
+			  ]},
+		{"name":"id","caption":"Código", "input": "hidden","type":"hidden"},
+		{"name":"color","input":"hidden", "type":"hidden"},
+		{"name":"type","caption":"input","type":"select","data":[[0,"seleccione","*"],["circle","Círculo"],["rectangle","Rectánguloa"],["polygon","Polígono"]]},
+		{"name":"alpha","caption":"hidden","type":"hidden","data":[[0,"seleccione","*"],[0.1, 0.1],[0.2, 0.2],[0.3, 0.3],[0.4, 0.4],[0.5, 0.5],[0.6, 0.6],[0.7, 0.7],[0.8, 0.8],[0.9, 0.9],[1, 1]]}
 
 	],
-	
+
 	"searchFor":[
 		"brand", "model"
 	],
-	"onDataUser":"dataUser.params[0].eparams={formData:this.getForm().getValue()};S.send(dataUser);"
+	"_onDataUser":"dataUser.params[0].eparams={formData:this.getForm().getValue()};S.send(dataUser);"
 
 }

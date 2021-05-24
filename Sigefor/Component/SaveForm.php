@@ -15,14 +15,14 @@ class InfoRecordField{
     public $table = '';
     public $notNull = false;
     public $rules = [];
-    
+
     public $sqlValue = false;
     public $refValue = false;
 	public $master = false;
 	public $expValue = 'Numero {=value} &name @cedula';
-    
+
     public $serialize = false;
-    public $serializeFilters = []; 
+    public $serializeFilters = [];
     public $aux = false;
     public $isUpdate = true;
     public $key = false;
@@ -31,12 +31,12 @@ class InfoRecordField{
     public $setSes = false;
 	public $setReq = false;
     public $setExp = false;
-    
+
     public $subform = null;
     public function __construct($opt = []){
-		
+
 		foreach($opt as $k => $v){
-          
+
 			if(property_exists($this, $k)){
 				$this->$k = $v;
 			}
@@ -45,18 +45,18 @@ class InfoRecordField{
 }
 
 class SaveForm {
-	
+
 
 	use \Sigefor\DBTrait\Form2;
 
 	private $loadRecord = null;
 
-	
+
 	private $patternJsonFile = JSON_PATH.'{name}.json';
 	private $userData = [];
 	private $masterFields = null;
 
-    
+
     private $transaction = false;
     private $error = false;
     private $errno = 0;
@@ -69,11 +69,11 @@ class SaveForm {
 	private $data = null;
 	private $subforms = null;
 
-	
+
 	//private $record = null;
 
 	/*
-	
+
 	$data;
 	$masterData = [];
 	$tables = [];
@@ -100,13 +100,13 @@ class SaveForm {
 	*/
 
 	public function __construct($info = []){
-		
+
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-        
+
 		$this->cn = \Sevian\Connection::get();
-		
+
 		$this->init($this->name, $this->record, $this->patternJsonFile);
 
 		//hx(json_encode($this->infoFields, JSON_PRETTY_PRINT));
@@ -115,10 +115,10 @@ class SaveForm {
 		foreach($this->infoQuery->fields as $key => $infoField){
 			$fields[] = $_fields[$key] = new InfoRecordField($infoField);
 		}
-		
+
 		foreach($this->infoFields as $info){
 			$info = (object)$info;
-			
+
 			if(!isset($_fields[$info->name])){
 				continue;
 			}
@@ -128,7 +128,7 @@ class SaveForm {
 			}
 
 
-			
+
 			if($info->params?? false){
 				if(is_string($info->params)){
 					$params = \Sevian\S::varCustom($info->params, $values, '&');
@@ -136,7 +136,7 @@ class SaveForm {
 				}else{
 					$params = $info->params;
 				}
-				
+
 				foreach($params as $k => $v){
 					$_fields[$info->name]->$k = $v;
 				}
@@ -150,19 +150,19 @@ class SaveForm {
 		if($this->data){
 			$this->send($this->data, []);
 		}
-		
+
 
 	}
-	
+
 
 	public function send($data, $masterData = []){
-       
-      
+
+
         $this->begin();
 
         $this->error = false;
         $this->errno = 0;
-       
+
         if($this->dataKeys){
             $this->setDataKeys($this->dataKeys);
         }
@@ -174,20 +174,20 @@ class SaveForm {
         foreach($data as $record){
             $this->result[] = $this->saveRecord($record, $masterData);
         }
-        
+
         $this->end($this->error);
-        
+
         return $this->result;
     }
 
     public function sendOne($record, $masterData = []){
-       
-      
+
+
         $this->begin();
 
         $this->error = false;
         $this->errno = 0;
-       
+
         if($this->dataKeys){
             $this->setDataKeys($this->dataKeys);
         }
@@ -196,12 +196,12 @@ class SaveForm {
             $this->setDictRecords($this->dataKeys[$this->dataKeysId]);
         }
 
-        
+
         $this->result[] = $this->saveRecord($record, $masterData);
-        
-        
+
+
         $this->end($this->error);
-        
+
         return $this->result;
     }
 
@@ -213,7 +213,7 @@ class SaveForm {
 
         $cn = $this->cn;
         $mode = $data->__mode_;
-       
+
         if(isset($data->__record_)){
             $record = $data->__record_;
         }elseif(isset($this->dict[$data->__id_])){
@@ -228,53 +228,53 @@ class SaveForm {
 
         $tables = $this->tables;
         $result = new \stdClass;
-        
+
         foreach($tables as $table){
-            
+
             if($table == ''){
                 continue;
             }
-            
+
             $serial = '';
             $filter = new \stdClass;
             $q_where = '';
 
             if($record != '' and $mode != '1'){
-                
+
                 if(count($tables ) == 1){
-                   
+
                     foreach($record as $k => $v){
-                        $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($k)."='".$cn->addSlashes($v)."'";    
+                        $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($k)."='".$cn->addSlashes($v)."'";
                     }
                 }else{
-                    
+
                     foreach($record as $k => $v){
                         //hr($k);exit;
                         if(isset($this->fields[$k]) and $this->fields[$k]->table == $table){
-                            $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($this->fields[$k]->field)."='".$cn->addSlashes($v)."'";    
+                            $q_where .= (($q_where != '')? ' AND ': '').$cn->addQuotes($this->fields[$k]->field)."='".$cn->addSlashes($v)."'";
                         }
                     }
                 }
             }
             //hr("table: $table, mode: $mode ". $q_where, "red");
-            
+
             foreach($this->fields as $field){
 
                 $name = $field->name;
 
                 //$field = new InfoRecordField($field);
-              
+
                 if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->isUpdate)){
                     continue;
                 }
-              
+
                 if(($field->serial) and $field->notNull and $data->$name??false and $data->$name == '' and $mode == 1){
 					$serial = $field->field;
                     continue;
                 }
 
                 $fieldName = $cn->addQuotes($field->field);
-               
+
                 if($field->sqlValue){
                     $fieldValue = $field->sqlValue;
                 }else{
@@ -307,7 +307,7 @@ class SaveForm {
                                 break;
                         }
                     }
-                    
+
                     if($field->key){
                         $record->$name = $value;
                     }
@@ -323,7 +323,7 @@ class SaveForm {
 					}else{
 						$fieldValue = "'".$cn->addSlashes($value)."'";
                     }
-                    
+
                 }
                 if($mode == 1){
                     $q_values[] = $fieldValue;
@@ -333,8 +333,8 @@ class SaveForm {
                 }
                 $data->$name = $value;
 
-                
-                
+
+
             }
             $table = $cn->addQuotes($table);
             $q = '';
@@ -343,7 +343,7 @@ class SaveForm {
                     $q = "INSERT INTO $table (".implode(', ',$q_fields).') VALUES ('.implode(', ',$q_values).');';
                     break;
                 case 2:
-                
+
                     $q = "UPDATE $table SET ". implode(', ', $q_set). " WHERE $q_where;";
                     break;
                 case 3:
@@ -351,10 +351,10 @@ class SaveForm {
                     $q = "DELETE FROM $table WHERE $q_where;";
                     break;
             }
-            
+
             $q_error = false;
             $q_errno = 0;
-            
+
             if($q and $mode <=3){
                 //hr($q);
                 $cn->execute($q);
@@ -363,17 +363,17 @@ class SaveForm {
                     $this->error = true;
                     $this->errno = $q_errno = $cn->errno;
                     $q_error = $cn->error;
-                    //hr("ERROR ".$q, "RED");	
-                    //hr($q_error, "green");	
+                    //hr("ERROR ".$q, "RED");
+                    //hr($q_error, "green");
                 }
-                
+
                 if($serial){
                     $lastId = $cn->getLastId();
                     $data->$serial =  $lastId;
 					$record->$serial = $lastId;
                 }
             }
-            
+
             if($q_error){
                 $record = $recordIni;
                 $this->dict[$data->__id_] = $recordIni;
@@ -388,9 +388,9 @@ class SaveForm {
                 'error' => $q_error,
                 'errno' => $q_errno
             ];
-            
+
         }
-        
+
         if($this->subforms){
             foreach($this->subforms as $subform){
 				//hx($data, "green");
@@ -414,20 +414,20 @@ class SaveForm {
         foreach($this->fields as $k => $field){
 
             if(isset($field->detail)){
-                
+
                 if(is_string($data->$k)){
                     $data->$k = \json_decode($data->$k);
                 }
                 if($data->$k){
-                   $this->send($field->detail, $data->$k, $data); 
+                   $this->send($field->detail, $data->$k, $data);
                 }
             }
         }
-        
+
         $result->error = $this->error;
         return $result;
 	}
-	
+
 	public function getResult(){
 		return $this->result;
 	}
@@ -439,14 +439,14 @@ class SaveForm {
     }
 
     private function end($error){
-            
+
         if($this->transaction){
             if(!$error){
                 $this->cn->commit();
-                
+
             }else{
                 $this->cn->rollback();
-                
+
             }
         }
     }

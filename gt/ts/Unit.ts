@@ -58,7 +58,10 @@ class Mobil{
 	private infoForm: typeof InfoForm = null;
 	private infoFormMain: InfoForm = null;
 	private propertysInfo: any[] = [];
-	private follow: boolean = false;
+	private maxDelay: number = 200;
+	private followMe: boolean = false;
+	private trackingData: any[] = [];
+
 
 	public onValid: (value: boolean) => void = (value) => { };
 	public onFollow: (value: boolean) => void = (value) => { };
@@ -122,12 +125,20 @@ class Mobil{
 		});
 	}
 
+	deleteTrace() {
+		this.trace.delete();
+	}
+
 	getTrace() {
 		return this.trace;
 	}
 
-	initTrace(tracking) {
-		this.trace.init(tracking);
+	initTrace(trackingData?) {
+		if (trackingData) {
+			this.trackingData = trackingData;
+		}
+
+		this.trace.init(this.trackingData);
 	}
 
 	addTracking(tracking) {
@@ -135,7 +146,9 @@ class Mobil{
 		this.setValid(true);
 
 		if (this.trace.isActive()) {
-			this.trace.add(tracking);
+			console.log(tracking)
+			this.trackingData.push(tracking);
+			this.trace.setData(this.trackingData);
 		}
 	}
 
@@ -199,11 +212,21 @@ class Mobil{
 		return [this.longitude, this.latitude];
 	}
 	getFollow() {
-		return this.follow;
+		return this.followMe;
 	}
 	setFollow(value: boolean) {
-		this.follow = value;
+		this.followMe = value;
 		this.onFollow(value);
+	}
+	cutTrace() {
+		if (this.trace.isActive() && this.maxDelay) {
+			let length = this.trackingData.length;
+			const time = Math.trunc(Date.now() / 1000);
+			this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.maxDelay);
+			if (length != this.trackingData.length) {
+				this.trace.setData(this.trackingData);
+			}
+		}
 	}
 }
 
@@ -222,7 +245,7 @@ export class Unit{
 	private infoTrace: any = null;
 	private infoPopupMain: any = null;
 
-	private delay: number = 4000;
+	private delay: number = 400000;
 	private traceDelay: number = 20000;
 
 	private timer: number = null;
@@ -488,27 +511,31 @@ return;
 		this.map = map;
 	}
 
-	updateTracking(data){
+	updateTracking(data) {
+
+		for (let unitId in this.units) {
+			this.units[unitId].cutTrace();
+		}
 		if (data === undefined) {
 			return;
 		}
 
-		data.forEach((element, i)=>{
+		data.forEach((tracking, i)=>{
 			//this.trace.add(element);
-			const unitId = element.unitId;
+			const unitId = tracking.unitId;
 			const index:number = this.tracking.findIndex(e=>e.unitId == unitId);
 
 			if(index >= 0){
-				this.tracking[index] = element;
+				this.tracking[index] = tracking;
 			}
 
 			if (this.units[unitId]) {
 
-				this.units[unitId].addTracking(element);
+				this.units[unitId].addTracking(tracking);
 				this.units[unitId].setPosition({
-					longitude: element.longitude,
-					latitude: element.latitude,
-					heading: element.heading
+					longitude: tracking.longitude,
+					latitude: tracking.latitude,
+					heading: tracking.heading
 				}).setInfo(this.getUnitInfo(unitId));
 
 			}
@@ -551,6 +578,7 @@ return;
 
 	play(){
 
+		return;
 		if(this.timer){
 			window.clearTimeout(this.timer);
 		}
@@ -605,6 +633,8 @@ return;
 	playTrace(unitId: number, value?: boolean) {
 
 		if (value === false) {
+
+			this.units[unitId].deleteTrace();
 			return;
 		}
 
@@ -697,7 +727,7 @@ return;
 
 
 					if(this.units[unitId].getValid()){
-
+						this.units[unitId].setInfo(this.getUnitInfo(unitId));
 						this.units[unitId].show(true);
 						this.units[unitId].flyTo();
 						this._lastUnitId = unitId;
@@ -949,7 +979,7 @@ return;
 	initTraceControl() {
 
 		this.traceControl = this.map.getControl().getControl("trace") as TraceControl;//<TraceControl>
-		this.traceControl.play();
+		//this.traceControl.play();
 
 		this.traceTool = new TraceTool({
 			id:this.traceControl.getPage(0),

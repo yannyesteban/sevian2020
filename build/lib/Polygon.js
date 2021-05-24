@@ -2,7 +2,6 @@ import { createGeoJSONPoly, createGeoJSONCircle } from './Util.js';
 export class Polygon {
     constructor(info) {
         this.map = null;
-        this.type = "polygon";
         this.parent = null;
         this.name = "";
         this.visible = true;
@@ -57,6 +56,9 @@ export class Polygon {
         this.lineId = "l-" + this.id;
         this.circleId = "c-" + this.id;
         this.init();
+    }
+    getType() {
+        return Polygon.TYPE;
     }
     init() {
         let map = this.map;
@@ -423,4 +425,5 @@ export class Polygon {
         this.map.panTo(centroid.geometry.coordinates, { duration: duration || this.panDuration });
     }
 }
+Polygon.TYPE = "polygon";
 //# sourceMappingURL=Polygon.js.map

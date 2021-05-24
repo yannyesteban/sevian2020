@@ -45,7 +45,9 @@ class Mobil {
         this.infoForm = null;
         this.infoFormMain = null;
         this.propertysInfo = [];
-        this.follow = false;
+        this.maxDelay = 200;
+        this.followMe = false;
+        this.trackingData = [];
         this.onValid = (value) => { };
         this.onFollow = (value) => { };
         this.onVisible = (value) => { };
@@ -91,16 +93,24 @@ class Mobil {
             }
         });
     }
+    deleteTrace() {
+        this.trace.delete();
+    }
     getTrace() {
         return this.trace;
     }
-    initTrace(tracking) {
-        this.trace.init(tracking);
+    initTrace(trackingData) {
+        if (trackingData) {
+            this.trackingData = trackingData;
+        }
+        this.trace.init(this.trackingData);
     }
     addTracking(tracking) {
         this.setValid(true);
         if (this.trace.isActive()) {
-            this.trace.add(tracking);
+            console.log(tracking);
+            this.trackingData.push(tracking);
+            this.trace.setData(this.trackingData);
         }
     }
     setPosition(info) {
@@ -159,11 +169,21 @@ class Mobil {
         return [this.longitude, this.latitude];
     }
     getFollow() {
-        return this.follow;
+        return this.followMe;
     }
     setFollow(value) {
-        this.follow = value;
+        this.followMe = value;
         this.onFollow(value);
+    }
+    cutTrace() {
+        if (this.trace.isActive() && this.maxDelay) {
+            let length = this.trackingData.length;
+            const time = Math.trunc(Date.now() / 1000);
+            this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.maxDelay);
+            if (length != this.trackingData.length) {
+                this.trace.setData(this.trackingData);
+            }
+        }
     }
 }
 Mobil.map = null;
@@ -179,7 +199,7 @@ export class Unit {
         this.infoPopup = null;
         this.infoTrace = null;
         this.infoPopupMain = null;
-        this.delay = 4000;
+        this.delay = 400000;
         this.traceDelay = 20000;
         this.timer = null;
         this.traceTimer = null;
@@ -362,22 +382,25 @@ export class Unit {
         this.map = map;
     }
     updateTracking(data) {
+        for (let unitId in this.units) {
+            this.units[unitId].cutTrace();
+        }
         if (data === undefined) {
             return;
         }
-        data.forEach((element, i) => {
+        data.forEach((tracking, i) => {
             //this.trace.add(element);
-            const unitId = element.unitId;
+            const unitId = tracking.unitId;
             const index = this.tracking.findIndex(e => e.unitId == unitId);
             if (index >= 0) {
-                this.tracking[index] = element;
+                this.tracking[index] = tracking;
             }
             if (this.units[unitId]) {
-                this.units[unitId].addTracking(element);
+                this.units[unitId].addTracking(tracking);
                 this.units[unitId].setPosition({
-                    longitude: element.longitude,
-                    latitude: element.latitude,
-                    heading: element.heading
+                    longitude: tracking.longitude,
+                    latitude: tracking.latitude,
+                    heading: tracking.heading
                 }).setInfo(this.getUnitInfo(unitId));
             }
             if (this._lastUnitId === unitId) {
@@ -401,6 +424,7 @@ export class Unit {
         });
     }
     play() {
+        return;
         if (this.timer) {
             window.clearTimeout(this.timer);
         }
@@ -445,6 +469,7 @@ export class Unit {
     }
     playTrace(unitId, value) {
         if (value === false) {
+            this.units[unitId].deleteTrace();
             return;
         }
         S.go({
@@ -524,6 +549,7 @@ export class Unit {
                     let ch = item.getCheck();
                     ch.get().checked = true;
                     if (this.units[unitId].getValid()) {
+                        this.units[unitId].setInfo(this.getUnitInfo(unitId));
                         this.units[unitId].show(true);
                         this.units[unitId].flyTo();
                         this._lastUnitId = unitId;
@@ -717,7 +743,7 @@ export class Unit {
     }
     initTraceControl() {
         this.traceControl = this.map.getControl().getControl("trace"); //<TraceControl>
-        this.traceControl.play();
+        //this.traceControl.play();
         this.traceTool = new TraceTool({
             id: this.traceControl.getPage(0),
             dataUnits: this.dataUnits,

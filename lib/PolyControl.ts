@@ -1,6 +1,8 @@
-import {_sgQuery as $}  from '../Sevian/ts/Query.js';
+import { _sgQuery as $ } from '../Sevian/ts/Query.js';
+import { IPoly } from './IPoly';
+
 export class PolyControl{
-        
+
     id:string = "mapboxgl-ctrl-poly";
     type:string = "circle";
     _map:any = null;
@@ -16,14 +18,14 @@ export class PolyControl{
     _unit:any = null;
     _group1:any = null;
     _group2:any = null;
-    
+
     _btnRule:any = null;
     _btnLine:any = null;
     _btnUnit:any = null;
     _btnMultiLine:any = null;
     _btnTrash:any = null;
     _btnExit:any = null;
-    
+
     _fill:any = null;
     _alpha:any = null;
 
@@ -50,26 +52,26 @@ export class PolyControl{
     }
 
     onAdd(map){
-        
+
         this._map = map;
-        
+
         this._container = $.create("div").addClass(["poly-tool-main"]);
-        
-        
+
+
 
         this._group = this._container.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "poly-tool-info"])
         .style("display","none");
         this._groupi = this._group.create("div").addClass(["info"]);
         this._length = this._groupi.create("span").addClass("poly-tool-value");
         this._length.text("0 Km<sup>2</sup>");
-        
+
 
         this._group0 = this._group.create("div").addClass(["propertys"]);
         this._group0.create("span").text("Color: ");
         this._fill = this._group0.create("input").prop({"type": "color", "title":"Color", "value":this.fill.color}).
         on("change", (event)=>{
             this.evalPropertys();
-            
+
         });
         this._group0.create("span").text("Opacidad: ");
         let options = "";
@@ -86,7 +88,7 @@ export class PolyControl{
 
         this._group1 = this._container.create("div");
         this._group1.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
-        
+
         this._btnRule = this._group1.create("button").prop({"type": "button", "title":"Inicia la herramienta de Polígonos"}).addClass("icon-poly");
         this._btnRule.on("click", ()=>{
             this.play({});
@@ -94,7 +96,7 @@ export class PolyControl{
 
         this._group2 = this._container.create("div").style("display","none");
         this._group2.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "rule-tool"]);
-        
+
         this._btnLine = this._group2.create("button").prop({"type": "button", "title":"Dibujar un Círculo"}).addClass("icon-circle")
         .on("click", ()=>{
             this.delete();
@@ -112,7 +114,7 @@ export class PolyControl{
         });
         this._btnUnit = this._group2.create("button").prop({"type": "button", "title":"Guardar"}).addClass(["icon-save"])
         .on("click", ()=>{
-            
+
             this.onsave(this._line.getCoordinates());
         });
         this._btnTrash = this._group2.create("button").prop({"type": "button", "title":"Descarta la medición actual"}).addClass(["icon-trash"])
@@ -127,7 +129,7 @@ export class PolyControl{
         });
 
         return this._container.get();
-        
+
     }
 
     onRemove(){
@@ -158,9 +160,9 @@ export class PolyControl{
 
 
         }
-        
 
-        
+
+
     }
     evalPropertys(){
         this.fill = {
@@ -173,20 +175,20 @@ export class PolyControl{
             opacity: 1,
             width: 2
         };
-        
+
         this._line.setFill(this.fill);
         this._line.setLine(this.line);
     }
     setLength(length){
-       
-        
+
+
     }
     toggleUnit(){
 
 
     }
     stop(){
-        
+
         if(this._mode == 1){
             this.delete();
             this._group.style("display","none");
@@ -205,15 +207,15 @@ export class PolyControl{
         if(area > 1000000){
             area = area / 1000000;
             this._length.text(area.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2}) + " Km<sup>2</sup>");
-            
+
         }else{
-            this._length.text(area.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2}) + " m<sup>2</sup>");    
-            
+            this._length.text(area.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2}) + " m<sup>2</sup>");
+
         }
     }
     setCircle(){
-       
-        
+
+
         this._line = this._parent.draw(this.id, "circle",{
             fill: this.fill,
             line:this.line,
@@ -225,10 +227,10 @@ export class PolyControl{
             let radio = this._line.getRadio();
             let area = Math.PI*Math.pow(radio, 2);
             this._length.text(area.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2})+" Km<sup>2</sup>"+" (R: "+radio.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2})+" Km)" );
-            
+
             return;
             if(coordinates.length > 2){
-               
+
                 let coord = coordinates.slice();
                 coord.push(coord[0]);
                 let polygon = turf.polygon([coord]);
@@ -239,10 +241,10 @@ export class PolyControl{
                     this._length.text(area.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2}));
                     this._unit.text("Km<sup>2</sup>");
                 }else{
-                    this._length.text(area.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2}));    
+                    this._length.text(area.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2}));
                     this._unit.text("m<sup>2</sup>");
                 }
-                
+
 
             }else{
                 this._length.text("0");
@@ -253,7 +255,7 @@ export class PolyControl{
         this._type = 1;
     }
 
-    
+
     setRectangle(){
         this._line = this._parent.draw(this.id, "rectangle",{
             fill: this.fill,
@@ -263,7 +265,7 @@ export class PolyControl{
             coordinates: this.defaultCoordinates,
         });
         this._line.ondraw = (coordinates) => {
-            
+
             this.printArea(this._line.getArea());
 
         };
@@ -279,7 +281,7 @@ export class PolyControl{
         });
         this._line.ondraw = (coordinates) => {
             if(coordinates.length > 2){
-               
+
                 let coord = coordinates.slice();
                 coord.push(coord[0]);
                 let polygon = turf.polygon([coord]);
@@ -287,7 +289,7 @@ export class PolyControl{
 
             }else{
                 this._length.text("0 Km<sup>2</sup>");
-                
+
             }
         };
         this._line.play();
