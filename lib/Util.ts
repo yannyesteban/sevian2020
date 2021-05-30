@@ -16,8 +16,8 @@ export const createGeoJSONRectangle = function(p1, p2 = null) {
     }else{
         ret = [[p1]];
     }
-    
-    
+
+
     //let ret = bboxPolygon.geometry.coordinates;
     //ret.push(ret[0]);
 
@@ -34,7 +34,7 @@ export const createGeoJSONRectangle = function(p1, p2 = null) {
             }]
         }
     };
-    
+
     ret[0].forEach((item, index)=>{
         if(index>=4){
             return;
@@ -48,24 +48,24 @@ export const createGeoJSONRectangle = function(p1, p2 = null) {
             "properties": {
                 "index": index,
                 "type": "h",
-                
+
             }
         };
         json.data.features.push(point);
     });
-    
-    
-    // 
+
+
+    //
     p1=null, p2 = null;
     let midpoint = null;
-    
+
     ret[0].forEach((item, index)=>{
 
         if(index > 0){
             p2 = turf.point(item);
             midpoint = turf.midpoint(p1, p2);
             p1 = p2;
-            
+
         }else{
             p1 = turf.point(item);
             return;
@@ -80,17 +80,17 @@ export const createGeoJSONRectangle = function(p1, p2 = null) {
             "properties": {
                 "index": 3+index,
                 "type": "m",
-                
+
             }
         };
         json.data.features.push(point);
     });
     return json;
-    
+
 };
 
-export const createGeoJSONPoly= function(coords, ini) {
-    
+export const createGeoJSONPoly= function(coords, ini?) {
+
     let c = [];
     let ret = coords.slice();
     ret.push(ret[0]);
@@ -108,9 +108,9 @@ export const createGeoJSONPoly= function(coords, ini) {
             }]
         }
     };
-   
+
     coords.forEach((item, index)=>{
-   
+
         let point = {
             "type": "Feature",
             "geometry": {
@@ -120,22 +120,22 @@ export const createGeoJSONPoly= function(coords, ini) {
             "properties": {
                 "index": index,
                 "type": "h",
-                
+
             }
         };
         json.data.features.push(point);
     });
-    
-    
+
+
     let p1=null, p2 = null, midpoint = null;
-    
+
     ret.forEach((item, index)=>{
 
         if(index > 0){
             p2 = turf.point(item);
             midpoint = turf.midpoint(p1, p2);
             p1 = p2;
-            
+
         }else{
             p1 = turf.point(item);
             return;
@@ -150,19 +150,19 @@ export const createGeoJSONPoly= function(coords, ini) {
             "properties": {
                 "index": index,
                 "type": "m",
-                
+
             }
         };
         json.data.features.push(point);
     });
     return json;
-    
+
 };
 export const createGeoJSONLine= function(coords, ini) {
-    
-    
+
+
     let ret = coords;
-   
+
 
     let json =  {
         "type": "geojson",
@@ -177,9 +177,9 @@ export const createGeoJSONLine= function(coords, ini) {
             }]
         }
     };
-   
+
     coords.forEach((item, index)=>{
-   
+
         let point = {
             "type": "Feature",
             "geometry": {
@@ -189,22 +189,22 @@ export const createGeoJSONLine= function(coords, ini) {
             "properties": {
                 "index": index,
                 "type": "h",
-                
+
             }
         };
         json.data.features.push(point);
     });
-    
-    
+
+
     let p1=null, p2 = null, midpoint = null;
-    
+
     ret.forEach((item, index)=>{
 
         if(index > 0){
             p2 = turf.point(item);
             midpoint = turf.midpoint(p1, p2);
             p1 = p2;
-            
+
         }else{
             p1 = turf.point(item);
             return;
@@ -219,13 +219,13 @@ export const createGeoJSONLine= function(coords, ini) {
             "properties": {
                 "index": index,
                 "type": "m",
-                
+
             }
         };
         json.data.features.push(point);
     });
     return json;
-    
+
 };
 export const createGeoJSONCircle = function(center, radiusInKm, points) {
     if(!points) points = 64;
@@ -278,7 +278,7 @@ export const createGeoJSONCircle = function(center, radiusInKm, points) {
         "properties": {
             "index": -1,
             "type": "c",
-            
+
         }
     };
     json.data.features.push(point);
@@ -293,14 +293,14 @@ export const createGeoJSONCircle = function(center, radiusInKm, points) {
             "properties": {
                 "index": index,
                 "type": "h",
-                
+
             }
         };
         json.data.features.push(point);
     });
-    
- 
-    
+
+
+
 
     return json;
 };

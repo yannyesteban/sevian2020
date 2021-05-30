@@ -50,6 +50,7 @@ export class PolyControl {
     public onstart: Function = (coords, propertys) => { };
     public onsave: Function = (coords, propertys) => { };
     public onexit: Function = (coords, propertys) => { };
+    public onNew: Function = () => { };
 
     public ondraw: Function = (config) => { };
     public onlength: Function = (length) => { console.log(length) };
@@ -208,6 +209,7 @@ export class PolyControl {
             let area = Math.PI * Math.pow(radio, 2);
             this.onlength(area.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km<sup>2</sup>" + " (R: " + radio.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km)");
             this.ondraw({ coordinates: coordinates, type: this.poly.getType() });
+            this.updateForm({ coordinates: coordinates, type: this.poly.getType() });
             return;
             if (coordinates.length > 2) {
 
@@ -248,11 +250,12 @@ export class PolyControl {
 
             this.printArea(this.poly.getArea());
             this.ondraw({ coordinates: coordinates, type: this.poly.getType() });
-
+            this.updateForm({ coordinates: coordinates, type: this.poly.getType() });
         };
         this.poly.play();
         this._type = 2;
     }
+
     setPolygon() {
         this.poly = this.parentControl.draw(this.id, "polygon", {
             fill: this.fill,
@@ -273,6 +276,7 @@ export class PolyControl {
 
             }
             this.ondraw({ coordinates: coordinates, type: this.poly.getType() });
+            this.updateForm({ coordinates: coordinates, type: this.poly.getType() });
         };
         this.poly.play();
         this._type = 3;
@@ -416,7 +420,8 @@ export class PolyControl {
                         id: 1,
                         caption: this.infoForm.newCaption,
                         action: (item, event) => {
-                            this.form.reset();
+                            this.newForm();
+
                         }
                     },
                     {
@@ -453,4 +458,15 @@ export class PolyControl {
         this.form.setValue(data);
     }
 
+    updateForm(data) {
+        this.form.getInput("coordinates").setValue(JSON.stringify(data.coordinates));
+        this.form.getInput("type").setValue(data.type);
+    }
+
+    newForm() {
+        this.reset();
+        this.form.reset();
+        this.onNew();
+
+    }
 }

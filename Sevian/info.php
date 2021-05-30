@@ -63,7 +63,7 @@ class InfoParam{
 	public $fixed = false;
 
 	public $isPanel = false;
-	public $token = null;
+	public $iToken = null;
 
 	public function __construct($opt = []){
 		foreach($opt as $k => $v){
@@ -81,6 +81,7 @@ class InfoElement{
 	public $name = '';
 	public $method = '';
 	public $eparams = false;
+	public $iToken = null;
 
 	public $debugMode = false;
 	public $designMode = false;

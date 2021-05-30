@@ -27,34 +27,9 @@ class Geofence
 
 	private $_jsonRequest = null;
 	static $patternJsonFile = '';
-	private $popupTemplate = '<div class="wecar_info">
-		<div>{=name}</div>
-		<div>Categoria: {=category}</div>
+	private $popupTemplate = '';
 
-
-		<div>{=latitude}, {=longitude}</div>
-		<div>Telefonos {=phone1} {=phone2} {=phone3}</div>
-		<div>Web: {=web}</div>
-		<div>Dirección: {=address}</div>
-
-	</div>';
-
-	private $infoTemplate = '
-	<div class="units-info">
-
-		<div>Nombre</div><div>{=name}</div>
-		<div>Categoria</div><div>{=category}</div>
-
-		<div>Longitud</div><div>{=longitude}</div>
-		<div>Latidud</div><div>{=latitude}</div>
-
-		<div>Dirección</div><div>{=address}</div>
-		<div>Teléfonos</div><div>{=phone1} {=phone2} {=phone3}</div>
-		<div>Correo</div><div>{=email}</div>
-		<div>Web</div><div>{=web}</div>
-		<div>Observaciones</div><div>{=observations}</div>
-
-	</div>';
+	private $infoTemplate = '';
 
     public function __construct($info = []){
         foreach($info as $k => $v){
@@ -76,6 +51,8 @@ class Geofence
 			$this->userData = $this->getSes('_userData');
 
 		}
+
+
 		switch($method){
 			case 'load':
 				$this->load();
@@ -94,16 +71,35 @@ class Geofence
 
 					'pathImages'	=> PATH_IMAGES,
 					'caption'		=> 'Geocercas',
-					'id'            => 'ks',
+					'id'            => $this->id,
 					'followMe'		=> true,
 					'delay'			=> 60000,
 				];
+			case 'test':
+				$this->addResponse([
+					'type'=>'update',
+					'id'=>$this->id,
+					'actions'=>[
+						['property'=>'name4', 'value'=>'yanny esteban 24'],
+						['method'=>'test', 'value'=>'cool']
+					]
+
+
+				]);
+				break;
+
 			case 'get-record':
 				$id = $this->eparams->geofenceId?? false;
 
-				$this->setRequest([
-					'list'=>$this->listGeofences(),
-					'data'=>$this->loadGeofence($id)
+				$this->addResponse([
+
+					'id'=>$this->id,
+					'data'=>[
+						'list'=>$this->listGeofences(),
+						'data'=>$this->loadGeofence($id)
+					],
+					'iToken'=>$this->iToken
+
 				]);
 
 				break;
@@ -163,12 +159,22 @@ class Geofence
 
 			'pathImages'	=> PATH_IMAGES,
 			'caption'		=> 'Geocercas',
-			'id'            => 'ks',
+			'id'            => $this->id,
 			'followMe'		=> true,
 			'delay'			=> 60000,
 			'geofenceForm'	=> $this->getGeofenceForm(1)
 ];
 		$this->setInit($this->info);
+
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> 'GTGeofence',
+			'iClass'	=> 'GTGeofence',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> '',
+			'config'	=> $this->info
+		]);
 
     }
 

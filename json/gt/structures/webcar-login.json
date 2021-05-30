@@ -2,7 +2,8 @@
 	"structure":"webcar-login",
 	"title":"Módulo GT",
 	"template":"gt-cota",
-	"templateName":"/gt-webcar-login",
+	"templateName_ini":"/gt-webcar-login",
+	"templateName":"/gt/login",
 	"themeTemplate":"",
 	"class":"webcar",
 	"mainPanel":4,
@@ -12,7 +13,7 @@
 	"publicRole":true,
 	"elements":[
 		{
-			"id":4,
+			"id":"panel-4",
 			"element":"form",
 			"name":"/gt/forms/login",
 			"method":"request",

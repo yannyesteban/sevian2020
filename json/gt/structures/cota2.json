@@ -2,10 +2,11 @@
 	"structure": "cota",
 	"title": "Módulo GT",
 	"template": "gt-cota",
-	"templateName": "/gt-webcar",
+	"templateNameIni": "/gt-webcar",
+	"templateName": "/gt/webcar",
 	"themeTemplate": "",
 	"class": "webcar",
-	"mainPanel": 4,
+	"mainPanel": "panel-4",
 	"params": {},
 	"wins": [
 		{
@@ -24,8 +25,8 @@
 	"publicRole": true,
 	"elements": [
 		{
-			"id": 4,
-			"element": "gt_map",
+			"id": "panel-4",
+			"element": "gt-map",
 			"name": "map_01",
 			"method": "load",
 			"eparams": {
@@ -45,7 +46,7 @@
 			"design": 0
 		},
 		{
-			"id": 2,
+			"id": "panel-2",
 			"element": "s-menu",
 			"name": "/gt/menus/webcar",
 			"method": "create",
@@ -56,7 +57,7 @@
 			"design": 0
 		},
 		{
-			"id": 3,
+			"id": "panel-3",
 			"element": "form",
 			"name": "/gt/forms/main_unit",
 			"method": "request",
@@ -67,7 +68,7 @@
 			"design": 0
 		},
 		{
-			"id": 5,
+			"id": "panel-5",
 			"element": "s-menu",
 			"name": "/menu/tool",
 			"method": "create",
@@ -78,7 +79,7 @@
 			"design": 0
 		},
 		{
-			"id": 7,
+			"id": "panel-7",
 			"element": "s-menu",
 			"name": "/gt/menus/comm_menu",
 			"method": "create",
@@ -89,7 +90,7 @@
 			"design": 0
 		},
 		{
-			"id": 6,
+			"id": "panel-6",
 			"element": "s-menu",
 			"name": "/gt/menus/comm_tool",
 			"method": "create",

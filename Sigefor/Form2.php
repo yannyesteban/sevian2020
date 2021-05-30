@@ -272,7 +272,7 @@ class Form2
 	}
 
 	public function save(){
-
+		//hx(\Sevian\S::getVReq());
 		//hr($this->_masterData);exit;
 		$formSave =  new \Sigefor\Component\FF([
 			'name'		=> JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
@@ -287,14 +287,14 @@ class Form2
 
 			if(!$v->error){
 
-				$this->addFragment(new \Sevian\iMessage([
+				$this->setInfoElement(new \Sevian\iMessage([
 					'caption'	=> $formSave->getCaption(),
 					'text'		=> 'Record was saved!!!'
 				]));
 
 			}else{
 
-				$this->addFragment(new \Sevian\iMessage([
+				$this->setInfoElement(new \Sevian\iMessage([
 					'caption'	=> 'Error '.$formSave->getCaption(),
 					'text'		=> "Record wasn't saved!!!"
 				]));

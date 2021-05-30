@@ -47,7 +47,7 @@ export const createGeoJSONRectangle = function (p1, p2 = null) {
         };
         json.data.features.push(point);
     });
-    // 
+    //
     p1 = null, p2 = null;
     let midpoint = null;
     ret[0].forEach((item, index) => {

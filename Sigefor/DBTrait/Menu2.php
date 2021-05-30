@@ -10,7 +10,7 @@ trait Menu2{
 
 	protected $tMenus = "_sg_menus";
 	protected $tMenuItems = "_sg_menu_items";
-	
+
 	public $userData = [];
 	static public $patternJsonFile = JSON_PATH.'{name}.json';
 
@@ -25,7 +25,7 @@ trait Menu2{
 	}
 
 	public function setInfoMenu($info){
-		
+
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
@@ -36,7 +36,7 @@ trait Menu2{
 		}else{
 			$config = $this->params;
 		}
-		
+
 		if($config){
 			foreach($config as $k => $v){
 				$this->$k = $v;
@@ -48,10 +48,10 @@ trait Menu2{
 				\Sevian\S::setExp($k, $v);
 			}
 		}
-		
+
 		if($this->methods?? false){
 			if(is_string($this->methods)){
-				
+
 				$methods = \Sevian\S::varCustom($this->methods, $this->userData, '&P_');
 
 				$methods = \Sevian\S::vars($methods);
@@ -59,7 +59,7 @@ trait Menu2{
 			}else{
 				$methods = (array)$this->methods;
 			}
-			
+
 			if($methods and $methods[$this->method]?? false){
 				foreach($methods[$this->method] as $k => $v){
 					$this->$k = $v;
@@ -68,7 +68,7 @@ trait Menu2{
 		}
 		if($this->items?? false){
 
-			
+
 			if(is_string($this->items)){
 				$items = \Sevian\S::varCustom($this->items, $this->userData, '&P_');
 				$items = \Sevian\S::vars($items);
@@ -76,21 +76,21 @@ trait Menu2{
 			}else{
 				//$config = (array)$this->items;
 			}
-			
-			
+
+
 		}
 	}
 
 
 	public function jsonConfig($info){
-		
+
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
 
 		$params = \Sevian\S::vars($this->params);
 		$params = json_decode($params);
-		
+
 		if($params){
 			foreach($params as $k => $v){
 				$this->$k = $v;
@@ -101,7 +101,7 @@ trait Menu2{
 	}
 
 	public function loadJsonMenu($file){
-		
+
 		$info = json_decode(file_get_contents($file, true));
 		return $this->jsonConfig($info);
 	}
@@ -111,7 +111,7 @@ trait Menu2{
 
 		$cn->query = "
 			SELECT menu, title as caption, class, items, params, config
-			FROM $this->tMenus 
+			FROM $this->tMenus
 			WHERE menu = '$name'";
 
 		$this->cn->execute();
@@ -124,7 +124,7 @@ trait Menu2{
 			}
 			$params = \Sevian\S::vars($this->config);
 			$config = json_decode($params);
-			
+
 			if($config){
 				foreach($config as $k => $v){
 					$this->$k = $v;
@@ -141,8 +141,8 @@ trait Menu2{
 		$cn = $this->cn;
 
 		$cn->query = "
-			SELECT * 
-			FROM $this->tMenuItems 
+			SELECT *
+			FROM $this->tMenuItems
 			WHERE menu = '$name' order by `order`
 			";
 
@@ -150,7 +150,7 @@ trait Menu2{
 
 		$items = [];
 		$json = [];
-		
+
 		while($rs = $cn->getDataAssoc($result)){
 			if($rs["action"]){
 				$action = "S.send(".$rs["action"].");";
@@ -162,25 +162,25 @@ trait Menu2{
 				$events = [];
 				$params = str_replace("\r\n", '\\n', $rs['events']);
 				$params = str_replace("\t", '',  ($params));
-			
-				
+
+
 				$params = json_decode(\Sevian\S::vars($params));
 
-				
+
 				foreach($params as $k => $v){
 					$events[$k] = $v;
 				}
-				
+
 			}
 
 			$index = $rs["index"];
 			$parent = $rs["parent"];
-			
+
 			$items[$index] = [
 				"caption" => $rs["title"],
 				"action" => $action,
 			];
-            
+
             if($events){
                 $items[$index]['events'] = $events;
             }

@@ -3,11 +3,11 @@ namespace SIGEFOR\DBTrait;
 
 trait JasonFileInfo{
 
-	public function loadJsonInfo($name, $pattern = null){ 
-		
+	public function loadJsonInfo($name, $pattern = null){
+
 		if(substr($name, 0, 1) == '/'){
 			$name = substr($name, 1);
-			
+
 			if($pattern){
 				$name = str_replace('{name}', $name, $pattern);
 			}
@@ -19,8 +19,8 @@ trait JasonFileInfo{
 		return null;
 	}
 
-	public function loadJsonFile($name){ 
-		
+	public function loadJsonFile($name){
+
 		if(substr($name, 0, 1) == '/'){
 			$file = \Sevian\S::varCustom(@file_get_contents(substr($name, 1), true), $this->userData, '&P_');
 			$file = \Sevian\S::vars($file);

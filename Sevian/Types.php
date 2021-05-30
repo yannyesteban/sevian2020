@@ -19,14 +19,14 @@ class iPanel{
 }
 
 class iFragment{
-    
+
     public $token = '';
     public $targetId = '';
     public $html = '';
 	public $script = '';
 	public $css = '';
 	public $mode = '1';
-    
+
 
     public function __construct($opt = []){
 		foreach($opt as $k => $v){
@@ -59,7 +59,7 @@ class iPropertyHTML{
 	public $targetId = '';
     public $propertys = [];
     public $style = [];
-	
+
 
     public function __construct($opt = []){
 		foreach($opt as $k => $v){
@@ -88,7 +88,8 @@ class iObjectData{
 }
 
 class iMessage{
-	public $token = '';
+	public $type = 'message';
+	public $iToken = '';
 	public $caption = '';
 	public $text = '';
 	public $className = '';
@@ -105,13 +106,13 @@ class iMessage{
 				$this->$k = $v;
 			}
         }
-        $this->token = 'message';
+
 	}
 }
 
 
 class jsConfigPanel{
-    
+
     public $panel = '';
     public $type = '';
     public $option = [];
@@ -127,11 +128,11 @@ class jsConfigPanel{
 }
 
 class jsUpdatePanel{
-    
+
     public $panel = '';
     public $actions = [];
 	public $debug = false;
-	
+
     public function __construct($opt = []){
 		foreach($opt as $k => $v){
 			if(property_exists($this, $k)){
@@ -142,7 +143,7 @@ class jsUpdatePanel{
 }
 
 class jsConfigElement{
-    
+
     public $id = '';
     public $type = '';
     public $option = [];

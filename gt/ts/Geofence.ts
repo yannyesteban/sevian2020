@@ -1,4 +1,4 @@
-import {_sgQuery as $}  from '../../Sevian/ts/Query.js';
+import {_sgQuery as $, SQObject}  from '../../Sevian/ts/Query.js';
 import {Map}  from './Map.js';
 //import {Form2 as Form2} from './Form2.js';
 import {Menu as Menu} from '../../Sevian/ts/Menu2.js';
@@ -78,8 +78,6 @@ export class Geofence{
 
 
 
-
-
 	constructor(info){
 
 		for(var x in info){
@@ -118,13 +116,32 @@ export class Geofence{
 					async: true,
 					valid: false,
 					confirm_: 'seguro?',
-					blockingTarget: mapControl.getPanel(),
-					requestFunction: (json) => {
+					blockingTarget: mapControl.getPanel() as SQObject,
+					requestFunctions: {
+						"f": (json) => {
+							console.log(json);
+							mapControl.setGeogenceList(json.list);
+							mapControl.setGeogence(json.data);
+
+						}
+					},
+					requestFunction_: (json) => {
 						console.log(json);
 						mapControl.setGeogenceList(json.list);
 						mapControl.setGeogence(json.data);
 
 					},
+					task: [
+						{
+							cmd: "setMethod",
+							element: "gt-geofence",
+							method: "get-record",
+							eparams: {
+								geofenceId:"1"
+							},
+							iToken : "f"
+						}
+					],
 					params: [
 						{
 							t: "setMethod",
@@ -134,8 +151,9 @@ export class Geofence{
 
 							name: "/form/geofence",
 							eparams: {
-								geofenceId:"5"
-							}
+								geofenceId:"1"
+							},
+							iToken : "f"
 						}
 					]
 				});
@@ -148,7 +166,15 @@ export class Geofence{
 					valid: false,
 					confirm_: 'seguro?',
 					blockingTarget: mapControl.getPanel(),
-					requestFunction: (json) => {
+					requestFunctions: {
+						"f": (json) => {
+							console.log(json);
+							mapControl.setGeogenceList(json.list);
+							mapControl.setGeogence(json.data);
+
+						}
+					},
+					requestFunction_: (json) => {
 						console.log(json);
 						mapControl.setGeogenceList(json.list);
 						mapControl.setGeogence(json.data);
@@ -161,7 +187,8 @@ export class Geofence{
 							name: "/form/geofence",
 							eparams: {
 								geofenceId: id
-							}
+							},
+							iToken : "f"
 						}
 					]
 				});
@@ -181,7 +208,7 @@ export class Geofence{
 				formData.append("propertys", data.propertys);
 				formData.append("__mode_", data.__mode_);
 				if (data.__mode_ == 2) {
-					formData.append("record", JSON.stringify({
+					formData.append("__record_", JSON.stringify({
 						id: data.id
 					}));
 				}
@@ -193,6 +220,14 @@ export class Geofence{
 					confirm_: 'seguro?',
 					form: formData,
 					blockingTarget: mapControl.getPanel(),
+					requestFunctions: {
+						"f": (json) => {
+							console.log(json);
+							mapControl.setGeogenceList(json.list);
+							mapControl.setGeogence(json.data);
+
+						}
+					},
 					_requestFunction: (json) => {
 
 					},
@@ -205,7 +240,19 @@ export class Geofence{
 
 							name:"/form/geofence",
 							eparams: {}
-						}
+						},
+						{
+							t: "setMethod",
+
+							element: "gt-geofence",
+							method: "get-record",
+
+							name: "/form/geofence",
+							eparams: {
+								geofenceId:"1"
+							},
+							iToken : "f"
+						},
 					]
 				});
 			}

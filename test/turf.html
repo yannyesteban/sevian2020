@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+    <script src='turf.min.js'></script>
+</head>
+<body>
+
+    <script type="module">
+	</script>
+    <script>
+
+
+
+
+
+        var polygon = turf.feature({
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              14.414062499999998,
+              55.97379820507658
+            ],
+            [
+              -45,
+              16.29905101458183
+            ],
+            [
+              20.7421875,
+              -31.653381399663985
+            ],
+            [
+              52.3828125,
+              3.8642546157214084
+            ],
+            [
+              52.03125,
+              67.60922060496382
+            ],
+            [
+              7.03125,
+              71.74643171904148
+            ],
+            [
+              14.414062499999998,
+              55.97379820507658
+            ]
+          ]
+        ]
+      }
+    });
+    var geom = turf.getGeom(polygon)
+console.log(geom)
+
+var d = turf.getGeom(polygon);
+console.log(turf.getGeom(d).coordinates)
+console.log(turf.getCoords(d))
+
+
+    </script>
+
+</body>
+</html>

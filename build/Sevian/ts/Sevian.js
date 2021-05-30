@@ -27,6 +27,51 @@ export var S = (($) => {
         static test() {
             alert("hello i am sevian");
         }
+        static initElement(element) {
+            if (!element) {
+                return;
+            }
+            const id = element.id;
+            if ($(id)) {
+                $(id).text(element.html);
+            }
+            if (element.script) {
+                $.appendScript(element.script);
+            }
+            if (element.css) {
+                $.appendStyle(element.css);
+            }
+            if (element.title) {
+                document.title = element.title;
+            }
+            if (this.components[element.iClass] && element.config !== null) {
+                if (this._e[id]) {
+                    delete this._e[id];
+                }
+                this._e[id] = new this.components[element.iClass](element.config); //x.option
+            }
+        }
+        static updateElement(element) {
+            if (!this._e[element.id] || !element.actions) {
+                return;
+            }
+            const id = element.id;
+            element.actions.forEach(action => {
+                if (action.property !== undefined) {
+                    this._e[id][action.property] = action.value;
+                    return;
+                }
+                if (action.method !== undefined) {
+                    if (action.args !== undefined) {
+                        this._e[id][action.method](...action.args);
+                    }
+                    else if (action.value !== undefined) {
+                        alert(action.method);
+                        this._e[id][action.method](action.value);
+                    }
+                }
+            });
+        }
         static load(info) {
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
@@ -39,6 +84,46 @@ export var S = (($) => {
             this.setComponents(this.jsComponents);
             this.setModules(this.modules);
         }
+        static load3(info) {
+            for (var x in info) {
+                if (this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+            this.winInit(this.wins);
+            console.log(this.elements);
+            //this.init(this.elements);
+            this.elements.forEach(element => {
+                if (!element) {
+                    return;
+                }
+                this.initElement(element);
+                return;
+                console.log(this.components[element.iClass]);
+                const id = element.id;
+                if ($(id)) {
+                    $(id).text(element.html);
+                }
+                if (element.script) {
+                    $.appendScript(element.script);
+                }
+                if (element.css) {
+                    $.appendStyle(element.css);
+                }
+                if (element.title) {
+                    document.title = element.title;
+                }
+                if (this.components[element.iClass] && element.config !== null) {
+                    if (this._e[id]) {
+                        delete this._e[id];
+                    }
+                    this._e[id] = new this.components[element.iClass](element.config); //x.option
+                }
+            });
+            //this.requestPanel(this.request);
+            this.setComponents(this.jsComponents);
+            this.setModules(this.modules);
+        }
         static winInit(info) {
             for (let win of info) {
                 this._w[win.name] = new Float.Window(win);
@@ -46,6 +131,37 @@ export var S = (($) => {
         }
         static getElement(id) {
             return this._e[id];
+        }
+        static requestPanel3(data, requestFunctions) {
+            console.log(data);
+            data.forEach(item => {
+                if (item.iToken && requestFunctions && requestFunctions[item.iToken]) {
+                    requestFunctions[item.iToken](item.data);
+                    return;
+                }
+                switch (item.type) {
+                    case "panel":
+                        break;
+                    case "update":
+                        this.updateElement(item);
+                        break;
+                    case "response":
+                        break;
+                    case "element":
+                        this.initElement(item);
+                        break;
+                    case "fragment":
+                        break;
+                    case "message": //push, delay,
+                        console.log(item);
+                        this.msg = new Float.Message(item);
+                        this.msg.show({});
+                        break;
+                        break;
+                    case "notice": //push, delay,
+                        break;
+                }
+            });
         }
         static requestPanel(p) {
             console.log(p);
@@ -154,10 +270,10 @@ export var S = (($) => {
             return $().query(`form[data-sg-type="panel"][data-sg-panel="${id}"]`);
         }
         static go(info) {
-            this.send3(info);
+            this.send4(info);
         }
-        static send3(info) {
-            console.log("send3");
+        static send4(info) {
+            console.log("send3", info);
             if (info.confirm && !confirm(info.confirm)) {
                 return false;
             }
@@ -191,6 +307,200 @@ export var S = (($) => {
                 }
                 else {
                     params = info.params;
+                }
+            }
+            if ($(info.id) && !info.async) {
+                const f = $(info.id);
+                if (f.get() instanceof HTMLFormElement) {
+                    const form = f.get();
+                    if (!form.elements["__sg_async"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_async" });
+                    }
+                    form.elements["__sg_async"].value = 0;
+                    if (!form.elements["__sg_id"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_id" });
+                    }
+                    form.elements["__sg_id"].value = info.id;
+                    if (!form.elements["__sg_params"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_params" });
+                    }
+                    form.elements["__sg_params"].value = params;
+                    if (!form.elements["__sg_sw"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_sw" });
+                    }
+                    form.elements["__sg_sw"].value = Sevian.sw;
+                    if (!form.elements["__sg_ins"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_ins" });
+                    }
+                    form.elements["__sg_ins"].value = Sevian.instance;
+                    f.get().submit();
+                }
+            }
+            if (info.form) {
+                if (typeof info.form === "string") {
+                    form = document.getElementById(info.form);
+                }
+                if (info.form instanceof HTMLFormElement) {
+                    form = info.form;
+                }
+                if (info.form instanceof FormData) {
+                    formData = info.form;
+                }
+            }
+            else if (this.getForm(info.id)) {
+                form = this.getForm(info.id);
+            }
+            if (form) {
+                if (!info.async) {
+                    if (form.__sg_sw.value === form.__sg_sw2.value) {
+                        if (form.__sg_sw.value != 1) {
+                            form.__sg_sw.value = 1;
+                        }
+                        else {
+                            form.__sg_sw.value = 0;
+                        }
+                    }
+                    form.__sg_params.value = params;
+                    form.__sg_async.value = info.async ? 1 : 0;
+                    form.submit();
+                    return false;
+                }
+                formData = new FormData(form);
+            }
+            if (!formData) {
+                formData = new FormData();
+            }
+            formData.set("__sg_panel", info.id);
+            formData.set("__sg_ins", Sevian.instance);
+            formData.set("__sg_sw", Sevian.sw);
+            formData.set("__sg_params", params);
+            formData.set("__sg_async", info.async);
+            if (info.async) {
+                let blockingLayer = null;
+                if (info.blockingTarget !== undefined) {
+                    blockingLayer = new BlockingLayer({});
+                    blockingLayer.show((info.blockingTarget && info.blockingTarget.get()) || this.getForm(info.id));
+                }
+                let fun;
+                let _onRequest = info.onRequest || (xhr => { });
+                if (info.requestFunction) {
+                    fun = info.requestFunction;
+                }
+                else {
+                    /*fun = (xhr) => {
+                        this.requestPanel(JSON.parse(xhr.responseText));
+                    }*/
+                    fun = (json) => {
+                        this.requestPanel3(json, info.requestFunctions || null);
+                    };
+                }
+                fetch("", {
+                    method: "post",
+                    body: formData,
+                    headers: {
+                    //'Content-Type': 'application/json'
+                    }
+                }).then(res => (res.json()))
+                    .catch(error => {
+                    if (blockingLayer) {
+                        blockingLayer.hide();
+                    }
+                })
+                    .then(json => {
+                    //this.requestPanel(json);
+                    fun(json);
+                    if (blockingLayer) {
+                        blockingLayer.hide();
+                    }
+                    _onRequest(json);
+                });
+                return;
+                var ajax = new sgAjax({
+                    url: "",
+                    method: "post",
+                    form: formData,
+                    onSucess: (xhr) => {
+                        fun(xhr);
+                        _onRequest(xhr);
+                    },
+                    onError: function (xhr) {
+                    },
+                    waitLayer: {
+                        class: "wait",
+                        target: $.create("div").get(),
+                        message: false,
+                        icon: ""
+                    },
+                });
+                ajax.send();
+                return false;
+            }
+            else {
+                // gererate a HTMLElementForm and submit !!!
+            }
+        }
+        static send3(info) {
+            console.log("send3", info);
+            if (info.confirm && !confirm(info.confirm)) {
+                return false;
+            }
+            if (info.window) {
+                this.configWin(info.window);
+            }
+            let elem = null;
+            if (!isNaN(info.element)) {
+                elem = this.getElement(info.element);
+            }
+            else if (typeof (info.element) === "string") {
+                elem = this.getElement(info.element);
+            }
+            else if (typeof (info.element) === "object") {
+                elem = info.element;
+            }
+            if (elem) {
+                if (info.valid && elem.valid && !elem.valid(info.valid)) {
+                    return false;
+                }
+                if (info.onsubmit && elem.onsubmit && !elem.onsubmit()) {
+                    return false;
+                }
+            }
+            let form = null;
+            let formData = null;
+            let params = "";
+            if (info.params) {
+                if (typeof (info.params) === "object") {
+                    params = JSON.stringify(info.params);
+                }
+                else {
+                    params = info.params;
+                }
+            }
+            if ($(info.id) && !info.async) {
+                const f = $(info.id);
+                if (f.get() instanceof HTMLFormElement) {
+                    const form = f.get();
+                    if (!form.elements["__sg_async"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_async" });
+                    }
+                    form.elements["__sg_async"].value = 0;
+                    if (!form.elements["__sg_id"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_id" });
+                    }
+                    form.elements["__sg_id"].value = info.id;
+                    if (!form.elements["__sg_params"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_params" });
+                    }
+                    form.elements["__sg_params"].value = params;
+                    if (!form.elements["__sg_sw"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_sw" });
+                    }
+                    form.elements["__sg_sw"].value = Sevian.sw;
+                    if (!form.elements["__sg_ins"]) {
+                        f.create("input").prop({ "type": "text", name: "__sg_ins" });
+                    }
+                    form.elements["__sg_ins"].value = Sevian.instance;
+                    f.get().submit();
                 }
             }
             if (info.form) {
@@ -259,7 +569,6 @@ export var S = (($) => {
                     }
                 }).then(res => (res.json()))
                     .catch(error => {
-                    console.error("Error:", error);
                     if (blockingLayer) {
                         blockingLayer.hide();
                     }
@@ -779,15 +1088,17 @@ S.register("Menu", Menu);
 //S.register("GTHistory", GTHistory);
 S.register("InfoForm", InfoForm);
 //S.register("GTSite", GTSite);
+/*
 S.go({
     async: true,
     form: null,
     data: {},
     define: {
-        hola: (e) => alert(e),
+        hola: (e)=>alert(e),
     },
     task: [
         {}
     ]
-});
+
+})*/ 
 //# sourceMappingURL=Sevian.js.map

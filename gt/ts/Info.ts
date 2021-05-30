@@ -14,22 +14,22 @@ export class GTInfo{
     _form:object = null;
 
     _infoBody:object = null;
-    
+
     private _win:any[] = [];
 
 
     constructor(info){
-        
+
         for(var x in info){
             if(this.hasOwnProperty(x)) {
                 this[x] = info[x];
             }
         }
-        
+
         let main = (this.id)? $(this.id): false;
-        
+
         if(main){
-            
+
             if(main.ds("gtInfo")){
                 return;
             }
@@ -42,11 +42,11 @@ export class GTInfo{
 
         }else{
             main = $.create("div").attr("id", this.id);
-            
+
             this._create(main);
         }
 
-    
+
     }
     _create(main:any){
 
@@ -71,11 +71,11 @@ export class GTInfo{
             className:["sevian"],
             child:main.get()
         });
-        
-        
 
 
-        
+
+
+
     }
     show(){
         this._win["info-main"].show();

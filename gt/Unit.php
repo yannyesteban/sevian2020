@@ -198,7 +198,7 @@ class Unit
 
 		$lastDateTime = date('Y-m-d H:i:s');
 		$this->info = [
-			'id'=>$this->panel->id,
+			'id'=>$this->id,
 			'panel'=>$this->id,
 
 			'mapName'     	=> $this->eparams->mapName ?? '',
@@ -232,6 +232,16 @@ class Unit
 
 		$this->setSes('lastDateTime', $lastDateTime);
 		$this->setInit($this->info);
+
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> 'GTUnit',
+			'iClass'	=> 'GTUnit',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> '',
+			'config'	=> $this->info
+		]);
 
     }
 

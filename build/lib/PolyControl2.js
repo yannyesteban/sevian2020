@@ -41,6 +41,7 @@ export class PolyControl {
         this.onstart = (coords, propertys) => { };
         this.onsave = (coords, propertys) => { };
         this.onexit = (coords, propertys) => { };
+        this.onNew = () => { };
         this.ondraw = (config) => { };
         this.onlength = (length) => { console.log(length); };
         this.parentControl = object;
@@ -159,6 +160,7 @@ export class PolyControl {
             let area = Math.PI * Math.pow(radio, 2);
             this.onlength(area.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km<sup>2</sup>" + " (R: " + radio.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " Km)");
             this.ondraw({ coordinates: coordinates, type: this.poly.getType() });
+            this.updateForm({ coordinates: coordinates, type: this.poly.getType() });
             return;
             if (coordinates.length > 2) {
                 let coord = coordinates.slice();
@@ -194,6 +196,7 @@ export class PolyControl {
         this.poly.ondraw = (coordinates) => {
             this.printArea(this.poly.getArea());
             this.ondraw({ coordinates: coordinates, type: this.poly.getType() });
+            this.updateForm({ coordinates: coordinates, type: this.poly.getType() });
         };
         this.poly.play();
         this._type = 2;
@@ -217,6 +220,7 @@ export class PolyControl {
                 this.onlength("0 Km<sup>2</sup>");
             }
             this.ondraw({ coordinates: coordinates, type: this.poly.getType() });
+            this.updateForm({ coordinates: coordinates, type: this.poly.getType() });
         };
         this.poly.play();
         this._type = 3;
@@ -348,7 +352,7 @@ export class PolyControl {
                         id: 1,
                         caption: this.infoForm.newCaption,
                         action: (item, event) => {
-                            this.form.reset();
+                            this.newForm();
                         }
                     },
                     {
@@ -378,6 +382,15 @@ export class PolyControl {
     setGeogence(data) {
         data.__mode_ = 2;
         this.form.setValue(data);
+    }
+    updateForm(data) {
+        this.form.getInput("coordinates").setValue(JSON.stringify(data.coordinates));
+        this.form.getInput("type").setValue(data.type);
+    }
+    newForm() {
+        this.reset();
+        this.form.reset();
+        this.onNew();
     }
 }
 //# sourceMappingURL=PolyControl2.js.map

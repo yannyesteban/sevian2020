@@ -7,10 +7,10 @@ namespace SIGEFOR;
 //require_once MAIN_PATH.'Sigefor/DBTrait/Menu2.php';
 
 class Menu2 extends \Sevian\Element {
-	
+
 	//use	DBTrait\Menu2;
 
-	
+
 	private $infoPanels = null;
 	private $_dbINFO = [];
 	public $jsClassName = 'Menu';
@@ -27,9 +27,9 @@ class Menu2 extends \Sevian\Element {
 	}
 
 	public function config(){
-		
+
 	}
-	
+
 	public function evalMethod($method = false): bool{
 
 		if($method){
@@ -42,7 +42,7 @@ class Menu2 extends \Sevian\Element {
 				/*
 				$this->loadMenu($this->name);
 				$this->panel = new \SEVIAN\HTML('div');
-				
+
 				$this->panel->id = $this->getPanelId();
 				$this->typeElement = "Menu";
 				$menu = [
@@ -53,28 +53,28 @@ class Menu2 extends \Sevian\Element {
 					'className'=>$this->className,
 					'autoClose'=>$this->autoClose,
 					'items'=>$this->items,
-					'onDataUser'=>$this->onDataUser?? 'S.send(dataUser);' 
-				
+					'onDataUser'=>$this->onDataUser?? 'S.send(dataUser);'
+
 
 
 				];
 				$this->info = $menu;
-				
+
 				*/
 
 
 			break;
 			case 'load':
-				
+
 
 		}
-		return true;		
+		return true;
 	}
 
 	public function createMenu(){
 
 		if(!$this->containerId){
-            $this->containerId = 'menu-main-'.$this->id;
+            $this->containerId = $this->id;
         }
 
 		$info = new Component\Menu([
@@ -83,16 +83,26 @@ class Menu2 extends \Sevian\Element {
             'panelId'	=> $this->id,
             'name'		=> $this->name,//JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
 			'method'	=> $this->method,
-			'onDataUser'=>$this->onDataUser?? 'S.send(dataUser);' 
-            
+			'onDataUser'=>$this->onDataUser?? 'S.send(dataUser);'
+
         ]);
 
 		$div = new \SEVIAN\HTML('div');
         $div->id = $this->containerId;
         $this->setPanel($div);
 
-        $info->id = $this->containerId;
+        //$info->id = $this->containerId;
         $this->setInit($info);
-		
+
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> '',
+			'iClass'	=> 'Menu',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> '',
+			'config'	=> $info
+		]);
+
 	}
 }

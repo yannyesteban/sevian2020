@@ -2,12 +2,13 @@
 namespace Sevian;
 
 class Element{
-	
+
 	public $async = false;
 	public $elementId = null;
 	public $name = '';
 	public $eparams = [];
 	public $updated = false;
+	public $iToken = false;
 
 	protected $_panel = null;
 	protected $_init = null;
@@ -15,7 +16,7 @@ class Element{
 
 	protected $onDesing = true;
 	protected $onDebug = true;
-	
+
 	public $jsClassName = '';
 	/* to here */
 	public $id = null;
@@ -23,10 +24,12 @@ class Element{
 
 	static private $_elementName = [];
 	public $element = "default";
-	
+
 	public $title = '';
 	public $panel = null;
 	public $containerId = null;
+
+	protected $_res = [];
 
 	public $_data_user = [];
 
@@ -36,15 +39,16 @@ class Element{
 	protected $_secAfter = null;
 	protected $_config = [];
 	protected $_response = [];
+	protected $_infoElement = null;
 	protected $_jsElement = [];
 	protected $_components = null;
 	protected $typeElement = "panel";
 	protected $info = null;
 	protected $panelActions = null;
 	protected $_configInput = null;
-	
+
 	protected $_vPanel = [];
-	
+
 	public function __construct($opt = []){
 
 		foreach($opt as $k => $v){
@@ -52,18 +56,26 @@ class Element{
 		}
 
 	}
-	
+	public function getInfoElement(){
+		return $this->_infoElement;
+	}
+
+	public function setInfoElement($infoElement){
+		$this->_response[] = $infoElement;
+	}
+
+
 	/* OK */
 	public function config(){}
-	
+
 	/* OK */
 	public function evalMethod(){}
-	
+
 	/* OK */
 	public function setPanel($panel){
 		$this->_panel = $panel ;
 	}
-	
+
 	/* OK */
 	public function getPanel(){
 		if(isset($this->_panel)){
@@ -76,17 +88,17 @@ class Element{
 	public function setInit($info){
 		$this->_init = $info;
 	}
-	
+
 	/* OK */
 	public function getInit(){
 		return $this->_init;
 	}
-	
+
 	/* OK */
 	public function setJSActions($info){
 		$this->_jsActions = $info;
 	}
-	
+
 	/* OK */
 	public function getJSActions(){
 		return $this->_jsActions;
@@ -105,7 +117,7 @@ class Element{
 			"type"	=> $this->typeElement,
 			"option"=> $this->info,
 			"debug" => "hola",
-			
+
 		]);
 	}
 
@@ -114,17 +126,29 @@ class Element{
 			"panel" => $this->id,
 			"actions"=> $this->panelActions??$this->info,
 			"debug" => "hola",
-			
-		]);	
+
+		]);
 	}
-	
-	public function addFragment($frag){
-		
-		$this->_response[]=$frag;
-	
+
+	public function addResponse($response){
+
+		$this->_response[] = $response;
+
 	}
-	
+
 	public function getResponse(){
+
+		return $this->_response;
+
+	}
+
+	public function addFragment($frag){
+
+		$this->_response[]=$frag;
+
+	}
+
+	public function getResponse2(){
 
 		return $this->_response;
 
@@ -133,22 +157,22 @@ class Element{
 	public function getSequenceBefore(){
 
 		return $this->_secBefore;
-		
+
 	}
 
 	public function getSequenceAfter(){
-		
+
 		return $this->_secAfter;
-	
+
 	}
 
 	public function addConfig($config){
-	
+
 		$this->_config = array_merge($this->_config, $config);
-	
+
 	}
 
-	
+
 
 	static public function setElementName($name){
 		self::$_elementName[get_called_class()] = $name;
@@ -165,9 +189,9 @@ class Element{
 	public function getConfigPanel(){
 		return $this->_configPanel;
 	}
-	
+
 	public function request($method=false){
-		
+
 
 		return new iPanel([
 			'panel'	=> $this->id,
@@ -177,24 +201,24 @@ class Element{
 			'css'	=> $this->panel->css,
 			'class'	=> 'yyy',
 		]);
-		
+
 	}
-    
+
     public function _getJsConfigPanel():jsConfigPanel{
-        
+
         return new jsConfigPanel([
             "panel"   => $this->id,
             "type"    => "sgPanel",
             "options" => []
-            
+
         ]);
-        
+
     }
-    
+
     public function _addJsElement($opt){
-		
+
 		$this->_jsElement[] = $opt;
-	
+
 	}
 	public function _getJsElement(){
 
@@ -219,10 +243,10 @@ class Element{
 		//	hr($e->getMessage());
 
 		//}
-		
 
 
-		
+
+
 	}
 	public function getJsonComponents(){
 		return $this->_components?? [];
@@ -245,12 +269,12 @@ class EmptyElement extends Element{
 	public function __construct(){
 		$this->main =  \Sevian\HTML('');
 	}
-	
-} 
+
+}
 
 
 abstract class JsComponent  implements \Sevian\JasonComponent{
-	
+
 	static $_element = false;
 	protected $type = '';
 
@@ -258,13 +282,13 @@ abstract class JsComponent  implements \Sevian\JasonComponent{
 	public $panelId = false;
 	public $id = false;
 	public $element = "default";
-	
+
 	public $name = '';
 	public $method = '';
 	public $eparams = [];
 
-	
-	
+
+
 	public $caption = '';
 
 	protected $onDesing = true;
@@ -277,7 +301,7 @@ abstract class JsComponent  implements \Sevian\JasonComponent{
 		}
 
 	}
-	
+
 
 	public function configPanel(){
 		return new jsConfigPanel([
@@ -285,7 +309,7 @@ abstract class JsComponent  implements \Sevian\JasonComponent{
 			"type"	=> $this->typeElement,
 			"option"=> $this->info,
 			"debug" => "hola",
-			
+
 		]);
 	}
 
@@ -294,21 +318,21 @@ abstract class JsComponent  implements \Sevian\JasonComponent{
 			"panel" => $this->id,
 			"actions"=> $this->info,
 			"debug" => "hola",
-			
-		]);	
+
+		]);
 	}
 
 
 	public function evalMethod(){
-		
+
 	}
 	public function createID($name){
 		return $name."".$this->id;
 	}
 	public function addFragment($frag){
-		
+
 		$this->_response[]=$frag;
-	
+
 	}
 	public function getResponse(){
 
@@ -316,14 +340,14 @@ abstract class JsComponent  implements \Sevian\JasonComponent{
 
 	}
 
-	
 
 
 
-	
-	
+
+
+
 	public function request($method=false){
-		
+
 
 		return new iPanel([
 			'panel'	=> $this->id,
@@ -333,21 +357,21 @@ abstract class JsComponent  implements \Sevian\JasonComponent{
 			'css'	=> $this->panel->css,
 			'class'	=> 'yyy',
 		]);
-		
+
 	}
-    
+
     public function _getJsConfigPanel():jsConfigPanel{
-        
+
         return new jsConfigPanel([
             "panel"   => $this->id,
             "type"    => "sgPanel",
             "options" => []
-            
+
         ]);
-        
+
     }
-    
-    
+
+
 
 	public function setVPanel(&$var){
 		$this->_vPanel = &$var;

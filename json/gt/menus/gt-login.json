@@ -13,7 +13,7 @@
 			"caption": "Aceptar",
 			"dataUser": {
 				"async": false,
-				"id": "&P_id",
+				"id": "&EX_ID_",
 				"valid": false,
 				"confirm_": "seguro?",
 				"params": [

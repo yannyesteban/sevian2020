@@ -77,6 +77,8 @@ class S{
 	private static $_strPanels = false;
 	private static $_templateChanged = false;
 
+
+	private static $_response = [];
 	private static $_elements = [];
 	private static $_inputs = [];
 
@@ -499,6 +501,8 @@ class S{
 			self::$_jsonRequest = $e->getRequest();
 		}
 
+		self::$_response = array_merge(self::$_response, $e->getResponse());
+
 		if($e instanceof \Sevian\PanelsAdmin and $panels = $e->getPanels()){
 			foreach($panels as $k => $p){
 				self::setElement($p);
@@ -834,6 +838,7 @@ class S{
 				self::setElement(new InfoParam($cmd), true);
 				break;
 			case "setMethod":
+				//hx($cmd);
 				//self::setElement(new InfoElement($cmd), true);
 				self::setElement(new InfoParam($cmd), true);
 				//self::evalMethod($params);
@@ -876,9 +881,7 @@ class S{
 
 
 		if(isset(self::$req["__sg_params"]) and self::$req["__sg_params"] != ""){
-
 			self::sequence(json_decode(self::$req["__sg_params"]));
-
 		}
 	}
 	public static function setTemplate($template = ''){
@@ -953,6 +956,191 @@ class S{
 
 	private static function addPanel($panel){
 		self::$_panels[] = $panel;
+	}
+
+	public static function htmlDoc3(){
+
+		global $sevian;
+
+
+		$doc = new Document();
+
+
+		$doc->setTitle(self::$title);
+
+		foreach(self::$_css as $v){
+			$doc->appendCssSheet($v);
+		}
+		$modules = [];
+		foreach(self::$_js as $k=> $v){
+
+			$v = (object)$v;
+			if(isset($v->file)){
+				$doc->appendScriptDoc($v->file, $v->begin?? true, $v->attrib?? []);
+			}
+			if(isset($v->module)){
+			//	$modules[] = ["name"=>]
+
+			}
+		}
+
+		$templates = [];
+
+		if(isset(self::$_themes[self::$theme])){
+			$theme = new InfoThemes(self::$_themes[self::$theme]);
+			foreach($theme->css as $css){
+				$doc->appendCssSheet($css);
+			}
+			foreach($theme->templates as $k => $v){
+				self::$_templates[$k] = $v;
+			}
+			$templates = $theme->templates;
+		}
+
+		$templates = (array)$templates;
+		if(!self::getTemplate()){
+			if(self::$templateName and isset($templates[self::$templateName])){
+				self::setTemplate(@file_get_contents($templates[self::$templateName]));
+			}else{
+				self::setTemplate(self::$template);
+			}
+		}
+
+
+		self::$_str->setTemplate(self::vars(self::getTemplate()));
+
+		//if(self::$_templateChanged){
+
+		/*
+		self::$_strPanels = self::$_str->getStrPanels();
+		foreach(self::$_strPanels as $panel){
+
+			if(!isset(self::$_info[$panel])){
+				self::$_str->addPanel($panel, new \Sevian\HTML(''));
+			}
+		}
+		*/
+		//}
+
+
+
+		$js = [];
+		//print_r(self::$_e);exit;
+		$initConfig = [];
+		foreach(self::$_e as $k => $v){
+			//hr("$k");
+			$initConfig[] = $v->getInfoElement();
+
+			if($v->getInit())
+			$js[] = [
+				'id'=>$k,
+				'type'=>$v->getJSClass(),
+				'option'=>$v->getInit()
+
+			];
+			//hr($v->getInit());
+		}
+
+
+
+		$doc->body->add(self::$_str);
+
+		$doc->appendScript(self::$script, true);
+		//hr(self::$_mainPanels, "green");
+		//$json = json_encode(self::$_mainPanels, JSON_PRETTY_PRINT);
+		//$script = "//Sevian.loadPanels($json)";
+		$win = json_encode(self::$_windows, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+		$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+
+		$json = json_encode($js, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+
+		$data = [];
+		$data['instance'] = self::$ins;
+		$data['sw'] = self::$cfg['SW'];
+		$data['sw2'] = self::$cfg['SW'];
+		$data['defaultPanel'] = self::$defaultPanel;
+		$data['wins'] = self::$_windows;
+		$data['elements'] = self::$_response;//$initConfig;//$js;
+		$data['request'] = [
+			//'panels'=>$p,
+			//'config'=> self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			//'update'=> self::getJsConfigPanel(),
+			'fragments'=>self::$_f,
+			'debug'=>self::$_db
+		];
+		$data['jsComponents'] = self::getJsComponents();
+
+		$json = json_encode($data, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+		$mainPath = MAIN_PATH;
+		$script = "\nimport {S} from '{$mainPath}build/Sevian/ts/Sevian.js';";
+		$script .= "\nwindow.S = S;";
+
+		//hx(self::$_modules);
+		foreach(self::$_modules as $module){
+
+			$script .= "\nimport { $module[name] } from '$module[src]';";
+			//$script .= "\nwindow.$module[name] = $module[name];";
+			$name = $module['alias']?? $module['name'];
+			$script .= "\nS.register(\"$name\", $module[name]);";
+		}
+		$script .= "\nS.load3($json);";
+		$doc->appendScript($script, true, ["type"=>"module"]);
+
+		return $doc->render();
+
+	}
+	public static function jsonDoc3(){
+
+
+
+		//$elems = self::$_str->getElements();
+
+		$p = 	self::$_str->render();
+
+		//echo json_encode(self::$_f, JSON_PRETTY_PRINT);
+		$js = [];
+		$up = [];
+		foreach(self::$_e as $k => $v){
+
+			if($v->getInit()){
+
+				$js[] = [
+					'mode'=>self::$_info[$k]->mode,
+					'id'=>$k,
+					'type'=>$v->getJSClass(),
+					'option'=>$v->getInit()
+
+				];
+			}
+
+			if($v->getJSActions()){
+				$up[] = ['id'=>$k, 'actions'=>$v->getJSActions()];
+			}
+			//hr($v->getInit());
+		}
+
+
+
+		$response = [
+			'panels'	=> $p,
+			'config'	=> $js,//self::getJsPanel(),//json_encode(self::getJsPanel(), JSON_PRETTY_PRINT),
+			//'update'	=> self::getJsConfigPanel(),
+			'update'	=> $up,
+			'fragments'	=> self::$_f,
+			'components'=> self::getJsComponents(),
+			'debug'		=> self::$_db
+			];
+
+
+
+			//$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
+			//$script = "Sevian.action.initPanel($json)";
+
+			//echo $script;exit;
+
+		//echo	$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
+		return json_encode(self::$_response, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+
 	}
 
 	public static function htmlDoc(){
@@ -1317,7 +1505,7 @@ class S{
 		//5.-
 
 		if(!self::$onAjax){
-			return self::htmlDoc();
+			return self::htmlDoc3();
 		}
 
 
@@ -1330,7 +1518,7 @@ class S{
 		}
 
 		if(self::$onAjax){
-			return self::jsonDoc();
+			return self::jsonDoc3();
 		}else{
 			return self::htmlDoc();
 		}

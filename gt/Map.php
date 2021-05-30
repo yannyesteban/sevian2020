@@ -43,7 +43,7 @@ class Map extends \Sevian\Element implements \Sevian\UserInfo{
 		$config = $this->loadUserConfig($this->getUser());
 
 		$this->info = [
-			'id'			=> $this->panel->id,
+			'id'			=> $this->id,//$this->panel->id,
 			'panel'			=> $this->id,
 			'name'			=> $this->name,
 			'markImages' 	=> $this->loadImage(),
@@ -58,7 +58,15 @@ class Map extends \Sevian\Element implements \Sevian\UserInfo{
 		];
 
 		$this->setInit($this->info);
-
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> 'MAP',
+			'iClass'	=> 'GTMap',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> 'body{color:red!important}',
+			'config'	=> $this->info
+		]);
 
 	}
 

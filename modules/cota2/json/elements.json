@@ -103,7 +103,7 @@
         ]
     },
     {
-        "name": "gt_map",
+        "name": "gt-map",
         "file": "{@MAIN_PATH}gt/Map.php",
         "class": "\\GT\\Map",
         "enable": true,

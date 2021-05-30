@@ -1,18 +1,8 @@
 import {createGeoJSONRectangle,createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle} from './Util.js';
 import { IPoly } from './IPoly';
-import {Polygon as GeoPolygon, Feature} from '../types/geojson/GeoJSON';
 
 export class Polygon implements IPoly{
     public static readonly TYPE = "polygon";
-    private feature: Feature = null;
-
-    private sourceId: string = "";
-
-    private fillLayerId: string = "";
-    private borderLayerId: string = "";
-    private nodeLayerId: string = "";
-    private midLayerId: string = "";
-
 
     map: any = null;
 
@@ -57,7 +47,7 @@ export class Polygon implements IPoly{
     _line:any = null;
     id:string = "p"+String(new Date().getTime());
 
-
+    nodesId:string = null;
     lineId:string = null;
     circleId:string = null;
 
@@ -77,127 +67,83 @@ export class Polygon implements IPoly{
                 this[x] = info[x];
             }
         }
-
-        this.sourceId = "s-"+this.id;
-
-        this.fillLayerId = "f-" + this.id;
-        this.borderLayerId = "b-" + this.id;
-        this.nodeLayerId = "n-" + this.id;
-        this.midLayerId = "m-"+this.id;
-
+        this.nodesId = "n-"+this.id;
+        this.lineId = "l-"+this.id;
+        this.circleId = "c-"+this.id;
         this.init();
     }
 
     init(){
         let map = this.map;
-        if (this.feature === null) {
-            this.feature = {
+
+
+        //let polygon = turf.polygon([coo], { name: "poly1" });
+        //polygon = turf.bezierSpline(polygon);
+        //            console.log(polygon)
+
+
+        let polygon = {
+
                 "type": "Feature",
-                "properties": {
-                    "fill-color": "#aa2255",
-                    "line-color": "#5522aa",
-                    "line-width": 2,
-                    "line-dasharray": [2, 2],
-                    "fill-opacity": 0.4,
-                },
                 "geometry": {
-                  "type": "Polygon",
-                  "coordinates": [[]]
+                    "type": "Polygon",
+                    "coordinates": [[]]
                 }
-              };
-        } else {
-            this.feature = {
-                "type": "Feature",
-                "properties": {
-                    "fill-color": "#aa2255",
-                    "line-color": "#5522aa",
-                    "line-width": 2,
-                    "line-dasharray": [2, 2],
-                    "fill-opacity": 0.4,
-                },
-                "geometry": {
-                  "type": "Polygon",
-                  "coordinates": [[[-66.87686735735063, 10.49935516128366], [-66.86582490973026, 10.509106707957727], [-66.85887225752434, 10.506291860101157], [-66.85672511493149, 10.500662087456533], [-66.85652062516098, 10.488296334115446], [-66.86153062454457, 10.504381770164244], [-66.86459797110578, 10.50649292151337], [-66.87686735735063, 10.49935516128366]]]
-                }
-              };
+
         }
+        this._line = {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [polygon]
+            }
+        };
 
-
-        const geojson = this.setFeature(this.feature);
-        /*
-        const midPoints = this.createMidPoints( this.feature.geometry.coordinates[0]);
-        console.log(midPoints);
-
-        const features = [];
-        features.push(this.feature);
-
-        const geojson = {
-        "type": "geojson",
-        "data": turf.featureCollection(features.concat(midPoints))};
-        */
-        this.map.addSource(this.sourceId, geojson);
+        this.map.addSource(this.lineId, this._line);
 
         this.map.addLayer({
-            "id": this.borderLayerId,
+            "id": this.lineId,
             "type": "line",
-            "source": this.sourceId,
+            "source": this.lineId,
             "layout": {
                 "line-join": "round",
                 "line-cap": "round",
-                "visibility": (this.visible)? "visible": "none"
+                visibility:(this.visible)? "visible": "none"
+
             },
             "paint": {
-                "line-color": ["get","line-color"],
-                "line-width": ["get","line-width"],
-
+                "line-color": "#ff3300",
+                "line-width": 4,
+                //"line-opacity": 0.9,
                 //"line-gap-width":4,
                 //"line-dasharray":[2,2]
-                //"line-dasharray": ["get","line-width"]
 
             },
             "filter": ["==", "$type", "Polygon"]
         });
 
         this.map.addLayer({
-            "id": this.fillLayerId,
+            "id": this.circleId,
             "type": "fill",
-            "source": this.sourceId,
+            "source": this.lineId,
             "layout": {
                 visibility:(this.visible)? "visible": "none"
             },
             "paint": {
-                "fill-color": ["get","fill-color"],
-                "fill-opacity": ["get","fill-opacity"],
+                //"fill-color": "#ff9900",
+                //"fill-opacity": 0.4,
             },
             "filter": ["==", "$type", "Polygon"]
         });
-        /*
+        //this.setLine(this.line);
+        //this.setFill(this.fill);
+
         map.addLayer({
-            id: this.nodeLayerId,
+            id: this.nodesId,
             type: "circle",
-            source: this.sourceId,
+            source: this.lineId,
             layout: {
-                visibility:"visible"
-            },
-            paint: {
-                "circle-radius": 3,
-                "circle-opacity":0.5,
-                "circle-color": "#000",
-                "circle-stroke-color":"#ff3300",
-                "circle-stroke-width":1
-            },
-            filter: ["in", "type", "h"]
-            //filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "m"]
-            //filter: ["in", "type"]
-        });
-        */
-        map.addLayer({
-            id: this.nodeLayerId,
-            type: "circle",
-            source: this.sourceId,
-            layout: {
-                visibility:"visible"
+                visibility:"none"
             },
             paint: {
                 "circle-radius": 4,
@@ -208,29 +154,68 @@ export class Polygon implements IPoly{
             },
             filter: ["in", "$type", "Point"]
             //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type", "m"]
+            //filter: ["in", "type"]
         });
-        return;
-        //this.setLine(this.line);
-        //this.setFill(this.fill);
-        this.map.setPaintProperty(this.fillLayerId, "fill-color", "#aa0000");
-        //console.log(this.map.getLayoutProperty(this.fillLayerId));
-        this.setFeature(this.feature)
+        /*
+        map.addLayer({
+            id: this.nodesId+"2",
+            type: "circle",
+            source: this.lineId,
+            layout: {
+                visibility:"visible"
+            },
+            paint: {
+                "circle-radius": 3,
+                "circle-opacity":0.5,
+                "circle-color": "#000",
+                "circle-stroke-color":"#ff3300",
+                "circle-stroke-width":1
+            },
+            //filter: ["in", "$type", "Point"]
+            filter: ["in", "type", "m"]
+            //filter: ["in", "type"]
+        });
+        */
+        this.setLine(this.line);
+        this.setFill(this.fill);
+        this.coordinates_ = [
+            [-66.84927463531494,10.490132784557675],
+            [-66.84916734695435,10.487727485274153],
+            [-66.847482919693,10.488339361426192],
+            [-66.84403896331787,10.48798067555274],
+            [-66.83899641036987,10.4872211040956],
+            [-66.83056354522705,10.480659173081785],
+            [-66.82998418807983,10.48194625089936],
+            [-66.83200120925903,10.48333882087384],
+            [-66.83295607566833,10.483686962388932],
+            [-66.83379024267197,10.484296209098416],
+            [-66.83488190174103,10.485327442138733],
+            [-66.83595210313797,10.486147678753897],
+            [-66.8368935585022,10.487347699467918],
+            [-66.83808445930487,10.488181117709713],
+            [-66.83968305587774,10.488465956341086],
+            [-66.84177517890936,10.488687497317594],
+            [-66.84476852416998,10.489014533707307],
+            [-66.84704303741461,10.489362668839194],
+            [-66.84779405593878,10.490064212687859],
+            [-66.84927463531494,10.490132784557675]
+        ];
+        this.coordinatesInit = this.coordinates.slice()
+        if(this.coordinates.length > 0){
 
+            this.draw();
+        }
 
     }
 
-    updateSource(geojson) {
-        this.map.getSource(this.sourceId).setData(geojson.data);
-    }
     setLine(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.borderLayerId, "line-" + p, info[p]);
+            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]);
         }
     }
     setFill(info:object){
         for(let p in info){
-            this.map.setPaintProperty(this.fillLayerId, "fill-" + p, info[p]);
+            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]);
         }
     }
 
@@ -239,136 +224,34 @@ export class Polygon implements IPoly{
         if(value){
             visible = "visible";
         }
-        this.map.setLayoutProperty(this.borderLayerId, "visibility", visible);
-        this.map.setLayoutProperty(this.fillLayerId, "visibility", visible);
+        this.map.setLayoutProperty(this.lineId, "visibility", visible);
+        this.map.setLayoutProperty(this.circleId, "visibility", visible);
 
         if(this._play){
 
-            this.map.setLayoutProperty(this.nodeLayerId, "visibility", visible);
+            this.map.setLayoutProperty(this.nodesId, "visibility", visible);
         }
 
 
     }
 
-
-
-    createMidPoints = function(coords) {
-
-
-        let coordinates = coords.slice();
-        let p1 = null, p2 = null;
-        const features = [];
-
-        coordinates.map((item, index)=>{
-
-            if (index == 0) {
-                p1 = turf.point(item);
-                return;
-            }
-
-            p2 = turf.point(item);
-
-
-            features.push({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": item
-                },
-                "properties": {
-                    "index": index,
-                    "type": "h",
-                }
-            });
-
-            features.push({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": turf.midpoint(p1, p2).geometry.coordinates
-                },
-                "properties": {
-                    "index": index,
-                    "type": "m",
-                }
-            });
-
-            p1 = p2;
-        });
-
-        return features;
-
-    };
-
-    getCoordinates() {
-        return turf.getCoords(turf.getGeom(this.feature))[0];
-    }
-    setFeature(feature) {
-        this.feature = feature;
-
-        const midPoints = this.createMidPoints(this.feature.geometry.coordinates[0]);
-        const features = [];
-
-        features.push(this.feature);
-
-        const geojson = {
-            "type": "geojson",
-            "data": turf.featureCollection(features.concat(midPoints))
-        };
-
-        return geojson;
-        //this.map.getSource(this.sourceId).setData(geojson);
-    }
-
-    draw() {
-
+    add(lngLat){
+        this.coordinates.push([lngLat.lng, lngLat.lat]);
+        this.draw();
         //let data = createGeoJSONPoly(this.coordinates);
 
 
-        return;
+        //this.map.getSource(this.lineId).setData(data.data);
+    }
+
+
+    draw(){
+        let data = createGeoJSONPoly(this.coordinates);
+
+
         this.map.getSource(this.lineId).setData(data.data);
         this.ondraw(this.coordinates);
 
-
-    }
-
-    add(lngLat) {
-        this.feature.geometry.coordinates[0][this.feature.geometry.coordinates.length-1] = [lngLat.lng, lngLat.lat];
-        this.feature.geometry.coordinates[0].push(this.feature.geometry.coordinates[0][0]);
-        this.updateSource(this.setFeature(this.feature));
-    }
-    removeLast() {
-
-        const geo = this.feature.geometry;
-
-        console.log(geo.coordinates[0])
-        if (geo.coordinates[0].length > 0) {
-
-
-            this.feature.geometry.coordinates[0].splice(geo.coordinates[0].length-1, 1);
-            console.log(geo.coordinates[0])
-
-
-            this.updateSource(this.setFeature(this.feature));
-        }
-
-    }
-    moveNode(index, coordinates) {
-        if (index === this.feature.geometry.coordinates[0].length - 1) {
-            this.feature.geometry.coordinates[0][0] = coordinates;
-        }
-        this.feature.geometry.coordinates[0][index] = coordinates;
-        this.updateSource(this.setFeature(this.feature));
-    }
-
-    move(deltaLng, deltaLat) {
-
-        for (let i = 0; i < this.feature.geometry.coordinates[0].length; i++){
-            this.feature.geometry.coordinates[0][i] = [
-                this.feature.geometry.coordinates[0][i][0] + deltaLng,
-                this.feature.geometry.coordinates[0][i][1] + deltaLat];
-        }
-        this.updateSource(this.setFeature(this.feature));
 
     }
     getArea(){
@@ -390,11 +273,11 @@ export class Polygon implements IPoly{
         this.parent.stop();
         this._play = true;
         let map =  this.map;
-        //this.map.setLayoutProperty(this.nodeLayerId, "visibility", "none");
+        //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
         this.setVisible(true);
         this.setFill(this.fillEdit);
         this.setLine(this.lineEdit);
-        //this.map.setLayoutProperty(this.nodeLayerId, "visibility", "visible");
+        //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
         //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
 
         let place = null;
@@ -402,7 +285,6 @@ export class Polygon implements IPoly{
         let place_one = null;
         let down1 = false;
 
-        let index: number = null;
 
         let fnUp = (e)=>{
             map.off("mousemove", fnMove);
@@ -410,7 +292,8 @@ export class Polygon implements IPoly{
             down1 = false;
         }
         let fnMove = (e)=>{
-            this.moveNode(index, [e.lngLat.lng, e.lngLat.lat]);
+            this.coordinates[place] = [e.lngLat.lng, e.lngLat.lat];
+            this.draw();
         }
         let fnUp2 = (e)=>{
             map.off("mousemove", fnMove2);
@@ -418,31 +301,33 @@ export class Polygon implements IPoly{
         }
         let fnMove2 = (e)=>{
 
+            //this.move(place_one, e.lngLat);
+            let dLng = e.lngLat.lng - place_one.lng;
+            let dLat = e.lngLat.lat - place_one.lat;
+            //db (dLng)
+            let c = []
+            this.coordinates.forEach((elem, index)=>{
+                //db (index+"  "+elem[0], "white")
+                c.push([elem[0]+dLng, elem[1]+dLat]);
 
-            const dLng = e.lngLat.lng - place_one.lng;
-            const dLat = e.lngLat.lat - place_one.lat;
+            });
+            this.coordinates = c;
             place_one = e.lngLat;
-
-
-            this.move(dLng, dLat);
-
-
-
+            this.draw();
         }
 
-        map.on("mousedown", this.nodeLayerId, this._mousedown = (e)=> {
+        map.on("mousedown", this.nodesId, this._mousedown = (e)=> {
             // Prevent the default map drag behavior.
             e.preventDefault();
 
             down1 = true;
             var features = map.queryRenderedFeatures(e.point, {
-                layers: [this.nodeLayerId]
+                layers: [this.nodesId]
             });
 
-
-            index = place = features[0].properties.index;
+            place = features[0].properties.index;
             type = features[0].properties.type;
-            console.log(index)
+
             if(type == "m"){
                 this.split(place, [e.lngLat.lng, e.lngLat.lat]);
                 this.draw();
@@ -452,7 +337,7 @@ export class Polygon implements IPoly{
             map.once("mouseup", fnUp);
         });
 
-        map.on("mousedown", this.fillLayerId, this._mousedown2 = (e)=> {
+        map.on("mousedown", this.circleId, this._mousedown2 = (e)=> {
 
             if(down1){
                 return;
@@ -471,16 +356,15 @@ export class Polygon implements IPoly{
 
             //db (e.originalEvent.button+".........", "red","yellow")
             var features = this.map.queryRenderedFeatures(e.point, {
-                layers: [this.nodeLayerId]
+                layers: [this.nodesId]
             });
             this.add(e.lngLat);
         });
 
         map.on("contextmenu", this._contextmenu = (e) => {
-
             e.preventDefault();
-            this.removeLast();
-
+            this.coordinates.pop();
+            this.draw();
 
         });
 
@@ -496,7 +380,7 @@ export class Polygon implements IPoly{
             this.map.off("click", this._click);
             this.map.off("contextmenu", this._contextmenu);
 
-            this.map.off("mousedown", this.nodeLayerId, this._mousedown);
+            this.map.off("mousedown", this.nodesId, this._mousedown);
             this.map.off("mousedown", this.circleId, this._mousedown2);
 
 
@@ -505,7 +389,7 @@ export class Polygon implements IPoly{
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
             //map.on("mousemove", fnMove);
         }
-        this.map.setLayoutProperty(this.nodeLayerId, "visibility", "none");
+        this.map.setLayoutProperty(this.nodesId, "visibility", "none");
         this.setFill(this.fill);
         this.setLine(this.line);
         //this._mode = 0;
@@ -519,11 +403,6 @@ export class Polygon implements IPoly{
             return;
         }
         this._mode = 1;
-
-        this.feature.geometry.coordinates[0] = [];
-        this.updateSource(this.setFeature(this.feature));
-
-        return
         if(this.coordinatesInit){
 
             this.coordinates = this.coordinatesInit.slice();
@@ -560,7 +439,7 @@ export class Polygon implements IPoly{
         let map = this.map;
         if (map.getLayer(this.circleId)) map.removeLayer(this.circleId);
         if (map.getLayer(this.lineId)) map.removeLayer(this.lineId);
-        if (map.getLayer(this.nodeLayerId)) map.removeLayer(this.nodeLayerId);
+        if (map.getLayer(this.nodesId)) map.removeLayer(this.nodesId);
 
         if (map.getSource(this.lineId)) map.removeSource(this.lineId);
 
@@ -568,7 +447,7 @@ export class Polygon implements IPoly{
 
     }
 
-    getCoordinates2(){
+    getCoordinates(){
         return this.coordinates;
     }
 
@@ -585,15 +464,25 @@ export class Polygon implements IPoly{
 
 
 
+    createCircle(center, radio){
+        let length;
+        if(typeof radio === "number" ){
+            length = radio;
 
+        }else{
+            var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
+            length = turf.length(line, {units: "kilometers"});
+        }
+
+        this.radio = length;
+        let data = createGeoJSONCircle([center.lng, center.lat], length);
+
+        this.map.getSource(this.lineId).setData(data.data);
+    }
 
     split(index, value){
-        //let coordinates = this.getCoordinates();
-        //coordinates.splice(index, 0, value);
-        //console.log(this.feature.geometry.coordinates[0])
-        this.feature.geometry.coordinates[0].splice(index, 0, value);
-        this.updateSource(this.setFeature(this.feature));
-        //this.setFeature(this.feature);
+
+        this.coordinates.splice(index, 0, value);
     }
     getHand(){
         return this.hand;

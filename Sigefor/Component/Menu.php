@@ -11,9 +11,9 @@ class Menu extends \Sevian\JS\Menu {
 	use \Sigefor\DBTrait\Menu2;
 
 	static public $patternJsonFile = JSON_PATH.'{name}.json';
-	
+
 	public function __construct($info = []){
-		
+
 		foreach($info as $k => $v){
 			$this->$k = $v;
 		}
