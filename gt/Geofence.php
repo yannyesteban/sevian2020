@@ -89,8 +89,9 @@ class Geofence
 				break;
 
 			case 'get-record':
-				$id = $this->eparams->geofenceId?? false;
 
+				$id = $this->eparams->geofenceId?? \sevian\s::getReq('id');
+				//hx(json_encode(\sevian\s::getVReq(), JSON_PRETTY_PRINT));
 				$this->addResponse([
 
 					'id'=>$this->id,

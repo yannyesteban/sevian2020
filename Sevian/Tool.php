@@ -4,21 +4,21 @@ namespace Sevian;
 
 
 class Tool{
-	
+
 	static function evalIf($exp, $q, $then, $else) {
-	
+
 		eval("\$v = $q;");
-	
+
 		if($v){
 			$qq = $then;
 		}else{
 			$qq = $else;
 		}
-	
+
 		if(preg_match($exp, $qq, $c)){
-	
+
 			$result = preg_replace_callback ($exp, function($c) use($exp){
-	
+
 				if($c['cc']){
 					return Tool::evalIf($exp,$c['cc'],$c['then'],$c['else']??false);
 				}
@@ -27,11 +27,11 @@ class Tool{
 		}else{
 			return $qq;
 		}
-		
+
 	}
 
 
-	static function evalExp($q){	
+	static function evalExp($q){
 
 		$exp = '
 		/
@@ -39,38 +39,38 @@ class Tool{
 			(?<pp> \( (?: (?>[^()]+) | (?&exp) )* \) )
 			(?<pc> \{ (?: (?>[^{}]+) | (?&exp) )* \} )
 			#	(?<pc> )
-		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (?:\.\d+)? (?:[eE] [+-]? \d+)? )    
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (?:\.\d+)? (?:[eE] [+-]? \d+)? )
 		   #(?<boolean>   true | false | null )
 		   (?<string>    " (?:[^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
 		   #(?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
 		   #(?<pair>      \s* (?&string) \s* : (?&json)  )
 		   #(?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
 		   #(?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
-		
+
 		   (?<xw> ([^(){}"])*)
-			
+
 			(?<exp> (?:(?&string) | (?&number) | \s* | (?&pp)| (?&pc) | (?&xw) )* )
 
 			#(?<cond>) @if\((?&exp)\){((?&number))}
 
 			(?<if> @if\((?&exp)\)\{((?R))\}(?>\{((?R))\})*+ )
-		
+
 		)
-		
+
 		(
 		# @if\(( (?&exp)  )\)\{((?&exp)*+|(?R)*+)\}(?>\{((?R))\})*+
 
 			#(?:if\((?&exp)\)\{((?&exp))\}\{((?&exp))\})
-			#|(?:if\(xx\)\{((?&exp))\}) 
+			#|(?:if\(xx\)\{((?&exp))\})
 			#(case\(((?&exp))\)\{(?=)(when\((\d+)\)\{(\w+)\})+\})
 
-			
-			
-			(?:\$if\((?<cc>(?&exp))\)\{(?<then>(?&exp))\}(\{(?<else>(?&exp))\})?) 
+
+
+			(?:\$if\((?<cc>(?&exp))\)\{(?<then>(?&exp))\}(\{(?<else>(?&exp))\})?)
 			#|
-			#(?:if\((?<cc2>(?&exp))\)\{(?<then2>(?&exp))\}) 
+			#(?:if\((?<cc2>(?&exp))\)\{(?<then2>(?&exp))\})
 		)
-		
+
 
 		/six';
 
@@ -87,13 +87,13 @@ class Tool{
 				if($c['cc']){
 					return Tool::evalIf($exp,$c['cc'],$c['then'],$c['else']??'');
 				}
-				
+
 			},$q);
 		}
 
 		return $q;
 
-		
+
 
 
 		//hr($m(8,9));
@@ -131,7 +131,7 @@ class Tool{
 		$pcre_regex = '
 		/
 		(?(DEFINE)
-		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
 		   (?<boolean>   true | false | null )
 		   (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
 		   (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
@@ -146,7 +146,7 @@ class Tool{
 		/
 		(?(DEFINE)
 			(?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
-		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+		   (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
 		   (?<if>@if\((\w+)\)\{((?&string) | (?&number))\}\{((?&string) | (?&number))\}?)
 		)
 		((?&if))
@@ -156,14 +156,14 @@ class Tool{
 		if(preg_match($pcre_regex, $q1, $c)){
 			print_r($c);
 
-		
+
 			return"";
 		}else{
-			
+
 			hr("Error: ".$q);
 			//throw new Exception($q);
-			//return array();	
-			
+			//return array();
+
 		}// end if
 		return;
 
@@ -171,8 +171,8 @@ class Tool{
 		$c = "xx";
 		$exp ='
 		{
-		
-		
+
+
 			if(\(.+)\){}{"dos"}
 
 		}isx';
@@ -190,26 +190,26 @@ class Tool{
 		#|(?:do:((?1)+)while((?P>cond);))
 		#|
 		|
-		#OLD: 
+		#OLD:
 		#((\w+)\s*+:\s*+(?:"([^"]*+(?:(?<=\\\)"[^"]*+)*+)"|\'([^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'|([^;"\':]+))\s*;)
-		#NEW: 
+		#NEW:
 		 ((\w+)\s*+:\s*+(?:"([^"]*+(?:(?<=\\\)"[^"]*+)*+)"|\'([^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'|([^;"\':]*))\s*;)
 		)}isx';
 		if(preg_match_all($exp, $q, $c)){
 			//print_r($c);
 			return $c;
 		}else{
-			
+
 			hr("Error: ".$q);
 			//throw new Exception($q);
-			//return array();	
-			
+			//return array();
+
 		}// end if
 	}
 
 
 	static function extract($q){
-		
+
 		$exp = '
 		{(
 		(?:if\s*+:(?P<cond>(?P<sc>[^;"\']*+(?:"(?:[^"]*+(?:(?<=\\\)"[^"]*+)*+)" | \'(?:[^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'))*+[^;"\']*+|(?P>sc));
@@ -223,47 +223,47 @@ class Tool{
 		#|(?:do:((?1)+)while((?P>cond);))
 		#|
 		|
-		#OLD: 
+		#OLD:
 		#((\w+)\s*+:\s*+(?:"([^"]*+(?:(?<=\\\)"[^"]*+)*+)"|\'([^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'|([^;"\':]+))\s*;)
-		#NEW: 
+		#NEW:
 		 ((\w+)\s*+:\s*+(?:"([^"]*+(?:(?<=\\\)"[^"]*+)*+)"|\'([^\']*+(?:(?<=\\\)\'[^\']*+)*+)\'|([^;"\':]*))\s*;)
 		)}isx';
 		if(preg_match_all($exp, $q, $c)){
 			//print_r($c);
 			return $c;
 		}else{
-			
+
 			hr("Error: ".$q);
 			//throw new Exception($q);
-			//return array();	
-			
+			//return array();
+
 		}// end if
 	}
-	
+
 	static function vars($q, $info){
-		
+
 		foreach($info as $i){
 			$q = self::evalVar($q, $i["token"], $i["data"], $i["default"]);
 		}
 		return $q;
 	}
-	
+
 	static function evalVar($q, $t, $data, $default = false){
 
-		if($q == "" or count($data) == 0){
-			return $q;	
+		if($q == "" or count((array)$data) == 0){
+			return $q;
 		}// end if
-		
+
 		$exp="{
 			(?:(?<![\{\\\])$t(\w++))
 			|
 			(?:\{$t(\w++)\})
 			|
 			(?:([\\\]($t\w++)))
-			
-		}isx";
 
-		$q = preg_replace_callback($exp,
+		}isx";
+		if(is_array($data)){
+			$q = preg_replace_callback($exp,
 			function($i) use (&$data, $default){
 				if(isset($data[$i[1]])){
 					return $data[$i[1]];
@@ -273,23 +273,42 @@ class Tool{
 					return $i[4];
 				}else{
 					if($default !== false){
-						return $default;	
+						return $default;
 					}else{
 						return $i[0];
 					}// end if
 				}// end if
 			},$q);
-		return $q;		
+		}else{
+			$q = preg_replace_callback($exp,
+			function($i) use (&$data, $default){
+				if(isset($data->{$i[1]})){
+					return $data->{$i[1]};
+				}elseif(isset($i[2]) and $i[2] != "" and isset($data->$i[2])){
+					return $data->{$i[2]};
+				}elseif(isset($i[4])){
+					return $i[4];
+				}else{
+					if($default !== false){
+						return $default;
+					}else{
+						return $i[0];
+					}// end if
+				}// end if
+			},$q);
+		}
+
+		return $q;
 	}
-	
+
 	static function param($q, &$p){
 
 		if(trim($q) == ""){
-			return "";	
+			return "";
 		}// end if
 
 		$c = self::extract($q);
-					
+
 		foreach($c[0] as $k => $v){
 			if($c[2][$k] != ""){
 				eval("\$eval=".$c[2][$k].";");
@@ -317,7 +336,7 @@ class Tool{
 					$aux = $c[13][$k];
 				}else{
 					$aux="";
-				}// end if					
+				}// end if
 				self::param($aux, $p);
 			}elseif($c[16][$k] != ""){
 				$p[$c[15][$k]] = $c[16][$k];
@@ -328,20 +347,20 @@ class Tool{
 			}//end if
 		}// next
 	}
-	
+
 	static function getList($q){
-		$exp = '{[^,]+\'.+\'|[^,]+\(.+\)|[^,]+}isx';		
-		
+		$exp = '{[^,]+\'.+\'|[^,]+\(.+\)|[^,]+}isx';
+
 		if(preg_match_all($exp, $q, $c)){
 			return $c[0];
 		}else{
 			throw new Exception($q);
-			return array();	
-			
-		}// end if		
-		
+			return array();
+
+		}// end if
+
 	}// end function
-	
+
 }
 
 ?>

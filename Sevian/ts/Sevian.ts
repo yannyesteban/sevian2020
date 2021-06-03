@@ -108,19 +108,20 @@ export var S = (($) => {
 		//height: "500px",
 		mode: "custom"
 	};
-    class Sevian{
+	class Sevian {
 
 		private static instance = null;
 		private static sw = 0;
 		private static sw2 = 0;
 
-		private static wins:any[] = [];
-		private static elements:any[] = [];
-		private static request:any[] = [];
-		private static jsComponents:any[] = [];
-		private static components:any[] = [];
-		private static modules:any[] = [];
+		private static wins: any[] = [];
+		private static elements: any[] = [];
+		private static request: any[] = [];
+		private static jsComponents: any[] = [];
+		private static components: any[] = [];
+		private static modules: any[] = [];
 
+		private static vars: { [key: string]: any } = {};
 
 
 		static _e:object[] = [];
@@ -134,6 +135,14 @@ export var S = (($) => {
 
 		static test() {
 			alert("hello i am sevian");
+		}
+
+		static setVar(key: string, value: any) {
+			this.vars[key] = value;
+		}
+
+		static getVar(key: string) {
+			return this.vars[key];
 		}
 
 		static initElement(element:IElement | IResponse) {
@@ -280,6 +289,16 @@ export var S = (($) => {
 					return;
 				}
 				switch (item.type) {
+					case "debug":
+						console.log(item.info);
+						break;
+					case "dataForm":
+
+						console.log(item.dataForm);
+						for (let key in item.dataForm) {
+							this.setVar(key, item.dataForm[key]);
+						}
+						break;
 					case "panel":
 						break;
 					case "update":

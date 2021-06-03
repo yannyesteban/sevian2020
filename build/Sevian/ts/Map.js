@@ -475,6 +475,9 @@ var sgMap = (($) => {
             });
             let geofences = new Geofences({
                 geofences: this.geofences,
+                //groups:this.marks.groups,
+                //scales:this.marks.scales,
+                //icons: this.marks.icons
             });
             let alarms = new Alarms({
                 alarms: this.alarms.alarms,

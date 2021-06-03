@@ -328,6 +328,7 @@ export class MapBoxLib {
 
     draw(name: string, type: string, info: Polylayer) {
 
+        console.log("poligon name", name);
         if (this._poly[name]) {
             return this._poly[name];
         }

@@ -1286,7 +1286,7 @@ trait DBSite{
 
 trait DBGeofence{
     private $cn = null;
-    private function loadGeofences(){
+    private function loadGeofences($user=""){
 
         $cn = $this->cn;
 
@@ -1325,14 +1325,14 @@ trait DBGeofence{
         $cn->query = "SELECT g.*
             #, concat(name, ' ', type) as name
             FROM geofence as g
-            WHERE type='polygon'
+            #WHERE type='polygon'
             #WHERE g.user = 'Rmartinez'
             ";
 
         $result = $this->cn->execute();
         $data = [];
 		while($rs = $cn->getDataAssoc($result)){
-            $rs['config'] = json_decode($rs['config']);
+            $rs['geojson'] = json_decode($rs['geojson']);
             $data[$rs['id']] = $rs;
         }
 

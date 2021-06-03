@@ -4,7 +4,14 @@ import { Form2 as Form } from '../Sevian/ts/Form2.js';
 
 export class PolyControl {
 
-    private id: string = "mapboxgl-ctrl-poly";
+    private newId: string = "mapboxgl-ctrl-poly";
+    private id: any = "";
+    private name: string = "";
+    private color: string = "";
+    private opacity: string = "";
+    private mode: number = 1;
+    private feature = {};
+
     private poly: IPoly = null;
 
     private main: SQObject = null;
@@ -14,6 +21,9 @@ export class PolyControl {
 
     private mainButton: SQObject = null;
     private subPanel: SQObject = null;
+
+    private colorInput: SQObject = null;
+    private opacityInput: SQObject = null;
 
     private form: Form = null;
 
@@ -31,18 +41,6 @@ export class PolyControl {
         saveCaption: "Guardar",
         newCaption: "Nuevo+",
         deleteCaption: "Eliminar"
-    }
-
-    private fill: any = {
-        color: "#2fb5f9",
-        opacity: 0.4
-    }
-    private line: any = {
-        color: "#2fb5f9",
-        opacity: 1,
-        width: 2,
-        dasharray: [2, 2]
-
     }
 
     public onInit: Function = () => { };
@@ -134,6 +132,13 @@ export class PolyControl {
         //this.map = undefined;
     }
 
+    getId() {
+        if (this.mode === 1) {
+            return this.newId;
+        }
+        return this.id;
+    }
+
     play(info?) {
         this.parentControl.stopControls();
 
@@ -146,41 +151,38 @@ export class PolyControl {
     }
 
     evalPropertys(options) {
-
-        for (let x in options.fill) {
-            this.fill[x] = options.fill[x];
-        }
-        for (let x in options.line) {
-            this.line[x] = options.line[x];
-        }
-
-
-
-        this.poly.setFill(this.fill);
-        this.poly.setLine(this.line);
+        this.poly.setProperties(options);
     }
+
     setLength(length) {
 
 
     }
+
     toggleUnit() {
 
 
     }
+
     stop() {
         this.menu.style("display", "");
         this.panel.style("display", "none");
         this.subPanel.style("display", "none");
         this.bar.style("display", "none");
+        if (this.poly) {
+            this.poly.stop();
+        }
     }
 
     delete() {
 
         this.parentControl.delete(this.id);
+        console.log("delete")
         this.onlength("0 Km<sup>2</sup>");
     }
     reset() {
         this.onlength("0 Km<sup>2</sup>");
+        console.log("reset")
         this.poly.reset();
     }
     printArea(area) {
@@ -256,14 +258,15 @@ export class PolyControl {
         this._type = 2;
     }
 
-    setPolygon() {
-        this.poly = this.parentControl.draw(this.id, "polygon", {
-            fill: this.fill,
-            line: this.line,
-            fillEdit: this.fill,
-            lineEdit: this.line,
-        });
-        this.poly.ondraw = (coordinates) => {
+    setPolygon(feature) {
+        this.feature = feature;
+        console.log(this.getId())
+
+        this.poly = this.parentControl.draw(this.getId(), "polygon",
+            { feature: this.feature });
+        this.poly.ondraw = (feature) => {
+            const coordinates = feature.geometry.coordinates;
+            console.log(feature)
             if (coordinates.length > 2) {
                 console.log(coordinates)
                 let coord = coordinates.slice();
@@ -275,8 +278,8 @@ export class PolyControl {
                 this.onlength("0 Km<sup>2</sup>");
 
             }
-            this.ondraw({ coordinates: coordinates, type: this.poly.getType() });
-            this.updateForm({ coordinates: coordinates, type: this.poly.getType() });
+            this.ondraw(feature);
+            this.updateForm(feature);
         };
         this.poly.play();
         this._type = 3;
@@ -285,39 +288,31 @@ export class PolyControl {
     createPropertysControl(main) {
         const colorMain = main.create("div").addClass("propertys");
         const alphaMain = main.create("div").addClass("propertys");
-        const colorTitle = colorMain.create("div").addClass("color").text("Color");
+        colorMain.create("div").addClass("color").text("Color");
         alphaMain.create("div").addClass("color").text("Opacidad");
-        colorMain.create("input").prop({ "type": "color", "title": "Color", "value": this.fill.color }).
+        this.colorInput = colorMain.create("input").prop({ "type": "color", "title": "Color", "value": this.color }).
             on("change", (event) => {
-
+                this.color = event.currentTarget.value;
                 this.evalPropertys({
-                    fill: {
-                        color: event.currentTarget.value
-                    },
-                    line: {
-                        color: event.currentTarget.value
-                    }
+                    color: event.currentTarget.value
                 });
 
             });
 
         let options = "";
         for (let i = 0.1; i <= 1; i = i + 0.1) {
-            options += `<option value=${i}>${i.toPrecision(1)}</option>`;
+            options += `<option value=${i.toPrecision(1)}>${i.toPrecision(1)}</option>`;
         }
 
-        alphaMain.create("select").prop({ "title": "Opacidad" }).
+        this.opacityInput = alphaMain.create("select").prop({ "title": "Opacidad" }).
             text(options).
             on("change", (event) => {
+                this.opacity = event.currentTarget.value;
                 this.evalPropertys({
-                    fill: {
-                        opacity: Number.parseFloat(event.currentTarget.value)
-                    },
-                    line: {
-                        opacity: Number.parseFloat(event.currentTarget.value)
-                    }
+                    opacity: Number.parseFloat(event.currentTarget.value),
+
                 });
-            }).val(this.fill.opacity);
+            }).val(this.opacity);
     }
 
     createForm(main) {
@@ -364,32 +359,32 @@ export class PolyControl {
                     value: "",
                     caption: this.infoForm.descriptionCaption,
                     rules: {
-                        required: {}
+
                     }
                 },
                 {
                     input: "input",
-                    type: "text",
+                    type: "hidden",
                     name: "type",
                     value: "",
                     caption: this.infoForm.typeCaption,
                     rules: {
-                        required: {}
+
                     }
                 },
                 {
                     input: "input",
-                    type: "text",
-                    name: "coordinates",
+                    type: "textarea",
+                    name: "geojson",
                     value: "",
                     caption: this.infoForm.coordinatesCaption,
                     rules: {
-                        required: {}
+
                     }
                 },
                 {
                     input: "input",
-                    type: "text",
+                    type: "hidden",
                     name: "propertys",
                     value: "",
                     caption: this.infoForm.propertysCaption,
@@ -399,7 +394,7 @@ export class PolyControl {
                 },
                 {
                     input: "input",
-                    type: "text",
+                    type: "hidden",
                     name: "__mode_",
                     value: "1",
                     default: "1",
@@ -429,6 +424,7 @@ export class PolyControl {
                         caption: this.infoForm.saveCaption,
                         action: (item, event) => {
                             if (this.form.valid()) {
+                                console.log(this.form.getValue())
                                 this.onsave(this.form.getValue());
                                 //this.saveLayer(this.forms["layer"].getValue());
                             }
@@ -453,20 +449,28 @@ export class PolyControl {
             data.map(e => [e.id, e.name]),
         );
     }
+
     setGeogence(data) {
+        const geojson = JSON.parse(data.geojson);
+        console.log(geojson)
+        this.mode = 2;
         data.__mode_ = 2;
+        this.name = data.name;
+        this.id = data.id;
         this.form.setValue(data);
+        this.colorInput.val(geojson.properties.color);
+        this.opacityInput.val(geojson.properties.opacity);
+        this.setPolygon(geojson);
     }
 
-    updateForm(data) {
-        this.form.getInput("coordinates").setValue(JSON.stringify(data.coordinates));
-        this.form.getInput("type").setValue(data.type);
+    updateForm(feature) {
+        this.form.getInput("geojson").setValue(JSON.stringify(feature));
     }
 
     newForm() {
+        this.mode = 1;
         this.reset();
         this.form.reset();
         this.onNew();
-
     }
 }

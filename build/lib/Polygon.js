@@ -6,6 +6,8 @@ export class Polygon {
         this.borderLayerId = "";
         this.nodeLayerId = "";
         this.midLayerId = "";
+        this.editMode = false;
+        this.color = "#ff3300";
         this.map = null;
         this.parent = null;
         this.name = "";
@@ -15,43 +17,11 @@ export class Polygon {
         this.flyToSpeed = 0.8;
         this.flyToZoom = 14;
         this.panDuration = 5000;
-        this.line = {
-            color: "#FFA969",
-            width: 2,
-            opacity: 0.9,
-            dasharray: [1]
-        };
-        this.fill = {
-            color: "#f9f871",
-            opacity: 0.4
-        };
-        this.lineEdit = {
-            color: "#ff3300",
-            width: 1,
-            opacity: 0.9,
-            dasharray: [2, 2]
-        };
-        this.fillEdit = {
-            color: "#ff9933",
-            opacity: 0.4
-        };
-        this.lineColor = "white";
-        this.lineWidth = 2;
-        this.fillColor = "red";
-        //radio:number = 0;
-        //center:number[] = null;
-        this.hand = null;
-        this._mode = 0;
-        this._nodes = null;
-        this._line = null;
         this.id = "p" + String(new Date().getTime());
-        this.lineId = null;
-        this.circleId = null;
-        this._play = false;
         this.callmove = () => { };
         this.callresize = () => { };
         this.ondraw = () => { };
-        this.createMidPoints = function (coords) {
+        this.createMidPoints = function (coords, color) {
             let coordinates = coords.slice();
             let p1 = null, p2 = null;
             const features = [];
@@ -70,6 +40,7 @@ export class Polygon {
                     "properties": {
                         "index": index,
                         "type": "h",
+                        "color": color
                     }
                 });
                 features.push({
@@ -104,15 +75,20 @@ export class Polygon {
     }
     init() {
         let map = this.map;
+        this.popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+        //this.playPopup();
         if (this.feature === null) {
             this.feature = {
                 "type": "Feature",
                 "properties": {
-                    "fill-color": "#aa2255",
-                    "line-color": "#5522aa",
-                    "line-width": 2,
-                    "line-dasharray": [2, 2],
-                    "fill-opacity": 0.4,
+                    "rol": "polygon",
+                    "color": this.color,
+                    "width": 2,
+                    "dasharray": [2, 2],
+                    "opacity": 0.4,
                 },
                 "geometry": {
                     "type": "Polygon",
@@ -121,34 +97,38 @@ export class Polygon {
             };
         }
         else {
+            this.feature.properties.rol = "polygon";
+            /*
             this.feature = {
                 "type": "Feature",
                 "properties": {
-                    "fill-color": "#aa2255",
-                    "line-color": "#5522aa",
-                    "line-width": 2,
-                    "line-dasharray": [2, 2],
-                    "fill-opacity": 0.4,
+                    "color": "#aa2255",
+                    "width": 2,
+                    "dasharray": [2, 2],
+                    "opacity": 0.4,
                 },
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [[[-66.87686735735063, 10.49935516128366], [-66.86582490973026, 10.509106707957727], [-66.85887225752434, 10.506291860101157], [-66.85672511493149, 10.500662087456533], [-66.85652062516098, 10.488296334115446], [-66.86153062454457, 10.504381770164244], [-66.86459797110578, 10.50649292151337], [-66.87686735735063, 10.49935516128366]]]
                 }
             };
+            */
         }
         const geojson = this.setFeature(this.feature);
-        /*
-        const midPoints = this.createMidPoints( this.feature.geometry.coordinates[0]);
-        console.log(midPoints);
-
-        const features = [];
-        features.push(this.feature);
-
-        const geojson = {
-        "type": "geojson",
-        "data": turf.featureCollection(features.concat(midPoints))};
-        */
         this.map.addSource(this.sourceId, geojson);
+        this.map.addLayer({
+            "id": this.fillLayerId,
+            "type": "fill",
+            "source": this.sourceId,
+            "layout": {
+                visibility: (this.visible) ? "visible" : "none"
+            },
+            "paint": {
+                "fill-color": ["get", "color"],
+                "fill-opacity": ["get", "opacity"],
+            },
+            "filter": ["==", "$type", "Polygon"]
+        });
         this.map.addLayer({
             "id": this.borderLayerId,
             "type": "line",
@@ -159,72 +139,57 @@ export class Polygon {
                 "visibility": (this.visible) ? "visible" : "none"
             },
             "paint": {
-                "line-color": ["get", "line-color"],
-                "line-width": ["get", "line-width"],
+                "line-color": ["get", "color"],
+                "line-width": ["get", "width"],
+                //"line-gap-width":4,
+                //"line-dasharray":[2,2]
+                //"line-dasharray": ["get","line-width"]
             },
             "filter": ["==", "$type", "Polygon"]
         });
-        this.map.addLayer({
-            "id": this.fillLayerId,
-            "type": "fill",
-            "source": this.sourceId,
-            "layout": {
-                visibility: (this.visible) ? "visible" : "none"
-            },
-            "paint": {
-                "fill-color": ["get", "fill-color"],
-                "fill-opacity": ["get", "fill-opacity"],
-            },
-            "filter": ["==", "$type", "Polygon"]
-        });
-        /*
         map.addLayer({
             id: this.nodeLayerId,
             type: "circle",
             source: this.sourceId,
             layout: {
-                visibility:"visible"
-            },
-            paint: {
-                "circle-radius": 3,
-                "circle-opacity":0.5,
-                "circle-color": "#000",
-                "circle-stroke-color":"#ff3300",
-                "circle-stroke-width":1
-            },
-            filter: ["in", "type", "h"]
-            //filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "m"]
-            //filter: ["in", "type"]
-        });
-        */
-        map.addLayer({
-            id: this.nodeLayerId,
-            type: "circle",
-            source: this.sourceId,
-            layout: {
-                visibility: "visible"
+                visibility: (this.editMode && this.visible) ? "visible" : "none"
             },
             paint: {
                 "circle-radius": 4,
                 "circle-opacity": ["case", ["==", ["get", "type"], "m"], 0.0, 0.8],
-                "circle-color": "white",
-                "circle-stroke-color": "#ff3300",
+                "circle-color": ["get", "color"],
+                "circle-stroke-color": "#FFFFFF",
                 "circle-stroke-width": 1
             },
             filter: ["in", "$type", "Point"]
             //filter: ["in", "type", "h", "m"]
             //filter: ["in", "type", "m"]
         });
-        return;
-        //this.setLine(this.line);
-        //this.setFill(this.fill);
-        this.map.setPaintProperty(this.fillLayerId, "fill-color", "#aa0000");
-        //console.log(this.map.getLayoutProperty(this.fillLayerId));
-        this.setFeature(this.feature);
     }
     updateSource(geojson) {
         this.map.getSource(this.sourceId).setData(geojson.data);
+        if (this.editMode) {
+            //this.map.setPaintProperty(this.nodeLayerId, "circle-stroke-color", "#ff0000");
+        }
+        this.ondraw(this.feature);
+    }
+    setProperties(info) {
+        for (let p in info) {
+            this.feature.properties[p] = info[p];
+            switch (p) {
+                case "dasharray":
+                    this.map.setPaintProperty(this.borderLayerId, "line-dasharray", info[p]);
+                    break;
+                case "color":
+                    this.map.setPaintProperty(this.borderLayerId, "line-color", info[p]);
+                    this.map.setPaintProperty(this.fillLayerId, "fill-color", info[p]);
+                    break;
+                case "opacity":
+                    this.map.setPaintProperty(this.fillLayerId, "fill-opacity", info[p]);
+                    break;
+            }
+        }
+        this.ondraw(this.feature);
     }
     setLine(info) {
         for (let p in info) {
@@ -243,8 +208,14 @@ export class Polygon {
         }
         this.map.setLayoutProperty(this.borderLayerId, "visibility", visible);
         this.map.setLayoutProperty(this.fillLayerId, "visibility", visible);
-        if (this._play) {
+        if (this.editMode || value === false) {
             this.map.setLayoutProperty(this.nodeLayerId, "visibility", visible);
+        }
+    }
+    setEditMode(value) {
+        if (value) {
+        }
+        else {
         }
     }
     getCoordinates() {
@@ -252,7 +223,8 @@ export class Polygon {
     }
     setFeature(feature) {
         this.feature = feature;
-        const midPoints = this.createMidPoints(this.feature.geometry.coordinates[0]);
+        this.color = this.feature.properties.color;
+        const midPoints = this.createMidPoints(this.feature.geometry.coordinates[0], this.color);
         const features = [];
         features.push(this.feature);
         const geojson = {
@@ -263,22 +235,27 @@ export class Polygon {
         //this.map.getSource(this.sourceId).setData(geojson);
     }
     draw() {
+        console.log(this.feature);
         //let data = createGeoJSONPoly(this.coordinates);
         return;
         this.map.getSource(this.lineId).setData(data.data);
         this.ondraw(this.coordinates);
     }
     add(lngLat) {
-        this.feature.geometry.coordinates[0][this.feature.geometry.coordinates.length - 1] = [lngLat.lng, lngLat.lat];
-        this.feature.geometry.coordinates[0].push(this.feature.geometry.coordinates[0][0]);
+        const geo = this.feature.geometry;
+        if (geo.coordinates[0].length === 0) {
+            geo.coordinates[0].push([lngLat.lng, lngLat.lat]);
+            geo.coordinates[0].push([lngLat.lng, lngLat.lat]);
+        }
+        else {
+            geo.coordinates[0].splice(geo.coordinates[0].length - 1, 0, [lngLat.lng, lngLat.lat]);
+        }
         this.updateSource(this.setFeature(this.feature));
     }
     removeLast() {
         const geo = this.feature.geometry;
-        console.log(geo.coordinates[0]);
         if (geo.coordinates[0].length > 0) {
-            this.feature.geometry.coordinates[0].splice(geo.coordinates[0].length - 1, 1);
-            console.log(geo.coordinates[0]);
+            this.feature.geometry.coordinates[0].splice(geo.coordinates[0].length - 2, 1);
             this.updateSource(this.setFeature(this.feature));
         }
     }
@@ -306,18 +283,18 @@ export class Polygon {
         return;
     }
     play() {
-        if (this._play) {
+        if (this.editMode) {
             return;
         }
         this.parent.stop();
-        this._play = true;
+        this.editMode = true;
         let map = this.map;
         //this.map.setLayoutProperty(this.nodeLayerId, "visibility", "none");
         this.setVisible(true);
-        this.setFill(this.fillEdit);
-        this.setLine(this.lineEdit);
+        //this.setFill(this.fillEdit);
+        //this.setLine(this.lineEdit);
         //this.map.setLayoutProperty(this.nodeLayerId, "visibility", "visible");
-        //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
+        this.map.setPaintProperty(this.borderLayerId, "line-dasharray", [2, 2]);
         let place = null;
         let type = null;
         let place_one = null;
@@ -379,27 +356,25 @@ export class Polygon {
             this.removeLast();
         });
     }
-    pause() {
-    }
     stop() {
-        if (this._play) {
+        if (this.editMode) {
             this.map.off("click", this._click);
             this.map.off("contextmenu", this._contextmenu);
             this.map.off("mousedown", this.nodeLayerId, this._mousedown);
-            this.map.off("mousedown", this.circleId, this._mousedown2);
-            // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+            this.map.off("mousedown", this.fillLayerId, this._mousedown2);
+            this.map.setPaintProperty(this.borderLayerId, "line-dasharray", [1]);
             //"line-dasharray":[2,2]
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
             //map.on("mousemove", fnMove);
         }
         this.map.setLayoutProperty(this.nodeLayerId, "visibility", "none");
-        this.setFill(this.fill);
-        this.setLine(this.line);
+        //this.setFill(this.fill);
+        //this.setLine(this.line);
         //this._mode = 0;
-        this._play = false;
+        this.editMode = false;
     }
     reset() {
-        if (!this._play) {
+        if (!this.editMode) {
             return;
         }
         this._mode = 1;
@@ -435,23 +410,12 @@ export class Polygon {
     delete() {
         this.stop();
         let map = this.map;
-        if (map.getLayer(this.circleId))
-            map.removeLayer(this.circleId);
-        if (map.getLayer(this.lineId))
-            map.removeLayer(this.lineId);
         if (map.getLayer(this.nodeLayerId))
             map.removeLayer(this.nodeLayerId);
-        if (map.getSource(this.lineId))
-            map.removeSource(this.lineId);
-    }
-    getCoordinates2() {
-        return this.coordinates;
-    }
-    setCenter(lngLat) {
-        this.center = lngLat;
-    }
-    setHand(lngLat) {
-        this.hand = lngLat;
+        if (map.getLayer(this.borderLayerId))
+            map.removeLayer(this.borderLayerId);
+        if (map.getLayer(this.fillLayerId))
+            map.removeLayer(this.fillLayerId);
     }
     split(index, value) {
         //let coordinates = this.getCoordinates();
@@ -468,6 +432,11 @@ export class Polygon {
         return this.radio;
     }
     flyTo(zoom, speed) {
+        const bboxPolygon = turf.bbox(this.feature.geometry);
+        this.map.fitBounds(bboxPolygon, {
+            padding: 80
+        });
+        return;
         var coordinates = this.coordinates;
         // Pass the first coordinates in the LineString to `lngLatBounds` &
         // wrap each coordinate pair in `extend` to include them in the bounds
@@ -499,6 +468,37 @@ export class Polygon {
         let polygon = turf.lineString(this.coordinates);
         let centroid = turf.centroid(polygon);
         this.map.panTo(centroid.geometry.coordinates, { duration: duration || this.panDuration });
+    }
+    playPopup() {
+        /*
+        var popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+            });
+            */
+        const map = this.map;
+        map.on("mouseenter", this.nodeLayerId, (e) => {
+            const info = e.features[0].properties;
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = "pointer";
+            info.length = 0;
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            // Populate the popup and set its coordinates
+            // based on the feature found.
+            this.popup.setHTML(`<div>${coordinates[0]}</div><div>${coordinates[1]}</div>`).addTo(map);
+            this.popup.setLngLat(coordinates).addTo(map);
+        });
+        map.on("mouseleave", this.nodeLayerId, () => {
+            map.getCanvas().style.cursor = '';
+            this.popup.remove();
+            //popup.remove();
+        });
     }
 }
 Polygon.TYPE = "polygon";

@@ -2,7 +2,7 @@
 	"form":"geofence",
 	"caption":"Geocercas",
 	"className":"filter-form",
-	"query":"SELECT concat('', geofence.id) as geogence_id, id, name, description, type, coordinates, color, '' as alpha FROM geofence",
+	"query":"SELECT concat('', geofence.id) as geogence_id, id, name, description, geojson, '' as alpha FROM geofence",
 	"menuName":"/menu/geofence_menu",
 	"methods":{
 		"request":{

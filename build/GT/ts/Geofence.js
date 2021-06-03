@@ -107,7 +107,7 @@ export class Geofence {
                             element: "gt-geofence",
                             method: "get-record",
                             eparams: {
-                                geofenceId: "1"
+                                geofenceId: "2"
                             },
                             iToken: "f"
                         }
@@ -119,7 +119,7 @@ export class Geofence {
                             method: "get-record",
                             name: "/form/geofence",
                             eparams: {
-                                geofenceId: "1"
+                                geofenceId: "2"
                             },
                             iToken: "f"
                         }
@@ -159,12 +159,13 @@ export class Geofence {
                 });
             };
             mapControl.onsave = (data) => {
+                console.log(data);
                 var formData = new FormData();
                 formData.append("id", data.id);
                 formData.append("name", data.name);
                 formData.append("description", data.description);
                 formData.append("type", data.type);
-                formData.append("coordinates", data.coordinates);
+                formData.append("geojson", data.geojson);
                 formData.append("propertys", data.propertys);
                 formData.append("color", "red");
                 formData.append("scope", data.propertys);
@@ -183,6 +184,7 @@ export class Geofence {
                     blockingTarget: mapControl.getPanel(),
                     requestFunctions: {
                         "f": (json) => {
+                            console.log(S.getVar("geofenceId"), "....");
                             console.log(json);
                             mapControl.setGeogenceList(json.list);
                             mapControl.setGeogence(json.data);
@@ -200,13 +202,15 @@ export class Geofence {
                             eparams: {}
                         },
                         {
+                            t: "getDataForm",
+                            fields: { id: "geofenceId" }
+                        },
+                        {
                             t: "setMethod",
                             element: "gt-geofence",
                             method: "get-record",
                             name: "/form/geofence",
-                            eparams: {
-                                geofenceId: "1"
-                            },
+                            eparams: {},
                             iToken: "f"
                         },
                     ]
@@ -221,7 +225,7 @@ export class Geofence {
                 console.log(config);
                 tool.setConfig(config)
             }*/
-            mapControl.play();
+            //mapControl.play();
         });
     }
     _create(main) {
@@ -556,8 +560,8 @@ export class Geofence {
     }
     showGeofence(id, value) {
         if (!this.marks[id]) {
-            this.marks[id] = this.getMap().draw(id, this.dataMain[id].type, {
-                coordinates: this.dataMain[id].config,
+            this.marks[id] = this.getMap().draw(id, this.dataMain[id].geojson.properties.rol, {
+                feature: this.dataMain[id].geojson,
                 popupInfo: this.loadPopupInfo(id)
             });
         }

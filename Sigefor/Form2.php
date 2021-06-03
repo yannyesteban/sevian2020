@@ -274,14 +274,16 @@ class Form2
 	public function save(){
 		//hx(\Sevian\S::getVReq());
 		//hr($this->_masterData);exit;
+		//\Sevian\S::getVReq() = (object)\Sevian\S::getVReq();
+		//$d = &\Sevian\S::getVReq();
+		//hx(\Sevian\S::getVReq());
 		$formSave =  new \Sigefor\Component\FF([
 			'name'		=> JasonFile::getNameJasonFile($this->name, self::$patternJsonFile),
 			'dataKeys'	=> $this->_masterData,
 			'dataKeysId'=> 'grid',
-			'data'		=> [(object)\Sevian\S::getVReq()]
+			'data'		=> [\Sevian\S::getVReq()]
 		]);
 
-		//hx($formSave->getResult());
 
 		foreach($formSave->getResult() as $k => $v){
 

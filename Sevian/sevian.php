@@ -47,6 +47,8 @@ class S{
 	public static $ses = [];
 	public static $req = [];
 	public static $exp = [];
+	public static $frm = [];
+
 
 	/* private */
 	private static $_init = [];
@@ -168,7 +170,7 @@ class S{
 	}
 
 	public static function setReq($key, $value){
-		self::$req[$key] = $value;
+		self::$req->{$key} = $value;
 	}
 
 	public static function addSes($ses){
@@ -186,7 +188,7 @@ class S{
 		return self::$ses[$key];
 	}
 	public static function &getReq($key){
-		return self::$req[$key];
+		return self::$req->{$key};
 	}
 	public static function &getExp($key){
 		return self::$exp[$key];
@@ -199,6 +201,9 @@ class S{
 	}
 	public static function &getVExp(){
 		return self::$exp;
+	}
+	public static function &getVFrm(){
+		return self::$frm;
 	}
 	public static function jsInit($js = []){
 		self::$_js = array_merge(self::$_js, $js);
@@ -239,6 +244,9 @@ class S{
 
 	}
 
+	public static function addResponse($response){
+		self::$_response = array_merge(self::$_response, $response);
+	}
 
 	public static function addTask($id, $task){
 
@@ -262,7 +270,8 @@ class S{
 		session_start();
 
 		self::$cfg = &$_SESSION;
-		self::$req = &$_REQUEST;
+		self::$frm = &$_REQUEST;
+		self::$req = (object)$_REQUEST;
 
 		self::$ses = &self::$cfg['VSES'];
 		self::$onAjax = self::getReq('__sg_async');
@@ -762,6 +771,11 @@ class S{
 				'default' 	=> $default
 			],
 			[
+				'token'		=> '\&F_',
+				'data' 		=> self::$frm,
+				'default' 	=> $default
+			],
+			[
 				'token' 	=> '&EX_',
 				'data' 		=> self::$exp,
 				'default' 	=> $default
@@ -813,7 +827,23 @@ class S{
 
 		switch($cmd->t){
 
+			case "getDataForm":
 
+				$data = [];
+				if($cmd->fields?? false){
+					foreach($cmd->fields as $key => $value){
+						$data[$value] = self::getReq($key);
+					}
+				}else{
+					$data = self::getVReq();
+				}
+
+				self::addResponse([[
+					"type"=>"dataForm",
+					"dataForm" => $data
+				]]);
+
+				break;
 			case "addSes":
 				self::addSes((array)$cmd->param);
 				break;
@@ -880,8 +910,8 @@ class S{
 
 
 
-		if(isset(self::$req["__sg_params"]) and self::$req["__sg_params"] != ""){
-			self::sequence(json_decode(self::$req["__sg_params"]));
+		if(isset(self::$req->{"__sg_params"}) and self::$req->{"__sg_params"} != ""){
+			self::sequence(json_decode(self::$req->{"__sg_params"}));
 		}
 	}
 	public static function setTemplate($template = ''){
@@ -1525,6 +1555,14 @@ class S{
 
 	}
 
+	public static function debug($info){
+		self::addResponse([[
+			"type"=>"debug",
+			"info" => $info
+		]]);
+
+
+	}
 	public static function setMainPanel($panel, $type, $main){
 
 		self::$_mainPanels[$panel] = [

@@ -515,6 +515,7 @@ var Form = (($) => {
                                 items: [
                                     {
                                         caption: "Guardar",
+                                        //useCheck:true,
                                     },
                                     {
                                         caption: "Volver"

@@ -27,6 +27,12 @@ export var S = (($) => {
         static test() {
             alert("hello i am sevian");
         }
+        static setVar(key, value) {
+            this.vars[key] = value;
+        }
+        static getVar(key) {
+            return this.vars[key];
+        }
         static initElement(element) {
             if (!element) {
                 return;
@@ -140,6 +146,15 @@ export var S = (($) => {
                     return;
                 }
                 switch (item.type) {
+                    case "debug":
+                        console.log(item.info);
+                        break;
+                    case "dataForm":
+                        console.log(item.dataForm);
+                        for (let key in item.dataForm) {
+                            this.setVar(key, item.dataForm[key]);
+                        }
+                        break;
                     case "panel":
                         break;
                     case "update":
@@ -1072,6 +1087,7 @@ export var S = (($) => {
     Sevian.jsComponents = [];
     Sevian.components = [];
     Sevian.modules = [];
+    Sevian.vars = {};
     Sevian._e = [];
     Sevian._w = [];
     Sevian._components = [];
