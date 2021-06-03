@@ -339,6 +339,7 @@ export class Geofence {
 	}
 	setMap(map) {
 		this.map = map;
+		return;
 
 		map.getControl("poly").onsave = ((info) => {
 			this.loadForm(info);
