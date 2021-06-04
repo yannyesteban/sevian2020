@@ -34,28 +34,7 @@ export class Geofence {
 	pathImages: string = "";
 	followMe: boolean = false;
 
-	infoTemplate: string = `
-			<div class="units-info">
-			<div>Placa</div><div>{=plate}</div>
-			<div>Marca</div><div>{=brand}</div>
-			<div>Modelo</div><div>{=model}</div>
-			<div>Color</div><div>{=color}</div>
-
-			<div>Hora</div><div>{=date_time}</div>
-			<div>Longitud</div><div>{=longitude}</div>
-			<div>Latidud</div><div>{=latitude}</div>
-			<div>Velocidad</div><div>{=speed}</div>
-
-			<div>Heading</div><div>{=heading}</div>
-			<div>Satellite</div><div>{=satellite}</div>
-			<div>Inputs</div><div>{=speed}</div>
-			<div>Outputs</div><div>{=speed}</div>
-
-
-
-
-
-		</div>`;
+	infoTemplate: string = ``;
 	popupTemplate: string = ``;
 	public oninfo: Function = (info, name) => { };
 	public delay: number = 30000;
@@ -122,7 +101,8 @@ export class Geofence {
 						"f": (json) => {
 							console.log(json);
 							mapControl.setGeogenceList(json.list);
-							mapControl.setGeogence(json.data);
+							mapControl.newGeofence();
+							//mapControl.setGeogence(json.data);
 
 						}
 					},
@@ -228,6 +208,76 @@ export class Geofence {
 							console.log(json);
 							mapControl.setGeogenceList(json.list);
 							mapControl.setGeogence(json.data);
+
+						}
+					},
+					_requestFunction: (json) => {
+
+					},
+					params: [
+						{
+							t: "setMethod",
+							'mode': 'element',
+							element: "s-form",
+							method: "save",
+
+							name: "/form/geofence",
+							eparams: {}
+						},
+						{
+							t: "getDataForm",
+							fields: { id: "geofenceId" }
+						},
+						{
+							t: "setMethod",
+
+							element: "gt-geofence",
+							method: "get-record",
+
+							name: "/form/geofence",
+							eparams: {
+
+							},
+							iToken: "f"
+						},
+					]
+				});
+			}
+
+			mapControl.ondelete = (data) => {
+				console.log(data)
+				var formData = new FormData();
+				formData.append("id", data.id);
+				formData.append("name", data.name);
+				formData.append("description", data.description);
+				formData.append("type", data.type);
+				formData.append("geojson", data.geojson);
+				formData.append("propertys", data.propertys);
+				formData.append("color", "red");
+				formData.append("scope", data.propertys);
+				formData.append("propertys", data.propertys);
+				formData.append("__mode_", "3");
+
+
+					formData.append("__record_", JSON.stringify({
+						id: data.id
+					}));
+
+
+
+				S.go({
+					async: true,
+					valid: false,
+					confirm: 'seguro?',
+					form: formData,
+					blockingTarget: mapControl.getPanel(),
+					requestFunctions: {
+						"f": (json) => {
+							console.log(S.getVar("geofenceId"), "....");
+							console.log(json);
+							mapControl.delete();
+							mapControl.setGeogenceList(json.list);
+							mapControl.newGeofence();
 
 						}
 					},

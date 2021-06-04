@@ -4,7 +4,7 @@ import { Polygon as GeoPolygon, Feature } from '../types/geojson/GeoJSON';
 
 export class Polygon implements IPoly {
     public static readonly TYPE = "polygon";
-    private feature: any = null;
+    private feature:any  = null;
 
     private sourceId: string = "";
 
@@ -103,7 +103,9 @@ export class Polygon implements IPoly {
             };
             */
         }
-
+        if (this.feature.geometry.coordinates === null) {
+            this.feature.geometry.coordinates = [[]];
+        }
 
         const geojson = this.setFeature(this.feature);
 
@@ -493,15 +495,23 @@ export class Polygon implements IPoly {
 
 
     }
-    reset() {
+    reset(feature?) {
 
         if (!this.editMode) {
             return;
         }
-        this._mode = 1;
 
-        this.feature.geometry.coordinates[0] = [];
-        this.updateSource(this.setFeature(this.feature));
+        if (feature !== undefined) {
+
+            this.updateSource(this.setFeature(feature));
+            this.setProperties(feature.properties);
+
+        } else {
+            this.feature.geometry.coordinates = [[]];
+            this.updateSource(this.setFeature(this.feature));
+        }
+
+
 
         return
         if (this.coordinatesInit) {

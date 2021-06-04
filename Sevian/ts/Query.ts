@@ -119,14 +119,14 @@ export class SQObject{
 
 	}
 
-	id(id){
+	id(id?){
 		if(id === undefined){
 			return this.e.id;
 		}
 		this.e.id = id;
 		return this;
 	}
-	val(value){
+	val(value?){
 		if(value === undefined){
 			return this.e.value;
 		}
@@ -134,7 +134,7 @@ export class SQObject{
 		return this;
 
 	}
-	value(value){
+	value(value?){
 		if(value === undefined){
 			return this.e.value;
 		}

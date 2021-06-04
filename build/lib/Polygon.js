@@ -114,6 +114,9 @@ export class Polygon {
             };
             */
         }
+        if (this.feature.geometry.coordinates === null) {
+            this.feature.geometry.coordinates = [[]];
+        }
         const geojson = this.setFeature(this.feature);
         this.map.addSource(this.sourceId, geojson);
         this.map.addLayer({
@@ -373,13 +376,18 @@ export class Polygon {
         //this._mode = 0;
         this.editMode = false;
     }
-    reset() {
+    reset(feature) {
         if (!this.editMode) {
             return;
         }
-        this._mode = 1;
-        this.feature.geometry.coordinates[0] = [];
-        this.updateSource(this.setFeature(this.feature));
+        if (feature !== undefined) {
+            this.updateSource(this.setFeature(feature));
+            this.setProperties(feature.properties);
+        }
+        else {
+            this.feature.geometry.coordinates = [[]];
+            this.updateSource(this.setFeature(this.feature));
+        }
         return;
         if (this.coordinatesInit) {
             this.coordinates = this.coordinatesInit.slice();

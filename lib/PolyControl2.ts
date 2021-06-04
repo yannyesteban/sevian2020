@@ -7,11 +7,38 @@ export class PolyControl {
     private newId: string = "mapboxgl-ctrl-poly";
     private id: any = "";
     private name: string = "";
-    private color: string = "";
-    private opacity: string = "";
+    private color: string = "#460046";
+    private opacity: string = "0.2";
     private mode: number = 1;
-    private feature = {};
-
+    private rol: string = "polygon";
+    private defaultFeature = {
+        "type": "Feature",
+        "rol": this.rol,
+        "properties": {
+            "rol": "polygon",
+            "color": this.color,
+            "width": 2,
+            "opacity": this.opacity
+        },
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [[]]
+        }
+    };
+    private feature = {
+        "type": "Feature",
+        "rol": this.rol,
+        "properties": {
+            "rol": "polygon",
+            "color": this.color,
+            "width": 2,
+            "opacity": this.opacity
+        },
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [[]]
+        }
+    };
     private poly: IPoly = null;
 
     private main: SQObject = null;
@@ -39,14 +66,16 @@ export class PolyControl {
         propertysCaption: "Propiedades",
         typeCaption: "Tipo",
         saveCaption: "Guardar",
-        newCaption: "Nuevo+",
-        deleteCaption: "Eliminar"
+        newCaption: "+",
+        deleteCaption: "Eliminar",
+        warnningDelete: "Seguro?"
     }
 
     public onInit: Function = () => { };
     public onLoadGeofence: Function = (id) => { };
     public onstart: Function = (coords, propertys) => { };
     public onsave: Function = (coords, propertys) => { };
+    public ondelete: Function = (coords, propertys) => { };
     public onexit: Function = (coords, propertys) => { };
     public onNew: Function = () => { };
 
@@ -91,27 +120,19 @@ export class PolyControl {
 
         this.bar.create("button").prop({ "type": "button", "title": "Dibujar un Círculo" }).addClass("icon-circle")
             .on("click", () => {
-                this.delete();
-                this.setCircle();
+                this.setRol("circle");
             });
 
         this.bar.create("button").prop({ "type": "button", "title": "Dibujar un Rectángulo" }).addClass(["icon-rectangle"])
             .on("click", () => {
-                this.delete();
-                this.setRectangle();
+                this.setRol("rectangle");
             });
 
         this.bar.create("button").prop({ "type": "button", "title": "Dibuja un Polígono" }).addClass(["icon-poly"])
             .on("click", () => {
-                this.delete();
-                this.setPolygon();
+                this.setRol("polygon");
             });
 
-        this.bar.create("button").prop({ "type": "button", "title": "Guardar" }).addClass(["icon-save"])
-            .on("click", () => {
-
-                this.onsave(this.poly.getCoordinates());
-            });
         this.bar.create("button").prop({ "type": "button", "title": "Descarta la medición actual" }).addClass(["icon-trash"])
             .on("click", () => {
                 this.reset();
@@ -165,6 +186,7 @@ export class PolyControl {
     }
 
     stop() {
+        this.reset();
         this.menu.style("display", "");
         this.panel.style("display", "none");
         this.subPanel.style("display", "none");
@@ -176,14 +198,18 @@ export class PolyControl {
 
     delete() {
 
-        this.parentControl.delete(this.id);
+        this.parentControl.delete(this.getId());
         console.log("delete")
         this.onlength("0 Km<sup>2</sup>");
     }
     reset() {
         this.onlength("0 Km<sup>2</sup>");
         console.log("reset")
-        this.poly.reset();
+        if (this.poly) {
+
+            this.poly.reset(JSON.parse(JSON.stringify(this.defaultFeature)));
+        }
+
     }
     printArea(area) {
         if (area > 1000000) {
@@ -260,9 +286,13 @@ export class PolyControl {
 
     setPolygon(feature) {
         this.feature = feature;
-        console.log(this.getId())
 
-        this.poly = this.parentControl.draw(this.getId(), "polygon",
+        this.defaultFeature = JSON.parse(JSON.stringify(this.feature))
+
+        console.log("default Feature", this.defaultFeature)
+
+
+        this.poly = this.parentControl.draw(this.getId(), this.feature.properties.rol,
             { feature: this.feature });
         this.poly.ondraw = (feature) => {
             const coordinates = feature.geometry.coordinates;
@@ -330,7 +360,12 @@ export class PolyControl {
                     //data:this.getLayerList(),
                     events: {
                         "change": event => {
-                            this.onLoadGeofence(event.currentTarget.value);
+                            if (event.currentTarget.value === "") {
+                                this.newGeofence();
+                            } else {
+                                this.onLoadGeofence(event.currentTarget.value);
+                            }
+
                             //this.loadLayer(event.currentTarget.value);
                         }
                     }
@@ -415,7 +450,7 @@ export class PolyControl {
                         id: 1,
                         caption: this.infoForm.newCaption,
                         action: (item, event) => {
-                            this.newForm();
+                            this.newGeofence();
 
                         }
                     },
@@ -424,7 +459,7 @@ export class PolyControl {
                         caption: this.infoForm.saveCaption,
                         action: (item, event) => {
                             if (this.form.valid()) {
-                                console.log(this.form.getValue())
+
                                 this.onsave(this.form.getValue());
                                 //this.saveLayer(this.forms["layer"].getValue());
                             }
@@ -435,6 +470,7 @@ export class PolyControl {
                         id: 3,
                         caption: this.infoForm.deleteCaption,
                         action: (item, event) => {
+                            this.ondelete(this.form.getValue());
                             //this.deleteLayer(this.forms["layer"].getValue());
                         }
                     }
@@ -443,14 +479,52 @@ export class PolyControl {
         });
     }
 
-    setGeogenceList(data){
+    getEmptyFeature() {
+
+
+    }
+    setRol(rol) {
+        this.delete();
+        this.feature.rol = rol;
+        this.feature.geometry.coordinates = null;
+
+        this.setPolygon(this.feature);
+    }
+    setGeogenceList(data) {
+
+        data = [{id: 0, name: ""}].concat(data);
 
         this.form.getInput("geofenceId").setOptionsData(
             data.map(e => [e.id, e.name]),
         );
     }
 
+    newGeofence() {
+        this.newForm();
+        const feature = {
+            "type": "Feature",
+            "rol": this.rol,
+            "properties": {
+                "rol": "polygon",
+                "color": this.colorInput.val(),
+                "width": 2,
+                "opacity": Number(this.opacityInput.val())
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[]]
+            }
+        }
+
+        this.updateForm(feature);
+        this.setPolygon(feature);
+    }
     setGeogence(data) {
+        console.log("setGeofence")
+        if (this.mode == 1) {
+            this.parentControl.delete(this.newId);
+
+        }
         const geojson = JSON.parse(data.geojson);
         console.log(geojson)
         this.mode = 2;
