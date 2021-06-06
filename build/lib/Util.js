@@ -73,6 +73,7 @@ export const createGeoJSONRectangle = function (p1, p2 = null) {
         };
         json.data.features.push(point);
     });
+    console.log(json);
     return json;
 };
 export const createGeoJSONPoly = function (coords, ini) {

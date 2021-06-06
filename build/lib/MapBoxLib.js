@@ -244,7 +244,6 @@ export class MapBoxLib {
         return this._poly[name];
     }
     draw(name, type, info) {
-        console.log("poligon name", name);
         if (this._poly[name]) {
             return this._poly[name];
         }

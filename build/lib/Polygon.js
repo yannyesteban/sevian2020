@@ -1,6 +1,7 @@
 export class Polygon {
     constructor(info) {
         this.feature = null;
+        this.defaultFeature = null;
         this.sourceId = "";
         this.fillLayerId = "";
         this.borderLayerId = "";
@@ -8,6 +9,8 @@ export class Polygon {
         this.midLayerId = "";
         this.editMode = false;
         this.color = "#ff3300";
+        this.opacity = 0.4;
+        this.width = 2;
         this.map = null;
         this.parent = null;
         this.name = "";
@@ -86,9 +89,9 @@ export class Polygon {
                 "properties": {
                     "rol": "polygon",
                     "color": this.color,
-                    "width": 2,
+                    "width": this.width,
                     "dasharray": [2, 2],
-                    "opacity": 0.4,
+                    "opacity": this.opacity,
                 },
                 "geometry": {
                     "type": "Polygon",
@@ -117,6 +120,7 @@ export class Polygon {
         if (this.feature.geometry.coordinates === null) {
             this.feature.geometry.coordinates = [[]];
         }
+        this.defaultFeature = JSON.parse(JSON.stringify(this.feature));
         const geojson = this.setFeature(this.feature);
         this.map.addSource(this.sourceId, geojson);
         this.map.addLayer({
@@ -188,6 +192,7 @@ export class Polygon {
                     this.map.setPaintProperty(this.fillLayerId, "fill-color", info[p]);
                     break;
                 case "opacity":
+                    console.log(info);
                     this.map.setPaintProperty(this.fillLayerId, "fill-opacity", info[p]);
                     break;
             }
@@ -349,9 +354,9 @@ export class Polygon {
         });
         map.on("click", this._click = (e) => {
             //db (e.originalEvent.button+".........", "red","yellow")
-            var features = this.map.queryRenderedFeatures(e.point, {
+            /*var features = this.map.queryRenderedFeatures(e.point, {
                 layers: [this.nodeLayerId]
-            });
+            });*/
             this.add(e.lngLat);
         });
         map.on("contextmenu", this._contextmenu = (e) => {
@@ -376,44 +381,13 @@ export class Polygon {
         //this._mode = 0;
         this.editMode = false;
     }
-    reset(feature) {
+    reset() {
         if (!this.editMode) {
             return;
         }
-        if (feature !== undefined) {
-            this.updateSource(this.setFeature(feature));
-            this.setProperties(feature.properties);
-        }
-        else {
-            this.feature.geometry.coordinates = [[]];
-            this.updateSource(this.setFeature(this.feature));
-        }
-        return;
-        if (this.coordinatesInit) {
-            this.coordinates = this.coordinatesInit.slice();
-            if (this.coordinates.length > 1) {
-                this.draw();
-                return;
-            }
-        }
-        else {
-            this.coordinates = [];
-        }
-        this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "Polygon",
-                            "coordinates": [this.coordinates]
-                        }
-                    }]
-            }
-        };
-        //this._line.data.features = [];
-        this.map.getSource(this.lineId).setData(this._line.data);
+        console.log(this.defaultFeature.properties);
+        this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
+        this.setProperties(this.defaultFeature.properties);
     }
     delete() {
         this.stop();
@@ -424,6 +398,8 @@ export class Polygon {
             map.removeLayer(this.borderLayerId);
         if (map.getLayer(this.fillLayerId))
             map.removeLayer(this.fillLayerId);
+        if (map.getSource(this.sourceId))
+            map.removeSource(this.sourceId);
     }
     split(index, value) {
         //let coordinates = this.getCoordinates();

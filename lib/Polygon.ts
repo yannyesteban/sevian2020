@@ -5,7 +5,7 @@ import { Polygon as GeoPolygon, Feature } from '../types/geojson/GeoJSON';
 export class Polygon implements IPoly {
     public static readonly TYPE = "polygon";
     private feature:any  = null;
-
+    private defaultFeature  = null;
     private sourceId: string = "";
 
     private fillLayerId: string = "";
@@ -16,6 +16,8 @@ export class Polygon implements IPoly {
     private popup;
 
     private color: string = "#ff3300";
+    private opacity: number = 0.4;
+    private width: number = 2;
 
     map: any = null;
 
@@ -36,6 +38,8 @@ export class Polygon implements IPoly {
     callresize: Function = () => { };
 
     ondraw: Function = () => { };
+
+
     public getType() {
         return Polygon.TYPE;
     }
@@ -76,9 +80,9 @@ export class Polygon implements IPoly {
                 "properties": {
                     "rol": "polygon",
                     "color": this.color,
-                    "width": 2,
+                    "width": this.width,
                     "dasharray": [2, 2],
-                    "opacity": 0.4,
+                    "opacity": this.opacity,
                 },
                 "geometry": {
                     "type": "Polygon",
@@ -106,6 +110,8 @@ export class Polygon implements IPoly {
         if (this.feature.geometry.coordinates === null) {
             this.feature.geometry.coordinates = [[]];
         }
+
+        this.defaultFeature = JSON.parse(JSON.stringify(this.feature));
 
         const geojson = this.setFeature(this.feature);
 
@@ -187,6 +193,7 @@ export class Polygon implements IPoly {
                     this.map.setPaintProperty(this.fillLayerId, "fill-color", info[p]);
                     break;
                 case "opacity":
+                    console.log(info);
                     this.map.setPaintProperty(this.fillLayerId, "fill-opacity", info[p]);
                     break;
             }
@@ -455,9 +462,9 @@ export class Polygon implements IPoly {
         map.on("click", this._click = (e) => {
 
             //db (e.originalEvent.button+".........", "red","yellow")
-            var features = this.map.queryRenderedFeatures(e.point, {
+            /*var features = this.map.queryRenderedFeatures(e.point, {
                 layers: [this.nodeLayerId]
-            });
+            });*/
             this.add(e.lngLat);
         });
 
@@ -495,52 +502,15 @@ export class Polygon implements IPoly {
 
 
     }
-    reset(feature?) {
+    reset() {
 
         if (!this.editMode) {
             return;
         }
+        console.log(this.defaultFeature.properties);
+        this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
+        this.setProperties(this.defaultFeature.properties);
 
-        if (feature !== undefined) {
-
-            this.updateSource(this.setFeature(feature));
-            this.setProperties(feature.properties);
-
-        } else {
-            this.feature.geometry.coordinates = [[]];
-            this.updateSource(this.setFeature(this.feature));
-        }
-
-
-
-        return
-        if (this.coordinatesInit) {
-
-            this.coordinates = this.coordinatesInit.slice();
-            if (this.coordinates.length > 1) {
-                this.draw();
-                return;
-            }
-
-        } else {
-            this.coordinates = [];
-        }
-
-        this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [this.coordinates]
-                    }
-                }]
-            }
-        };
-        //this._line.data.features = [];
-        this.map.getSource(this.lineId).setData(this._line.data);
     }
 
     delete() {
@@ -551,7 +521,7 @@ export class Polygon implements IPoly {
         if (map.getLayer(this.nodeLayerId)) map.removeLayer(this.nodeLayerId);
         if (map.getLayer(this.borderLayerId)) map.removeLayer(this.borderLayerId);
         if (map.getLayer(this.fillLayerId)) map.removeLayer(this.fillLayerId);
-
+        if (map.getSource(this.sourceId)) map.removeSource(this.sourceId);
 
     }
 

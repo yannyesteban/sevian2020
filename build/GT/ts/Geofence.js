@@ -70,14 +70,12 @@ export class Geofence {
                     blockingTarget: mapControl.getPanel(),
                     requestFunctions: {
                         "f": (json) => {
-                            console.log(json);
                             mapControl.setGeogenceList(json.list);
                             mapControl.newGeofence();
                             //mapControl.setGeogence(json.data);
                         }
                     },
                     requestFunction_: (json) => {
-                        console.log(json);
                         mapControl.setGeogenceList(json.list);
                         mapControl.setGeogence(json.data);
                     },
@@ -114,13 +112,11 @@ export class Geofence {
                     blockingTarget: mapControl.getPanel(),
                     requestFunctions: {
                         "f": (json) => {
-                            console.log(json);
                             mapControl.setGeogenceList(json.list);
                             mapControl.setGeogence(json.data);
                         }
                     },
                     requestFunction_: (json) => {
-                        console.log(json);
                         mapControl.setGeogenceList(json.list);
                         mapControl.setGeogence(json.data);
                     },
@@ -139,7 +135,6 @@ export class Geofence {
                 });
             };
             mapControl.onsave = (data) => {
-                console.log(data);
                 var formData = new FormData();
                 formData.append("id", data.id);
                 formData.append("name", data.name);
@@ -164,8 +159,6 @@ export class Geofence {
                     blockingTarget: mapControl.getPanel(),
                     requestFunctions: {
                         "f": (json) => {
-                            console.log(S.getVar("geofenceId"), "....");
-                            console.log(json);
                             mapControl.setGeogenceList(json.list);
                             mapControl.setGeogence(json.data);
                         }
@@ -197,7 +190,6 @@ export class Geofence {
                 });
             };
             mapControl.ondelete = (data) => {
-                console.log(data);
                 var formData = new FormData();
                 formData.append("id", data.id);
                 formData.append("name", data.name);
@@ -220,8 +212,6 @@ export class Geofence {
                     blockingTarget: mapControl.getPanel(),
                     requestFunctions: {
                         "f": (json) => {
-                            console.log(S.getVar("geofenceId"), "....");
-                            console.log(json);
                             mapControl.delete();
                             mapControl.setGeogenceList(json.list);
                             mapControl.newGeofence();

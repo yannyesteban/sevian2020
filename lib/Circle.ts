@@ -1,72 +1,79 @@
-import {createGeoJSONRectangle,createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle} from './Util.js';
+import { createGeoJSONRectangle, createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle } from './Util.js';
 import { IPoly } from './IPoly';
-export class Circle implements IPoly{
+export class Circle implements IPoly {
     public static readonly TYPE = "circle";
-    map:any = null;
-    type:string = "circle";
-    parent:object = null;
-    name:string = "";
-    visible:boolean = true;
+    private feature: any = null;
+    private defaultFeature = null;
+    private sourceId: string = "";
 
-    flyToSpeed:number = 0.8;
-    flyToZoom:number = 14;
-    panDuration:number = 5000;
+    private fillLayerId: string = "";
+    private borderLayerId: string = "";
+    private nodeLayerId: string = "";
+    private midLayerId: string = "";
+    private editMode: boolean = false;
+    private color: string = "#ff3300";
+    private opacity: number = 0.4;
+    private width: number = 2;
 
-    line:object = {
-        color: "#FFA969",
-        width: 2,
-        opacity: 0.9,
-        dasharray: [1]
-    };
-    fill:object = {
-        color: "#f9f871",
-        opacity: 0.4
-    };
-    lineEdit:object = {
-        color: "#ff3300",
-        width: 2,
-        opacity: 0.9,
-        dasharray: [2,2]
-    };
-    fillEdit:object = {
-        color: "#ff9933",
-        opacity: 0.4
-    };
-    lineColor:string = "white";
-    lineWidth:number = 2;
-    fillColor:string = "red";
-    coordinates:any[] = null;
-    radio:number = 0;
-    center:number[] = null;
-    hand:number[] = null;
-    _mode:number = 0;
-    _nodes:any = null;
-    _line:any = null;
-    id:string = "c"+String(new Date().getTime());
 
-    nodesId:string = null;
-    lineId:string = null;
-    circleId:string = null;
 
-    _play:boolean = false;
+    map: any = null;
+    type: string = "circle";
+    parent: object = null;
+    name: string = "";
+    visible: boolean = true;
 
-    callmove:Function = ()=>{};
-    callresize:Function = ()=>{};
+    flyToSpeed: number = 0.8;
+    flyToZoom: number = 14;
+    panDuration: number = 5000;
+
+
+
+
+    radio: number = 0;
+    center: number[] = null;
+    hand: number[] = null;
+    _mode: number = 0;
+    _nodes: any = null;
+    _line: any = null;
+    id: string = "c" + String(new Date().getTime());
+
+    nodesId: string = null;
+    lineId: string = null;
+    circleId: string = null;
+
+    _play: boolean = false;
+
+    callmove: Function = () => { };
+    callresize: Function = () => { };
 
     ondraw: Function = () => { };
+
+
+
     public getType() {
         return Circle.TYPE;
     }
-    constructor(info:object){
+    constructor(info: object) {
 
-        for(let x in info){
-            if(this.hasOwnProperty(x)) {
+        for (let x in info) {
+            if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
             }
         }
-        this.nodesId = "n-"+this.id;
-        this.lineId = "l-"+this.id;
-        this.circleId = "c-"+this.id;
+
+        this.sourceId = "s-" + this.id;
+
+        this.fillLayerId = "f-" + this.id;
+        this.borderLayerId = "b-" + this.id;
+        this.nodeLayerId = "n-" + this.id;
+        this.midLayerId = "m-" + this.id;
+        this.init();
+        return;
+
+        this.nodesId = "n-" + this.id;
+        this.lineId = "l-" + this.id;
+        this.circleId = "c-" + this.id;
 
         let map = this.map;
 
@@ -93,7 +100,7 @@ export class Circle implements IPoly{
             "layout": {
                 "line-join": "round",
                 "line-cap": "round",
-                visibility:(this.visible)? "visible": "none"
+                visibility: (this.visible) ? "visible" : "none"
 
             },
             "paint": {
@@ -111,7 +118,7 @@ export class Circle implements IPoly{
             "type": "fill",
             "source": this.lineId,
             "layout": {
-                visibility:(this.visible)? "visible": "none"
+                visibility: (this.visible) ? "visible" : "none"
             },
             "paint": {
                 //"fill-color": "#ff9900",
@@ -125,14 +132,14 @@ export class Circle implements IPoly{
             type: "circle",
             source: this.lineId,
             layout: {
-                visibility:"none"
+                visibility: "none"
             },
             paint: {
                 "circle-radius": 4,
-                "circle-opacity":0.0,
+                "circle-opacity": 0.0,
                 "circle-color": "#000",
-                "circle-stroke-color":"#ff3300",
-                "circle-stroke-width":1
+                "circle-stroke-color": "#ff3300",
+                "circle-stroke-width": 1
             },
             filter: ["in", "$type", "Point"]
         });
@@ -140,126 +147,412 @@ export class Circle implements IPoly{
         this.setLine(this.line);
         this.setFill(this.fill);
 
-        if(this.coordinates){
+        if (this.coordinates) {
             this.center = this.coordinates[0];
-            this.radio = this.coordinates[1]/1000;
+            this.radio = this.coordinates[1] / 1000;
 
         }
 
-        if(this.center && this.radio){
+        if (this.center && this.radio) {
 
             this.createCircle(this.center, this.radio);
         }
-        if(this.center && this.hand){
+        if (this.center && this.hand) {
             this.createCircle(this.center, this.hand);
         }
 
     }
 
-    setLine(info:object){
-        for(let p in info){
-            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]);
+    init() {
+        let map = this.map;
+        if (this.feature === null) {
+            this.feature = {
+                "type": "Feature",
+                "properties": {
+                    "center": null,
+                    "radius": null,
+                    "rol": "circle",
+                    "color": this.color,
+                    "width": this.width,
+                    "opacity": this.opacity,
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[]]
+                }
+            };
+        } else {
+            /*this.feature.properties.rol = "circle";alert(2)
+            this.feature = {
+                "type": "Feature", "geometry":
+                {
+                    "type": "Polygon", "coordinates":
+                        //[[[-66.87412347509954, 10.559468614481247], [-66.8743216356281, 10.563460708395764], [-66.87491420881956, 10.567414356263585], [-66.87589548787015, 10.571291482294457], [-66.8772560225262, 10.575054747645252], [-66.87898271009522, 10.57866791001343], [-66.88105892163202, 10.58209617267023], [-66.88346466208453, 10.585306519572189], [-66.88617676285708, 10.588268033323686], [-66.88916910493664, 10.590952192928366], [-66.8924128704332, 10.593333148461927], [-66.89587682011182, 10.595387970021015], [-66.89952759424351, 10.59709686855074], [-66.90333003387765, 10.598443386424078], [-66.90724751944194, 10.59941455593783], [-66.91124232340889, 10.600001024198683], [-66.9152759736325, 10.600197143196686], [-66.91930962385612, 10.600001024198683], [-66.92330442782307, 10.59941455593783], [-66.92722191338736, 10.598443386424078], [-66.9310243530215, 10.59709686855074], [-66.93467512715318, 10.595387970021015], [-66.9381390768318, 10.593333148461927], [-66.94138284232837, 10.590952192928366], [-66.94437518440793, 10.588268033323686], [-66.94708728518047, 10.585306519572189], [-66.94949302563299, 10.58209617267023], [-66.95156923716979, 10.57866791001343], [-66.95329592473881, 10.575054747645252], [-66.95465645939485, 10.571291482294457], [-66.95563773844545, 10.567414356263585], [-66.9562303116369, 10.563460708395764], [-66.95642847216547, 10.559468614481247], [-66.9562303116369, 10.55547652056673], [-66.95563773844545, 10.551522872698909], [-66.95465645939485, 10.547645746668037], [-66.95329592473881, 10.543882481317242], [-66.95156923716979, 10.540269318949065], [-66.94949302563299, 10.536841056292264], [-66.94708728518047, 10.533630709390305], [-66.94437518440793, 10.530669195638808], [-66.94138284232837, 10.527985036034128], [-66.9381390768318, 10.525604080500568], [-66.93467512715318, 10.523549258941479], [-66.9310243530215, 10.521840360411755], [-66.92722191338736, 10.520493842538416], [-66.92330442782307, 10.519522673024664], [-66.91930962385612, 10.518936204763811], [-66.9152759736325, 10.518740085765808], [-66.91124232340889, 10.518936204763811], [-66.90724751944194, 10.519522673024664], [-66.90333003387765, 10.520493842538416], [-66.89952759424351, 10.521840360411755], [-66.89587682011182, 10.523549258941479], [-66.8924128704332, 10.525604080500568], [-66.88916910493664, 10.527985036034128], [-66.88617676285708, 10.530669195638808], [-66.88346466208453, 10.533630709390305], [-66.88105892163202, 10.536841056292264], [-66.87898271009522, 10.540269318949065], [-66.8772560225262, 10.543882481317242], [-66.87589548787015, 10.547645746668037], [-66.87491420881956, 10.551522872698909], [-66.8743216356281, 10.55547652056673], [-66.87412347509954, 10.559468614481247]]]
+                    [[]]
+                }, "properties": {
+                    "rol": "circle",
+                    "radius": 5,
+                    "center": null,
+                    //"center": [-66.9152759736325, 10.559468614481247],
+                    "color": "#45ff00", "width": 6, "opacity": 0.4
+                }
+            }
+            */
         }
-    }
-    setFill(info:object){
-        for(let p in info){
-            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]);
-        }
-    }
 
-    setVisible(value:boolean){
-        let visible = "none";
-        if(value){
-            visible = "visible";
-        }
-        this.map.setLayoutProperty(this.lineId, "visibility", visible);
-        this.map.setLayoutProperty(this.circleId, "visibility", visible);
 
-        if(this._play){
 
-            this.map.setLayoutProperty(this.nodesId, "visibility", visible);
+
+
+        if (this.feature.geometry.coordinates === null) {
+            this.feature.geometry.coordinates = [[]];
         }
 
+        this.defaultFeature = JSON.parse(JSON.stringify(this.feature));
+
+        const geojson = this.setFeature(this.feature);
+
+        this.map.addSource(this.sourceId, geojson);
+
+        this.map.addLayer({
+            "id": this.fillLayerId,
+            "type": "fill",
+            "source": this.sourceId,
+            "layout": {
+                visibility: (this.visible) ? "visible" : "none"
+            },
+            "paint": {
+                "fill-color": ["get", "color"],
+                "fill-opacity": ["get", "opacity"],
+            },
+            "filter": ["==", "$type", "Polygon"]
+        });
+
+        this.map.addLayer({
+            "id": this.borderLayerId,
+            "type": "line",
+            "source": this.sourceId,
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round",
+                "visibility": (this.visible) ? "visible" : "none"
+            },
+            "paint": {
+                "line-color": ["get", "color"],
+                "line-width": ["get", "width"],
+
+                //"line-gap-width":4,
+                //"line-dasharray":[2,2]
+                //"line-dasharray": ["get","line-width"]
+
+            },
+            "filter": ["==", "$type", "Polygon"]
+        });
+
+        map.addLayer({
+            id: this.nodeLayerId,
+            type: "circle",
+            source: this.sourceId,
+            layout: {
+                visibility: (this.editMode && this.visible) ? "visible" : "none"
+            },
+            paint: {
+                "circle-radius": 4,
+                "circle-opacity": ["case", ["==", ["get", "type"], "m"], 0.0, 0.8],
+                "circle-color": ["get", "color"],
+                "circle-stroke-color": "#FFFFFF",
+                "circle-stroke-width": 1
+            },
+            filter: ["in", "$type", "Point"]
+            //filter: ["in", "type", "h", "m"]
+            //filter: ["in", "type", "m"]
+        });
 
     }
 
-    test(){
+    setFeature(feature) {
+        this.feature = feature;
+        this.color = this.feature.properties.color;
+
+        const geojson = this.createGeoJSONCircle(this.feature);
 
 
+        return geojson;
+        //this.map.getSource(this.sourceId).setData(geojson);
+    }
+
+    updateSource(geojson) {
+        this.map.getSource(this.sourceId).setData(geojson.data);
+        if (this.editMode) {
+            //this.map.setPaintProperty(this.nodeLayerId, "circle-stroke-color", "#ff0000");
+        }
+        this.ondraw(this.feature);
+    }
+
+    setCenter(center) {
+
+        this.feature.properties.center = center;
+        this.updateSource(this.setFeature(this.feature));
 
     }
 
-    _fnclick(map){
+    setRadius(radius) {
+        var line = turf.lineString([this.feature.properties.center, radius]);
+        this.feature.properties.radius = turf.length(line, { units: "kilometers" });
+        this.updateSource(this.setFeature(this.feature));
+    }
 
-         return this._click = (e)=>{
-            var features = this.map.queryRenderedFeatures(e.point, {
-                layers: [this.nodesId]
+    setProperties(info: object) {
+        for (let p in info) {
+            this.feature.properties[p] = info[p];
+            switch (p) {
+                case "dasharray":
+                    this.map.setPaintProperty(this.borderLayerId, "line-dasharray", info[p]);
+                    break;
+                case "color":
+                    this.map.setPaintProperty(this.borderLayerId, "line-color", info[p]);
+                    this.map.setPaintProperty(this.fillLayerId, "fill-color", info[p]);
+                    break;
+                case "opacity":
+                    this.map.setPaintProperty(this.fillLayerId, "fill-opacity", info[p]);
+                    break;
+            }
+        }
+        this.ondraw(this.feature);
+
+    }
+    createGeoJSONCircle(feature, points?) {
+
+        if (feature.properties.center === null) {
+            return {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            };
+        }
+
+        const ret = [];
+        const hands = [];
+
+        if (!points) points = 64;
+
+        const coords = {
+            latitude: feature.properties.center[1],
+            longitude: feature.properties.center[0]
+        };
+
+        const km = feature.properties.radius || 0;
+        const distanceX = km / (111.320 * Math.cos(coords.latitude * Math.PI / 180));
+        const distanceY = km / 110.574;
+
+        let theta, x, y;
+
+        for (let i = 0; i < points; i++) {
+            theta = (i / points) * (2 * Math.PI);
+            x = distanceX * Math.cos(theta);
+            y = distanceY * Math.sin(theta);
+
+            ret.push([coords.longitude + x, coords.latitude + y]);
+
+            if (i % (~~(points / 4)) == 0) {
+                hands.push([coords.longitude + x, coords.latitude + y]);
+            }
+        }
+
+        ret.push(ret[0]);
+
+        this.feature.geometry = {
+            "type": "Polygon",
+            "coordinates": [ret]
+        }
+
+        let json = {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [this.feature]
+            }
+        };
+
+        json.data.features.push({
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": feature.properties.center
+            },
+            "properties": {
+                "index": -1,
+                "type": "c",
+
+            }
+        });
+
+        hands.forEach((item, index) => {
+
+            json.data.features.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": item
+                },
+                "properties": {
+                    "index": index,
+                    "type": "h",
+
+                }
             });
+        });
 
-            if(this._mode == 1){
-                this.setCenter([e.lngLat.lng, e.lngLat.lat]);
-                this.createCircle(this.center, 0);
-                this._mode = 2;
+        return json;
+    };
+
+    createMidPoints = function(coords, color) {
+
+
+        let coordinates = coords.slice();
+        let p1 = null, p2 = null;
+        const features = [];
+
+        coordinates.map((item, index) => {
+
+            if (index == 0) {
+                p1 = turf.point(item);
                 return;
             }
 
-            if(this._mode == 2){
-                this.setHand([e.lngLat.lng, e.lngLat.lat]);
-                this.createCircle(this.center, this.hand);
+            p2 = turf.point(item);
+
+
+            features.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": item
+                },
+                "properties": {
+                    "index": index,
+                    "type": "h",
+                    "color": color
+                }
+            });
+
+            features.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": turf.midpoint(p1, p2).geometry.coordinates
+                },
+                "properties": {
+                    "index": index,
+                    "type": "m",
+                }
+            });
+
+            p1 = p2;
+        });
+
+        return features;
+
+    };
+
+    setLine(info: object) {
+        for (let p in info) {
+            this.map.setPaintProperty(this.borderLayerId, "line-" + p, info[p]);
+        }
+    }
+    setFill(info: object) {
+        for (let p in info) {
+            this.map.setPaintProperty(this.fillLayerId, "fill-" + p, info[p]);
+        }
+    }
+
+    setVisible(value: boolean) {
+        let visible = "none";
+        if (value) {
+            visible = "visible";
+        }
+        this.map.setLayoutProperty(this.borderLayerId, "visibility", visible);
+        this.map.setLayoutProperty(this.fillLayerId, "visibility", visible);
+
+        if (this.editMode || value === false) {
+
+            this.map.setLayoutProperty(this.nodeLayerId, "visibility", visible);
+        }
+
+
+    }
+
+    test() {
+
+
+
+    }
+
+    _fnclick(map) {
+
+        return this._click = (e) => {
+            if (this.feature.properties.center !== null) {
+                this.setRadius([e.lngLat.lng, e.lngLat.lat]);
+            } else {
+                this.feature.properties.radius = 0;
+                this.setCenter([e.lngLat.lng, e.lngLat.lat]);
             }
         }
 
     }
-    play(){
+    play() {
+        console.log("play")
 
-        if(this._play){
+        if (this.editMode) {
             return;
         }
 
         this.parent.stop();
-        this._play = true;
+        this.editMode = true;
 
-        let map =  this.map;
+        let map = this.map;
 
         //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
         this.setVisible(true);
-        this.setFill(this.fillEdit);
-        this.setLine(this.lineEdit);
-        //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
-        //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
+        //this.setFill(this.fillEdit);
+        //this.setLine(this.lineEdit);
+        this.map.setLayoutProperty(this.nodeLayerId, "visibility", "visible");
+        this.map.setPaintProperty(this.borderLayerId, "line-dasharray", [2,2]);
 
         let place = null;
-        if(this.radio == 0){
+        if (this.radio == 0) {
             this._mode = 1;
         }
 
-
-
-        let fnUp = (e)=>{
+        let fnUp = (e) => {
             //point = null;
             map.off("mousemove", fnMove)
         }
-        let fnMove = (e)=>{
+        let fnMove = (e) => {
             //this.coordinates[point] = [e.lngLat.lng, e.lngLat.lat];
             //this.setCoordinates(this.coordinates);
+
             //this.redraw();
-            if(place == "c"){
-                this.center = [e.lngLat.lng, e.lngLat.lat];
-                this.createCircle(this.center, this.radio);
+            if (place == "c") {
+                this.setCenter([e.lngLat.lng, e.lngLat.lat]);
+                //this.center = [e.lngLat.lng, e.lngLat.lat];
+                //this.createCircle(this.center, this.radio);
                 this.callmove();
-            }else if(place == "h"){
+            } else if (place == "h") {
                 this.hand = [e.lngLat.lng, e.lngLat.lat];
-                this.createCircle(this.center, this.hand);
+                this.setRadius([e.lngLat.lng, e.lngLat.lat]);
                 this.callresize();
             }
 
 
         }
-        map.on("mousedown", this.nodesId, this._mousedown = (e)=> {
+        map.on("mousedown", this.nodeLayerId, this._mousedown = (e) => {
             // Prevent the default map drag behavior.
             e.preventDefault();
             var features = map.queryRenderedFeatures(e.point, {
-                layers: [this.nodesId]
+                layers: [this.nodeLayerId]
             });
 
             if (features.length) {
@@ -278,99 +571,110 @@ export class Circle implements IPoly{
 
     }
 
-    pause(){
+    pause() {
 
     }
-    stop(){
-        if(this._play){
+    stop() {
+        console.log("stop")
+        if (this.editMode) {
 
             this.map.off("click", this._click);
-            this.map.off("mousedown", this.nodesId, this._mousedown);
+            this.map.off("mousedown", this.nodeLayerId, this._mousedown);
 
 
-           // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+            // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
             //"line-dasharray":[2,2]
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
             //map.on("mousemove", fnMove);
         }
-        this.map.setLayoutProperty(this.nodesId, "visibility", "none");
-        this.setFill(this.fill);
-        this.setLine(this.line);
+        this.map.setLayoutProperty(this.nodeLayerId, "visibility", "none");
+        this.map.setPaintProperty(this.borderLayerId, "line-dasharray", [1]);
+        //this.setFill(this.fill);
+        //this.setLine(this.line);
         //this._mode = 0;
-        this._play = false;
+        this.editMode = false;
 
 
     }
-    reset(){
-        if(!this._play){
+    reset() {
+
+        console.log("reset")
+        console.log(this.defaultFeature)
+        if (!this.editMode) {
             return;
         }
-        this._mode = 1;
-        this.radio = 0;
-        this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [[]]
-                    }
-                }]
-            }
-        };
-        //this._line.data.features = [];
-        this.map.getSource(this.lineId).setData(this._line.data);
-    }
-    draw(center, radio){
+
+        this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
+        this.setProperties(this.defaultFeature.properties);
 
     }
-    setCenter(lngLat){
 
-        this.center = lngLat;
+    draw(center, radio) {
 
     }
-    setHand(lngLat){
+
+    setHand(lngLat) {
 
         this.hand = lngLat;
 
     }
 
-    createCircle(center, radio){
+    createCircle(center, radio) {
         let length;
-        if(typeof radio === "number" ){
+        if (typeof radio === "number") {
             length = radio;
 
-        }else{
+        } else {
             var line = turf.lineString([center, radio]);
-            length = turf.length(line, {units: "kilometers"});
+            length = turf.length(line, { units: "kilometers" });
         }
 
         this.radio = length;
         let data = createGeoJSONCircle(center, length);
-
+        const feature = data.data.features[0];
 
         this.source = this.map.getSource(this.lineId).setData(data.data);
-        this.ondraw(center, radio);
+
+        feature.properties = {
+
+
+            "rol": "circle",
+            "radio": radio,
+            "center": center,
+            "color": "",
+            "width": 2,
+            "opacity": 0.4,
+
+        };
+
+        this.ondraw(feature);
     }
 
-    getCenter(){
+    getCenter() {
         return this.center;
     }
-    getHand(){
+    getHand() {
         return this.hand;
     }
-    getCoordinates(){
+    getCoordinates() {
         return [this.center, this.radio];
     }
-    getRadio(){
+    getRadio() {
         return this.radio;
     }
 
-    flyTo(zoom, speed){
 
 
+    flyTo(zoom, speed) {
+
+
+        const bboxPolygon = turf.bbox(this.feature.geometry);
+
+        this.map.fitBounds(bboxPolygon, {
+            padding: 80
+        });
+
+        return;
 
 
 
@@ -392,7 +696,7 @@ export class Circle implements IPoly{
         // to the bounds of multiple Points or Polygon geomteries - it just
         // requires wrapping all the coordinates with the extend method.
         var bounds = coordinates.reduce(function(bounds, coord) {
-        return bounds.extend(coord);
+            return bounds.extend(coord);
         }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
 
         this.map.fitBounds(bounds, {
@@ -413,27 +717,27 @@ export class Circle implements IPoly{
             speed: speed || this.flyToSpeed,
             curve: 1,
             easing(t) {
-              return t;
+                return t;
             }
-          });
+        });
 
     }
-    panTo(duration){
+    panTo(duration) {
 
 
 
-        this.map.panTo(this.center, {duration: duration || this.panDuration });
+        this.map.panTo(this.center, { duration: duration || this.panDuration });
     }
 
-    delete(){
+    delete() {
         this.stop();
 
         let map = this.map;
-        if (map.getLayer(this.circleId)) map.removeLayer(this.circleId);
-        if (map.getLayer(this.lineId)) map.removeLayer(this.lineId);
-        if (map.getLayer(this.nodesId)) map.removeLayer(this.nodesId);
+        if (map.getLayer(this.fillLayerId)) map.removeLayer(this.fillLayerId);
+        if (map.getLayer(this.borderLayerId)) map.removeLayer(this.borderLayerId);
+        if (map.getLayer(this.nodeLayerId)) map.removeLayer(this.nodeLayerId);
 
-        if (map.getSource(this.lineId)) map.removeSource(this.lineId);
+        if (map.getSource(this.sourceId)) map.removeSource(this.sourceId);
 
 
 

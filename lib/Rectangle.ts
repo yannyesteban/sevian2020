@@ -1,248 +1,543 @@
-import {createGeoJSONRectangle,createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle} from './Util.js';
+import { createGeoJSONRectangle, createGeoJSONPoly, createGeoJSONLine, createGeoJSONCircle } from './Util.js';
 import { IPoly } from './IPoly';
 
-export class Rectangle implements IPoly{
+export class Rectangle implements IPoly {
     public static readonly TYPE = "rectangle";
-    map:any = null;
 
-    parent:object = null;
-    name:string = "";
-    visible:boolean = true;
+    private feature: any = null;
+    private defaultFeature = null;
+    private sourceId: string = "";
+
+    private fillLayerId: string = "";
+    private borderLayerId: string = "";
+    private nodeLayerId: string = "";
+    private midLayerId: string = "";
+    private editMode: boolean = false;
+    private popup;
+
+    private color: string = "#ff3300";
+    private opacity: number = 0.4;
+    private width: number = 2;
+
+
+    map: any = null;
+
+    parent: object = null;
+    name: string = "";
+    visible: boolean = true;
     coordinates = null;
     coordinatesInit = null;
 
-    flyToSpeed:number = 0.8;
-    flyToZoom:number = 14;
-    panDuration:number = 5000;
+    flyToSpeed: number = 0.8;
+    flyToZoom: number = 14;
+    panDuration: number = 5000;
 
-    line:object = {
+    line: object = {
         color: "#FFA969",
         width: 2,
         opacity: 0.9,
         dasharray: [1]
     };
-    fill:object = {
+    fill: object = {
         color: "#f9f871",
         opacity: 0.4
     };
-    lineEdit:object = {
+    lineEdit: object = {
         color: "#ff3300",
         width: 1,
         opacity: 0.9,
-        dasharray: [2,2]
+        dasharray: [2, 2]
     };
-    fillEdit:object = {
+    fillEdit: object = {
         color: "#ff9933",
         opacity: 0.4
     };
-    lineColor:string = "white";
-    lineWidth:number = 2;
-    fillColor:string = "red";
+    lineColor: string = "white";
+    lineWidth: number = 2;
+    fillColor: string = "red";
     //radio:number = 0;
     //center:number[] = null;
-    hand:number[] = null;
-    _mode:number = 0;
-    _nodes:any = null;
-    _line:any = null;
-    id:string = "p"+String(new Date().getTime());
+    hand: number[] = null;
+    _mode: number = 0;
+    _nodes: any = null;
+    _line: any = null;
+    id: string = "p" + String(new Date().getTime());
 
-    nodesId:string = null;
-    lineId:string = null;
-    circleId:string = null;
+    nodesId: string = null;
+    lineId: string = null;
+    circleId: string = null;
 
-    _play:boolean = false;
+    _play: boolean = false;
 
-    callmove:Function = ()=>{};
-    callresize:Function = ()=>{};
+    callmove: Function = () => { };
+    callresize: Function = () => { };
 
-    ondraw:Function = ()=>{};
+    ondraw: Function = () => { };
 
-    private dataSource:any = null;
+    private dataSource: any = null;
     public getType() {
         return Rectangle.TYPE;
     }
-    constructor(info:object){
+    constructor(info: object) {
 
-        for(let x in info){
-            if(this.hasOwnProperty(x)) {
+        for (let x in info) {
+            if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
             }
         }
-        this.nodesId = "n-"+this.id;
-        this.lineId = "l-"+this.id;
-        this.circleId = "c-"+this.id;
+        this.sourceId = "s-" + this.id;
+
+        this.fillLayerId = "f-" + this.id;
+        this.borderLayerId = "b-" + this.id;
+        this.nodeLayerId = "n-" + this.id;
+        this.midLayerId = "m-" + this.id;
+
+        this.init();
+
+        return;
+        this.nodesId = "n-" + this.id;
+        this.lineId = "l-" + this.id;
+        this.circleId = "c-" + this.id;
         this.init();
     }
 
-    init(){
+    init() {
         let map = this.map;
 
+        const feature1 = {
+            "type": "Feature",
+            "properties": {
+                "rol": "rectangle",
+                "color": this.color,
+                "width": this.width,
+                "dasharray": [2, 2],
+                "opacity": this.opacity,
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -66.92179910595793,
+                            10.547093051244758
+                        ],
+                        [
+                            -66.86824075634837,
+                            10.547093051244758
+                        ],
+                        [
+                            -66.86824075634837,
+                            10.466752297728732
+                        ],
+                        [
+                            -66.92179910595793,
+                            10.466752297728732
+                        ],
+                        [
+                            -66.92179910595793,
+                            10.547093051244758
+                        ]
+                    ]
+                ]
+            }
+        }
 
-        //let polygon = turf.polygon([coo], { name: "poly1" });
-        //polygon = turf.bezierSpline(polygon);
-//            console.log(polygon)
 
 
-        let polygon = {
+        this.popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
 
+        //this.playPopup();
+
+        if (this.feature === null) {
+            this.feature = {
                 "type": "Feature",
+                "properties": {
+                    "rol": "rectangle",
+                    "color": this.color,
+                    "width": this.width,
+                    "dasharray": [2, 2],
+                    "opacity": this.opacity,
+                },
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [[]]
                 }
-
+            };
         }
-        this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [polygon]
-            }
-        };
 
-        this.map.addSource(this.lineId, this._line);
+        if (this.feature.geometry.coordinates === null) {
+            this.feature.geometry.coordinates = [[]];
+        }
+
+        this.defaultFeature = JSON.parse(JSON.stringify(this.feature));
+
+        const geojson = this.setFeature(this.feature);
+
+        this.map.addSource(this.sourceId, geojson);
 
         this.map.addLayer({
-            "id": this.lineId,
+            "id": this.fillLayerId,
+            "type": "fill",
+            "source": this.sourceId,
+            "layout": {
+                visibility: (this.visible) ? "visible" : "none"
+            },
+            "paint": {
+                "fill-color": ["get", "color"],
+                "fill-opacity": ["get", "opacity"],
+            },
+            "filter": ["==", "$type", "Polygon"]
+        });
+
+        this.map.addLayer({
+            "id": this.borderLayerId,
             "type": "line",
-            "source": this.lineId,
+            "source": this.sourceId,
             "layout": {
                 "line-join": "round",
                 "line-cap": "round",
-                visibility:(this.visible)? "visible": "none"
-
+                "visibility": (this.visible) ? "visible" : "none"
             },
             "paint": {
-                "line-color": "#ff3300",
-                "line-width": 4,
-                //"line-opacity": 0.9,
+                "line-color": ["get", "color"],
+                "line-width": ["get", "width"],
+
                 //"line-gap-width":4,
                 //"line-dasharray":[2,2]
+                //"line-dasharray": ["get","line-width"]
 
             },
             "filter": ["==", "$type", "Polygon"]
         });
-
-        this.map.addLayer({
-            "id": this.circleId,
-            "type": "fill",
-            "source": this.lineId,
-            "layout": {
-                visibility:(this.visible)? "visible": "none"
-            },
-            "paint": {
-                //"fill-color": "#ff9900",
-                //"fill-opacity": 0.4,
-            },
-            "filter": ["==", "$type", "Polygon"]
-        });
-        //this.setLine(this.line);
-        //this.setFill(this.fill);
 
         map.addLayer({
-            id: this.nodesId,
+            id: this.nodeLayerId,
             type: "circle",
-            source: this.lineId,
+            source: this.sourceId,
             layout: {
-                visibility:"none"
+                visibility: (this.editMode && this.visible) ? "visible" : "none"
             },
             paint: {
                 "circle-radius": 4,
-                "circle-opacity":["case",["==",["get","type"],"m"] , 0.0, 0.8],
-                "circle-color": "white",
-                "circle-stroke-color":"#ff3300",
-                "circle-stroke-width":1
+                "circle-opacity": ["case", ["==", ["get", "type"], "m"], 0.0, 0.8],
+                "circle-color": ["get", "color"],
+                "circle-stroke-color": "#FFFFFF",
+                "circle-stroke-width": 1
             },
             filter: ["in", "$type", "Point"]
             //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type"]
+            //filter: ["in", "type", "m"]
         });
-        /*
-        map.addLayer({
-            id: this.nodesId+"2",
-            type: "circle",
-            source: this.lineId,
-            layout: {
-                visibility:"visible"
-            },
-            paint: {
-                "circle-radius": 3,
-                "circle-opacity":0.5,
-                "circle-color": "#000",
-                "circle-stroke-color":"#ff3300",
-                "circle-stroke-width":1
-            },
-            //filter: ["in", "$type", "Point"]
-            filter: ["in", "type", "m"]
-            //filter: ["in", "type"]
+
+    }
+
+    updateSource(geojson) {
+        this.map.getSource(this.sourceId).setData(geojson.data);
+        if (this.editMode) {
+            //this.map.setPaintProperty(this.nodeLayerId, "circle-stroke-color", "#ff0000");
+        }
+        this.ondraw(this.feature);
+    }
+
+    setProperties(info: object) {
+        for (let p in info) {
+            this.feature.properties[p] = info[p];
+            switch (p) {
+                case "dasharray":
+                    this.map.setPaintProperty(this.borderLayerId, "line-dasharray", info[p]);
+                    break;
+                case "color":
+                    this.map.setPaintProperty(this.borderLayerId, "line-color", info[p]);
+                    this.map.setPaintProperty(this.fillLayerId, "fill-color", info[p]);
+                    break;
+                case "opacity":
+
+                    this.map.setPaintProperty(this.fillLayerId, "fill-opacity", info[p]);
+                    break;
+            }
+        }
+        this.ondraw(this.feature);
+
+    }
+
+    createMidPoints = function(coords, color) {
+
+
+        let coordinates = coords.slice();
+        let p1 = null, p2 = null;
+        const features = [];
+
+        coordinates.map((item, index) => {
+
+            if (index == 0) {
+                p1 = turf.point(item);
+                return;
+            }
+
+            p2 = turf.point(item);
+
+
+            features.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": item
+                },
+                "properties": {
+                    "index": index,
+                    "type": "h",
+                    "color": color
+                }
+            });
+
+            features.push({
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": turf.midpoint(p1, p2).geometry.coordinates
+                },
+                "properties": {
+                    "index": index + 9,
+                    "type": "m",
+                }
+            });
+
+            p1 = p2;
         });
-        */
-        this.setLine(this.line);
-        this.setFill(this.fill);
-        this.coordinates_ = [
-            [-66.84927463531494,10.490132784557675],
-            [-66.84916734695435,10.487727485274153],
-            [-66.847482919693,10.488339361426192],
-            [-66.84403896331787,10.48798067555274],
-            [-66.83899641036987,10.4872211040956],
-            [-66.83056354522705,10.480659173081785],
-            [-66.82998418807983,10.48194625089936],
-            [-66.83200120925903,10.48333882087384],
-            [-66.83295607566833,10.483686962388932],
-            [-66.83379024267197,10.484296209098416],
-            [-66.83488190174103,10.485327442138733],
-            [-66.83595210313797,10.486147678753897],
-            [-66.8368935585022,10.487347699467918],
-            [-66.83808445930487,10.488181117709713],
-            [-66.83968305587774,10.488465956341086],
-            [-66.84177517890936,10.488687497317594],
-            [-66.84476852416998,10.489014533707307],
-            [-66.84704303741461,10.489362668839194],
-            [-66.84779405593878,10.490064212687859],
-            [-66.84927463531494,10.490132784557675]
-        ];
-        if(this.coordinates){
-            this.coordinatesInit = this.coordinates.slice();
-            this.draw();
+
+        return features;
+
+    };
+
+    setFeature(feature) {
+        this.feature = feature;
+        this.color = this.feature.properties.color;
+
+        const midPoints = this.createMidPoints(this.feature.geometry.coordinates[0], this.color);
+        const features = [];
+
+        features.push(this.feature);
+
+        const geojson = {
+            "type": "geojson",
+            "data": turf.featureCollection(features.concat(midPoints))
+        };
+
+
+        return geojson;
+        //this.map.getSource(this.sourceId).setData(geojson);
+    }
+    createGeoJSONRectangle(p1, p2 = null) {
+
+
+        //let line = turf.lineString([p1, p2]);
+        //let bbox = turf.bbox(line);
+        //let bboxPolygon = turf.bboxPolygon(bbox);
+        let ret;
+        if (p2) {
+            ret = [[
+                [p1[0], p1[1]],
+                [p2[0], p1[1]],
+                [p2[0], p2[1]],
+                [p1[0], p2[1]],
+                [p1[0], p1[1]]
+            ]];
+        } else {
+            ret = [[p1]];
         }
 
-    }
 
-    setLine(info:object){
-        for(let p in info){
-            this.map.setPaintProperty(this.lineId, "line-" + p, info[p]);
+        //let ret = bboxPolygon.geometry.coordinates;
+        //ret.push(ret[0]);
+
+        let json = {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": ret
+                    }
+                }]
+            }
+        };
+
+        ret[0].forEach((item, index) => {
+            if (index >= 4) {
+                return;
+            }
+            let point = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": item
+                },
+                "properties": {
+                    "index": index,
+                    "type": "h",
+
+                }
+            };
+            json.data.features.push(point);
+        });
+
+
+        //
+        p1 = null, p2 = null;
+        let midpoint = null;
+
+        ret[0].forEach((item, index) => {
+
+            if (index > 0) {
+                p2 = turf.point(item);
+                midpoint = turf.midpoint(p1, p2);
+                p1 = p2;
+
+            } else {
+                p1 = turf.point(item);
+                return;
+            }
+
+            let point = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": midpoint.geometry.coordinates
+                },
+                "properties": {
+                    "index": 3 + index,
+                    "type": "m",
+
+                }
+            };
+            json.data.features.push(point);
+        });
+        return json;
+
+    };
+
+    setLine(info: object) {
+
+        for (let p in info) {
+            this.map.setPaintProperty(this.borderLayerId, "line-" + p, info[p]);
         }
     }
-    setFill(info:object){
-        for(let p in info){
-            this.map.setPaintProperty(this.circleId, "fill-" + p, info[p]);
+
+    setFill(info: object) {
+        for (let p in info) {
+            this.map.setPaintProperty(this.fillLayerId, "fill-" + p, info[p]);
         }
     }
 
-    setVisible(value:boolean){
+    setVisible(value: boolean) {
         let visible = "none";
-        if(value){
+        if (value) {
             visible = "visible";
         }
-        this.map.setLayoutProperty(this.lineId, "visibility", visible);
-        this.map.setLayoutProperty(this.circleId, "visibility", visible);
+        this.map.setLayoutProperty(this.borderLayerId, "visibility", visible);
+        this.map.setLayoutProperty(this.fillLayerId, "visibility", visible);
 
-        if(this._play){
+        if (this.editMode || value === false) {
 
-            this.map.setLayoutProperty(this.nodesId, "visibility", visible);
+            this.map.setLayoutProperty(this.nodeLayerId, "visibility", visible);
         }
 
 
     }
 
-    add(lngLat){
+    move(deltaLng, deltaLat) {
 
-        if(this._mode == 0){
+        for (let i = 0; i < this.feature.geometry.coordinates[0].length; i++) {
+            this.feature.geometry.coordinates[0][i] = [
+                this.feature.geometry.coordinates[0][i][0] + deltaLng,
+                this.feature.geometry.coordinates[0][i][1] + deltaLat];
+        }
+        this.updateSource(this.setFeature(this.feature));
+
+    }
+
+    resize(point, index) {
+
+        const geo = this.feature.geometry;
+
+        if (geo.coordinates[0].length <= 0) {
+            geo.coordinates[0].push([...point]);
+            geo.coordinates[0].push([...point]);
+            geo.coordinates[0].push([...point]);
+            geo.coordinates[0].push([...point]);
+            geo.coordinates[0].push([...point]);
+            this.updateSource(this.setFeature(this.feature));
+            return;
+        }
+
+        if (index === 4 && geo.coordinates[0][4]) {
+            geo.coordinates[0][4] = point;
+            geo.coordinates[0][1][1] = point[1]
+            geo.coordinates[0][3][0] = point[0];
+            geo.coordinates[0][0] = geo.coordinates[0][4];
+        }
+
+        if (index === 1 && geo.coordinates[0][1]) {
+            geo.coordinates[0][4][1] = point[1];
+            geo.coordinates[0][1] = point;
+            geo.coordinates[0][2][0] = point[0];
+            geo.coordinates[0][0] = geo.coordinates[0][4];
+        }
+
+        if (index === 2 && geo.coordinates[0][2]) {
+
+            geo.coordinates[0][1][0] = point[0];
+            geo.coordinates[0][2] = point;
+            geo.coordinates[0][3][1] = point[1];
+        }
+
+        if (index === 3 && geo.coordinates[0][3]) {
+            geo.coordinates[0][4][0] = point[0];
+            geo.coordinates[0][2][1] = point[1];
+            geo.coordinates[0][3] = point;
+            geo.coordinates[0][0] = geo.coordinates[0][4];
+        }
+
+
+
+        if (index === 10) {
+            geo.coordinates[0][4][1] = point[1];
+            geo.coordinates[0][1][1] = point[1];
+            geo.coordinates[0][0] = geo.coordinates[0][4];
+        }
+
+        if (index === 11) {
+            geo.coordinates[0][1][0] = point[0];
+            geo.coordinates[0][2][0] = point[0];
+        }
+
+        if (index === 12) {
+            geo.coordinates[0][2][1] = point[1];
+            geo.coordinates[0][3][1] = point[1];
+        }
+
+        if (index === 13) {
+            geo.coordinates[0][3][0] = point[0];
+            geo.coordinates[0][4][0] = point[0];
+            geo.coordinates[0][0] = geo.coordinates[0][4];
+        }
+
+
+        this.updateSource(this.setFeature(this.feature));
+    }
+    add(lngLat) {
+
+        if (this._mode == 0) {
             this.coordinates = [];
             this.coordinates[0] = [lngLat.lng, lngLat.lat];
             this.coordinates[1] = null;
             this._mode = 1;
-        }else{
+        } else {
             this.coordinates[1] = [lngLat.lng, lngLat.lat];
             this._mode = 2;
         }
@@ -251,7 +546,7 @@ export class Rectangle implements IPoly{
     }
 
 
-    draw(){
+    draw() {
         let data = createGeoJSONRectangle(this.coordinates[0], this.coordinates[1]);
         //let data = createGeoJSONPoly(this.coordinates);
         this.map.getSource(this.lineId).setData(data.data);
@@ -261,10 +556,10 @@ export class Rectangle implements IPoly{
 
     }
 
-    getArea(){
+    getArea() {
         let coord = this.dataSource.features[0].geometry.coordinates;
 
-        if(coord[0].length >= 4){
+        if (coord[0].length >= 4) {
             let polygon = turf.polygon(this.dataSource.features[0].geometry.coordinates);
 
             return turf.area(polygon);
@@ -273,26 +568,26 @@ export class Rectangle implements IPoly{
 
     }
 
-    _fnclick(map){
+    _fnclick(map) {
 
-         return ;
+        return;
     }
 
-    play(){
+    play() {
 
-        if(this._play){
+        if (this.editMode) {
             return;
         }
 
         this.parent.stop();
-        this._play = true;
-        let map =  this.map;
-        //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
+        this.editMode = true;
+        let map = this.map;
+        //this.map.setLayoutProperty(this.nodeLayerId, "visibility", "none");
         this.setVisible(true);
-        this.setFill(this.fillEdit);
-        this.setLine(this.lineEdit);
-        //this.map.setLayoutProperty(this.nodesId, "visibility", "visible");
-        //this.map.setPaintProperty(this.lineId, "line-dasharray", [2,2]);
+        //this.setFill(this.fillEdit);
+        //this.setLine(this.lineEdit);
+        //this.map.setLayoutProperty(this.nodeLayerId, "visibility", "visible");
+        this.map.setPaintProperty(this.borderLayerId, "line-dasharray", [2, 2]);
 
         let place = null;
         let type = null;
@@ -300,20 +595,23 @@ export class Rectangle implements IPoly{
         let down1 = false;
 
 
-        let fnUp = (e)=>{
+        let fnUp = (e) => {
             map.off("mousemove", fnMove);
             type = null;
             down1 = false;
         }
-        let fnMove = (e)=>{
-            if(this._mode == 2){
+        let fnMove = (e) => {
+            this.resize([e.lngLat.lng, e.lngLat.lat], place);
+            return;
+
+            if (this._mode == 2) {
                 let pX = this.coordinates[0][0];
                 let pY = this.coordinates[0][1];
                 let p1X = this.coordinates[1][0];
                 let p1Y = this.coordinates[1][1];
 
 
-                switch(place){
+                switch (place) {
                     case 0:
                         pX = e.lngLat.lng;
                         pY = e.lngLat.lat;
@@ -346,60 +644,48 @@ export class Rectangle implements IPoly{
                 this.coordinates[0] = [pX, pY];
                 this.coordinates[1] = [p1X, p1Y];
 
-            }else{
+            } else {
                 this.coordinates[0] = [e.lngLat.lng, e.lngLat.lat];
 
             }
             this.draw();
 
         }
-        let fnUp2 = (e)=>{
+        let fnUp2 = (e) => {
             map.off("mousemove", fnMove2);
 
         }
-        let fnMove2 = (e)=>{
+        let fnMove2 = (e) => {
 
-            //this.move(place_one, e.lngLat);
-            let dLng = e.lngLat.lng - place_one.lng;
-            let dLat = e.lngLat.lat - place_one.lat;
-
-            let pX = this.coordinates[0][0] + dLng;
-            let pY = this.coordinates[0][1] + dLat;
-            let p1X = this.coordinates[1][0] + dLng;
-            let p1Y = this.coordinates[1][1] + dLat;
-            this.coordinates[0] = [pX, pY];
-            this.coordinates[1] = [p1X, p1Y];
-            this.draw();
+            const dLng = e.lngLat.lng - place_one.lng;
+            const dLat = e.lngLat.lat - place_one.lat;
             place_one = e.lngLat;
+
+
+            this.move(dLng, dLat);
 
         }
 
-        map.on("mousedown", this.nodesId, this._mousedown = (e)=> {
+        map.on("mousedown", this.nodeLayerId, this._mousedown = (e) => {
             // Prevent the default map drag behavior.
             e.preventDefault();
 
             down1 = true;
             var features = map.queryRenderedFeatures(e.point, {
-                layers: [this.nodesId]
+                layers: [this.nodeLayerId]
             });
 
             place = features[0].properties.index;
             type = features[0].properties.type;
 
-            //db (place);return;
-
-            if(type == "m"){
-                //this.split(place, [e.lngLat.lng, e.lngLat.lat]);
-                //this.draw();
-             }
 
             map.on("mousemove", fnMove);
             map.once("mouseup", fnUp);
         });
 
-        map.on("mousedown", this.circleId, this._mousedown2 = (e)=> {
+        map.on("mousedown", this.fillLayerId, this._mousedown2 = (e) => {
 
-            if(down1){
+            if (down1) {
                 return;
             }
             // Prevent the default map drag behavior.
@@ -412,127 +698,98 @@ export class Rectangle implements IPoly{
 
         });
 
-        map.on("click", this._click = (e)=>{
+        map.on("click", this._click = (e) => {
 
             //db (e.originalEvent.button+".........", "red","yellow")
-            var features = this.map.queryRenderedFeatures(e.point, {
-                layers: [this.nodesId]
-            });
-            this.add(e.lngLat);
+            /*var features = this.map.queryRenderedFeatures(e.point, {
+                layers: [this.nodeLayerId]
+            });*/
+            this.resize([e.lngLat.lng, e.lngLat.lat], 2);
         });
 
         map.on("contextmenu", this._contextmenu = (e) => {
             e.preventDefault();
-            this.coordinates.pop();
-            this.draw();
+            //this.coordinates.pop();
+            //this.draw();
+            alert("back")
 
         });
 
 
     }
 
-    pause(){
+    pause() {
 
     }
-    stop(){
-        if(this._play){
+    stop() {
+        if (this.editMode) {
 
             this.map.off("click", this._click);
             this.map.off("contextmenu", this._contextmenu);
 
-            this.map.off("mousedown", this.nodesId, this._mousedown);
-            this.map.off("mousedown", this.circleId, this._mousedown2);
+            this.map.off("mousedown", this.nodeLayerId, this._mousedown);
+            this.map.off("mousedown", this.fillLayerId, this._mousedown2);
 
-
-           // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
+            this.map.setPaintProperty(this.borderLayerId, "line-dasharray", [1]);
             //"line-dasharray":[2,2]
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");
             //map.on("mousemove", fnMove);
         }
-        this.map.setLayoutProperty(this.nodesId, "visibility", "none");
-        this.setFill(this.fill);
-        this.setLine(this.line);
+        this.map.setLayoutProperty(this.nodeLayerId, "visibility", "none");
+        //this.setFill(this.fill);
+        //this.setLine(this.line);
         //this._mode = 0;
-        this._play = false;
+        this.editMode = false;
 
 
     }
-    reset(){
-        if(!this._play){
+    reset() {
+
+        if (!this.editMode) {
             return;
         }
 
-        if(this.coordinatesInit){
-            this.coordinates = this.coordinatesInit.slice();
-            this.draw();
-            return;
-        }else{
-            this.coordinates = [];
-        }
-        this._mode = 0;
-        this._line = {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [this.coordinates]
-                    }
-                }]
-            }
-        };
-        //this._line.data.features = [];
-        this.map.getSource(this.lineId).setData(this._line.data);
+        this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
+        this.setProperties(this.defaultFeature.properties);
+
     }
 
-    delete(){
+    delete() {
+
         this.stop();
 
         let map = this.map;
-        if (map.getLayer(this.circleId)) map.removeLayer(this.circleId);
-        if (map.getLayer(this.lineId)) map.removeLayer(this.lineId);
-        if (map.getLayer(this.nodesId)) map.removeLayer(this.nodesId);
-
-        if (map.getSource(this.lineId)) map.removeSource(this.lineId);
-
-
+        if (map.getLayer(this.nodeLayerId)) map.removeLayer(this.nodeLayerId);
+        if (map.getLayer(this.borderLayerId)) map.removeLayer(this.borderLayerId);
+        if (map.getLayer(this.fillLayerId)) map.removeLayer(this.fillLayerId);
+        if (map.getSource(this.sourceId)) map.removeSource(this.sourceId);
 
     }
 
-    getCoordinates(){
+    getCoordinates() {
         return this.coordinates;
     }
 
 
-    createCircle(center, radio){
-        let length;
-        if(typeof radio === "number" ){
-            length = radio;
 
-        }else{
-            var line = turf.lineString([[center.lng, center.lat], [radio.lng, radio.lat]]);
-            length = turf.length(line, {units: "kilometers"});
-        }
 
-        this.radio = length;
-        let data = createGeoJSONCircle([center.lng, center.lat], length);
-
-        this.map.getSource(this.lineId).setData(data.data);
-    }
-
-    split(index, value){
+    split(index, value) {
 
         this.coordinates.splice(index, 0, value);
     }
-    getHand(){
+    getHand() {
         return this.hand;
     }
-    getRadio(){
-        return this.radio;
-    }
-    flyTo(zoom, speed){
+
+    flyTo(zoom, speed) {
+
+        const bboxPolygon = turf.bbox(this.feature.geometry);
+
+        this.map.fitBounds(bboxPolygon, {
+            padding: 80
+        });
+
+        return;
 
         var coordinates = this.coordinates;
 
@@ -542,7 +799,7 @@ export class Rectangle implements IPoly{
         // to the bounds of multiple Points or Polygon geomteries - it just
         // requires wrapping all the coordinates with the extend method.
         var bounds = coordinates.reduce(function(bounds, coord) {
-        return bounds.extend(coord);
+            return bounds.extend(coord);
         }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
 
         this.map.fitBounds(bounds, {
@@ -563,12 +820,12 @@ export class Rectangle implements IPoly{
             speed: speed || this.flyToSpeed,
             curve: 1,
             easing(t) {
-              return t;
+                return t;
             }
-          });
+        });
 
     }
-    panTo(duration){
+    panTo(duration) {
 
         //this.map.setLayerZoomRange(this.circleId, 2, 5);
 
@@ -581,6 +838,6 @@ export class Rectangle implements IPoly{
 
 
 
-        this.map.panTo(centroid.geometry.coordinates, {duration: duration || this.panDuration });
+        this.map.panTo(centroid.geometry.coordinates, { duration: duration || this.panDuration });
     }
 }

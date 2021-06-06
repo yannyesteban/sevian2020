@@ -328,12 +328,12 @@ export class MapBoxLib {
 
     draw(name: string, type: string, info: Polylayer) {
 
-        console.log("poligon name", name);
         if (this._poly[name]) {
             return this._poly[name];
         }
         info.map = this.map;
         info.parent = this;
+
         switch (type) {
             case "circle":
                 this._poly[name] = new Circle(info);
