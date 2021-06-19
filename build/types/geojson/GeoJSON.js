@@ -7,5 +7,4 @@
 //                 Dan Vanderkam <https://github.com/danvk>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.3
-export {};
 //# sourceMappingURL=GeoJSON.js.map

@@ -91,9 +91,6 @@ export class Rule {
             "paint": {
                 "line-color": "#ff3300",
                 "line-width": 4,
-                //"line-opacity": 0.9,
-                //"line-gap-width":4,
-                //"line-dasharray":[2,2]
             },
             "filter": ["==", "$type", "LineString"]
         });

@@ -9,6 +9,7 @@ import { Float as float } from './Window.js';
 const Float = float.Float;
 class Item {
     constructor(info) {
+        this.index = -1;
         this.main = null;
         this.tagLink = "a";
         this.url = null;
@@ -50,6 +51,9 @@ class Item {
     getMain() {
         return this.main;
     }
+    remove() {
+        this.main.remove();
+    }
     load(item) {
     }
     getCaption() {
@@ -61,9 +65,18 @@ class Item {
     getImage() {
         return this.main.q(":first-of-type > .image");
     }
-    getCheck(item) {
+    getIndex() {
+        return this.index;
+    }
+    getCheck() {
         return this.main.q(":first-of-type > input[type='checkbox']");
         //return $(item.query("input[type='checkbox']'"));
+    }
+    setCheckValue(value) {
+        this.getCheck().attr("checked", value);
+    }
+    getCheckValue() {
+        return this.getCheck().checked;
     }
     getChild() {
         return this.main.q(".sg-menu:first-of-type");
@@ -163,6 +176,7 @@ class Item {
 export class Menu {
     constructor(info) {
         this.id = null;
+        this.lastIndex = -1;
         this.className = null;
         this.tagLink = "a";
         this.useCheck = false;
@@ -234,11 +248,15 @@ export class Menu {
         main.addClass(this.useIcon ? "w-icon" : "n-icon")
             .addClass(`menu-${this.getType()}`)
             .addClass(`menu-${this.getSubType()}`);
-        this.items.forEach((item) => {
+        this.items.forEach((item, index) => {
+            this.lastIndex = item.index = index;
             this.add(item);
         });
     }
     add(info) {
+        if (info.index === undefined) {
+            info.index = ++this.lastIndex;
+        }
         //info.menuInfo = {type: "accordion", subType: "default"};
         info.menu = this;
         info.onDataUser = this.onDataUser;
@@ -256,6 +274,8 @@ export class Menu {
             context: this.context,
         });
     }
+    deleteItem(index) {
+    }
     getByValue(value) {
         return new Item({
             main: $(this._main.q(`.item[data-value='${value}']`)),
@@ -267,7 +287,7 @@ export class Menu {
     getByData(data, value) {
         let main = $(this._main.q(`.item[data-${data}='${value}']`));
         if (!main) {
-            return false;
+            return null;
         }
         return new Item({
             main: main,

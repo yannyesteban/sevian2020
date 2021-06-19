@@ -157,7 +157,7 @@ export class Communication {
                 }
             });
             if (this.showConnectedUnit) {
-                return;
+                //return;
                 this.play2();
             }
             if (this.connectionId) {

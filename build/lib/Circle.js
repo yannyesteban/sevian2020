@@ -232,9 +232,6 @@ export class Circle {
             "paint": {
                 "line-color": ["get", "color"],
                 "line-width": ["get", "width"],
-                //"line-gap-width":4,
-                //"line-dasharray":[2,2]
-                //"line-dasharray": ["get","line-width"]
             },
             "filter": ["==", "$type", "Polygon"]
         });
@@ -391,6 +388,12 @@ export class Circle {
     }
     test() {
     }
+    move(deltaLng, deltaLat) {
+        const center = this.feature.properties.center;
+        this.setCenter([center[0] + deltaLng, center[1] + deltaLat]);
+        this.callmove();
+        this.updateSource(this.setFeature(this.feature));
+    }
     _fnclick(map) {
         return this._click = (e) => {
             if (this.feature.properties.center !== null) {
@@ -403,12 +406,13 @@ export class Circle {
         };
     }
     play() {
-        console.log("play");
         if (this.editMode) {
             return;
         }
         this.parent.stop();
         this.editMode = true;
+        let place_one = null;
+        let down1 = false;
         let map = this.map;
         //this.map.setLayoutProperty(this.nodesId, "visibility", "none");
         this.setVisible(true);
@@ -421,17 +425,12 @@ export class Circle {
             this._mode = 1;
         }
         let fnUp = (e) => {
-            //point = null;
             map.off("mousemove", fnMove);
+            down1 = false;
         };
         let fnMove = (e) => {
-            //this.coordinates[point] = [e.lngLat.lng, e.lngLat.lat];
-            //this.setCoordinates(this.coordinates);
-            //this.redraw();
             if (place == "c") {
                 this.setCenter([e.lngLat.lng, e.lngLat.lat]);
-                //this.center = [e.lngLat.lng, e.lngLat.lat];
-                //this.createCircle(this.center, this.radio);
                 this.callmove();
             }
             else if (place == "h") {
@@ -440,9 +439,19 @@ export class Circle {
                 this.callresize();
             }
         };
+        let fnUp2 = (e) => {
+            map.off("mousemove", fnMove2);
+        };
+        let fnMove2 = (e) => {
+            const dLng = e.lngLat.lng - place_one.lng;
+            const dLat = e.lngLat.lat - place_one.lat;
+            place_one = e.lngLat;
+            this.move(dLng, dLat);
+        };
         map.on("mousedown", this.nodeLayerId, this._mousedown = (e) => {
             // Prevent the default map drag behavior.
             e.preventDefault();
+            down1 = true;
             var features = map.queryRenderedFeatures(e.point, {
                 layers: [this.nodeLayerId]
             });
@@ -453,6 +462,16 @@ export class Circle {
             map.on("mousemove", fnMove);
             map.once("mouseup", fnUp);
         });
+        map.on("mousedown", this.fillLayerId, this._mousedown2 = (e) => {
+            if (down1) {
+                return;
+            }
+            // Prevent the default map drag behavior.
+            e.preventDefault();
+            place_one = e.lngLat;
+            map.on("mousemove", fnMove2);
+            map.once("mouseup", fnUp2);
+        });
         map.on("click", this._fnclick(this.map));
     }
     pause() {
@@ -462,6 +481,7 @@ export class Circle {
         if (this.editMode) {
             this.map.off("click", this._click);
             this.map.off("mousedown", this.nodeLayerId, this._mousedown);
+            this.map.off("mousedown", this.fillLayerId, this._mousedown2);
             // this.map.setPaintProperty(this.lineId, "line-dasharray", [1]);
             //"line-dasharray":[2,2]
             //this.map.setPaintProperty(this.lineId, "line-color", "#fd8d3c");

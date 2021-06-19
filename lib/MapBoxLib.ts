@@ -12,6 +12,7 @@ import { InfoRuleControl } from './InfoRuleControl.js';
 import { PolyControl } from './PolyControl.js';
 import { PolyControl as PolyControl2 } from './PolyControl2.js';
 import { MarkControl } from './MarkControl.js';
+import { MarkControl as  MarkControl2 } from './MarkControl2.js';
 
 import { IMark } from './IMark.js';
 import { Polygon } from './Polygon.js';
@@ -238,7 +239,10 @@ export class MapBoxLib {
                 case "mark":
                     map.addControl(this._controls["mark"] = new MarkControl(this), "top-right");
                     break;
-                case "layer":
+                case "mark2":
+                    map.addControl(this._controls["mark2"] = new MarkControl2(this), "top-right");
+                    break;
+                    case "layer":
                     //map.addControl(this._controls["layer"] = new LayerControl(), "top-right");
                     break;
             }

@@ -229,7 +229,7 @@ export var S = (($) => {
             }
 
 			this.winInit(this.wins);
-			console.log(this.elements);
+
 			//this.init(this.elements);
 			this.elements.forEach(element => {
 				if (!element) {
@@ -282,7 +282,7 @@ export var S = (($) => {
 		}
 
 		static requestPanel3(data: IResponse[], requestFunctions?: (config) => void[]) {
-			console.log(data)
+
 			data.forEach(item => {
 				if (item.iToken && requestFunctions && requestFunctions[item.iToken]) {
 					requestFunctions[item.iToken](item.data);
@@ -294,7 +294,7 @@ export var S = (($) => {
 						break;
 					case "dataForm":
 
-						console.log(item.dataForm);
+
 						for (let key in item.dataForm) {
 							this.setVar(key, item.dataForm[key]);
 						}
@@ -312,7 +312,7 @@ export var S = (($) => {
 					case "fragment":
 						break;
 					case "message"://push, delay,
-						console.log(item);
+
 						this.msg = new Float.Message(item);
 							this.msg.show({});
 							break;
@@ -327,7 +327,7 @@ export var S = (($) => {
         }
 
 		static requestPanel(p){
-			console.log(p)
+
 			//let p = JSON.parse(xhr.responseText);
 
 			if(p.panels){
@@ -404,7 +404,7 @@ export var S = (($) => {
 		static init(info:InfoElement[]){
 
             for(var x of info){
-				console.log(this.components[x.type])
+
                 if(this.components[x.type] && x.option !== null){
 
 					if(this._e[x.id]){
@@ -465,7 +465,7 @@ export var S = (($) => {
 			this.send4(info);
 		}
 		static send4(info: any) {
-			console.log("send3", info);
+
 			if(info.confirm && !confirm(info.confirm)){
 				return false;
 			}
@@ -671,7 +671,7 @@ export var S = (($) => {
 
         }
 		static send3(info:any){
-			console.log("send3", info);
+
 			if(info.confirm && !confirm(info.confirm)){
 				return false;
 			}
@@ -877,7 +877,7 @@ export var S = (($) => {
 
         }
 		static send2(info/*:InfoParam*/){
-			console.log("send2");
+
 			if(info.confirm && !confirm(info.confirm)){
 				return false;
 			}
@@ -1109,7 +1109,7 @@ export var S = (($) => {
 
         static send(info/*:InfoParam*/){
 
-			console.log(info)
+
 			if(info.confirm && !confirm(info.confirm)){
 				return false;
 			}

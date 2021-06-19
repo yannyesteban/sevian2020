@@ -25,7 +25,7 @@ export class Geofence {
 
 	dataMain: any[] = null;
 
-	menu: any = null;
+	menu: Menu = null;
 	win: any = null;
 	form: any = null;
 
@@ -55,7 +55,7 @@ export class Geofence {
 
 	private _win: any[] = [];
 
-
+	private lastTransaction: number = 0;
 
 	constructor(info) {
 
@@ -90,6 +90,35 @@ export class Geofence {
 
 			this.setMap(map);
 			const mapControl = map.getControl("poly2") as PolyControl;// as TraceControl;//<TraceControl>
+
+
+
+			const processSave = (json) => {
+
+
+				this.updateData(json.data);
+				if (!json.data.__error_) {
+					new Float.Message({
+						"caption": "Geocercas",
+						"text": "Record was saved!!!",
+						"className": "",
+						"delay": 3000,
+						"mode": "",
+						"left": "center",
+						"top": "top"
+					}).show({});
+				} else {
+					new Float.Message({
+						"caption": "Geocercas",
+						"text": "Record wasn't saved!!!!",
+						"className": "",
+						"delay": 3000,
+						"mode": "",
+						"left": "center",
+						"top": "top"
+					}).show({});
+				}
+			};
 
 			mapControl.onInit = () => {
 				S.go({
@@ -190,9 +219,12 @@ export class Geofence {
 				formData.append("propertys", data.propertys);
 				formData.append("__mode_", data.__mode_);
 				if (data.__mode_ == 2) {
+					this.lastTransaction = 2;
 					formData.append("__record_", JSON.stringify({
 						id: data.id
 					}));
+				} else {
+					this.lastTransaction = 1;
 				}
 
 
@@ -208,7 +240,11 @@ export class Geofence {
 							mapControl.setGeogenceList(json.list);
 							mapControl.setGeogence(json.data);
 
-						}
+
+
+						},
+						"f2": processSave
+
 					},
 					_requestFunction: (json) => {
 
@@ -221,7 +257,8 @@ export class Geofence {
 							method: "save",
 
 							name: "/form/geofence",
-							eparams: {}
+							eparams: { getResult: true },
+							iToken: "f2"
 						},
 						{
 							t: "getDataForm",
@@ -258,9 +295,9 @@ export class Geofence {
 				formData.append("__mode_", "3");
 
 
-					formData.append("__record_", JSON.stringify({
-						id: data.id
-					}));
+				formData.append("__record_", JSON.stringify({
+					id: data.id
+				}));
 
 
 
@@ -277,7 +314,8 @@ export class Geofence {
 							mapControl.setGeogenceList(json.list);
 							mapControl.newGeofence();
 
-						}
+						},
+						"f2": processSave
 					},
 					_requestFunction: (json) => {
 
@@ -290,7 +328,8 @@ export class Geofence {
 							method: "save",
 
 							name: "/form/geofence",
-							eparams: {}
+							eparams: { getResult: true },
+							iToken: "f2"
 						},
 						{
 							t: "getDataForm",
@@ -387,16 +426,6 @@ export class Geofence {
 	}
 	setMap(map) {
 		this.map = map;
-		return;
-
-		map.getControl("poly").onsave = ((info) => {
-			this.loadForm(info);
-
-			map.getControl("poly").stop();
-			console.log(info);
-			this.onSave(info);
-		});
-
 
 	}
 
@@ -417,6 +446,36 @@ export class Geofence {
 
 
 	}
+
+	updateData(data) {
+		const id = data.id;
+		if (data.__mode_ === 3) {
+			let item = this.menu.getByValue(id);
+			item.remove();
+			delete this.dataMain[id];
+			return;
+		}
+		if (!this.dataMain[id]) {
+			this.dataMain[id] = {};
+		}
+
+		this.dataMain[id].id = data.id;
+		this.dataMain[id].name = data.name;
+		this.dataMain[id].description = data.description;
+		this.dataMain[id].geojson = JSON.parse(data.geojson);
+
+		if (data.__mode_ === 1) {
+			this.menu.add(this.createItem(this.dataMain[id], true));
+		} else {
+			let item = this.menu.getByValue(id);
+			item.setCheckValue(true);
+			//this.getMap().delete("geofence-" + id);
+			item.getCaption().text(data.name);
+		}
+
+		this.showGeofence(id, true);
+	}
+
 	edit(id) {
 
 		this.mode = 2;
@@ -525,100 +584,41 @@ export class Geofence {
 		});
 	}
 
-	play() {
-		let map = this.getMap().map;
+	createItem(info, checked) {
+		const id = info.id;
+		return {
+			id: id,
+			caption: info.name,
+			useCheck: true,
+			value: id,
+			checkValue: id,
+			checked: checked,
+			checkDs: { "level": "geofence", "geofenceId": id },
+			infoElement: $.create("span").addClass("geofence-edit").on("click", () => {
+				//this.edit(this.dataMain[x].id);
+			}),
+			ds: { "geofenceId": id },
+			check: (item, event) => {
+				this.showGeofence(id, event.currentTarget.checked);
+			},
+			action: (item, event) => {
+				let ch = item.getCheck();
+				ch.get().checked = true;
+				this.showGeofence(id, true);
+				this._lastUnitId = id;
+				this.setInfo(id);
+				this.flyTo(id);
 
-		map.loadImage(
-			'https://upload.wikimedia.org/wikipedia/commons/7/7c/201408_cat.png',
-			function(error, image) {
-				if (error) throw error;
-				map.addImage('cat', image);
-				map.addSource('point', {
-					'type': 'geojson',
-					'data': {
-						'type': 'FeatureCollection',
-						'features': [
-							{
-								'type': 'Feature',
-								'properties': {
-									'rotacion': 45
-								},
-								'geometry': {
-									'type': 'Point',
-									'coordinates': [-69.39874800, 10.06882300]
-								}
-							},
-							{
-								'type': 'Feature',
-								'properties': {
-									'rotacion': 120
-								},
-								'geometry': {
-									'type': 'Point',
-									'coordinates': [-69.39674800, 10.06682300]
-								}
-							}
-						]
-					}
-				});
-				map.addLayer({
-					'id': 'points',
-					'type': 'symbol',
-					'source': 'point',
-					'layout': {
-						'icon-image': 'cat',
-						'icon-size': 0.10,
-						'icon-rotate': ['get', 'rotacion']
-					}
-				});
 			}
-		);
 
-
-
-
-		if (this._timer) {
-			clearTimeout(this._timer);
-		}
-
-		this._timer = setInterval(() => {
-
-			S.send(
-				{
-
-					async: true,
-					panel: 2,
-					valid: false,
-					confirm_: 'seguro?',
-					requestFunction: $.bind(this.requestFun, this),
-					params: [
-						{
-							t: 'setMethod',
-							id: 2,
-							element: 'gt_unit',
-							method: 'tracking',
-							name: 'x',
-							eparams: {
-								record: { codpersona: 16386 },
-								token: "yanny",
-								page: 2
-							}
-						}
-
-					]
-
-
-				});
-
-
-		}, this.delay);
+		};
 	}
 
 	createMenu() {
 		let infoMenu = [];
 
 
-
+		console.log(this.dataMain);
 
 		for (let x in this.dataMain) {
 
@@ -765,18 +765,15 @@ export class Geofence {
 	}
 
 	showGeofence(id, value) {
+		console.log(id, this.dataMain)
 		if (!this.marks[id]) {
 
 			this.marks[id] = this.getMap().draw(id, this.dataMain[id].geojson.properties.rol, {
 				feature: this.dataMain[id].geojson,
 				popupInfo: this.loadPopupInfo(id)
 			});
-
-
-
-
-
 		} else {
+			console.log(2, id)
 			this.marks[id].setVisible(value);
 		}
 	}

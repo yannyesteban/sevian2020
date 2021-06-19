@@ -401,24 +401,23 @@ export class Polygon implements IPoly {
             type = null;
             down1 = false;
         }
+
         let fnMove = (e) => {
             this.moveNode(index, [e.lngLat.lng, e.lngLat.lat]);
         }
+
         let fnUp2 = (e) => {
             map.off("mousemove", fnMove2);
 
         }
-        let fnMove2 = (e) => {
 
+        let fnMove2 = (e) => {
 
             const dLng = e.lngLat.lng - place_one.lng;
             const dLat = e.lngLat.lat - place_one.lat;
             place_one = e.lngLat;
 
-
             this.move(dLng, dLat);
-
-
 
         }
 
@@ -460,11 +459,6 @@ export class Polygon implements IPoly {
         });
 
         map.on("click", this._click = (e) => {
-
-            //db (e.originalEvent.button+".........", "red","yellow")
-            /*var features = this.map.queryRenderedFeatures(e.point, {
-                layers: [this.nodeLayerId]
-            });*/
             this.add(e.lngLat);
         });
 

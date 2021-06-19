@@ -166,7 +166,7 @@ class FormSave{
 
         $tables = $info->tables;
         $result = new \stdClass;
-
+        $data->__error_ = false;
         foreach($tables as $table){
 
             if($table == ''){
@@ -299,9 +299,10 @@ class FormSave{
                 if($cn->error){
                     self::$error = true;
                     self::$errno = $q_errno = $cn->errno;
+                    $data->__error_ = true;
                     $q_error = $cn->error;
-                    hr("ERROR ".$q, "RED");
-                    hr($q_error, "green");
+                    //hr("ERROR ".$q, "RED");
+                    //hr($q_error, "green");
                 }
 
                 if($serial){

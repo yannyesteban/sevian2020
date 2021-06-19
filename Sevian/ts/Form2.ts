@@ -54,7 +54,7 @@ export class Form2{
     _inputs:object = {};
 
     parentContext:any = null;
-
+    mapValue = () => { };
     static _objs = [];
 
     static init(){
@@ -352,6 +352,25 @@ export class Form2{
         field.create("div").addClass("input").append(this._inputs[info.name]);
         return field;
     }
+
+    createGroupInputs(info: any) {
+
+        let field = this._page.create("div").addClass("field");
+        let ind = "";
+
+        if(info.rules && info.rules.required){
+            ind = "<span class='ind'>*</span>";
+        }
+
+        field.create("label").addClass("label").prop("htmlFor", info.id).text(info.caption + ind);
+
+        info.inputs.forEach(element => {
+            this._inputs[element.name] = I.create(element.input, element);
+            field.create("div").addClass("input").append(this._inputs[element.name]);
+        });
+
+        return field;
+    }
     get(){
         return this._main;
     }
@@ -469,7 +488,18 @@ export class Form2{
         return data;
         */
     }
-    getFormData(){
+
+    getValues() {
+
+        const data = [];
+
+        for (let name in this._inputs) {
+            data.push({ name: name, value: this._inputs[name].getValue() });
+        }
+        return data;
+    }
+
+    getFormData() {
         let formData = new FormData();
         for(let name in this._inputs){
             formData.append(name, this._inputs[name].getValue());

@@ -116,7 +116,7 @@ class Communication extends
         $this->typeElement = 'GTCommunication';
 		$this->jsClassName = 'GTCommunication';
 
-        $this->setInit([
+        $this->setInit($_init = [
             //'id'=>$this->eparams->targetId,
 
             'id'            => $this->containerId,
@@ -170,6 +170,16 @@ class Communication extends
 
             ]
         ]);
+
+        $this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> 'GTCommunication',
+			'iClass'	=> 'GTCommunication',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> '',
+			'config'	=> $_init
+		]);
 
     }
 

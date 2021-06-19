@@ -7,7 +7,8 @@ class Geofence
     extends \Sevian\Element
 	implements
 		\sevian\JasonComponent,
-		\sevian\JsonRequest
+		\sevian\JsonRequest,
+		\Sevian\UserInfo
 
 {
 
@@ -252,5 +253,13 @@ class Geofence
 	}
 
 
-
+	public function setUserInfo($info){
+        $this->_userInfo = $info;
+    }
+    public function getUserInfo(){
+        return $this->_userInfo;
+    }
+	public function getUser(){
+        return $this->_userInfo->user;
+    }
 }

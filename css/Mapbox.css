@@ -548,7 +548,7 @@
   padding-left: 10px;
   margin-bottom: 50px;
 }
-.layer-tool .sg-form .page .field input, .layer-tool .sg-form .page .field textarea, .layer-tool .sg-form .page .field select {
+.layer-tool .sg-form .page .field input, .layer-tool .sg-form .page .field textarea, .layer-tool .sg-form .page .field select, .layer-tool .sg-form .page .field label {
   background-color: #eceaea;
   color: #6d6d6d;
   border: 0px;
@@ -557,6 +557,9 @@
   max-width: 100%;
   max-height: 1.8em;
   margin: 0px;
+}
+.layer-tool .sg-form .page .field label {
+  padding-left: 6px;
 }
 .layer-tool .sg-form .sg-menu {
   padding: 0px;

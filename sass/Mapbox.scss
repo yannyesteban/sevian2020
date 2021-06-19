@@ -683,7 +683,7 @@
 					//margin: 0px;
 
 				}
-				input, textarea, select{
+				input, textarea, select, label{
 
 					background-color: rgb(236, 234, 234);
 					color: rgb(109, 109, 109);
@@ -696,6 +696,9 @@
 					max-height: 1.8em;
 					margin: 0px;
 					//font-weight: bold;
+				}
+				label{
+					padding-left: 6px;
 				}
 
 			}

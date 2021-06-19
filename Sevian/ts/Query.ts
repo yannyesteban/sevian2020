@@ -292,12 +292,12 @@ export class SQObject{
 		}
 	}
 
-	prop(prop, value){
+	prop(prop, value?){
 		_sg.prop(this.e, prop, value);
 		return this;
 	}
 
-	style(prop, value){
+	style(prop, value?){
 		/*
 		if(typeof(prop) === "object"){
 			_sg.prop(this.e.style, prop, value);

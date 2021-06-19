@@ -284,6 +284,18 @@ class Form2
 			'data'		=> [\Sevian\S::getVReq()]
 		]);
 
+		if($this->eparams->getResult?? false and $this->eparams->getResult){
+			$this->addResponse([
+				'type'=>'',
+				'id'=>$this->id,
+				'data'=>[
+					'data'=>\Sevian\S::getVReq(),
+					'result' => $formSave->getResult()
+				],
+				'iToken'=>$this->iToken
+			]);
+			return;
+		}
 
 		foreach($formSave->getResult() as $k => $v){
 

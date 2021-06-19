@@ -425,9 +425,6 @@ export class Trace {
                 "icon-rotate": ["get", "heading"],
                 "icon-allow-overlap": true,
                 "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
             },
             paint: {},
             filter: ["in", "dot", '']
@@ -625,9 +622,6 @@ export class Trace {
                 "icon-rotate": ["get", "heading"],
                 "icon-allow-overlap": true,
                 "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
             },
             //"paint": paint,
             //filter: ["in", "$type", "Point"]

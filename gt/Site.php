@@ -8,13 +8,14 @@ class Site
 	implements
 		\sevian\JasonComponent,
 		\sevian\JsonRequest,
-		\Sevian\ListenSigns
+		\Sevian\ListenSigns,
+		\Sevian\UserInfo
 
 {
 
 
     use DBSite{
-		DBSite::loadRecord as public loadSite;
+	//	DBSite::loadSite as public loadSite;
 	}
 
 
@@ -82,6 +83,23 @@ class Site
 			case 'load':
 
 				$this->load();
+
+				break;
+			case 'get-record':
+
+				$id = $this->eparams->siteId?? \sevian\s::getReq('id');
+				//hx(json_encode(\sevian\s::getVReq(), JSON_PRETTY_PRINT));
+				$this->addResponse([
+
+					'id'=>$this->id,
+					'data'=>[
+						'list'=>$this->listSites($this->getUser()),
+						'categoryList'=>$this->listCategorys($this->getUser()),
+						'data'=>$this->loadSite($id)
+					],
+					'iToken'=>$this->iToken
+
+				]);
 
 				break;
             case 'load-sites':
@@ -195,8 +213,8 @@ class Site
 		$this->jsClassName = 'GTSite';
 		$this->info = [
 			'mapName'     	=> $this->eparams->mapName ?? '',
-			'dataSite'     	=> $this->loadSites(),
-			'dataCategory' 	=> $this->loadCategorys(),
+			'dataMain'     	=> $this->loadSites($this->getUser()),
+			'dataCategory' 	=> $this->loadCategorys($this->getUser()),
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
 			'pathImages'	=> PATH_IMAGES."sites/",
@@ -212,7 +230,17 @@ class Site
 			'formId'		=> $this->id.'-form'
 		];
 
-		$this->setInit($this->info);
+		//$this->setInit($this->info);
+
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> 'GTSite',
+			'iClass'	=> 'GTSite',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> '',
+			'config'	=> $this->info
+		]);
 
     }
 
@@ -296,5 +324,14 @@ class Site
 		];
 	}
 
+	public function setUserInfo($info){
+        $this->_userInfo = $info;
+    }
+    public function getUserInfo(){
+        return $this->_userInfo;
+    }
 
+	public function getUser(){
+        return $this->_userInfo->user;
+    }
 }

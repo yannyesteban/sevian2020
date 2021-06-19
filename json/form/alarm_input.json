@@ -1,0 +1,51 @@
+{
+	"form":"alarm_input",
+	"caption":"alarm_input",
+	"className":"webcar",
+	"query":"SELECT * FROM alarm_input",
+	"menuName":"/menu/grid",
+	"methods":{
+		"request":{
+			"menuName":"/menu/request"
+		},
+		"load":{
+			"menuName":"/menu/request"
+		}
+	},
+	"params":"",
+
+	"pages":[
+		{
+			"type":"tab",
+			"name":"tab",
+			"config":{
+				"caption":"hello"
+			}
+		},
+		{
+			"type":"tab_page",
+			"name":"xxx",
+			"config":{
+				"caption":"hello"
+			}
+		},
+		{
+			"type":"tab_page",
+			"name":"xx2",
+			"config":{
+				"caption":"Dos"
+			}
+		}
+	],
+	"groups":{},
+	"infoFields":[
+		{"name":"id","caption":"Usuario","page":"xxx"},
+		{"name":"week","caption":"Modelo","page":"xx2"}
+
+	],
+
+	"searchFor":[
+		"brand", "model"
+	]
+
+}

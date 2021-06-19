@@ -434,9 +434,6 @@ export class History {
                 "icon-rotate": ["get", "heading"],
                 "icon-allow-overlap": true,
                 "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
             },
             paint: {},
             filter: ["in", "dot", '']
@@ -546,10 +543,6 @@ export class History {
             "paint": {
                 "line-color": ["get", "color"],
                 "line-width": 5,
-                //"line-opacity": 0.9,
-                //"line-gap-width":4,
-                //"line-dasharray":[2,2]
-                //"line-dasharray":[1,1]
             },
             "filter": ["==", "$type", "LineString"]
         });
@@ -587,9 +580,6 @@ export class History {
                 "icon-rotate": ["get", "heading"],
                 "icon-allow-overlap": true,
                 "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
             },
             paint: {
                 //"icon-color":"#4d0000",
@@ -614,11 +604,6 @@ export class History {
                     160,
                     "black"
                 ],
-                //"circle-radius": 4,
-                //"circle-opacity":["case",["==",["get","type"],"m"] , 0.0, 0.8],
-                //"circle-color": "orange",
-                //"circle-stroke-color":"yellow",
-                //"circle-stroke-width":1
             },
             filter: ["in", "dot", '']
             //filter: ["in", "$type", "Point"]
@@ -700,10 +685,6 @@ export class History {
             "paint": {
                 "line-color": ["get", "color"],
                 "line-width": 5,
-                //"line-opacity": 0.9,
-                //"line-gap-width":4,
-                //"line-dasharray":[2,2]
-                //"line-dasharray":[1,1]
             },
             "filter": ["==", "$type", "LineString"]
         });
@@ -738,9 +719,6 @@ export class History {
                 "icon-rotate": ["get", "heading"],
                 "icon-allow-overlap": true,
                 "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
             },
             paint: {
                 //"icon-color":"#4d0000",
@@ -765,11 +743,6 @@ export class History {
                     160,
                     "black"
                 ],
-                //"circle-radius": 4,
-                //"circle-opacity":["case",["==",["get","type"],"m"] , 0.0, 0.8],
-                //"circle-color": "orange",
-                //"circle-stroke-color":"yellow",
-                //"circle-stroke-width":1
             },
             filter: ["in", "dot", '']
             //filter: ["in", "$type", "Point"]
@@ -847,9 +820,6 @@ export class History {
                 "icon-rotate": ["get", "heading"],
                 "icon-allow-overlap": true,
                 "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
             },
             paint: {},
             //filter: ["in", "$type", "Point"]
@@ -1037,9 +1007,6 @@ export class History {
                 "icon-rotate": ["get", "heading"],
                 "icon-allow-overlap": true,
                 "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
             },
             //"paint": paint,
             //filter: ["in", "$type", "Point"]

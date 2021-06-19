@@ -76,7 +76,7 @@ export class InfoMenu {
         if (text === 0) {
             text = "";
         }
-        this.menu.getByValue(type).getCaption().text(text);
+        //this.menu.getByValue(type).getCaption().text(text);
     }
 }
 

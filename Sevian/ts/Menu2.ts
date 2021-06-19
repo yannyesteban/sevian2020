@@ -11,6 +11,7 @@ import { Float as float } from './Window.js';
 const Float = float.Float;
 
 class Item{
+    index: number = -1;
     main:any = null;
     tagLink:string = "a";
     url:string = null;
@@ -58,7 +59,9 @@ class Item{
     getMain(){
         return this.main;
     }
-
+    remove() {
+        this.main.remove();
+    }
     load(item){
 
     }
@@ -72,9 +75,18 @@ class Item{
     getImage(){
         return this.main.q(":first-of-type > .image");
     }
-    getCheck(item){
+    getIndex() {
+        return this.index;
+    }
+    getCheck(){
         return this.main.q(":first-of-type > input[type='checkbox']");
         //return $(item.query("input[type='checkbox']'"));
+    }
+    setCheckValue(value) {
+        this.getCheck().attr("checked", value);
+    }
+    getCheckValue() {
+        return this.getCheck().checked;
     }
     getChild(){
         return this.main.q(".sg-menu:first-of-type");
@@ -186,14 +198,11 @@ class Item{
             link.prop(this.propertys);
         }
     }
-
-
-
-
 }
 
 export class Menu{
-    public id:any = null;
+    public id: any = null;
+    private lastIndex:number = -1;
     public className:any = null;
     public tagLink:string = "a";
     public useCheck:boolean = false;
@@ -206,7 +215,7 @@ export class Menu{
     public subType:string = "default";
     public autoClose:boolean = true;
 
-    private items:any[] = [];
+    private items:Item[] = [];
     private context:any = null;
     private parentContext:any = null;
 
@@ -285,13 +294,16 @@ export class Menu{
         .addClass(`menu-${this.getSubType()}`)
         ;
 
-        this.items.forEach((item)=>{
-
+        this.items.forEach((item, index: number)=>{
+            this.lastIndex = item.index = index;
             this.add(item);
         });
     }
 
-    add(info){
+    add(info) {
+        if (info.index === undefined) {
+            info.index = ++this.lastIndex;
+        }
         //info.menuInfo = {type: "accordion", subType: "default"};
         info.menu = this;
         info.onDataUser = this.onDataUser;
@@ -312,6 +324,10 @@ export class Menu{
         });
     }
 
+    deleteItem(index) {
+
+    }
+
     getByValue(value){
         return new Item({
             main:$(this._main.q(`.item[data-value='${value}']`)),
@@ -320,11 +336,11 @@ export class Menu{
             context: this.context,
         });
     }
-    getByData(data, value){
+    getByData(data, value): Item{
 
         let main = $(this._main.q(`.item[data-${data}='${value}']`));
         if(!main){
-            return false;
+            return null;
         }
         return new Item({
             main:main,

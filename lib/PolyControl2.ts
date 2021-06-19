@@ -36,6 +36,7 @@ export class PolyControl {
         nameCaption: "Nombre",
         descriptionCaption: "Descripción",
         coordinatesCaption: "Coordenadas",
+        resetCaption: "Reiniciar",
         propertysCaption: "Propiedades",
         typeCaption: "Tipo",
         saveCaption: "Guardar",
@@ -124,13 +125,13 @@ export class PolyControl {
                 this.setRol("polygon");
             });
 
-        this.bar
+        /*this.bar
             .create("button")
             .prop({ type: "button", title: "Descarta la medición actual" })
             .addClass(["icon-trash"])
             .on("click", () => {
                 this.reset();
-            });
+            });*/
         this.bar
             .create("button")
             .prop({ type: "button", title: "Salir" })
@@ -190,8 +191,6 @@ export class PolyControl {
         this.onlength("0 Km<sup>2</sup>");
     }
     reset() {
-        this.onlength("0 Km<sup>2</sup>");
-
         if (this.poly) {
             this.poly.reset();
         }
@@ -377,8 +376,6 @@ export class PolyControl {
                             } else {
                                 this.onLoadGeofence(event.currentTarget.value);
                             }
-
-                            //this.loadLayer(event.currentTarget.value);
                         },
                     },
                 },
@@ -471,6 +468,14 @@ export class PolyControl {
                             //this.deleteLayer(this.forms["layer"].getValue());
                         },
                     },
+                    {
+                        id: 4,
+                        caption: this.infoForm.resetCaption,
+                        action: (item, event) => {
+                            this.reset();
+                            //this.deleteLayer(this.forms["layer"].getValue());
+                        },
+                    },
                 ],
             },
         });
@@ -490,7 +495,7 @@ export class PolyControl {
         this.setEmptyPolygon();
     }
     setGeogenceList(data) {
-        data = [{ id: 0, name: "" }].concat(data);
+        data = [{ id: "", name: "" }].concat(data);
 
         this.form
             .getInput("geofenceId")

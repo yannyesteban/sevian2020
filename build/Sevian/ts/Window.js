@@ -581,10 +581,6 @@ export var Float = (($) => {
         }
         ;
     }
-    class Win {
-        constructor() {
-        }
-    }
     $(window).on("load_", function () {
         //let div = $().create("div").addClass("drag2");
         let div2 = $().create("div").addClass("drag4");
@@ -641,7 +637,7 @@ export var Float = (($) => {
         });
         db(document.defaultView.getComputedStyle(div.get()).gridTemplateColumns);
     });
-    return { Window: Win, Float: Float, Resize: Resize, Move: Move, Window: null, Popup: null, Message: null };
+    return { Float: Float, Resize: Resize, Move: Move, Window: null, Popup: null, Message: null };
 })(_sgQuery);
 Float.Window = (($) => {
     var _last = false;

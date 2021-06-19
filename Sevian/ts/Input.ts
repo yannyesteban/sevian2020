@@ -1,5 +1,6 @@
 import {_sgQuery, SQObject}  from './Query.js';
-import {List}  from './List.js';
+import { List } from './List.js';
+import { FormDetail }  from './FormDetail.js';
 
 export class I{
     static _ele_ = [];
@@ -12,8 +13,8 @@ export class I{
 }
 I.register("list", List);
 export var $I = {};
-export var Input = (($) => {  
- 
+export var Input = (($) => {
+
     class Input{
         target:object = null;
         id:string = "";
@@ -33,7 +34,7 @@ export var Input = (($) => {
 
         context:any = null;
         parentContext:any = null;
-        
+
         childs:boolean = false;
         parent:string = "";
         parentValue:any = null;
@@ -48,7 +49,7 @@ export var Input = (($) => {
         getParentValue: any = () => {};
 
         constructor(info: any){
-            
+
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -58,10 +59,10 @@ export var Input = (($) => {
             let main = this._main = (this.id)? $(this.id): null;
 
             if(!main){
-                
+
                 this._create(false);
             }else{
-                
+
                 if(main.ds("sgInput")){
                     return;
                 }
@@ -72,7 +73,7 @@ export var Input = (($) => {
             if(target){
                 target.append(this._main);
             }
-            
+
         }
 
         _create(target:any){
@@ -88,7 +89,7 @@ export var Input = (($) => {
                 case "date":
                 case "time":
                 case "number":
-                case "range":	
+                case "range":
                     info.tagName = "input";
                     info.type = this.type;
                     break;
@@ -109,7 +110,7 @@ export var Input = (($) => {
             if(this.value){
                 info.value = this.value;
             }
-            
+
             this._input = this._main = $.create(info).addClass("type-input").addClass(this.className);
 
             for(var x in this.events){
@@ -117,10 +118,10 @@ export var Input = (($) => {
                 //let action = $.bind(this.events[x], this._main);
 				this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
-            
+
             if(this.childs){
                 this._main.ds("childs", "childs");
-                this._main.on("change", $.bind(this.evalChilds, this.context || this, "event")); 
+                this._main.on("change", $.bind(this.evalChilds, this.context || this, "event"));
             }
 
 			this._main.prop(this.propertys);
@@ -137,8 +138,8 @@ export var Input = (($) => {
             if(this.parent){
                 this._main.ds("parent", this.parent);
             }
-           
-            
+
+
             this.setValue(this.value);
         }
         setValue(value:any){
@@ -152,7 +153,7 @@ export var Input = (($) => {
             }
 			this._input.val(value);
         }
-        
+
         getValue(){
             return this.get().value;
 		}
@@ -162,11 +163,11 @@ export var Input = (($) => {
         }
 
         get(){
-            
+
             return this._main.get();
         }
         main(){
-            
+
             return this._main;
         }
 
@@ -177,42 +178,42 @@ export var Input = (($) => {
             return false;
         }
         createOptions(parentValue?:any){
-            
-            
+
+
 
 			let i,
 				option,
 				vParent = [];
-			
+
                 this._main.get().length = 0;
-			
+
 			if(this.parent){
                 let aux = (parentValue + "").split(",");
-                
-                
+
+
 				for(i = 0; i < aux.length; i++){
 					vParent[aux[i]] = true;
 				}
 			}
-	
+
 			if(this.placeholder){
 				option = document.createElement("OPTION");
 				option.value = "";
 				option.text = this.placeholder;
 				this._main.get().options.add(option);
             }
-            
+
 
 			for (i in this.data){
 				if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
-                    
+
 					option = document.createElement("OPTION");
 					option.value = this.data[i][0];
 					option.text = this.data[i][1];
 					this._main.get().options.add(option);
 				}
 			}
-			
+
         }
         setOptionsData(data:any[]){
             this.data = data;
@@ -238,26 +239,26 @@ export var Input = (($) => {
         }
         focus(){
             this._main.get().focus();
-            
+
         }
         select(){
             if(this._main.get().select){
                 this._main.get().select();
             }
-            
+
         }
 
         reset(){
             this.setValue(this.default);
         }
     }
-    
+
     I.register("input", Input);
     return Input;
 })(_sgQuery);
 
-export var Hidden = (($) => {  
- 
+export var Hidden = (($) => {
+
     class Hidden{
         target:object = null;
         id:string = "";
@@ -293,7 +294,7 @@ export var Hidden = (($) => {
         getParentValue: any = () => {};
 
         constructor(info: any){
-            
+
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -303,10 +304,10 @@ export var Hidden = (($) => {
             let main = this._main = (this.id)? $(this.id): false;
 
             if(!main){
-                
+
                 this._create(false);
             }else{
-                
+
                 if(main.ds("sgInput")){
                     return;
                 }
@@ -317,12 +318,12 @@ export var Hidden = (($) => {
             if(target){
                 target.append(this._main);
             }
-            
+
         }
 
         _create(target:any){
             let info = {};
-            
+
             info.tagName = "input";
             info.type = "hidden";
             if(this.id){
@@ -334,7 +335,7 @@ export var Hidden = (($) => {
             if(this.value){
                 info.value = this.value;
             }
-            
+
             this._input = this._main = $.create(info).addClass("type-input").addClass(this.className);
 
 
@@ -346,15 +347,15 @@ export var Hidden = (($) => {
             this._main.ds("sgName", this.name);
             this._main.ds("sgInput", "input");
             this._main.ds("sgType", this.type);
-           
-            
+
+
             this.setValue(this.value);
         }
         setValue(value:any){
             this._input.val(value);
             return this;
         }
-        
+
         getValue(){
             return this.get().value;
 		}
@@ -364,22 +365,22 @@ export var Hidden = (($) => {
         }
 
         get(){
-            
+
             return this._main.get();
         }
         main(){
-            
+
             return this._main;
         }
 
         hasChilds(){
             return false;
         }
-        
+
         createOptions(parentValue:any){
-			
+
         }
-        
+
         evalOptions(parentValue:any){
 
         }
@@ -400,7 +401,7 @@ export var Hidden = (($) => {
         }
         focus(){
             this._main.get().focus();
-            
+
         }
         select(){
             this._main.get().select();
@@ -410,13 +411,13 @@ export var Hidden = (($) => {
             this.setValue(this.default);
         }
     }
-    
+
     I.register("hidden", Hidden);
     return Hidden;
 })(_sgQuery);
 
 export var InputDate = (($) => {
-    
+
     class InputCalendar{
         target:object = null;
         id:string = "";
@@ -447,7 +448,7 @@ export var InputDate = (($) => {
         status:string = "valid";
         mode:string = "request";
         constructor(opt: any){
-            
+
             for(var x in opt){
                 if(this.hasOwnProperty(x)) {
                     this[x] = opt[x];
@@ -459,17 +460,17 @@ export var InputDate = (($) => {
 
             if(!main){
 
-                
+
                 this._create(false);
             }else{
-                
+
                 if(main.ds("sgInput")){
                     return;
                 }
             }
 
-            
-           
+
+
 
 
             let target = (this.target)? $(this.target): false;
@@ -477,7 +478,7 @@ export var InputDate = (($) => {
             if(target){
                 target.append(this._main);
             }
-            
+
         }
 
         _create(target:any){
@@ -512,55 +513,55 @@ export var InputDate = (($) => {
 
             let auxTxt = main.create({tagName: "input", type: "text", value: "", name:this.name+"_aux"})
             .on("change", (event)=>{
-                
+
                 let date = sgDate.dateFrom(event.currentTarget.value, this.outFormat);
-                
+
                 if(date){
-                    input.val(sgDate.evalFormat(date, this.format)); 
+                    input.val(sgDate.evalFormat(date, this.format));
                 }else{
                     input.val(event.currentTarget.value);
                 }
-                
+
 
             }).addClass("type-input-out");
 
             for(var x in this.events){
 				auxTxt.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
-			
+
 			auxTxt.prop(this.propertys);
 			auxTxt.style(this.style);
 
             this._main.ds(this.dataset);
-            
+
             this._main.ds("sgName", this.name);
             this._main.ds("sgInput", "date");
             this._main.ds("sgType", this.type);
 
             this.setValue(this.value);
-            
+
             let div2 = $.create("div");
             let p = this.picker = new sgDate.Picker({
                 id_:this.id+"_calendar",
                 target:div2,
                 onselectday: (date)=>{
-                   
+
                     auxTxt.val(sgDate.evalFormat(date, this.outFormat));
                     input.val(sgDate.evalFormat(date, this.format));
                     this.hide();
                 }
             });
-           
+
 
             let btn = main.create({tagName: "button", type: "button", innerHTML: "&raquo;"})
             .on("click", (event)=>{
 
-                
+
                 let date = sgDate.dateFrom(input.val(), "%yy-%mm-%dd");
 
                 p.setCal(date || new Date());
                 p.show({context:event.currentTarget});
-                
+
             });
         }
         hide(){
@@ -568,7 +569,7 @@ export var InputDate = (($) => {
         }
         setValue(value:any){
 
-            
+
             let date = sgDate.dateFrom(value, this.format);
             let auxTxt = $(this._main.query(".type-input-out"));
             let value2 = "";
@@ -583,16 +584,16 @@ export var InputDate = (($) => {
             if(auxTxt){
                 auxTxt.val(value2);
             }
-			
+
         }
-        
+
         getValue(){
             let elem = this._main.query(".type-input");
             if(elem){
                 return elem.value;
-            } 
+            }
             return "";
-            
+
 		}
         _load(main:any){
 
@@ -604,7 +605,7 @@ export var InputDate = (($) => {
         main(){
             return this._main;
         }
-        
+
         getName(){
             return this._main.get().name;
         }
@@ -624,14 +625,14 @@ export var InputDate = (($) => {
             if(elem){
                 elem.focus();
             }
-            
+
         }
         select(){
             let elem = this._main.query(".type-input-out");
             if(elem){
                 elem.select();
             }
-            
+
         }
         reset(){
             this.setValue(this.default);
@@ -643,8 +644,8 @@ export var InputDate = (($) => {
     return InputCalendar;
 })(_sgQuery);
 
-export var InputInfo = (($) => {  
- 
+export var InputInfo = (($) => {
+
     class InputInfo{
         target:object = null;
         id:string = "";
@@ -681,7 +682,7 @@ export var InputInfo = (($) => {
         getParentValue: any = () => {};
 
         constructor(info: any){
-            
+
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -691,10 +692,10 @@ export var InputInfo = (($) => {
             let main = this._main = (this.id)? $(this.id): false;
 
             if(!main){
-                
+
                 this._create(false);
             }else{
-                
+
                 if(main.ds("sgInput")){
                     return;
                 }
@@ -705,12 +706,12 @@ export var InputInfo = (($) => {
             if(target){
                 target.append(this._main);
             }
-            
+
         }
 
         _create(target:any){
             let info = {};
-            
+
             info.tagName = "input";
             info.type = "hidden";
             if(this.id){
@@ -722,7 +723,7 @@ export var InputInfo = (($) => {
             if(this.value){
                 info.value = this.value;
             }
-            
+
             this._main = $.create("div").addClass("input-info").addClass(this.className);
             this._input = this._main.create(info);
             this._text = this._main.create("div").addClass("text");
@@ -730,10 +731,10 @@ export var InputInfo = (($) => {
             for(var x in this.events){
 				this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
 			}
-            
+
             if(this.childs){
                 this._main.ds("childs", "childs");
-                this._input.on("change", $.bind(this.evalChilds, this.context || this, "event")); 
+                this._input.on("change", $.bind(this.evalChilds, this.context || this, "event"));
             }
 
 			this._main.prop(this.propertys);
@@ -750,8 +751,8 @@ export var InputInfo = (($) => {
             if(this.parent){
                 this._main.ds("parent", this.parent);
             }
-           
-            
+
+
             this.setValue(this.value);
         }
         setValue(value:any){
@@ -778,10 +779,10 @@ export var InputInfo = (($) => {
                 this._input.val(value);
             }
 
-            
-            
+
+
         }
-        
+
         getValue(){
             return this._input.val();
 		}
@@ -791,11 +792,11 @@ export var InputInfo = (($) => {
         }
 
         get(){
-            
+
             return this._main.get();
         }
         main(){
-            
+
             return this._main;
         }
 
@@ -806,30 +807,30 @@ export var InputInfo = (($) => {
             return false;
         }
         createOptions(parentValue:any){
-            
+
             this._data = {};
 
 			let i,
 				option,
 				vParent = [];
-			
+
 			if(this.parent){
                 let aux = (parentValue + "").split(",");
-                
+
                 for(i = 0; i < aux.length; i++){
 					vParent[aux[i]] = true;
 				}
 			}
 
 			for (i in this.data){
-                
+
                 if(vParent[this.data[i][2]] || !this.parent || this.data[i][2] === "*"){
                     this._data[this.data[i][0]] = this.data[i][1];
 				}
 			}
-			
+
         }
-        
+
         evalOptions(parentValue:any){
 
         }
@@ -850,7 +851,7 @@ export var InputInfo = (($) => {
         }
         focus(){
             this._main.get().focus();
-            
+
         }
         select(){
             this._input.get().select();
@@ -860,7 +861,7 @@ export var InputInfo = (($) => {
             this.setValue(this.default);
         }
     }
-    
+
     I.register("inputInfo", InputInfo);
     return InputInfo;
 })(_sgQuery);
@@ -903,12 +904,12 @@ export var Multi = (($) => {
             inputs.forEach((e)=>{
                 value += ((value !== "")? ",": "") + e.value;
             });
-            
+
             return value;
-        }; 
+        };
 
         constructor(info: any){
-            
+
             for(var x in info){
                 if(this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -918,10 +919,10 @@ export var Multi = (($) => {
             let main = this._main = (this.id)? $(this.id): false;
 
             if(!main){
-               
+
                 this._create(false);
             }else{
-                
+
                 if(main.ds("sgInput")){
                     //return;
                 }
@@ -929,8 +930,8 @@ export var Multi = (($) => {
             if(info.doValues){
                 this.doValues = $.bind(info.doValues, this.context || this, "inputs");
             }
-            
-            
+
+
 
 
             let target = (this.target)? $(this.target): false;
@@ -938,7 +939,7 @@ export var Multi = (($) => {
             if(target){
                 target.append(this._main);
             }
-            
+
         }
 
         _create(target:any){
@@ -962,12 +963,12 @@ export var Multi = (($) => {
             if(this.value){
                 info.value = this.value;
             }
-            
+
             this._main = $.create("div").addClass("input-multi").addClass("type-input").addClass(this.className);
             if(this.type === "checkbox"){
                 this._input = this._main.create({tagName:"input", type: "text", name: this.name});
             }
-            
+
             this._main.ds(this.dataset);
             this._main.ds("sgName", this.name);
             this._main.ds("sgInput", "multi");
@@ -979,11 +980,11 @@ export var Multi = (($) => {
             if(this.childs){
                 this._main.ds("childs", "childs");
             }
-            
+
             this.createOptions(this.parentValue);
-            
+
             this.setValue(this.value);
-           
+
         }
         setValue(value:any){
 
@@ -1007,38 +1008,38 @@ export var Multi = (($) => {
                 });
 
             }
-            
+
             if(Array.isArray(value)){
                 this._input.val(JSON.stringify(value));
             }else{
                 //this._input.val(value);
             }
-            
+
             return false;
         }
-        
+
         getValue(){
 
             if(this.type === "radio"){
                 let input = this._main.query("input.option:checked");
-                
+
                 if(input){
-                
+
                     return input.value;
                 }
-                
+
             }else{
                 let inputs = this._main.queryAll("input.option:checked");
                 if(inputs){
                     return this.doValues(inputs);
                 }
             }
-            
+
             return "";
         }
 
-        
-        
+
+
         _load(main:any){
 
         }
@@ -1059,7 +1060,7 @@ export var Multi = (($) => {
         createInputs(data){
             data.forEach((d, index) => {
                 let div = this._main.create("span");
-              
+
                 div.create(
                     {tagName:"input",
                     type: this.type,
@@ -1068,12 +1069,11 @@ export var Multi = (($) => {
                     className: "option",
                     value:d[0]})
                 .on("click", (event) => {
-                    
-                })
-                ;
+
+                });
                 div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
             });
-            
+
 
         }
 
@@ -1085,31 +1085,31 @@ export var Multi = (($) => {
                     $(e).on(x, $.bind(this.events[x], this.context || this, "event"));
                 }
                 if(this.childs){
-                
-                    $(e).on("change", $.bind(this.evalChilds, this.context || this, "event")); 
+
+                    $(e).on("change", $.bind(this.evalChilds, this.context || this, "event"));
                 }
-                
+
             });
-            
+
 
         }
         createOptions(parentValue:any){
 
 			let i,
 				vParent = {};
-			
+
 			if(this.parent){
                 let aux = (parentValue + "").split(",");
 				for(i = 0; i < aux.length; i++){
 					vParent[aux[i]] = true;
 				}
 			}
-	
+
             let inputs = this._main.queryAll("span");
             inputs.forEach((e)=>{
                 e.parentNode.removeChild(e);
             });
-            
+
             this.data.forEach((d, index) => {
                 if(vParent[d[2]] || !this.parent || d[2] === "*"){
                     let div = this._main.create("span");
@@ -1120,16 +1120,16 @@ export var Multi = (($) => {
                         id:this.id + "_" + index,
                         className: "option",
                         value:d[0]});
-                    
+
                         div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
                 }
-                
+
             });
 
             this._setPropertys();
-			
+
         }
-        
+
         evalOptions(parentValue:any){
 
         }
@@ -1150,7 +1150,7 @@ export var Multi = (($) => {
         }
         focus(){
             this._main.get().focus();
-            
+
         }
         select(){
             this._main.get().select();
@@ -1160,8 +1160,8 @@ export var Multi = (($) => {
             this.setValue(this.default);
         }
     }
-    
-    
+
+
     class Multi{
         target:object = null;
         id:string = "";
@@ -1192,7 +1192,7 @@ export var Multi = (($) => {
         status:string = "valid";
         mode:string = "request";
         subForm:object = null;
-        
+
         _form:object = null;
 
         evalChilds:any = () => {};
@@ -1202,9 +1202,9 @@ export var Multi = (($) => {
             inputs.forEach((e)=>{
                 value += ((value !== "")? ",": "") + e.value;
             });
-            
+
             return value;
-        }; 
+        };
 
         constructor(info: any){
 
@@ -1217,10 +1217,10 @@ export var Multi = (($) => {
             let main = this._main = (this.id)? $(this.id): false;
 
             if(!main){
-               
+
                 this._create(false);
             }else{
-                
+
                 if(main.ds("sgInput")){
                     //return;
                 }
@@ -1228,14 +1228,14 @@ export var Multi = (($) => {
             if(info.doValues){
                 this.doValues = $.bind(info.doValues, this.context || this, "inputs");
             }
-            
+
 
             let target = (this.target)? $(this.target): false;
 
             if(target){
                 target.append(this._main);
             }
-            
+
         }
 
         _create(target:any){
@@ -1259,12 +1259,12 @@ export var Multi = (($) => {
             if(this.value){
                 info.value = this.value;
             }
-            
+
             this._main = $.create("div").addClass("input-multi").addClass("type-input").addClass(this.className);
             if(this.type === "checkbox"){
                 this._input = this._main.create({tagName:"textarea", type: "text", name: this.name});
             }
-            
+
             this._main.ds(this.dataset);
             this._main.ds("sgName", this.name);
             this._main.ds("sgInput", "multi");
@@ -1276,7 +1276,7 @@ export var Multi = (($) => {
             if(this.childs){
                 this._main.ds("childs", "childs");
             }
-            
+
             this.createOptions(this.parentValue);
 
             if(this.subForm){
@@ -1284,18 +1284,31 @@ export var Multi = (($) => {
                 this._form = new FormDetail(this.subForm);
                 this._form.setValue(this.value);
             }
-            
+
             this.setValue(this.value);
-            
-           
+
+
         }
 
-        onchange(item){
+        onchange(item) {
+            alert(888)
+            if (this._form) {
+                let value = this._form.setOn(item.get().value, item.get().checked);
 
-            let value = this._form.setOn(item.get().value, item.get().checked);
-            
-            this._input.val(JSON.stringify(value));
-            
+                this._input.val(JSON.stringify(value));
+
+            }else{
+                let input = this._main.queryAll("input.option:checked");
+                if(input){
+                    let str = "";
+                    input.forEach((i) => {
+                        str = ((str != "")? ",":"") + i.value;
+                    });
+                    this._input.val(str);
+
+                }
+            }
+
         }
 
         check(values){
@@ -1309,22 +1322,22 @@ export var Multi = (($) => {
             let input = this._main.queryAll("input.option");
 
             input.forEach((input) => {
-                
+
                 if(data[input.value] !== undefined){
                     input.checked = true;
                 }else{
                     input.checked = false;
                 }
-            }); 
+            });
         }
-        
+
         setValue(value:any){
             this.value = value;
 
             if(this._form){
                 this.check(this._form.getList());
             }
-            
+
             if(Array.isArray(value)){
                 value = JSON.stringify(value);
             }
@@ -1335,10 +1348,10 @@ export var Multi = (($) => {
 
             return this;
         }
-        
+
         getValue(){
             //return this._main.val();
-            
+
 
             if(this.type === "radio"){
                 let input = this._main.query("input.option:checked");
@@ -1360,7 +1373,7 @@ export var Multi = (($) => {
             return "";
 
         }
-        
+
         _load(main:any){
 
         }
@@ -1381,7 +1394,7 @@ export var Multi = (($) => {
         createInputs(data){
             data.forEach((d, index) => {
                 let div = this._main.create("span");
-              
+
                 div.create(
                     {tagName:"input",
                     type: this.type,
@@ -1390,12 +1403,12 @@ export var Multi = (($) => {
                     className: "option",
                     value:d[0]})
                 .on("click", (event) => {
-                    
+
                 })
                 ;
                 div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
             });
-            
+
 
         }
 
@@ -1407,31 +1420,31 @@ export var Multi = (($) => {
                     $(e).on(x, $.bind(this.events[x], this.context || this, "event"));
                 }
                 if(this.childs){
-                
-                    $(e).on("change", $.bind(this.evalChilds, this.context || this, "event")); 
+
+                    $(e).on("change", $.bind(this.evalChilds, this.context || this, "event"));
                 }
-                
+
             });
-            
+
 
         }
         createOptions(parentValue:any){
 
 			let i,
 				vParent = {};
-			
+
 			if(this.parent){
                 let aux = (parentValue + "").split(",");
 				for(i = 0; i < aux.length; i++){
 					vParent[aux[i]] = true;
 				}
 			}
-	
+
             let inputs = this._main.queryAll("span");
             inputs.forEach((e)=>{
                 e.parentNode.removeChild(e);
             });
-            
+
             this.data.forEach((d, index) => {
                 if(vParent[d[2]] || !this.parent || d[2] === "*"){
                     let div = this._main.create("span");
@@ -1442,19 +1455,19 @@ export var Multi = (($) => {
                         id:this.id + "_" + index,
                         className: "option",
                         value:d[0]}).on("change", event => {
-                            
+
                             this.onchange($(event.currentTarget));
                         });
-                    
+
                     div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
                 }
-                
+
             });
 
             this._setPropertys();
-			
+
         }
-        
+
         evalOptions(parentValue:any){
 
         }
@@ -1475,7 +1488,7 @@ export var Multi = (($) => {
         }
         focus(){
             this._main.get().focus();
-            
+
         }
         select(){
             this._main.get().select();
@@ -1485,7 +1498,364 @@ export var Multi = (($) => {
             this.setValue(this.default);
         }
     }
-    
-    I.register("multi", Multi);
+
+    class CheckingList{
+        target:object = null;
+        id:string = "";
+        name:string = "";
+        type:string = "";
+        caption:string = "";
+        value:string = "";
+        default:string = "";
+        className = "";
+        data:any = false;
+        propertys:object = {};
+        dataset:object = null;
+        style:object = {};
+        events:any = false;
+        placeholder:string = "";
+        rules:object = null;
+
+        context:any = null;
+        parentContext:any = null;
+
+
+        childs:boolean = false;
+        parent:string = "";
+        parentValue:any = "";
+        _main:SQObject = null;
+        _input:SQObject = null;
+        _value:object = null;
+        status:string = "valid";
+        mode:string = "request";
+        subForm:object = null;
+
+        _form:object = null;
+
+        evalChilds:any = () => {};
+        getParentValue: any = () => {};
+        doValues:Function = (inputs:any) => {
+            let value = "";
+            inputs.forEach((e)=>{
+                value += ((value !== "")? ",": "") + e.value;
+            });
+
+            return value;
+        };
+
+        check = (value, inputs) => {
+
+            const values = (value || "").split(",");
+            let data = [];
+
+            values.forEach((v) => {
+                data[v] = v;
+            });
+
+            let input = this._main.queryAll("input.option");
+
+            input.forEach((input) => {
+
+                if (data[input.value] !== undefined) {
+                    input.checked = true;
+                } else {
+                    input.checked = false;
+                }
+            });
+        };
+        onchange = (item) => {
+
+            if (this._form) {
+                console.log(999, this._form)
+                let value = this._form.setOn(item.get().value, item.get().checked);
+                this._input.val(JSON.stringify(value));
+            } else {
+                let input = this._main.queryAll("input.option:checked");
+                if (input) {
+                    let str = "";
+
+                    input.forEach((i) => {
+                        str += ((str != "") ? "," : "") + i.value;
+                    });
+                    this._input.val(str);
+
+                }
+            }
+        };
+        constructor(info: any){
+
+            for(var x in info){
+                if(this.hasOwnProperty(x)) {
+                    this[x] = info[x];
+                }
+            }
+
+            let main = this._main = (this.id)? $(this.id): null;
+
+            if(!main){
+
+                this._create(false);
+            }else{
+
+                if(main.ds("sgInput")){
+                    //return;
+                }
+            }
+            if(info.doValues){
+                this.doValues = $.bind(info.doValues, this.context || this, "inputs");
+            }
+
+
+            let target = (this.target)? $(this.target): false;
+
+            if(target){
+                target.append(this._main);
+            }
+
+        }
+
+        _create(target:any){
+            let info = {};
+
+            switch(this.type){
+                case "radio":
+                case "checkbox":
+                    break;
+                default:
+                    this.type = "radio";
+                    break;
+            }
+
+
+
+            this._main = $.create("div").addClass("input-multi").addClass("type-input").addClass(this.className);
+            if(this.type === "checkbox"){
+                this._input = this._main.create({tagName:"input", type: "hidden", name: this.name});
+            }
+
+            this._main.ds(this.dataset);
+            this._main.ds("sgName", this.name);
+            this._main.ds("sgInput", "multi");
+            this._main.ds("sgType", this.type);
+
+            if(this.parent){
+                this._main.ds("parent", this.parent);
+            }
+            if(this.childs){
+                this._main.ds("childs", "childs");
+            }
+
+            this.createOptions(this.parentValue);
+
+            if(this.subForm){
+
+                this._form = new FormDetail(this.subForm);
+                this._form.setValue(this.value);
+            }
+
+            this.setValue(this.value);
+
+
+        }
+
+
+
+        getInputsCheck() {
+            return this._main.queryAll("input.option");
+        }
+
+        check1(value) {
+
+            const values = (value || "").split(",");
+            let data = [];
+
+            values.forEach((v) => {
+                data[v] = v;
+            });
+
+            let input = this._main.queryAll("input.option");
+
+            input.forEach((input) => {
+
+                if(data[input.value] !== undefined){
+                    input.checked = true;
+                }else{
+                    input.checked = false;
+                }
+            });
+        }
+
+        setValue(value:any){
+            this.value = value;
+
+
+
+            if(Array.isArray(value)){
+                value = JSON.stringify(value);
+            } else {
+
+                this.check(value, this.getInputsCheck());
+
+            }
+
+            if(this._input){
+                this._input.val(value);
+            }
+
+            return this;
+        }
+
+        getValue() {
+            return this._input.val();
+            //return this._main.val();
+
+
+            if(this.type === "radio"){
+                let input = this._main.query("input.option:checked");
+                if(input){
+                    return input.value;
+                }
+                return undefined;
+            }else{
+                let input = this._main.queryAll("input.option:checked");
+                if(input){
+                    let str = "";
+                    input.forEach((i) => {
+                        str = ((str != "")? ",":"") + i.value;
+                    });
+                    return str;
+                }
+            }
+
+            return "";
+
+        }
+
+        _load(main:any){
+
+        }
+
+        get(){
+            return this._main.get();
+        }
+        main(){
+            return this._main;
+        }
+        hasChilds(){
+            if(this._main.ds("childs")){
+                return true;
+            }
+            return false;
+        }
+
+        createInputs(data){
+            data.forEach((d, index) => {
+                let div = this._main.create("div");
+
+                div.create(
+                    {tagName:"input",
+                    type: this.type,
+                    name: this.name + ((this.type === "checkbox")?"_" + index: ""),
+                    id:this.id + "_" + index,
+                    className: "option",
+                    value:d[0]})
+                .on("click", (event) => {
+
+                })
+                ;
+                div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
+            });
+
+
+        }
+
+        _setPropertys(){
+
+            let inputs = this._main.queryAll("input.option");
+            inputs.forEach((e, index) => {
+                for(var x in this.events){
+                    $(e).on(x, $.bind(this.events[x], this.context || this, "event"));
+                }
+                if(this.childs){
+
+                    $(e).on("change", $.bind(this.evalChilds, this.context || this, "event"));
+                }
+
+            });
+
+
+        }
+        createOptions(parentValue:any){
+
+			let i,
+				vParent = {};
+
+			if(this.parent){
+                let aux = (parentValue + "").split(",");
+				for(i = 0; i < aux.length; i++){
+					vParent[aux[i]] = true;
+				}
+			}
+
+            let inputs = this._main.queryAll("div");
+            inputs.forEach((e)=>{
+                e.parentNode.removeChild(e);
+            });
+
+            this.data.forEach((d, index) => {
+                if(vParent[d[2]] || !this.parent || d[2] === "*"){
+                    let div = this._main.create("div");
+                    div.create(
+                        {tagName:"input",
+                        type: this.type,
+                        name: this.name + ((this.type === "checkbox")? "_" + index: ""),
+                        id:this.id + "_" + index,
+                        className: "option",
+                        value:d[0]}).on("change", event => {
+
+                            this.onchange($(event.currentTarget));
+                        });
+
+                    div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
+                }
+
+            });
+
+            this._setPropertys();
+
+        }
+
+        evalOptions(parentValue:any){
+
+        }
+
+        getName(){
+            return this._main.get().name;
+        }
+        getId(){
+            return this._main.get().id;
+        }
+        getText(){
+            if(this._main.get().type){
+                alert(8)
+            }
+        }
+        ds(prop, value){
+            return this._main.ds(prop, value);
+        }
+        focus(){
+            this._main.get().focus();
+
+        }
+        select(){
+            this._main.get().select();
+        }
+
+        reset(){
+            this.setValue(this.default);
+        }
+    }
+
+    I.register("multi", CheckingList);
     return Multi;
 })(_sgQuery);

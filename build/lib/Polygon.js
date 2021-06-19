@@ -148,9 +148,6 @@ export class Polygon {
             "paint": {
                 "line-color": ["get", "color"],
                 "line-width": ["get", "width"],
-                //"line-gap-width":4,
-                //"line-dasharray":[2,2]
-                //"line-dasharray": ["get","line-width"]
             },
             "filter": ["==", "$type", "Polygon"]
         });
@@ -353,10 +350,6 @@ export class Polygon {
             map.once("mouseup", fnUp2);
         });
         map.on("click", this._click = (e) => {
-            //db (e.originalEvent.button+".........", "red","yellow")
-            /*var features = this.map.queryRenderedFeatures(e.point, {
-                layers: [this.nodeLayerId]
-            });*/
             this.add(e.lngLat);
         });
         map.on("contextmenu", this._contextmenu = (e) => {

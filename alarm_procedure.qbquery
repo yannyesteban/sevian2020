@@ -1,0 +1,52 @@
+﻿SELECT g.name,
+
+COALESCE(t.speed < min_speed, false) or COALESCE(t.speed > max_speed, false) as speed_active,
+t.date_time, COALESCE(t.date_time >= a.from, true) and COALESCE(t.date_time <= a.to, true) and COALESCE((a.week & POW(2, DAYOFWEEK(t.date_time) -1)) > 0, true) as date_active,
+
+
+
+ST_GeomFromText(CONCAT('POINT(',m.longitude,' ', m.latitude,  ' )')) as x,
+ST_GeomFromText(CONCAT('POINT(',t.longitude,' ', t.latitude,  ' )')) as y,
+ST_Distance_Sphere(ST_GeomFromText(CONCAT('POINT(',m.longitude,' ', m.latitude,  ' )')), ST_GeomFromText(CONCAT('POINT(',t.longitude,' ', t.latitude,  ' )'))) as distance,
+m.name,m.longitude, m.latitude, am.radius,
+a.id, t.id, t.speed, t.longitude, t.latitude, t.input_status, t.date_time, a.min_speed, a.max_speed,
+
+t.speed < a.min_speed as s_min,
+t.speed > a.max_speed as s_max,
+t.date_time >= a.from,
+t.date_time <= a.to,a.week,
+a.week & POW(2, DAYOFWEEK(now()) -1),
+
+ui.number, t.input_status, ai.mode,
+
+(((t.input_status & POW(2, number)) DIV POW(2, number) = ai.mode)) as _or,
+(((t.input_status & POW(2, number)) DIV POW(2, number))) as _or2, i.name,
+
+
+ST_Contains(ST_GeomFromGeoJson(g.geojson), ST_GeomFromText( CONCAT('POINT(',t.latitude,' ', t.longitude,  ' )'), 4326 ))
+
+
+
+
+FROM unit as u
+INNER JOIN alarm_unit as au ON au.unit_id = u.id
+INNER JOIN alarm as a ON a.id = au.alarm_id
+INNER JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date
+
+LEFT JOIN unit_input ui ON ui.unit_id = u.id
+LEFT JOIN alarm_input as ai ON ai.alarm_id = au.alarm_id AND ai.input_id = ui.input_id
+LEFT JOIN input as i ON i.id = ui.input_id
+
+
+LEFT JOIN alarm_mark as am ON am.alarm_id = au.alarm_id
+LEFT JOIN mark as m ON m.id = am.mark_id
+
+LEFT JOIN alarm_geofence as ag ON ag.alarm_id = au.alarm_id
+LEFT JOIN geofence as g ON g.id = ag.geofence_id
+
+
+
+#WHERE a.id=1
+
+
+

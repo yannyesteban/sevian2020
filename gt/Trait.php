@@ -1161,6 +1161,42 @@ trait DBTracking{
 
 trait DBSite{
     private $cn = null;
+
+    private function loadSite($user=""){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT m.id, m.name, m.description, m.geojson, m.address, phone1,
+            phone2, phone3, fax, email, web, note, scope
+
+            FROM mark as m
+
+            WHERE m.user = '$user'
+            ";
+
+        $result = $this->cn->execute();
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+            $rs['geojson'] = json_decode($rs['geojson']);
+            $data[$rs['id']] = $rs;
+        }
+
+
+        return $data;
+    }
+
+    private function listSites($user=""){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT id, name
+            FROM mark as m
+            WHERE user = '$user'
+            ";
+
+        $result = $this->cn->execute();
+        return $this->cn->getDataAll();
+    }
+
     private function test(){
 
         $cn = $this->cn;
@@ -1191,53 +1227,17 @@ trait DBSite{
 
         return [];
     }
-
-
-    private function loadSites(){
+    private function loadSites($user=""){
 
         $cn = $this->cn;
 
-        /*
-        $cn->query = "select * from geofences";
-
-        $result = $cn->execute();
-
-
-        $value = [];
-        while($rs = $cn->getDataAssoc($result)){
-            $coord = explode(",",$rs['coords']);
-            $str = [];
-            foreach($coord as $c){
-                $aux = explode(" ",$c);
-                $str[] = [$aux[1]*1,$aux[0]*1];
-            }
-            $value[$rs['id']] = $str;
-        }
-
-        foreach($value as $k => $v){
-
-            $v = json_encode($v);
-
-            $cn->query = "update geofences set
-
-            config = '$v'
-
-            where id=$k and type='circle'";
-
-            $result = $cn->execute();
-
-        }
-
-        */
-        $cn->query = "SELECT m.*,
-                c.name as category
+        $cn->query = "SELECT m.*, c.name as category
             FROM mark as m
             INNER JOIN mark_category as c ON c.id = m.category_id
             #INNER JOIN icon as i ON i.id = m.icon_id
-            WHERE m.user = 'panda'";
+            WHERE m.user = '$user'";
 
         $result = $cn->execute();
-
 
         $data = [];
         while($rs = $cn->getDataAssoc($result)){
@@ -1268,7 +1268,19 @@ trait DBSite{
 
         return [];
     }
-    private function loadCategorys(){
+    private function listCategorys($user=""){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT c.id, c.name
+            FROM mark_category as c
+            WHERE c.user = '$user'
+            ORDER BY 2";
+
+        $result = $cn->execute();
+        return $this->cn->getDataAll();
+    }
+    private function loadCategorys($user=""){
 
         $cn = $this->cn;
 
@@ -1276,7 +1288,7 @@ trait DBSite{
             FROM mark_category as c
             #INNER JOIN mark as m as c ON c.id = m.category_id
 
-            WHERE c.user = 'panda'
+            WHERE c.user = '$user'
             GROUP BY c.id ORDER BY 2";
 
         $result = $cn->execute();
@@ -1286,6 +1298,7 @@ trait DBSite{
 
 trait DBGeofence{
     private $cn = null;
+
     private function loadGeofences($user=""){
 
         $cn = $this->cn;
@@ -1322,8 +1335,7 @@ trait DBGeofence{
         }
 
         */
-        $cn->query = "SELECT g.*
-            #, concat(name, ' ', type) as name
+        $cn->query = "SELECT g.id, g.name, g.description, g.geojson
             FROM geofence as g
             #WHERE type='polygon'
             #WHERE g.user = 'Rmartinez'
@@ -1382,53 +1394,116 @@ trait DBGeofence{
 
 trait DBAlarm{
     private $cn = null;
-    private function loadAlarms(){
+
+    private function loadAlarm($id, $user=""){
 
         $cn = $this->cn;
 
-        /*
-        $cn->query = "select * from geofences";
-
-        $result = $cn->execute();
-
-
-        $value = [];
-        while($rs = $cn->getDataAssoc($result)){
-            $coord = explode(",",$rs['coords']);
-            $str = [];
-            foreach($coord as $c){
-                $aux = explode(" ",$c);
-                $str[] = [$aux[1]*1,$aux[0]*1];
-            }
-            $value[$rs['id']] = $str;
-        }
-
-        foreach($value as $k => $v){
-
-            $v = json_encode($v);
-
-            $cn->query = "update geofences set
-
-            config = '$v'
-
-            where id=$k and type='circle'";
-
-            $result = $cn->execute();
-
-        }
-
-        */
-        $cn->query = "SELECT * FROM alarm";
+        $cn->query = "SELECT a.*
+        FROM alarm as a
+        WHERE a.user = '$user' and a.id = '$id'";
 
         $result = $this->cn->execute();
-        $data = [];
-		while($rs = $cn->getDataAssoc($result)){
 
-            $data[] = $rs;
+        if($rs = $cn->getDataAssoc($result)){
+            return $rs;
         }
+        return null;
+    }
+
+    private function listAlarms($user=""){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT a.*
+        FROM alarm as a
+        WHERE a.user = '$user'";
+
+        $result = $this->cn->execute();
 
 
-        return $data;
+        return $this->cn->getDataAll();
+    }
+
+    private function listGeofences($id=0, $user=""){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT g.id, g.name, a.mode
+            FROM geofence as g
+            LEFT JOIN alarm_geofence as a ON a.geofence_id = g.id and a.alarm_id = '$id'
+            WHERE g.user = '$user'
+            ";
+
+        $result = $this->cn->execute();
+
+
+        return $this->cn->getDataAll();
+    }
+    private function listMarks($id=0, $user=""){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT m.id, m.name, radius, COALESCE(mode, 0) as mode
+        FROM mark as m
+        LEFT JOIN alarm_mark as a ON a.mark_id = m.id and a.alarm_id = '$id'
+        WHERE abs(longitude) < 90 and abs(latitude) < 90
+        AND m.user = '$user'
+            ";
+
+        $result = $this->cn->execute();
+
+
+        return $this->cn->getDataAll();
+    }
+
+    private function listInputs($id=0, $user=""){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT id, name, value_on, value_off, type, CASE WHEN mode IS NULL then 2 ELSE mode END as mode
+        FROM input as i
+        LEFT JOIN alarm_input as a ON a.input_id = i.id and a.alarm_id = '$id'
+            ";
+
+        $result = $this->cn->execute();
+
+
+        return $this->cn->getDataAll();
+    }
+
+    private function listUnits($id=0, $user=""){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT u.id, COALESCE(n.name, u.name) as name, case WHEN a.unit_id IS NOT NULL THEN 1 ELSE 0 END as mode
+        FROM unit as u
+
+        INNER JOIN user_unit as uu ON uu.unit_id = u.id
+        LEFT JOIN unit_name as n ON n.id = u.name_id
+        LEFT JOIN alarm_unit as a ON a.unit_id = u.id and a.alarm_id = '$id'
+
+        AND uu.user = '$user'
+        ";
+
+        $result = $this->cn->execute();
+
+
+        return $this->cn->getDataAll();
+    }
+
+    private function deleteConfig($id){
+
+        $cn = $this->cn;
+
+        $cn->query = "DELETE FROM alarm_geofence WHERE alarm_id = '$id'";
+        $cn->execute();
+
+        $cn->query = "DELETE FROM alarm_input WHERE alarm_id = '$id'";
+        $cn->execute();
+
+        $cn->query = "DELETE FROM alarm_mark WHERE alarm_id = '$id'";
+        $cn->execute();
+
+        $cn->query = "DELETE FROM alarm_unit WHERE alarm_id = '$id'";
+        $cn->execute();
+
     }
 
 
