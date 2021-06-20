@@ -3,6 +3,8 @@ CREATE TRIGGER evalAlarm
 AFTER INSERT ON tracking
 FOR EACH ROW
 BEGIN
+
+	
 	call InfoAlarm(NEW.id);
  
 END$$

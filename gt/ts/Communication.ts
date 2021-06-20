@@ -238,7 +238,7 @@ export class Communication {
 
     _create(main: any) {
 
-        this._infoMenu = S.getElement(7);
+        this._infoMenu = S.getElement("panel-7");
 
         this.unitPanel = S.getElement(this.unitPanelId);
 
@@ -320,6 +320,7 @@ export class Communication {
             },
 
             onadd: (info) => {
+
                 const counts = this.getInfoWin(this.winNames.alarm).getCounts();
                 this.infoMenu.updateType(this.winNames.alarm, counts || "");
 
@@ -528,7 +529,7 @@ export class Communication {
 
     reqDataEvent(json) {
 
-
+        console.log(json)
         let i = 0;
         const modes = [1, 2, 4, 8, 16, 32, 64, 128, 256];
         for (let x in json) {

@@ -1,4 +1,5 @@
 import { _sgQuery as $ } from '../../Sevian/ts/Query.js';
+import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
 
 function humanDiff(t1, t2) {
     const diff = Math.max(t1, t2) - Math.min(t1, t2)
@@ -76,7 +77,10 @@ export class InfoMenu {
         if (text === 0) {
             text = "";
         }
-        //this.menu.getByValue(type).getCaption().text(text);
+        if (this.menu) {
+            this.menu.getByValue(type).getCaption().text(text);
+        }
+
     }
 }
 

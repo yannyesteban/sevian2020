@@ -225,11 +225,11 @@ export class Alarm {
                 {
                     input: "input",
                     type: "select",
-                    name: "type_id",
+                    name: "event_id",
                     value: 0,
                     default: "0",
                     caption: "Tipo",
-                    data: ["Alarma", "Advertenica"].map((e, index) => [index, e]),
+                    data: [[205, "Alarma"], [206, "Advertenica"]],
                     events: {}
                 },
                 {
