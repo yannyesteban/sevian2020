@@ -38,6 +38,7 @@ export class Communication {
     private menuPanel: any = null;
     private gridId: any = null;
     private historyPanel: any = null;
+    private infoMenuId: any = null;
 
     private paramCommandId = "xxx1";
     private paramCommand = null;
@@ -238,7 +239,7 @@ export class Communication {
 
     _create(main: any) {
 
-        this._infoMenu = S.getElement("panel-7");
+        this._infoMenu = S.getElement(this.infoMenuId);
 
         this.unitPanel = S.getElement(this.unitPanelId);
 

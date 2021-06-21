@@ -843,4 +843,8 @@ export class Alarm {
 					]
 				});
     }
+
+    showMenu(){
+		this.wins["main"].show();
+	}
 }

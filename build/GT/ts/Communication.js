@@ -26,6 +26,7 @@ export class Communication {
         this.menuPanel = null;
         this.gridId = null;
         this.historyPanel = null;
+        this.infoMenuId = null;
         this.paramCommandId = "xxx1";
         this.paramCommand = null;
         this._formCommand = null;
@@ -172,7 +173,7 @@ export class Communication {
         });
     }
     _create(main) {
-        this._infoMenu = S.getElement("panel-7");
+        this._infoMenu = S.getElement(this.infoMenuId);
         this.unitPanel = S.getElement(this.unitPanelId);
         this.main = main;
         main.addClass(this.mainClass);
