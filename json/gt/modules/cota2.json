@@ -8,7 +8,7 @@
     "params":{},
     "vars":{
 		"structure":"cota2",
-		"module_name":"Cota"
+		"module_name":"@GT_TITLE"
     },
 	"theme":"sevian",
 	"debug":true

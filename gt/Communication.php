@@ -110,7 +110,7 @@ class Communication extends
 
         //$info->id = $this->containerId;
 
-        $this->host = '127.0.0.1';
+        $this->host = $this->eparams->gtServer ?? '127.0.0.1';
         $this->eparams->gridId='eres';
 
         $this->typeElement = 'GTCommunication';

@@ -190,7 +190,8 @@
 			"eparams": {
 				"mapName": "map_01",
 				"unitPanelId": "gt-unit-10",
-				"infoMenu":"panel-7"
+				"infoMenu": "panel-7",
+				"gtServer": "@GT_SERVER"
 			},
 			"type": 0,
 			"class": "",

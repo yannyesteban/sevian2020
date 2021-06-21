@@ -31,6 +31,7 @@ class S{
 	public static $role = 'public';
 
 	public static $userInfo = null;
+	public static $env = [];
 
 	public static $title = 'SEVIAN 2017.10';
 	public static $theme = [];
@@ -225,6 +226,10 @@ class S{
 	public static function getRole(){
 
 	}
+	public static function setEnvData($data){
+		self::$env = $data;
+	}
+
 	public static function setUserInfo($userInfo){
 		self::setSes("SS_USER", $userInfo->user);
 		self::$userInfo = $userInfo;
@@ -315,6 +320,11 @@ class S{
 			self::$cfg['STR_PANELS'] = &self::$_strPanels;
 
 			self::$_str->sw = self::$cfg['SW'];
+
+			foreach(self::$env as $k => $v){
+				self::setSes($k, $v);
+			}
+
 			foreach(self::$_info as $info){
 				$info->update = false;
 			}
