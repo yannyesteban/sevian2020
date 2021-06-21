@@ -199,7 +199,7 @@ export class Unit {
         this.infoPopup = null;
         this.infoTrace = null;
         this.infoPopupMain = null;
-        this.delay = 400000;
+        this.delay = 5000;
         this.traceDelay = 20000;
         this.timer = null;
         this.traceTimer = null;
@@ -424,7 +424,6 @@ export class Unit {
         });
     }
     play() {
-        return;
         if (this.timer) {
             window.clearTimeout(this.timer);
         }

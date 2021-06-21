@@ -245,7 +245,7 @@ export class Unit{
 	private infoTrace: any = null;
 	private infoPopupMain: any = null;
 
-	private delay: number = 400000;
+	private delay: number = 5000;
 	private traceDelay: number = 20000;
 
 	private timer: number = null;
@@ -578,7 +578,7 @@ return;
 
 	play(){
 
-		return;
+
 		if(this.timer){
 			window.clearTimeout(this.timer);
 		}
