@@ -234,6 +234,10 @@ export class Rectangle implements IPoly {
 
     }
 
+    setDefaultFeature(feature) {
+        this.defaultFeature = feature;
+    }
+
     updateSource(geojson) {
         this.map.getSource(this.sourceId).setData(geojson.data);
         if (this.editMode) {

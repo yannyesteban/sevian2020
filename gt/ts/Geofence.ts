@@ -5,7 +5,7 @@ import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
 import { Float } from '../../Sevian/ts/Window.js';
 
 import { S } from '../../Sevian/ts/Sevian.js';
-import { GeofenceTool } from '../../gt/ts/GeofenceTool.js';
+//import { GeofenceTool } from '../../gt/ts/GeofenceTool.js';
 import { PolyControl } from '../../lib/PolyControl2';
 import { Form2 as Form } from '../../Sevian/ts/Form2.js';
 
@@ -618,7 +618,7 @@ export class Geofence {
 		let infoMenu = [];
 
 
-		console.log(this.dataMain);
+
 
 		for (let x in this.dataMain) {
 
@@ -765,7 +765,7 @@ export class Geofence {
 	}
 
 	showGeofence(id, value) {
-		console.log(id, this.dataMain)
+
 		if (!this.marks[id]) {
 
 			this.marks[id] = this.getMap().draw(id, this.dataMain[id].geojson.properties.rol, {
@@ -773,7 +773,7 @@ export class Geofence {
 				popupInfo: this.loadPopupInfo(id)
 			});
 		} else {
-			console.log(2, id)
+
 			this.marks[id].setVisible(value);
 		}
 	}

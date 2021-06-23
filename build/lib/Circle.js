@@ -261,6 +261,9 @@ export class Circle {
         return geojson;
         //this.map.getSource(this.sourceId).setData(geojson);
     }
+    setDefaultFeature(feature) {
+        this.defaultFeature = feature;
+    }
     updateSource(geojson) {
         this.map.getSource(this.sourceId).setData(geojson.data);
         if (this.editMode) {
@@ -477,7 +480,6 @@ export class Circle {
     pause() {
     }
     stop() {
-        console.log("stop");
         if (this.editMode) {
             this.map.off("click", this._click);
             this.map.off("mousedown", this.nodeLayerId, this._mousedown);
@@ -495,8 +497,6 @@ export class Circle {
         this.editMode = false;
     }
     reset() {
-        console.log("reset");
-        console.log(this.defaultFeature);
         if (!this.editMode) {
             return;
         }

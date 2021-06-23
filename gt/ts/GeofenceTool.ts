@@ -2,7 +2,7 @@ import { _sgQuery as $, SQObject } from '../../Sevian/ts/Query.js';
 import { Tab } from '../../Sevian/ts/Tab.js';
 import { Form2 as Form } from '../../Sevian/ts/Form2.js';
 import { S } from '../../Sevian/ts/Sevian.js';
-
+alert(88)
 export class GeofenceTool{
     private main: SQObject = null;
     private id: any = null;

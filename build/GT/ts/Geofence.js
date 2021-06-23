@@ -484,7 +484,6 @@ export class Geofence {
     }
     createMenu() {
         let infoMenu = [];
-        console.log(this.dataMain);
         for (let x in this.dataMain) {
             infoMenu[this.dataMain[x].id] = {
                 id: this.dataMain[x].id,
@@ -596,7 +595,6 @@ export class Geofence {
         return this._info;
     }
     showGeofence(id, value) {
-        console.log(id, this.dataMain);
         if (!this.marks[id]) {
             this.marks[id] = this.getMap().draw(id, this.dataMain[id].geojson.properties.rol, {
                 feature: this.dataMain[id].geojson,
@@ -604,7 +602,6 @@ export class Geofence {
             });
         }
         else {
-            console.log(2, id);
             this.marks[id].setVisible(value);
         }
     }

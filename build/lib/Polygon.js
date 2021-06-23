@@ -20,7 +20,7 @@ export class Polygon {
         this.flyToSpeed = 0.8;
         this.flyToZoom = 14;
         this.panDuration = 5000;
-        this.id = "p" + String(new Date().getTime());
+        this.id = "ply" + String(new Date().getTime());
         this.callmove = () => { };
         this.callresize = () => { };
         this.ondraw = () => { };
@@ -177,6 +177,9 @@ export class Polygon {
         }
         this.ondraw(this.feature);
     }
+    setDefaultFeature(feature) {
+        this.defaultFeature = feature;
+    }
     setProperties(info) {
         for (let p in info) {
             this.feature.properties[p] = info[p];
@@ -189,7 +192,6 @@ export class Polygon {
                     this.map.setPaintProperty(this.fillLayerId, "fill-color", info[p]);
                     break;
                 case "opacity":
-                    console.log(info);
                     this.map.setPaintProperty(this.fillLayerId, "fill-opacity", info[p]);
                     break;
             }
@@ -240,7 +242,6 @@ export class Polygon {
         //this.map.getSource(this.sourceId).setData(geojson);
     }
     draw() {
-        console.log(this.feature);
         //let data = createGeoJSONPoly(this.coordinates);
         return;
         this.map.getSource(this.lineId).setData(data.data);
@@ -331,7 +332,6 @@ export class Polygon {
             });
             index = place = features[0].properties.index;
             type = features[0].properties.type;
-            console.log(index);
             if (type == "m") {
                 this.split(place, [e.lngLat.lng, e.lngLat.lat]);
                 this.draw();
@@ -378,7 +378,7 @@ export class Polygon {
         if (!this.editMode) {
             return;
         }
-        console.log(this.defaultFeature.properties);
+        console.log(this.defaultFeature);
         this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
         this.setProperties(this.defaultFeature.properties);
     }

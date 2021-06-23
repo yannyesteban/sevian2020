@@ -2,7 +2,7 @@ import { _sgQuery as $ } from "../Sevian/ts/Query.js";
 import { Form2 as Form } from "../Sevian/ts/Form2.js";
 export class MarkControl {
     constructor(object) {
-        this.newId = "mapboxgl-ctrl-poly";
+        this.newId = "mapboxgl-ctrl-mark";
         this.id = "";
         this.name = "";
         this.color = "#460046";

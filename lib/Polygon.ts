@@ -32,7 +32,7 @@ export class Polygon implements IPoly {
     panDuration: number = 5000;
 
 
-    id: string = "p" + String(new Date().getTime());
+    id: string = "ply" + String(new Date().getTime());
 
     callmove: Function = () => { };
     callresize: Function = () => { };
@@ -113,6 +113,8 @@ export class Polygon implements IPoly {
 
         this.defaultFeature = JSON.parse(JSON.stringify(this.feature));
 
+
+
         const geojson = this.setFeature(this.feature);
 
         this.map.addSource(this.sourceId, geojson);
@@ -181,6 +183,9 @@ export class Polygon implements IPoly {
         this.ondraw(this.feature);
     }
 
+    setDefaultFeature(feature) {
+        this.defaultFeature = feature;
+    }
     setProperties(info: object) {
         for (let p in info) {
             this.feature.properties[p] = info[p];
@@ -193,7 +198,7 @@ export class Polygon implements IPoly {
                     this.map.setPaintProperty(this.fillLayerId, "fill-color", info[p]);
                     break;
                 case "opacity":
-                    console.log(info);
+
                     this.map.setPaintProperty(this.fillLayerId, "fill-opacity", info[p]);
                     break;
             }
@@ -312,7 +317,7 @@ export class Polygon implements IPoly {
     }
 
     draw() {
-        console.log(this.feature);
+
         //let data = createGeoJSONPoly(this.coordinates);
 
 
@@ -433,7 +438,7 @@ export class Polygon implements IPoly {
 
             index = place = features[0].properties.index;
             type = features[0].properties.type;
-            console.log(index)
+
             if (type == "m") {
                 this.split(place, [e.lngLat.lng, e.lngLat.lat]);
                 this.draw();
@@ -501,7 +506,7 @@ export class Polygon implements IPoly {
         if (!this.editMode) {
             return;
         }
-        console.log(this.defaultFeature.properties);
+        console.log(this.defaultFeature);
         this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
         this.setProperties(this.defaultFeature.properties);
 

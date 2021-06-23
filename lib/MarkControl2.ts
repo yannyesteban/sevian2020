@@ -3,7 +3,7 @@ import { IPoly } from "./IPoly";
 import { Form2 as Form } from "../Sevian/ts/Form2.js";
 
 export class MarkControl {
-    private newId: string = "mapboxgl-ctrl-poly";
+    private newId: string = "mapboxgl-ctrl-mark";
     private id: any = "";
     private name: string = "";
     private color: string = "#460046";

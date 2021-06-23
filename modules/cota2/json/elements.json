@@ -76,7 +76,11 @@
         "enable": true,
         "js": [
             {
-                "file": "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js",
+                "file_": "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js",
+                "begin_": true
+            },
+            {
+                "file": "https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js",
                 "begin": true
             },
             {
@@ -98,7 +102,7 @@
             }
         ],
         "css": [
-            "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css",
+            "https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css",
             "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css"
         ]
     },

@@ -296,9 +296,10 @@ export class PolyControl {
 
         //this.defaultFeature = JSON.parse(JSON.stringify(this.feature));
 
-        //console.log(this.rol, this.feature.properties.rol);
+
 
         this.poly = this.parentControl.draw(this.getId(), rol, info);
+        this.poly.setDefaultFeature(info.feature);
         this.poly.ondraw = (feature) => {
             /*
                         const coordinates = feature.geometry.coordinates;
