@@ -375,6 +375,7 @@ form{
 
 
 
+
 .gt-webcar-login{
 	display: flex;
 	height: 100%;
@@ -1073,4 +1074,48 @@ form{
 		}
 	}
 
+}
+
+.mark-tool-g2{
+
+	border: 3px solid white;
+
+	height: 120px;
+
+	overflow: auto;
+	display: flex;
+	flex-wrap: wrap;
+
+	//justify-content: space-around;
+	//justify-content: center;
+	align-content:stretch;
+	*>{
+		flex:1 1 auto;
+	}
+	/*
+	display: grid;
+	grid-template-columns: repeat(8, 30px);
+	gap: 5px;
+	*/
+	//grid-template-rows: 60px auto 1fr;
+	//overflow: auto;
+	//max-width: 400px;
+
+	div{
+		width:30px;
+		height: 30px;
+		//margin: 5px;
+		//background-color: rgb(189, 189, 189);
+		:hover{
+			cursor: pointer;
+			//background-color: rgb(255, 255, 255);
+		}
+
+		img{
+			width: 100%;
+			max-height: 100%;
+
+		}
+
+	}
 }

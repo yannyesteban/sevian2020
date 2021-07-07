@@ -17,9 +17,9 @@ export class Site {
 	private mapName: string = null;
     private geofenceForm: typeof Form = null;
     private dataCategory: any[] = null;
-    private dataMain: any[] = null;
+    private dataMain: any[] = [];
 
-	id: any = null;
+	private id: any = null;
 	map: any = null;
 	mode: number = 0;
 	tempPoly: any = null;
@@ -70,281 +70,14 @@ export class Site {
 		//return;
 		let main = (this.id) ? $(this.id) : false;
 
-		if (main) {
-
-			if (main.ds("gtGeofence")) {
-				return;
-			}
-
-			if (main.hasClass("gt-geofence")) {
-				this._load(main);
-			} else {
-				this._create(main);
-			}
-
-		} else {
+		if (!main) {
 			main = $.create("div").attr("id", this.id);
-
-			this._create(main);
 		}
 
-		Map.load(this.mapName, (map, s) => {
-
-			this.setMap(map);
-			const mapControl = map.getControl("mark2") as MarkControl;// as TraceControl;//<TraceControl>
-
-			const processSave = (json) => {
+		this._create(main);
 
 
-				this.updateData(json.data);
-				if (!json.data.__error_) {
-					new Float.Message({
-						"caption": "Geocercas",
-						"text": "Record was saved!!!",
-						"className": "",
-						"delay": 3000,
-						"mode": "",
-						"left": "center",
-						"top": "top"
-					}).show({});
-				} else {
-					new Float.Message({
-						"caption": "Geocercas",
-						"text": "Record wasn't saved!!!!",
-						"className": "",
-						"delay": 3000,
-						"mode": "",
-						"left": "center",
-						"top": "top"
-					}).show({});
-				}
-			};
-
-			mapControl.onInit = () => {
-				S.go({
-					async: true,
-					valid: false,
-					confirm_: 'seguro?',
-					blockingTarget: mapControl.getPanel() as SQObject,
-					requestFunctions: {
-						"f": (json) => {
-                            console.log(json)
-                            mapControl.setSiteList(json.list);
-                            mapControl.setCategoryList(json.categoryList);
-							mapControl.newSite();
-							//mapControl.setGeogence(json.data);
-						}
-					},
-
-					params: [
-						{
-							t: "setMethod",
-
-							element: "gt-site",
-							method: "get-record",
-							name: "",
-							eparams: {
-								siteId: "2"
-							},
-							iToken: "f"
-						}
-					]
-				});
-
-			}
-
-			mapControl.onLoadGeofence = (id) => {
-				S.go({
-					async: true,
-					valid: false,
-					confirm_: 'seguro?',
-					blockingTarget: mapControl.getPanel(),
-					requestFunctions: {
-						"f": (json) => {
-
-							mapControl.setGeogenceList(json.list);
-							mapControl.setGeogence(json.data);
-
-						}
-					},
-					requestFunction_: (json) => {
-
-						mapControl.setGeogenceList(json.list);
-						mapControl.setGeogence(json.data);
-					},
-					params: [
-						{
-							t: "setMethod",
-							element: "gt-geofence",
-							method: "get-record",
-							name: "/form/geofence",
-							eparams: {
-								geofenceId: id
-							},
-							iToken: "f"
-						}
-					]
-				});
-
-			}
-
-			mapControl.onsave = (data) => {
-
-				var formData = new FormData();
-				formData.append("id", data.id);
-				formData.append("name", data.name);
-				formData.append("description", data.description);
-				formData.append("type", data.type);
-				formData.append("geojson", data.geojson);
-				formData.append("propertys", data.propertys);
-				formData.append("color", "red");
-				formData.append("scope", data.propertys);
-				formData.append("propertys", data.propertys);
-				formData.append("__mode_", data.__mode_);
-				if (data.__mode_ == 2) {
-					this.lastTransaction = 2;
-					formData.append("__record_", JSON.stringify({
-						id: data.id
-					}));
-				} else {
-					this.lastTransaction = 1;
-				}
-
-
-				S.go({
-					async: true,
-					valid: false,
-					confirm_: 'seguro?',
-					form: formData,
-					blockingTarget: mapControl.getPanel(),
-					requestFunctions: {
-						"f": (json) => {
-
-							mapControl.setGeogenceList(json.list);
-							mapControl.setGeogence(json.data);
-
-
-
-						},
-						"f2": processSave
-
-					},
-					_requestFunction: (json) => {
-
-					},
-					params: [
-						{
-							t: "setMethod",
-							'mode': 'element',
-							element: "s-form",
-							method: "save",
-
-							name: "/form/geofence",
-							eparams: { getResult: true },
-							iToken: "f2"
-						},
-						{
-							t: "getDataForm",
-							fields: { id: "geofenceId" }
-						},
-						{
-							t: "setMethod",
-
-							element: "gt-geofence",
-							method: "get-record",
-
-							name: "/form/geofence",
-							eparams: {
-
-							},
-							iToken: "f"
-						},
-					]
-				});
-			}
-
-			mapControl.ondelete = (data) => {
-
-				var formData = new FormData();
-				formData.append("id", data.id);
-				formData.append("name", data.name);
-				formData.append("description", data.description);
-				formData.append("type", data.type);
-				formData.append("geojson", data.geojson);
-				formData.append("propertys", data.propertys);
-				formData.append("color", "red");
-				formData.append("scope", data.propertys);
-				formData.append("propertys", data.propertys);
-				formData.append("__mode_", "3");
-
-
-				formData.append("__record_", JSON.stringify({
-					id: data.id
-				}));
-
-
-
-				S.go({
-					async: true,
-					valid: false,
-					confirm: 'seguro?',
-					form: formData,
-					blockingTarget: mapControl.getPanel(),
-					requestFunctions: {
-						"f": (json) => {
-
-							mapControl.delete();
-							mapControl.setGeogenceList(json.list);
-							mapControl.newGeofence();
-
-						},
-						"f2": processSave
-					},
-					_requestFunction: (json) => {
-
-					},
-					params: [
-						{
-							t: "setMethod",
-							'mode': 'element',
-							element: "s-form",
-							method: "save",
-
-							name: "/form/geofence",
-							eparams: { getResult: true },
-							iToken: "f2"
-						},
-						{
-							t: "getDataForm",
-							fields: { id: "geofenceId" }
-						},
-						{
-							t: "setMethod",
-
-							element: "gt-geofence",
-							method: "get-record",
-
-							name: "/form/geofence",
-							eparams: {
-
-							},
-							iToken: "f"
-						},
-					]
-				});
-			}
-
-			/*
-			const tool = new GeofenceTool({
-				id: mapControl.getPanel(),
-				form: this.geofenceForm
-			});
-			mapControl.ondraw = (config) => {
-				console.log(config);
-				tool.setConfig(config)
-			}*/
-			//mapControl.play();
-		});
+		Map.load(this.mapName, $.bind(this.setMapLoad, this));
 
 
 	}
@@ -388,6 +121,250 @@ export class Site {
 
 	}
 
+	setMapLoad(map, s) {
+
+		this.setMap(map);
+		const mapControl = map.getControl("mark2") as MarkControl;// as TraceControl;//<TraceControl>
+
+		const processSave = (json) => {
+
+
+			this.updateData(json.data);
+			if (!json.data.__error_) {
+				new Float.Message({
+					"caption": "Geocercas",
+					"text": "Record was saved!!!",
+					"className": "",
+					"delay": 3000,
+					"mode": "",
+					"left": "center",
+					"top": "top"
+				}).show({});
+			} else {
+				new Float.Message({
+					"caption": "Geocercas",
+					"text": "Record wasn't saved!!!!",
+					"className": "",
+					"delay": 3000,
+					"mode": "",
+					"left": "center",
+					"top": "top"
+				}).show({});
+			}
+		};
+
+		mapControl.onInit = () => {
+			S.go({
+				async: true,
+				valid: false,
+				blockingTarget: mapControl.getPanel() as SQObject,
+				requestFunctions: {
+					"f": (json) => {
+						console.log(json)
+						mapControl.setSiteList(json.list);
+						mapControl.setCategoryList(json.categoryList);
+						mapControl.setSite(json.data);
+					}
+				},
+				params: [
+					{
+						t: "setMethod",
+						element: "gt-site",
+						method: "get-record",
+						name: "",
+						eparams: {
+							siteId: "2"
+						},
+						iToken: "f"
+					}
+				]
+			});
+		};
+
+		mapControl.onLoadSite = (id) => {
+
+			S.go({
+				async: true,
+				valid: false,
+				blockingTarget: mapControl.getPanel(),
+				requestFunctions: {
+					"f": (json) => {
+						console.log(json)
+						mapControl.setSiteList(json.list);
+						mapControl.setCategoryList(json.categoryList);
+						mapControl.setSite(json.data);
+					}
+				},
+				params: [
+					{
+						t: "setMethod",
+						element: "gt-site",
+						method: "get-record",
+						name: "/form/site",
+						eparams: {
+							siteId: id
+						},
+						iToken: "f"
+					}
+				]
+			});
+		};
+
+		mapControl.onsave = (data) => {
+
+			var formData = new FormData();
+			formData.append("id", data.id);
+			formData.append("name", data.name);
+			formData.append("description", data.description);
+			formData.append("category_id", data.category_id);
+			formData.append("longitude", data.longitude);
+			formData.append("latitude", data.latitude);
+			formData.append("image", data.image);
+			formData.append("scale", data.scale);
+
+			formData.append("__mode_", data.__mode_);
+			if (data.__mode_ == 2) {
+				this.lastTransaction = 2;
+				formData.append("__record_", JSON.stringify({
+					id: data.id
+				}));
+			} else {
+				this.lastTransaction = 1;
+			}
+
+
+			S.go({
+				async: true,
+				valid: false,
+
+				form: formData,
+				blockingTarget: mapControl.getPanel(),
+				requestFunctions: {
+					"f": (json) => {
+
+						console.log(json)
+						mapControl.setSiteList(json.list);
+						mapControl.setCategoryList(json.categoryList);
+						mapControl.setSite(json.data);
+
+
+
+					},
+					"f2": processSave
+
+				},
+
+				params: [
+					{
+						t: "setMethod",
+						'mode': 'element',
+						element: "s-form",
+						method: "save",
+
+						name: "/form/site",
+						eparams: { getResult: true },
+						iToken: "f2"
+					},
+					{
+						t: "getDataForm",
+						fields: { id: "siteId" }
+					},
+					{
+						t: "setMethod",
+
+						element: "gt-site",
+						method: "get-record",
+
+						name: "/form/site",
+						eparams: {
+
+						},
+						iToken: "f"
+					},
+				]
+			});
+		}
+
+		mapControl.ondelete = (data) => {
+
+			var formData = new FormData();
+			formData.append("id", data.id);
+			formData.append("name", data.name);
+			formData.append("description", data.description);
+			formData.append("type", data.type);
+			formData.append("geojson", data.geojson);
+			formData.append("propertys", data.propertys);
+			formData.append("color", "red");
+			formData.append("scope", data.propertys);
+			formData.append("propertys", data.propertys);
+			formData.append("__mode_", "3");
+
+
+			formData.append("__record_", JSON.stringify({
+				id: data.id
+			}));
+
+
+
+			S.go({
+				async: true,
+				valid: false,
+				confirm: 'seguro?',
+				form: formData,
+				blockingTarget: mapControl.getPanel(),
+				requestFunctions: {
+					"f": (json) => {
+
+						mapControl.delete();
+						mapControl.setGeogenceList(json.list);
+						mapControl.newGeofence();
+
+					},
+					"f2": processSave
+				},
+
+				params: [
+					{
+						t: "setMethod",
+						'mode': 'element',
+						element: "s-form",
+						method: "save",
+
+						name: "/form/geofence",
+						eparams: { getResult: true },
+						iToken: "f2"
+					},
+					{
+						t: "getDataForm",
+						fields: { id: "geofenceId" }
+					},
+					{
+						t: "setMethod",
+
+						element: "gt-geofence",
+						method: "get-record",
+
+						name: "/form/geofence",
+						eparams: {
+
+						},
+						iToken: "f"
+					},
+				]
+			});
+		}
+
+		/*
+		const tool = new GeofenceTool({
+			id: mapControl.getPanel(),
+			form: this.geofenceForm
+		});
+		mapControl.ondraw = (config) => {
+			console.log(config);
+			tool.setConfig(config)
+		}*/
+		//mapControl.play();
+	}
 	showMenu() {
 		this._win["main-menu"].show();
 	}
@@ -416,13 +393,13 @@ export class Site {
 		let json = JSON.parse(xhr.responseText);
 		this.createForm(json);
 		let id = this.editId;
-		this.showGeofence(id, false);
+		this.showSite(id, false);
 
 		this.map.getControl("poly").play({
 			type: this.dataMain[id].type,
 			defaultCoordinates: this.dataMain[id].config,
 			onstop: () => {
-				this.showGeofence(id, true);
+				this.showSite(id, true);
 				this.editId = null;
 			}
 		});
@@ -431,6 +408,28 @@ export class Site {
 	}
 
 	updateData(data) {
+
+		let index = this.dataMain.find(e => e.id == data.id);
+		if (index) {
+			if (data.__mode_ === 3) {
+				let item = this.menu.getByValue(data.id);
+				item.remove();
+				delete this.dataMain[index];
+				return;
+			}
+			this.dataMain[index] = data;
+			let item = this.menu.getByValue(data.id);
+			item.setCheckValue(true);
+			//this.getMap().delete("geofence-" + id);
+			item.getCaption().text(data.name);
+
+		} else {
+			this.dataMain.push(data);
+			this.menu.add(this.createItem(data, true));
+		}
+		this.showSite(data.id, true);
+		return;
+		console.log(data);
 		const id = data.id;
 		if (data.__mode_ === 3) {
 			let item = this.menu.getByValue(id);
@@ -445,7 +444,7 @@ export class Site {
 		this.dataMain[id].id = data.id;
 		this.dataMain[id].name = data.name;
 		this.dataMain[id].description = data.description;
-		this.dataMain[id].geojson = JSON.parse(data.geojson);
+		//this.dataMain[id].geojson = JSON.parse(data.geojson);
 
 		if (data.__mode_ === 1) {
 			this.menu.add(this.createItem(this.dataMain[id], true));
@@ -456,7 +455,7 @@ export class Site {
 			item.getCaption().text(data.name);
 		}
 
-		this.showGeofence(id, true);
+		this.showSite(id, true);
 	}
 
 	edit(id) {
@@ -522,13 +521,13 @@ export class Site {
 
 				infoElement: $.create("span").addClass("geofence-edit").on("click", () => { this.edit(this.dataMain[id].id); }),
 				check: (item, event) => {
-					this.showGeofence(id, event.currentTarget.checked);
+					this.showSite(id, event.currentTarget.checked);
 				},
 				action: (item, event) => {
 					let ch = item.getCheck();
 
 					ch.get().checked = true;
-					this.showGeofence(id, true);
+					this.showSite(id, true);
 					this._lastUnitId = id;
 					this.setInfo(id);
 					this.flyTo(id);
@@ -542,7 +541,7 @@ export class Site {
 
 
 
-		this.showGeofence(id, true);
+		this.showSite(id, true);
 
 
 	}
@@ -582,12 +581,12 @@ export class Site {
 			}),
 			ds: { "geofenceId": id },
 			check: (item, event) => {
-				this.showGeofence(id, event.currentTarget.checked);
+				this.showSite(id, event.currentTarget.checked);
 			},
 			action: (item, event) => {
 				let ch = item.getCheck();
 				ch.get().checked = true;
-				this.showGeofence(id, true);
+				this.showSite(id, true);
 				this._lastUnitId = id;
 				this.setInfo(id);
 				this.flyTo(id);
@@ -690,14 +689,16 @@ export class Site {
     }
 
     showSite(id, value){
+		console.log(this.dataMain)
+		if (!this.marks[id]) {
+			const site = this.dataMain.find(e => e.id = id);
 
-		if(!this.marks[id]){
-
+			console.log(this.dataMain[id])
 			this.marks[id] = this.getMap().draw("site-"+id, 'mark',
 				{
-					coordinates:[this.dataMain[id].longitude, this.dataMain[id].latitude],
+					coordinates:[site.longitude, site.latitude],
 					height: 30,
-					image: this.dataMain[id].image,
+					image: site.image,
 					popupInfo: this.loadPopupInfo(id)
 
 				});
@@ -727,12 +728,12 @@ export class Site {
 				}),
 				ds: { "geofenceId": x },
 				check: (item, event) => {
-					this.showGeofence(x, event.currentTarget.checked);
+					this.showSite(x, event.currentTarget.checked);
 				},
 				action: (item, event) => {
 					let ch = item.getCheck();
 					ch.get().checked = true;
-					this.showGeofence(x, true);
+					this.showSite(x, true);
 					this._lastUnitId = x;
 					this.setInfo(x);
 					this.flyTo(x);
@@ -857,12 +858,12 @@ export class Site {
 		return this._info;
 	}
 
-	showGeofence(id, value) {
+	showSite2(id, value) {
 		console.log(id, this.dataMain)
 		if (!this.marks[id]) {
 
-			this.marks[id] = this.getMap().draw(id, this.dataMain[id].geojson.properties.rol, {
-				feature: this.dataMain[id].geojson,
+			this.marks[id] = this.getMap().draw(id, "mark", {
+				//feature: this.dataMain[id].geojson,
 				popupInfo: this.loadPopupInfo(id)
 			});
 		} else {

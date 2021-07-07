@@ -1,6 +1,9 @@
-export class IMark{
+export class JMark{
     map:any = null;
-    type:string = "mark";
+    type: string = "mark";
+    private feature:any  = null;
+    private defaultFeature = null;
+
     parent:object = null;
     name:string = "";
     visible:boolean = true;
@@ -51,6 +54,7 @@ export class IMark{
 
     init(){
         let map = this.map;
+
 
 
         let markerHeight = 24;
@@ -205,8 +209,7 @@ export class IMark{
         this.onsave(this.coordinatesInit);
     }
 
-    delete() {
-
+    delete(){
         this.stop();
         this.setVisible(false);
         this._marker = null;

@@ -134,6 +134,7 @@ export class IMark {
             this.onplace(e.lngLat);
             this.ondraw([e.lngLat.lng, e.lngLat.lat]);
         });
+        this.flyTo();
     }
     stop() {
         if (this._play) {

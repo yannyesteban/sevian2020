@@ -14,6 +14,8 @@ import { LayerMenu } from './LayerMenu.js';
 
 import { GTInfo } from '../../GT/ts/Info.js';
 
+import {Cluster}  from '../../lib/Cluster.js';
+
 const evalInputs = (data) => {
 
 	let xInputs = "";
@@ -577,8 +579,9 @@ return;
 	}
 
 	play(){
-
-
+		console.log(this.map.map.map)
+		const cluster = new Cluster({ map: this.map.map.map });
+		cluster.init();
 		if(this.timer){
 			window.clearTimeout(this.timer);
 		}
@@ -588,8 +591,10 @@ return;
 			S.go({
 				async: true,
 				valid:false,
-				confirm_: 'seguro?',
+
 				requestFunction: (json) => {
+					console.log(json)
+					cluster.updateSource(json);
 					this.updateTracking(json)
 				},
 				params:	[

@@ -536,6 +536,7 @@ export class Communication {
         });
     }
     play2() {
+        return;
         if (this._timer2) {
             clearTimeout(this._timer2);
         }

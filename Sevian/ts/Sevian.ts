@@ -1,4 +1,4 @@
-import {_sgQuery}  from './Query.js';
+import {_sgQuery, SQObject}  from './Query.js';
 import {BlockingLayer}  from './BlockingLayer.js';
 import {sgAjax, sgJson, sgFragment} from './Ajax.js';
 import { Form2 as Form2 } from './Form2.js';
@@ -56,9 +56,9 @@ export var S = (($) => {
 		params?: object,
 		form?: FormData,
 		data?: object,
-		blockingTarget?: BlockingLayer,
+		blockingTarget?: BlockingLayer | SQObject,
 		define?: { [name: string]: (config) => void },
-		reqFunctions?: { [name: string]: (config) => void },
+		requestFunctions?: { [name: string]: (config) => void },
 		//onsubmit:()=>void,
 		window?:{
 			name:"",
@@ -70,6 +70,7 @@ export var S = (($) => {
 				height:"600px;"
 			}
 		},
+		requestFunction?:(json) => void,
 		onRequest?:Function
 	};
 	interface ITask{
@@ -511,27 +512,27 @@ export var S = (($) => {
 				if(f.get() instanceof HTMLFormElement){
 					const form = f.get();
 					if (!form.elements["__sg_async"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_async"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_async"})
 					}
 					form.elements["__sg_async"].value = 0;
 
 					if (!form.elements["__sg_id"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_id"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_id"})
 					}
 					form.elements["__sg_id"].value = info.id;
 
 					if (!form.elements["__sg_params"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_params"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_params"})
 					}
 					form.elements["__sg_params"].value = params;
 
 					if (!form.elements["__sg_sw"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_sw"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_sw"})
 					}
 					form.elements["__sg_sw"].value = Sevian.sw;
 
 					if (!form.elements["__sg_ins"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_ins"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_ins"})
 					}
 					form.elements["__sg_ins"].value = Sevian.instance;
 
@@ -717,27 +718,27 @@ export var S = (($) => {
 				if(f.get() instanceof HTMLFormElement){
 					const form = f.get();
 					if (!form.elements["__sg_async"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_async"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_async"})
 					}
 					form.elements["__sg_async"].value = 0;
 
 					if (!form.elements["__sg_id"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_id"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_id"})
 					}
 					form.elements["__sg_id"].value = info.id;
 
 					if (!form.elements["__sg_params"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_params"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_params"})
 					}
 					form.elements["__sg_params"].value = params;
 
 					if (!form.elements["__sg_sw"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_sw"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_sw"})
 					}
 					form.elements["__sg_sw"].value = Sevian.sw;
 
 					if (!form.elements["__sg_ins"]) {
-						f.create("input").prop({ "type": "text", name: "__sg_ins"})
+						f.create("input").prop({ "type": "hidden", name: "__sg_ins"})
 					}
 					form.elements["__sg_ins"].value = Sevian.instance;
 
@@ -1410,23 +1411,23 @@ export var S = (($) => {
 			}).ds("sgPanel", id).ds("sgType", "panel");
 			form.create({
 				"tagName":"input",
-				"type":"text",
+				"type":"hidden",
 				"name":"__sg_async"
 			});
 
 			form.create({
 				"tagName":"input",
-				"type":"text",
+				"type":"hidden",
 				"name":"__sg_params"
 			});
 			form.create({
 				"tagName":"input",
-				"type":"text",
+				"type":"hidden",
 				"name":"__sg_sw"
 			});
 			form.create({
 				"tagName":"input",
-				"type":"text",
+				"type":"hidden",
 				"name":"__sg_sw2"
 			});
 

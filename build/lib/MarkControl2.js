@@ -1,12 +1,20 @@
 import { _sgQuery as $ } from "../Sevian/ts/Query.js";
 import { Form2 as Form } from "../Sevian/ts/Form2.js";
+import { I } from '../Sevian/ts/Input.js';
 export class MarkControl {
     constructor(object) {
         this.newId = "mapboxgl-ctrl-mark";
         this.id = "";
+        this.mark = null;
         this.name = "";
         this.color = "#460046";
         this.opacity = 0.2;
+        this.latitude = 0.22222;
+        this.longitude = 0.55555;
+        this.image = "";
+        this.size = 30;
+        this.defaultImage = "img_29";
+        this.defaultSize = 30;
         this.mode = 1;
         this.rol = "polygon";
         this.feature = null;
@@ -17,8 +25,9 @@ export class MarkControl {
         this.bar = null;
         this.mainButton = null;
         this.subPanel = null;
-        this.colorInput = null;
-        this.opacityInput = null;
+        this.latInput = null;
+        this.lngInput = null;
+        this.scaleInput = null;
         this.form = null;
         this.map = null;
         this.parentControl = null;
@@ -30,6 +39,10 @@ export class MarkControl {
             categoryCaption: "Category",
             descriptionCaption: "Descripción",
             coordinatesCaption: "Coordenadas",
+            longitudeCaption: "Longitud",
+            latitudeCaption: "Latitud",
+            imageCaption: "Imagen",
+            scaleCaption: "Tamaño",
             resetCaption: "Reiniciar",
             addressCaption: "Dirección",
             phone1Caption: "Teléfono 1",
@@ -44,7 +57,7 @@ export class MarkControl {
             warnningDelete: "Seguro?",
         };
         this.onInit = () => { };
-        this.onLoadGeofence = (id) => { };
+        this.onLoadSite = (id) => { };
         this.onstart = (coords, propertys) => { };
         this.onsave = (coords, propertys) => { };
         this.ondelete = (coords, propertys) => { };
@@ -64,7 +77,7 @@ export class MarkControl {
     }
     onAdd(map) {
         this.map = map;
-        this.main = $.create("div").addClass(["poly-tool"]);
+        this.main = $.create("div").addClass(["mark-tool"]);
         this.menu = this.main
             .create("div")
             .addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "menu"]);
@@ -95,21 +108,18 @@ export class MarkControl {
             .prop({ type: "button", title: "Dibujar un Círculo" })
             .addClass("icon-circle")
             .on("click", () => {
-            this.setRol("circle");
         });
         this.bar
             .create("button")
             .prop({ type: "button", title: "Dibujar un Rectángulo" })
             .addClass(["icon-rectangle"])
             .on("click", () => {
-            this.setRol("rectangle");
         });
         this.bar
             .create("button")
             .prop({ type: "button", title: "Dibuja un Polígono" })
             .addClass(["icon-poly"])
             .on("click", () => {
-            this.setRol("polygon");
         });
         /*this.bar
             .create("button")
@@ -130,14 +140,12 @@ export class MarkControl {
     }
     onRemove() {
         alert("remove");
-        //this.main.parentNode.removeChild(this.main);
-        //this.map = undefined;
     }
     getId() {
         if (this.mode === 1) {
             return this.newId;
         }
-        return this.id;
+        return "site-" + this.id;
     }
     play(info) {
         this.parentControl.stopControls();
@@ -151,15 +159,14 @@ export class MarkControl {
         this.poly.setProperties(options);
     }
     setLength(length) { }
-    toggleUnit() { }
     stop() {
         this.reset();
         this.menu.style("display", "");
         this.panel.style("display", "none");
         this.subPanel.style("display", "none");
         this.bar.style("display", "none");
-        if (this.poly) {
-            this.poly.stop();
+        if (this.mark) {
+            this.mark.stop();
         }
     }
     delete() {
@@ -167,9 +174,10 @@ export class MarkControl {
         this.onlength("0 Km<sup>2</sup>");
     }
     reset() {
-        if (this.poly) {
-            this.poly.reset();
+        if (this.mark) {
+            this.mark.reset();
         }
+        this.form.reset();
     }
     printArea(area) {
         if (area > 1000000) {
@@ -186,11 +194,11 @@ export class MarkControl {
             }) + " m<sup>2</sup>");
         }
     }
-    setPolygon(rol, info) {
+    setMark(info) {
         //this.feature = feature;
         //this.defaultFeature = JSON.parse(JSON.stringify(this.feature));
         //console.log(this.rol, this.feature.properties.rol);
-        this.poly = this.parentControl.draw(this.getId(), rol, info);
+        this.poly = this.parentControl.draw(this.getId(), 'mark', info);
         this.poly.ondraw = (feature) => {
             /*
                         const coordinates = feature.geometry.coordinates;
@@ -213,34 +221,56 @@ export class MarkControl {
         this.poly.play();
     }
     createPropertysControl(main) {
-        const colorMain = main.create("div").addClass("propertys");
-        const alphaMain = main.create("div").addClass("propertys");
-        colorMain.create("div").addClass("color").text("Color");
-        alphaMain.create("div").addClass("color").text("Opacidad");
-        this.colorInput = colorMain
+        const latMain = main.create("div").addClass("propertys");
+        const lngMain = main.create("div").addClass("propertys");
+        const imageMain = main.create("div").addClass("mark-tool-g2");
+        latMain.create("div").addClass("color").text("Latitud");
+        lngMain.create("div").addClass("color").text("Longitud");
+        this.latInput = latMain
             .create("input")
-            .prop({ type: "color", title: "Color", value: this.color })
+            .prop({ type: "text", title: "Latitud", value: this.latitude })
             .on("change", (event) => {
             this.color = event.currentTarget.value;
             this.evalPropertys({
                 color: event.currentTarget.value,
             });
         });
-        let options = "";
-        for (let i = 0.1; i <= 1; i = i + 0.1) {
-            options += `<option value=${i.toPrecision(1)}>${i.toPrecision(1)}</option>`;
-        }
-        this.opacityInput = alphaMain
-            .create("select")
-            .prop({ title: "Opacidad" })
-            .text(options)
+        this.lngInput = lngMain
+            .create("input")
+            .prop({ type: "text", title: "Longitud", value: this.longitude })
             .on("change", (event) => {
-            this.opacity = event.currentTarget.value;
+            this.color = event.currentTarget.value;
             this.evalPropertys({
-                opacity: Number.parseFloat(event.currentTarget.value),
+                color: event.currentTarget.value,
             });
-        })
-            .val(this.opacity);
+        });
+        this.scaleInput = I.create("input", {
+            type: "select",
+            data: [20, 24, 26, 28, 30, 32, 36, 40, 44, 50, 60].map(e => [e, e]),
+            target: latMain,
+            events: {
+                "onchange": (event) => {
+                    this.setSize(event.currentTarget.value);
+                }
+            }
+        });
+        console.log(this.parentControl.markImages);
+        this.parentControl.markImages.forEach((image) => {
+            const images = imageMain.create("div").create("img");
+            images.prop("src", image.src);
+            images.on("click", () => {
+                this.image = image.src;
+                this.mark.setImage(image.name);
+                this.form.getInput("image").setValue(image.name);
+                /*
+                this.onchange({
+                    coordinates: this.coordinates,
+                    image: this.image,
+                    size: this._line.getSize()
+                });
+                */
+            });
+        });
     }
     createForm(main) {
         this.form = new Form({
@@ -258,10 +288,10 @@ export class MarkControl {
                     events: {
                         change: (event) => {
                             if (event.currentTarget.value === "") {
-                                this.newGeofence();
+                                this.newSite();
                             }
                             else {
-                                this.onLoadGeofence(event.currentTarget.value);
+                                this.onLoadSite(event.currentTarget.value);
                             }
                         },
                     },
@@ -289,6 +319,10 @@ export class MarkControl {
                     name: "category_id",
                     value: "",
                     caption: this.infoForm.categoryCaption,
+                    rules: {
+                        required: {},
+                    }
+                    //data:this.getLayerList(),
                 },
                 {
                     input: "input",
@@ -296,6 +330,38 @@ export class MarkControl {
                     name: "description",
                     value: "",
                     caption: this.infoForm.descriptionCaption,
+                    rules: {},
+                },
+                {
+                    input: "input",
+                    type: "text",
+                    name: "image",
+                    default: this.defaultImage,
+                    caption: this.infoForm.imageCaption,
+                    rules: {},
+                },
+                {
+                    input: "input",
+                    type: "text",
+                    name: "longitude",
+                    value: "",
+                    caption: this.infoForm.longitudeCaption,
+                    rules: {},
+                },
+                {
+                    input: "input",
+                    type: "text",
+                    name: "latitude",
+                    value: "",
+                    caption: this.infoForm.latitudeCaption,
+                    rules: {},
+                },
+                {
+                    input: "input",
+                    type: "text",
+                    name: "scale",
+                    default: this.defaultSize,
+                    caption: this.infoForm.scaleCaption,
                     rules: {},
                 },
                 {
@@ -381,7 +447,7 @@ export class MarkControl {
                         id: 1,
                         caption: this.infoForm.newCaption,
                         action: (item, event) => {
-                            this.newGeofence();
+                            this.newSite();
                         },
                     },
                     {
@@ -414,24 +480,22 @@ export class MarkControl {
             },
         });
     }
-    setEmptyPolygon() {
-        this.setPolygon(this.rol, {
-            color: this.colorInput.val(),
-            opacity: Number(this.opacityInput.val()),
+    newMark() {
+        alert(4);
+        console.log([this.map.getCenter().lng, this.map.getCenter().lat]);
+        this.mark = this.parentControl.draw(this.getId(), "mark", {
+            coordinates: [this.map.getCenter().lng, this.map.getCenter().lat],
+            height: 30,
+            image: "img_31",
         });
-    }
-    setRol(rol) {
-        this.rol = rol;
-        this.delete();
-        //this.feature.properties.rol = this.rol;
-        //this.feature.geometry.coordinates = null;
-        this.setEmptyPolygon();
-    }
-    setGeogenceList(data) {
-        data = [{ id: "", name: "" }].concat(data);
-        this.form
-            .getInput("geofenceId")
-            .setOptionsData(data.map((e) => [e.id, e.name]));
+        this.mark.ondraw = (coord) => {
+            this.form.getInput("longitude").setValue(coord[0]);
+            this.form.getInput("latitude").setValue(coord[1]);
+            this.lngInput.val(coord[0]);
+            this.latInput.val(coord[1]);
+            console.log("x", coord);
+        };
+        this.mark.play();
     }
     setSiteList(data) {
         data = [{ id: "", name: "" }].concat(data);
@@ -449,26 +513,52 @@ export class MarkControl {
     newSite() {
         this.newForm();
         this.updateForm("");
-        this.setEmptyPolygon();
+        this.newMark();
+        //this.setEmptyPolygon();
     }
-    newGeofence() {
-        this.newForm();
-        this.updateForm("");
-        this.setEmptyPolygon();
-    }
-    setGeogence(data) {
+    setSite(data) {
         if (this.mode == 1) {
             this.parentControl.delete(this.newId);
         }
-        const geojson = JSON.parse(data.geojson);
-        this.mode = 2;
-        data.__mode_ = 2;
-        this.name = data.name;
-        this.id = data.id;
-        this.form.setValue(data);
-        this.colorInput.val(geojson.properties.color);
-        this.opacityInput.val(geojson.properties.opacity);
-        this.setPolygon(geojson.properties.rol, { feature: geojson });
+        if (data === null) {
+            this.mode = 1;
+            this.image = this.defaultImage;
+            this.longitude = this.map.getCenter().lng;
+            this.latitude = this.map.getCenter().lat;
+            this.size = this.defaultSize,
+                this.reset();
+            this.form.reset();
+            this.form.getInput("longitude").setValue(this.longitude);
+            this.form.getInput("latitude").setValue(this.latitude);
+        }
+        else {
+            this.mode = 2;
+            data.__mode_ = 2;
+            this.name = data.name;
+            this.image = data.image;
+            this.id = data.id;
+            this.longitude = data.longitude;
+            this.latitude = data.latitude;
+            this.size = data.scale;
+            this.form.setValue(data);
+        }
+        this.scaleInput.setValue(this.size);
+        this.lngInput.val(this.longitude);
+        this.latInput.val(this.latitude);
+        console.log(this.image);
+        this.mark = this.parentControl.draw(this.getId(), "mark", {
+            coordinates: [this.longitude, this.latitude],
+            height: this.size,
+            image: this.image,
+        });
+        this.mark.ondraw = (coord) => {
+            this.form.getInput("longitude").setValue(coord[0]);
+            this.form.getInput("latitude").setValue(coord[1]);
+            this.lngInput.val(coord[0]);
+            this.latInput.val(coord[1]);
+            console.log("x", coord);
+        };
+        this.mark.play();
     }
     updateForm(feature) {
         this.form.getInput("geojson").setValue(JSON.stringify(feature));
@@ -478,6 +568,17 @@ export class MarkControl {
         this.reset();
         this.form.reset();
         this.onNew();
+    }
+    updateMark(info) {
+    }
+    setSize(size) {
+        this.form.getInput("scale").setValue(size);
+        this.mark.setSize(null, size);
+    }
+    setScale(scale) {
+        let size = this.mark.getSize();
+        this.mark.setSize(null, size[1] * scale);
+        this.form.getInput("scale").setValue(scale);
     }
 }
 //# sourceMappingURL=MarkControl2.js.map

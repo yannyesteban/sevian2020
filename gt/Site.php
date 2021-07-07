@@ -88,6 +88,7 @@ class Site
 			case 'get-record':
 
 				$id = $this->eparams->siteId?? \sevian\s::getReq('id');
+
 				//hx(json_encode(\sevian\s::getVReq(), JSON_PRETTY_PRINT));
 				$this->addResponse([
 
@@ -95,7 +96,7 @@ class Site
 					'data'=>[
 						'list'=>$this->listSites($this->getUser()),
 						'categoryList'=>$this->listCategorys($this->getUser()),
-						'data'=>$this->loadSite($id)
+						'data'=>$this->loadSite($id, $this->getUser())
 					],
 					'iToken'=>$this->iToken
 

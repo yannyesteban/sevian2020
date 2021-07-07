@@ -512,6 +512,7 @@ export class PolyControl {
     setGeogence(data) {
 
         if (this.mode == 1) {
+            alert("delete")
             this.parentControl.delete(this.newId);
         }
         const geojson = JSON.parse(data.geojson);

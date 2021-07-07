@@ -148,6 +148,9 @@ export class Polygon {
             "paint": {
                 "line-color": ["get", "color"],
                 "line-width": ["get", "width"],
+                //"line-gap-width":4,
+                //"line-dasharray":[2,2]
+                //"line-dasharray": ["get","line-width"]
             },
             "filter": ["==", "$type", "Polygon"]
         });

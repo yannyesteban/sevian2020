@@ -15,6 +15,7 @@ import { MarkControl } from './MarkControl.js';
 import { MarkControl as  MarkControl2 } from './MarkControl2.js';
 
 import { IMark } from './IMark.js';
+import { JMark } from './JMark.js';
 import { Polygon } from './Polygon.js';
 import { Rectangle } from './Rectangle.js';
 import { Circle } from './Circle.js';
@@ -59,9 +60,9 @@ export class MapBoxLib {
 
     load: any = (event) => { };
 
-    _poly: Polylayer[] = [];
+    _poly: { [key:string]: Polylayer } = {};
     _controls: MapControl[] = [];
-    markImages: string[] = [];
+    markImages: {name:string, src:string}[] = [];
     iconImages: any[] = null;
     layerImages: any[] = [];
     markDefaultImage: string = null;
@@ -331,13 +332,13 @@ export class MapBoxLib {
     }
 
     draw(name: string, type: string, info: Polylayer) {
-
+        console.log(name, info);
         if (this._poly[name]) {
             return this._poly[name];
         }
         info.map = this.map;
         info.parent = this;
-
+        console.log("POLYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
         switch (type) {
             case "circle":
                 this._poly[name] = new Circle(info);
@@ -355,7 +356,13 @@ export class MapBoxLib {
                 this._poly[name] = new Rule(info);
                 break;
             case "mark":
+
                 this._poly[name] = new IMark(info);
+                console.log(this._poly);
+                //this._poly[name] = new Trace(info);
+                break;
+            case "jmark":
+                this._poly[name] = new JMark(info);
                 //this._poly[name] = new Trace(info);
                 break;
             case "history":
@@ -381,6 +388,7 @@ export class MapBoxLib {
     }
 
     delete(name) {
+
         if (this._poly[name]) {
             this._poly[name].delete();
             delete this._poly[name];
@@ -402,6 +410,14 @@ export class MapBoxLib {
         }
     }
     getImage(name) {
+        console.log(name);
+        console.log(this.markImages)
+
+        return this.markImages.find((img:any) => img.name == name).src;
+
+
+        alert(name)
+        console.log(this.markImages, this.markImages[name])
         return this.markImages[name] || '';
     }
 

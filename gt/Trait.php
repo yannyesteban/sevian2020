@@ -1162,27 +1162,20 @@ trait DBTracking{
 trait DBSite{
     private $cn = null;
 
-    private function loadSite($user=""){
+    private function loadSite($id, $user){
 
         $cn = $this->cn;
 
-        $cn->query = "SELECT m.id, m.name, m.description, m.geojson, m.address, phone1,
-            phone2, phone3, fax, email, web, note, scope
+        $cn->query = "SELECT m.id, m.name, m.description, m.longitude, m.latitude, image, COALESCE(scale, 1.0) as scale, m.geojson, m.address, phone1,
+            phone2, phone3, fax, email, web, note, scope, m.id as siteId
 
             FROM mark as m
 
-            WHERE m.user = '$user'
+            WHERE m.user = '$user' and m.id = '$id'
             ";
 
         $result = $this->cn->execute();
-        $data = [];
-		while($rs = $cn->getDataAssoc($result)){
-            $rs['geojson'] = json_decode($rs['geojson']);
-            $data[$rs['id']] = $rs;
-        }
-
-
-        return $data;
+        return $cn->getDataAssoc($result);
     }
 
     private function listSites($user=""){
@@ -1512,6 +1505,18 @@ trait DBAlarm{
 trait DBImage{
     private $cn = null;
     private function load(){
+
+        $path = PATH_IMAGES.'marks/';
+        $cn = $this->cn;
+        $cn->query = "SELECT name, CONCAT('$path', image) as src FROM image";
+
+        $result = $this->cn->execute();
+
+		return $cn->getDataAll($result);
+
+    }
+
+    private function load2(){
 
         $cn = $this->cn;
         $cn->query = "SELECT * FROM image";

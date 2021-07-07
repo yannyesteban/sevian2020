@@ -166,6 +166,8 @@ export class History {
                     "name": "/form/h_commands",
                     "eparams": {
                         "a": "yanny",
+                        //"mainId":this.bodyPanelId,
+                        //"unitId":unitId,
                     }
                 }
             ],
@@ -196,6 +198,8 @@ export class History {
                     "name": "/form/h_commands",
                     "eparams": {
                         "config": config,
+                        //"mainId":this.bodyPanelId,
+                        //"unitId":unitId,
                     }
                 }
             ],

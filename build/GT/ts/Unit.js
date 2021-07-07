@@ -8,6 +8,7 @@ import { Trace } from '../../lib/Trace.js';
 import { TraceTool } from './TraceTool.js';
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 import { LayerMenu } from './LayerMenu.js';
+import { Cluster } from '../../lib/Cluster.js';
 const evalInputs = (data) => {
     let xInputs = "";
     let xOutputs = "";
@@ -424,6 +425,9 @@ export class Unit {
         });
     }
     play() {
+        console.log(this.map.map.map);
+        const cluster = new Cluster({ map: this.map.map.map });
+        cluster.init();
         if (this.timer) {
             window.clearTimeout(this.timer);
         }
@@ -431,8 +435,9 @@ export class Unit {
             S.go({
                 async: true,
                 valid: false,
-                confirm_: 'seguro?',
                 requestFunction: (json) => {
+                    console.log(json);
+                    cluster.updateSource(json);
                     this.updateTracking(json);
                 },
                 params: [

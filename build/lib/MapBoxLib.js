@@ -10,6 +10,7 @@ import { PolyControl as PolyControl2 } from './PolyControl2.js';
 import { MarkControl } from './MarkControl.js';
 import { MarkControl as MarkControl2 } from './MarkControl2.js';
 import { IMark } from './IMark.js';
+import { JMark } from './JMark.js';
 import { Polygon } from './Polygon.js';
 import { Rectangle } from './Rectangle.js';
 import { Circle } from './Circle.js';
@@ -34,7 +35,7 @@ export class MapBoxLib {
         this.layers = [];
         this.latlng = new mapboxgl.LngLat(-66.903603, 10.480594);
         this.load = (event) => { };
-        this._poly = [];
+        this._poly = {};
         this._controls = [];
         this.markImages = [];
         this.iconImages = null;
@@ -248,11 +249,13 @@ export class MapBoxLib {
         return this._poly[name];
     }
     draw(name, type, info) {
+        console.log(name, info);
         if (this._poly[name]) {
             return this._poly[name];
         }
         info.map = this.map;
         info.parent = this;
+        console.log("POLYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
         switch (type) {
             case "circle":
                 this._poly[name] = new Circle(info);
@@ -271,6 +274,11 @@ export class MapBoxLib {
                 break;
             case "mark":
                 this._poly[name] = new IMark(info);
+                console.log(this._poly);
+                //this._poly[name] = new Trace(info);
+                break;
+            case "jmark":
+                this._poly[name] = new JMark(info);
                 //this._poly[name] = new Trace(info);
                 break;
             case "history":
@@ -310,6 +318,11 @@ export class MapBoxLib {
         }
     }
     getImage(name) {
+        console.log(name);
+        console.log(this.markImages);
+        return this.markImages.find((img) => img.name == name).src;
+        alert(name);
+        console.log(this.markImages, this.markImages[name]);
         return this.markImages[name] || '';
     }
     createImage(info) {
