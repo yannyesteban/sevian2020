@@ -92,7 +92,7 @@ export class Alarm {
         });
         this.loadRecord(this.data);
         this.wins["main"] = new Float.Window({
-            visible: true,
+            visible: false,
             caption: this.caption,
             child: main,
             left: 10,
