@@ -75,7 +75,21 @@ class HCommand extends \sevian\element {
 		
 		$form = (object)$this->paramsLoad($value, $this->eparams->commandId??0, $this->eparams->unitId??0);
 		$form->id = $this->containerId;
-        $this->setInit($form);
+		
+		$this->typeElement = 'Form2';
+		$this->jsClassName = 'Form2';
+		//hx($form);
+        //$this->setInit($form);
+		$this->setInfoElement([
+			'type'		=> 'element',
+			'id'		=> $this->id,
+			'title'		=> 'GH',
+			'iClass'	=> 'Form2',
+			//'html'		=> $this->panel->render(),
+			
+			'css'		=> '',
+			'config'	=> $form
+		]);
        
     }
 	

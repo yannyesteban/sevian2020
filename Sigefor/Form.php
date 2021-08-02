@@ -284,6 +284,17 @@ class Form extends \sevian\element {
 		$this->setPanel($this->createPanel());
 		$this->title = $form->caption;
 
+		$this->setInfoElement([
+			'type'		=> 'element',
+			'id'		=> $this->id,
+			'title'		=> $form->caption,
+			'iClass'	=> 'Grid2',
+			'html'		=> $this->createPanel()->render(),
+			'script'	=> '',
+			'css'		=> 'body{color:red!important}',
+			'config'	=> $form
+		]);
+
 	}
 
 	public function save($data){

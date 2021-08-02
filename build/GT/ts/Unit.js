@@ -8,7 +8,6 @@ import { Trace } from '../../lib/Trace.js';
 import { TraceTool } from './TraceTool.js';
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 import { LayerMenu } from './LayerMenu.js';
-import { Cluster } from '../../lib/Cluster.js';
 const evalInputs = (data) => {
     let xInputs = "";
     let xOutputs = "";
@@ -266,6 +265,7 @@ export class Unit {
         Map.load(this.mapName, (mapApi, map) => {
             Mobil.setMap(mapApi);
             this.setMap(map);
+            console.log(this.tracking);
             this.dataUnits.forEach((info) => {
                 const tracking = this.tracking.find(e => e.unitId == info.unitId) || {};
                 const propertys = {};
@@ -425,9 +425,12 @@ export class Unit {
         });
     }
     play() {
+        return;
         console.log(this.map.map.map);
+        /*
         const cluster = new Cluster({ map: this.map.map.map });
         cluster.init();
+        */
         if (this.timer) {
             window.clearTimeout(this.timer);
         }
@@ -437,7 +440,7 @@ export class Unit {
                 valid: false,
                 requestFunction: (json) => {
                     console.log(json);
-                    cluster.updateSource(json);
+                    //cluster.updateSource(json);
                     this.updateTracking(json);
                 },
                 params: [

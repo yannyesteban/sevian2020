@@ -16,7 +16,7 @@
 		"port": "3306",
 		"user": "root",
 		"pass": "123456",
-		"dbase": "seniat_2017",
+		"dbase": "xxx",
 		"charset": "utf-8"
 	}
 ]

@@ -14,7 +14,7 @@ class Communication extends
 
     private $_userInfo = null;
 
-        private $host = 'bests.no-ip.info';
+    private $host = 'bests.no-ip.info';
 
     use DBCommunication{
 		DBCommunication::ccc as public ccc;

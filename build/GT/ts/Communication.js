@@ -50,9 +50,9 @@ export class Communication {
         this._infoWin2 = null;
         this.showConnectedUnit = true;
         this._timer2 = null;
-        this.delay2 = 5000;
+        this.delay2 = 5000 * 1000;
         this._timer3 = null;
-        this.delay3 = 5000;
+        this.delay3 = 5000 * 1000;
         this.lastEventId = 0;
         this.lastDate = null;
         this.statusId = null;
@@ -536,7 +536,6 @@ export class Communication {
         });
     }
     play2() {
-        return;
         if (this._timer2) {
             clearTimeout(this._timer2);
         }
@@ -682,6 +681,69 @@ export class Communication {
     }
     loadUnit(unitId) {
         let f = this._form.getFormData();
+        let formData = this._form.getFormData();
+        console.log(this.bodyPanelId);
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            //blockingTarget: mapControl.getPanel(),
+            requestFunctions: {
+                "f": (json) => {
+                    console.log(json);
+                },
+            },
+            onRequest: (x) => {
+                $(this.bodyPanelId).removeClass("sg-form");
+                //S.getElement(this.mainPanelId).setContext(this);
+                S.getElement(this.commandPanelId).setContext(this);
+                //this._form = S.getElement(this.mainPanelId);
+                // alert(x)
+            },
+            "params": [
+                {
+                    "t": "setMethod",
+                    'mode': 'element',
+                    //"id":this.formCommandId,
+                    "element": "gt-communication",
+                    "method": "load-unit",
+                    "name": "",
+                    "eparams": {
+                        "a": 'yanny',
+                        //"mainId":this.formCommandId,
+                        "unitId": unitId,
+                    }
+                },
+                {
+                    "t": "setMethod",
+                    'mode': 'element',
+                    "id": this.commandPanelId,
+                    "element": "form",
+                    "method": "request",
+                    "name": "/gt/forms/form_command",
+                    "eparams": {
+                        "a": 'yanny',
+                        "mainId": this.commandPanelId,
+                        "unitId": 5555555,
+                    }
+                },
+                {
+                    "t": "setMethod",
+                    'mode': 'element',
+                    "id": this.bodyPanelId,
+                    "element": "form",
+                    "method": "list",
+                    //"name":"/gt/forms/h_commands",
+                    "name": "/gt/forms/pending",
+                    "eparams": {
+                        "a": 'yanny',
+                        "mainId": this.bodyPanelId,
+                        "unitId": 5555555,
+                    }
+                }
+            ]
+        });
+        return;
         S.send3({
             "async": 1,
             "form": f,
@@ -730,6 +792,7 @@ export class Communication {
             ],
             onRequest: (x) => {
                 $(this.bodyPanelId).removeClass("sg-form");
+                alert(this.commandPanelId);
                 //S.getElement(this.mainPanelId).setContext(this);
                 S.getElement(this.commandPanelId).setContext(this);
                 //this._form = S.getElement(this.mainPanelId);
@@ -751,6 +814,34 @@ export class Communication {
     paramLoad(commandId, request) {
         let unitId = this._form.getInput("unit_idx").getValue();
         let f = this._form.getFormData();
+        let formData = this._form.getFormData();
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            //blockingTarget: mapControl.getPanel(),
+            onRequest: (x) => {
+                // alert(this.bodyPanelId)
+                S.getElement(this.bodyPanelId).setContext(this);
+            },
+            "params": [
+                {
+                    "t": "setMethod",
+                    'mode': 'element',
+                    "id": this.bodyPanelId,
+                    "element": "h-command",
+                    "method": (request) ? "request" : "load",
+                    "name": "/form/h_commands",
+                    "eparams": {
+                        "a": 'yanny',
+                        "mainId": this.bodyPanelId,
+                        "unitId": unitId,
+                        "commandId": commandId
+                    }
+                }
+            ],
+        });
+        return;
         S.send3({
             "async": 1,
             "form": f,
@@ -1006,6 +1097,7 @@ export class Communication {
         this.mode = mode;
     }
     s(type = "SET") {
+        alert("set");
         let commandId = this.getCommandId();
         let unitId = this.getUnitId();
         let inputs = S.getElement(this.bodyPanelId).getInputs();

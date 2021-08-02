@@ -550,6 +550,9 @@ trait DBInput{
 
     private function getDataInput($user, $tracking){
         $dataUnitInput = $this->loadConfigInput($user);
+        if(count($dataUnitInput ) <= 0){
+            return $tracking;
+        }   
 
         $data = array_map(function($item) use($dataUnitInput){
 
@@ -741,8 +744,11 @@ trait DBTracking{
 
         LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
 
-        WHERE uu.user='$user' AND t.date_time > '$lastDateTime'
+        WHERE uu.user='$user' 
+        #and input_STATUS>0
+        AND t.date_time > '$lastDateTime'
         ORDER BY t.date_time
+        #limit 3
         ";
 
         //hx($cn->query);

@@ -137,7 +137,7 @@ class Unit
 			'caption'		=> 'Unidades',
 			'id'            => 'k',
 			'followMe'		=> true,
-			'delay'			=> 10000,
+			'delay'			=> 10000*10000,
 		];
 	}
 

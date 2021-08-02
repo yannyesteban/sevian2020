@@ -57,7 +57,7 @@ class Map extends \Sevian\Element implements \Sevian\UserInfo{
 			'markDefaultImage' => 'img_35'
 		];
 
-		$this->setInit($this->info);
+		//$this->setInit($this->info);return;
 		$this->setInfoElement([
 			'id'		=> $this->id,
 			'title'		=> 'MAP',

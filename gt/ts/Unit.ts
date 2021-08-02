@@ -346,7 +346,7 @@ export class Unit{
 
 			Mobil.setMap(mapApi);
 			this.setMap(map);
-
+console.log(this.tracking)
 			this.dataUnits.forEach((info) => {
 
 				const tracking = this.tracking.find(e => e.unitId == info.unitId) || {};
@@ -579,9 +579,13 @@ return;
 	}
 
 	play(){
+		
+		return;
 		console.log(this.map.map.map)
+		/*
 		const cluster = new Cluster({ map: this.map.map.map });
 		cluster.init();
+		*/
 		if(this.timer){
 			window.clearTimeout(this.timer);
 		}
@@ -594,7 +598,7 @@ return;
 
 				requestFunction: (json) => {
 					console.log(json)
-					cluster.updateSource(json);
+					//cluster.updateSource(json);
 					this.updateTracking(json)
 				},
 				params:	[
