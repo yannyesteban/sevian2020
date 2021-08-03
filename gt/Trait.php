@@ -557,7 +557,7 @@ trait DBInput{
         $data = array_map(function($item) use($dataUnitInput){
 
             if(!isset($item['unitId'])){
-                continue;
+                return $item;
             }
             $dataInput = $dataUnitInput[$item['unitId']];
 
