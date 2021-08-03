@@ -75,11 +75,11 @@ export class Communication {
 
     public showConnectedUnit: boolean = true;
     private _timer2: any = null;
-    public delay2: number = 5000*1000;
+    public delay2: number = 5000;
 
 
     private _timer3: any = null;
-    public delay3: number = 5000*1000;
+    public delay3: number = 5000;
 
 
 
