@@ -50,9 +50,9 @@ export class Communication {
         this._infoWin2 = null;
         this.showConnectedUnit = true;
         this._timer2 = null;
-        this.delay2 = 5000 * 1000;
+        this.delay2 = 5000;
         this._timer3 = null;
-        this.delay3 = 5000 * 1000;
+        this.delay3 = 5000;
         this.lastEventId = 0;
         this.lastDate = null;
         this.statusId = null;
@@ -1097,7 +1097,6 @@ export class Communication {
         this.mode = mode;
     }
     s(type = "SET") {
-        alert("set");
         let commandId = this.getCommandId();
         let unitId = this.getUnitId();
         let inputs = S.getElement(this.bodyPanelId).getInputs();
