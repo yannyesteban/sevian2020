@@ -16,8 +16,8 @@ enum WNames {
     event = 2,
     alarm = 4,
     synch = 8
-
 }
+
 let n = 0;
 
 
