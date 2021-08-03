@@ -1421,7 +1421,7 @@ alert(this.commandPanelId)
     }
 
     s(type: string = "SET") {
-        alert("set")
+        
         let commandId = this.getCommandId();
         let unitId = this.getUnitId();
 

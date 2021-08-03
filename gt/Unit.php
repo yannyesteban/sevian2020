@@ -77,7 +77,7 @@ class Unit
 					'caption'		=> 'Unidades 2',
 					'id'            => 'k',
 					'followMe'		=> true,
-					'delay'			=> 60000,
+					'delay'			=> 10000,
 				];
 			case 'tracking':
 				//hx($this->id);
@@ -137,7 +137,7 @@ class Unit
 			'caption'		=> 'Unidades',
 			'id'            => 'k',
 			'followMe'		=> true,
-			'delay'			=> 10000*10000,
+			'delay'			=> 10000,
 		];
 	}
 

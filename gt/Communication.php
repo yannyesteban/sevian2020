@@ -129,8 +129,8 @@ class Communication extends
             'infoMenuId'    => $this->eparams->infoMenu?? '',
             'user'          => $this->_userInfo->user,
             'socketServer'  => [
-                'host'  => 'bests.no-ip.info',
-                'port'  => 3342
+                'host'  => 'bests.no-ip.info',//'localhost',//'bests.no-ip.info',
+                'port'  => 3317
             ],
             'winNow'=>[
                 'caption'=>'Inmediato',
