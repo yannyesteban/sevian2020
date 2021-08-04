@@ -49,7 +49,7 @@ class Event
 		switch($method){
 			case 'load':
 				//$this->load();
-				$this->setRequest($this->loadDataEvent($this->eparams->lastEventId?? 0));
+				$this->setRequest($this->loadDataEvent($this->eparams->lastEventId?? 0, $this->getUser()));
 
 				break;
 			case 'update-status':
@@ -167,6 +167,9 @@ class Event
     }
     public function getUserInfo(){
         return $this->_userInfo;
+    }
+	public function getUser(){
+        return $this->_userInfo->user;
     }
 
 }

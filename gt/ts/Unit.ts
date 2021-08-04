@@ -148,7 +148,7 @@ class Mobil{
 		this.setValid(true);
 
 		if (this.trace.isActive()) {
-			console.log(tracking)
+			
 			this.trackingData.push(tracking);
 			this.trace.setData(this.trackingData);
 		}
@@ -346,7 +346,7 @@ export class Unit{
 
 			Mobil.setMap(mapApi);
 			this.setMap(map);
-console.log(this.tracking)
+
 			this.dataUnits.forEach((info) => {
 
 				const tracking = this.tracking.find(e => e.unitId == info.unitId) || {};
@@ -580,8 +580,8 @@ return;
 
 	play(){
 		
-		return;
-		console.log(this.map.map.map)
+		
+		//console.log(this.map.map.map)
 		/*
 		const cluster = new Cluster({ map: this.map.map.map });
 		cluster.init();
@@ -1048,6 +1048,26 @@ return;
 
 	public isValid(unitId) {
 		this.units[unitId]
+	}
+
+	public showUnit3(unitId){
+		if(this.units[unitId].getValid()){
+			this.units[unitId].setInfo(this.getUnitInfo(unitId));
+			this.units[unitId].show(true);
+			this.units[unitId].flyTo();
+			this._lastUnitId = unitId;
+			//this.playTrace(unitId);
+
+		}else{
+			alert(this.msgErrortracking);
+		}
+
+		const info = this.dataUnits.find(e => e.unitId == unitId) || {};
+		if(info){
+			
+			this.onInfoUpdate(this.getUnitInfo(unitId), info.unitName);
+		}
+		
 	}
 }
 

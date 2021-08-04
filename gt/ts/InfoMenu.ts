@@ -521,6 +521,15 @@ export class InfoUnits {
     }
 
     public getCounts() {
+        
+        const ele = this.main.queryAll(".main[data-line]");
+
+        
+
+        return ele.length || 0;
+
+
+
         for (let x in this.types) {
             this.counts[x] = 0;
         }

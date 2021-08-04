@@ -282,10 +282,13 @@ export class Communication {
                 if (info.id) {
                     this.unitPanel.setUnit(info.id);
                 }
-                const counts = this.getInfoWin(2).getCounts();
-                infoMenu.updateType(1, counts[info.type] || "");
-                alert(77);
+                //const counts = this.getInfoWin(2).getCounts();
+                //infoMenu.updateType(1, counts[info.type] || "");
+                this.unitPanel.showUnit3(info.id);
                 //console.log(info);
+            },
+            onadd: (info) => {
+                this._win["status-unit"].setCaption("Conected Units [ " + this._infoWin2.getCounts() + " ]");
             }
         });
         if (this.unitId) {

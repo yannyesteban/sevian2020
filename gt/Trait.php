@@ -1888,7 +1888,7 @@ trait DBHistory{
 trait DBEvent{
     private $cn = null;
 
-    private function loadDataEvent($lastId=0){
+    private function loadDataEvent($lastId=0, $user=""){
 
         $cn = $this->cn;
         $cn->query = "SELECT e.id, e.event_id, e.user, e.status,
@@ -1914,7 +1914,8 @@ trait DBEvent{
         WHERE
 
         e.status != 2
-        AND ('$lastId'= 0 or e.id > '$lastId')
+        AND ('$lastId'= 0 or e.id > '$lastId') 
+        AND uu.user = '$user'
         ORDER BY 1
         #ORDER BY 1 desc
         #LIMIT 5

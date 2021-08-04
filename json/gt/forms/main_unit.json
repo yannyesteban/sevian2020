@@ -31,7 +31,7 @@
 			"input":"input","type":"button",
 			"events":{
 
-				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"
+				"click":";S.getElement('gt-unit-10').showUnit3(this.getInput('unit_id').getValue());"
 			}
 		},
 		{
