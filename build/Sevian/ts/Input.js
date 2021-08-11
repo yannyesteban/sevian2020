@@ -27,7 +27,7 @@ export var Input = (($) => {
             this.propertys = {};
             this.dataset = null;
             this.style = {};
-            this.events = false;
+            this.events = null;
             this.placeholder = "";
             this.rules = null;
             this.context = null;
@@ -41,6 +41,7 @@ export var Input = (($) => {
             this.mode = "request";
             this.evalChilds = () => { };
             this.getParentValue = () => { };
+            this.onAddOption = (option, data) => { };
             for (var x in info) {
                 if (this.hasOwnProperty(x)) {
                     this[x] = info[x];
@@ -94,9 +95,11 @@ export var Input = (($) => {
                 info.value = this.value;
             }
             this._input = this._main = $.create(info).addClass("type-input").addClass(this.className);
-            for (var x in this.events) {
-                //let action = $.bind(this.events[x], this._main);
-                this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
+            if (this.events) {
+                for (var x in this.events) {
+                    //let action = $.bind(this.events[x], this._main);
+                    this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
+                }
             }
             if (this.childs) {
                 this._main.ds("childs", "childs");
@@ -162,6 +165,7 @@ export var Input = (($) => {
                     option = document.createElement("OPTION");
                     option.value = this.data[i][0];
                     option.text = this.data[i][1];
+                    this.onAddOption(option, this.data[i]);
                     this._main.get().options.add(option);
                 }
             }
@@ -403,8 +407,10 @@ export var InputDate = (($) => {
                     input.val(event.currentTarget.value);
                 }
             }).addClass("type-input-out");
-            for (var x in this.events) {
-                auxTxt.on(x, $.bind(this.events[x], this.context || this, "event"));
+            if (this.events) {
+                for (var x in this.events) {
+                    auxTxt.on(x, $.bind(this.events[x], this.context || this, "event"));
+                }
             }
             auxTxt.prop(this.propertys);
             auxTxt.style(this.style);

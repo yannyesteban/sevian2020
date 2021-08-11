@@ -254,7 +254,7 @@ export class Alarm {
                         //const values = (bin || "").split("");
                         //console.log(values)
                         inputs.forEach((input) => {
-                            console.log(parseInt(value, 10), parseInt(input.value, 10), parseInt(value, 10) & parseInt(input.value, 10));
+                            //console.log(parseInt(value, 10), parseInt(input.value, 10), parseInt(value, 10) & parseInt(input.value, 10))
                             if ((parseInt(value, 10) & parseInt(input.value, 10)) == parseInt(input.value)) {
                                 input.checked = true;
                             }

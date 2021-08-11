@@ -210,6 +210,19 @@
 			"class": "",
 			"debug": 0,
 			"design": 0
+		},
+		{
+			"id": "report",
+			"element": "gt-report",
+			"name": "gt-report",
+			"method": "load",
+			"eparams": {
+				
+			},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		}
 	]
 }

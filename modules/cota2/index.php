@@ -1,5 +1,4 @@
 <?php
-ini_set('memory_limit','512M');
 
 $constants = (array)json_decode(@file_get_contents("constants.json", true));
 $env = (array)json_decode(@file_get_contents("env.json", true));

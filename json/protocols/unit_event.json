@@ -1,0 +1,15 @@
+[
+    {
+      "eventId": 100,
+      "description":"Botón Pánico"
+    },
+    {
+      "eventId": 101,
+      "description":"Luces Encendidas"
+    },
+    {
+      "eventId": 128,
+      "description":"Motor Apagado"
+    }
+  ]
+  

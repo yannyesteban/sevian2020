@@ -307,7 +307,7 @@ export class Alarm {
 
 
                         inputs.forEach((input:HTMLInputElement) => {
-                            console.log(parseInt(value, 10), parseInt(input.value, 10), parseInt(value, 10) & parseInt(input.value, 10))
+                            //console.log(parseInt(value, 10), parseInt(input.value, 10), parseInt(value, 10) & parseInt(input.value, 10))
                             if ((parseInt(value, 10) & parseInt(input.value, 10)) == parseInt(input.value)) {
                                 input.checked = true;
                             } else {

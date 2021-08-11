@@ -2,7 +2,7 @@
 	"name":"form_command",
 	"caption":"",
 	"className":"gt-command-main",
-	"query":"SELECT '' as command_idx, '' as b1, '' as b2, '' as b3, '' as b4, '' as p",
+	"query":"SELECT '' as command_idx, '' as b1, '' as b2, '' as b3, '' as b4, '' as p, '' as l, '' as e",
 	"menuName_":"grid_menu",
 	"methods":{
 		"request":{
@@ -68,6 +68,22 @@
 			"propertys":{"title":"Ver Todos los Comandos Pendientes por enviar"},
 			"className":["gt-button", ""],
 			"events":{"click":"this.getContext().loadPending()"}
+		},
+		{
+			"name":"l",
+			"caption":"",
+			"input": "input", "type":"button","default":"L", "mode_value":1,
+			"propertys":{"title":"Programación de Eventos"},
+			"className":["gt-button", ""],
+			"events":{"click":"this.getContext().showUtil('p');"}
+		},
+		{
+			"name":"e",
+			"caption":"",
+			"input": "input", "type":"button","default":"C", "mode_value":1,
+			"propertys":{"title":"Configuración de Eventos"},
+			"className":["gt-button", ""],
+			"events":{"click":"this.getContext().showUtil('c')"}
 		}
 
 	],

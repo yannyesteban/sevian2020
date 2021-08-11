@@ -271,6 +271,21 @@
         "init": {
             "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
         }
+    },
+    {
+        "name": "gt-report",
+        "file": "{@MAIN_PATH}gt/Report.php",
+        "class": "\\GT\\Report",
+        "enable": true,
+        "module":{
+            "name":"Report",
+            "alias":"GTReport",
+            "src":"{@MAIN_PATH}build/GT/ts/Report.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
     }
 
 

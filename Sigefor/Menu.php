@@ -243,7 +243,7 @@ class Test4 extends \Sevian\Element {
 		}
 
 		$this->_main = new \Sevian\HTML('div');
-		$this->_main->style = "color:red";
+		$this->_main->style = "color:green";
 		$this->_main->innerHTML = "alpha";
 	}
 
@@ -258,7 +258,7 @@ class Test5 extends \Sevian\Element {
 		}
 
 		$this->_main = new \Sevian\HTML('div');
-		$this->_main->style = "color:red";
+		$this->_main->style = "color:green";
 		$this->_main->innerHTML = "betha....";
 	}
 

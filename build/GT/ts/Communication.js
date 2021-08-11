@@ -288,7 +288,7 @@ export class Communication {
                 //console.log(info);
             },
             onadd: (info) => {
-                this._win["status-unit"].setCaption("Conected Units [ " + this._infoWin2.getCounts() + " ]");
+                this._win["status-unit"].setCaption("Conected Units [ " + (this._infoWin2.getCounts() * 1) + " ]");
             }
         });
         if (this.unitId) {
@@ -539,6 +539,7 @@ export class Communication {
         });
     }
     play2() {
+        return;
         if (this._timer2) {
             clearTimeout(this._timer2);
         }
@@ -691,6 +692,7 @@ export class Communication {
             valid: false,
             form: formData,
             //blockingTarget: mapControl.getPanel(),
+            blockingTarget: $(this.commandPanelId),
             requestFunctions: {
                 "f": (json) => {
                     console.log(json);
@@ -823,6 +825,7 @@ export class Communication {
             valid: false,
             form: formData,
             //blockingTarget: mapControl.getPanel(),
+            blockingTarget: $(this.bodyPanelId),
             onRequest: (x) => {
                 // alert(this.bodyPanelId)
                 S.getElement(this.bodyPanelId).setContext(this);
@@ -908,11 +911,45 @@ export class Communication {
     }
     getConfigParam(commandId) {
         let unitId = this._form.getInput("unit_idx").getValue();
-        let f = this._form.getFormData();
-        S.send3({
+        let formData = this._form.getFormData();
+        /* S.send3({
             "async": 1,
             "form": f,
-            //id:4,
+
+            "params": [
+
+                {
+                    "t": "setMethod",
+                    'mode': 'element',
+                    "id": this.bodyPanelId,
+                    "element": "h-command",
+                    "method": "load-config",
+                    "name": "/form/h_commands",
+                    "eparams": {
+                        "a": 'yanny',
+                        "mainId": this.bodyPanelId,
+                        "unitId": unitId,
+                        "commandId": commandId
+                    }
+
+                }
+            ],
+            onRequest: (x) => {
+                //S.getElement(this.commandPanelId).setContext(this);
+                S.getElement(this.bodyPanelId).setContext(this);
+                // alert(x)
+            }
+        });
+ */
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            blockingTarget: $(this.bodyPanelId),
+            onRequest: (x) => {
+                S.getElement(this.bodyPanelId).setContext(this);
+                // alert(x)
+            },
             "params": [
                 {
                     "t": "setMethod",
@@ -928,21 +965,17 @@ export class Communication {
                         "commandId": commandId
                     }
                 }
-            ],
-            onRequest: (x) => {
-                //S.getElement(this.commandPanelId).setContext(this);
-                S.getElement(this.bodyPanelId).setContext(this);
-                // alert(x)
-            }
+            ]
         });
     }
     loadHistory() {
         let unitId = this._form.getInput("unit_idx").getValue();
-        let f = this._form.getFormData();
-        S.send3({
-            "async": 1,
-            "form": f,
-            //id:4,
+        let formData = this._form.getFormData();
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            blockingTarget: $(this.bodyPanelId),
             "params": [
                 {
                     "t": "setMethod",
@@ -966,12 +999,13 @@ export class Communication {
         });
     }
     loadPending() {
-        let unitId = this._form.getInput("unit_idx").getValue();
-        let f = this._form.getFormData();
-        S.send3({
-            "async": 1,
-            "form": f,
-            //id:4,
+        const unitId = this._form.getInput("unit_idx").getValue();
+        const formData = this._form.getFormData();
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            blockingTarget: $(this.bodyPanelId),
             "params": [
                 {
                     "t": "setMethod",
@@ -1115,6 +1149,7 @@ export class Communication {
             deviceName: "",
             commandId: commandId,
             unitId: unitId,
+            cmdIndex: 0,
             comdValues: values,
             msg: "",
             name: "",
@@ -1155,6 +1190,7 @@ export class Communication {
             deviceName: "",
             commandId: commandId,
             unitId: unitId * 1,
+            index: 0,
             comdValues: values,
             msg: "",
             name: "",

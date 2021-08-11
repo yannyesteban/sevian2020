@@ -28,7 +28,7 @@ export var Input = (($) => {
         propertys:object = {};
         dataset:object = null;
         style:object = {};
-        events:any = false;
+        events:any = null;
         placeholder:string = "";
         rules:object = null;
 
@@ -47,6 +47,8 @@ export var Input = (($) => {
 
         evalChilds:any = () => {};
         getParentValue: any = () => {};
+
+        onAddOption:Function = (option, data)=>{};
 
         constructor(info: any){
 
@@ -112,12 +114,14 @@ export var Input = (($) => {
             }
 
             this._input = this._main = $.create(info).addClass("type-input").addClass(this.className);
+            if(this.events){
+                for(var x in this.events){
 
-            for(var x in this.events){
-
-                //let action = $.bind(this.events[x], this._main);
-				this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
-			}
+                    //let action = $.bind(this.events[x], this._main);
+                    this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
+                }
+            }
+            
 
             if(this.childs){
                 this._main.ds("childs", "childs");
@@ -200,6 +204,7 @@ export var Input = (($) => {
 				option = document.createElement("OPTION");
 				option.value = "";
 				option.text = this.placeholder;
+                
 				this._main.get().options.add(option);
             }
 
@@ -210,6 +215,7 @@ export var Input = (($) => {
 					option = document.createElement("OPTION");
 					option.value = this.data[i][0];
 					option.text = this.data[i][1];
+                    this.onAddOption(option, this.data[i]);
 					this._main.get().options.add(option);
 				}
 			}
@@ -524,10 +530,12 @@ export var InputDate = (($) => {
 
 
             }).addClass("type-input-out");
-
-            for(var x in this.events){
-				auxTxt.on(x, $.bind(this.events[x], this.context || this, "event"));
-			}
+            if(this.events){
+                for(var x in this.events){
+                    auxTxt.on(x, $.bind(this.events[x], this.context || this, "event"));
+                }
+            }
+            
 
 			auxTxt.prop(this.propertys);
 			auxTxt.style(this.style);
@@ -1687,8 +1695,6 @@ export var Multi = (($) => {
 
         setValue(value:any){
             this.value = value;
-
-
 
             if(Array.isArray(value)){
                 value = JSON.stringify(value);

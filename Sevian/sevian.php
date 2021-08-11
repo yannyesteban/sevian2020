@@ -995,7 +995,7 @@ class S{
 	}
 
 	private static function addPanel($panel){
-		self::$_panels[] = $panel;
+		//self::$_panels[] = $panel;
 	}
 
 	public static function htmlDoc3(){

@@ -114,7 +114,7 @@ class Form extends \sevian\element {
 			'iClass'	=> 'Form2',
 			'html'		=> $this->createPanel()->render(),
 			'script'	=> '',
-			'css'		=> 'body{color:red!important}',
+			'css'		=> '',
 			'config'	=> $form
 		]);
 	}
@@ -291,7 +291,7 @@ class Form extends \sevian\element {
 			'iClass'	=> 'Grid2',
 			'html'		=> $this->createPanel()->render(),
 			'script'	=> '',
-			'css'		=> 'body{color:red!important}',
+			'css'		=> '',
 			'config'	=> $form
 		]);
 

@@ -126,6 +126,7 @@ class Unit
 	}
 
 	public function init(){
+		hx("BYE");
 		return [
 			'dataUnits'     => $this->loadUnits($this->getUser()),
 			'dataClients'   => $this->loadClients($this->getUser()),
@@ -216,7 +217,7 @@ class Unit
 			'caption'		=> 'Unidades',
 			//'id'            => 'U-'.$this->panel->id,
 			'followMe'		=> true,
-			'delay'			=> 10000,
+			'delay'			=> 10000*100000,
 			'infoId'		=> $this->eparams->infoId ?? false,
 			'statusId'		=> $this->eparams->statusId ?? false,
 			'searchUnitId'	=> $this->eparams->searchUnitId ?? false,

@@ -404,7 +404,7 @@ export class Communication {
             },
             onadd: (info) => {
                 
-                this._win["status-unit"].setCaption("Conected Units [ "+this._infoWin2.getCounts()+" ]");
+                this._win["status-unit"].setCaption("Conected Units [ "+(this._infoWin2.getCounts()*1)+" ]");
             }
         });
 
@@ -738,6 +738,8 @@ export class Communication {
 
     play2() {
 
+        return;
+
         
 
         if (this._timer2) {
@@ -921,6 +923,7 @@ export class Communication {
             
             form: formData,
             //blockingTarget: mapControl.getPanel(),
+            blockingTarget: $(this.commandPanelId),
             requestFunctions: {
                 "f": (json) => {
                     console.log(json);
@@ -1074,6 +1077,7 @@ alert(this.commandPanelId)
             
             form: formData,
             //blockingTarget: mapControl.getPanel(),
+            blockingTarget: $(this.bodyPanelId),
             onRequest: (x) => {
                // alert(this.bodyPanelId)
                S.getElement(this.bodyPanelId).setContext(this);
@@ -1181,12 +1185,10 @@ alert(this.commandPanelId)
         let unitId = this._form.getInput("unit_idx").getValue();
 
 
-        let f = this._form.getFormData();
-        S.send3({
+        let formData = this._form.getFormData();
+        /* S.send3({
             "async": 1,
             "form": f,
-            //id:4,
-
 
             "params": [
 
@@ -1212,19 +1214,52 @@ alert(this.commandPanelId)
                 // alert(x)
             }
         });
+ */
+
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            blockingTarget: $(this.bodyPanelId),
+            onRequest: (x) => {
+                
+                S.getElement(this.bodyPanelId).setContext(this);
+                // alert(x)
+            },
+            "params": [
+
+                {
+                    "t": "setMethod",
+                    'mode': 'element',
+                    "id": this.bodyPanelId,
+                    "element": "h-command",
+                    "method": "load-config",
+                    "name": "/form/h_commands",
+                    "eparams": {
+                        "a": 'yanny',
+                        "mainId": this.bodyPanelId,
+                        "unitId": unitId,
+                        "commandId": commandId
+                    }
+
+                }
+            ]
+
+        });
     }
 
     loadHistory() {
 
         let unitId = this._form.getInput("unit_idx").getValue();
 
-        let f = this._form.getFormData();
-        S.send3({
-            "async": 1,
-            "form": f,
-            //id:4,
+        let formData = this._form.getFormData();
+        S.go({
+            async: true,
+            valid: false,
+            
+            form: formData,
 
-
+            blockingTarget: $(this.bodyPanelId),
             "params": [
 
                 {
@@ -1252,13 +1287,16 @@ alert(this.commandPanelId)
 
     loadPending() {
 
-        let unitId = this._form.getInput("unit_idx").getValue();
+        const unitId = this._form.getInput("unit_idx").getValue();
 
-        let f = this._form.getFormData();
-        S.send3({
-            "async": 1,
-            "form": f,
-            //id:4,
+        const formData = this._form.getFormData();
+        S.go({
+            async: true,
+            valid: false,
+            
+            form: formData,
+
+            blockingTarget: $(this.bodyPanelId),
 
 
             "params": [
@@ -1445,6 +1483,7 @@ alert(this.commandPanelId)
             deviceName: "",
             commandId: commandId,
             unitId: unitId,
+            cmdIndex: 0,
             comdValues: values,
             msg: "",
             name: "",
@@ -1508,6 +1547,7 @@ alert(this.commandPanelId)
             deviceName: "",
             commandId: commandId,
             unitId: unitId * 1,
+            index: 0,
             comdValues: values,
             msg: "",
             name: "",

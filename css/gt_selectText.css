@@ -20,14 +20,17 @@
   padding: 0px;
   font-size: 9pt;
 }
+
 .list-menu:not(.active) {
   visibility: hidden;
 }
+
 .list-menu .option {
   text-transform: uppercase;
   padding: 2px;
   line-height: 1.5em;
 }
+
 .list-menu .option.active {
   background-color: #0051ff;
   color: white;

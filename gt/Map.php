@@ -64,7 +64,7 @@ class Map extends \Sevian\Element implements \Sevian\UserInfo{
 			'iClass'	=> 'GTMap',
 			//'html'		=> $this->panel->render(),
 			'script'	=> '',
-			'css'		=> 'body{color:red!important}',
+			'css'		=> '',
 			'config'	=> $this->info
 		]);
 
