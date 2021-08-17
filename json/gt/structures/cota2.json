@@ -217,7 +217,7 @@
 			"name": "gt-report",
 			"method": "load",
 			"eparams": {
-				
+				"socketId":"comm"
 			},
 			"type": 0,
 			"class": "",

@@ -121,7 +121,7 @@ export var Input = (($) => {
                     this._main.on(x, $.bind(this.events[x], this.context || this, "event"));
                 }
             }
-            
+
 
             if(this.childs){
                 this._main.ds("childs", "childs");
@@ -204,7 +204,7 @@ export var Input = (($) => {
 				option = document.createElement("OPTION");
 				option.value = "";
 				option.text = this.placeholder;
-                
+
 				this._main.get().options.add(option);
             }
 
@@ -535,7 +535,7 @@ export var InputDate = (($) => {
                     auxTxt.on(x, $.bind(this.events[x], this.context || this, "event"));
                 }
             }
-            
+
 
 			auxTxt.prop(this.propertys);
 			auxTxt.style(this.style);
@@ -1807,25 +1807,27 @@ export var Multi = (($) => {
             inputs.forEach((e)=>{
                 e.parentNode.removeChild(e);
             });
+            if(Array.isArray(this.data)){
+                this.data.forEach((d, index) => {
+                    if(vParent[d[2]] || !this.parent || d[2] === "*"){
+                        let div = this._main.create("div");
+                        div.create(
+                            {tagName:"input",
+                            type: this.type,
+                            name: this.name + ((this.type === "checkbox")? "_" + index: ""),
+                            id:this.id + "_" + index,
+                            className: "option",
+                            value:d[0]}).on("change", event => {
 
-            this.data.forEach((d, index) => {
-                if(vParent[d[2]] || !this.parent || d[2] === "*"){
-                    let div = this._main.create("div");
-                    div.create(
-                        {tagName:"input",
-                        type: this.type,
-                        name: this.name + ((this.type === "checkbox")? "_" + index: ""),
-                        id:this.id + "_" + index,
-                        className: "option",
-                        value:d[0]}).on("change", event => {
+                                this.onchange($(event.currentTarget));
+                            });
 
-                            this.onchange($(event.currentTarget));
-                        });
+                        div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
+                    }
 
-                    div.create({tagName:"label", htmlFor:this.id + "_" + index}).text(d[1]);
-                }
+                });
+            }
 
-            });
 
             this._setPropertys();
 

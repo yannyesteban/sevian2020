@@ -1180,7 +1180,7 @@ export class Communication {
         });
         this._ws.send(str1);
     }
-    sendCommand(unitId, type = "RC") {
+    sendCommand1(unitId, type = "RC") {
         let commandId = 0;
         //let unitId = this.getUnitId();
         let values = [];
@@ -1200,6 +1200,9 @@ export class Communication {
             useTag: 0
         });
         this._ws.send(str);
+    }
+    sendCommand(query) {
+        this._ws.send(JSON.stringify(query));
     }
     updateType(type, text) {
         this.menu.getByValue(type).getCaption().text(text);

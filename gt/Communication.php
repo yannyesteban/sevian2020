@@ -130,7 +130,7 @@ class Communication extends
             'user'          => $this->_userInfo->user,
             'socketServer'  => [
                 'host'  => 'localhost',//'localhost',//'bests.no-ip.info',
-                'port'  => 3342
+                'port'  => 3321
             ],
             'winNow'=>[
                 'caption'=>'Inmediato',

@@ -398,12 +398,12 @@ export class Communication {
                 //const counts = this.getInfoWin(2).getCounts();
                 //infoMenu.updateType(1, counts[info.type] || "");
                 this.unitPanel.showUnit3(info.id);
-                
+
 
                 //console.log(info);
             },
             onadd: (info) => {
-                
+
                 this._win["status-unit"].setCaption("Conected Units [ "+(this._infoWin2.getCounts()*1)+" ]");
             }
         });
@@ -740,7 +740,7 @@ export class Communication {
 
         return;
 
-        
+
 
         if (this._timer2) {
             clearTimeout(this._timer2);
@@ -920,7 +920,7 @@ export class Communication {
         S.go({
             async: true,
             valid: false,
-            
+
             form: formData,
             //blockingTarget: mapControl.getPanel(),
             blockingTarget: $(this.commandPanelId),
@@ -933,7 +933,7 @@ export class Communication {
             },
             onRequest: (x) => {
                 $(this.bodyPanelId).removeClass("sg-form");
-                
+
                                 //S.getElement(this.mainPanelId).setContext(this);
                                 S.getElement(this.commandPanelId).setContext(this);
                                 //this._form = S.getElement(this.mainPanelId);
@@ -1065,8 +1065,8 @@ alert(this.commandPanelId)
     }
 
     paramLoad(commandId, request) {
-        
-        
+
+
         let unitId = this._form.getInput("unit_idx").getValue();
 
         let f = this._form.getFormData();
@@ -1074,14 +1074,14 @@ alert(this.commandPanelId)
         S.go({
             async: true,
             valid: false,
-            
+
             form: formData,
             //blockingTarget: mapControl.getPanel(),
             blockingTarget: $(this.bodyPanelId),
             onRequest: (x) => {
                // alert(this.bodyPanelId)
                S.getElement(this.bodyPanelId).setContext(this);
-                
+
             },
             "params": [
 
@@ -1222,7 +1222,7 @@ alert(this.commandPanelId)
             form: formData,
             blockingTarget: $(this.bodyPanelId),
             onRequest: (x) => {
-                
+
                 S.getElement(this.bodyPanelId).setContext(this);
                 // alert(x)
             },
@@ -1256,7 +1256,7 @@ alert(this.commandPanelId)
         S.go({
             async: true,
             valid: false,
-            
+
             form: formData,
 
             blockingTarget: $(this.bodyPanelId),
@@ -1293,7 +1293,7 @@ alert(this.commandPanelId)
         S.go({
             async: true,
             valid: false,
-            
+
             form: formData,
 
             blockingTarget: $(this.bodyPanelId),
@@ -1405,7 +1405,7 @@ alert(this.commandPanelId)
         return S.getElement(this.bodyPanelId).getInput("q_params").getValue();
     }
     save(commandId) {
-        
+
         this.getDetail();
 
         let unitId = this._form.getInput("unit_idx").getValue();
@@ -1464,7 +1464,7 @@ alert(this.commandPanelId)
     }
 
     s(type: string = "SET") {
-        
+
         let commandId = this.getCommandId();
         let unitId = this.getUnitId();
 
@@ -1531,7 +1531,7 @@ alert(this.commandPanelId)
     }
 
 
-    sendCommand(unitId: number, type: string = "RC") {
+    sendCommand1(unitId: number, type: string = "RC") {
 
         let commandId = 0;
         //let unitId = this.getUnitId();
@@ -1562,6 +1562,10 @@ alert(this.commandPanelId)
         this._ws.send(str);
 
 
+    }
+
+    public sendCommand(query:{}) {
+        this._ws.send(JSON.stringify(query));
     }
 
     public updateType(type, text) {

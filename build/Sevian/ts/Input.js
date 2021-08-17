@@ -1385,20 +1385,22 @@ export var Multi = (($) => {
             inputs.forEach((e) => {
                 e.parentNode.removeChild(e);
             });
-            this.data.forEach((d, index) => {
-                if (vParent[d[2]] || !this.parent || d[2] === "*") {
-                    let div = this._main.create("div");
-                    div.create({ tagName: "input",
-                        type: this.type,
-                        name: this.name + ((this.type === "checkbox") ? "_" + index : ""),
-                        id: this.id + "_" + index,
-                        className: "option",
-                        value: d[0] }).on("change", event => {
-                        this.onchange($(event.currentTarget));
-                    });
-                    div.create({ tagName: "label", htmlFor: this.id + "_" + index }).text(d[1]);
-                }
-            });
+            if (Array.isArray(this.data)) {
+                this.data.forEach((d, index) => {
+                    if (vParent[d[2]] || !this.parent || d[2] === "*") {
+                        let div = this._main.create("div");
+                        div.create({ tagName: "input",
+                            type: this.type,
+                            name: this.name + ((this.type === "checkbox") ? "_" + index : ""),
+                            id: this.id + "_" + index,
+                            className: "option",
+                            value: d[0] }).on("change", event => {
+                            this.onchange($(event.currentTarget));
+                        });
+                        div.create({ tagName: "label", htmlFor: this.id + "_" + index }).text(d[1]);
+                    }
+                });
+            }
             this._setPropertys();
         }
         evalOptions(parentValue) {
