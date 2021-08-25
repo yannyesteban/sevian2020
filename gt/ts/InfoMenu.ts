@@ -1,4 +1,4 @@
-import { _sgQuery as $ } from '../../Sevian/ts/Query.js';
+import { SQObject, _sgQuery as $ } from '../../Sevian/ts/Query.js';
 import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
 
 function humanDiff(t1, t2) {
@@ -28,7 +28,7 @@ export class InfoMenu {
     private menu: any = null;
     constructor(info) {
 
-        //console.di(info);
+        
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -105,6 +105,8 @@ export class InfoComm {
     private lineId: number = 0;
 
     private showType: boolean = true;
+
+    private ul: SQObject = null;
     /*
     types
     1:unit conected
@@ -136,7 +138,7 @@ export class InfoComm {
     ];
     constructor(info) {
 
-        //console.di(info);
+        
         for (let x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -235,7 +237,7 @@ export class InfoComm {
 
     public setStatus(id, status, user?) {
 
-        //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
+        
         const ele = $(this.ul.query(`.main[data-id='${id}']`));
         if (ele) {
             if (status == 0) {
@@ -274,7 +276,7 @@ export class InfoComm {
     }
     public setAllStatus(eventId, status, user?) {
 
-        //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
+        
         const list = this.ul.queryAll(`.main[data-id]`);
 
         for (let item of list) {
@@ -378,6 +380,8 @@ export class InfoUnits {
     public onadd: Function = (info) => { };
 
     private lineId: number = 0;
+
+    private ul: SQObject = null;
     /*
     types
     1:unit conected
@@ -409,7 +413,7 @@ export class InfoUnits {
     ];
     constructor(info) {
 
-        //console.di(info);
+        
         for (let x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -443,7 +447,45 @@ export class InfoUnits {
 
     }
     public add(message: any) {
+
+        const connected = message.connected;
         const e = this.main.query(`.main[data-id='${message.id}']`);
+        if(e){
+            const value = $(e).ds("connected");
+            if(value == message.connected){
+                
+                return;
+            
+            }
+            
+            this.deleteLine(e);
+        
+        }
+        this.createRow(message);
+        this.onadd(message);
+        return;
+
+        console.log(message.id)
+        if(connected >= 0){
+            
+            if(!e){
+            
+                this.createRow(message);
+            }
+            
+        }else{
+            
+            if(e){
+            
+                this.deleteLine(e);
+            }
+        }
+        
+        
+        this.onadd(message);
+
+        return;
+        
         //console.log(message);
         //console.log(message.id, message.name);
         if (e) {
@@ -544,6 +586,75 @@ export class InfoUnits {
 
         return this.counts;
 
+    }
+
+    public createRow(message){
+        
+        const e = this.main.query(`.s${message.connected}`);
+        const div = $.create("div").addClass("main").addClass("ID-" + message.id)
+            .ds("id", message.id).ds("line", this.lineId).ds("type", message.type).ds("connected", message.connected);
+            div.addClass("s"+message.connected).addClass((message.connected==1)?"connected":"disconnectes");
+        
+        div.on("click", () => {
+            this.onread(message);
+        });
+        
+        if(e){
+            
+            const parentNode = e.parentNode;
+            parentNode.insertBefore(div.get(), e);
+        }else{
+            
+            if(message.connected==1){
+                
+                this.ul.insertFirst(div);
+
+            }else{
+                
+                this.ul.append(div);
+            }
+            
+        }
+        
+        /*
+        const divNO = this.ul.createFirst("div").addClass("main").removeClass("open").addClass("ID-" + message.id)
+        .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
+        div.addClass("s"+message.connected);
+        div.on("click", () => {
+            
+            this.onread(message);
+        });
+        */
+        div.create("div").text("+").addClass("btn-new").on("click", () => {
+            div.toggleClass("open");
+
+        });
+
+        div.create("div").text(message.name || "");
+
+        //const date = new Date();
+        //const start = date.getTime();
+
+        //div.create("div").text("Ahora").addClass("date").ds("date",date.toISOString()).ds("time", start);
+        //div.create("div").addClass("delay").text(message.delay || "1");;
+        
+        div.create("div").text(message.message || "");
+        div.create("div").addClass("type").ds("xtype", message.type).text(message.device_name || "");
+        
+
+
+        if (typeof (message.info) === "object") {
+            const detail = div.create("div").addClass("detail");
+            for (let x in message.info) {
+                detail.create("span").text(x);
+                detail.create("span").text(message.info[x]);
+            }
+
+        }
+
+        
+        
+        
     }
 
     public deleteLine(e) {

@@ -55,7 +55,7 @@ export class GTInfo{
         main.addClass("gt-info-main");
 
         this._win["info-main"] = new Float.Window({
-            visible:false,//true
+            visible:true,//true
             caption: this.caption,
             //left:1180 -160,
             //top:100,
@@ -69,7 +69,8 @@ export class GTInfo{
             height: "200px",
             mode:"custom",
             className:["sevian"],
-            child:main.get()
+            child:main.get(),
+            closable: false
         });
 
 

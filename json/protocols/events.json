@@ -28,7 +28,7 @@
     {
       "name": "longitude",
       "label": "longitude",
-      "value":"zzzxx",
+      "value": "zzzxx",
       "type": "text",
       "description": "The longitude of center point of defined circle zone."
     },
@@ -39,10 +39,17 @@
       "description": "The latitude of center point of defined circle zone."
     },
     {
+      "name": "radius",
+      "label": "radius",
+      "type": "text",
+      "description": "The radius of the circle zone. The effective range is from 50 to 65535 meters."
+    },
+
+    {
       "name": "zone_control",
       "label": "Zone Control",
       "type": "select",
-      "value":"0",
+      "value": "0",
       "data": [
         [0, "Disable"],
         [1, "Inside Zone"],

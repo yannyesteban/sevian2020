@@ -1,0 +1,37 @@
+{
+	"name":"geofence_menu",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal","webcar-menu"],
+	"autoClose":false,
+	"params":false,
+	"onDataUser_":"S.send3(dataUser);",
+	"items":[
+		{
+			"caption":"",
+			"imageClass":"icon-info",
+			"propertys":{
+				"title":"GetPosition"
+			},
+			"action":"S.getElement('report').goCommandId(null, 2)"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-unit",
+			"propertys":{
+				"title":"Reboot"
+			},
+			"action":"S.getElement('report').goCommandId(null, 3)"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-marker_001",
+			"propertys":{
+				"title":"Conectar LLamada"
+			},
+			"action":"S.getElement('report').goCommandId(null, 4);"
+		}
+
+	]
+}

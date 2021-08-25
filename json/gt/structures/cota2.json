@@ -57,6 +57,17 @@
 			"design": 0
 		},
 		{
+			"id": "panel-9",
+			"element": "s-menu",
+			"name": "/gt/menus/commands",
+			"method": "create",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		},
+		{
 			"id": "panel-3",
 			"element": "form",
 			"name": "/gt/forms/main_unit",
@@ -69,7 +80,7 @@
 		},
 		{
 			"id": "panel-5",
-			"element": "s-menu",
+			"element": "s-menuu",
 			"name": "/menu/tool",
 			"method": "create",
 			"eparams": {},
@@ -119,6 +130,7 @@
 			"eparams": {
 				"mapName": "map_01",
 				"infoId": "gt-info-11",
+				"infoMenuId": "panel-7",
 				"searchUnitId": 3
 			},
 			"type": 0,
@@ -217,7 +229,8 @@
 			"name": "gt-report",
 			"method": "load",
 			"eparams": {
-				"socketId":"comm"
+				"socketId":"comm",
+				"unitPanelId": "gt-unit-10"
 			},
 			"type": 0,
 			"class": "",

@@ -54,7 +54,7 @@
 			"propertys":{
 				"title":"Enviar Commando"
 			},
-			"action":"S.getElement('comm').show()"
+			"action":"S.getElement('report').show();/*S.getElement('comm').show()*/"
 		}
 
 	]

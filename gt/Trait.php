@@ -113,7 +113,8 @@ trait DBUnit{
      * load all units of a user
      *
      */
-    public function loadUnits($user){
+
+    public function loadUnits2($user){
         $cn = $this->cn;
 		$path = PATH_IMAGES;
         $cn->query = "SELECT
@@ -129,11 +130,42 @@ trait DBUnit{
         CASE WHEN t.id IS NULL THEN 1 ELSE 0 END as noTracking,
         CASE WHEN t.id IS NULL THEN 0 ELSE 1 END as valid,
         vn.name as unitName,
-        CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,#,
-        ' - ' as date_time, ' -' as longitude, ' -' as latitude,
-        ' -' as heading, ' -' as satellite, '- ' as speed
-        #t.id as trackId,
-        #t.longitude, t.latitude
+        CONCAT('../../images/', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,
+        u.conn_status as connected,
+
+
+t.date_time,
+            t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
+            t.event_id as eventId, t.mileage, t.input_status as inputStatus, t.voltage_level_i1 as voltageI1, t.voltage_level_i2 as voltageI2,
+            t.output_status as outputStatus, t.battery_voltage as batteryVoltage,
+
+            e.event_id as mainEvent,
+            date_format(t.date_time, '%d/%m/%Y %T') as dateTime,
+            date_format(t.date_time, '%T') as uTime,
+            date_format(t.date_time, '%d/%m/%Y') as uDate,
+
+            UNIX_TIMESTAMP(now()) as ts,
+            e.title as myEvent, de.name as event,
+
+         (input_status >> (1-1)) % 2 as i1,
+         (input_status >> (2-1)) % 2 as i2,
+         (input_status >> (3-1)) % 2 as i3,
+         (input_status >> (4-1)) % 2 as i4,
+         (input_status >> (5-1)) % 2 as i5,
+         (input_status >> (6-1)) % 2 as i6,
+         (input_status >> (7-1)) % 2 as i7,
+         (input_status >> (8-1)) % 2 as i8,
+
+         (output_status >> (1-1)) % 2 as o1,
+         (output_status >> (2-1)) % 2 as o2,
+         (output_status >> (3-1)) % 2 as o3,
+         (output_status >> (4-1)) % 2 as o4,
+         (output_status >> (5-1)) % 2 as o5,
+         (output_status >> (6-1)) % 2 as o6,
+         (output_status >> (7-1)) % 2 as o7,
+         (output_status >> (8-1)) % 2 as o8
+
+
 
 
         FROM unit as u
@@ -153,14 +185,82 @@ trait DBUnit{
 
         LEFT JOIN account as ac ON ac.id = u.account_id
         LEFT JOIN client as cl ON cl.id = ac.client_id
-        #INNER JOIN tracking as t ON t.id = u.tracking_id
+
+        LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date
+      LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
+        WHERE uu.user = '$user'
+        ORDER BY client, account, vehicle_name
+        
+        ";
+		$result = $cn->execute();
+        
+        return $cn->getDataAll($result);
+        $data = $cn->getDataAll($result);
+		//hx($data);
+
+        $s = [];
+        foreach($data as $unitId => $v){
+            if($v['trackId']){
+                $s[] = $v['trackId'];
+            }
+
+        }
+
+        $this->getUnitInput($data, $s);
+
+        return $data;
+    }
+
+
+
+
+    public function loadUnits($user){
+        $cn = $this->cn;
+		$path = PATH_IMAGES;
+        $cn->query = "SELECT
+        u.id as unitId,
+        ac.client_id as client_id,
+        cl.name as client,
+        u.account_id,
+        ac.name as account,
+        u.device_id,
+        de.name as device_name,
+        u.vehicle_id,
+        vn.name as vehicle_name,
+        CASE WHEN t.id IS NULL THEN 1 ELSE 0 END as noTracking,
+        CASE WHEN t.id IS NULL THEN 0 ELSE 1 END as valid,
+        vn.name as unitName,
+        CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,#,
+        ' - ' as date_time, ' -' as longitude, ' -' as latitude,
+        ' -' as heading, ' -' as satellite, '- ' as speed, u.conn_status as connected
+        
+
+
+        FROM unit as u
+        INNER JOIN user_unit as uu ON uu.unit_id = u.id
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
+
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
+
+        LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+        LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
+
+        INNER JOIN device as de ON de.id = u.device_id
+        INNER JOIN device_name as dn ON dn.name = de.name
+
+
+        LEFT JOIN icon as ic ON ic.id = u.icon_id
+
+        LEFT JOIN account as ac ON ac.id = u.account_id
+        LEFT JOIN client as cl ON cl.id = ac.client_id
+        
         LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
         WHERE uu.user = '$user'
         ORDER BY client, account, vehicle_name
-        #LIMIT 10
+        
         ";
 		$result = $cn->execute();
-
+        hx($cn->query);
         return $cn->getDataAll($result);
         $data = $cn->getDataAll($result);
 		//hx($data);
@@ -212,7 +312,7 @@ trait DBUnit{
 
 
     }
-	public function loadUnits2(){
+	public function loadUnits3(){
         $cn = $this->cn;
 
         $cn->query = "SELECT
@@ -386,29 +486,55 @@ trait DBUnit{
         return $data;
     }
 
-    public function statusUnits($lastDate = '0000-00-00 00:00:00'){
+
+    public function unitConected($user, $lastDate = '0000-00-00 00:00:00'){
 
         $cn = $this->cn;
 
-        $cn->query = "SELECT u.id as unit_id, NOW() as last_date,
+        $cn->query = "SELECT id as unitId, u.conn_status  as connected, 
+        CASE u.conn_status WHEN 1 THEN 'Conectado' ELSE '-' END as str_status
+
+        FROM unit as u
+        INNER JOIN user_unit as uu ON uu.unit_id = u.id
+        WHERE uu.user = '$user'
+                AND u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR) 
+        ";
+
+        $result = $cn->execute();
+        
+        return $cn->getDataAll($result);
+    }
+    public function statusUnits($user, $lastDate = '0000-00-00 00:00:00'){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT u.id as unit_id, NOW() as last_date, 
+        TIMESTAMPDIFF(MINUTE, conn_date, now()) as delay,
+        u.conn_status as connected,
         CONCAT(
             TIMESTAMPDIFF(DAY, TIMESTAMP(u.conn_date), NOW()) ,'d ',
             MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(u.conn_date), NOW()), 24), ':',
             MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(u.conn_date), NOW()), 60), ':',
-            MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(u.conn_date), NOW()), 60),'' ) AS delay,
+            MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(u.conn_date), NOW()), 60),'' ) AS delay2,
 
-            vn.name as vehicle_name, de.name as device_name, CASE u.conn_status WHEN 1 THEN 'Conectado' ELSE '-' END as status, date_format(u.conn_date,'%d/%m/%Y') as date, date_format(u.conn_date,'%H:%m:%s') as time
+            vn.name as vehicle_name, de.name as device_name,
+            CASE u.conn_status WHEN 1 THEN 'Conectado' ELSE '-' END as status, date_format(u.conn_date,'%d/%m/%Y') as date, date_format(u.conn_date,'%H:%m:%s') as time
         FROM unit as u
-        LEFT JOIN unit_name as vn ON vn.id = u.name_id
-        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
-        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
+        INNER JOIN user_unit as uu ON uu.unit_id = u.id
         INNER JOIN device as de ON de.id = u.device_id
+
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
+        LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
         LEFT JOIN tracking as t ON t.unit_id = u.id AND u.tracking_date = t.date_time
-        WHERE u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR)
-        AND u.conn_date > '$lastDate'
-        AND u.conn_status = 1
+
+
+                WHERE
+        u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND
+        uu.user = '$user' 
+        #AND u.conn_date > '$lastDate'
+        #AND u.conn_status = 0
         ORDER BY 2";
-        //hx($cn->query);
+        //echo($cn->query);exit;
 
         $result = $cn->execute();
         //    hr($cn->getDataAll($result));
@@ -619,7 +745,7 @@ trait DBTracking{
         $cn = $this->cn;
 
         $cn->query = "SELECT
-            t.unit_id as unitId, t.device_id as deviceId, t.date_time,
+            t.unit_id as unitId, t.device_id as deviceId, t.date_time, u.conn_status as connected,
             t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
             t.event_id as eventId, t.mileage, t.input_status as inputStatus, t.voltage_level_i1 as voltageI1, t.voltage_level_i2 as voltageI2,
             t.output_status as outputStatus, t.battery_voltage as batteryVoltage,
@@ -699,6 +825,77 @@ trait DBTracking{
         //$fields = $cn->fieldsName($result);
 
         return $data;
+    }
+
+    private function updateTracking2($user, &$lastDateTime){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT u.id as unitId, u.conn_status as connected, t.id as tracking_id,
+        UNIX_TIMESTAMP(now()) as ants,
+             t.device_id as deviceId, t.date_time,
+            t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
+            t.event_id as eventId, t.mileage, t.input_status as inputStatus, t.voltage_level_i1 as voltageI1, t.voltage_level_i2 as voltageI2,
+            t.output_status as outputStatus, t.battery_voltage as batteryVoltage,
+
+            e.event_id as mainEvent,
+            date_format(t.date_time, '%d/%m/%Y %T') as dateTime,
+            date_format(t.date_time, '%T') as uTime,
+            date_format(t.date_time, '%d/%m/%Y') as uDate,
+
+            UNIX_TIMESTAMP(now()) as ts,
+            e.title as myEvent, de.name as event,
+
+         (input_status >> (1-1)) % 2 as i1,
+         (input_status >> (2-1)) % 2 as i2,
+         (input_status >> (3-1)) % 2 as i3,
+         (input_status >> (4-1)) % 2 as i4,
+         (input_status >> (5-1)) % 2 as i5,
+         (input_status >> (6-1)) % 2 as i6,
+         (input_status >> (7-1)) % 2 as i7,
+         (input_status >> (8-1)) % 2 as i8,
+
+         (output_status >> (1-1)) % 2 as o1,
+         (output_status >> (2-1)) % 2 as o2,
+         (output_status >> (3-1)) % 2 as o3,
+         (output_status >> (4-1)) % 2 as o4,
+         (output_status >> (5-1)) % 2 as o5,
+         (output_status >> (6-1)) % 2 as o6,
+         (output_status >> (7-1)) % 2 as o7,
+         (output_status >> (8-1)) % 2 as o8
+
+        FROM unit as u
+        INNER JOIN user_unit as uu ON uu.unit_id = u.id
+
+
+        INNER JOIN tracking as t ON u.id = t.unit_id AND t.date_time = u.tracking_date AND t.time > '$lastDateTime'
+
+        LEFT JOIN device as v ON v.id = u.device_id
+        LEFT JOIN device_event de ON de.version_id = v.version_id AND de.event_id = t.event_id
+
+        LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
+
+        WHERE  uu.user='$user'
+
+        ORDER BY t.date_time
+        ";
+
+        
+
+		$result = $cn->execute();
+		$tracking = $cn->getDataAll($result);
+
+        $len = count($tracking);
+        
+        if($len > 0){
+            if($tracking[$len - 1]['date_time']){
+                $lastDateTime = $tracking[$len - 1]['date_time'];
+            }
+            
+            //hx($lastDateTime);
+        }
+
+        return $this->getDataInput($user, $tracking);
     }
 
     private function updateTracking($user, &$lastDateTime){

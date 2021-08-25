@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="x">SONAR</button>
+    <script type="module">
+
+
+
+		import { Sound } from "../build/test/sound.js";
+		
+		import { _sgQuery as $ } from "../build/Sevian/ts/Query.js";
+
+
+		
+		let s = new Sound();
+        var sound = s.test("../sounds/mixkit-classic-alarm-995.wav");//.play();
+        //sound.play();
+        $("x").on("click", (event)=>{
+            sound.play();
+        });
+
+        $(window).on("mousemove", () => {
+            sound.autoplay = true;
+           
+
+        });
+
+        setTimeout(()=>{ 
+            try{
+                sound.play(); 
+            }catch(e){
+                console.log(e)
+            }
+            
+        
+        
+        }, 3000);
+
+	</script>
+    
+    
+</body>
+</html>

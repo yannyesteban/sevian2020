@@ -1098,4 +1098,26 @@ ul.trace-tool li a {
 .event-tool .sg-form .sg-menu .text {
   margin: 0px;
 }
+
+.info-form-main.unit-conn-0 .false {
+  color: red;
+  background-color: #fcff33;
+  text-align: center;
+  font-weight: bold;
+}
+
+.info-form-main.unit-conn-0 .true {
+  display: none;
+}
+
+.info-form-main.unit-conn-1 .true {
+  color: #075a15;
+  background-color: #9bf767;
+  text-align: center;
+  font-weight: bold;
+}
+
+.info-form-main.unit-conn-1 .false {
+  display: none;
+}
 /*# sourceMappingURL=Mapbox.css.map */

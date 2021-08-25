@@ -45,11 +45,12 @@ class Unit
 
 	public function evalMethod($method = false): bool{
 
-		if($method === false){
-            $method = $this->method;
+		if($method !== false){
+            $this->method = $method;
 		}
 
-		switch($method){
+		
+		switch($this->method){
 			case 'load':
 
 				//$this->setSes('last_id', 12699);
@@ -86,7 +87,11 @@ class Unit
 				//hx("-");
 				$value = $this->getSes('last_id');
 				$lastDateTime = $this->getSes('lastDateTime');
-				$this->setRequest($this->updateTracking($this->getUser(), $lastDateTime));
+				$this->setRequest([
+					'tracking2'=>$this->updateTracking2($this->getUser(), $lastDateTime),
+					//'tracking'=>$this->updateTracking($this->getUser(), $lastDateTime),
+					'connected'=>$this->unitConected($this->getUser(), $lastDateTime)
+				]);
 
 				$value++;
 				$this->setSes('lastDateTime', $lastDateTime);
@@ -111,9 +116,9 @@ class Unit
 				break;
 			case 'status-units':
 				if($this->eparams->lastDate ?? false){
-					$this->setRequest($this->statusUnits($this->eparams->lastDate));
+					$this->setRequest($this->statusUnits($this->getUser(), $this->eparams->lastDate));
 				}else{
-					$this->setRequest($this->statusUnits());
+					$this->setRequest($this->statusUnits($this->getUser()));
 				}
 
 				break;
@@ -128,7 +133,7 @@ class Unit
 	public function init(){
 		hx("BYE");
 		return [
-			'dataUnits'     => $this->loadUnits($this->getUser()),
+			'dataUnits'     => $this->loadUnits2($this->getUser()),
 			'dataClients'   => $this->loadClients($this->getUser()),
 			'dataAccounts'  => $this->loadAccounts($this->getUser()),
 			'tracking'      => $this->loadTracking2(),
@@ -198,18 +203,42 @@ class Unit
 		//hx($this->panel->id);
 
 		$lastDateTime = date('Y-m-d H:i:s');
+
+
+		//hx($this->lastTracking($this->getUser(), $lastDateTime));
+
+
+		$winStatus = [
+			'visible'=> true,
+			'caption'=> 'Unidades Conectadas',
+			'left'=>'right',
+			'top'=>'bottom',
+			'deltaX'=> -50,
+			'deltaY'=>-140-20,
+			//top:390,
+			'width'=> '330px',
+			'height'=> '120px',
+			'mode'=>'auto',
+			'className'=>['sevian'],
+			//'child'=>_statusUnit.get(),
+			'resizable'=> true,
+			'draggable'=> true,
+			'closable'=> false
+
+		]; 
+
 		$this->info = [
 			'id'=>$this->id,
 			'panel'=>$this->id,
 
 			'mapName'     	=> $this->eparams->mapName ?? '',
 
-			'dataUnits'     => $this->loadUnits($this->getUser()),
+			'dataUnits'     => $this->loadUnits2($this->getUser()),
 			'dataClients'   => $this->loadClients($this->getUser()),
 			'dataAccounts'  => $this->loadAccounts($this->getUser()),
 			//'tracking'      => $this->loadTracking2(),
-			'tracking'		=> $this->lastTracking($this->getUser(), $lastDateTime),
-			'history'		=> $this->loadTracking4(2002, '2020-07-01 09:20:34', '2020-07-01 12:09:50', '', ''),
+			//'tracking'		=> $this->lastTracking($this->getUser(), $lastDateTime),
+			//'history'		=> $this->loadTracking4(2002, '2020-07-01 09:20:34', '2020-07-01 12:09:50', '', ''),
 			'traceConfig'	=> $this->loadUserConfig($this->_userInfo->user),
 			'popupTemplate' => $this->popupTemplate,
 			'infoTemplate'	=> $this->infoTemplate,
@@ -217,10 +246,11 @@ class Unit
 			'caption'		=> 'Unidades',
 			//'id'            => 'U-'.$this->panel->id,
 			'followMe'		=> true,
-			'delay'			=> 10000*100000,
+			'delay'			=> 10000,
 			'infoId'		=> $this->eparams->infoId ?? false,
 			'statusId'		=> $this->eparams->statusId ?? false,
 			'searchUnitId'	=> $this->eparams->searchUnitId ?? false,
+			'infoMenuId'    => $this->eparams->infoMenuId?? '',
 			'infoInput'		=>$this->infoInput(),
 			'unitInputs'	=>$this->loadUnitInputs($this->getUser()),
 			'msgErrorUnit'	=> "Unidad no encontrada!!!",
@@ -228,7 +258,9 @@ class Unit
 			'infoForm'		=> $infoForm->getInit(),
 			'infoPopup'		=> $infoPopup->getInit(),
 			'infoTrace'		=> $infoTrace->getInit(),
-			'propertysInfo' => $this->getPropertysInfo()
+			'propertysInfo' => $this->getPropertysInfo(),
+
+			'winStatus' => $winStatus
 		];
 
 		$this->setSes('lastDateTime', $lastDateTime);

@@ -4,6 +4,7 @@ import { Grid2 as Grid } from '../../Sevian/ts/Grid2.js';
 import { Float } from '../../Sevian/ts/Window.js';
 import { S } from '../../Sevian/ts/Sevian.js';
 import { Socket } from './Socket.js';
+import { Sound } from './Sound.js';
 import { InfoComm, InfoMenu, InfoUnits } from './InfoMenu.js';
 var WNames;
 (function (WNames) {
@@ -68,6 +69,7 @@ export class Communication {
         this.winAlarm = null;
         this.unitPanel = null;
         this.winNames = WNames;
+        this.sound = null;
         this.socketServer = {
             host: "127.0.0.1",
             port: 3310
@@ -116,7 +118,6 @@ export class Communication {
                 onmessage: (event) => {
                     //db ("     onmessage !!!!");
                     const server_message = event.data;
-                    //console.log(server_message)
                     try {
                         let json = JSON.parse(server_message);
                         //console.log(json);
@@ -170,6 +171,8 @@ export class Communication {
                     return mode;
                 };
             }
+            let s = new Sound();
+            this.sound = s.test("../../sounds/mixkit-classic-alarm-995.wav"); //.play();
         });
     }
     _create(main) {
@@ -191,6 +194,7 @@ export class Communication {
             onread: (info) => {
                 if (info.unitId) {
                     this.unitPanel.setUnit(info.unitId);
+                    this.unitPanel.showUnit3(info.unitId);
                 }
                 //this.updateEventStatus(info, 1, this.winNames.now);
             },
@@ -205,6 +209,7 @@ export class Communication {
             onread: (info) => {
                 if (info.unitId) {
                     this.unitPanel.setUnit(info.unitId);
+                    this.unitPanel.showUnit3(info.unitId);
                 }
                 //infoMenu.updateType(1, counts[info.type] || "");
                 //console.log(info);
@@ -224,6 +229,7 @@ export class Communication {
             onread: (info) => {
                 if (info.unitId) {
                     this.unitPanel.setUnit(info.unitId);
+                    this.unitPanel.showUnit3(info.unitId);
                 }
                 //const counts = this.getInfoWin(this.winNames.alarm).getCounts();
                 //infoMenu.updateType(0, counts[info.type] || "");
@@ -288,12 +294,13 @@ export class Communication {
                 //console.log(info);
             },
             onadd: (info) => {
-                this._win["status-unit"].setCaption("Conected Units [ " + (this._infoWin2.getCounts() * 1) + " ]");
+                //this._win["status-unit"].setCaption("Conected Units [ "+(this._infoWin2.getCounts()*1)+" ]");
             }
         });
         if (this.unitId) {
             this.loadUnit(this.unitId);
         }
+        return;
         this.statusId = "yasta2";
         const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
         const winStatus = {
@@ -370,9 +377,8 @@ export class Communication {
     }
     reqStatusWin(json) {
         //this._infoWin2.reset();
-        console.log(json);
+        let sum = 0;
         json.forEach(e => {
-            console.log("....", e.unit_id, e.vehicle_name);
             this.lastDate = e.last_date;
             this._infoWin2.add({
                 id: e.unit_id,
@@ -380,15 +386,19 @@ export class Communication {
                 delay: e.delay,
                 type: 10,
                 device_name: e.device_name,
-                message: e.status
+                message: e.status,
+                connected: e.connected
             });
+            if (e.connected >= 0) {
+                sum++;
+            }
         });
+        this._win["status-unit"].setCaption("Conected Units: [ " + (sum) + " ]");
         //console.log(json);
         const div = $(this.statusId);
         div.append(this._infoWin2.get());
     }
     reqDataEvent(json) {
-        console.log(json);
         let i = 0;
         const modes = [1, 2, 4, 8, 16, 32, 64, 128, 256];
         for (let x in json) {
@@ -539,6 +549,12 @@ export class Communication {
         });
     }
     play2() {
+        if (this._timer3) {
+            clearTimeout(this._timer3);
+        }
+        this._timer3 = setInterval(() => {
+            this.getDataEvent();
+        }, this.delay3);
         return;
         if (this._timer2) {
             clearTimeout(this._timer2);
@@ -546,12 +562,6 @@ export class Communication {
         this._timer2 = setInterval(() => {
             this.showStatusWin();
         }, this.delay2);
-        if (this._timer3) {
-            clearTimeout(this._timer3);
-        }
-        this._timer3 = setInterval(() => {
-            this.getDataEvent();
-        }, this.delay3);
     }
     test2() {
         let f = this._form.getFormData();

@@ -8,6 +8,7 @@ import { Trace } from '../../lib/Trace.js';
 import { TraceTool } from './TraceTool.js';
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 import { LayerMenu } from './LayerMenu.js';
+import { InfoUnits } from './InfoMenu.js';
 const evalInputs = (data) => {
     let xInputs = "";
     let xOutputs = "";
@@ -48,6 +49,7 @@ class Mobil {
         this.maxDelay = 200;
         this.followMe = false;
         this.trackingData = [];
+        this.connected = 0;
         this.onValid = (value) => { };
         this.onFollow = (value) => { };
         this.onVisible = (value) => { };
@@ -184,6 +186,12 @@ class Mobil {
             }
         }
     }
+    getData() {
+        return this.data;
+    }
+    setData(data) {
+        this.data = data;
+    }
 }
 Mobil.map = null;
 export class Unit {
@@ -229,7 +237,7 @@ export class Unit {
         this._timer = null;
         this._timer2 = null;
         this.delay2 = 12000;
-        this._lastUnitId = 0;
+        this._lastUnitId = null;
         this._traces = [];
         this.infoId = null;
         this.statusId = null;
@@ -239,6 +247,8 @@ export class Unit {
         this.msgErrortracking = "data tracking not Found!!!";
         this.searchUnitId = null;
         this.searchUnit = null;
+        this.winStatus = null;
+        this.statusInfo = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -265,7 +275,7 @@ export class Unit {
             Mobil.setMap(mapApi);
             this.setMap(map);
             this.dataUnits.forEach((info) => {
-                const tracking = this.tracking.find(e => e.unitId == info.unitId) || {};
+                //const tracking = this.tracking.find(e => e.unitId == info.unitId) || {};
                 const propertys = {};
                 this.propertysInfo.forEach((e) => {
                     propertys[e.name] = e;
@@ -273,14 +283,14 @@ export class Unit {
                 this.units[info.unitId] = new Mobil({
                     data: info,
                     name: info.vehicle_name,
-                    latitude: tracking.latitude || 0,
-                    longitude: tracking.longitude || 0,
-                    heading: tracking.heading || 0,
+                    latitude: info.latitude || 0,
+                    longitude: info.longitude || 0,
+                    heading: info.heading || 0,
                     image: info.image,
                     popupInfo: "this.loadPopupInfo(info)" + info.unitId,
                     visible: false,
                     infoForm: this.infoPopup,
-                    valid: tracking.unitId !== undefined,
+                    valid: info.valid,
                     propertysInfo: propertys,
                     traceInfo: {
                         layers: this.traceConfig.layers,
@@ -305,6 +315,7 @@ export class Unit {
                         //this.infoFormMain.setMode(info.className);
                         this.infoFormMain.setData(info);
                         winInfo.setCaption(name);
+                        this.infoFormMain.setMode("xxxx");
                         winInfo.setBody(this.infoFormMain.get());
                     };
                 }
@@ -314,8 +325,6 @@ export class Unit {
             //this.playTrace();
             //map.map.addImage("t1", new TraceMarker(map.map, 30), { pixelRatio: 1 });
             return;
-            console.log(this.tracking);
-            t;
         });
         if (this.showConnectedUnit) {
             this.play2();
@@ -335,6 +344,21 @@ export class Unit {
         this.searchUnit = S.getElement(this.searchUnitId);
         main.addClass("unit-main");
         this.createMenu();
+        this.statusInfo = new InfoUnits({
+            onread: (info) => {
+                if (info.id) {
+                    this.setUnit(info.id);
+                }
+                //const counts = this.getInfoWin(2).getCounts();
+                //infoMenu.updateType(1, counts[info.type] || "");
+                this.showUnit3(info.id);
+            },
+            onadd: (info) => {
+                //this._win["status-unit"].setCaption("Conected Units [ "+(this._infoWin2.getCounts()*1)+" ]");
+            }
+        });
+        this.winStatus.child = this.statusInfo.get();
+        this._win["status"] = new Float.Window(this.winStatus);
         //this.menu = this.createMenu();
         this._win["menu-unit"] = new Float.Window({
             visible: true,
@@ -380,6 +404,30 @@ export class Unit {
     setMap(map) {
         this.map = map;
     }
+    updateUnit(tracking) {
+        const unitId = tracking.unitId;
+        /*
+        const index: number = this.tracking.findIndex(e => e.unitId == unitId);
+
+        if (index >= 0) {
+            this.tracking[index] = tracking;
+        }
+        */
+        if (this.units[unitId]) {
+            this.units[unitId].addTracking(tracking);
+            this.units[unitId].setPosition({
+                longitude: tracking.longitude,
+                latitude: tracking.latitude,
+                heading: tracking.heading
+            }).setInfo(this.getUnitInfo(unitId));
+        }
+        if (this._lastUnitId === unitId) {
+            this.onInfoUpdate(this.getUnitInfo(unitId), this.units[unitId].getName());
+        }
+        if (this.followMe) {
+            this.flyTo();
+        }
+    }
     updateTracking(data) {
         for (let unitId in this.units) {
             this.units[unitId].cutTrace();
@@ -387,7 +435,42 @@ export class Unit {
         if (data === undefined) {
             return;
         }
-        data.forEach((tracking, i) => {
+        let sum = 0;
+        data.connected.forEach((tracking) => {
+            this.units[tracking.unitId].data.connected = tracking.connected;
+            //this.lastDate = e.last_date;
+            this.statusInfo.add({
+                id: tracking.unitId,
+                name: this.units[tracking.unitId].getName(),
+                delay: 0,
+                type: 10,
+                device_name: this.units[tracking.unitId].data.device_name,
+                message: tracking.str_status,
+                connected: tracking.connected
+            });
+            if (tracking.connected > 0) {
+                sum++;
+            }
+        });
+        this._win["status"].setCaption("Conected Units: [ " + (sum) + " ]");
+        data.tracking2.forEach((tracking, i) => {
+            this.units[tracking.unitId].data = Object.assign(this.units[tracking.unitId].data, tracking);
+            this.updateUnit(tracking);
+            /*
+            if (tracking.tracking_id) {
+                console.log(tracking);
+                
+            }else{
+                console.log("NOOOOOO");
+                
+            }
+            */
+        });
+        return;
+        data.conected.forEach((item, i) => {
+            this.units[item.unit_id].connected = item.connected;
+        });
+        data.tracking.forEach((tracking, i) => {
             //this.trace.add(element);
             const unitId = tracking.unitId;
             const index = this.tracking.findIndex(e => e.unitId == unitId);
@@ -408,22 +491,10 @@ export class Unit {
             if (this.followMe) {
                 this.flyTo();
             }
-            return;
-            const unitIndex = this.dataUnits.findIndex(e => e.unitId == unitId);
-            console.log(index, this.marks, this.marks[unitId]);
-            if (this.marks[unitId]) {
-                const mark = this.marks[unitId];
-                mark.setLngLat([this.tracking[index].longitude, this.tracking[index].latitude]);
-                mark.setHeading(this.tracking[index].heading);
-                mark.setPopup(this.loadPopupInfo(unitIndex));
-                this.setInfo(unitIndex);
-                //let popup = this.evalHTML(this.popupTemplate, this.dataUnits[id]);
-                //popup = this.evalHTML(popup, this.tracking[id]);
-            }
         });
     }
     play() {
-        return;
+        //return;
         //console.log(this.map.map.map)
         /*
         const cluster = new Cluster({ map: this.map.map.map });
@@ -437,7 +508,7 @@ export class Unit {
                 async: true,
                 valid: false,
                 requestFunction: (json) => {
-                    console.log(json);
+                    //console.log(json)
                     //cluster.updateSource(json);
                     this.updateTracking(json);
                 },
@@ -461,7 +532,6 @@ export class Unit {
     }
     updateTrace(xhr) {
         let json = JSON.parse(xhr.responseText);
-        console.log(json);
         //this.updateTraceLayer(json);
         //this.stopTrace();
         //this.traceDelay = 60000000;
@@ -643,24 +713,22 @@ export class Unit {
         }
     }
     getUnitInfo(unitId) {
+        return this.units[unitId].data;
         const dataUnit = this.dataUnits.find(e => e.unitId == unitId);
         const data = Object.assign({}, dataUnit);
         Object.assign(data, this.tracking.find(e => e.unitId == unitId));
         return (data);
     }
     setInfo(unitId) {
+        this.onInfoUpdate(this.loadInfoData(this.units[unitId].data), this.units[unitId].getName());
+        return;
         const dataUnit = this.dataUnits.find(e => e.unitId == unitId);
         const data = Object.assign({}, dataUnit);
         Object.assign(data, this.tracking.find(e => e.unitId == unitId));
         this.onInfoUpdate(this.loadInfoData(data), dataUnit.vehicle_name);
-        return;
-        if (!this.dataUnits[id]) {
-            return;
-        }
-        //this._info.text(this.loadInfoData(id));
-        //this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
     }
     getDataInfo(id) {
+        alert(8888);
         if (!this.dataUnits[id]) {
             return;
         }
@@ -695,7 +763,6 @@ export class Unit {
         //return this.evalHTML(, this.tracking[this.dataUnits[id].unitId]);
     }
     loadInfoData(data) {
-        console.log(data);
         let xInputs = "";
         if (data.iInputs) {
             data.iInputs.forEach(element => {
@@ -813,6 +880,9 @@ export class Unit {
         if (info) {
             this.onInfoUpdate(this.getUnitInfo(unitId), info.unitName);
         }
+    }
+    getLastUnit() {
+        return this._lastUnitId;
     }
 }
 Unit._instances = [];

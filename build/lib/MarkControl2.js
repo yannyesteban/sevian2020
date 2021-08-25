@@ -254,7 +254,6 @@ export class MarkControl {
                 }
             }
         });
-        console.log(this.parentControl.markImages);
         this.parentControl.markImages.forEach((image) => {
             const images = imageMain.create("div").create("img");
             images.prop("src", image.src);

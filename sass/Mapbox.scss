@@ -1010,3 +1010,28 @@ ul.trace-tool {
     }
   }
 }
+
+.info-form-main {
+  &.unit-conn-0 {
+    .false {
+      color: red;
+      background-color: #fcff33;
+      text-align: center;
+      font-weight: bold;
+    }
+    .true {
+      display: none;
+    }
+  }
+  &.unit-conn-1 {
+    .true {
+      color: rgb(7, 90, 21);
+      background-color: #9bf767;
+      text-align: center;
+      font-weight: bold;
+    }
+    .false {
+      display: none;
+    }
+  }
+}

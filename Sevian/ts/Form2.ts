@@ -1,5 +1,5 @@
 //import { Query as $} from './Query.js';
-import {_sgQuery as $}  from './Query.js';
+import {_sgQuery as $, SQObject}  from './Query.js';
 import {I, Input, Hidden, InputDate, InputInfo, Multi}  from './Input.js';
 import {List}  from './List.js';
 import {Menu}  from './Menu2.js';
@@ -47,7 +47,7 @@ export class Form2{
     //text:string = "";
     elements:object[] = [];
 
-    _main:object = null;
+    _main:SQObject = null;
     _page:object = null;
     _pg:object = [];
     _tab:object = null;
@@ -592,7 +592,13 @@ export class Form2{
 
     setMode(value){
         this._main.addClass("mode-" + value);
+        this._main.ds("mode", value);
         return this;
+
+    }
+
+    getMode(){
+        return this._main.ds("mode");
 
     }
 }

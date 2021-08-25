@@ -12,5 +12,6 @@
 	"{@PATH}css/gt_command.css",
 	"{@PATH}css/gt_catalogue.css",
 	"{@PATH}css/sgTab.css",
-	"{@PATH}css/Mapbox.css"
+	"{@PATH}css/Mapbox.css",
+	"{@PATH}css/gt_tool.css"
 ]

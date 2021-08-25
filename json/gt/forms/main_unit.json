@@ -38,7 +38,7 @@
 			"name":"follow_me",
 			"default":"»",
 			"title":"hola",
-			"input":"input","type":"checkbox",
+			"input":"input","type":"hidden",
 			"events":{
 
 				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"

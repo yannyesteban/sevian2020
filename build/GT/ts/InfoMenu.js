@@ -18,7 +18,6 @@ export class InfoMenu {
         this.main = null;
         this.types = [];
         this.menu = null;
-        //console.di(info);
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -70,6 +69,7 @@ export class InfoComm {
         this.ondelete = (info) => { };
         this.lineId = 0;
         this.showType = true;
+        this.ul = null;
         /*
         types
         1:unit conected
@@ -96,7 +96,6 @@ export class InfoComm {
         this.cTypes = [
             "UNK", "CONN", "DISC", "SYNC", "POS", "ALARM", "EVENT", "MSG", "CMD"
         ];
-        //console.di(info);
         for (let x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -170,7 +169,6 @@ export class InfoComm {
         this.onadd(message);
     }
     setStatus(id, status, user) {
-        //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
         const ele = $(this.ul.query(`.main[data-id='${id}']`));
         if (ele) {
             if (status == 0) {
@@ -202,7 +200,6 @@ export class InfoComm {
         }
     }
     setAllStatus(eventId, status, user) {
-        //console.log(`.main[data-id='${id}']`, this.ul.query(`.main[data-id='${id}']`));
         const list = this.ul.queryAll(`.main[data-id]`);
         for (let item of list) {
             if ($(item).ds("id") * 1 <= eventId) {
@@ -274,6 +271,7 @@ export class InfoUnits {
         this.onread = (info) => { };
         this.onadd = (info) => { };
         this.lineId = 0;
+        this.ul = null;
         /*
         types
         1:unit conected
@@ -300,7 +298,6 @@ export class InfoUnits {
         this.cTypes = [
             "UNK", "CONN", "DISC", "SYNC", "POS", "ALARM", "EVENT", "MSG", "CMD"
         ];
-        //console.di(info);
         for (let x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -324,7 +321,31 @@ export class InfoUnits {
         let mainPanel = this.ul = main.create("div").addClass("info-comm-units").id("xxy");
     }
     add(message) {
+        const connected = message.connected;
         const e = this.main.query(`.main[data-id='${message.id}']`);
+        if (e) {
+            const value = $(e).ds("connected");
+            if (value == message.connected) {
+                return;
+            }
+            this.deleteLine(e);
+        }
+        this.createRow(message);
+        this.onadd(message);
+        return;
+        console.log(message.id);
+        if (connected >= 0) {
+            if (!e) {
+                this.createRow(message);
+            }
+        }
+        else {
+            if (e) {
+                this.deleteLine(e);
+            }
+        }
+        this.onadd(message);
+        return;
         //console.log(message);
         //console.log(message.id, message.name);
         if (e) {
@@ -397,6 +418,53 @@ export class InfoUnits {
             });
         }
         return this.counts;
+    }
+    createRow(message) {
+        const e = this.main.query(`.s${message.connected}`);
+        const div = $.create("div").addClass("main").addClass("ID-" + message.id)
+            .ds("id", message.id).ds("line", this.lineId).ds("type", message.type).ds("connected", message.connected);
+        div.addClass("s" + message.connected).addClass((message.connected == 1) ? "connected" : "disconnectes");
+        div.on("click", () => {
+            this.onread(message);
+        });
+        if (e) {
+            const parentNode = e.parentNode;
+            parentNode.insertBefore(div.get(), e);
+        }
+        else {
+            if (message.connected == 1) {
+                this.ul.insertFirst(div);
+            }
+            else {
+                this.ul.append(div);
+            }
+        }
+        /*
+        const divNO = this.ul.createFirst("div").addClass("main").removeClass("open").addClass("ID-" + message.id)
+        .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
+        div.addClass("s"+message.connected);
+        div.on("click", () => {
+            
+            this.onread(message);
+        });
+        */
+        div.create("div").text("+").addClass("btn-new").on("click", () => {
+            div.toggleClass("open");
+        });
+        div.create("div").text(message.name || "");
+        //const date = new Date();
+        //const start = date.getTime();
+        //div.create("div").text("Ahora").addClass("date").ds("date",date.toISOString()).ds("time", start);
+        //div.create("div").addClass("delay").text(message.delay || "1");;
+        div.create("div").text(message.message || "");
+        div.create("div").addClass("type").ds("xtype", message.type).text(message.device_name || "");
+        if (typeof (message.info) === "object") {
+            const detail = div.create("div").addClass("detail");
+            for (let x in message.info) {
+                detail.create("span").text(x);
+                detail.create("span").text(message.info[x]);
+            }
+        }
     }
     deleteLine(e) {
         const parent = e.parentNode;

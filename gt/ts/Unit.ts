@@ -1,12 +1,12 @@
-import {_sgQuery as $, SQObject}  from '../../Sevian/ts/Query.js';
-import {Map, MapApi, MapControl}  from './Map.js';
+import { _sgQuery as $, SQObject } from '../../Sevian/ts/Query.js';
+import { Map, MapApi, MapControl } from './Map.js';
 //import {Form2 as Form2} from './Form2.js';
-import {Menu as Menu} from '../../Sevian/ts/Menu2.js';
-import {Float}  from '../../Sevian/ts/Window.js';
-import {S}  from '../../Sevian/ts/Sevian.js';
-import {Trace}  from '../../lib/Trace.js';
-import {Mark}  from '../../lib/Mark';
-import {TraceControl}  from '../../lib/TraceControl.js';
+import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
+import { Float } from '../../Sevian/ts/Window.js';
+import { S } from '../../Sevian/ts/Sevian.js';
+import { Trace } from '../../lib/Trace.js';
+import { Mark } from '../../lib/Mark';
+import { TraceControl } from '../../lib/TraceControl.js';
 import { TraceTool } from './TraceTool.js';
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 
@@ -14,7 +14,9 @@ import { LayerMenu } from './LayerMenu.js';
 
 import { GTInfo } from '../../GT/ts/Info.js';
 
-import {Cluster}  from '../../lib/Cluster.js';
+import { Cluster } from '../../lib/Cluster.js';
+
+import { InfoComm, InfoMenu, InfoUnits } from './InfoMenu.js';
 
 const evalInputs = (data) => {
 
@@ -44,18 +46,18 @@ const evalInputs = (data) => {
 	return data;
 }
 
-class Mobil{
-	private data:any = null;
+class Mobil {
+	public data: any = null;
 	private name: Mark = null;
 	private mark: Mark = null;
-	private latitude:number = 0;
-	private longitude:number = 0;
-	private heading:number = 0;
+	private latitude: number = 0;
+	private longitude: number = 0;
+	private heading: number = 0;
 	private image: string = "";
 	private trace: Trace = null;
 	private traceInfo: any = {};
-	private popupInfo:string = "";
-	private visible:boolean = false;
+	private popupInfo: string = "";
+	private visible: boolean = false;
 	private valid: boolean = false;
 	private infoForm: typeof InfoForm = null;
 	private infoFormMain: InfoForm = null;
@@ -63,6 +65,7 @@ class Mobil{
 	private maxDelay: number = 200;
 	private followMe: boolean = false;
 	private trackingData: any[] = [];
+	public connected: number = 0;
 
 
 	public onValid: (value: boolean) => void = (value) => { };
@@ -78,8 +81,8 @@ class Mobil{
 	}
 	constructor(info?) {
 
-		for(var x in info){
-			if(this.hasOwnProperty(x)) {
+		for (var x in info) {
+			if (this.hasOwnProperty(x)) {
 				this[x] = info[x];
 			}
 		}
@@ -87,25 +90,28 @@ class Mobil{
 		this.infoFormMain = new InfoForm(this.infoForm);
 
 		this.mark = Mobil.map.createMark({
-			latitude:this.latitude,
-			longitude:this.longitude,
-			heading:this.heading,
-			image:this.image,
+			latitude: this.latitude,
+			longitude: this.longitude,
+			heading: this.heading,
+			image: this.image,
 			popupInfo: this.infoFormMain.get(),
-			visible:this.visible
+			visible: this.visible
 		});
 
 		this.createTrace(this.traceInfo);
 
+		
+
 	}
 
+	
 	createTrace(info) {
 
 
 		const infoForm = new InfoForm(info.infoTrace);
 		this.trace = new Trace({
 			//data:tracking,
-			map:Mobil.map.map,
+			map: Mobil.map.map,
 			layers: info.layers,
 			propertysInfo: this.propertysInfo,
 			popupInfo: infoForm.get(),
@@ -148,7 +154,7 @@ class Mobil{
 		this.setValid(true);
 
 		if (this.trace.isActive()) {
-			
+
 			this.trackingData.push(tracking);
 			this.trace.setData(this.trackingData);
 		}
@@ -161,21 +167,21 @@ class Mobil{
 		this.mark.setLngLat([this.longitude, this.latitude]);
 		this.mark.setHeading(info.heading || 0);
 		//this.mark.setPopup(info.popupInfo || "");
-		if(info.visible){
+		if (info.visible) {
 			this.mark.show(info.visible);
 		}
-		if(info.image){
+		if (info.image) {
 
 		}
 
 		return this;
 
 	}
-	setInfo(info){
+	setInfo(info) {
 		this.infoFormMain.setData(info);
 		return this;
 	}
-	flyTo(){
+	flyTo() {
 		this.mark.flyTo();
 		return this;
 	}
@@ -193,7 +199,7 @@ class Mobil{
 	getVisible() {
 		return this.visible;
 	}
-	panTo(){
+	panTo() {
 		this.mark.panTo();
 		return this;
 	}
@@ -230,18 +236,24 @@ class Mobil{
 			}
 		}
 	}
+	getData(){
+		return this.data;
+	}
+	setData(data){
+		this.data = data;
+	}
 }
 
-export class Unit{
+export class Unit {
 
-	id:any = null;
-	map:any = null;
+	id: any = null;
+	map: any = null;
 
-	private units:{ [key: number]: Mobil} = {};
-	private mapName:string = null;
-	private traceControl:TraceControl = null;
+	private units: { [key: number]: Mobil } = {};
+	private mapName: string = null;
+	private traceControl: TraceControl = null;
 
-	private infoForm:any = null;
+	private infoForm: any = null;
 	private infoFormMain: InfoForm = null;
 	private infoPopup: any = null;
 	private infoTrace: any = null;
@@ -256,87 +268,93 @@ export class Unit{
 	private traceTool: TraceTool = null;
 
 
-	dataClients:any[] = null;
-	dataAccounts:any[] = null;
-	dataUnits:any[] = null;
-	indexUnit:any[] = [];
-	tracking:any[] = null;
-	history:any[] = null;
-	traceConfig:any = null;
-	menu:any = null;
-	win:any = null;
+	dataClients: any[] = null;
+	dataAccounts: any[] = null;
+	dataUnits: any[] = null;
+	indexUnit: any[] = [];
+	tracking: any[] = null;
+	history: any[] = null;
+	traceConfig: any = null;
+	menu: any = null;
+	win: any = null;
 
-	private infoInput:any = {};
-	private unitInputs:any = {};
+	private infoInput: any = {};
+	private unitInputs: any = {};
 
-	caption:string = "u";
-	winCaption:string = "";
-	pathImages:string = "";
-	followMe:boolean = false;
+	caption: string = "u";
+	winCaption: string = "";
+	pathImages: string = "";
+	followMe: boolean = false;
 
-	infoTemplate:string = ``;
-	popupTemplate:string = ``;
+	infoTemplate: string = ``;
+	popupTemplate: string = ``;
 
-	public onInfoUpdate:Function = (info, name)=>{};
+	public onInfoUpdate: Function = (info, name) => { };
 
 
-	private main:any = null;
-	private marks:any = {};
+	private main: any = null;
+	private marks: any = {};
 
-	private _info:any = null;
-	private _winInfo:any = null;
+	private _info: any = null;
+	private _winInfo: any = null;
 
-	private _timer:any = null;
+	private _timer: any = null;
 
-	private _timer2:any = null;
-	public delay2:number = 12000;
+	private _timer2: any = null;
+	public delay2: number = 12000;
 
-	private _lastUnitId: number = 0;
+	private _lastUnitId: number = null;
 
-	private _traces:any[] = [];
+	private _traces: any[] = [];
 
-	private infoId:string = null;
-	private statusId:string = null;
-	private _win:any[] = [];
+	private infoId: string = null;
+	private statusId: string = null;
+	private _win: any[] = [];
 
-	public showConnectedUnit:boolean = false;
+	public showConnectedUnit: boolean = false;
 
 	private msgErrorUnit = "Unit not Found!!!";
 	private msgErrortracking = "data tracking not Found!!!";
 
 
-	private searchUnitId:any = null;
-	private searchUnit:any = null;
-	static _instances:object[] = [];
+	private searchUnitId: any = null;
+	private searchUnit: any = null;
+	
+	private winStatus:any = null; 
+	private statusInfo: InfoUnits = null;
+	
+	static _instances: object[] = [];
 
-	static getInstance(name){
+
+
+	static getInstance(name) {
 		return Unit._instances[name];
 	}
 
-	constructor(info){
+	constructor(info) {
 
-		for(var x in info){
-			if(this.hasOwnProperty(x)) {
+		for (var x in info) {
+			if (this.hasOwnProperty(x)) {
 				this[x] = info[x];
 			}
 		}
 
 		//return;
-		let main = (this.id)? $(this.id): false;
+		let main = (this.id) ? $(this.id) : false;
 
-		if(main){
+		if (main) {
 
-			if(main.ds("gtUnit")){
+			if (main.ds("gtUnit")) {
 				return;
 			}
 
-			if(main.hasClass("gt-unit")){
+			if (main.hasClass("gt-unit")) {
 				this._load(main);
-			}else{
+			} else {
 				this._create(main);
 			}
 
-		}else{
+		} else {
 			main = $.create("div").attr("id", this.id);
 
 			this._create(main);
@@ -349,7 +367,7 @@ export class Unit{
 
 			this.dataUnits.forEach((info) => {
 
-				const tracking = this.tracking.find(e => e.unitId == info.unitId) || {};
+				//const tracking = this.tracking.find(e => e.unitId == info.unitId) || {};
 
 				const propertys = {};
 
@@ -358,15 +376,15 @@ export class Unit{
 				});
 				this.units[info.unitId] = new Mobil({
 					data: info,
-					name:info.vehicle_name,
-					latitude:tracking.latitude || 0,
-					longitude:tracking.longitude || 0,
-					heading:tracking.heading || 0,
-					image:info.image,
-					popupInfo: "this.loadPopupInfo(info)"+info.unitId,
+					name: info.vehicle_name,
+					latitude: info.latitude || 0,
+					longitude: info.longitude || 0,
+					heading: info.heading || 0,
+					image: info.image,
+					popupInfo: "this.loadPopupInfo(info)" + info.unitId,
 					visible: false,
 					infoForm: this.infoPopup,
-					valid: tracking.unitId !== undefined,
+					valid: info.valid,
 					propertysInfo: propertys,
 					traceInfo: {
 						layers: this.traceConfig.layers,
@@ -388,22 +406,23 @@ export class Unit{
 
 
 
-			if(this.infoForm){
+			if (this.infoForm) {
 
 
 				this.infoFormMain = new InfoForm(this.infoForm);
 
-				if(this.infoId){
-					const winInfo:GTInfo = S.getElement(this.infoId) as GTInfo;
-					this.onInfoUpdate = (info, name) =>{
+				if (this.infoId) {
+					const winInfo: GTInfo = S.getElement(this.infoId) as GTInfo;
+					this.onInfoUpdate = (info, name) => {
 
 
-
+						
 
 						//this.infoFormMain.setMode(info.className);
 						this.infoFormMain.setData(info);
 
 						winInfo.setCaption(name);
+						this.infoFormMain.setMode("xxxx");
 
 						winInfo.setBody(this.infoFormMain.get());
 					};
@@ -417,13 +436,13 @@ export class Unit{
 			//this.playTrace();
 
 			//map.map.addImage("t1", new TraceMarker(map.map, 30), { pixelRatio: 1 });
-return;
-			console.log(this.tracking);
+			return;
+			
 
-			t
+
 		});
 
-		if(this.showConnectedUnit){
+		if (this.showConnectedUnit) {
 			this.play2();
 		}
 
@@ -433,13 +452,13 @@ return;
 
 
 
-	showMenu(){
+	showMenu() {
 		this._win["menu-unit"].show();
 	}
-	showConnected(){
+	showConnected() {
 		this._win["status-unit"].show();
 	}
-	_create(main:any){
+	_create(main: any) {
 
 		this.main = main;
 
@@ -451,31 +470,53 @@ return;
 
 		this.createMenu();
 
+
+		this.statusInfo = new InfoUnits({
+            onread: (info) => {
+                if (info.id) {
+                    this.setUnit(info.id);
+                }
+                //const counts = this.getInfoWin(2).getCounts();
+                //infoMenu.updateType(1, counts[info.type] || "");
+                this.showUnit3(info.id);
+
+
+                
+            },
+            onadd: (info) => {
+
+                //this._win["status-unit"].setCaption("Conected Units [ "+(this._infoWin2.getCounts()*1)+" ]");
+            }
+        });
+
+		this.winStatus.child =  this.statusInfo.get();
+		this._win["status"] = new Float.Window(this.winStatus);
+
 		//this.menu = this.createMenu();
 		this._win["menu-unit"] = new Float.Window({
-			visible:true,
+			visible: true,
 			caption: this.caption,
-			left:10,
-			top:100,
+			left: 10,
+			top: 100,
 			width: "280px",
 			height: "250px",
-			mode:"auto",
-			className:["sevian"],
-			child:this.main.get()
+			mode: "auto",
+			className: ["sevian"],
+			child: this.main.get()
 		});
 
 		this.statusId = "yasta";
 		const _statusUnit = $().create("div").id(this.statusId).addClass("win-status-unit");
 		this._win["status-unit"] = new Float.Window({
-			visible:this.showConnectedUnit,
+			visible: this.showConnectedUnit,
 			caption: "Conected Units",
-			left:10+280+20,
-			top:100,
+			left: 10 + 280 + 20,
+			top: 100,
 			width: "380px",
 			height: "300px",
-			mode:"auto",
-			className:["sevian"],
-			child:_statusUnit.get()
+			mode: "auto",
+			className: ["sevian"],
+			child: _statusUnit.get()
 		});
 
 
@@ -488,29 +529,58 @@ return;
 	}
 
 
-	_load(main:any){
+	_load(main: any) {
 
 	}
 
-	init(){
+	init() {
 
 	}
 
-	setUnit(info:any){
-		if(!this.units[info.unitId]){
+	setUnit(info: any) {
+		if (!this.units[info.unitId]) {
 			this.units[info.unitId] = new Mobil(info);
 		}
 	}
 
-	load(){
+	load() {
 
 	}
 
-	getMap(){
+	getMap() {
 		return this.map;
 	}
-	setMap(map){
+	setMap(map) {
 		this.map = map;
+	}
+
+	updateUnit(tracking) {
+		const unitId = tracking.unitId;
+		/*
+		const index: number = this.tracking.findIndex(e => e.unitId == unitId);
+
+		if (index >= 0) {
+			this.tracking[index] = tracking;
+		}
+		*/
+		if (this.units[unitId]) {
+
+			this.units[unitId].addTracking(tracking);
+			this.units[unitId].setPosition({
+				longitude: tracking.longitude,
+				latitude: tracking.latitude,
+				heading: tracking.heading
+			}).setInfo(this.getUnitInfo(unitId));
+
+		}
+
+		if (this._lastUnitId === unitId) {
+			this.onInfoUpdate(this.getUnitInfo(unitId), this.units[unitId].getName());
+		}
+
+		if (this.followMe) {
+			this.flyTo();
+		}
 	}
 
 	updateTracking(data) {
@@ -522,12 +592,67 @@ return;
 			return;
 		}
 
-		data.forEach((tracking, i)=>{
+
+		
+
+		
+       
+       
+		let sum = 0;
+
+		data.connected.forEach((tracking)=>{
+			this.units[tracking.unitId].data.connected = tracking.connected;
+			
+
+			//this.lastDate = e.last_date;
+            this.statusInfo.add({
+                id: tracking.unitId,
+                name: this.units[tracking.unitId].getName(),
+                delay: 0,
+                type: 10,
+                device_name: this.units[tracking.unitId].data.device_name,
+                message: tracking.str_status,
+                connected : tracking.connected
+            });
+            if(tracking.connected > 0){
+                sum++;
+            }
+		});
+
+
+		this._win["status"].setCaption("Conected Units: [ "+(sum)+" ]");
+
+		data.tracking2.forEach((tracking, i) => {
+			
+			this.units[tracking.unitId].data = Object.assign(this.units[tracking.unitId].data, tracking);
+			this.updateUnit(tracking) ;
+			/*
+			if (tracking.tracking_id) {
+				console.log(tracking);
+				
+			}else{
+				console.log("NOOOOOO");
+				
+			}
+			*/
+
+		});
+
+		return;
+
+		
+
+		data.conected.forEach((item: { unit_id: number, connected: number }, i) => {
+
+			this.units[item.unit_id].connected = item.connected;
+
+		});
+		data.tracking.forEach((tracking, i) => {
 			//this.trace.add(element);
 			const unitId = tracking.unitId;
-			const index:number = this.tracking.findIndex(e=>e.unitId == unitId);
+			const index: number = this.tracking.findIndex(e => e.unitId == unitId);
 
-			if(index >= 0){
+			if (index >= 0) {
 				this.tracking[index] = tracking;
 			}
 
@@ -552,41 +677,22 @@ return;
 
 
 
-			return;
 
-
-			const unitIndex:number = this.dataUnits.findIndex(e=>e.unitId == unitId);
-
-
-
-			console.log(index, this.marks, this.marks[unitId])
-			if(this.marks[unitId]){
-				const mark = this.marks[unitId];
-
-				mark.setLngLat([this.tracking[index].longitude, this.tracking[index].latitude]);
-				mark.setHeading(this.tracking[index].heading);
-
-				mark.setPopup(this.loadPopupInfo(unitIndex));
-				this.setInfo(unitIndex);
-
-				//let popup = this.evalHTML(this.popupTemplate, this.dataUnits[id]);
-				//popup = this.evalHTML(popup, this.tracking[id]);
-			}
 		});
 
 
 
 	}
 
-	play(){
-		
-		return;
+	play() {
+
+		//return;
 		//console.log(this.map.map.map)
 		/*
 		const cluster = new Cluster({ map: this.map.map.map });
 		cluster.init();
 		*/
-		if(this.timer){
+		if (this.timer) {
 			window.clearTimeout(this.timer);
 		}
 
@@ -594,21 +700,21 @@ return;
 
 			S.go({
 				async: true,
-				valid:false,
+				valid: false,
 
 				requestFunction: (json) => {
-					console.log(json)
+					//console.log(json)
 					//cluster.updateSource(json);
 					this.updateTracking(json)
 				},
-				params:	[
+				params: [
 					{
-						t:"setMethod",
-						id:this.id,
-						element:"gt_unit",
-						method:"tracking",
-						name:"x",
-						eparams:{}
+						t: "setMethod",
+						id: this.id,
+						element: "gt_unit",
+						method: "tracking",
+						name: "x",
+						eparams: {}
 					}
 				]
 			});
@@ -616,17 +722,17 @@ return;
 	}
 
 	stop() {
-		if(this.timer){
+		if (this.timer) {
 			window.clearTimeout(this.timer);
 		}
 	}
 
 
 
-	updateTrace(xhr:any) {
+	updateTrace(xhr: any) {
 
 		let json = JSON.parse(xhr.responseText);
-		console.log(json);
+		
 
 		//this.updateTraceLayer(json);
 		//this.stopTrace();
@@ -635,7 +741,7 @@ return;
 	}
 
 	stopTrace() {
-		if(this.traceTimer){
+		if (this.traceTimer) {
 			window.clearTimeout(this.traceTimer);
 		}
 	}
@@ -653,22 +759,22 @@ return;
 				this.units[unitId].initTrace(tracking);
 				this.units[unitId].setVisible(true);
 			},
-			params:	[
+			params: [
 				{
-					t:"setMethod",
-					id:this.id,
-					element:"gt_unit",
-					method:"trace",
-					name:'',
+					t: "setMethod",
+					id: this.id,
+					element: "gt_unit",
+					method: "trace",
+					name: '',
 					eparams: {
-						unitId:unitId
+						unitId: unitId
 					}
 				}
 			]
 		});
 	}
 
-	createMenu(){
+	createMenu() {
 		//console.log(this.dataUnits);return;
 		let infoMenu = [];
 		let cacheClient = [];
@@ -680,17 +786,17 @@ return;
 			const unitId = info.unitId;
 
 			//console.log(clientId, this.dataUnits[x].client);
-			if(!cacheClient[clientId]){
+			if (!cacheClient[clientId]) {
 				cacheClient[clientId] = {
 					id: clientId,
-					caption:info.client,
-					items:[],
-					useCheck:true,
-					useIcon:false,
+					caption: info.client,
+					items: [],
+					useCheck: true,
+					useIcon: false,
 					checkValue: index,
-					checkDs:{"level":"client","clientId":clientId},
-					ds:{"clientId":clientId},
-					check:(item, event)=>{
+					checkDs: { "level": "client", "clientId": clientId },
+					ds: { "clientId": clientId },
+					check: (item, event) => {
 
 						this.showAccountUnits(clientId, event.currentTarget.checked);
 
@@ -699,17 +805,17 @@ return;
 				infoMenu.push(cacheClient[clientId]);
 			}
 
-			if(!cacheAccount[accountId]){
+			if (!cacheAccount[accountId]) {
 				cacheAccount[accountId] = {
 					id: accountId,
-					caption:info.account,
-					items:[],
-					useCheck:true,
-					useIcon:false,
-					checkValue:accountId,
-					checkDs:{"level":"account","accountId":accountId},
-					ds:{"accountId":accountId},
-					check:(item, event)=>{
+					caption: info.account,
+					items: [],
+					useCheck: true,
+					useIcon: false,
+					checkValue: accountId,
+					checkDs: { "level": "account", "accountId": accountId },
+					ds: { "accountId": accountId },
+					check: (item, event) => {
 
 						this.showUnits(accountId, event.currentTarget.checked);
 
@@ -720,29 +826,29 @@ return;
 
 			cacheAccount[accountId].items.push({
 				id: unitId,
-				caption:info.vehicle_name,
-				useCheck:true,
+				caption: info.vehicle_name,
+				useCheck: true,
 				value: index,
 				checkValue: index,
 
-				checkDs:{"level":"units","unitId":unitId},
-				ds:{"unitId":unitId, "valid": info.valid},
-				check:(item, event)=>{
+				checkDs: { "level": "units", "unitId": unitId },
+				ds: { "unitId": unitId, "valid": info.valid },
+				check: (item, event) => {
 					this.showUnit(unitId, event.currentTarget.checked);
 				},
-				action:(item, event) => {
+				action: (item, event) => {
 					let ch = item.getCheck();
 					ch.get().checked = true;
 
 
-					if(this.units[unitId].getValid()){
+					if (this.units[unitId].getValid()) {
 						this.units[unitId].setInfo(this.getUnitInfo(unitId));
 						this.units[unitId].show(true);
 						this.units[unitId].flyTo();
 						this._lastUnitId = unitId;
 						//this.playTrace(unitId);
 
-					}else{
+					} else {
 						alert(this.msgErrortracking);
 					}
 					this.onInfoUpdate(this.getUnitInfo(unitId), info.vehicle_name);
@@ -753,74 +859,74 @@ return;
 		});
 
 		return new Menu({
-			caption:"",
+			caption: "",
 			autoClose: false,
-			target:this.main,
+			target: this.main,
 			items: infoMenu,
-			useCheck:true,
-			check:(item) => {
-					let ch = item.getCheck();
-					let checked = ch.get().checked;
-					let list = item.queryAll(`input[type="checkbox"]`);
-					for(let x of list){
-						x.checked = checked;
-					}
+			useCheck: true,
+			check: (item) => {
+				let ch = item.getCheck();
+				let checked = ch.get().checked;
+				let list = item.queryAll(`input[type="checkbox"]`);
+				for (let x of list) {
+					x.checked = checked;
 				}
-			});;
+			}
+		});;
 
 	}
 
-	getInfoLayer(){
+	getInfoLayer() {
 
 		return this._info;
 	}
-	showUnit2(unitId, value){
+	showUnit2(unitId, value) {
 		this.showUnit(this.indexUnit[unitId], value);
 	}
-	showUnit(unitId, value){
+	showUnit(unitId, value) {
 
-		if(this.units[unitId]){
+		if (this.units[unitId]) {
 			this.units[unitId].show(value);
 			return;
 		}
 		//alert(this.msgErrorUnit);
 	}
 
-	showUnits(accountId, value){
+	showUnits(accountId, value) {
 
 		let e;
 
-		for(let x in this.dataUnits){
+		for (let x in this.dataUnits) {
 			e = this.dataUnits[x];
 
-			if(accountId == e.account_id){
+			if (accountId == e.account_id) {
 				this.showUnit(x, value);
 
 			}
 
 		}
 	}
-	showAccountUnits(clientId, value){
+	showAccountUnits(clientId, value) {
 
 		let e;
 
-		for(let x in this.dataUnits){
+		for (let x in this.dataUnits) {
 			e = this.dataUnits[x];
 
-			if(clientId == e.client_id){
+			if (clientId == e.client_id) {
 				this.showUnits(e.account_id, value);
 			}
 		}
 	}
-	evalHTML(html, data){
+	evalHTML(html, data) {
 
-		function auxf(str, p, p2, offset, s){
+		function auxf(str, p, p2, offset, s) {
 			return data[p2];
 		}
 
-		for(let x in data){
-			let regex = new RegExp('\(\{=('+x+')\})', "gi");
-			html= html.replace(regex, auxf);
+		for (let x in data) {
+			let regex = new RegExp('\(\{=(' + x + ')\})', "gi");
+			html = html.replace(regex, auxf);
 
 		}
 		return html;
@@ -844,7 +950,7 @@ return;
 
 	panTo(unitId: number) {
 
-		if(this.marks[unitId]){
+		if (this.marks[unitId]) {
 
 			this.marks[unitId].panTo();
 		}
@@ -852,61 +958,67 @@ return;
 
 
 	getUnitInfo(unitId: number) {
-		const dataUnit = this.dataUnits.find(e=>e.unitId == unitId);
+		
+		return this.units[unitId].data;
+
+		const dataUnit = this.dataUnits.find(e => e.unitId == unitId);
 		const data = Object.assign({}, dataUnit);
 		Object.assign(data, this.tracking.find(e => e.unitId == unitId));
 
 		return (data);
 
 	}
-	setInfo(unitId:number){
-		const dataUnit = this.dataUnits.find(e=>e.unitId == unitId);
-		const data = Object.assign({}, dataUnit);
-		Object.assign(data, this.tracking.find(e=>e.unitId == unitId));
-		this.onInfoUpdate(this.loadInfoData(data), dataUnit.vehicle_name);
+	setInfo(unitId: number) {
+		
+		this.onInfoUpdate(this.loadInfoData(this.units[unitId].data), this.units[unitId].getName());
+
 
 		return;
-		if(!this.dataUnits[id]){
-			return;
-		}
-		//this._info.text(this.loadInfoData(id));
-		//this._winInfo.setCaption(this.dataUnits[id].vehicle_name);
+
+
+		const dataUnit = this.dataUnits.find(e => e.unitId == unitId);
+		const data = Object.assign({}, dataUnit);
+		Object.assign(data, this.tracking.find(e => e.unitId == unitId));
+		this.onInfoUpdate(this.loadInfoData(data), dataUnit.vehicle_name);
+
+		
 
 
 
 	}
 
-	getDataInfo(id:number){
-		if(!this.dataUnits[id]){
+	getDataInfo(id: number) {
+		alert(8888)
+		if (!this.dataUnits[id]) {
 			return;
 		}
 		let data = this.dataUnits[id];
 		const tracking = this.tracking[data.unitId];
-		for(let x in tracking){
+		for (let x in tracking) {
 			this.dataUnits[id][x] = tracking[x];
 		}
 		return data;
 	}
-	loadPopupInfo(id:number){
+	loadPopupInfo(id: number) {
 		const data = this.getDataInfo(id);
 
 
 
 		data.input1 = " -";
 		data.output1 = " -";
-		if(data.input){
+		if (data.input) {
 			let _input = $.create("div");
-			data.input.forEach((e, index)=>{
-				_input.create("div").text(e.name+":"+e.value);
+			data.input.forEach((e, index) => {
+				_input.create("div").text(e.name + ":" + e.value);
 				//_input.add("div").text(e.value);
 			});
 			data.input1 = _input.text();
 		}
 
-		if(data.output){
+		if (data.output) {
 			let _input = $.create("div");
-			data.output.forEach((e, index)=>{
-				_input.create("div").text(e.name+":"+e.value);
+			data.output.forEach((e, index) => {
+				_input.create("div").text(e.name + ":" + e.value);
 				//_input.add("div").text(e.value);
 			});
 			data.output1 = _input.text();
@@ -917,10 +1029,10 @@ return;
 		//return this.evalHTML(, this.tracking[this.dataUnits[id].unitId]);
 	}
 
-	loadInfoData(data){
-		console.log(data)
+	loadInfoData(data) {
+		
 		let xInputs = "";
-		if(data.iInputs){
+		if (data.iInputs) {
 			data.iInputs.forEach(element => {
 				xInputs += `<div>${element.name} ${element.value}</div>`;
 			});
@@ -933,47 +1045,47 @@ return;
 
 	}
 
-	setFollowMe(value:boolean){
+	setFollowMe(value: boolean) {
 		this.followMe = value;
 	}
-	getFollowMe(){
+	getFollowMe() {
 		return this.followMe;
 	}
 
 
-	showStatusWin(){
+	showStatusWin() {
 		S.send3({
-			"async":1,
+			"async": 1,
 
-			"params":[
+			"params": [
 
 				{
-					"t":"setMethod",
-					"mode":"element",
-					"id":this.statusId,
-					"element":"form",
-					"method":"list",
-					"name":"/form/status_unit",
-					"eparams":{"mainId":this.statusId}
+					"t": "setMethod",
+					"mode": "element",
+					"id": this.statusId,
+					"element": "form",
+					"method": "list",
+					"name": "/form/status_unit",
+					"eparams": { "mainId": this.statusId }
 
 				}
 			],
-			onRequest:(x)=>{
+			onRequest: (x) => {
 
 			}
 		});
 	}
 
-	setUnit2(unitId:number){
+	setUnit2(unitId: number) {
 		this._lastUnitId = unitId;
-		if(this.searchUnit){
-			this.searchUnit.setValue({unitId:unitId});
+		if (this.searchUnit) {
+			this.searchUnit.setValue({ unitId: unitId });
 		}
 		this.findUnit(unitId);
 
 	}
 
-	findUnit(unitId:number){
+	findUnit(unitId: number) {
 		const index = this.indexUnit[unitId];
 
 		this.showUnit(index, true);
@@ -981,7 +1093,7 @@ return;
 		this.flyTo(index);
 	}
 
-	initTool(){
+	initTool() {
 		const tool = new TraceTool({});
 	}
 
@@ -991,7 +1103,7 @@ return;
 		//this.traceControl.play();
 
 		this.traceTool = new TraceTool({
-			id:this.traceControl.getPage(0),
+			id: this.traceControl.getPage(0),
 			dataUnits: this.dataUnits,
 			tracking: this.tracking,
 			onTrace: (unitId, value) => {
@@ -1006,7 +1118,7 @@ return;
 		new LayerMenu({
 			layers: this.traceConfig.layers,
 			groups: this.traceConfig.groups,
-			map:this.map.getControl(),
+			map: this.map.getControl(),
 			target: this.traceControl.getPage(1),
 			onShowLayer: (index, value) => {
 
@@ -1029,14 +1141,14 @@ return;
 		*/
 		//console.log(this.dataUnits);
 		const trace = this.trace = new Trace({
-			data:tracking,
-			map:this.map.getControl().map,
-			layers:this.traceConfig.layers,
-			images:this.traceConfig.images,
+			data: tracking,
+			map: this.map.getControl().map,
+			layers: this.traceConfig.layers,
+			images: this.traceConfig.images,
 		});
 		//trace.draw({});
 		const traceTool = new TraceTool({
-			id:this.traceControl.getPage(0),
+			id: this.traceControl.getPage(0),
 			dataUnits: this.dataUnits,
 			tracking: this.tracking,
 		});
@@ -1050,24 +1162,30 @@ return;
 		this.units[unitId]
 	}
 
-	public showUnit3(unitId){
-		if(this.units[unitId].getValid()){
+	public showUnit3(unitId) {
+		if (this.units[unitId].getValid()) {
 			this.units[unitId].setInfo(this.getUnitInfo(unitId));
 			this.units[unitId].show(true);
 			this.units[unitId].flyTo();
 			this._lastUnitId = unitId;
 			//this.playTrace(unitId);
 
-		}else{
+		} else {
 			alert(this.msgErrortracking);
 		}
 
 		const info = this.dataUnits.find(e => e.unitId == unitId) || {};
-		if(info){
-			
+		if (info) {
+
 			this.onInfoUpdate(this.getUnitInfo(unitId), info.unitName);
 		}
-		
+
+	}
+
+	public getLastUnit() {
+
+		return this._lastUnitId;
+
 	}
 }
 

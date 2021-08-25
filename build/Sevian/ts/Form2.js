@@ -465,7 +465,11 @@ export class Form2 {
     }
     setMode(value) {
         this._main.addClass("mode-" + value);
+        this._main.ds("mode", value);
         return this;
+    }
+    getMode() {
+        return this._main.ds("mode");
     }
 }
 Form2._objs = [];
