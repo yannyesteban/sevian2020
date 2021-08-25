@@ -2,14 +2,20 @@ DELIMITER $$
 CREATE TRIGGER TrackingInsertBefore
 BEFORE INSERT ON tracking
 FOR EACH ROW
+
+
 BEGIN
-
 	set NEW.date_time = DATE_ADD(NEW.date_time, interval -4 hour);
-
-	UPDATE unit SET tracking_id = NEW.id, tracking_date=NEW.date_time WHERE id = NEW.unit_id;
+	
+	UPDATE unit 
+	SET 
+		tracking_id = NEW.id,
+		tracking_date=NEW.date_time,
+		conn_status = 1,
+		conn_date = now()
+	WHERE id = NEW.unit_id;
      
-     
-     INSERT INTO event (unit_id, date_time, event_id, mode, status, title)
+    INSERT INTO event (unit_id, date_time, event_id, mode, status, title)
 	
     SELECT NEW.unit_id, NEW.date_time, ue.event_id, ue.mode, 0, (SELECT de.name
 		FROM unit as u
