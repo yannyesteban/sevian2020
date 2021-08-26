@@ -70,10 +70,9 @@ export class MapBoxLib {
         });
     }
     _create(main) {
-        alert(this.ACCESS_TOKEN);
+        alert(1);
         mapboxgl.accessToken = this.ACCESS_TOKEN;
         //mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJja3N0ZnFyZnowdGp2MnhtcWw5bXc4Zjg4In0.rWee3WMnJhmEocYBDK5O5g";
-        alert(8);
         let map = this.map = new mapboxgl.Map({
             container: this.id,
             //style: "mapbox://styles/mapbox/streets-v10",
@@ -82,7 +81,6 @@ export class MapBoxLib {
             center: this.latlng,
             attributionControl: true
         });
-        alert(9);
         map.on("load", (event) => {
             if (this.iconImages) {
                 this.iconImages.forEach((e) => {

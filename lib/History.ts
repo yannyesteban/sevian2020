@@ -917,126 +917,7 @@ export class History {
             //filter: ["in", "type", "h", "m"]
             //filter: ["in", "type"]
         });
-        return;
-
-        this.coordinatesInit.forEach((element, index) => {
-            let point = {
-                type: "Feature",
-                "properties": {
-                    "iconImage": this.data[index].iconImage,
-                    "speed": this.data[index].speed,
-                    "heading": this.data[index].heading,
-                    "event": this.data[index].event,
-                },
-                geometry: {
-                    type: "Point",
-                    coordinates: element
-                }
-            };
-            geojson.data.features.push(point);
-        });
-
-
-
-
-
-        this.map.addSource(this.lineIdA, geojson);
-
-        this.map.addLayer({
-            "id": this.lineIdA,
-            "type": "line",
-            "source": this.lineIdA,
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round",
-                visibility: (this.visible) ? "visible" : "none"
-
-            },
-            "paint": {
-                "line-color": "#ff9900",
-                "line-width": 2,
-                "line-opacity": 0.8,
-                //"line-gap-width":4,
-                "line-dasharray": [2, 2]
-
-
-            },
-            "filter": ["==", "$type", "LineString"]
-        });
-
-
-        this.map.addLayer({
-            id: this.lineIdA + "3",
-            type: "circle",
-            "minzoom": 13,
-            "source": this.lineIdA,
-            layout: {
-                visibility: "visible"
-            },
-            paint: {
-                "circle-radius": 4,
-                //"circle-opacity":["case",["=>",["get","type"],30] , 0.0, 0.8],
-                //"circle-color": "white",
-                "circle-color": ["case", [">=", ["get", "speed"], 31], "red", [">=", ["get", "speed"], 21], "yellow", [">=", ["get", "speed"], 11], '#00d4ff', [">=", ["get", "speed"], 1], '#f743b7', "purple"],
-                "circle-stroke-color": "#ffffff",
-                "circle-stroke-width": 1
-            },
-            //filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type"]
-            //filter:['>=',"speed",31]
-            //filter:["case",[">=",["get","speed"],31], true,false]
-            filter: ["any", ['>=', "speed", 31], ['>=', "speed", 30]]
-
-        });
-
-
-
-        return;
-        this.map.addLayer({
-            id: this.lineIdA + "3",
-            type: "symbol",
-            "source": this.lineIdA,
-            layout: {
-                //visibility:["get", "visible"],
-                "icon-image": ["get", "iconImage"],
-                "icon-size": 0.4,
-                "icon-rotate": ["get", "heading"],
-                "icon-allow-overlap": true,
-                "icon-ignore-placement": true,
-                //"text-field":["get","speed"],
-                //"text-offset":[0,5],
-                //"text-ignore-placement": true,
-
-            },
-            paint: {
-
-            },
-            //filter: ["in", "$type", "Point"]
-            //filter:["in","dot", "dot"]
-            "filter": ['==', "$type", "Point"]
-
-        });
-        return;
-        this.map.addLayer({
-            id: this.nodesId + "cc",
-            type: "circle",
-            source: this.lineIdA,
-            layout: {
-                visibility: "none"
-            },
-            paint: {
-                "circle-radius": 3,
-                "circle-opacity": 0.5,
-                "circle-color": "white",
-                "circle-stroke-color": "#ff3300",
-                "circle-stroke-width": 1
-            },
-            filter: ["in", "$type", "Point"]
-            //filter: ["in", "type", "h", "m"]
-            //filter: ["in", "type"]
-        });
-
+      
     }
 
     setLine(info: object) {
@@ -1862,7 +1743,7 @@ export class History {
             padding: 40
         });
 
-        return;
+       /*
 
         let polygon = turf.lineString(this.coordinates);
 
@@ -1879,6 +1760,7 @@ export class History {
                 return t;
             }
         });
+        */
 
     }
     panTo(duration) {
