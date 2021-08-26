@@ -20,6 +20,7 @@ export class Map {
         this.markDefaultImage = "";
         this.iconImages = [];
         this.controls = [];
+        this.ACCESS_TOKEN = "";
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -58,7 +59,8 @@ export class Map {
             layerImages: this.layerImages,
             markDefaultImage: this.markDefaultImage,
             iconImages: this.iconImages,
-            controls: this.controls
+            controls: this.controls,
+            ACCESS_TOKEN: this.ACCESS_TOKEN
         });
         this.map.on("load", (event) => {
             if (Map._loadFunctions[this.name]) {

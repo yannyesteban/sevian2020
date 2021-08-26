@@ -70,6 +70,7 @@ export class MapBoxLib {
     controls: string[] = ["history", "rule", "poly", "mark", "layer"];
     //controls:string[] = ["rule"];
 
+    public ACCESS_TOKEN = "";
     constructor(info: object) {
         for (let x in info) {
             if (this.hasOwnProperty(x)) {
@@ -104,10 +105,10 @@ export class MapBoxLib {
     _create(main) {
 
 
-        
-        mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJja3N0ZnFyZnowdGp2MnhtcWw5bXc4Zjg4In0.rWee3WMnJhmEocYBDK5O5g";
-        
-        console.log(mapboxgl.accessToken);
+        alert(this.ACCESS_TOKEN)
+        mapboxgl.accessToken = this.ACCESS_TOKEN;
+        //mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJja3N0ZnFyZnowdGp2MnhtcWw5bXc4Zjg4In0.rWee3WMnJhmEocYBDK5O5g";
+        alert(8)
         let map = this.map = new mapboxgl.Map({
             container: this.id,
             //style: "mapbox://styles/mapbox/streets-v10",
@@ -117,9 +118,9 @@ export class MapBoxLib {
             attributionControl: true
 
         });
-        console.log("before onLoad")
+        alert(9)
         map.on("load", (event) => {
-            console.log("onLoad")
+
             if (this.iconImages) {
 
                 this.iconImages.forEach((e) => {

@@ -38,6 +38,7 @@ export class Map {
     markDefaultImage: string = "";
     iconImages: any[] = [];
     controls: string[] = [];
+    public ACCESS_TOKEN = "";
 
     static getMap(name) {
 
@@ -60,7 +61,7 @@ export class Map {
         Map._loadFunctions[mapName].push(fn);
     }
     constructor(info) {
-
+        
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -78,7 +79,7 @@ export class Map {
     }
 
     create(main: any) {
-
+        
         main.addClass(["gt-map", "map-main", "map-layout"]);
         this.map = new MapBoxLib({
             id: `${this.id}`,
@@ -86,7 +87,8 @@ export class Map {
             layerImages: this.layerImages,
             markDefaultImage: this.markDefaultImage,
             iconImages: this.iconImages,
-            controls: this.controls
+            controls: this.controls,
+            ACCESS_TOKEN: this.ACCESS_TOKEN
         });
 
         this.map.on("load", (event) => {

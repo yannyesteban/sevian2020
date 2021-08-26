@@ -22,7 +22,6 @@ var ctMap = ctMap || [];
 const turf = window["turf"];
 const mapboxgl = window["mapboxgl"];
 export class MapBoxLib {
-    //controls:string[] = ["rule"];
     constructor(info) {
         this.id = null;
         this.iImages = {};
@@ -42,6 +41,8 @@ export class MapBoxLib {
         this.layerImages = [];
         this.markDefaultImage = null;
         this.controls = ["history", "rule", "poly", "mark", "layer"];
+        //controls:string[] = ["rule"];
+        this.ACCESS_TOKEN = "";
         for (let x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -69,8 +70,10 @@ export class MapBoxLib {
         });
     }
     _create(main) {
-        mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJja3N0ZnFyZnowdGp2MnhtcWw5bXc4Zjg4In0.rWee3WMnJhmEocYBDK5O5g";
-        console.log(mapboxgl.accessToken);
+        alert(this.ACCESS_TOKEN);
+        mapboxgl.accessToken = this.ACCESS_TOKEN;
+        //mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJja3N0ZnFyZnowdGp2MnhtcWw5bXc4Zjg4In0.rWee3WMnJhmEocYBDK5O5g";
+        alert(8);
         let map = this.map = new mapboxgl.Map({
             container: this.id,
             //style: "mapbox://styles/mapbox/streets-v10",
@@ -79,9 +82,8 @@ export class MapBoxLib {
             center: this.latlng,
             attributionControl: true
         });
-        console.log("before onLoad");
+        alert(9);
         map.on("load", (event) => {
-            console.log("onLoad");
             if (this.iconImages) {
                 this.iconImages.forEach((e) => {
                     map.loadImage(e.source, (error, image) => {
