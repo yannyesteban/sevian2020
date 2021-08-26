@@ -70,6 +70,7 @@ export class MapBoxLib {
     }
     _create(main) {
         mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJja3N0ZnFyZnowdGp2MnhtcWw5bXc4Zjg4In0.rWee3WMnJhmEocYBDK5O5g";
+        console.log(mapboxgl.accessToken);
         let map = this.map = new mapboxgl.Map({
             container: this.id,
             //style: "mapbox://styles/mapbox/streets-v10",
@@ -78,7 +79,9 @@ export class MapBoxLib {
             center: this.latlng,
             attributionControl: true
         });
+        console.log("before onLoad");
         map.on("load", (event) => {
+            console.log("onLoad");
             if (this.iconImages) {
                 this.iconImages.forEach((e) => {
                     map.loadImage(e.source, (error, image) => {
