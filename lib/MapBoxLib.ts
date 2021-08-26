@@ -104,7 +104,7 @@ export class MapBoxLib {
     }
     _create(main) {
 
-        alert(1)
+
         
         mapboxgl.accessToken = this.ACCESS_TOKEN;
         //mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJja3N0ZnFyZnowdGp2MnhtcWw5bXc4Zjg4In0.rWee3WMnJhmEocYBDK5O5g";
