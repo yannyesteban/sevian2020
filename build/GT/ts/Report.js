@@ -52,6 +52,15 @@ export class Report {
         }
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
+            this.unitPanel.onGetPosition = (unitId) => {
+                this.goCommandId(null, 2);
+            };
+            this.unitPanel.onReset = (unitId) => {
+                this.goCommandId(null, 3);
+            };
+            this.unitPanel.onCall = (unitId) => {
+                this.goCommandId(null, 4);
+            };
         }
         this.formIds["0"] = "form-" + String(new Date().getTime());
         this.formIds["A"] = "form-a" + String(new Date().getTime());
@@ -217,9 +226,14 @@ export class Report {
         if (this.unitPanel && this.unitId) {
             this.unitName = this.unitPanel.getUnitInfo(this.unitId).unitName;
         }
-        this.wins["main"].setCaption(`${this.caption} : ${this.unitName}`);
+        /*
+        this.start(this.unitId, this.index);
+        this.wins["main"].show();
+        return;
+        */
         if (this.unitId) {
             this.start(this.unitId, this.index);
+            this.wins["main"].setCaption(`${this.caption} : ${this.unitName}`);
             this.wins["main"].show();
         }
         else {

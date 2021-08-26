@@ -275,7 +275,7 @@ class Report
         INNER JOIN device_command as dc ON dc.version_id = v.id
         INNER JOIN command as c ON c.command_id = dc.id
         WHERE u.id = '$unitId' AND dc.role_id = 1";
-
+        //hx($cn->query );
         $data = [];
         $result = $this->cn->execute();
         $list = [];
@@ -374,7 +374,7 @@ class Report
 
         WHERE
 
-        u.id = '$unitId'";
+        u.id = '$unitId' AND c.role_id != 1";
 
         $result = $this->cn->execute();
         return $cn->getDataAll($result);

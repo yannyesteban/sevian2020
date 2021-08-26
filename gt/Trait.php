@@ -130,7 +130,7 @@ trait DBUnit{
         CASE WHEN t.id IS NULL THEN 1 ELSE 0 END as noTracking,
         CASE WHEN t.id IS NULL THEN 0 ELSE 1 END as valid,
         vn.name as unitName,
-        CONCAT('../../images/', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,
+        CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,
         u.conn_status as connected,
 
 
@@ -145,7 +145,8 @@ t.date_time,
             date_format(t.date_time, '%d/%m/%Y') as uDate,
 
             UNIX_TIMESTAMP(now()) as ts,
-            e.title as myEvent, de.name as event,
+            e.title as myEvent,
+            de.name as event,m.name as device_model, v.version,IFNULL(v.name, '') as protocol,
 
          (input_status >> (1-1)) % 2 as i1,
          (input_status >> (2-1)) % 2 as i2,
@@ -178,6 +179,8 @@ t.date_time,
         LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN device as de ON de.id = u.device_id
+        INNER JOIN device_version as v on v.id = de.version_id
+        INNER JOIN device_model as m ON m.id = v.id_model
         INNER JOIN device_name as dn ON dn.name = de.name
 
 
@@ -189,7 +192,7 @@ t.date_time,
         LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date
       LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
         WHERE uu.user = '$user'
-        ORDER BY client, account, vehicle_name
+        ORDER BY client, account, vehicle_name 
         
         ";
 		$result = $cn->execute();

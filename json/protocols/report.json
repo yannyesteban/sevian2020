@@ -1,0 +1,136 @@
+{
+  "name": "report",
+  "description": "Execute this command to set or query user defined report parameters.",
+  "indexField": "event_id",
+  "eventRange": [100, 109],
+  "usePassword": true,
+  "useTag": true,
+  "fields": [
+    {
+      "name": "event_id",
+      "label": "event_id",
+      "type": "index",
+      "data": [],
+      "description": "The report’s numeric identifier. This number is defined by Programmer and can be any number from 100 through 109"
+    },
+    {
+      "name": "enable",
+      "label": "Enable",
+      "type": "select",
+      "value": 0,
+      "data": [
+        [0, "disable"],
+        [1, "Enable"]
+      ],
+      "description": ""
+    },
+    {
+      "name": "input_mask",
+      "label": "InputMask",
+      "type": "bit",
+      "data": [
+        [1, "Input 1"],
+        [2, "Input 2"],
+        [4, "Input 3"],
+        [8, "input 4"]
+      ],
+      "description": ""
+    },
+    {
+      "name": "input_control",
+      "label": "InputControl",
+      "type": "bit",
+      "data": [
+        [1, "Input 1"],
+        [2, "Input 2"],
+        [4, "Input 3"],
+        [8, "input 4"]
+      ],
+      "description": ""
+    },
+    {
+      "name": "longitude",
+      "label": "longitude",
+      "type": "text",
+      "description": "The longitude of center point of defined circle zone."
+    },
+    {
+      "name": "latitude",
+      "label": "latitude",
+      "type": "text",
+      "description": "The latitude of center point of defined circle zone."
+    },
+    {
+      "name": "radius",
+      "label": "Zone Tolerence",
+      "type": "text",
+      "description": "The radius of the circle zone. The effective range is from 50 to 65535 meters."
+    },
+
+    {
+      "name": "zone_control",
+      "label": "Zone Control",
+      "type": "select",
+      "value": "0",
+      "data": [
+        [0, "Disable"],
+        [1, "Entering the Zone"],
+        [2, "Exiting the Zone"],
+        [3, "Inside Zone"],
+        [4, "Outside Zone"]
+      ],
+      "description": ""
+    },
+    {
+      "name": "actions",
+      "label": "Actions",
+      "type": "select",
+      "data": [
+        [1, "Logging"],
+        [2, "Polling"],
+        [3, "Logging and Polling"],
+        [4, "Set Output"],
+        [5, "Logging + Set output"],
+        [6, "Polling + Set Output"],
+        [7, "Logging + Polling + Set Output"]
+      ],
+      "description": ""
+    },
+    {
+      "name": "output_id",
+      "label": "OutputID",
+      "type": "bit",
+      "data": [
+        [1, "Output 1"],
+        [2, "Output 2"],
+        [4, "Output 3"],
+        [8, "Output 4"]
+      ],
+      "description": ""
+    },
+    {
+      "name": "output_control",
+      "label": "Output Control",
+      "type": "bit",
+      "data": [
+        [1, "Output 1"],
+        [2, "Output 2"],
+        [4, "Output 3"],
+        [8, "Output 4"]
+      ],
+      "description": ""
+    },
+    {
+      "name": "duration",
+      "label": "Output Duration",
+      "type": "text",
+      "description": "Unit of duration is 100 milliseconds. Ex: if want to setup duration for 2 seconds, you have to give a 20 value. (Min. 1=0.1 second; Max. 255 = 25.5 seconds)"
+    },
+    {
+      "name": "toggle_times",
+      "label": "Toggle Times",
+      "type": "text",
+      "description": "The times from its current state to its alternate state and back again. Min. 1 times; Max. 255 times"
+    }
+  ]
+}

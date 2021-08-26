@@ -17,6 +17,7 @@ export class InfoForm {
         this.className = null;
         this.mode = "";
         this.modePropertys = [];
+        this.onSetData = (data) => { };
         let x;
         for (x in info) {
             if (this.hasOwnProperty(x)) {
@@ -37,6 +38,9 @@ export class InfoForm {
             target.append(main);
         }
     }
+    getMain() {
+        return this.main;
+    }
     get() {
         return this.main.get();
     }
@@ -53,6 +57,7 @@ export class InfoForm {
         this.setModeProperty(this.modePropertys);
         this.main.text(this.templateHtml);
         this.setTemplate(this.main.get(), data);
+        this.onSetData(data);
         return;
         let elems = this.main.queryAll("[data-id]");
         for (let e of elems) {

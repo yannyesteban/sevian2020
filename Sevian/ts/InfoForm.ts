@@ -21,6 +21,8 @@ export class InfoForm{
     private mode: string = "";
     private modePropertys: string[] = [];
 
+
+    public onSetData: (data:any) => void = (data) => { };
     constructor(info:any){
         let x:string;
 
@@ -49,7 +51,9 @@ export class InfoForm{
             target.append(main);
         }
     }
-
+    public getMain(){
+        return this.main;
+    }
     public get(){
         return this.main.get();
     }
@@ -73,7 +77,7 @@ export class InfoForm{
         this.main.text(this.templateHtml);
         this.setTemplate(this.main.get(), data);
 
-
+        this.onSetData(data);
         return;
 
         let elems = this.main.queryAll("[data-id]");

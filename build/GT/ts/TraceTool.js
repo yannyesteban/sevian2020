@@ -46,23 +46,58 @@ export class TraceTool {
         tab.getCaption(5).prop("title", "Configuración");
     }
     createUnitMenu(unitData) {
+        const qDiv = this.main.create("input").prop({ "type": "text", "placeholder": "...SEARCH" }).addClass("trace-tool-search")
+            .on("keyup", (event) => {
+            //event.preventDefault()
+            const value = event.currentTarget.value.toUpperCase();
+            if (value != "") {
+                let elements = this.main.queryAll(`li:not([data-unit-name*="${value}"])`);
+                elements.forEach((e) => {
+                    e.style.display = "none";
+                });
+                elements = this.main.queryAll(`li[data-unit-name*="${value}"]`);
+                elements.forEach((e) => {
+                    e.style.display = "";
+                });
+            }
+            else {
+                const elements = this.main.queryAll(`li[data-unit-name]`);
+                elements.forEach((e) => {
+                    e.style.display = "";
+                });
+            }
+        });
         const ul = this.main.create("ul").addClass("trace-tool");
-        unitData.forEach(unit => {
-            const li = ul.create("li").ds("unitId", unit.unitId);
+        const data = unitData.sort((a, b) => {
+            if (a.unitName > b.unitName) {
+                return 1;
+            }
+            if (a.unitName < b.unitName) {
+                return -1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+        data.forEach(unit => {
+            const li = ul.create("li").ds("unitId", unit.unitId).ds("unitName", (unit.unitName || "").toUpperCase());
             li.create("a").text(unit.unitName);
             li.create("input").prop({
                 "type": "checkbox",
-                "title": "iniciar Trace Tool",
-                "disabled": ((unit.noTracking == 1) ? "disabled" : "")
+                "title": "Iniciar Trace Tool",
+                "value": unit.unitId,
+                "disabled": ((unit.noTracking == 1) ? "disabled" : ""),
             })
+                .ds("role", "trace")
                 .on("click", (event) => {
                 this.onTrace(unit.unitId, event.currentTarget.checked);
             });
             li.create("input").prop({
                 "type": "checkbox",
-                "title": "iniciar Follow Me",
-                "disabled": ((unit.valid == 0) ? "disabled" : "")
+                "title": "Iniciar Follow Me",
+                "value": unit.unitId,
+                "disabled": ((unit.valid == 0) ? "disabled" : ""),
             })
+                .ds("role", "follow")
                 .on("click", (event) => {
                 this.onFollow(unit.unitId, event.currentTarget.checked);
             });
@@ -73,6 +108,18 @@ export class TraceTool {
         const nodes = this.main.queryAll(`[data-unit-id="${unitId}"] input`);
         nodes.forEach(ele => {
             ele.disabled = false;
+        });
+    }
+    setFollowCheck(unitId, value) {
+        const nodes = this.main.queryAll(`[data-unit-id="${unitId}"] input[data-role="follow"]`);
+        nodes.forEach(ele => {
+            ele.checked = value;
+        });
+    }
+    setTraceCheck(unitId, value) {
+        const nodes = this.main.queryAll(`[data-unit-id="${unitId}"] input[data-role="trace"]`);
+        nodes.forEach(ele => {
+            ele.checked = value;
         });
     }
 }

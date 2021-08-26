@@ -66,6 +66,7 @@ class Mobil {
 	private followMe: boolean = false;
 	private trackingData: any[] = [];
 	public connected: number = 0;
+	private traceActive: boolean = false;
 
 
 	public onValid: (value: boolean) => void = (value) => { };
@@ -135,6 +136,7 @@ class Mobil {
 
 	deleteTrace() {
 		this.trace.delete();
+		this.traceActive = false;
 	}
 
 	getTrace() {
@@ -147,6 +149,7 @@ class Mobil {
 		}
 
 		this.trace.init(this.trackingData);
+		this.traceActive = true;
 	}
 
 	addTracking(tracking) {
@@ -178,6 +181,7 @@ class Mobil {
 
 	}
 	setInfo(info) {
+		
 		this.infoFormMain.setData(info);
 		return this;
 	}
@@ -241,6 +245,9 @@ class Mobil {
 	}
 	setData(data){
 		this.data = data;
+	}
+	isTraceActive(){
+		return this.traceActive;
 	}
 }
 
@@ -323,6 +330,10 @@ export class Unit {
 	private winStatus:any = null; 
 	private statusInfo: InfoUnits = null;
 	
+	public onGetPosition: (unitId:number) => void = (unitId:number) => { };
+	public onReset: (unitId:number) => void = (unitId:number) => { };
+	public onCall: (unitId:number) => void = (unitId:number) => { };
+
 	static _instances: object[] = [];
 
 
@@ -407,15 +418,64 @@ export class Unit {
 
 
 			if (this.infoForm) {
+				this.infoForm.onSetData=(data=>{
+					const e = this.infoFormMain.getMain().query(`input[type="checkbox"][data-trace]`);
+					console.log(e)
+					if(e){
+						$(e).on("click", (event)=>{
+							this.playTrace(data.unitId, event.currentTarget.value);
+						})
+					}
 
+				});
 
 				this.infoFormMain = new InfoForm(this.infoForm);
+				
 
 				if (this.infoId) {
 					const winInfo: GTInfo = S.getElement(this.infoId) as GTInfo;
+
+					const div = $.create("div").addClass("info-main");
+					
+					const body = div.create("div").addClass("info-body");
+					const menu = div.create("div").addClass("info-menu");
+
+					const traceCHK = menu.create("input").prop({type:"checkbox"});
+					menu.create("span").text("Activar Traza");
+					const followCHK = menu.create("input").prop({type:"checkbox"});
+					menu.create("span").text("Seguir");
+					const b1 = menu.create("button").prop({type:"button", "value":"0", "title":"Get Position"}).text("P")
+					.on("click", event=>{
+						this.onGetPosition(event.currentTarget.value);
+					});
+					const b2 = menu.create("button").prop({type:"button", "value":"0", "title":"Reset"}).text("R")
+					.on("click", event=>{
+						this.onGetPosition(event.currentTarget.value);
+					});
+
+					traceCHK.on("change", event=>{
+						this.playTrace(event.currentTarget.value, event.currentTarget.checked);
+						
+					});
+					followCHK.on("change", event =>{
+						this.setFollowMe(event.currentTarget.value, event.currentTarget.checked);
+					});
+
+					//winInfo.setBody(div.get());
+
 					this.onInfoUpdate = (info, name) => {
 
 
+						traceCHK.ds("trace", info.unitId);
+						followCHK.ds("follow", info.unitId);
+						traceCHK.value(info.unitId);
+						followCHK.value(info.unitId);
+						
+						b1.value(info.unitId);
+						b2.value(info.unitId);
+
+						traceCHK.get().checked = this.units[info.unitId].isTraceActive();
+						followCHK.get().checked = this.units[info.unitId].getFollow();
 						
 
 						//this.infoFormMain.setMode(info.className);
@@ -424,7 +484,10 @@ export class Unit {
 						winInfo.setCaption(name);
 						this.infoFormMain.setMode("xxxx");
 
-						winInfo.setBody(this.infoFormMain.get());
+						//winInfo.setBody(this.infoFormMain.get());
+						body.append(this.infoFormMain.get());
+						winInfo.setBody(div.get());
+						
 					};
 
 				}
@@ -758,6 +821,14 @@ export class Unit {
 			requestFunction: (tracking: any) => {
 				this.units[unitId].initTrace(tracking);
 				this.units[unitId].setVisible(true);
+
+				const checkInfo = $(document).query(`input[type="checkbox"][data-trace="${unitId}"]`);
+				if(checkInfo){
+					
+					checkInfo.checked = value;
+				}
+
+				this.traceTool.setTraceCheck(unitId, value);
 			},
 			params: [
 				{
@@ -849,8 +920,18 @@ export class Unit {
 						//this.playTrace(unitId);
 
 					} else {
-						alert(this.msgErrortracking);
+						new Float.Message({
+							"caption": this.units[unitId].getName(),
+							"text": this.msgErrortracking,
+							"className": "",
+							"delay": 3000,
+							"mode": "",
+							"left": "center",
+							"top": "top"
+						}).show({});
+						//alert(this.msgErrortracking);
 					}
+					this._lastUnitId = unitId;
 					this.onInfoUpdate(this.getUnitInfo(unitId), info.vehicle_name);
 					//this.setInfo(unitId);
 				}
@@ -1045,8 +1126,19 @@ export class Unit {
 
 	}
 
-	setFollowMe(value: boolean) {
-		this.followMe = value;
+	setFollowMe(unitId: number, value: boolean) {
+		if(this.units[unitId]){
+			this.units[unitId].setFollow(value);
+
+			this.units[unitId].setFollow(value);
+			const checkInfo = $(document).query(`input[type="checkbox"][data-follow]`);
+			if(checkInfo){
+				checkInfo.checked = value;
+			}
+
+			this.traceTool.setFollowCheck(unitId, value)
+		}
+		
 	}
 	getFollowMe() {
 		return this.followMe;
@@ -1108,10 +1200,20 @@ export class Unit {
 			tracking: this.tracking,
 			onTrace: (unitId, value) => {
 				this.playTrace(unitId, value);
+
+				
 			},
 			onFollow: (unitId, value) => {
+				this.setFollowMe(unitId, value);
+				/*
 				this.units[unitId].setFollow(value);
-			}
+				const checkInfo = $(document).query(`input[type="checkbox"][data-follow]`);
+				if(checkInfo){
+					checkInfo.checked = value;
+				}
+				 */
+			},
+			
 		});
 
 		this.traceControl.getPage(1).addClass("trace-layer");
@@ -1132,7 +1234,7 @@ export class Unit {
 
 	updateTraceLayer(tracking) {
 
-
+		console.log("hola");
 		/*
 		console.log(this.history);
 		console.log(this.history.filter((e, index)=>{
@@ -1171,7 +1273,16 @@ export class Unit {
 			//this.playTrace(unitId);
 
 		} else {
-			alert(this.msgErrortracking);
+			new Float.Message({
+				"caption": this.units[unitId].getName(),
+				"text": this.msgErrortracking,
+				"className": "",
+				"delay": 3000,
+				"mode": "",
+				"left": "center",
+				"top": "top"
+			}).show({});
+			//alert(this.msgErrortracking);
 		}
 
 		const info = this.dataUnits.find(e => e.unitId == unitId) || {};

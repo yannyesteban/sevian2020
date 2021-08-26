@@ -82,6 +82,16 @@ export class Report {
 
         if(this.unitPanelId){
             this.unitPanel = S.getElement(this.unitPanelId);
+
+            this.unitPanel.onGetPosition = (unitId:number) => {
+                this.goCommandId(null, 2);
+             };
+            this.unitPanel.onReset = (unitId:number) => { 
+                this.goCommandId(null, 3);
+            };
+            this.unitPanel.onCall = (unitId:number) => { 
+                this.goCommandId(null, 4);
+            };
         }
 
         this.formIds["0"] = "form-" + String(new Date().getTime());
@@ -284,10 +294,17 @@ export class Report {
             this.unitName = this.unitPanel.getUnitInfo(this.unitId).unitName;
         }
 
-        this.wins["main"].setCaption(`${this.caption} : ${this.unitName}`);
+       
+
+        /*
+        this.start(this.unitId, this.index);
+        this.wins["main"].show();
+        return;
+        */
 
         if(this.unitId){
             this.start(this.unitId, this.index);
+            this.wins["main"].setCaption(`${this.caption} : ${this.unitName}`);
             this.wins["main"].show();
         }else{
             alert("no unit selected!!!")

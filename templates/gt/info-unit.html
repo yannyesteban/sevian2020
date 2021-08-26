@@ -32,6 +32,10 @@
         <div>Satelites</div>
         <div>{=satellite}</div>
     </div>
+    <div class="row">
+        <div>Firmware</div>
+        <div>{=device_model}<br>{=version} - {=protocol}</div>
+    </div>
     <div class="inputs">
         <div data-detail="inputs" data-input-id="{=inputs.id}" data-input-value="{=inputs.on}">
             <span>{=inputs.name}</span><span data-input-value="{=inputs.value}">{=inputs.value}</span>
@@ -42,10 +46,10 @@
         <div data-detail="outputs" data-input-id="{=outputs.id}" data-input-value="{=outputs.on}"><span>{=outputs.name}</span><span data-input-value="{=outputs.value}">{=outputs.value}</span></div>
 
     </div>
-    
-    <div><input type="checkbox">Seguir</div>
-    <div><input type="checkbox">Activar Traza</div>
+    <!--
+    <div><input type="checkbox" data-follow="{=unitId}">Seguir</div>
+    <div><input type="checkbox" data-trace="{=unitId}">Activar Traza</div>
     <div><button type="button">Posición</button></div>
-    <div><button type="button">Reiniciar</button></div>
+    <div><button type="button">Reiniciar</button></div>-->
 
 </div>

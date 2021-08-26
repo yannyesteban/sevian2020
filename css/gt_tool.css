@@ -214,4 +214,74 @@
 .report-tool .sg-form .sg-menu .text {
   margin: 0px;
 }
+
+.report-tool div[data-mode="0"] .sg-form > .caption {
+  background-color: aqua;
+}
+
+.report-tool div[data-mode="1"] .sg-form > .caption {
+  background-color: aqua;
+}
+
+.report-tool div[data-mode="2"] .sg-form > .caption {
+  background-color: aqua;
+}
+
+.report-tool div[data-mode="3"] .sg-form > .caption {
+  background-color: aqua;
+}
+
+.report-tool option.mode-0 {
+  color: #a76010 !important;
+}
+
+.report-tool option.mode-1 {
+  color: #39b16f !important;
+}
+
+.report-tool option.mode-2 {
+  color: red !important;
+  font-weight: bold;
+}
+
+.report-tool option.mode-3 {
+  color: #db48c3 !important;
+}
+
+.gt-info-main {
+  overflow: auto;
+  height: 100%;
+}
+
+.gt-info-main .info-body {
+  overflow: auto;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+
+.gt-info-main .info-menu {
+  background-color: white;
+  color: #575757;
+  font-size: 10px;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+
+.gt-info-main .info-menu button {
+  margin-left: 5px;
+}
+
+.gt-info-main .info-main {
+  overflow: auto;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
 /*# sourceMappingURL=gt_tool.css.map */

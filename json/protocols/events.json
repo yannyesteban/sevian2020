@@ -28,7 +28,6 @@
     {
       "name": "longitude",
       "label": "longitude",
-      "value": "zzzxx",
       "type": "text",
       "description": "The longitude of center point of defined circle zone."
     },

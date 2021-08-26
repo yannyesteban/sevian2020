@@ -35,7 +35,7 @@ class Communication extends
 
     }
     public function evalMethod($method = false): bool{
-
+        
 		if($method){
             $this->method = $method;
         }
@@ -110,7 +110,15 @@ class Communication extends
 
         //$info->id = $this->containerId;
 
-        $this->host = $this->eparams->gtServer ?? '127.0.0.1';
+        $gtServer = '127.0.0.1';
+        $gtPort = 3321;
+
+        if(\Sevian\S::getSes('GT_SERVER')){
+            $gtServer = \Sevian\S::getSes('GT_SERVER');
+            $gtPort = \Sevian\S::getSes('GT_SERVER_PORT');
+        }
+
+        //$this->host =  $gtServer;//$this->eparams->gtServer ?? '127.0.0.1';
         $this->eparams->gridId='eres';
 
         $this->typeElement = 'GTCommunication';
@@ -129,8 +137,8 @@ class Communication extends
             'infoMenuId'    => $this->eparams->infoMenu?? '',
             'user'          => $this->_userInfo->user,
             'socketServer'  => [
-                'host'  => 'bests.no-ip.info',//'localhost',//'bests.no-ip.info',
-                'port'  => 3342
+                'host'  => $gtServer,//'localhost',//'bests.no-ip.info',
+                'port'  => $gtPort
             ],
             'winNow'=>[
                 'caption'=>'Inmediato',
