@@ -184,7 +184,13 @@ export class History {
         }
     }
     addImage(info) {
+        console.log(1, info);
         if (this.map.hasImage(info.name)) {
+            if (!this.iImages[info.name]) {
+                this.iImages[info.name] = this.createImage(Object.assign({ map: this.map }, info));
+                //this.map.addImage(info.name, this.iImages[info.name], { pixelRatio: 3 });
+                this.onAddImage(info);
+            }
             return false;
         }
         this.iImages[info.name] = this.createImage(Object.assign({ map: this.map }, info));

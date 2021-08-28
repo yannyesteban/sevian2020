@@ -47,10 +47,12 @@ class History
 	public function evalMethod($method = false): bool{
 
 		if($method === false){
-            $method = $this->method;
+            $this->method = $this->method;
 		}
 
-		switch($method){
+		//hx($this->method);
+
+		switch($this->method){
 			case 'request':
 				$this->load2();
 				break;
@@ -64,6 +66,7 @@ class History
 				$dateTo = \SEVIAN\S::getReq('date_to');
 				$hourTo = \SEVIAN\S::getReq('hour_to');
 				$this->loadHistory($unitId, $dateFrom, $hourFrom, $dateTo, $hourTo);
+				break;
 			case 'load-test':
 
 				$this->loadHistory(2002, '2020-07-01', '09:20:34', '2020-07-01', '12:09:50');
@@ -239,8 +242,16 @@ class History
 			'infoForm'		=> $info->getInit()
 		];
 
-
-		$this->setInit($this->info);
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> 'GTHistory',
+			'iClass'	=> 'GTHistory',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> '',
+			'config'	=> $this->info
+		]);
+		//$this->setInit($this->info);
 
     }
 
@@ -294,7 +305,7 @@ class History
 
 		$data = $this->loadTracking($unitId, $from, $to);
 		//print_r(json_encode($data, JSON_NUMERIC_CHECK));exit;
-		$this->setJSActions([
+		$this->info = [
 			[
             	'method'	=> 'setData',
 				'value'		=> $data,
@@ -316,6 +327,12 @@ class History
 				'method'	=> 'play',
 				'value'		=> null
 			]
+		];
+
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'actions'	=> $this->info,
+			'type'=>'update'
 		]);
 
 		return;

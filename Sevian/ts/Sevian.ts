@@ -201,7 +201,6 @@ export var S = (($) => {
 						this._e[id][action.method](...action.args);
 
 					} else if (action.value !== undefined) {
-						alert(action.method)
 						this._e[id][action.method](action.value);
 					}
 				}

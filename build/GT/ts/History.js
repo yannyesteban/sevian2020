@@ -150,12 +150,12 @@ export class History {
         const blockingTarget = this.getMap().getControl("history").getLayerControl();
         //let unitId = this.form.getInput("unit_idx").getValue();
         let f = this._form.getFormData();
-        S.send3({
+        S.go({
             "async": true,
             "form": f,
             element: this._form,
             valid: true,
-            "blockingTarget": blockingTarget,
+            //"blockingTarget": blockingTarget,
             "params": [
                 {
                     "t": "setMethod",
@@ -211,6 +211,10 @@ export class History {
         });
     }
     play() {
+        if (this.data.length <= 0) {
+            console.log("error");
+            return;
+        }
         let data = this.formateData(this.data);
         const layer2 = this.layerConfig.groups;
         this.layerConfig.layers.forEach((e, index) => {

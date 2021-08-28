@@ -341,7 +341,7 @@ export class MapBoxLib {
         }
         info.map = this.map;
         info.parent = this;
-        console.log("POLYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+        
         switch (type) {
             case "circle":
                 this._poly[name] = new Circle(info);

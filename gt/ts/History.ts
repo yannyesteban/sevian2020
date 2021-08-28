@@ -207,12 +207,12 @@ export class History{
 		//let unitId = this.form.getInput("unit_idx").getValue();
 
 		let f  = this._form.getFormData();
-		S.send3({
+		S.go({
 			"async":true,
 			"form":f,
 			element:this._form,
 			valid:true,
-			"blockingTarget": blockingTarget,
+			//"blockingTarget": blockingTarget,
 			"params":[
 
 				{
@@ -282,6 +282,11 @@ export class History{
 	play(){
 
 
+
+		if(this.data.length<=0){
+			console.log("error");
+			return;
+		}
 		let data = this.formateData(this.data);
 
 
@@ -326,7 +331,7 @@ export class History{
 			}
 
 		});
-
+		
 		this.trace.init();
 		this.getMap().getControl("history").setTrace(this.trace);
 		//this.getMap().getControl("history").reset();

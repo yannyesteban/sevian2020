@@ -470,7 +470,10 @@ export class HistoryControl{
                 
             }
             let icon = null;
+            
+
             if(layer.image){
+            
                  icon = $(this.getTrace().getImageObj(layer.image).getCanvas());
                 icon.addClass(["layer-icon", layer.image]);
             }
