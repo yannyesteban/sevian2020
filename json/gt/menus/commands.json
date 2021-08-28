@@ -28,7 +28,7 @@
 			"caption":"",
 			"imageClass":"icon-marker_001",
 			"propertys":{
-				"title":"Conectar LLamada"
+				"title":"Callback"
 			},
 			"action":"S.getElement('report').goCommandId(null, 4);"
 		}

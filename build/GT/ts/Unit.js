@@ -336,13 +336,17 @@ export class Unit {
                     menu.create("span").text("Activar Traza");
                     const followCHK = menu.create("input").prop({ type: "checkbox" });
                     menu.create("span").text("Seguir");
-                    const b1 = menu.create("button").prop({ type: "button", "value": "0", "title": "Get Position" }).text("P")
+                    const b1 = menu.create("button").prop({ type: "button", "value": "2", "title": "Get Position" }).text("P")
                         .on("click", event => {
                         this.onGetPosition(event.currentTarget.value);
                     });
-                    const b2 = menu.create("button").prop({ type: "button", "value": "0", "title": "Reset" }).text("R")
+                    const b2 = menu.create("button").prop({ type: "button", "value": "3", "title": "Reboot" }).text("R")
                         .on("click", event => {
-                        this.onGetPosition(event.currentTarget.value);
+                        this.onReset(event.currentTarget.value);
+                    });
+                    const b3 = menu.create("button").prop({ type: "button", "value": "4", "title": "Callback" }).text("C")
+                        .on("click", event => {
+                        this.onCall(event.currentTarget.value);
                     });
                     traceCHK.on("change", event => {
                         this.playTrace(event.currentTarget.value, event.currentTarget.checked);

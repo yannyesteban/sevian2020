@@ -271,3 +271,26 @@
     flex-direction: column;
   }
 }
+
+.sg-form {
+  display: grid;
+  height: 100%;
+  overflow: auto;
+  grid-template-rows: auto 1fr auto;
+  .page {
+    height: 100%;
+    overflow: auto;
+  }
+}
+.flex {
+  > .body {
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    > * {
+      flex: 1 1 auto;
+      height: 100%;
+      overflow: auto;
+    }
+  }
+}

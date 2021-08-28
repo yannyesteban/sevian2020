@@ -112,8 +112,9 @@ export class Report {
             width: "280px",
             height: "250px",
             mode: "auto",
-            className: ["sevian"],
+            className: ["sevian", "flex"],
         });
+        this.wins["params"].getBody().addClass("report-tool");
         this.listCommand["0"] = new Input({
             target: this.tabs["0"],
             input: "input",
@@ -265,6 +266,9 @@ export class Report {
         this.goInit(this.unitId, this.index, 0);
     }
     iniLists(eventList, commandList, type) {
+        if (type == "params") {
+            return;
+        }
         if (type === false) {
             this.listCommand["0"].setOptionsData([['', ' - ']].concat(eventList));
             this.listCommand["A"].setOptionsData([['', ' - ']].concat(commandList
@@ -643,7 +647,8 @@ export class Report {
             requestFunctions: {
                 f: (json) => {
                     if (json.commandId > 0) {
-                        this.sendRapidCommand(role, unitId, json.commandId);
+                        console.log("commnadId", json.commandId);
+                        this.sendRapidCommand(role, unitId, json.commandId, json.command);
                     }
                     else {
                         alert("error command not found");
@@ -668,6 +673,9 @@ export class Report {
     createForm(command, type) {
         if (type == "0") {
             this.createMainForm(command);
+        }
+        else if (type == "params") {
+            this.createAuxForm(command, type);
         }
         else {
             this.createCommandForm(command, type);
@@ -803,7 +811,7 @@ export class Report {
             caption: "Mode",
             name: "mode",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: 1,
         });
         fields.push({
@@ -845,7 +853,7 @@ export class Report {
             caption: "command_params",
             name: "command_params",
             input: "input",
-            type: "textarea",
+            type: "hidden",
             value: JSON.stringify(command.fields.map(e => e.name)),
         });
         const form = this.forms[type] = new Form({
@@ -982,7 +990,7 @@ export class Report {
             caption: "ID",
             name: "id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: id,
         });
         fields.push({
@@ -1010,14 +1018,14 @@ export class Report {
             caption: "Mode",
             name: "mode",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: mode,
         });
         fields.push({
             caption: "Status",
             name: "status",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: status,
             default: 1
         });
@@ -1060,7 +1068,7 @@ export class Report {
             caption: "command_params",
             name: "command_params",
             input: "input",
-            type: "textarea",
+            type: "hidden",
             value: JSON.stringify(command.fields.map(e => e.name)),
         });
         const form = this.forms[type] = new Form({
@@ -1124,22 +1132,29 @@ export class Report {
     }
     evalCommandId(role) {
     }
-    sendRapidCommand(rolId, unitId, commandId) {
+    sendRapidCommand(rolId, unitId, commandId, command) {
         if (rolId == 2) {
             this.goSaveRapidCommand(null, null, unitId, commandId, 0, 2, true);
         }
+        if (rolId == 3) {
+            this.goSaveRapidCommand(null, null, unitId, commandId, 0, 2, true);
+        }
+        if (rolId == 4) {
+            this.wins["params"].show();
+            this.createAuxForm(command, "params");
+            return;
+            this.createFormParams([{
+                    caption: "Teléfono",
+                    name: "phone",
+                    input: "input",
+                    type: "text",
+                    value: "04164309040",
+                }], unitId, commandId);
+            //this.goSaveRapidCommand(null, null, unitId, commandId, 0, 1, true);
+        }
         return;
-        this.wins["params"].show();
-        this.createFormParams([{
-                caption: "Teléfono",
-                name: "phone",
-                input: "input",
-                type: "text",
-                value: "hola",
-            }]);
-        alert(command);
     }
-    createFormParams(fields) {
+    createFormParams(fields, unitId, commandId) {
         const type = "params";
         const form = this.forms[type] = new Form({
             target: this.wins["params"].getBody(),
@@ -1158,7 +1173,8 @@ export class Report {
                             fields.forEach((element) => {
                                 params[element.name] = form.getInput(element.name).getValue();
                             });
-                            this.goSaveCommand(type, JSON.stringify(params), true);
+                            this.goSaveRapidCommand(null, null, unitId, commandId, 0, 1, true);
+                            //this.goSaveCommand(type, JSON.stringify(params), true);
                         },
                     },
                 ],
@@ -1185,6 +1201,220 @@ export class Report {
                 }
             }
         }
+    }
+    createAuxForm(command, type) {
+        let data = null;
+        const id = command.id;
+        const commandId = command.command_id;
+        const unitId = command.unit_id;
+        const index = command.index;
+        const mode = command.mode;
+        //const name = this.unitPending.name;
+        const status = command.status;
+        const __mode_ = command.__mode_;
+        let __record_ = "";
+        if (command.__record_) {
+            __record_ = JSON.stringify(command.__record_);
+        }
+        const fields = [];
+        //const commandParams = []; 
+        //const fields = this.commandConfig.params.fields.map((item) => {
+        command.fields.forEach((item) => {
+            //commandParams.push(item.name);
+            data = command.paramData
+                .filter((e) => e.param_id == item.id)
+                .map((e) => {
+                return [e.value, e.title || e.value];
+            });
+            const info = {
+                caption: item.param,
+                name: item.name,
+                input: "input",
+                type: "text",
+                value: item.value,
+                dataset: { type: "param" }
+            };
+            if (item.type == "select") {
+                info.type = "select";
+                info.data = data;
+                fields.push(info);
+                return;
+            }
+            if (item.type == "bit") {
+                info.input = "multi";
+                info.type = "checkbox";
+                info.data = data;
+                info.check = (value, inputs) => {
+                    inputs.forEach((input) => {
+                        if ((parseInt(value, 10) & parseInt(input.value, 10)) ==
+                            parseInt(input.value)) {
+                            input.checked = true;
+                        }
+                        else {
+                            input.checked = false;
+                        }
+                    });
+                };
+                info.onchange = function (item) {
+                    const parent = $(item.get().parentNode.parentNode);
+                    let input = parent.queryAll("input.option:checked");
+                    if (input) {
+                        let str = 0;
+                        input.forEach((i) => {
+                            str += Number(i.value);
+                        });
+                        this._input.val(str);
+                    }
+                };
+                fields.push(info);
+                return;
+            }
+            fields.push(info);
+        });
+        let params = "";
+        if (command.params) {
+            params = JSON.stringify(command.params);
+        }
+        fields.push({
+            caption: "ID",
+            name: "id",
+            input: "input",
+            type: "hidden",
+            value: id,
+        });
+        fields.push({
+            caption: "Unit ID",
+            name: "unit_id",
+            input: "input",
+            type: "hidden",
+            value: unitId,
+        });
+        fields.push({
+            caption: "Command ID",
+            name: "command_id",
+            input: "input",
+            type: "hidden",
+            value: commandId,
+        });
+        fields.push({
+            caption: "Index",
+            name: "index",
+            input: "input",
+            type: "hidden",
+            value: index,
+        });
+        fields.push({
+            caption: "Mode",
+            name: "mode",
+            input: "input",
+            type: "hidden",
+            value: mode,
+        });
+        fields.push({
+            caption: "Status",
+            name: "status",
+            input: "input",
+            type: "hidden",
+            value: status,
+            default: 1
+        });
+        fields.push({
+            caption: "Params",
+            name: "params",
+            input: "input",
+            type: "hidden",
+            value: params,
+        });
+        fields.push({
+            caption: "__mode_",
+            name: "__mode_",
+            input: "input",
+            type: "hidden",
+            value: __mode_,
+        });
+        fields.push({
+            caption: "__record_",
+            name: "__record_",
+            input: "input",
+            type: "hidden",
+            value: __record_,
+        });
+        fields.push({
+            caption: "type_command",
+            name: "type_command",
+            input: "input",
+            type: "hidden",
+            value: type,
+        });
+        fields.push({
+            caption: "command_name",
+            name: "command_name",
+            input: "input",
+            type: "hidden",
+            value: command.command,
+        });
+        fields.push({
+            caption: "command_params",
+            name: "command_params",
+            input: "input",
+            type: "hidden",
+            value: JSON.stringify(command.fields.map(e => e.name)),
+        });
+        const form = this.forms[type] = new Form({
+            target: this.wins["params"].getBody(),
+            id: this.formIds[type],
+            caption: command.command,
+            fields: fields,
+            menu: {
+                caption: "",
+                autoClose: false,
+                className: ["sevian", "horizontal"],
+                items: [
+                    /*{
+                        caption: "Save",
+                        action: (item, event) => {
+
+                            let params = {};
+                            
+
+
+                            command.fields.forEach((element) => {
+                                
+                                params[element.name] = form.getInput(element.name).getValue();
+                            });
+                            form.getInput("status").setValue(1);
+                            form.getInput("params").setValue(JSON.stringify(params));
+                            this.goSave(type);
+                        },
+                    },*/
+                    {
+                        caption: "Send",
+                        action: (item, event) => {
+                            let params = {};
+                            command.fields.forEach((element) => {
+                                params[element.name] = form.getInput(element.name).getValue();
+                            });
+                            form.getInput("params").setValue(JSON.stringify(params));
+                            form.getInput("status").setValue(2);
+                            this.goSave(type, true);
+                        },
+                    } /*,
+                    {
+                        caption: "Recibir",
+                        action: (item, event) => {
+                           
+
+                            this.goSaveCommand(type, "", true);
+                        },
+                    },*/
+                ],
+            },
+        });
+        if (__mode_ == 2) {
+            form.setValue(command.params);
+        }
+        form.setMode(status);
+        return form;
     }
 }
 //# sourceMappingURL=Report.js.map

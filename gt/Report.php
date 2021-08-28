@@ -112,10 +112,20 @@ class Report
             case 'get-command-id':
 
                 $role = $this->eparams->role ?? 2;
+                $commandId = $this->getCommandId($unitId, $role);
+                $index = 0;
+                $mode = 1;
+                $c = $this->getCommand($unitId, $commandId, $index, $mode);
+                
+                $c['fields'] = $this->getCommandFields($unitId, $commandId, $index, $mode);
+                $c['paramData'] = $this->getParamData($unitId, $commandId);
+
+                
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
                         "commandId" => $this->getCommandId($unitId, $role),
+                        "command"=>$c
                     ],
                     'iToken'=> $this->iToken
                 ]);
