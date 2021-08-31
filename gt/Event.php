@@ -50,7 +50,6 @@ class Event
 			case 'load':
 				//$this->load();
 				$this->setRequest($this->loadDataEvent($this->eparams->lastEventId?? 0, $this->getUser()));
-
 				break;
 			case 'update-status':
 				$userInfo = $this->getUserInfo();

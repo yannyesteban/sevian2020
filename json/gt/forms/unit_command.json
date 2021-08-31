@@ -2,7 +2,7 @@
 	"name": "unit_command",
 	"caption": "Comandos",
 	"className": "history",
-	"query": "SELECT * FROM unit_command",
+	"query": "SELECT id, unit_id, command_id, `index`, `mode`, name, params, `status`, `user` FROM unit_command",
 	"menuName": "",
 	"methods": {
 		"request": {

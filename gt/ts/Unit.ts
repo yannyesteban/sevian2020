@@ -443,7 +443,8 @@ export class Unit {
 					const traceCHK = menu.create("input").prop({type:"checkbox"});
 					menu.create("span").text("Activar Traza");
 					
-					const followCHK = menu.create("input").prop({type:"checkbox"});
+					const followCHK = menu.create("input").prop({type:"hidden"});
+					const followCHK2 = menu.create("input").prop({type:"checkbox"});
 					menu.create("span").text("Seguir");
 					
 					
@@ -469,6 +470,10 @@ export class Unit {
 					followCHK.on("change", event =>{
 						this.setFollowMe(event.currentTarget.value, event.currentTarget.checked);
 					});
+					followCHK2.on("change", event =>{
+						this.followMe = event.currentTarget.checked;
+					});
+
 
 					//winInfo.setBody(div.get());
 
@@ -643,15 +648,22 @@ export class Unit {
 				latitude: tracking.latitude,
 				heading: tracking.heading
 			}).setInfo(this.getUnitInfo(unitId));
-
+			
 		}
 
 		if (this._lastUnitId === unitId) {
 			this.onInfoUpdate(this.getUnitInfo(unitId), this.units[unitId].getName());
+			
+			if (this.followMe) {
+				
+				this.units[unitId].panTo();
+				
+			}
 		}
 
 		if (this.followMe) {
-			this.flyTo();
+			//this.flyTo();
+			//this.panTo(unitId);
 		}
 	}
 
@@ -663,16 +675,16 @@ export class Unit {
 		if (data === undefined) {
 			return;
 		}
-
-
-		
-
-		
-       
        
 		let sum = 0;
 
 		data.connected.forEach((tracking)=>{
+
+
+			if (this._lastUnitId === tracking.unitId && this.units[tracking.unitId].data.connected != tracking.connected) {
+				this.onInfoUpdate(this.getUnitInfo(tracking.unitId), this.units[tracking.unitId].getName());
+			}
+
 			this.units[tracking.unitId].data.connected = tracking.connected;
 			
 
@@ -689,6 +701,8 @@ export class Unit {
             if(tracking.connected > 0){
                 sum++;
             }
+
+			
 		});
 
 

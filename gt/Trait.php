@@ -134,7 +134,7 @@ trait DBUnit{
         u.conn_status as connected,
 
 
-t.date_time,
+        t.date_time,
             t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
             t.event_id as eventId, t.mileage, t.input_status as inputStatus, t.voltage_level_i1 as voltageI1, t.voltage_level_i2 as voltageI2,
             t.output_status as outputStatus, t.battery_voltage as batteryVoltage,
@@ -2093,24 +2093,19 @@ trait DBEvent{
         $cn = $this->cn;
         $cn->query = "SELECT e.id, e.event_id, e.user, e.status,
         vn.name, 1 as type, 'x' as cType, e.info,
-        t.id as track_id, e.date_time, u.id as unitId,
-        e.mode, e.title,
-
-        dn.name as device_name,
-
-
-                CONCAT(
-                    TIMESTAMPDIFF(DAY, TIMESTAMP(e.date_time), NOW()) ,'d ',
-                    MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.date_time), NOW()), 24), ':',
-                    MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.date_time), NOW()), 60), ':',
-                    MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.date_time), NOW()), 60),'' ) AS time
+        e.date_time, u.id as unitId,
+        e.mode, e.title, dn.name as device_name, e.stamp,
+        CONCAT(
+            TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
+            MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()), 24), ':',
+            MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), NOW()), 60), ':',
+            MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.stamp), NOW()), 60),'' ) AS time
         FROM event as e
         LEFT JOIN unit as u ON u.id = e.unit_id
         LEFT JOIN device as de ON de.id = u.device_id
         LEFT JOIN device_name as dn ON dn.name = de.name
         LEFT JOIN unit_name as vn ON vn.id = u.name_id
         LEFT JOIN user_unit as uu ON uu.unit_id = u.id
-        LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = e.date_time
         WHERE
 
         e.status != 2

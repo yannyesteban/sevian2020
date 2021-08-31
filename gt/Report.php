@@ -12,6 +12,7 @@ class Report
     private $commandId = 0;
     private $index = 0;
     private $mode = 0;
+    
     private $type = "0";
 
 	static public $patternJsonFile = '';
@@ -37,6 +38,7 @@ class Report
         $commandId = $this->eparams->commandId ?? $this->commandId;
         $index = $this->eparams->index ?? $this->index;
         $mode = $this->eparams->mode ?? $this->mode;
+        
         $type = $this->eparams->type ?? $this->type;
 
 		switch($method){
@@ -57,7 +59,7 @@ class Report
                 break;
             case 'get-event':
                 $config = $this->getEventConfig($unitId);
-                $command = $this->getUnitCommand( $unitId, $index, $mode);
+                $command = $this->getUnitCommand( $unitId, $index);
                 $command['fields'] = $config['params']->fields;
                 $command['indexField'] = $config['params']->indexField;
 
@@ -77,12 +79,13 @@ class Report
                 $unitId = $this->eparams->unitId ?? $this->unitId;
                 $commandId = $this->eparams->commandId ?? $this->commandId;
                 $index = $this->eparams->index ?? $this->index;
-                $mode = $this->eparams->mode ?? 0;
-                $c = $this->getCommand($unitId, $commandId, $index, $mode);
                 
-                $c['fields'] = $this->getCommandFields($unitId, $commandId, $index, $mode);
+                $c = $this->getCommand($unitId, $commandId, $index);
+                
+                $c['fields'] = $this->getCommandFields($unitId, $commandId, $index);
                 $c['paramData'] = $this->getParamData($unitId, $commandId);
-                //$command['values'] = $this->getCommandFieldsValue($unitId, $commandId, $index, $mode);
+                //$command['values'] = $this->getCommandFieldsValue($unitId, $commandId, $index);
+                
                 $config = $this->getEventConfig($unitId);
                 $this->addResponse([
                     'id'	=> $this->id,
@@ -114,10 +117,10 @@ class Report
                 $role = $this->eparams->role ?? 2;
                 $commandId = $this->getCommandId($unitId, $role);
                 $index = 0;
-                $mode = 1;
-                $c = $this->getCommand($unitId, $commandId, $index, $mode);
                 
-                $c['fields'] = $this->getCommandFields($unitId, $commandId, $index, $mode);
+                $c = $this->getCommand($unitId, $commandId, $index);
+                
+                $c['fields'] = $this->getCommandFields($unitId, $commandId, $index);
                 $c['paramData'] = $this->getParamData($unitId, $commandId);
 
                 
@@ -131,6 +134,19 @@ class Report
                 ]);
                 
                 break;
+            case 'get-values':
+                $config = $this->getEventConfig($unitId);
+                $command = $this->getUnitCommand( $unitId, $index);
+                $command['fields'] = $config['params']->fields;
+                $command['indexField'] = $config['params']->indexField;
+
+                
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> $this->getCommandValues($unitId, $commandId, $index),
+                    'iToken'=> $this->iToken
+                ]);
+                break;                
                 
 			default:
 				break;
@@ -184,19 +200,19 @@ class Report
         return $this->_userInfo->user;
     }
 
-    private function getCommand($unitId = 0, $commandId = 0, $index = 0, $mode = 0){
+    private function getCommand($unitId = 0, $commandId = 0, $index = 0){
         $cn = $this->cn;
 
         $cn->query = "SELECT uc.id,
             '$unitId' as unit_id, c.id as command_id, '$index' as `index`,
-            '$mode' as `mode`, uc.name as description, uc.params, uc.values,
+            uc.name as description, uc.params, uc.values,
             IFNULL(uc.status, 0) as status, c.command as command,
             c.type, role_id,
             CASE WHEN uc.id IS NULL THEN 1 ELSE 2 END as __mode_,
              '' as __record_
             FROM device_command as c
             LEFT JOIN unit_command as uc ON c.id = uc.command_id
-            AND uc.index = '$index' AND uc.mode = '$mode' AND uc.unit_id = '$unitId'
+            AND uc.index = '$index' AND uc.unit_id = '$unitId'
             WHERE c.id = '$commandId'
             ";
 
@@ -215,7 +231,7 @@ class Report
 
     }
 
-    private function getCommandFields($unitId = 0, $commandId = 0, $index = 0, $mode = 0){
+    private function getCommandFields($unitId = 0, $commandId = 0, $index = 0){
 
         $cn = $this->cn;
 
@@ -224,7 +240,7 @@ class Report
                     p.id, p.command_id, param, IFNULL(title, param) as title, p.type_value, p.order,p.default_value as value,
                     p.description,
 
-                    CONCAT('name_',p.id) as name,'' as value, null as data, p.param as label,  1 as param_mode,
+                    '' as name,'' as value, null as data, p.param as label,  1 as param_mode,
 
                     CASE p.type_value
                         WHEN 1 THEN 'select'
@@ -250,7 +266,7 @@ class Report
         INNER JOIN device_version as v ON v.id = d.version_id
         INNER JOIN device_command as dc ON dc.version_id = v.id
         INNER JOIN unit_command as c ON c.command_id = dc.id
-        WHERE u.id = '$unitId' AND dc.role_id = 1 AND c.mode = 1";
+        WHERE u.id = '$unitId' AND dc.role_id = 1";
 
         $list = [];
         $result = $this->cn->execute();
@@ -335,7 +351,7 @@ class Report
         return $data;
     }
 
-    private function getUnitCommand($unitId, $index, $mode){
+    private function getUnitCommand($unitId, $index){
         
 
         $cn = $this->cn;
@@ -343,7 +359,7 @@ class Report
         $cn->query = "SELECT c.id, u.id as unit_id, dc.id as command_id, '$index' as `index`,
             c.name, c.params,
             IFNULL(c.status, 0) as status,
-            1 as __mode_, '' as __record_, c.mode as `mode`, dc.command
+            1 as __mode_, '' as __record_, dc.command
 
             FROM unit u
             INNER JOIN device as d on d.id = u.device_id
@@ -353,7 +369,7 @@ class Report
                 ON c.command_id = dc.id
                 AND c.unit_id = u.id
                 AND c.index = '$index'
-                AND c.mode = '$mode'
+                
 
             WHERE u.id = '$unitId' AND dc.role_id = 1";
 
@@ -379,7 +395,7 @@ class Report
         INNER JOIN device as d ON d.version_id = v.id
         INNER JOIN unit as u ON u.device_id = d.id
         LEFT JOIN unit_command as uc ON uc.command_id = c.id
-                AND uc.unit_id = u.id AND uc.mode = 1
+                AND uc.unit_id = u.id 
 
 
         WHERE
@@ -428,18 +444,18 @@ class Report
     }
 
 
-    private function getCommandFieldsValue($unitId = 0, $commandId = 0, $index = 0, $mode = 0){
+    private function getCommandFieldsValue($unitId = 0, $commandId = 0, $index = 0){
         $cn = $this->cn;
 
         $cn->query = "SELECT IFNULL(c.id,'') as id, dc.id as command_id, '$unitId' as unit_id, '$index' as `index`,
-                    '$mode' as mode, IFNULL(c.params, '') as params, IFNULL(c.status,0) as status,
+                    IFNULL(c.params, '') as params, IFNULL(c.status,0) as status,
                     CASE WHEN c.id IS NULL THEN 1 ELSE 2 END as __mode_,
                     '' as __record_, 'yanny' as n
                     FROM device_command as dc
                     LEFT JOIN unit_command as c ON
 
                     c.unit_id = '$unitId' AND c.command_id = dc.id
-                        AND c.index = '$index' AND c.mode = '$mode'
+                        AND c.index = '$index'
                     WHERE dc.id = '$commandId'";
         $result = $this->cn->execute();
 
@@ -458,35 +474,35 @@ class Report
 
     }
 
-    private function saveCommand($unitId = 0, $commandId = 0, $index = 0, $mode = 0, $params = ""){
+    private function saveCommand($unitId = 0, $commandId = 0, $index = 0, $mode=0, $params = ""){
         $cn = $this->cn;
 
         $cn->query = "SELECT *
             FROM unit_command as uc
-            
             WHERE 
                 uc.command_id = '$commandId' AND
                 uc.index = '$index' AND
-                uc.mode = '$mode' AND
                 uc.unit_id = '$unitId'
-            
             ";
-
+        if($mode == 1){
+            $field_param = 'params';
+        }else{
+            $field_param = 'query';
+        }
 
         $result = $this->cn->execute();
 
         $data = [];
         if($data = $cn->getDataAssoc($result)){
             $cn->query = "UPDATE unit_command as uc
-            SET status='1', `read`=0, params='$params'
+            SET status='1', `read`=0, `$field_param`='$params', `mode` = '$mode'
             WHERE 
                 uc.command_id = '$commandId' AND
                 uc.index = '$index' AND
-                uc.mode = '$mode' AND
                 uc.unit_id = '$unitId'";
             $cn->execute();
         }else{
-            $cn->query = "INSERT INTO unit_command (unit_id, command_id, `index`, `mode`, `status`, `read`, params)
+            $cn->query = "INSERT INTO unit_command (unit_id, command_id, `index`, `mode`, `status`, `read`, `$field_param`)
             VALUES ('$unitId', '$commandId', '$index', '$mode', 1, 0, '$params')";
 
             $cn->execute();
@@ -520,5 +536,32 @@ class Report
         }
         return $commandId;
 
+    }
+
+    private function getCommandValues($unitId = 0, $commandId = 0, $index = 0){
+
+        $cn = $this->cn;
+
+
+        $cn->query = "SELECT uc.values
+                    
+                FROM unit_command as uc
+                
+            WHERE uc.unit_id = '$unitId' AND uc.command_id = '$commandId' AND uc.index = '$index'
+            ";
+
+        $result = $this->cn->execute();
+
+
+        $data = [];
+        if($data = $cn->getDataAssoc($result)){
+            if($data['values'] != ""){
+                $data  = json_decode($data["values"]);
+            
+            }
+        }
+        return $data;
+        
+        
     }
 }

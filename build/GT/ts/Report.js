@@ -47,7 +47,7 @@ export class Report {
         if (this.socketId) {
             this.socket = S.getElement(this.socketId);
             this.socket.callOnMessage = (json) => {
-                this.decodeMessage(json.message);
+                this.decodeMessage(json);
             };
         }
         if (this.unitPanelId) {
@@ -66,7 +66,7 @@ export class Report {
         this.formIds["A"] = "form-a" + String(new Date().getTime());
         this.formIds["W"] = "form-w" + String(new Date().getTime());
         this.formIds["M"] = "form-m" + String(new Date().getTime());
-        this.formIds["params"] = "form-m" + String(new Date().getTime());
+        this.formIds["params"] = "form-p" + String(new Date().getTime());
         this.create(main);
     }
     create(main) {
@@ -128,7 +128,7 @@ export class Report {
             ],
             onAddOption: (option, data) => {
                 if (data[3] !== undefined) {
-                    $(option).addClass("mode-" + data[3]);
+                    $(option).addClass("status-" + data[3]);
                 }
             },
             events: {
@@ -151,7 +151,7 @@ export class Report {
             ],
             onAddOption: (option, data) => {
                 if (data[3] !== undefined) {
-                    $(option).addClass("mode-" + data[3]);
+                    $(option).addClass("status-" + data[3]);
                 }
             },
             events: {
@@ -173,7 +173,7 @@ export class Report {
             ],
             onAddOption: (option, data) => {
                 if (data[3] !== undefined) {
-                    $(option).addClass("mode-" + data[3]);
+                    $(option).addClass("status-" + data[3]);
                 }
             },
             events: {
@@ -195,7 +195,7 @@ export class Report {
             ],
             onAddOption: (option, data) => {
                 if (data[3] !== undefined) {
-                    $(option).addClass("mode-" + data[3]);
+                    $(option).addClass("status-" + data[3]);
                 }
             },
             events: {
@@ -264,6 +264,199 @@ export class Report {
             this.index = index;
         }
         this.goInit(this.unitId, this.index, 0);
+    }
+    loadTab(command, type) {
+        console.log(command);
+        this.listCommand[type].setValue(command.command_id);
+        this.tabs[type].ds("mode", command.status);
+        this.loadForm(command, type);
+    }
+    loadForm(command, type) {
+        const fields = [];
+        command.fields.forEach((item, index) => {
+            const data = command.paramData
+                .filter((e) => e.param_id == item.id)
+                .map((e) => {
+                return [e.value, e.title || e.value];
+            });
+            const info = {
+                caption: item.param,
+                name: `param_${index}`,
+                input: "input",
+                type: "text",
+                value: item.value,
+                dataset: { type: "param" }
+            };
+            if (item.type == "select") {
+                info.type = "select";
+                info.data = data;
+                fields.push(info);
+                return;
+            }
+            if (item.type == "bit") {
+                info.input = "multi";
+                info.type = "checkbox";
+                info.data = data;
+                info.check = (value, inputs) => {
+                    inputs.forEach((input) => {
+                        if ((parseInt(value, 10) & parseInt(input.value, 10)) ==
+                            parseInt(input.value)) {
+                            input.checked = true;
+                        }
+                        else {
+                            input.checked = false;
+                        }
+                    });
+                };
+                info.onchange = function (item) {
+                    const parent = $(item.get().parentNode.parentNode);
+                    let input = parent.queryAll("input.option:checked");
+                    if (input) {
+                        let str = 0;
+                        input.forEach((i) => {
+                            str += Number(i.value);
+                        });
+                        this._input.val(str);
+                    }
+                };
+                fields.push(info);
+                return;
+            }
+            fields.push(info);
+        });
+        let params = "";
+        if (command.params) {
+            params = JSON.stringify(command.params);
+        }
+        fields.push({
+            caption: "ID",
+            name: "id",
+            input: "input",
+            type: "text",
+            value: command.id,
+        });
+        fields.push({
+            caption: "Unit ID",
+            name: "unit_id",
+            input: "input",
+            type: "text",
+            value: command.unit_id,
+        });
+        fields.push({
+            caption: "Command ID",
+            name: "command_id",
+            input: "input",
+            type: "text",
+            value: command.command_id,
+        });
+        fields.push({
+            caption: "Index",
+            name: "index",
+            input: "input",
+            type: "text",
+            value: command.index,
+        });
+        fields.push({
+            caption: "Status",
+            name: "status",
+            input: "input",
+            type: "text",
+            value: command.status,
+            default: 1
+        });
+        fields.push({
+            caption: "Params",
+            name: "params",
+            input: "input",
+            type: "text",
+            value: params,
+        });
+        fields.push({
+            caption: "Mode",
+            name: "mode",
+            input: "input",
+            type: "text",
+            value: 1,
+        });
+        fields.push({
+            caption: "__mode_",
+            name: "__mode_",
+            input: "input",
+            type: "text",
+            value: command.__mode_,
+        });
+        fields.push({
+            caption: "__record_",
+            name: "__record_",
+            input: "input",
+            type: "hidden",
+            value: (command.__record_ != "") ? JSON.stringify(command.__record_) : "",
+        });
+        fields.push({
+            caption: "command_name",
+            name: "command_name",
+            input: "input",
+            type: "text",
+            value: command.command,
+        });
+        const form = this.forms[type] = new Form({
+            target: this.tabs[type],
+            id: this.formIds[type],
+            caption: command.command,
+            fields: fields,
+            menu: {
+                caption: "",
+                autoClose: false,
+                className: ["sevian", "horizontal"],
+                items: [
+                    {
+                        caption: "Save",
+                        action: (item, event) => {
+                            let params = {};
+                            command.fields.forEach((element, index) => {
+                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                            });
+                            form.getInput("status").setValue(1);
+                            form.getInput("mode").setValue(1);
+                            form.getInput("params").setValue(JSON.stringify(params));
+                            this.goSave(type);
+                        },
+                    },
+                    {
+                        caption: "Send",
+                        action: (item, event) => {
+                            let params = {};
+                            command.fields.forEach((element, index) => {
+                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                            });
+                            form.getInput("status").setValue(1);
+                            form.getInput("mode").setValue(1);
+                            form.getInput("params").setValue(JSON.stringify(params));
+                            this.goSave(type, true);
+                        },
+                    },
+                    {
+                        caption: "Recibir",
+                        action: (item, event) => {
+                            form.getInput("mode").setValue(2);
+                            this.goSaveCommand(type, "", true);
+                        },
+                    },
+                    {
+                        caption: "Config",
+                        action: (item, event) => {
+                            this.goGetValue(command.unit_id, command.command_id, command.index);
+                        },
+                    },
+                ],
+            },
+        });
+        if (command.__mode_ == 2) {
+            console.log(command.params);
+            form.setValue(command.params);
+        }
+        form.setMode(command.status);
+        console.log(command.params);
     }
     iniLists(eventList, commandList, type) {
         if (type == "params") {
@@ -360,7 +553,8 @@ export class Report {
             requestFunctions: {
                 f: (json) => {
                     this.iniLists(json.eventList, json.commandList, type);
-                    this.createForm(json.command, type);
+                    this.loadTab(json.command, type);
+                    //this.createForm(json.command, type);
                 },
             },
             params: [
@@ -464,7 +658,7 @@ export class Report {
                 f2: (json) => {
                     if (!json.message) {
                         new Float.Message({
-                            "caption": "Alarma",
+                            "caption": "Command",
                             "text": "Record was saved!!!",
                             "className": "",
                             "delay": 3000,
@@ -480,7 +674,7 @@ export class Report {
                     }
                     else {
                         new Float.Message({
-                            "caption": "Alarma",
+                            "caption": "Command",
                             "text": "Record wasn't saved!!!!",
                             "className": "",
                             "delay": 3000,
@@ -522,7 +716,7 @@ export class Report {
                 f2: (json) => {
                     if (!json.message) {
                         new Float.Message({
-                            "caption": "Alarma",
+                            "caption": "Command",
                             "text": "Record was saved!!!",
                             "className": "",
                             "delay": 3000,
@@ -536,7 +730,7 @@ export class Report {
                     }
                     else {
                         new Float.Message({
-                            "caption": "Alarma",
+                            "caption": "Command",
                             "text": "Record wasn't saved!!!!",
                             "className": "",
                             "delay": 3000,
@@ -670,6 +864,38 @@ export class Report {
             ],
         });
     }
+    goGetValue(unitId, commandId, index) {
+        S.go({
+            async: true,
+            valid: false,
+            //confirm_: 'seguro?',
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    for (let x in this.forms) {
+                        const commandId2 = this.forms[x].getInput("command_id").getValue();
+                        if (commandId == commandId2) {
+                            this.forms[x].setValue(json);
+                        }
+                    }
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "get-values",
+                    name: "",
+                    eparams: {
+                        unitId,
+                        commandId,
+                        index
+                    },
+                    iToken: "f",
+                }
+            ],
+        });
+    }
     createForm(command, type) {
         if (type == "0") {
             this.createMainForm(command);
@@ -678,7 +904,7 @@ export class Report {
             this.createAuxForm(command, type);
         }
         else {
-            this.createCommandForm(command, type);
+            this.loadTab(command, type);
         }
     }
     createMainForm(command) {
@@ -695,7 +921,7 @@ export class Report {
         const mode = command.mode;
         const fields = [];
         //const fields = this.commandConfig.params.fields.map((item) => {
-        command.fields.forEach((item) => {
+        command.fields.forEach((item, index) => {
             //let input = "input";
             //let type = "text";
             //let caption = item.label;
@@ -704,7 +930,7 @@ export class Report {
             //console.log(item.name, item.value);
             const info = {
                 caption: item.label,
-                name: `pr_${item.name}`,
+                name: `param_${index}`,
                 input: "input",
                 type: "text",
                 value: item.value,
@@ -905,6 +1131,9 @@ export class Report {
             for (let x in command.params) {
                 params2["pr_" + x] = command.params[x];
             }
+            command.params.forEach((item, index) => {
+                params2[`param_${index}`] = item;
+            });
             form.setValue(params2);
         }
         this.setMode(status);
@@ -930,7 +1159,7 @@ export class Report {
         const fields = [];
         //const commandParams = []; 
         //const fields = this.commandConfig.params.fields.map((item) => {
-        command.fields.forEach((item) => {
+        command.fields.forEach((item, index) => {
             //commandParams.push(item.name);
             data = command.paramData
                 .filter((e) => e.param_id == item.id)
@@ -939,7 +1168,7 @@ export class Report {
             });
             const info = {
                 caption: item.param,
-                name: item.name,
+                name: `param_${index}`,
                 input: "input",
                 type: "text",
                 value: item.value,
@@ -1115,6 +1344,7 @@ export class Report {
             },
         });
         if (__mode_ == 2) {
+            console.log(command.params);
             form.setValue(command.params);
         }
         form.setMode(status);
@@ -1182,7 +1412,14 @@ export class Report {
         });
     }
     decodeMessage(message) {
+        if (message.type == 4) {
+            if (message.unitId == this.getUnitId()) {
+                this.goGetValue(message.unitId, message.commandId, message.index);
+            }
+        }
+        return;
         //let exp ="$OK:SETVIP=55,5,5,,";
+        console.log(message);
         let regex = new RegExp("(\\$(\\w+):(\\w+)(\\+\\w+)?(?:=(.+)?)?)", "gi");
         let info = message.matchAll(regex);
         for (let match of info) {

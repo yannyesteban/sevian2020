@@ -119,6 +119,11 @@ export class MapBoxLib {
 
         });
         
+        map.doubleClickZoom.disable();
+
+        map.on("dblclick",(event)=>{
+           this.zoomOut();
+        })
         map.on("load", (event) => {
 
             if (this.iconImages) {
@@ -481,5 +486,13 @@ export class MapBoxLib {
             maxZoom: zoom,
             linear: false
         });
+    }
+
+    public zoomOut(){
+        this.map.zoomOut();
+    }
+
+    public zoomIn(){
+        this.map.zoomIn();
     }
 }

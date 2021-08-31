@@ -80,6 +80,10 @@ export class MapBoxLib {
             center: this.latlng,
             attributionControl: true
         });
+        map.doubleClickZoom.disable();
+        map.on("dblclick", (event) => {
+            this.zoomOut();
+        });
         map.on("load", (event) => {
             if (this.iconImages) {
                 this.iconImages.forEach((e) => {
@@ -372,6 +376,12 @@ export class MapBoxLib {
             maxZoom: zoom,
             linear: false
         });
+    }
+    zoomOut() {
+        this.map.zoomOut();
+    }
+    zoomIn() {
+        this.map.zoomIn();
     }
 }
 //# sourceMappingURL=MapBoxLib.js.map

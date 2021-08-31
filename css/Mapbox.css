@@ -789,6 +789,10 @@ ul.trace-tool li a {
           flex: 1 0 auto;
 }
 
+ul.trace-tool li input:nth-child(3) {
+  display: none;
+}
+
 .poly-tool .panel {
   position: absolute;
   width: 200px;
