@@ -1397,7 +1397,7 @@ export class Report {
     }
     sendRapidCommand(rolId, unitId, commandId, command) {
         if (rolId == 2) {
-            this.goSaveRapidCommand(null, null, unitId, commandId, 0, 2, true);
+            this.goSaveRapidCommand(null, null, unitId, commandId, 0, 1, true);
         }
         if (rolId == 3) {
             this.goSaveRapidCommand(null, null, unitId, commandId, 0, 2, true);
