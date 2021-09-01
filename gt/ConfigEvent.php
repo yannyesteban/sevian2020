@@ -4,7 +4,7 @@ namespace GT;
 require_once MAIN_PATH.'Sigefor/JasonFile.php';
 require_once MAIN_PATH.'gt/Trait.php';
 
-class Report
+class ConfigEvent
     extends \Sevian\Element
 	implements \Sevian\UserInfo {
 

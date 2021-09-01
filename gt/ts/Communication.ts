@@ -268,6 +268,7 @@ export class Communication {
 
         /* winNow */
         this.createInfoWindow(this.winNames.now, {
+            mainClass: "now",
             onread: (info) => {
 
                 if (info.unitId) {
@@ -288,6 +289,7 @@ export class Communication {
 
         /* winEvent */
         this.createInfoWindow(this.winNames.event, {
+            mainClass: "event",
             showType: false,
             onread: (info) => {
                 if (info.unitId) {
@@ -316,6 +318,7 @@ export class Communication {
 
         /* winAlarm */
         this.createInfoWindow(this.winNames.alarm, {
+            mainClass: "alarm",
             showType: false,
             onread: (info) => {
                 if (info.unitId) {

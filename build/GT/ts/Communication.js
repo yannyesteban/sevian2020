@@ -191,6 +191,7 @@ export class Communication {
         });
         /* winNow */
         this.createInfoWindow(this.winNames.now, {
+            mainClass: "now",
             onread: (info) => {
                 if (info.unitId) {
                     this.unitPanel.setUnit(info.unitId);
@@ -205,6 +206,7 @@ export class Communication {
         }, this.winNow);
         /* winEvent */
         this.createInfoWindow(this.winNames.event, {
+            mainClass: "event",
             showType: false,
             onread: (info) => {
                 if (info.unitId) {
@@ -225,6 +227,7 @@ export class Communication {
         }, this.winEvent);
         /* winAlarm */
         this.createInfoWindow(this.winNames.alarm, {
+            mainClass: "alarm",
             showType: false,
             onread: (info) => {
                 if (info.unitId) {

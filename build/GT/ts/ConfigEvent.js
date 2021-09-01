@@ -4,7 +4,7 @@ import { Input, } from "../../Sevian/ts/Input.js";
 import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { Tab } from "../../Sevian/ts/Tab.js";
 import { S } from "../../Sevian/ts/Sevian.js";
-export class Report {
+export class ConfigEvent {
     constructor(info) {
         this.id = null;
         this.caption = "";
@@ -1687,4 +1687,4 @@ export class Report {
         return form;
     }
 }
-//# sourceMappingURL=Report.js.map
+//# sourceMappingURL=ConfigEvent.js.map

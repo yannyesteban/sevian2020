@@ -180,7 +180,10 @@ export class Report {
             events: {
                 change: (event) => {
                     this.setIndex(event.currentTarget.value);
-                    this.goConfig(this.unitId, this.index, 1, "0");
+                    //this.goConfig(this.unitId, this.index, 1, "0");
+                    this.goGetCommand(this.unitId, null, event.currentTarget.value, "0", 1);
+
+                    //this.goGetCommand(this.unitId, event.currentTarget.value, 0, "0", 1);
                 },
             },
         });
@@ -342,22 +345,37 @@ export class Report {
     }
 
     private loadTab(command, type) {
-        console.log(command)
-        this.listCommand[type].setValue(command.command_id);
+        
+        if(type == "0"){
+            this.listCommand[type].setValue(command.index);
+        }else{
+            this.listCommand[type].setValue(command.command_id);
+        }
+        
         this.tabs[type].ds("mode", command.status);
 
-        this.loadForm(command, type);
+        this.loadForm(command, type, command.index);
 
 
 
     }
 
-    private loadForm(command, type) {
-
+    private loadForm(command, type, index) {
+        console.log(index, command.index)
         const fields = [];
+
+        fields.push({
+            caption: "[Description]",
+            name: "name",
+            input: "input",
+            type: "text",
+            value: command.name,
+        });
 
         command.fields.forEach((item, index: number) => {
 
+
+            /*
 
             const data = command.paramData
                 .filter((e) => e.param_id == item.id)
@@ -365,9 +383,9 @@ export class Report {
                     return [e.value, e.title || e.value];
                 });
 
-
+        */
             const info: any = {
-                caption: item.param,
+                caption: item.label || item.param,
                 name: `param_${index}`,
                 input: "input",
                 type: "text",
@@ -375,9 +393,20 @@ export class Report {
                 dataset: { type: "param" }
             };
 
+            if (command.indexField && item.name == command.indexField) {
+                info.type = "hidden";
+                /*info.data = range;
+                        info.events = {change: (event) => {
+                            this.setIndex(event.currentTarget.value);
+                            this.start();
+                        }};*/
+                info.value = this.index;
+               
+            }
+
             if (item.type == "select") {
                 info.type = "select";
-                info.data = data;
+                info.data = item.data;
                 fields.push(info);
                 return;
             }
@@ -385,7 +414,7 @@ export class Report {
             if (item.type == "bit") {
                 info.input = "multi";
                 info.type = "checkbox";
-                info.data = data;
+                info.data = item.data;
 
                 info.check = (value, inputs) => {
                     inputs.forEach((input: HTMLInputElement) => {
@@ -455,7 +484,7 @@ export class Report {
             name: "index",
             input: "input",
             type: "text",
-            value: command.index,
+            value: index,
         });
 
         fields.push({
@@ -705,6 +734,7 @@ export class Report {
                     this.iniLists(json.eventList, json.commandList, type);
 
                     this.loadTab(json.command, type);
+                    //this.loadForm(json.command, type, index);
                     //this.createForm(json.command, type);
                 },
             },
@@ -716,10 +746,11 @@ export class Report {
                     method: "get-command",
                     name: "",
                     eparams: {
-                        unitId: unitId,
-                        commandId: commandId,
-                        index: index,
-                        mode: mode,
+                        unitId,
+                        commandId,
+                        index,
+                        mode,
+                        type
                     },
                     iToken: "f",
                 },
@@ -756,7 +787,8 @@ export class Report {
                 },
                 f2: (json) => {
                     this.iniLists(json.eventList, json.commandList, type);
-                    this.createForm(json.command, type);
+                    //this.createForm(json.command, type);
+                    this.loadTab(json.command, type);
 
                     if (send) {
                         this.send(unitId, commandId, index, mode);
@@ -778,7 +810,7 @@ export class Report {
                 {
                     t: "setMethod",
                     element: "gt-report",
-                    method: (type == "0") ? "get-event" : "get-command",
+                    method: "get-command",//(type == "0") ? "get-event" : "get-command",
                     name: "",
                     eparams: {
                         unitId: unitId,
@@ -1100,7 +1132,11 @@ export class Report {
 
     private createForm(command, type) {
         if (type == "0") {
-            this.createMainForm(command);
+            //this.createMainForm(command);
+            //this.loadTab(command, type);
+            console.log(command)
+            this.loadForm(command, type, command.index);
+            
         } else if (type == "params") {
 
             this.createAuxForm(command, type);

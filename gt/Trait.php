@@ -2095,6 +2095,8 @@ trait DBEvent{
         vn.name, 1 as type, 'x' as cType, e.info,
         e.date_time, u.id as unitId,
         e.mode, e.title, dn.name as device_name, e.stamp,
+        date_format(e.stamp, '%d/%m/%Y') as fdate,
+        date_format(e.stamp, '%T') as ftime,
         CONCAT(
             TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
             MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()), 24), ':',

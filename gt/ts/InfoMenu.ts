@@ -201,13 +201,15 @@ export class InfoComm {
         const date = new Date();
         const start = date.getTime();
 
-        div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
+        
 
         if (this.showType) {
             //div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
 
         }
+        div.create("div").addClass("ftime").text(message.ftime || "");
         div.create("div").addClass("_type").ds("type", message.type).text(message.title || "");
+        div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
         //div.create("div").text(message.info || "");
         div.create("div").text(message.user || "").addClass("user").on("click", (event) => {
             //this.deleteLine(event.currentTarget);

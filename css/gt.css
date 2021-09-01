@@ -835,18 +835,28 @@ form {
   height: 100%;
 }
 
+.now .info-comm .user {
+  display: none;
+}
+
 .info-comm .main {
-  font-size: 11px;
+  font-size: 10px;
   color: #f4f7e0;
   background-color: #3a3a3aa9;
+  padding: 1px;
   display: -ms-grid;
   display: grid;
   grid-gap: 0px;
-  -ms-grid-columns: 20px 70px 50px 90px auto;
-      grid-template-columns: 20px 70px 50px 90px auto;
+  -ms-grid-columns: 16px 60px 60px 60px 50px auto;
+      grid-template-columns: 16px 60px 60px 60px 50px auto;
   -ms-grid-rows: 1.4em auto;
       grid-template-rows: 1.4em auto;
   overflow: hidden;
+}
+
+.info-comm .main .ftime,
+.info-comm .main .date {
+  text-align: center;
 }
 
 .info-comm .main .btn-new {
@@ -869,6 +879,10 @@ form {
 
 .info-comm .main.new {
   background-color: #a10c0ca9;
+}
+
+.info-comm .main.new:hover {
+  background-color: #0000009c;
 }
 
 .info-comm .main .type[data-type="1"] {
@@ -921,7 +935,7 @@ form {
   text-overflow: ellipsis;
 }
 
-.info-comm .main > :nth-child(6) {
+.info-comm .main > .detail {
   -ms-grid-column: 1;
   -ms-grid-column-span: 6;
   grid-column: 1/7;
@@ -930,7 +944,7 @@ form {
   background-color: rgba(209, 24, 24, 0.808);
 }
 
-.info-comm .main:not(.open) > :nth-child(6) {
+.info-comm .main:not(.open) > .detail {
   display: none;
 }
 
