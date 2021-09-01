@@ -359,35 +359,35 @@ export class Report {
             caption: "ID",
             name: "id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.id,
         });
         fields.push({
             caption: "Unit ID",
             name: "unit_id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.unit_id,
         });
         fields.push({
             caption: "Command ID",
             name: "command_id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.command_id,
         });
         fields.push({
             caption: "Index",
             name: "index",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: index,
         });
         fields.push({
             caption: "Status",
             name: "status",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.status,
             default: 1
         });
@@ -395,21 +395,21 @@ export class Report {
             caption: "Params",
             name: "params",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: params,
         });
         fields.push({
             caption: "Mode",
             name: "mode",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: 1,
         });
         fields.push({
             caption: "__mode_",
             name: "__mode_",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.__mode_,
         });
         fields.push({
@@ -423,7 +423,7 @@ export class Report {
             caption: "command_name",
             name: "command_name",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.command,
         });
         const form = this.forms[type] = new Form({

@@ -459,7 +459,7 @@ export class Report {
             caption: "ID",
             name: "id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.id,
         });
 
@@ -467,7 +467,7 @@ export class Report {
             caption: "Unit ID",
             name: "unit_id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.unit_id,
         });
 
@@ -475,7 +475,7 @@ export class Report {
             caption: "Command ID",
             name: "command_id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.command_id,
         });
 
@@ -483,7 +483,7 @@ export class Report {
             caption: "Index",
             name: "index",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: index,
         });
 
@@ -491,7 +491,7 @@ export class Report {
             caption: "Status",
             name: "status",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.status,
             default: 1
         });
@@ -500,7 +500,7 @@ export class Report {
             caption: "Params",
             name: "params",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: params,
         });
 
@@ -508,7 +508,7 @@ export class Report {
             caption: "Mode",
             name: "mode",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: 1,
         });
 
@@ -516,7 +516,7 @@ export class Report {
             caption: "__mode_",
             name: "__mode_",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.__mode_,
         });
 
@@ -532,7 +532,7 @@ export class Report {
             caption: "command_name",
             name: "command_name",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.command,
         });
 
