@@ -346,7 +346,7 @@ class Report
         INNER JOIN device_command as dc ON dc.version_id = v.id
         INNER JOIN unit_command as c ON c.command_id = dc.id
         WHERE u.id = '$unitId' AND dc.role_id = 1";
-
+hx($cn->query);
         $list = [];
         $result = $this->cn->execute();
         $evenList = $cn->getDataAll($result);
