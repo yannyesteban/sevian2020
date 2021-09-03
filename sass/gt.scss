@@ -738,6 +738,26 @@ form {
     .user {
       display: none;
     }
+
+    .ev-210 {
+      ._type {
+        color: rgb(248, 195, 23);
+        font-weight: bold;
+      }
+      ._type::before {
+        content: "« ";
+      }
+    }
+
+    .ev-209 {
+      ._type {
+        color: rgb(112, 199, 31);
+        font-weight: bold;
+      }
+      ._type::after {
+        content: " »";
+      }
+    }
   }
 }
 .info-comm {
@@ -748,9 +768,10 @@ form {
     padding: 1px;
     display: grid;
     grid-gap: 0px;
-    grid-template-columns: 16px 60px 60px 60px 50px auto;
+    grid-template-columns: 16px 60px 60px minmax(80px, 100px) 50px auto;
     grid-template-rows: 1.4em auto;
     overflow: hidden;
+
     .ftime,
     .date {
       text-align: center;

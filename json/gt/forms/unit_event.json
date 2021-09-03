@@ -1,0 +1,22 @@
+{
+	"name": "unit_event",
+	"caption": "Event",
+	"className": "history",
+	"query": "SELECT id, unit_id, name, event_id, `mode` FROM unit_event",
+	"menuName": "",
+	"methods": {
+		"request": {
+			
+		},
+		"load": {
+			
+		}
+	},
+	"params": "",
+	"pages": [],
+	"groups": {},
+	"infoFields": [],
+	"searchFor": [
+		
+	]
+}

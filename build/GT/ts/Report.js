@@ -4,6 +4,7 @@ import { Input, } from "../../Sevian/ts/Input.js";
 import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { Tab } from "../../Sevian/ts/Tab.js";
 import { S } from "../../Sevian/ts/Sevian.js";
+import { UnitConfig } from "./UnitConfig.js";
 export class Report {
     constructor(info) {
         this.id = null;
@@ -84,6 +85,10 @@ export class Report {
         this.tabs["M"] = this.tab.add({ caption: "Info", tagName: "form" });
         this.tabs["W"] = this.tab.add({ caption: "Equipo", tagName: "form" });
         this.tabs["0"] = this.tab.add({ caption: "Eventos", tagName: "form" });
+        this.unitConfig = new UnitConfig({
+            tagMain: "form"
+        });
+        this.tab.add({ caption: "Config", tagName: "form", set: this.unitConfig.get() });
         this.wins["main"] = new Float.Window({
             visible: false,
             caption: this.caption,
@@ -235,6 +240,7 @@ export class Report {
         return;
         */
         if (this.unitId) {
+            this.unitConfig.init(this.unitId);
             this.start(this.unitId, this.index);
             this.wins["main"].setCaption(`${this.caption} : ${this.unitName}`);
             this.wins["main"].show();
@@ -359,35 +365,35 @@ export class Report {
             caption: "ID",
             name: "id",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: command.id,
         });
         fields.push({
             caption: "Unit ID",
             name: "unit_id",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: command.unit_id,
         });
         fields.push({
             caption: "Command ID",
             name: "command_id",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: command.command_id,
         });
         fields.push({
             caption: "Index",
             name: "index",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: index,
         });
         fields.push({
             caption: "Status",
             name: "status",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: command.status,
             default: 1
         });
@@ -395,35 +401,35 @@ export class Report {
             caption: "Params",
             name: "params",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: params,
         });
         fields.push({
             caption: "Mode",
             name: "mode",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: 1,
         });
         fields.push({
             caption: "__mode_",
             name: "__mode_",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: command.__mode_,
         });
         fields.push({
             caption: "__record_",
             name: "__record_",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: (command.__record_ != "") ? JSON.stringify(command.__record_) : "",
         });
         fields.push({
             caption: "command_name",
             name: "command_name",
             input: "input",
-            type: "hidden",
+            type: "text",
             value: command.command,
         });
         const form = this.forms[type] = new Form({
@@ -434,7 +440,7 @@ export class Report {
             menu: {
                 caption: "",
                 autoClose: false,
-                className: ["sevian", "horizontal"],
+                className: ["sevian", "horizontal", `type-${type}`],
                 items: [
                     {
                         caption: "Save",
@@ -465,6 +471,15 @@ export class Report {
                     {
                         caption: "Recibir",
                         action: (item, event) => {
+                            let params = {};
+                            command.fields.forEach((element, index) => {
+                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                            });
+                            form.getInput("status").setValue(1);
+                            form.getInput("mode").setValue(2);
+                            form.getInput("params").setValue(JSON.stringify(params));
+                            this.goSave(type, true);
+                            return;
                             form.getInput("mode").setValue(2);
                             this.goSaveCommand(type, "", true);
                         },

@@ -117,6 +117,7 @@ export class Tab {
         }
     }
     add(opt, pos = false) {
+        let body = null;
         let index = this._menu.get().children.length;
         let tab = this._menu.create("a").addClass("tab-menu")
             .on("click", this._click(index))
@@ -124,8 +125,14 @@ export class Tab {
             .text(opt.caption || "")
             .attr("href", "javascript:void(0);")
             .ds("tabIndex", index);
-        let body = this._page.create(opt.tagName || "div").addClass("tab-body")
-            .ds("tabIndex", index);
+        if (opt.set) {
+            body = opt.set;
+            this._page.append(body);
+        }
+        else {
+            body = this._page.create(opt.tagName || "div");
+        }
+        body.addClass("tab-body").ds("tabIndex", index);
         if (opt.child) {
             body.append(opt.child);
         }

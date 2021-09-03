@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: Hemihead;
   src: url(fonts/HEMIHEAD.TTF);
@@ -839,6 +840,24 @@ form {
   display: none;
 }
 
+.now .info-comm .ev-210 ._type {
+  color: #f8c317;
+  font-weight: bold;
+}
+
+.now .info-comm .ev-210 ._type::before {
+  content: "« ";
+}
+
+.now .info-comm .ev-209 ._type {
+  color: #70c71f;
+  font-weight: bold;
+}
+
+.now .info-comm .ev-209 ._type::after {
+  content: " »";
+}
+
 .info-comm .main {
   font-size: 10px;
   color: #f4f7e0;
@@ -847,8 +866,8 @@ form {
   display: -ms-grid;
   display: grid;
   grid-gap: 0px;
-  -ms-grid-columns: 16px 60px 60px 60px 50px auto;
-      grid-template-columns: 16px 60px 60px 60px 50px auto;
+  -ms-grid-columns: 16px 60px 60px minmax(80px, 100px) 50px auto;
+      grid-template-columns: 16px 60px 60px minmax(80px, 100px) 50px auto;
   -ms-grid-rows: 1.4em auto;
       grid-template-rows: 1.4em auto;
   overflow: hidden;

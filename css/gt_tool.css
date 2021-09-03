@@ -248,6 +248,14 @@
   color: #db48c3 !important;
 }
 
+.report-tool .sg-menu.type-M li:nth-child(2) {
+  display: none !important;
+}
+
+.report-tool .sg-menu.type-W li:not(li:nth-child(2)) {
+  display: none !important;
+}
+
 .gt-info-main {
   overflow: auto;
   height: 100%;

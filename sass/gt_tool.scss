@@ -246,6 +246,19 @@
   option.mode-3 {
     color: rgb(219, 72, 195) !important;
   }
+
+  .sg-menu {
+    &.type-M {
+      li:nth-child(2) {
+        display: none !important;
+      }
+    }
+    &.type-W {
+      li:not(li:nth-child(2)) {
+        display: none !important;
+      }
+    }
+  }
 }
 
 .gt-info-main {

@@ -4,11 +4,13 @@ namespace GT;
 require_once MAIN_PATH.'Sigefor/JasonFile.php';
 require_once MAIN_PATH.'gt/Trait.php';
 
-class ConfigEvent
+class UnitConfig
     extends \Sevian\Element
 	implements \Sevian\UserInfo {
 
     private $unitId = 0;
+    private $eventId = 0;
+
     private $commandId = 0;
     private $index = 0;
     private $mode = 0;
@@ -36,6 +38,7 @@ class ConfigEvent
 
         $unitId = $this->eparams->unitId ?? $this->unitId;
         $commandId = $this->eparams->commandId ?? $this->commandId;
+        $eventId = $this->eparams->eventId ?? $this->eventId;
         $index = $this->eparams->index ?? $this->index;
         $mode = $this->eparams->mode ?? $this->mode;
         
@@ -51,34 +54,21 @@ class ConfigEvent
                 $this->addResponse([
 					'id'	=> $this->id,
 					'data'	=> [
-                        "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
-                        "commandList"   => $this->getCommandFieldsList($unitId)
+                        "eventList"=>$this->getEventList($unitId),
                     ],
 					'iToken'=> $this->iToken
 				]);
                 break;
-            case 'get-event':
-                $config = $this->getEventConfig($unitId);
-                $command = $this->getUnitCommand( $unitId, $index);
-                $command['fields'] = $config['params']->fields;
-                $command['indexField'] = $config['params']->indexField;
-
+            case 'get-unit-event':
                 
                 $this->addResponse([
 					'id'	=> $this->id,
-					'data'	=> [
-                        "command" => $command,
-                        "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
-                        "commandList"   => $this->getCommandFieldsList($unitId)
-                    ],
+					'data'	=> $this->getUnitEvent($unitId, $eventId),
 					'iToken'=> $this->iToken
 				]);
                 break;
 
             case 'get-command':
-                
-                
-                
 
                 $this->addResponse([
                     'id'	=> $this->id,
@@ -86,6 +76,7 @@ class ConfigEvent
                     'iToken'=> $this->iToken
                 ]);
                 break;
+
             case 'get-commandNOOOO':
 
 
@@ -185,6 +176,66 @@ class ConfigEvent
 		return true;
 	}
 
+
+    private function getEventList($unitId){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT de.event_id, CONCAT( '', de.event_id, ': ', COALESCE(ue.name, uc.name, de.name)) as name,
+        CASE WHEN ue.id IS NULL THEN 1 ELSE 2 END as __mode_
+        FROM device_event as de
+        LEFT JOIN unit_event as ue ON ue.unit_id = '$unitId' and ue.event_id = de.event_id
+        LEFT JOIN unit_command as uc ON uc.unit_id = '$unitId' and de.event_id = uc.index AND uc.index>0
+        WHERE de.version_id is null or version_id in (
+        SELECT v.id
+        FROM unit as u
+        INNER JOIN device as d ON d.id = u.device_id
+        INNER JOIN device_version as v ON v.id = d.version_id
+        WHERE u.id = '$unitId'
+        )
+        ORDER BY de.event_id
+        ;";
+
+        $result = $this->cn->execute();
+        $data = $cn->getDataAll($result);
+
+
+        return array_map(function($x){
+            return [$x['event_id'], $x['name'],'*',$x['__mode_']]
+            ;
+        }, $data);
+
+
+
+    }
+
+    private function getUnitEvent($unitId, $eventId){
+        $cn = $this->cn;
+
+        $cn->query = "SELECT ue.id,
+            '$unitId' as unit_id, COALESCE(uc.name, ue.name) as name, '$eventId' as event_id, ue.mode,
+
+            CASE WHEN ue.id IS NULL THEN 1 ELSE 2 END as __mode_,
+            '' as __record_
+            FROM unit as u
+            LEFT JOIN unit_event as ue ON ue.unit_id = u.id AND ue.event_id = '$eventId'
+            
+            LEFT JOIN unit_command as uc ON uc.unit_id = '$unitId' and ue.event_id = uc.index AND uc.index > 0
+            WHERE u.id = '$unitId'";
+        //hx($cn->query);
+        $result = $this->cn->execute();
+
+        $data = $cn->getDataAssoc($result);
+
+        if($data['id']){
+            $data['__record_'] = ["id" => $data["id"]];
+        }
+
+        return $data;
+
+    }
+
+
 	private function load(){
 
 		//$this->setInit($this->info);
@@ -224,6 +275,8 @@ class ConfigEvent
             "commandList"   => $this->getCommandFieldsList($unitId)
         ];
     }
+
+    
 
     private function getICommand($unitId, $commandId, $index){
 
@@ -279,36 +332,7 @@ class ConfigEvent
         return $this->_userInfo->user;
     }
 
-    private function getCommand($unitId = 0, $commandId = 0, $index = 0){
-        $cn = $this->cn;
-
-        $cn->query = "SELECT uc.id,
-            '$unitId' as unit_id, c.id as command_id, '$index' as `index`,
-            uc.name, uc.params, uc.values,
-            IFNULL(uc.status, 0) as status, c.command as command,
-            c.type, role_id,
-            CASE WHEN uc.id IS NULL THEN 1 ELSE 2 END as __mode_,
-             '' as __record_
-            FROM device_command as c
-            LEFT JOIN unit_command as uc ON c.id = uc.command_id
-            AND uc.index = '$index' AND uc.unit_id = '$unitId'
-            WHERE c.id = '$commandId'
-            ";
-
-
-        $result = $this->cn->execute();
-
-        $data = [];
-        if($data = $cn->getDataAssoc($result)){
-            if($data['id'] > 0){
-                $data['params'] = json_decode($data["params"]);
-                $data['values'] = json_decode($data["values"]);
-                $data['__record_'] = ["id"=>$data["id"]];
-            }
-        }
-        return $data;
-
-    }
+    
 
     private function getCommandFields($unitId = 0, $commandId = 0, $index = 0){
 
@@ -335,36 +359,7 @@ class ConfigEvent
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
     }
-    private function getEventList($unitId, $init, $end){
-
-        $cn = $this->cn;
-
-        $cn->query = "SELECT c.index as event_id, IFNULL(c.name, '') as name, c.status
-        FROM unit u
-        INNER JOIN device as d on d.id = u.device_id
-        INNER JOIN device_version as v ON v.id = d.version_id
-        INNER JOIN device_command as dc ON dc.version_id = v.id
-        INNER JOIN unit_command as c ON c.command_id = dc.id
-        WHERE u.id = '$unitId' AND dc.role_id = 1";
-
-        $list = [];
-        $result = $this->cn->execute();
-        $evenList = $cn->getDataAll($result);
-
-        for($i = $init; $i <= $end; $i++){
-            $found_key = array_search($i, array_column($evenList, 'event_id'));
-
-            if($found_key !== false){
-                $list[] = [$i, "$i : ".$evenList[$found_key]['name'], '*', $evenList[$found_key]['status']];
-            }else{
-                $list[] = [$i, "$i: ---"];
-            }
-
-        }
-
-        return $list;
-
-    }
+    
 
     private function getEventConfig($unitId){
 

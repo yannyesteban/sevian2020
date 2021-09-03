@@ -122,7 +122,7 @@ export class InfoComm {
         this.lineId++;
         const div = this.ul.createFirst("div").addClass("main").removeClass("open")
             .ds("id", message.id).ds("line", this.lineId).ds("type", message.type)
-            .ds("mode", message.mode);
+            .ds("mode", message.mode).addClass(`ev-${message.event_id}`);
         if (message.status == 0) {
             div.addClass("new");
         }

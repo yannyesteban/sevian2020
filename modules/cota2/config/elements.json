@@ -286,6 +286,21 @@
         "init": {
             "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
         }
+    },
+    {
+        "name": "gt-unit-config",
+        "file": "{@MAIN_PATH}gt/UnitConfig.php",
+        "class": "\\GT\\UnitConfig",
+        "enable": true,
+        "module":{
+            "name":"UnitConfig",
+            "alias":"GTUnitConfig",
+            "src":"{@MAIN_PATH}build/GT/ts/UnitConfig.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
     }
 
 

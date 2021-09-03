@@ -319,7 +319,6 @@ export class Unit {
             if (this.infoForm) {
                 this.infoForm.onSetData = (data => {
                     const e = this.infoFormMain.getMain().query(`input[type="checkbox"][data-trace]`);
-                    console.log(e);
                     if (e) {
                         $(e).on("click", (event) => {
                             this.playTrace(data.unitId, event.currentTarget.value);
@@ -936,7 +935,6 @@ export class Unit {
         });
     }
     updateTraceLayer(tracking) {
-        console.log("hola");
         /*
         console.log(this.history);
         console.log(this.history.filter((e, index)=>{
@@ -962,6 +960,12 @@ export class Unit {
         this.units[unitId];
     }
     showUnit3(unitId) {
+        if (this._lastUnitId && this.units[this._lastUnitId] && this._lastUnitId !== unitId) {
+            const visible = this.units[this._lastUnitId].getVisible();
+            if (visible && !this.isChecked(this._lastUnitId)) {
+                this.units[this._lastUnitId].setVisible(false);
+            }
+        }
         if (this.units[unitId].getValid()) {
             this.units[unitId].setInfo(this.getUnitInfo(unitId));
             this.units[unitId].show(true);
@@ -988,6 +992,14 @@ export class Unit {
     }
     getLastUnit() {
         return this._lastUnitId;
+    }
+    isChecked(unitId) {
+        const input = this.main.query(`a > input[data-level="units"][data-unit-id="${unitId}"]`);
+        if (input) {
+            console.log(input, input.checked);
+            return input.checked;
+        }
+        return false;
     }
 }
 Unit._instances = [];

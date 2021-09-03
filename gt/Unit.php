@@ -245,7 +245,7 @@ class Unit
 			'pathImages'	=> PATH_IMAGES,
 			'caption'		=> 'Unidades',
 			//'id'            => 'U-'.$this->panel->id,
-			'followMe'		=> true,
+			'followMe'		=> false,
 			'delay'			=> 10000,
 			'infoId'		=> $this->eparams->infoId ?? false,
 			'statusId'		=> $this->eparams->statusId ?? false,
