@@ -62,6 +62,9 @@ export class Report {
             this.unitPanel.onCall = (unitId) => {
                 this.goCommandId(null, 4);
             };
+            this.unitPanel.onAny = (unitId, type) => {
+                this.doAny(unitId, type);
+            };
         }
         this.formIds["0"] = "form-" + String(new Date().getTime());
         this.formIds["A"] = "form-a" + String(new Date().getTime());
@@ -489,7 +492,7 @@ export class Report {
                         action: (item, event) => {
                             this.goGetValue(command.unit_id, command.command_id, command.index);
                         },
-                    },
+                    }
                 ],
             },
         });
@@ -1408,6 +1411,12 @@ export class Report {
             mode: Number.parseInt(mode, 10),
         });
     }
+    disconnect(unitId) {
+        this.socket.sendCommand({
+            type: "RC",
+            unitId: Number.parseInt(unitId, 10)
+        });
+    }
     evalCommandId(role) {
     }
     sendRapidCommand(rolId, unitId, commandId, command) {
@@ -1700,6 +1709,11 @@ export class Report {
         }
         form.setMode(status);
         return form;
+    }
+    doAny(unitId, type) {
+        if (type == "dc" && confirm("Seguro?")) {
+            this.disconnect(unitId);
+        }
     }
 }
 //# sourceMappingURL=Report.js.map

@@ -333,6 +333,7 @@ export class Unit {
 	public onGetPosition: (unitId:number) => void = (unitId:number) => { };
 	public onReset: (unitId:number) => void = (unitId:number) => { };
 	public onCall: (unitId:number) => void = (unitId:number) => { };
+	public onAny: (unitId:number, type:string) => void = (unitId:number, type:string) => { };
 
 	static _instances: object[] = [];
 
@@ -475,7 +476,19 @@ export class Unit {
 					});
 
 
-					//winInfo.setBody(div.get());
+					menu.create("button").prop({type:"button", "value":"pn", "title":"Pending"}).text("PN")
+					.on("click", event=>{
+						this.onAny(this.getLastUnit(), event.currentTarget.value);
+					});
+					menu.create("button").prop({type:"button", "value":"dc", "title":"Disconnect"}).text("DC")
+					.on("click", event=>{
+						this.onAny(this.getLastUnit(), event.currentTarget.value);
+					});
+					menu.create("button").prop({type:"button", "value":"out", "title":"Output"}).text("O")
+					.on("click", event=>{
+						this.onAny(this.getLastUnit(), event.currentTarget.value);
+					});
+
 
 					this.onInfoUpdate = (info, name) => {
 

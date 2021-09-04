@@ -97,6 +97,9 @@ export class Report {
             this.unitPanel.onCall = (unitId: number) => {
                 this.goCommandId(null, 4);
             };
+            this.unitPanel.onAny = (unitId: number, type: string) => {
+                this.doAny(unitId, type);
+            };
         }
 
         this.formIds["0"] = "form-" + String(new Date().getTime());
@@ -627,7 +630,7 @@ export class Report {
                             
                             this.goGetValue(command.unit_id, command.command_id, command.index);
                         },
-                    },
+                    }
 
                 ],
             },
@@ -1712,6 +1715,15 @@ export class Report {
         });
     }
 
+    public disconnect(unitId) {
+
+
+        this.socket.sendCommand({
+            type: "RC",
+            unitId: Number.parseInt(unitId, 10)
+        });
+    }
+
     public evalCommandId(role) {
 
     }
@@ -2078,5 +2090,12 @@ export class Report {
         return form;
 
 
+    }
+
+    private doAny(unitId: number, type: string){
+        
+        if(type == "dc" && confirm("Seguro?")){
+            this.disconnect(unitId);
+        }
     }
 }

@@ -749,7 +749,8 @@ form {
       }
     }
 
-    .ev-209 {
+    .ev-209,
+    .ev-211 {
       ._type {
         color: rgb(112, 199, 31);
         font-weight: bold;
@@ -768,7 +769,7 @@ form {
     padding: 1px;
     display: grid;
     grid-gap: 0px;
-    grid-template-columns: 16px 60px 60px minmax(80px, 100px) 50px auto;
+    grid-template-columns: 16px minmax(80px, 100px) 60px minmax(80px, 1fr) 50px auto;
     grid-template-rows: 1.4em auto;
     overflow: hidden;
 

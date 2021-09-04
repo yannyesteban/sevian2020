@@ -258,6 +258,7 @@ export class Unit {
         this.onGetPosition = (unitId) => { };
         this.onReset = (unitId) => { };
         this.onCall = (unitId) => { };
+        this.onAny = (unitId, type) => { };
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -357,7 +358,18 @@ export class Unit {
                     followCHK2.on("change", event => {
                         this.followMe = event.currentTarget.checked;
                     });
-                    //winInfo.setBody(div.get());
+                    menu.create("button").prop({ type: "button", "value": "pn", "title": "Pending" }).text("PN")
+                        .on("click", event => {
+                        this.onAny(this.getLastUnit(), event.currentTarget.value);
+                    });
+                    menu.create("button").prop({ type: "button", "value": "dc", "title": "Disconnect" }).text("DC")
+                        .on("click", event => {
+                        this.onAny(this.getLastUnit(), event.currentTarget.value);
+                    });
+                    menu.create("button").prop({ type: "button", "value": "out", "title": "Output" }).text("O")
+                        .on("click", event => {
+                        this.onAny(this.getLastUnit(), event.currentTarget.value);
+                    });
                     this.onInfoUpdate = (info, name) => {
                         traceCHK.ds("trace", info.unitId);
                         followCHK.ds("follow", info.unitId);
