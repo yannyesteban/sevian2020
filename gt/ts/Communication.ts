@@ -16,7 +16,8 @@ enum WNames {
     now = 1,
     event = 2,
     alarm = 4,
-    synch = 8
+    synch = 8,
+    unit = 9999
 }
 
 let n = 0;
@@ -99,6 +100,7 @@ export class Communication {
 
     private winStatus: any = null;
     private winNow: any = null;
+    private winUnit: any = null;
     private winEvent: any = null;
     private winAlarm: any = null;
 
@@ -168,7 +170,7 @@ export class Communication {
                     //db ("     onmessage !!!!");
                     const server_message = event.data;
 
-                    
+
                     try {
                         let json = JSON.parse(server_message);
                         //console.log(json);
@@ -233,7 +235,7 @@ export class Communication {
 
             let s = new Sound();
             this.sound = s.test("../../sounds/mixkit-classic-alarm-995.wav");//.play();
-            
+
         });
 
 
@@ -247,7 +249,12 @@ export class Communication {
         this._infoMenu = S.getElement(this.infoMenuId);
 
         this.unitPanel = S.getElement(this.unitPanelId);
+        this.unitPanel.onChange = (unitId) => {
+            this.getInfoWin(this.winNames.unit).reset();
+            const unitName = this.unitPanel.getUnitInfo(unitId).unitName;
+            this.getWin(this.winNames.unit).setCaption(`${this.winNow.caption} : ${unitName}`);
 
+        }
 
         this.main = main;
         main.addClass(this.mainClass);
@@ -279,13 +286,44 @@ export class Communication {
                 //this.updateEventStatus(info, 1, this.winNames.now);
             },
 
-            onadd: (info) => { },
+            onadd: (info) => {
+                if (info.unitId == this.unitPanel.getLastUnit()) {
+                    this.getInfoWin(this.winNames.unit).add(info);
+                }
+
+             },
 
             ondelete: (info) => {
                 //this.updateEventStatus(info, 2, this.winNames.now);
             }
 
         }, this.winNow);
+
+
+        /* winNow2 */
+        this.createInfoWindow(this.winNames.unit, {
+            mainClass: "now",
+            onread: (info) => {
+
+                if (info.unitId) {
+                    this.unitPanel.setUnit(info.unitId);
+                    this.unitPanel.showUnit3(info.unitId);
+                }
+
+                //this.updateEventStatus(info, 1, this.winNames.now);
+            },
+
+            onadd: (info) => {
+
+
+             },
+
+            ondelete: (info) => {
+                //this.updateEventStatus(info, 2, this.winNames.now);
+            }
+
+        }, this.winUnit);
+
 
         /* winEvent */
         this.createInfoWindow(this.winNames.event, {
@@ -519,10 +557,10 @@ export class Communication {
 
 
         //this._infoWin2.reset();
-        
+
         let sum = 0;
         json.forEach(e => {
-            
+
             this.lastDate = e.last_date;
             this._infoWin2.add({
                 id: e.unit_id,
@@ -555,7 +593,7 @@ export class Communication {
 
     reqDataEvent(json) {
 
-        
+
         let i = 0;
         const modes = [1, 2, 4, 8, 16, 32, 64, 128, 256];
         for (let x in json) {
@@ -704,7 +742,7 @@ export class Communication {
     }
 
     showStatusWin() {
-        
+
         S.send3(
             {
 
@@ -785,7 +823,7 @@ export class Communication {
         }, this.delay2);
 
 
-        
+
     }
 
     test2() {
@@ -1629,6 +1667,14 @@ alert(this.commandPanelId)
         if (this._infoControl[type]) {
             return this._infoControl[type];
         }
+
+    }
+
+    public getWin(type) {
+        if (this._win["info-" + type]) {
+            return this._win["info-" + type];
+        }
+        return null;
 
     }
     public addInfo(type, info: any) {

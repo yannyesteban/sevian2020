@@ -35,7 +35,7 @@ class Communication extends
 
     }
     public function evalMethod($method = false): bool{
-        
+
 		if($method){
             $this->method = $method;
         }
@@ -144,6 +144,12 @@ class Communication extends
                 'caption'=>'Inmediato',
                 'top'=>'bottom',
                 'deltaX'=>-50,
+                'deltaY'=>-20
+            ],
+            'winUnit'=>[
+                'caption'=>'Unit',
+                'top'=>'bottom',
+                'deltaX'=>-50-350,
                 'deltaY'=>-20
             ],
             'winEvent'=>[

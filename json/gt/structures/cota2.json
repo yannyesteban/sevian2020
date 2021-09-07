@@ -236,6 +236,20 @@
 			"class": "",
 			"debug": 0,
 			"design": 0
+		},
+		{
+			"id": "pending",
+			"element": "gt-pending",
+			"name": "gt-pending",
+			"method": "load",
+			"eparams": {
+				"socketId":"comm",
+				"unitPanelId": "gt-unit-10"
+			},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		}
 	]
 }

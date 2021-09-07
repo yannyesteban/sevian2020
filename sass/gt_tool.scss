@@ -307,3 +307,46 @@
     }
   }
 }
+
+
+.pending-tool{
+  padding: 4px;
+  .row{
+    font-size: 10px;
+    color: rgb(244, 247, 224);
+    background-color: #3a3a3aa9;
+    padding: 1px;
+    display: grid;
+
+    grid-template-columns: minmax(50px, 100px) minmax(50px, 100px) 0px 1fr 1fr;
+    grid-template-rows: 1.4em auto;
+    overflow: hidden;
+    &:hover{
+      background-color: rgba(104, 104, 104, 0.822);
+      cursor: pointer;
+    }
+    .send{
+      text-align: center;
+      &:hover{
+        background-color: rgba(29, 184, 15, 0.822);
+        text-align: center;
+      }
+    }
+    .delete{
+      text-align: center;
+      &:hover{
+        background-color: rgba(206, 0, 0, 0.822);
+        cursor: pointer;
+      }
+    }
+    div{
+        //word-wrap: normal;
+        white-space: nowrap;
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+        list-style: none;
+
+    }
+  }
+}

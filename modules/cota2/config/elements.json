@@ -301,6 +301,21 @@
         "init": {
             "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
         }
+    },
+    {
+        "name": "gt-pending",
+        "file": "{@MAIN_PATH}gt/Pending.php",
+        "class": "\\GT\\Pending",
+        "enable": true,
+        "module":{
+            "name":"Pending",
+            "alias":"GTPending",
+            "src":"{@MAIN_PATH}build/GT/ts/Pending.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
     }
 
 

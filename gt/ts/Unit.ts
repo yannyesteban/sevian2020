@@ -101,11 +101,11 @@ class Mobil {
 
 		this.createTrace(this.traceInfo);
 
-		
+
 
 	}
 
-	
+
 	createTrace(info) {
 
 
@@ -181,7 +181,7 @@ class Mobil {
 
 	}
 	setInfo(info) {
-		
+
 		this.infoFormMain.setData(info);
 		return this;
 	}
@@ -326,14 +326,17 @@ export class Unit {
 
 	private searchUnitId: any = null;
 	private searchUnit: any = null;
-	
-	private winStatus:any = null; 
+
+	private winStatus:any = null;
 	private statusInfo: InfoUnits = null;
-	
+
 	public onGetPosition: (unitId:number) => void = (unitId:number) => { };
 	public onReset: (unitId:number) => void = (unitId:number) => { };
-	public onCall: (unitId:number) => void = (unitId:number) => { };
+	public onCall: (unitId: number) => void = (unitId: number) => { };
+	public onPending: (unitId:number) => void = (unitId:number) => { };
 	public onAny: (unitId:number, type:string) => void = (unitId:number, type:string) => { };
+
+	public onChange: (unitId:number) => void = (unitId:number) => { };
 
 	static _instances: object[] = [];
 
@@ -421,7 +424,7 @@ export class Unit {
 			if (this.infoForm) {
 				this.infoForm.onSetData=(data=>{
 					const e = this.infoFormMain.getMain().query(`input[type="checkbox"][data-trace]`);
-					
+
 					if(e){
 						$(e).on("click", (event)=>{
 							this.playTrace(data.unitId, event.currentTarget.value);
@@ -431,29 +434,29 @@ export class Unit {
 				});
 
 				this.infoFormMain = new InfoForm(this.infoForm);
-				
+
 
 				if (this.infoId) {
 					const winInfo: GTInfo = S.getElement(this.infoId) as GTInfo;
 
 					const div = $.create("div").addClass("info-main");
-					
+
 					const body = div.create("div").addClass("info-body");
 					const menu = div.create("div").addClass("info-menu");
 
 					const traceCHK = menu.create("input").prop({type:"checkbox"});
 					menu.create("span").text("Activar Traza");
-					
+
 					const followCHK = menu.create("input").prop({type:"hidden"});
 					const followCHK2 = menu.create("input").prop({type:"checkbox"});
 					menu.create("span").text("Seguir");
-					
-					
+
+
 					const b1 = menu.create("button").prop({type:"button", "value":"2", "title":"Get Position"}).text("P")
 					.on("click", event=>{
 						this.onGetPosition(event.currentTarget.value);
 					});
-					
+
 					const b2 = menu.create("button").prop({type:"button", "value":"3", "title":"Reboot"}).text("R")
 					.on("click", event=>{
 						this.onReset(event.currentTarget.value);
@@ -466,7 +469,7 @@ export class Unit {
 
 					traceCHK.on("change", event=>{
 						this.playTrace(event.currentTarget.value, event.currentTarget.checked);
-						
+
 					});
 					followCHK.on("change", event =>{
 						this.setFollowMe(event.currentTarget.value, event.currentTarget.checked);
@@ -478,7 +481,7 @@ export class Unit {
 
 					menu.create("button").prop({type:"button", "value":"pn", "title":"Pending"}).text("PN")
 					.on("click", event=>{
-						this.onAny(this.getLastUnit(), event.currentTarget.value);
+						this.onPending(this.getLastUnit());
 					});
 					menu.create("button").prop({type:"button", "value":"dc", "title":"Disconnect"}).text("DC")
 					.on("click", event=>{
@@ -497,13 +500,13 @@ export class Unit {
 						followCHK.ds("follow", info.unitId);
 						traceCHK.value(info.unitId);
 						followCHK.value(info.unitId);
-						
+
 						b1.value(info.unitId);
 						b2.value(info.unitId);
 
 						traceCHK.get().checked = this.units[info.unitId].isTraceActive();
 						followCHK.get().checked = this.units[info.unitId].getFollow();
-						
+
 
 						//this.infoFormMain.setMode(info.className);
 						this.infoFormMain.setData(info);
@@ -514,7 +517,7 @@ export class Unit {
 						//winInfo.setBody(this.infoFormMain.get());
 						body.append(this.infoFormMain.get());
 						winInfo.setBody(div.get());
-						
+
 					};
 
 				}
@@ -527,7 +530,7 @@ export class Unit {
 
 			//map.map.addImage("t1", new TraceMarker(map.map, 30), { pixelRatio: 1 });
 			return;
-			
+
 
 
 		});
@@ -571,7 +574,7 @@ export class Unit {
                 this.showUnit3(info.id);
 
 
-                
+
             },
             onadd: (info) => {
 
@@ -661,16 +664,16 @@ export class Unit {
 				latitude: tracking.latitude,
 				heading: tracking.heading
 			}).setInfo(this.getUnitInfo(unitId));
-			
+
 		}
 
 		if (this._lastUnitId === unitId) {
 			this.onInfoUpdate(this.getUnitInfo(unitId), this.units[unitId].getName());
-			
+
 			if (this.followMe) {
-				
+
 				this.units[unitId].panTo();
-				
+
 			}
 		}
 
@@ -688,7 +691,7 @@ export class Unit {
 		if (data === undefined) {
 			return;
 		}
-       
+
 		let sum = 0;
 
 		data.connected.forEach((tracking)=>{
@@ -699,7 +702,7 @@ export class Unit {
 			}
 
 			this.units[tracking.unitId].data.connected = tracking.connected;
-			
+
 
 			//this.lastDate = e.last_date;
             this.statusInfo.add({
@@ -715,23 +718,23 @@ export class Unit {
                 sum++;
             }
 
-			
+
 		});
 
 
 		this._win["status"].setCaption("Conected Units: [ "+(sum)+" ]");
 
 		data.tracking2.forEach((tracking, i) => {
-			
+
 			this.units[tracking.unitId].data = Object.assign(this.units[tracking.unitId].data, tracking);
 			this.updateUnit(tracking) ;
 			/*
 			if (tracking.tracking_id) {
 				console.log(tracking);
-				
+
 			}else{
 				console.log("NOOOOOO");
-				
+
 			}
 			*/
 
@@ -739,7 +742,7 @@ export class Unit {
 
 		return;
 
-		
+
 
 		data.conected.forEach((item: { unit_id: number, connected: number }, i) => {
 
@@ -831,7 +834,7 @@ export class Unit {
 	updateTrace(xhr: any) {
 
 		let json = JSON.parse(xhr.responseText);
-		
+
 
 		//this.updateTraceLayer(json);
 		//this.stopTrace();
@@ -860,7 +863,7 @@ export class Unit {
 
 				const checkInfo = $(document).query(`input[type="checkbox"][data-trace="${unitId}"]`);
 				if(checkInfo){
-					
+
 					checkInfo.checked = value;
 				}
 
@@ -952,7 +955,8 @@ export class Unit {
 						this.units[unitId].setInfo(this.getUnitInfo(unitId));
 						this.units[unitId].show(true);
 						this.units[unitId].flyTo();
-						this._lastUnitId = unitId;
+						//this._lastUnitId = unitId;
+						this.change(unitId);
 						//this.playTrace(unitId);
 
 					} else {
@@ -967,7 +971,8 @@ export class Unit {
 						}).show({});
 						//alert(this.msgErrortracking);
 					}
-					this._lastUnitId = unitId;
+					//this._lastUnitId = unitId;
+					this.change(unitId);
 					this.onInfoUpdate(this.getUnitInfo(unitId), info.vehicle_name);
 					//this.setInfo(unitId);
 				}
@@ -1075,7 +1080,7 @@ export class Unit {
 
 
 	getUnitInfo(unitId: number) {
-		
+
 		return this.units[unitId].data;
 
 		const dataUnit = this.dataUnits.find(e => e.unitId == unitId);
@@ -1086,7 +1091,7 @@ export class Unit {
 
 	}
 	setInfo(unitId: number) {
-		
+
 		this.onInfoUpdate(this.loadInfoData(this.units[unitId].data), this.units[unitId].getName());
 
 
@@ -1098,7 +1103,7 @@ export class Unit {
 		Object.assign(data, this.tracking.find(e => e.unitId == unitId));
 		this.onInfoUpdate(this.loadInfoData(data), dataUnit.vehicle_name);
 
-		
+
 
 
 
@@ -1147,7 +1152,7 @@ export class Unit {
 	}
 
 	loadInfoData(data) {
-		
+
 		let xInputs = "";
 		if (data.iInputs) {
 			data.iInputs.forEach(element => {
@@ -1174,7 +1179,7 @@ export class Unit {
 
 			this.traceTool.setFollowCheck(unitId, value)
 		}
-		
+
 	}
 	getFollowMe() {
 		return this.followMe;
@@ -1205,7 +1210,8 @@ export class Unit {
 	}
 
 	setUnit2(unitId: number) {
-		this._lastUnitId = unitId;
+		//this._lastUnitId = unitId;
+		this.change(unitId);
 		if (this.searchUnit) {
 			this.searchUnit.setValue({ unitId: unitId });
 		}
@@ -1237,7 +1243,7 @@ export class Unit {
 			onTrace: (unitId, value) => {
 				this.playTrace(unitId, value);
 
-				
+
 			},
 			onFollow: (unitId, value) => {
 				this.setFollowMe(unitId, value);
@@ -1249,7 +1255,7 @@ export class Unit {
 				}
 				 */
 			},
-			
+
 		});
 
 		this.traceControl.getPage(1).addClass("trace-layer");
@@ -1270,7 +1276,7 @@ export class Unit {
 
 	updateTraceLayer(tracking) {
 
-		
+
 		/*
 		console.log(this.history);
 		console.log(this.history.filter((e, index)=>{
@@ -1302,13 +1308,13 @@ export class Unit {
 
 	public showUnit3(unitId) {
 
-		
+
 		if (this._lastUnitId && this.units[this._lastUnitId] && this._lastUnitId !== unitId) {
-			
+
 			const visible = this.units[this._lastUnitId].getVisible();
-			
+
 			if(visible && !this.isChecked(this._lastUnitId)){
-				
+
 				this.units[this._lastUnitId].setVisible(false);
 			}
 		}
@@ -1318,7 +1324,8 @@ export class Unit {
 			this.units[unitId].setInfo(this.getUnitInfo(unitId));
 			this.units[unitId].show(true);
 			this.units[unitId].flyTo();
-			this._lastUnitId = unitId;
+			//this._lastUnitId = unitId;
+			this.change(unitId);
 			//this.playTrace(unitId);
 
 		} else {
@@ -1356,6 +1363,17 @@ export class Unit {
 		}
 
 		return false;
+	}
+
+	public change(unitId) {
+
+		if (this._lastUnitId !== unitId) {
+			this._lastUnitId = unitId;
+			this.onChange(this._lastUnitId);
+		}
+
+
+
 	}
 }
 

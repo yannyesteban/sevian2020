@@ -258,7 +258,9 @@ export class Unit {
         this.onGetPosition = (unitId) => { };
         this.onReset = (unitId) => { };
         this.onCall = (unitId) => { };
+        this.onPending = (unitId) => { };
         this.onAny = (unitId, type) => { };
+        this.onChange = (unitId) => { };
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -360,7 +362,7 @@ export class Unit {
                     });
                     menu.create("button").prop({ type: "button", "value": "pn", "title": "Pending" }).text("PN")
                         .on("click", event => {
-                        this.onAny(this.getLastUnit(), event.currentTarget.value);
+                        this.onPending(this.getLastUnit());
                     });
                     menu.create("button").prop({ type: "button", "value": "dc", "title": "Disconnect" }).text("DC")
                         .on("click", event => {
@@ -535,10 +537,10 @@ export class Unit {
             /*
             if (tracking.tracking_id) {
                 console.log(tracking);
-                
+
             }else{
                 console.log("NOOOOOO");
-                
+
             }
             */
         });
@@ -708,7 +710,8 @@ export class Unit {
                         this.units[unitId].setInfo(this.getUnitInfo(unitId));
                         this.units[unitId].show(true);
                         this.units[unitId].flyTo();
-                        this._lastUnitId = unitId;
+                        //this._lastUnitId = unitId;
+                        this.change(unitId);
                         //this.playTrace(unitId);
                     }
                     else {
@@ -723,7 +726,8 @@ export class Unit {
                         }).show({});
                         //alert(this.msgErrortracking);
                     }
-                    this._lastUnitId = unitId;
+                    //this._lastUnitId = unitId;
+                    this.change(unitId);
                     this.onInfoUpdate(this.getUnitInfo(unitId), info.vehicle_name);
                     //this.setInfo(unitId);
                 }
@@ -897,7 +901,8 @@ export class Unit {
         });
     }
     setUnit2(unitId) {
-        this._lastUnitId = unitId;
+        //this._lastUnitId = unitId;
+        this.change(unitId);
         if (this.searchUnit) {
             this.searchUnit.setValue({ unitId: unitId });
         }
@@ -982,7 +987,8 @@ export class Unit {
             this.units[unitId].setInfo(this.getUnitInfo(unitId));
             this.units[unitId].show(true);
             this.units[unitId].flyTo();
-            this._lastUnitId = unitId;
+            //this._lastUnitId = unitId;
+            this.change(unitId);
             //this.playTrace(unitId);
         }
         else {
@@ -1012,6 +1018,12 @@ export class Unit {
             return input.checked;
         }
         return false;
+    }
+    change(unitId) {
+        if (this._lastUnitId !== unitId) {
+            this._lastUnitId = unitId;
+            this.onChange(this._lastUnitId);
+        }
     }
 }
 Unit._instances = [];

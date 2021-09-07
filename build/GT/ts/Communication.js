@@ -12,6 +12,7 @@ var WNames;
     WNames[WNames["event"] = 2] = "event";
     WNames[WNames["alarm"] = 4] = "alarm";
     WNames[WNames["synch"] = 8] = "synch";
+    WNames[WNames["unit"] = 9999] = "unit";
 })(WNames || (WNames = {}));
 let n = 0;
 export class Communication {
@@ -65,6 +66,7 @@ export class Communication {
         this.infoMenu = null;
         this.winStatus = null;
         this.winNow = null;
+        this.winUnit = null;
         this.winEvent = null;
         this.winAlarm = null;
         this.unitPanel = null;
@@ -178,6 +180,11 @@ export class Communication {
     _create(main) {
         this._infoMenu = S.getElement(this.infoMenuId);
         this.unitPanel = S.getElement(this.unitPanelId);
+        this.unitPanel.onChange = (unitId) => {
+            this.getInfoWin(this.winNames.unit).reset();
+            const unitName = this.unitPanel.getUnitInfo(unitId).unitName;
+            this.getWin(this.winNames.unit).setCaption(`${this.winNow.caption} : ${unitName}`);
+        };
         this.main = main;
         main.addClass(this.mainClass);
         main.text("");
@@ -199,11 +206,31 @@ export class Communication {
                 }
                 //this.updateEventStatus(info, 1, this.winNames.now);
             },
-            onadd: (info) => { },
+            onadd: (info) => {
+                if (info.unitId == this.unitPanel.getLastUnit()) {
+                    this.getInfoWin(this.winNames.unit).add(info);
+                }
+            },
             ondelete: (info) => {
                 //this.updateEventStatus(info, 2, this.winNames.now);
             }
         }, this.winNow);
+        /* winNow2 */
+        this.createInfoWindow(this.winNames.unit, {
+            mainClass: "now",
+            onread: (info) => {
+                if (info.unitId) {
+                    this.unitPanel.setUnit(info.unitId);
+                    this.unitPanel.showUnit3(info.unitId);
+                }
+                //this.updateEventStatus(info, 1, this.winNames.now);
+            },
+            onadd: (info) => {
+            },
+            ondelete: (info) => {
+                //this.updateEventStatus(info, 2, this.winNames.now);
+            }
+        }, this.winUnit);
         /* winEvent */
         this.createInfoWindow(this.winNames.event, {
             mainClass: "event",
@@ -1248,6 +1275,12 @@ export class Communication {
         if (this._infoControl[type]) {
             return this._infoControl[type];
         }
+    }
+    getWin(type) {
+        if (this._win["info-" + type]) {
+            return this._win["info-" + type];
+        }
+        return null;
     }
     addInfo(type, info) {
         if (this._infoControl[type]) {
