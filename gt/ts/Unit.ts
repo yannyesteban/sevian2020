@@ -333,7 +333,8 @@ export class Unit {
 	public onGetPosition: (unitId:number) => void = (unitId:number) => { };
 	public onReset: (unitId:number) => void = (unitId:number) => { };
 	public onCall: (unitId: number) => void = (unitId: number) => { };
-	public onPending: (unitId:number) => void = (unitId:number) => { };
+	public onPending: (unitId: number) => void = (unitId: number) => { };
+	public onOutput: (unitId:number) => void = (unitId:number) => { };
 	public onAny: (unitId:number, type:string) => void = (unitId:number, type:string) => { };
 
 	public onChange: (unitId:number) => void = (unitId:number) => { };
@@ -489,7 +490,7 @@ export class Unit {
 					});
 					menu.create("button").prop({type:"button", "value":"out", "title":"Output"}).text("O")
 					.on("click", event=>{
-						this.onAny(this.getLastUnit(), event.currentTarget.value);
+						this.onOutput(this.getLastUnit());
 					});
 
 

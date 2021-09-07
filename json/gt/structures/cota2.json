@@ -250,6 +250,20 @@
 			"class": "",
 			"debug": 0,
 			"design": 0
+		},
+		{
+			"id": "output",
+			"element": "gt-output",
+			"name": "gt-output",
+			"method": "load",
+			"eparams": {
+				"socketId":"comm",
+				"unitPanelId": "gt-unit-10"
+			},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		}
 	]
 }

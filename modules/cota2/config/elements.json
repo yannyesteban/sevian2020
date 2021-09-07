@@ -316,6 +316,21 @@
         "init": {
             "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
         }
+    },
+    {
+        "name": "gt-output",
+        "file": "{@MAIN_PATH}gt/Output.php",
+        "class": "\\GT\\Output",
+        "enable": true,
+        "module":{
+            "name":"Output",
+            "alias":"GTOutput",
+            "src":"{@MAIN_PATH}build/GT/ts/Output.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
     }
 
 

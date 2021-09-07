@@ -259,6 +259,7 @@ export class Unit {
         this.onReset = (unitId) => { };
         this.onCall = (unitId) => { };
         this.onPending = (unitId) => { };
+        this.onOutput = (unitId) => { };
         this.onAny = (unitId, type) => { };
         this.onChange = (unitId) => { };
         for (var x in info) {
@@ -370,7 +371,7 @@ export class Unit {
                     });
                     menu.create("button").prop({ type: "button", "value": "out", "title": "Output" }).text("O")
                         .on("click", event => {
-                        this.onAny(this.getLastUnit(), event.currentTarget.value);
+                        this.onOutput(this.getLastUnit());
                     });
                     this.onInfoUpdate = (info, name) => {
                         traceCHK.ds("trace", info.unitId);

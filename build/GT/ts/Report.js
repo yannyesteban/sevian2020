@@ -106,9 +106,9 @@ export class Report {
         //main.style("height", "300px");
         /*
         this.wins["main"].getMain().on("dblclick", (event) => {
-            
+
             this.show(4032, 0);
-            
+
         });
         */
         this.wins["params"] = new Float.Window({
@@ -368,35 +368,35 @@ export class Report {
             caption: "ID",
             name: "id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.id,
         });
         fields.push({
             caption: "Unit ID",
             name: "unit_id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.unit_id,
         });
         fields.push({
             caption: "Command ID",
             name: "command_id",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.command_id,
         });
         fields.push({
             caption: "Index",
             name: "index",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: index,
         });
         fields.push({
             caption: "Status",
             name: "status",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.status,
             default: 1
         });
@@ -404,35 +404,35 @@ export class Report {
             caption: "Params",
             name: "params",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: params,
         });
         fields.push({
             caption: "Mode",
             name: "mode",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: 1,
         });
         fields.push({
             caption: "__mode_",
             name: "__mode_",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.__mode_,
         });
         fields.push({
             caption: "__record_",
             name: "__record_",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: (command.__record_ != "") ? JSON.stringify(command.__record_) : "",
         });
         fields.push({
             caption: "command_name",
             name: "command_name",
             input: "input",
-            type: "text",
+            type: "hidden",
             value: command.command,
         });
         const form = this.forms[type] = new Form({
@@ -1208,7 +1208,7 @@ export class Report {
             __record_ = JSON.stringify(command.__record_);
         }
         const fields = [];
-        //const commandParams = []; 
+        //const commandParams = [];
         //const fields = this.commandConfig.params.fields.map((item) => {
         command.fields.forEach((item, index) => {
             //commandParams.push(item.name);
@@ -1511,7 +1511,7 @@ export class Report {
             __record_ = JSON.stringify(command.__record_);
         }
         const fields = [];
-        //const commandParams = []; 
+        //const commandParams = [];
         //const fields = this.commandConfig.params.fields.map((item) => {
         command.fields.forEach((item) => {
             //commandParams.push(item.name);
@@ -1669,11 +1669,11 @@ export class Report {
                         action: (item, event) => {
 
                             let params = {};
-                            
+
 
 
                             command.fields.forEach((element) => {
-                                
+
                                 params[element.name] = form.getInput(element.name).getValue();
                             });
                             form.getInput("status").setValue(1);
@@ -1696,7 +1696,7 @@ export class Report {
                     {
                         caption: "Recibir",
                         action: (item, event) => {
-                           
+
 
                             this.goSaveCommand(type, "", true);
                         },
