@@ -124,7 +124,7 @@ class Pending
         INNER JOIN unit_name as un ON un.id = u.name_id
 
         INNER JOIN device_command as dc ON dc.id = uc.command_id
-        WHERE (uc.unit_id = '$unitId' or '$unitId' = '0') and uc.status=2";
+        WHERE (uc.unit_id = '$unitId' or '$unitId' = '0') and uc.status=1";
 
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
