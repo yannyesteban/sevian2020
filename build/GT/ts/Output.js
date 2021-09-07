@@ -60,7 +60,7 @@ export class Output {
         main.addClass("pending-tool");
         this.main = main;
         this.wins["main"] = new Float.Window({
-            visible: true,
+            visible: false,
             caption: "Output",
             left: 'right',
             top: 'bottom',

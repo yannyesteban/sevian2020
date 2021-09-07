@@ -105,7 +105,7 @@ export class Output {
         this.main = main;
 
         this.wins["main"] = new Float.Window({
-            visible: true,
+            visible: false,
             caption: "Output",
             left:'right',
 			top:'bottom',
