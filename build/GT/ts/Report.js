@@ -287,7 +287,6 @@ export class Report {
         this.loadForm(command, type, command.index);
     }
     loadForm(command, type, index) {
-        console.log(index, command.index);
         const fields = [];
         fields.push({
             caption: "[Description]",
@@ -333,6 +332,7 @@ export class Report {
                 info.input = "multi";
                 info.type = "checkbox";
                 info.data = item.data;
+                console.log(info.data);
                 info.check = (value, inputs) => {
                     inputs.forEach((input) => {
                         if ((parseInt(value, 10) & parseInt(input.value, 10)) ==
@@ -497,11 +497,9 @@ export class Report {
             },
         });
         if (command.__mode_ == 2) {
-            console.log(command.params);
             form.setValue(command.params);
         }
         form.setMode(command.status);
-        console.log(command.params);
     }
     iniLists(eventList, commandList, type) {
         if (type == "params") {

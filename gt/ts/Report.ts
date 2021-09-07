@@ -380,7 +380,7 @@ export class Report {
     }
 
     private loadForm(command, type, index) {
-        console.log(index, command.index)
+
         const fields = [];
 
         fields.push({
@@ -434,7 +434,7 @@ export class Report {
                 info.input = "multi";
                 info.type = "checkbox";
                 info.data = item.data;
-
+console.log(info.data)
                 info.check = (value, inputs) => {
                     inputs.forEach((input: HTMLInputElement) => {
                         if (
@@ -636,14 +636,14 @@ export class Report {
             },
         });
         if (command.__mode_ == 2) {
-            console.log(command.params);
+
 
 
             form.setValue(command.params);
         }
 
         form.setMode(command.status);
-        console.log(command.params);
+
 
     }
 
