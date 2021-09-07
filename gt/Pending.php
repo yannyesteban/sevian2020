@@ -135,7 +135,7 @@ class Pending
 
         $cn->query = "UPDATE unit_command
         SET status = 3
-        WHERE id = '$id' and status=2";
+        WHERE id = '$id'";
 
         $result = $this->cn->execute();
         return $cn->affectedRows;
