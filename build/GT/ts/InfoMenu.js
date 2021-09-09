@@ -265,6 +265,7 @@ export class InfoComm {
     deleteLast(main) {
         if (main.get().lastElementChild) {
             main.get().lastElementChild.remove();
+            this.lineId--;
         }
     }
     reset() {
