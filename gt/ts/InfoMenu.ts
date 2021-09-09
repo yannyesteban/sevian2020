@@ -364,7 +364,10 @@ export class InfoComm {
     }
 
     public deleteLast(main) {
-        main.get().lastElementChild.remove();
+        if (main.get().lastElementChild) {
+            main.get().lastElementChild.remove();
+        }
+
     }
 
     public reset() {

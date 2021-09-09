@@ -263,7 +263,9 @@ export class InfoComm {
         }
     }
     deleteLast(main) {
-        main.get().lastElementChild.remove();
+        if (main.get().lastElementChild) {
+            main.get().lastElementChild.remove();
+        }
     }
     reset() {
         this.ul.text("");

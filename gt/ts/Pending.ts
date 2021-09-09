@@ -72,13 +72,24 @@ export class Pending {
 
         let main = this.id ? $(this.id) : null;
 
+
+
         if (!main) {
             main = $.create("div").attr("id", this.id);
+            main.on("click", (event) => {
+
+            })
         }
 
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
+            this.unitPanel.addEvent((unitId: number) => {
 
+                if (this.wins["main"].getVisible()) {
+                    this.show(unitId);
+                }
+
+            });
             this.unitPanel.onPending = (unitId: number) => {
 
                 this.show(unitId);

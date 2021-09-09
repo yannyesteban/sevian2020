@@ -282,6 +282,7 @@ export class Unit {
         }
         else {
             main = $.create("div").attr("id", this.id);
+            const event = new Event("unit_change");
             this._create(main);
         }
         Map.load(this.mapName, (mapApi, map) => {
@@ -1020,10 +1021,16 @@ export class Unit {
         }
         return false;
     }
+    addEvent(fn) {
+        this.main.on("unit_change", (event) => {
+            fn(this._lastUnitId);
+        });
+    }
     change(unitId) {
         if (this._lastUnitId !== unitId) {
             this._lastUnitId = unitId;
             this.onChange(this._lastUnitId);
+            this.main.fire("unit_change");
         }
     }
 }

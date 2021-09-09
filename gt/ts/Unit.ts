@@ -254,7 +254,7 @@ class Mobil {
 export class Unit {
 
 	id: any = null;
-	map: any = null;
+	map: SQObject = null;
 
 	private units: { [key: number]: Mobil } = {};
 	private mapName: string = null;
@@ -371,7 +371,9 @@ export class Unit {
 			}
 
 		} else {
-			main = $.create("div").attr("id", this.id);
+			main = $.create("div").attr("id", this.id) as SQObject;
+
+			const event = new Event("unit_change");
 
 			this._create(main);
 		}
@@ -1366,15 +1368,19 @@ export class Unit {
 		return false;
 	}
 
+	public addEvent(fn) {
+		this.main.on("unit_change", (event) => {
+			fn(this._lastUnitId);
+		})
+	}
+
 	public change(unitId) {
 
 		if (this._lastUnitId !== unitId) {
 			this._lastUnitId = unitId;
 			this.onChange(this._lastUnitId);
+			this.main.fire("unit_change")
 		}
-
-
-
 	}
 }
 

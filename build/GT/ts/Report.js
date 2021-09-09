@@ -53,6 +53,11 @@ export class Report {
         }
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
+            this.unitPanel.addEvent((unitId) => {
+                if (this.wins["main"].getVisible()) {
+                    this.show(unitId);
+                }
+            });
             this.unitPanel.onGetPosition = (unitId) => {
                 this.goCommandId(null, 2);
             };
@@ -91,7 +96,7 @@ export class Report {
         this.unitConfig = new UnitConfig({
             tagMain: "form"
         });
-        this.tab.add({ caption: "Config", tagName: "form", set: this.unitConfig.get() });
+        this.tab.add({ caption: "Reportar", tagName: "form", set: this.unitConfig.get() });
         this.wins["main"] = new Float.Window({
             visible: false,
             caption: this.caption,
@@ -332,7 +337,6 @@ export class Report {
                 info.input = "multi";
                 info.type = "checkbox";
                 info.data = item.data;
-                console.log(info.data);
                 info.check = (value, inputs) => {
                     inputs.forEach((input) => {
                         if ((parseInt(value, 10) & parseInt(input.value, 10)) ==
