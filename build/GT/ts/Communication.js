@@ -432,6 +432,8 @@ export class Communication {
     reqDataEvent(json) {
         let i = 0;
         const modes = [1, 2, 4, 8, 16, 32, 64, 128, 256];
+        json = json.reverse();
+        console.log(json);
         for (let x in json) {
             i++;
             modes.forEach((m, index) => {
