@@ -71,6 +71,7 @@ export class Communication {
         this.winAlarm = null;
         this.unitPanel = null;
         this.winNames = WNames;
+        this.maxRecords = 50;
         this.sound = null;
         this.socketServer = {
             host: "127.0.0.1",
@@ -1248,6 +1249,7 @@ export class Communication {
         this.menu.getByValue(type).getCaption().text(text);
     }
     createInfoWindow(type, info, window) {
+        info.maxRecords = this.maxRecords;
         const typeGroup = [];
         const infoControl = this._infoControl[type] = new InfoComm(info);
         const winInfo = {
@@ -1281,6 +1283,14 @@ export class Communication {
             return this._win["info-" + type];
         }
         return null;
+    }
+    showWin(type, value) {
+        this.getWin(type).show({
+            top: "bottom",
+            left: "right",
+            deltaX: -50 - 350,
+            deltaY: -20
+        });
     }
     addInfo(type, info) {
         if (this._infoControl[type]) {

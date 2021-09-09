@@ -108,6 +108,7 @@ export class Communication {
 
     private winNames = WNames;
 
+    private maxRecords = 50;
     private sound: any = null;
     private socketServer = {
         host: "127.0.0.1",
@@ -1634,7 +1635,7 @@ alert(this.commandPanelId)
 
     public createInfoWindow(type, info, window) {
 
-
+        info.maxRecords = this.maxRecords;
 
         const typeGroup = [];
         const infoControl = this._infoControl[type] = new InfoComm(info);
@@ -1676,6 +1677,15 @@ alert(this.commandPanelId)
         }
         return null;
 
+    }
+
+    public showWin(type, value?) {
+        this.getWin(type).show({
+            top: "bottom",
+            left: "right",
+            deltaX:-50-350,
+            deltaY: -20
+        });
     }
     public addInfo(type, info: any) {
         if (this._infoControl[type]) {

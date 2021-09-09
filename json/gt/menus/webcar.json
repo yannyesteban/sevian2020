@@ -55,6 +55,14 @@
 				"title":"Enviar Commando"
 			},
 			"action":"S.getElement('report').show();/*S.getElement('comm').show()*/"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-bolt",
+			"propertys":{
+				"title":"Ventana de Inmediato"
+			},
+			"action":"S.getElement('comm').showWin(1);"
 		}
 
 	]

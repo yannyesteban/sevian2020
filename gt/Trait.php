@@ -192,11 +192,11 @@ trait DBUnit{
         LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date
       LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
         WHERE uu.user = '$user'
-        ORDER BY client, account, vehicle_name 
-        
+        ORDER BY client, account, vehicle_name
+
         ";
 		$result = $cn->execute();
-        
+
         return $cn->getDataAll($result);
         $data = $cn->getDataAll($result);
 		//hx($data);
@@ -236,7 +236,7 @@ trait DBUnit{
         CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,#,
         ' - ' as date_time, ' -' as longitude, ' -' as latitude,
         ' -' as heading, ' -' as satellite, '- ' as speed, u.conn_status as connected
-        
+
 
 
         FROM unit as u
@@ -256,11 +256,11 @@ trait DBUnit{
 
         LEFT JOIN account as ac ON ac.id = u.account_id
         LEFT JOIN client as cl ON cl.id = ac.client_id
-        
+
         LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
         WHERE uu.user = '$user'
         ORDER BY client, account, vehicle_name
-        
+
         ";
 		$result = $cn->execute();
         hx($cn->query);
@@ -494,24 +494,24 @@ trait DBUnit{
 
         $cn = $this->cn;
 
-        $cn->query = "SELECT id as unitId, u.conn_status  as connected, 
+        $cn->query = "SELECT id as unitId, u.conn_status  as connected,
         CASE u.conn_status WHEN 1 THEN 'Conectado' ELSE '-' END as str_status
 
         FROM unit as u
         INNER JOIN user_unit as uu ON uu.unit_id = u.id
         WHERE uu.user = '$user'
-                AND u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR) 
+                AND u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR)
         ";
 
         $result = $cn->execute();
-        
+
         return $cn->getDataAll($result);
     }
     public function statusUnits($user, $lastDate = '0000-00-00 00:00:00'){
 
         $cn = $this->cn;
 
-        $cn->query = "SELECT u.id as unit_id, NOW() as last_date, 
+        $cn->query = "SELECT u.id as unit_id, NOW() as last_date,
         TIMESTAMPDIFF(MINUTE, conn_date, now()) as delay,
         u.conn_status as connected,
         CONCAT(
@@ -533,7 +533,7 @@ trait DBUnit{
 
                 WHERE
         u.conn_date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND
-        uu.user = '$user' 
+        uu.user = '$user'
         #AND u.conn_date > '$lastDate'
         #AND u.conn_status = 0
         ORDER BY 2";
@@ -681,7 +681,7 @@ trait DBInput{
         $dataUnitInput = $this->loadConfigInput($user);
         if(count($dataUnitInput ) <= 0){
             return $tracking;
-        }   
+        }
 
         $data = array_map(function($item) use($dataUnitInput){
 
@@ -883,18 +883,18 @@ trait DBTracking{
         ORDER BY t.date_time
         ";
 
-        
+
 
 		$result = $cn->execute();
 		$tracking = $cn->getDataAll($result);
 
         $len = count($tracking);
-        
+
         if($len > 0){
             if($tracking[$len - 1]['date_time']){
                 $lastDateTime = $tracking[$len - 1]['date_time'];
             }
-            
+
             //hx($lastDateTime);
         }
 
@@ -947,7 +947,7 @@ trait DBTracking{
 
         LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
 
-        WHERE uu.user='$user' 
+        WHERE uu.user='$user'
         #and input_STATUS>0
         AND t.date_time > '$lastDateTime'
         ORDER BY t.date_time
@@ -2087,6 +2087,7 @@ trait DBHistory{
 
 trait DBEvent{
     private $cn = null;
+    public $maxRecords = 100;
 
     private function loadDataEvent($lastId=0, $user=""){
 
@@ -2111,11 +2112,11 @@ trait DBEvent{
         WHERE
 
         e.status != 2
-        AND ('$lastId'= 0 or e.id > '$lastId') 
+        AND ('$lastId'= 0 or e.id > '$lastId')
         AND uu.user = '$user'
-        ORDER BY 1
-        #ORDER BY 1 desc
-        #LIMIT 5
+        #ORDER BY 1
+        ORDER BY 1 desc
+        LIMIT $this->maxRecords
         ";
 
         //hx($cn->query);

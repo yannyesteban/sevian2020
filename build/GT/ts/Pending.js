@@ -32,6 +32,8 @@ export class Pending {
         this.socket = null;
         this.unitPanelId = "";
         this.unitPanel = null;
+        this.timer = null;
+        this.delay = 10000;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -67,7 +69,13 @@ export class Pending {
             height: "120px",
             mode: "auto",
             className: ["sevian"],
-            child: this.main
+            child: this.main,
+            onshow: (info) => {
+                this.play();
+            },
+            onhide: (info) => {
+                this.stop();
+            },
         });
     }
     getUnit() {
@@ -90,12 +98,26 @@ export class Pending {
         this.goLoadPending(unitId);
         this.wins["main"].setCaption(`${this.caption} : ${unitName}`);
         this.wins["main"].show({ left: "center", top: "middle" });
+        this.unitId = unitId;
     }
     setUnitId(unitId) {
         this.unitId = unitId;
     }
     getUnitId() {
         return this.unitId;
+    }
+    play() {
+        if (this.timer) {
+            window.clearTimeout(this.timer);
+        }
+        this.timer = setInterval(() => {
+            this.goLoadPending(this.unitId);
+        }, this.delay);
+    }
+    stop() {
+        if (this.timer) {
+            window.clearTimeout(this.timer);
+        }
     }
     goLoadPending(unitId) {
         S.go({
@@ -132,7 +154,12 @@ export class Pending {
         */
         data.forEach(item => {
             const row = this.main.create("div").addClass("row");
-            row.create("div").text(item.unit_name);
+            row.create("div").text(item.unit_name).on("click", (event) => {
+                if (item.unit_id) {
+                    this.unitPanel.setUnit(item.unit_id);
+                    this.unitPanel.showUnit3(item.unit_id);
+                }
+            });
             row.create("div").text(item.command);
             row.create("div").text("05/05/2021 16:25:00");
             row.create("div").addClass("send").text("SEND")

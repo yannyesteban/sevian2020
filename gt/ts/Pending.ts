@@ -60,6 +60,8 @@ export class Pending {
     private unitPanel: any = null;
 
 
+    private timer = null;
+    private delay: number = 10000;
     constructor(info: Pending) {
 
         for (var x in info) {
@@ -113,7 +115,13 @@ export class Pending {
 
             mode: "auto",
             className: ["sevian"],
-            child: this.main
+            child: this.main,
+            onshow: (info) => {
+                this.play();
+            },
+            onhide: (info) => {
+                this.stop();
+            },
         });
 
     }
@@ -145,7 +153,9 @@ export class Pending {
         this.goLoadPending(unitId);
 
         this.wins["main"].setCaption(`${this.caption} : ${unitName}`);
-        this.wins["main"].show({left:"center", top:"middle"});
+        this.wins["main"].show({ left: "center", top: "middle" });
+
+        this.unitId = unitId;
 
     }
 
@@ -158,7 +168,22 @@ export class Pending {
 
 
 
+    public play() {
+        if (this.timer) {
+			window.clearTimeout(this.timer);
+		}
 
+        this.timer = setInterval(() => {
+            this.goLoadPending(this.unitId);
+         }, this.delay);
+
+    }
+
+    stop() {
+		if (this.timer) {
+			window.clearTimeout(this.timer);
+		}
+	}
 
 
 
@@ -209,7 +234,13 @@ export class Pending {
         data.forEach(item => {
             const row = this.main.create("div").addClass("row");
 
-            row.create("div").text(item.unit_name);
+            row.create("div").text(item.unit_name).on("click", (event) => {
+                if (item.unit_id) {
+                    this.unitPanel.setUnit(item.unit_id);
+                    this.unitPanel.showUnit3(item.unit_id);
+                }
+
+            });
             row.create("div").text(item.command);
             row.create("div").text("05/05/2021 16:25:00");
             row.create("div").addClass("send").text("SEND")

@@ -68,6 +68,7 @@ export class InfoComm {
         this.onadd = (info) => { };
         this.ondelete = (info) => { };
         this.lineId = 0;
+        this.maxRecords = 5;
         this.showType = true;
         this.ul = null;
         /*
@@ -120,6 +121,9 @@ export class InfoComm {
     }
     add(message) {
         this.lineId++;
+        if (this.lineId > this.maxRecords) {
+            this.deleteLast(this.ul);
+        }
         const div = this.ul.createFirst("div").addClass("main").removeClass("open")
             .ds("id", message.id).ds("line", this.lineId).ds("type", message.type)
             .ds("mode", message.mode).addClass(`ev-${message.event_id}`);
@@ -257,6 +261,9 @@ export class InfoComm {
             ele.remove();
             alert(8);
         }
+    }
+    deleteLast(main) {
+        main.get().lastElementChild.remove();
     }
     reset() {
         this.ul.text("");
@@ -445,7 +452,7 @@ export class InfoUnits {
         .ds("id", message.id).ds("line", this.lineId).ds("type", message.type);
         div.addClass("s"+message.connected);
         div.on("click", () => {
-            
+
             this.onread(message);
         });
         */

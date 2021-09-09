@@ -2,10 +2,10 @@ DELIMITER $$
 CREATE TRIGGER TrackingInsertBefore
 BEFORE INSERT ON tracking
 FOR EACH ROW
-BEGIN
 
-    
-    SET NEW.date_time = DATE_ADD(NEW.date_time, interval -4 hour);
+
+BEGIN
+	set NEW.date_time = DATE_ADD(NEW.date_time, interval -4 hour);
 	
 	UPDATE unit 
 	SET 
@@ -31,15 +31,6 @@ BEGIN
     ORDER BY ue.unit_id DESC
     LIMIT 1;
     
-    IF NEW.event_id = 0 THEN
-		UPDATE
-			unit_command as uc
-		INNER JOIN device_command as dc ON dc.id = uc.command_id AND dc.role_id = 2
-		SET uc.status = 2
-		WHERE uc.status = 1 AND uc.unit_id = NEW.unit_id;
-
-    END IF;
     
-    
-END$$
+END $$
 DELIMITER ;

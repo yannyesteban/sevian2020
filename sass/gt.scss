@@ -233,6 +233,12 @@ form {
 .icon-connection {
   background-image: url(#{$path_images}connection.png);
 }
+
+.icon-bolt {
+  background-image: url(#{$path_images}bolt.png);
+  background-size: 60% 80% !important;
+}
+
 .icon-connected {
   background-image: url(#{$path_images}connected.png);
 }

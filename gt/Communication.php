@@ -9,6 +9,7 @@ class Communication extends
     static $patternJsonFile = '';
 
     public $unitId = '';
+    public $maxRecords = 100;
 
     public $jsClassName = 'GTCommunication';
 
@@ -136,6 +137,7 @@ class Communication extends
             'gridId'        => $this->eparams->gridId?? '',
             'infoMenuId'    => $this->eparams->infoMenu?? '',
             'user'          => $this->_userInfo->user,
+            'maxRecord'     => $this->maxRecords?? 20,
             'socketServer'  => [
                 'host'  => $gtServer,//'localhost',//'bests.no-ip.info',
                 'port'  => $gtPort
@@ -143,14 +145,17 @@ class Communication extends
             'winNow'=>[
                 'caption'=>'Inmediato',
                 'top'=>'bottom',
-                'deltaX'=>-50,
-                'deltaY'=>-20
+                'deltaX'=>-50-350,
+                'deltaY'=>-20,
+                'visible'=>false,
+                'closable'=> true
             ],
             'winUnit'=>[
                 'caption'=>'Unit',
                 'top'=>'bottom',
-                'deltaX'=>-50-350,
-                'deltaY'=>-20
+                'deltaX'=>-50,
+                'deltaY'=>-20,
+                'visible'=>true
             ],
             'winEvent'=>[
                 'caption'=>'Eventos',
