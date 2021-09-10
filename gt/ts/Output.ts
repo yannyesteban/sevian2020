@@ -81,7 +81,13 @@ export class Output {
 
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
+            this.unitPanel.addEvent((unitId: number) => {
 
+                if (this.wins["main"].getVisible()) {
+                    this.show(unitId);
+                }
+
+            });
             this.unitPanel.onOutput = (unitId: number) => {
 
                 this.show(unitId);
@@ -161,7 +167,7 @@ export class Output {
     public show(unitId?) {
 
         if (unitId == 0 || unitId === undefined) {
-            alert(33)
+
             this.goLoadPage(0,-1);
             this.wins["main"].setCaption(`${this.caption} : Todos`);
             this.wins["main"].show({left:"center", top:"middle"});
@@ -192,6 +198,10 @@ export class Output {
 
 
     private goLoadPage(unitId: number, index?) {
+
+        if (index < 0 && $(this.formId)) {
+            $(this.formId).text("...");
+        }
         S.go({
             async: true,
             valid: false,
@@ -199,7 +209,7 @@ export class Output {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json)
+
                     this.loadPage(json);
                     if (json.command) {
                         this.loadForm(json.command, 0, index);
@@ -284,7 +294,7 @@ export class Output {
             };
 
             if (command.indexField && item.name == command.indexField) {
-                info.type = "text";
+                info.type = "hidden";
                 /*info.data = range;
                         info.events = {change: (event) => {
                             this.setIndex(event.currentTarget.value);
@@ -505,22 +515,9 @@ export class Output {
             form: form.getFormData(),
             blockingTarget: this.main,
             requestFunctions: {
-                f: (json) => {
-                    if (type == "0") {
-                        this.iniLists(json.eventList, json.commandList, type);
-                        this.createMainForm(json.command)
-                    } else {
-                        this.iniLists(json.eventList, json.commandList, type);
-                        this.createCommandForm(json.command, type);
-                    }
 
-                },
                 f2: (json) => {
 
-                    console.log(json);
-                    //this.iniLists(json.eventList, json.commandList, type);
-                    //this.createForm(json.command, type);
-                    //this.loadTab(json.command, type);
 
 
                     this.loadPage(json);

@@ -120,7 +120,9 @@ class Output
         $cn->query = "SELECT u.unit_id, u.number, u.type, u.input_id, name, value_on, value_off
         FROM unit_input as u
         INNER JOIN input as i ON i.id = u.input_id
-        WHERE u.type = 2 AND u.unit_id = '$unitId'
+        WHERE
+        u.type = 2 AND
+        u.unit_id = '$unitId'
         ORDER BY unit_id, type, number
 
        ";
