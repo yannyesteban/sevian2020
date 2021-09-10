@@ -308,4 +308,13 @@
   text-overflow: ellipsis;
   list-style: none;
 }
+
+.output-tool {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.output-tool > :nth-child(2) {
+  overflow: auto;
+  height: 100%;
+}
 /*# sourceMappingURL=gt_tool.css.map */

@@ -13,8 +13,8 @@ class Output
     private $commandId = 0;
     private $index = 0;
     private $mode = 0;
-    private $type = "0";
-
+    private $type = '0';
+    private $roleId = 5;
 	static public $patternJsonFile = '';
 
     public function __construct($info = []){
@@ -40,6 +40,7 @@ class Output
         $mode = $this->eparams->mode ?? $this->mode;
 
         $type = $this->eparams->type ?? $this->type;
+        $roleId = $this->eparams->roleId ?? $this->roleId;
 
 		switch($method){
 
@@ -49,39 +50,38 @@ class Output
             case 'init':
 
                 break;
-            case 'load-pending':
+            case 'get-outputs':
+
+                $record = null;
+                $command = null;
+
+                if($index >= 0 ){
+
+                    $record = $this->getRecord($unitId, $index);
+                    $command = $this->getCommandConfig($unitId, 5, true);
 
 
-                $this->addResponse([
-                    'id'	=> $this->id,
-                    'data'	=> [
-                        "pendingList"     => $this->getPending($unitId)
-                    ],
-                    'iToken'=> $this->iToken
-                ]);
-                break;
-            case 'delete-pending':
-                $id = $this->eparams->id ?? 0;
+
+                    $command = array_merge((array)$command, (array)$record);
 
 
-                $affectedRows = $this->deletePending($id);
-                if($affectedRows > 0){
-                    $message = "El Comando fué eliminado Correctamente!";
-                }else{
-                    $message = "Error no se pudo eliminar el Comando!";
                 }
+
+
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
-                        "message"     => $message,
-                        "error" => ($affectedRows>0)? 0: -1,
-                        "pendingList"     => $this->getPending($unitId)
+                        'unitId'=>$unitId,
+                        'index'=>$index,
+                        'list'     => $this->getOutputs($unitId),
+                        //'record'   => $record,
+                        'command'   => $command
                     ],
                     'iToken'=> $this->iToken
                 ]);
-
-
                 break;
+
+
 			default:
 				break;
 
@@ -105,8 +105,8 @@ class Output
                 'panel'=>$this->id,
 
                 'caption'		=> 'Output',
-                'socketId'=>$this->eparams->socketId?? "",
-                'unitPanelId'=>$this->eparams->unitPanelId?? ""
+                'socketId'=>$this->eparams->socketId?? '',
+                'unitPanelId'=>$this->eparams->unitPanelId?? ''
 
             ]
 
@@ -114,22 +114,79 @@ class Output
 
     }
 
-    private function getPending($unitId = ''){
+    private function getOutputs($unitId = ''){
         $cn = $this->cn;
 
-        $cn->query = "SELECT
-        uc.id, uc.unit_id, uc.command_id, uc.index, uc.mode, un.name as unit_name, command
-        FROM unit_command as uc
-        INNER JOIN unit as u ON u.id = uc.unit_id
-        INNER JOIN unit_name as un ON un.id = u.name_id
+        $cn->query = "SELECT u.unit_id, u.number, u.type, u.input_id, name, value_on, value_off
+        FROM unit_input as u
+        INNER JOIN input as i ON i.id = u.input_id
+        WHERE u.unit_id = '$unitId'
+        ORDER BY unit_id, type, number
 
-        INNER JOIN device_command as dc ON dc.id = uc.command_id
-        WHERE (uc.unit_id = '$unitId' or '$unitId' = '0') and uc.status=2";
+       ";
 
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
     }
 
+    private function getRecord($unitId, $index, $role = 5){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT c.id, u.id as unit_id, dc.id as command_id, '$index' as `index`,
+            c.name, c.params,
+            IFNULL(c.status, 0) as status,
+            1 as __mode_, '' as __record_, dc.command
+
+            FROM unit u
+            INNER JOIN device as d on d.id = u.device_id
+            INNER JOIN device_version as v ON v.id = d.version_id
+            INNER JOIN device_command as dc ON dc.version_id = v.id
+            LEFT JOIN unit_command as c
+                ON c.command_id = dc.id
+                AND c.unit_id = u.id
+                AND c.index = '$index'
+
+
+            WHERE u.id = '$unitId' AND dc.role_id = '$role'";
+
+
+        $result = $this->cn->execute();
+        if($data = $cn->getDataAssoc($result)){
+            if($data['id']){
+                $data['params'] = json_decode($data['params']);
+                $data['__mode_'] = 2;
+                $data['__record_'] = ['id'=>$data['id']];
+            }
+        }
+        return $data;
+    }
+
+
+    private function getCommandConfig($unitId, $value, $byRole = false){
+        $cn = $this->cn;
+
+        if($byRole === false){
+            $cn->query = "SELECT c.*
+                FROM command as c
+                WHERE command_id = '$value'";
+        }else{
+            $cn->query = "SELECT c.*
+                FROM unit u
+                INNER JOIN device as d on d.id = u.device_id
+                INNER JOIN device_version as v ON v.id = d.version_id
+                INNER JOIN device_command as dc ON dc.version_id = v.id
+                INNER JOIN command as c ON c.command_id = dc.id
+                WHERE u.id = '$unitId' AND dc.role_id = '$value'";
+        }
+
+        $data = [];
+        $result = $this->cn->execute();
+        if($data = $cn->getDataAssoc($result)){
+            $data['params'] = json_decode($data["params"]);
+        }
+        return $data['params']??[];
+    }
     private function deletePending($id = ''){
         $cn = $this->cn;
 
@@ -152,9 +209,9 @@ class Output
         $command['indexField'] = $config['params']->indexField;
 
         return [
-            "command" => $command,
-            "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
-            "commandList"   => $this->getCommandFieldsList($unitId)
+            'command' => $command,
+            'eventList'     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
+            'commandList'   => $this->getCommandFieldsList($unitId)
         ];
     }
 
@@ -175,19 +232,19 @@ class Output
 
                 return $v['id'] == $m['param_id'];
             });
-            //hr($subdata,"red");
+            //hr($subdata,'red');
             $c['fields'][$k]['data'] = array_map(function($x){
                 return [$x['value'], ($x['title']!='')?$x['title']:$x['value']];
             }, $subdata);
-            //hr($v['data'], "green");
+            //hr($v['data'], 'green');
         }
         //hx($c['fields']);
         return [
-                "commandParam" => $this->getCommandFieldsParams($unitId, $commandId),
-                //"paramData"   => ,
-                "command"       =>  $c,
-                "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
-                "commandList"   => $this->getCommandFieldsList($unitId)
+                'commandParam' => $this->getCommandFieldsParams($unitId, $commandId),
+                //'paramData'   => ,
+                'command'       =>  $c,
+                'eventList'     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
+                'commandList'   => $this->getCommandFieldsList($unitId)
 
             ];
     }
@@ -234,9 +291,9 @@ class Output
         $data = [];
         if($data = $cn->getDataAssoc($result)){
             if($data['id'] > 0){
-                $data['params'] = json_decode($data["params"]);
-                $data['values'] = json_decode($data["values"]);
-                $data['__record_'] = ["id"=>$data["id"]];
+                $data['params'] = json_decode($data['params']);
+                $data['values'] = json_decode($data['values']);
+                $data['__record_'] = ['id'=>$data['id']];
             }
         }
         return $data;
@@ -318,7 +375,7 @@ class Output
         $result = $this->cn->execute();
         $list = [];
         if($data = $cn->getDataAssoc($result)){
-            $params = $data['params'] = json_decode($data["params"]);
+            $params = $data['params'] = json_decode($data['params']);
             /*
             if(isset($params->eventRange)){
                 for($i = $params->eventRange[0]; $i <= $params->eventRange[1]; $i++){
@@ -344,7 +401,7 @@ class Output
         $data = [];
         $result = $this->cn->execute();
         if($data = $cn->getDataAssoc($result)){
-            $data['params'] = json_decode($data["params"]);
+            $data['params'] = json_decode($data['params']);
         }
         return $data;
     }
@@ -358,7 +415,7 @@ class Output
         $data = [];
         $result = $this->cn->execute();
         if($data = $cn->getDataAssoc($result)){
-            $data['event'] = json_decode($data["event"]);
+            $data['event'] = json_decode($data['event']);
         }
         return $data;
     }
@@ -389,9 +446,9 @@ class Output
         $result = $this->cn->execute();
         if($data = $cn->getDataAssoc($result)){
             if($data['id']){
-                $data['params'] = json_decode($data["params"]);
+                $data['params'] = json_decode($data['params']);
                 $data['__mode_'] = 2;
-                $data['__record_'] = ["id"=>$data["id"]];
+                $data['__record_'] = ['id'=>$data['id']];
             }
         }
         return $data;
@@ -474,8 +531,8 @@ class Output
         $data = [];
         if($data = $cn->getDataAssoc($result)){
             if($data['__mode_'] == 2){
-                $data['params'] = json_decode($data["params"]);
-                $data['__record_'] = ["id"=>$data["id"]];
+                $data['params'] = json_decode($data['params']);
+                $data['__record_'] = ['id'=>$data['id']];
             }
         }
         return $data;
@@ -568,7 +625,7 @@ class Output
         $data = [];
         if($data = $cn->getDataAssoc($result)){
             if($data['values'] != ""){
-                $data  = json_decode($data["values"]);
+                $data  = json_decode($data['values']);
 
             }
         }

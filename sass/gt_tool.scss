@@ -350,3 +350,15 @@
     }
   }
 }
+
+
+.output-tool{
+  display: grid;
+  grid-template-rows: auto 1fr;
+  > :nth-child(2) {
+    overflow: auto;
+
+    height: 100%;
+  }
+
+}

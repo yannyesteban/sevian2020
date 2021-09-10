@@ -300,7 +300,7 @@ export class Report {
             type: "text",
             value: command.name,
         });
-        command.fields.forEach((item, index) => {
+        command.fields.forEach((item, index2) => {
             /*
 
             const data = command.paramData
@@ -312,7 +312,7 @@ export class Report {
         */
             const info = {
                 caption: item.label || item.param,
-                name: `param_${index}`,
+                name: `param_${index2}`,
                 input: "input",
                 type: "text",
                 value: item.value,

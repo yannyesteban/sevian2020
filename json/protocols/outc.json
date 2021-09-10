@@ -1,0 +1,41 @@
+{
+  "name": "outc",
+  "description": "Execute this command to set the output behavior.",
+  "indexField": "output_port",
+  "indexRange": [1, 8],
+  "usePassword": true,
+  "useTag": true,
+  "fields": [
+    {
+      "name": "output_port",
+      "label": "Output Port",
+      "type": "output",
+      "data": [],
+      "description": "This parameter can specify what output port will be activated"
+    },
+    {
+      "name": "output_control",
+      "label": "Output Control",
+      "type": "select",
+      "value": 0,
+      "data": [
+        [0, "Off"],
+        [1, "On"]
+      ],
+      "description": "This parameter is to set the output state to 0 (off) or 1(on) of the defined output port in the “Output Port” parameter."
+    },
+    {
+      "name": "toggle_duration",
+      "label": "Output Toggle Duration",
+      "type": "text",
+      "description": "To define the time interval of the specific output port staying in the specific state."
+    },
+    {
+      "name": "toggle_times",
+      "label": "Output Toggle Times",
+      "type": "text",
+      "description": "To define the times of the specific output port changing from current state to alternative state and back to the original state after reaching the duration."
+    }
+
+  ]
+}
