@@ -56,7 +56,7 @@ export class MapBoxLib {
     marks: any[] = [];
     groups: any[] = null;
     layers: any[] = [];
-    latlng = new mapboxgl.LngLat(-66.903603, 10.480594);
+    latlng = null;//new mapboxgl.LngLat(-66.903603, 10.480594);
 
     load: any = (event) => { };
 
@@ -104,11 +104,14 @@ export class MapBoxLib {
     }
     _create(main) {
 
+        if (!mapboxgl) {
+            console.log("no mapbox");
+            return;
+        }
 
-        
         //mapboxgl.accessToken = this.ACCESS_TOKEN;
         mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJjazYxZnM5dzMwMzk1M21xbjUyOHVmdjV0In0.4ifqDgs5_PqZd58N1DcVaQ";
-        
+        this.latlng = new mapboxgl.LngLat(-66.903603, 10.480594);
         let map = this.map = new mapboxgl.Map({
             container: this.id,
             //style: "mapbox://styles/mapbox/streets-v10",
@@ -118,7 +121,7 @@ export class MapBoxLib {
             attributionControl: true
 
         });
-        
+
         map.doubleClickZoom.disable();
 
         map.on("dblclick",(event)=>{
@@ -346,7 +349,7 @@ export class MapBoxLib {
         }
         info.map = this.map;
         info.parent = this;
-        
+
         switch (type) {
             case "circle":
                 this._poly[name] = new Circle(info);

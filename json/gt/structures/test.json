@@ -1,0 +1,43 @@
+{
+	"structure": "cota",
+	"title": "Módulo GT",
+	"template": "gt-cota",
+	"templateNameIni": "/gt-webcar",
+	"templateName": "/gt/webcar",
+	"themeTemplate": "",
+	"class": "webcar",
+	"mainPanel": "panel-4",
+	"params": {},
+	"wins": [
+		{
+			"name": "v1",
+			"caption": "Catálogo @module_name",
+			"mode": "custom",
+			"width": "400px",
+			"height": "400px",
+			"top": "middle",
+			"left": "center",
+			"visible": false,
+			"child": "#win_001"
+		}
+	],
+	"roles": [],
+	"publicRole": true,
+	"elements": [
+
+		{
+			"id": "event_admin",
+			"element": "gt-event_admin",
+			"name": "gt-event_admin",
+			"method": "load",
+			"eparams": {
+				"socketId":"comm",
+				"unitPanelId": "gt-unit-10"
+			},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		}
+	]
+}

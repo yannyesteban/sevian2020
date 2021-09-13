@@ -32,7 +32,7 @@ export class MapBoxLib {
         this.marks = [];
         this.groups = null;
         this.layers = [];
-        this.latlng = new mapboxgl.LngLat(-66.903603, 10.480594);
+        this.latlng = null; //new mapboxgl.LngLat(-66.903603, 10.480594);
         this.load = (event) => { };
         this._poly = {};
         this._controls = [];
@@ -70,8 +70,13 @@ export class MapBoxLib {
         });
     }
     _create(main) {
+        if (!mapboxgl) {
+            console.log("no mapbox");
+            return;
+        }
         //mapboxgl.accessToken = this.ACCESS_TOKEN;
         mapboxgl.accessToken = "pk.eyJ1IjoieWFubnkyNCIsImEiOiJjazYxZnM5dzMwMzk1M21xbjUyOHVmdjV0In0.4ifqDgs5_PqZd58N1DcVaQ";
+        this.latlng = new mapboxgl.LngLat(-66.903603, 10.480594);
         let map = this.map = new mapboxgl.Map({
             container: this.id,
             //style: "mapbox://styles/mapbox/streets-v10",

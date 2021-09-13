@@ -331,6 +331,21 @@
         "init": {
             "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
         }
+    },
+    {
+        "name": "gt-event_admin",
+        "file": "{@MAIN_PATH}gt/EventAdmin.php",
+        "class": "\\GT\\EventAdmin",
+        "enable": true,
+        "module":{
+            "name":"EventAdmin",
+            "alias":"GTEventAdmin",
+            "src":"{@MAIN_PATH}build/GT/ts/EventAdmin.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
     }
 
 

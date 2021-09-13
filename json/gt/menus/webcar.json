@@ -63,6 +63,14 @@
 				"title":"Ventana de Inmediato"
 			},
 			"action":"S.getElement('comm').showWin(1);"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-info",
+			"propertys":{
+				"title":"dministrador de Eventos"
+			},
+			"action":"S.getElement('event_admin').show();"
 		}
 
 	]

@@ -1328,7 +1328,7 @@ export class Unit {
 			this.units[unitId].show(true);
 			this.units[unitId].flyTo();
 			//this._lastUnitId = unitId;
-			this.change(unitId);
+
 			//this.playTrace(unitId);
 
 		} else {
@@ -1343,7 +1343,7 @@ export class Unit {
 			}).show({});
 			//alert(this.msgErrortracking);
 		}
-
+		this.change(unitId);
 		const info = this.dataUnits.find(e => e.unitId == unitId) || {};
 		if (info) {
 

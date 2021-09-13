@@ -279,6 +279,7 @@ export class Grid2 {
         this.parentContext = null;
         this.showEnum = false;
         this.allowSearch = true;
+        this.allowPaginator = true;
         this.option = [];
         this.data = [];
         this.menu = null;
@@ -422,31 +423,33 @@ export class Grid2 {
             .add({ tagName: "span", className: "icon" + this.iconClass })
             .add({ tagName: "span", className: "text", innerHTML: this.caption })
             .add({ tagName: "span", className: "arrow" });
-        let _search = main.create("div").addClass("grid-search");
-        let q = _search
-            .create("input")
-            .attr("type", "search")
-            .attr("name", "q")
-            .attr("placeholder", this.optionText.search)
-            .addClass("search")
-            .val(this.searchValue)
-            .on("keypress", (event) => {
-            // Number 13 is the "Enter" key on the keyboard
-            if (event.keyCode === 13) {
-                // Cancel the default action, if needed
-                event.preventDefault();
-                // Trigger the button element with a click
+        if (this.allowSearch) {
+            let _search = main.create("div").addClass("grid-search");
+            let q = _search
+                .create("input")
+                .attr("type", "search")
+                .attr("name", "q")
+                .attr("placeholder", this.optionText.search)
+                .addClass("search")
+                .val(this.searchValue)
+                .on("keypress", (event) => {
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    // Trigger the button element with a click
+                    this._search(q.val());
+                }
+            });
+            _search
+                .create("input")
+                .attr("type", "button")
+                .val(this.optionText.search_go + "")
+                .addClass("btn-search")
+                .on("click", (event) => {
                 this._search(q.val());
-            }
-        });
-        _search
-            .create("input")
-            .attr("type", "button")
-            .val(this.optionText.search_go + "")
-            .addClass("btn-search")
-            .on("click", (event) => {
-            this._search(q.val());
-        });
+            });
+        }
         if (this.type !== "default")
             if (this.selectMode === "one" || this.selectMode === "multiple") {
                 let _auxMenu = main.create("div").addClass("grid-aux-menu");
@@ -536,11 +539,13 @@ export class Grid2 {
             type: "hidden",
             name: "__data_",
         });
-        let pag = this.paginator;
-        //pag.change = $.bind(pag.change, this, "page");
-        pag.context = this;
-        let menuPag = this._main.create("div").addClass("nav-paginator");
-        menuPag.append((this.pag = new Paginator(pag)));
+        if (this.allowPaginator) {
+            let pag = this.paginator;
+            //pag.change = $.bind(pag.change, this, "page");
+            pag.context = this;
+            let menuPag = this._main.create("div").addClass("nav-paginator");
+            menuPag.append((this.pag = new Paginator(pag)));
+        }
         if (this.menu) {
             this._main.append(this.createMenu(this.menu));
         }

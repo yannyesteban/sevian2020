@@ -1,4 +1,6 @@
-var sgDate = { Calendar: null, Picker: null, evalFormat: null, dateFrom: null };
+import { _sgQuery as $ } from './Query.js';
+import { Float } from '../../Sevian/ts/Window.js';
+export const sgDate = { Calendar: null, Picker: null, evalFormat: null, dateFrom: null };
 sgDate.Calendar = (($) => {
     let _daysXMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let _holy = [];
@@ -483,7 +485,7 @@ sgDate.Calendar = (($) => {
             //this._popup.show({left:"left", top:"top"});
         }
         setNote(cell, date, info, type) {
-            //type = "note"            
+            //type = "note"
             cell.style().position = "relative";
             var tip = cell.create("div");
             tip.addClass("sgcal-" + (type || "ind"));
@@ -566,8 +568,8 @@ sgDate.Calendar = (($) => {
         ;
     }
     sgDate.Picker = Picker;
-    $(window).on("load", () => {
-        let msg = Sevian.Valid.send({ required: {} }, "", "hola", []);
+    $(window).on("load_", () => {
+        //let msg = Sevian.Valid.send({required:{}},"","hola",[]);
         return;
         let div = $("#form_p4").create("div").text("Calendario");
         let cal = new Calendar({
@@ -606,5 +608,5 @@ sgDate.Calendar = (($) => {
     ];
     setHoly(holy);
     return Calendar;
-})(_sgQuery);
+})($);
 //# sourceMappingURL=Calendar.js.map
