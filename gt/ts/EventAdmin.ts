@@ -96,10 +96,7 @@ export class EventAdmin {
                 }
 
             });
-            this.unitPanel.onOutput = (unitId: number) => {
 
-                this.show(unitId);
-            };
         }
 
         if (this.socketId) {
@@ -122,7 +119,7 @@ export class EventAdmin {
         this.main = main;
 
         this.wins["main"] = new Float.Window({
-            visible: true,
+            visible: false,
             caption: "Event Admin",
             left:'right',
 			top:'bottom',
@@ -153,7 +150,7 @@ export class EventAdmin {
     public show(unitId?) {
         if (unitId == 0 || unitId === undefined) {
 
-            unitId = this.unitId;
+            unitId = this.getUnit();
 
 
         }

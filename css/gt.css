@@ -875,6 +875,7 @@ form {
   text-align: center;
   font-size: 10pt;
   font-weight: bold;
+  visibility: hidden;
 }
 .info-comm-units .main .btn-delete {
   color: #f0fa9a;

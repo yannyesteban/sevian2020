@@ -56,9 +56,6 @@ export class EventAdmin {
                     this.show(unitId);
                 }
             });
-            this.unitPanel.onOutput = (unitId) => {
-                this.show(unitId);
-            };
         }
         if (this.socketId) {
             this.socket = S.getElement(this.socketId);
@@ -71,7 +68,7 @@ export class EventAdmin {
         main.addClass("report-tool");
         this.main = main;
         this.wins["main"] = new Float.Window({
-            visible: true,
+            visible: false,
             caption: "Event Admin",
             left: 'right',
             top: 'bottom',
@@ -93,7 +90,7 @@ export class EventAdmin {
     }
     show(unitId) {
         if (unitId == 0 || unitId === undefined) {
-            unitId = this.unitId;
+            unitId = this.getUnit();
         }
         if (!unitId) {
             alert("unit not found!!!");
