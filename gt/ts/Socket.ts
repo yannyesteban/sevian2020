@@ -8,10 +8,12 @@ export class Socket {
     user: string = "juan";
     key: string = "";
     error: any = null;
+    name: string = "";
     onopen: Function = function(event) {
         let openMessage = JSON.stringify({
             type: "connect",
-            clientName: this.user,
+            name: this.name,
+            user: this.user,
             config: []
 
 

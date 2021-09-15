@@ -7,10 +7,12 @@ export class Socket {
         this.user = "juan";
         this.key = "";
         this.error = null;
+        this.name = "";
         this.onopen = function (event) {
             let openMessage = JSON.stringify({
                 type: "connect",
-                clientName: this.user,
+                name: this.name,
+                user: this.user,
                 config: []
             });
             this.send(openMessage);

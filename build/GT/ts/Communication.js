@@ -99,10 +99,12 @@ export class Communication {
                 user: this.user,
                 url: this.socketServer.host,
                 port: this.socketServer.port,
+                //name: S.getInstance(),
                 onopen: (event) => {
                     let openMessage = JSON.stringify({
                         type: "connect",
-                        clientName: this.user,
+                        user: this.user,
+                        name: S.getInstance(),
                         config: []
                     });
                     this._ws.send(openMessage);

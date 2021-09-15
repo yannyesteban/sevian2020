@@ -55,7 +55,8 @@ class Pending
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
-                        "pendingList"     => $this->getPending($unitId)
+                        "pendingList"     => $this->getPending($unitId),
+                        'totalPending'=>$this->getTotalPending(0),
                     ],
                     'iToken'=> $this->iToken
                 ]);
@@ -75,7 +76,8 @@ class Pending
                     'data'	=> [
                         "message"     => $message,
                         "error" => ($affectedRows>0)? 0: -1,
-                        "pendingList"     => $this->getPending($unitId)
+                        "pendingList"     => $this->getPending($unitId),
+                        'totalPending'=>$this->getTotalPending(0),
                     ],
                     'iToken'=> $this->iToken
                 ]);
@@ -106,12 +108,38 @@ class Pending
                 'tapName'=>'yanny',
                 'caption'		=> 'Pending',
                 'socketId'=>$this->eparams->socketId?? "",
-                'unitPanelId'=>$this->eparams->unitPanelId?? ""
+                'unitPanelId'=>$this->eparams->unitPanelId?? "",
+                'infoMenuId'    => $this->eparams->infoMenu?? '',
+                'totalPending'=>$this->getTotalPending(0),
 
             ]
 
 		]);
 
+    }
+
+    private function getTotalPending($unitId = ''){
+        $cn = $this->cn;
+
+        $cn->query = "SELECT
+        count(*) as total
+        FROM unit_command as uc
+        INNER JOIN unit as u ON u.id = uc.unit_id
+        INNER JOIN unit_name as un ON un.id = u.name_id
+
+        INNER JOIN device_command as dc ON dc.id = uc.command_id
+        WHERE (uc.unit_id = '$unitId' or '$unitId' = '0') and uc.status=1";
+
+        $result = $this->cn->execute();
+       
+
+
+        $total = 0;
+		if($rs = $cn->getDataAssoc($result)){
+            $total = $rs["total"];
+        }
+
+        return $total;
     }
 
     private function getPending($unitId = ''){

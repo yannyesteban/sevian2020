@@ -244,7 +244,8 @@
 			"method": "load",
 			"eparams": {
 				"socketId":"comm",
-				"unitPanelId": "gt-unit-10"
+				"unitPanelId": "gt-unit-10",
+				"infoMenu": "panel-9"
 			},
 			"type": 0,
 			"class": "",

@@ -27,6 +27,9 @@ export var S = (($) => {
         static test() {
             alert("hello i am sevian");
         }
+        static getInstance() {
+            return this.instance;
+        }
         static setVar(key, value) {
             this.vars[key] = value;
         }

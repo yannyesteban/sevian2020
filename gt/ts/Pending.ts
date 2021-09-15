@@ -13,10 +13,10 @@ import {
 import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { Tab } from "../../Sevian/ts/Tab.js";
 import { S } from "../../Sevian/ts/Sevian.js";
-import { InfoComm } from "./InfoMenu.js";
+
 import { Communication } from "./Communication.js";
 import { UnitConfig } from "./UnitConfig.js"
-
+import { InfoComm, InfoMenu, InfoUnits } from './InfoMenu.js';
 
 export class Pending {
     public id: any = null;
@@ -62,6 +62,11 @@ export class Pending {
 
     private timer = null;
     private delay: number = 10000;
+
+    private infoMenuId:string = null;
+    private infoMenu:any = null;
+    private totalPending = -1;
+
     constructor(info: Pending) {
 
         for (var x in info) {
@@ -80,6 +85,22 @@ export class Pending {
 
             })
         }
+
+        if(this.infoMenuId){
+            
+            const menu = S.getElement(this.infoMenuId);
+            const infoMenu = this.infoMenu = new InfoMenu({
+                menu: menu,
+                id: "div222"
+    
+            });
+
+            
+            this.setTotal(this.totalPending);
+        }
+
+        
+        
 
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
@@ -197,6 +218,13 @@ export class Pending {
 	}
 
 
+    setTotal(total){
+        this.totalPending = total;
+        if(this.infoMenu){
+            this.infoMenu.updateType("P", this.totalPending);
+        }
+        
+    }
 
 
 
@@ -210,6 +238,7 @@ export class Pending {
                 f: (json) => {
 
                     this.loadPending(json.pendingList);
+                    this.setTotal(json.totalPending);
                 },
             },
 
@@ -342,6 +371,8 @@ export class Pending {
                             "top": "top"
                         }).show({});
                     }
+
+                    this.setTotal(json.totalPending);
 
                 },
             },

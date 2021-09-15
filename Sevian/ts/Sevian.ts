@@ -138,6 +138,10 @@ export var S = (($) => {
 			alert("hello i am sevian");
 		}
 
+		static getInstance() {
+			return this.instance;
+		}
+
 		static setVar(key: string, value: any) {
 			this.vars[key] = value;
 		}

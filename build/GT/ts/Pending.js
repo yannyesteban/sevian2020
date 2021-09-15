@@ -1,6 +1,7 @@
 import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
 import { Float } from "../../Sevian/ts/Window.js";
 import { S } from "../../Sevian/ts/Sevian.js";
+import { InfoMenu } from './InfoMenu.js';
 export class Pending {
     constructor(info) {
         this.id = null;
@@ -34,6 +35,9 @@ export class Pending {
         this.unitPanel = null;
         this.timer = null;
         this.delay = 10000;
+        this.infoMenuId = null;
+        this.infoMenu = null;
+        this.totalPending = -1;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -44,6 +48,14 @@ export class Pending {
             main = $.create("div").attr("id", this.id);
             main.on("click", (event) => {
             });
+        }
+        if (this.infoMenuId) {
+            const menu = S.getElement(this.infoMenuId);
+            const infoMenu = this.infoMenu = new InfoMenu({
+                menu: menu,
+                id: "div222"
+            });
+            this.setTotal(this.totalPending);
         }
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
@@ -126,6 +138,12 @@ export class Pending {
             window.clearTimeout(this.timer);
         }
     }
+    setTotal(total) {
+        this.totalPending = total;
+        if (this.infoMenu) {
+            this.infoMenu.updateType("P", this.totalPending);
+        }
+    }
     goLoadPending(unitId) {
         S.go({
             async: true,
@@ -134,6 +152,7 @@ export class Pending {
             requestFunctions: {
                 f: (json) => {
                     this.loadPending(json.pendingList);
+                    this.setTotal(json.totalPending);
                 },
             },
             params: [
@@ -244,6 +263,7 @@ export class Pending {
                             "top": "top"
                         }).show({});
                     }
+                    this.setTotal(json.totalPending);
                 },
             },
             params: [
