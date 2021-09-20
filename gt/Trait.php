@@ -1717,7 +1717,7 @@ trait DBImage{
 
         $path = PATH_IMAGES.'marks/';
         $cn = $this->cn;
-        $cn->query = "SELECT name, CONCAT('$path', image) as src FROM image";
+        $cn->query = "SELECT name, CONCAT('$path', image,'.png') as src FROM image";
 
         $result = $this->cn->execute();
 
