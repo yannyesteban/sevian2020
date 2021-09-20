@@ -31,4 +31,4 @@ t.output,  t.fh_server
 FROM cota.tracks_2020 t
 INNER JOIN device as d ON d.id2 = t.codequipo
 INNER JOIN unit2 as u ON u.device_id = d.id
-where t.id >= 323361861 limit 2000000, 500000
+where t.fh_server >= 'fh_server' limit 0, 500000
