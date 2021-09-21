@@ -708,12 +708,27 @@
   }
 }
 
+.trace-tool {
+  .trace-tool-search {
+    width: 100%;
+    color: rgb(2, 87, 13);
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+}
+
 ul.trace-tool {
   overflow: auto;
   min-width: 200px;
   height: 200px;
   padding: 4px;
   margin: 2px;
+  display: flex;
+  flex-direction: column;
+  //grid-template-columns: 1fr;
+  color: rgb(148, 148, 148);
+
   li {
     list-style: none;
     display: flex;
@@ -729,6 +744,16 @@ ul.trace-tool {
 
     input:nth-child(3) {
       display: none;
+    }
+    order: 1;
+    &.active {
+      order: 0;
+      color: rgb(0, 0, 0);
+    }
+    &.checked {
+      order: -1;
+
+      font-weight: bold;
     }
   }
 }

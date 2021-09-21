@@ -758,12 +758,28 @@
   margin: 0px;
 }
 
+.trace-tool .trace-tool-search {
+  width: 100%;
+  color: #02570d;
+  font-size: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 ul.trace-tool {
   overflow: auto;
   min-width: 200px;
   height: 200px;
   padding: 4px;
   margin: 2px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  color: #949494;
 }
 
 ul.trace-tool li {
@@ -771,6 +787,9 @@ ul.trace-tool li {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-ordinal-group: 2;
+      -ms-flex-order: 1;
+          order: 1;
 }
 
 ul.trace-tool li * > {
@@ -791,6 +810,20 @@ ul.trace-tool li a {
 
 ul.trace-tool li input:nth-child(3) {
   display: none;
+}
+
+ul.trace-tool li.active {
+  -webkit-box-ordinal-group: 1;
+      -ms-flex-order: 0;
+          order: 0;
+  color: black;
+}
+
+ul.trace-tool li.checked {
+  -webkit-box-ordinal-group: 0;
+      -ms-flex-order: -1;
+          order: -1;
+  font-weight: bold;
 }
 
 .poly-tool .panel {

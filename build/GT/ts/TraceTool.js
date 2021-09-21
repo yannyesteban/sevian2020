@@ -80,6 +80,7 @@ export class TraceTool {
         });
         data.forEach(unit => {
             const li = ul.create("li").ds("unitId", unit.unitId).ds("unitName", (unit.unitName || "").toUpperCase());
+            li.addClass((unit.noTracking == 1) ? "" : "active");
             li.create("a").text(unit.unitName);
             li.create("input").prop({
                 "type": "checkbox",
@@ -89,6 +90,12 @@ export class TraceTool {
             })
                 .ds("role", "trace")
                 .on("click", (event) => {
+                if (event.currentTarget.checked) {
+                    li.addClass("checked");
+                }
+                else {
+                    li.removeClass("checked");
+                }
                 this.onTrace(unit.unitId, event.currentTarget.checked);
             });
             li.create("input").prop({
