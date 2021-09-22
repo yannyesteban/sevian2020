@@ -255,6 +255,7 @@ export class Communication {
 
         this.unitPanel = S.getElement(this.unitPanelId);
         this.unitPanel.onChange = (unitId) => {
+            console.log("CHANGE ", unitId);
             this.getInfoWin(this.winNames.unit).reset();
             const unitName = this.unitPanel.getUnitInfo(unitId).unitName;
             this.getWin(this.winNames.unit).setCaption(`${this.winNow.caption} : ${unitName}`);
