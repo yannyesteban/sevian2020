@@ -26,7 +26,7 @@
     },
     {
       "name": "toggle_duration",
-      "label": "Output Toggle Duration",
+      "label": "Output Toggle Duration, 10 = 1 segundo",
       "type": "text",
       "description": "To define the time interval of the specific output port staying in the specific state."
     },

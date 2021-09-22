@@ -180,6 +180,9 @@ export class Pending {
         */
         data.forEach(item => {
             const row = this.main.create("div").addClass("row");
+            row.create("div").text("+").addClass("btn-new").on("click", () => {
+                row.toggleClass("open");
+            });
             row.create("div").text(item.unit_name).on("click", (event) => {
                 if (item.unit_id) {
                     this.unitPanel.setUnit(item.unit_id);
@@ -198,6 +201,7 @@ export class Pending {
                     this.goDeletePending(item.unit_id, item.id);
                 }
             });
+            row.create("div").addClass("detail").text(item.detail);
         });
     }
     send(unitId, commandId, index, mode) {

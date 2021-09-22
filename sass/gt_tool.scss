@@ -308,51 +308,73 @@
   }
 }
 
+.pending-tool {
+  //padding: 4px;
 
-.pending-tool{
-  padding: 4px;
-  .row{
+  .btn-new {
+    color: #1cbaf8;
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+  }
+  .row {
     font-size: 10px;
     color: rgb(244, 247, 224);
     background-color: #3a3a3aa9;
     padding: 1px;
     display: grid;
 
-    grid-template-columns: minmax(50px, 100px) minmax(50px, 100px) 0px 1fr 1fr;
+    grid-template-columns: 16px minmax(50px, 100px) minmax(50px, 100px) 0px 1fr 1fr;
     grid-template-rows: 1.4em auto;
     overflow: hidden;
-    &:hover{
+    &:hover {
       background-color: rgba(104, 104, 104, 0.822);
       cursor: pointer;
     }
-    .send{
+    .send {
       text-align: center;
-      &:hover{
+      &:hover {
         background-color: rgba(29, 184, 15, 0.822);
         text-align: center;
       }
     }
-    .delete{
+    .delete {
       text-align: center;
-      &:hover{
+      &:hover {
         background-color: rgba(206, 0, 0, 0.822);
         cursor: pointer;
       }
     }
-    div{
-        //word-wrap: normal;
-        white-space: nowrap;
-        overflow: hidden;
+    > .detail {
+      grid-column: 1/7;
+      grid-row: 2;
 
-        text-overflow: ellipsis;
-        list-style: none;
+      background-color: rgba(20, 87, 0, 0.808);
+      padding: 4px;
+    }
+    &:not(.open) {
+      > .detail {
+        display: none;
+      }
+    }
+    &.open {
+      > .detail {
+        display: inherit;
+      }
+    }
 
+    div {
+      //word-wrap: normal;
+      white-space: nowrap;
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+      list-style: none;
     }
   }
 }
 
-
-.output-tool{
+.output-tool {
   display: grid;
   grid-template-rows: auto 1fr;
   > :nth-child(2) {
@@ -360,5 +382,4 @@
 
     height: 100%;
   }
-
 }

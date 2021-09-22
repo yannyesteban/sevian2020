@@ -146,16 +146,45 @@ class Pending
         $cn = $this->cn;
 
         $cn->query = "SELECT
-        uc.id, uc.unit_id, uc.command_id, uc.index, uc.mode, un.name as unit_name, command
+        uc.id, uc.unit_id, uc.command_id, uc.index, uc.mode, un.name as unit_name,
+        CASE uc.mode WHEN 2 THEN CONCAT(command,' ?') ELSE command END as command,
+        CONCAT(protocol_pre,command,'=',pass_default,',') as detail,
+        CASE uc.mode WHEN 2 THEN uc.params ELSE uc.query END as params
         FROM unit_command as uc
+
         INNER JOIN unit as u ON u.id = uc.unit_id
         INNER JOIN unit_name as un ON un.id = u.name_id
 
         INNER JOIN device_command as dc ON dc.id = uc.command_id
+        INNER JOIN device_version as v ON v.id = dc.version_id
+
         WHERE (uc.unit_id = '$unitId' or '$unitId' = '0') and uc.status=1";
 
         $result = $this->cn->execute();
-        return $cn->getDataAll($result);
+        $params = [];
+        while($data = $cn->getDataAssoc($result)){
+            $p = json_decode($data['params']);
+            
+            $str = "";
+            if($p){
+                foreach($p as $k => $v){
+                    $str .= $v.',';
+                }
+                $data['detail'] = $data['detail'].$str;
+            }
+            if($data['mode'] == 2){
+                $data['detail'] .= '?';
+               
+            }
+
+            //$data['type'] = ($data['mode'] == 2)?'GET':'PUT';
+            unset($data['params']);
+            $params[] = $data;
+            
+        }
+
+        //return $cn->getDataAll($result);
+        return $params;
     }
 
     private function deletePending($id = ''){

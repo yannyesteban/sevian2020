@@ -421,7 +421,7 @@ export class Report {
             };
 
             if (command.indexField && item.name == command.indexField) {
-                info.type = "hidden";
+                info.type = "text";
                 /*info.data = range;
                         info.events = {change: (event) => {
                             this.setIndex(event.currentTarget.value);
@@ -481,6 +481,10 @@ export class Report {
         if (command.params) {
             params = JSON.stringify(command.params);
         }
+        let query = "";
+        if (command.query) {
+            params = JSON.stringify(command.query);
+        }
 
         fields.push({
             caption: "ID",
@@ -529,6 +533,14 @@ export class Report {
             input: "input",
             type: "hidden",
             value: params,
+        });
+
+        fields.push({
+            caption: "Query",
+            name: "query",
+            input: "input",
+            type: "hidden",
+            value: query,
         });
 
         fields.push({
@@ -615,14 +627,20 @@ export class Report {
 
 
 
-                            command.fields.forEach((element, index: number) => {
+                            command.fields.forEach((element, index2: number) => {
 
-                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                                params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue();
                             });
                             form.getInput("status").setValue(1);
                             form.getInput("mode").setValue(2);
 
                             form.getInput("params").setValue(JSON.stringify(params));
+
+                            if(form.getInput("index").getValue()>0){
+                                form.getInput("query").setValue(JSON.stringify({
+                                    param_0:form.getInput("index").getValue()
+                                    }));
+                            }
                             this.goSave(type, true);
 
                             return;

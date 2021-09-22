@@ -323,8 +323,11 @@
   overflow: auto;
 }
 
-.pending-tool {
-  padding: 4px;
+.pending-tool .btn-new {
+  color: #1cbaf8;
+  text-align: center;
+  font-size: 10pt;
+  font-weight: bold;
 }
 
 .pending-tool .row {
@@ -334,8 +337,8 @@
   padding: 1px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: minmax(50px, 100px) minmax(50px, 100px) 0px 1fr 1fr;
-      grid-template-columns: minmax(50px, 100px) minmax(50px, 100px) 0px 1fr 1fr;
+  -ms-grid-columns: 16px minmax(50px, 100px) minmax(50px, 100px) 0px 1fr 1fr;
+      grid-template-columns: 16px minmax(50px, 100px) minmax(50px, 100px) 0px 1fr 1fr;
   -ms-grid-rows: 1.4em auto;
       grid-template-rows: 1.4em auto;
   overflow: hidden;
@@ -362,6 +365,24 @@
 .pending-tool .row .delete:hover {
   background-color: rgba(206, 0, 0, 0.822);
   cursor: pointer;
+}
+
+.pending-tool .row > .detail {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 6;
+  grid-column: 1/7;
+  -ms-grid-row: 2;
+  grid-row: 2;
+  background-color: rgba(20, 87, 0, 0.808);
+  padding: 4px;
+}
+
+.pending-tool .row:not(.open) > .detail {
+  display: none;
+}
+
+.pending-tool .row.open > .detail {
+  display: inherit;
 }
 
 .pending-tool .row div {

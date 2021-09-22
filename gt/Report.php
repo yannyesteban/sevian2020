@@ -443,7 +443,7 @@ class Report
         $cn = $this->cn;
 
         $cn->query = "SELECT c.id, u.id as unit_id, dc.id as command_id, '$index' as `index`,
-            c.name, c.params,
+            c.name, c.params,c.query,
             IFNULL(c.status, 0) as status,
             1 as __mode_, '' as __record_, dc.command
 

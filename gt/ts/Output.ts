@@ -448,7 +448,7 @@ export class Output {
                 autoClose: false,
                 className: ["sevian", "horizontal", `type-${type}`],
                 items: [
-                    {
+                    /*{
                         caption: "Save",
                         action: (item, event) => {
 
@@ -463,7 +463,7 @@ export class Output {
                             form.getInput("params").setValue(JSON.stringify(params));
                             this.goSave(type);
                         },
-                    },
+                    },*/
                     {
                         caption: "Send",
                         action: (item, event) => {

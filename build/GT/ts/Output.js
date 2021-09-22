@@ -338,11 +338,14 @@ export class Output {
                 autoClose: false,
                 className: ["sevian", "horizontal", `type-${type}`],
                 items: [
-                    {
+                    /*{
                         caption: "Save",
                         action: (item, event) => {
+
                             let params = {};
-                            command.fields.forEach((element, index) => {
+
+                            command.fields.forEach((element, index: number) => {
+
                                 params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
                             });
                             form.getInput("status").setValue(1);
@@ -350,7 +353,7 @@ export class Output {
                             form.getInput("params").setValue(JSON.stringify(params));
                             this.goSave(type);
                         },
-                    },
+                    },*/
                     {
                         caption: "Send",
                         action: (item, event) => {

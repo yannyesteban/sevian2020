@@ -319,7 +319,7 @@ export class Report {
                 dataset: { type: "param" }
             };
             if (command.indexField && item.name == command.indexField) {
-                info.type = "hidden";
+                info.type = "text";
                 /*info.data = range;
                         info.events = {change: (event) => {
                             this.setIndex(event.currentTarget.value);
@@ -368,6 +368,10 @@ export class Report {
         if (command.params) {
             params = JSON.stringify(command.params);
         }
+        let query = "";
+        if (command.query) {
+            params = JSON.stringify(command.query);
+        }
         fields.push({
             caption: "ID",
             name: "id",
@@ -410,6 +414,13 @@ export class Report {
             input: "input",
             type: "hidden",
             value: params,
+        });
+        fields.push({
+            caption: "Query",
+            name: "query",
+            input: "input",
+            type: "hidden",
+            value: query,
         });
         fields.push({
             caption: "Mode",
@@ -479,12 +490,17 @@ export class Report {
                         caption: "Recibir",
                         action: (item, event) => {
                             let params = {};
-                            command.fields.forEach((element, index) => {
-                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                            command.fields.forEach((element, index2) => {
+                                params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue();
                             });
                             form.getInput("status").setValue(1);
                             form.getInput("mode").setValue(2);
                             form.getInput("params").setValue(JSON.stringify(params));
+                            if (form.getInput("index").getValue() > 0) {
+                                form.getInput("query").setValue(JSON.stringify({
+                                    param_0: form.getInput("index").getValue()
+                                }));
+                            }
                             this.goSave(type, true);
                             return;
                             form.getInput("mode").setValue(2);

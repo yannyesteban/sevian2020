@@ -1,3 +1,8 @@
+.mapboxgl-control-container {
+  z-index: 1000000 !important;
+  position: relative;
+}
+
 .trace-tool[data-mode-speed="r-1"] .r-1 {
   background-color: red;
 }
