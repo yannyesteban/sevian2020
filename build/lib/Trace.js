@@ -469,10 +469,12 @@ export class Trace {
     }
     add(point) {
         this.data.push(point);
+        console.log(this.data);
         if (this.maxDelay) {
             const time = Math.trunc(Date.now() / 1000);
             this.data = this.data.filter((e) => (time - e.ts) < this.maxDelay);
         }
+        console.log(this.data);
         this.updateSource(this.data);
     }
     createLayer(index, info) {
