@@ -46,7 +46,7 @@ class Mobil {
         this.infoForm = null;
         this.infoFormMain = null;
         this.propertysInfo = [];
-        this.maxDelay = 200;
+        this.traceTime = 200 * 100;
         this.followMe = false;
         this.trackingData = [];
         this.connected = 0;
@@ -114,6 +114,10 @@ class Mobil {
         this.setValid(true);
         if (this.trace.isActive()) {
             this.trackingData.push(tracking);
+            if (this.traceTime) {
+                const time = Math.trunc(Date.now() / 1000);
+                this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.traceTime);
+            }
             this.trace.setData(this.trackingData);
         }
     }
@@ -180,10 +184,10 @@ class Mobil {
         this.onFollow(value);
     }
     cutTrace() {
-        if (this.trace.isActive() && this.maxDelay) {
+        if (this.trace.isActive() && this.traceTime) {
             let length = this.trackingData.length;
             const time = Math.trunc(Date.now() / 1000);
-            this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.maxDelay);
+            this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.traceTime);
             if (length != this.trackingData.length) {
                 this.trace.setData(this.trackingData);
             }
@@ -255,6 +259,7 @@ export class Unit {
         this.searchUnit = null;
         this.winStatus = null;
         this.statusInfo = null;
+        this.traceTime = 60 * 5;
         this.onGetPosition = (unitId) => { };
         this.onReset = (unitId) => { };
         this.onCall = (unitId) => { };
@@ -306,6 +311,7 @@ export class Unit {
                     infoForm: this.infoPopup,
                     valid: info.valid,
                     propertysInfo: propertys,
+                    traceTime: this.traceTime,
                     traceInfo: {
                         layers: this.traceConfig.layers,
                         infoTrace: this.infoTrace,

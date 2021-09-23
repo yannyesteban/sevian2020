@@ -62,7 +62,7 @@ class Mobil {
 	private infoForm: typeof InfoForm = null;
 	private infoFormMain: InfoForm = null;
 	private propertysInfo: any[] = [];
-	private maxDelay: number = 200;
+	private traceTime: number = 200*100;
 	private followMe: boolean = false;
 	private trackingData: any[] = [];
 	public connected: number = 0;
@@ -159,6 +159,15 @@ class Mobil {
 		if (this.trace.isActive()) {
 
 			this.trackingData.push(tracking);
+
+
+			
+			if (this.traceTime) {
+				const time = Math.trunc(Date.now() / 1000);
+				this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.traceTime);
+			}
+			
+
 			this.trace.setData(this.trackingData);
 		}
 	}
@@ -231,11 +240,13 @@ class Mobil {
 		this.onFollow(value);
 	}
 	cutTrace() {
-		if (this.trace.isActive() && this.maxDelay) {
+		if (this.trace.isActive() && this.traceTime) {
+			
 			let length = this.trackingData.length;
 			const time = Math.trunc(Date.now() / 1000);
-			this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.maxDelay);
+			this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.traceTime);
 			if (length != this.trackingData.length) {
+			
 				this.trace.setData(this.trackingData);
 			}
 		}
@@ -330,6 +341,8 @@ export class Unit {
 	private winStatus:any = null;
 	private statusInfo: InfoUnits = null;
 
+	private traceTime:number = 60 * 5;
+
 	public onGetPosition: (unitId:number) => void = (unitId:number) => { };
 	public onReset: (unitId:number) => void = (unitId:number) => { };
 	public onCall: (unitId: number) => void = (unitId: number) => { };
@@ -404,6 +417,7 @@ export class Unit {
 					infoForm: this.infoPopup,
 					valid: info.valid,
 					propertysInfo: propertys,
+					traceTime: this.traceTime,
 					traceInfo: {
 						layers: this.traceConfig.layers,
 						infoTrace: this.infoTrace,

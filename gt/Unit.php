@@ -30,7 +30,7 @@ class Unit
 
 	private $infoTemplate = '';
 
-
+	private $traceTime = 60*60*2;
 
     public function __construct($info = []){
         foreach($info as $k => $v){
@@ -259,7 +259,7 @@ class Unit
 			'infoPopup'		=> $infoPopup->getInit(),
 			'infoTrace'		=> $infoTrace->getInit(),
 			'propertysInfo' => $this->getPropertysInfo(),
-
+			'traceTime'		=> $this->traceTime,
 			'winStatus' => $winStatus
 		];
 

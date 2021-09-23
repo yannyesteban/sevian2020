@@ -1015,10 +1015,10 @@ trait DBTracking{
         LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
         WHERE uu.user='$user' AND t.unit_id = '$unitId'
 
-        AND TIMESTAMPDIFF(minute, t.date_time, now())  < 60
+        AND TIMESTAMPDIFF(second, t.date_time, now())  < $this->traceTime
 
-        order by t.id
-
+        ORDER BY t.date_time
+        
         ";
 
 

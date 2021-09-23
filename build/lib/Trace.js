@@ -273,11 +273,9 @@ export class Trace {
         this.map.addSource(this.mainSourceId, this.createGeoJson(data));
     }
     setData(data) {
-        console.log(data);
         if (this.map.getSource(this.mainSourceId)) {
             this.map.getSource(this.mainSourceId).setData(this.createGeoJson(data).data);
         }
-        console.log(data);
     }
     updateSource(data) {
         if (this.map.getSource(this.mainSourceId)) {
@@ -470,6 +468,7 @@ export class Trace {
         }
     }
     add(point) {
+        alert("ERROR");
         this.data.push(point);
         console.log(this.data);
         if (this.maxDelay) {
