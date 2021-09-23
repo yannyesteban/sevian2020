@@ -270,6 +270,7 @@ export class InfoComm {
     }
     reset() {
         this.ul.text("");
+        this.lineId = 0;
     }
 }
 export class InfoUnits {
@@ -405,6 +406,7 @@ export class InfoUnits {
     }
     reset() {
         this.ul.text("");
+        this.lineId = 0;
     }
     updateTime() {
         const x = this.main.queryAll(".date");

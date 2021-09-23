@@ -1015,7 +1015,7 @@ trait DBTracking{
         LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
         WHERE uu.user='$user' AND t.unit_id = '$unitId'
 
-        AND TIMESTAMPDIFF(second, t.date_time, now())  < 200
+        AND TIMESTAMPDIFF(minute, t.date_time, now())  < 60
 
         order by t.id
 

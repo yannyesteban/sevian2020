@@ -662,7 +662,7 @@ export class Report {
                         this.createCommandForm(json.command, type);
                     }
                 },
-                f2: (json) => {
+                goSave: (json) => {
                     this.iniLists(json.eventList, json.commandList, type);
                     //this.createForm(json.command, type);
                     this.loadTab(json.command, type);
@@ -679,7 +679,7 @@ export class Report {
                     method: "save",
                     name: "/gt/forms/unit_command",
                     eparams: {},
-                    iToken: "f2",
+                    iToken: "goSave",
                 },
                 {
                     t: "setMethod",
@@ -693,7 +693,7 @@ export class Report {
                         mode: mode,
                         type: type,
                     },
-                    iToken: "f2",
+                    iToken: "goSave",
                 }
             ],
         });
@@ -721,7 +721,7 @@ export class Report {
                         this.createCommandForm(json.command, type);
                     }
                 },
-                f2: (json) => {
+                goSaveCommand: (json) => {
                     if (!json.message) {
                         new Float.Message({
                             "caption": "Command",
@@ -766,7 +766,7 @@ export class Report {
                         type: type,
                         params: params
                     },
-                    iToken: "f2",
+                    iToken: "goSaveCommand",
                 }
             ],
         });
@@ -779,7 +779,7 @@ export class Report {
             //form: (form)?form.getFormData():null,
             blockingTarget: this.main,
             requestFunctions: {
-                f2: (json) => {
+                goSaveRapidCommand: (json) => {
                     if (!json.message) {
                         new Float.Message({
                             "caption": "Command",
@@ -822,7 +822,7 @@ export class Report {
                         type: "W",
                         params: params
                     },
-                    iToken: "f2",
+                    iToken: "goSaveRapidCommand",
                 }
             ],
         });
