@@ -9,6 +9,10 @@ export class TraceTool {
         this.main = null;
         this.onTrace = (unitId, value) => { };
         this.onFollow = (unitId, value) => { };
+        this.onPlayTrace = (unitId) => { };
+        this.onStopTrace = (unitId) => { };
+        this.onPlayFollow = (unitId) => { };
+        this.onStopFollow = (unitId) => { };
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -89,14 +93,22 @@ export class TraceTool {
                 "disabled": ((unit.noTracking == 1) ? "disabled" : ""),
             })
                 .ds("role", "trace")
-                .on("click", (event) => {
+                .on("change", (event) => {
                 if (event.currentTarget.checked) {
-                    li.addClass("checked");
+                    this.play(unit.unitId);
                 }
                 else {
+                    this.stop(unit.unitId);
+                }
+                //this.playTrace(unit.unitId, event.currentTarget.checked);
+                /*
+                if(event.currentTarget.checked){
+                    li.addClass("checked");
+                }else{
                     li.removeClass("checked");
                 }
                 this.onTrace(unit.unitId, event.currentTarget.checked);
+                */
             });
             li.create("input").prop({
                 "type": "checkbox",
@@ -106,27 +118,52 @@ export class TraceTool {
             })
                 .ds("role", "follow")
                 .on("click", (event) => {
-                this.onFollow(unit.unitId, event.currentTarget.checked);
+                if (event.currentTarget.checked) {
+                    this.playFollow(unit.unitId);
+                }
+                else {
+                    this.stopFollow(unit.unitId);
+                }
+                //this.onFollow(unit.unitId, event.currentTarget.checked);
             });
             ;
         });
+    }
+    checkItem(unitId, enable, role) {
+        const item = this.main.queryAll(`li[data-unit-id="${unitId}"]`);
+        item.forEach(li => {
+            if (enable) {
+                $(li).addClass(role);
+            }
+            else {
+                $(li).removeClass(role);
+            }
+        });
+        const check = this.main.queryAll(`[data-unit-id="${unitId}"] input[data-role="${role}"]`);
+        check.forEach(ele => {
+            ele.checked = enable;
+        });
+    }
+    play(unitId) {
+        this.checkItem(unitId, true, "trace");
+        this.onPlayTrace(unitId);
+    }
+    stop(unitId) {
+        this.checkItem(unitId, false, "trace");
+        this.onStopTrace(unitId);
+    }
+    playFollow(unitId) {
+        this.checkItem(unitId, true, "follow");
+        this.onPlayFollow(unitId);
+    }
+    stopFollow(unitId) {
+        this.checkItem(unitId, false, "follow");
+        this.onStopFollow(unitId);
     }
     validUnit(unitId, value) {
         const nodes = this.main.queryAll(`[data-unit-id="${unitId}"] input`);
         nodes.forEach(ele => {
             ele.disabled = false;
-        });
-    }
-    setFollowCheck(unitId, value) {
-        const nodes = this.main.queryAll(`[data-unit-id="${unitId}"] input[data-role="follow"]`);
-        nodes.forEach(ele => {
-            ele.checked = value;
-        });
-    }
-    setTraceCheck(unitId, value) {
-        const nodes = this.main.queryAll(`[data-unit-id="${unitId}"] input[data-role="trace"]`);
-        nodes.forEach(ele => {
-            ele.checked = value;
         });
     }
 }

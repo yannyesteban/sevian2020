@@ -342,6 +342,7 @@ export class Unit {
 	private statusInfo: InfoUnits = null;
 
 	private traceTime:number = 60 * 5;
+	private modeFollow:number = 1;
 
 	public onGetPosition: (unitId:number) => void = (unitId:number) => { };
 	public onReset: (unitId:number) => void = (unitId:number) => { };
@@ -443,8 +444,14 @@ export class Unit {
 					const e = this.infoFormMain.getMain().query(`input[type="checkbox"][data-trace]`);
 
 					if(e){
-						$(e).on("click", (event)=>{
-							this.playTrace(data.unitId, event.currentTarget.value);
+						$(e).on("change", (event)=>{
+							//this.playTrace(data.unitId, event.currentTarget.value);
+							
+							if(event.currentTarget.value){
+								this.traceTool.play(data.unitId);
+							}else{
+								this.traceTool.stop(data.unitId);
+							}
 						})
 					}
 
@@ -485,14 +492,31 @@ export class Unit {
 					});
 
 					traceCHK.on("change", event=>{
-						this.playTrace(event.currentTarget.value, event.currentTarget.checked);
+						
+						if(event.currentTarget.checked){
+							this.traceTool.play(event.currentTarget.value);
+						}else{
+							this.traceTool.stop(event.currentTarget.value);
+						}
+						//this.playTrace(event.currentTarget.value, event.currentTarget.checked);
 
 					});
 					followCHK.on("change", event =>{
-						this.setFollowMe(event.currentTarget.value, event.currentTarget.checked);
+						if(event.currentTarget.checked){
+							this.traceTool.playFollow(event.currentTarget.value);
+						}else{
+							this.traceTool.stopFollow(event.currentTarget.value);
+						}
+						
+						//this.setFollowMe(event.currentTarget.value, event.currentTarget.checked);
 					});
 					followCHK2.on("change", event =>{
-						this.followMe = event.currentTarget.checked;
+						if(event.currentTarget.checked){
+							this.traceTool.playFollow(event.currentTarget.value);
+						}else{
+							this.traceTool.stopFollow(event.currentTarget.value);
+						}
+						//this.followMe = event.currentTarget.checked;
 					});
 
 
@@ -515,8 +539,10 @@ export class Unit {
 
 						traceCHK.ds("trace", info.unitId);
 						followCHK.ds("follow", info.unitId);
+						//followCHK2.ds("follow", info.unitId);
 						traceCHK.value(info.unitId);
 						followCHK.value(info.unitId);
+						followCHK2.value(info.unitId);
 
 						b1.value(info.unitId);
 						b2.value(info.unitId);
@@ -864,27 +890,32 @@ export class Unit {
 			window.clearTimeout(this.traceTimer);
 		}
 	}
-	playTrace(unitId: number, value?: boolean) {
 
-		if (value === false) {
-
+	playTrace(unitId: number, enable?: boolean){
+		if(enable){
+			this.goPlayTrace(unitId);
+		}else{
 			this.units[unitId].deleteTrace();
-			return;
 		}
+	}
+	goPlayTrace(unitId: number) {
+
+		
 
 		S.go({
 			async: true,
 			requestFunction: (tracking: any) => {
 				this.units[unitId].initTrace(tracking);
 				this.units[unitId].setVisible(true);
-
+				/*
 				const checkInfo = $(document).query(`input[type="checkbox"][data-trace="${unitId}"]`);
 				if(checkInfo){
 
 					checkInfo.checked = value;
 				}
-
-				this.traceTool.setTraceCheck(unitId, value);
+				*/
+				//this.traceTool.setTraceCheck(unitId, value);
+				//this.traceTool.play()
 			},
 			params: [
 				{
@@ -1127,7 +1158,7 @@ export class Unit {
 	}
 
 	getDataInfo(id: number) {
-		alert(8888)
+		
 		if (!this.dataUnits[id]) {
 			return;
 		}
@@ -1185,9 +1216,15 @@ export class Unit {
 	}
 
 	setFollowMe(unitId: number, value: boolean) {
+
+		/* version unique */
+		if(this.modeFollow == 1){
+			this.followMe = value;
+			return;
+		}
 		if(this.units[unitId]){
 			this.units[unitId].setFollow(value);
-
+			/*
 			this.units[unitId].setFollow(value);
 			const checkInfo = $(document).query(`input[type="checkbox"][data-follow]`);
 			if(checkInfo){
@@ -1195,6 +1232,7 @@ export class Unit {
 			}
 
 			this.traceTool.setFollowCheck(unitId, value)
+			*/
 		}
 
 	}
@@ -1257,13 +1295,48 @@ export class Unit {
 			id: this.traceControl.getPage(0),
 			dataUnits: this.dataUnits,
 			tracking: this.tracking,
+			onPlayTrace: (unitId)=>{
+				const checkInfo = $(document).query(`input[type="checkbox"][data-trace="${unitId}"]`);
+				if(checkInfo){
+					checkInfo.checked = true;
+				}
+				this.goPlayTrace(unitId);
+			},
+			onStopTrace: (unitId)=>{
+				const checkInfo = $(document).query(`input[type="checkbox"][data-trace="${unitId}"]`);
+				if(checkInfo){
+					checkInfo.checked = false;
+				}
+				this.units[unitId].deleteTrace();
+			},
 			onTrace: (unitId, value) => {
 				this.playTrace(unitId, value);
 
 
 			},
-			onFollow: (unitId, value) => {
-				this.setFollowMe(unitId, value);
+			onPlayFollow: (unitId) => {
+				const checkInfo = $(document).query(`input[type="checkbox"][data-follow="${unitId}"]`);
+				if(checkInfo){
+					checkInfo.checked = true;
+				}
+
+				this.setFollowMe(unitId, true);
+				/*
+				this.units[unitId].setFollow(value);
+				const checkInfo = $(document).query(`input[type="checkbox"][data-follow]`);
+				if(checkInfo){
+					checkInfo.checked = value;
+				}
+				 */
+			},
+			onStopFollow: (unitId) => {
+				const checkInfo = $(document).query(`input[type="checkbox"][data-follow="${unitId}"]`);
+				
+				if(checkInfo){
+					
+					checkInfo.checked = false;
+				}
+				this.setFollowMe(unitId, false);
 				/*
 				this.units[unitId].setFollow(value);
 				const checkInfo = $(document).query(`input[type="checkbox"][data-follow]`);

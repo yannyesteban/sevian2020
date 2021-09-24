@@ -747,7 +747,7 @@ ul.trace-tool {
       flex: 1 0 auto;
     }
 
-    input:nth-child(3) {
+    input[data-role="follow"] {
       display: none;
     }
     order: 1;
@@ -755,10 +755,14 @@ ul.trace-tool {
       order: 0;
       color: rgb(0, 0, 0);
     }
-    &.checked {
+    &.trace {
       order: -1;
 
       font-weight: bold;
+    }
+    &.followNO a:after {
+      color: rgb(225, 0, 255);
+      content: " **";
     }
   }
 }

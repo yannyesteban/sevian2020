@@ -813,7 +813,7 @@ ul.trace-tool li a {
           flex: 1 0 auto;
 }
 
-ul.trace-tool li input:nth-child(3) {
+ul.trace-tool li input[data-role="follow"] {
   display: none;
 }
 
@@ -824,11 +824,16 @@ ul.trace-tool li.active {
   color: black;
 }
 
-ul.trace-tool li.checked {
+ul.trace-tool li.trace {
   -webkit-box-ordinal-group: 0;
       -ms-flex-order: -1;
           order: -1;
   font-weight: bold;
+}
+
+ul.trace-tool li.followNO a:after {
+  color: #e100ff;
+  content: " **";
 }
 
 .poly-tool .panel {
