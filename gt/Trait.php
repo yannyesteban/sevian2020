@@ -1016,7 +1016,7 @@ trait DBTracking{
         WHERE uu.user='$user' AND t.unit_id = '$unitId'
 
         AND TIMESTAMPDIFF(second, t.date_time, now())  < $this->traceTime
-
+        AND t.date_time <=  now()
         ORDER BY t.date_time
         
         ";
