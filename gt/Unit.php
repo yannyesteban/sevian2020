@@ -30,7 +30,7 @@ class Unit
 
 	private $infoTemplate = '';
 
-	private $traceTime = 60*60*2;
+	private $traceTime = 60*10;
 
     public function __construct($info = []){
         foreach($info as $k => $v){
