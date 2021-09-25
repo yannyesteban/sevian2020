@@ -149,7 +149,7 @@ class Pending
         uc.id, uc.unit_id, uc.command_id, uc.index, uc.mode, un.name as unit_name,
         CASE uc.mode WHEN 2 THEN CONCAT(command,' ?') ELSE command END as command,
         CONCAT(protocol_pre,command,'=',pass_default,',') as detail,
-        CASE uc.mode WHEN 2 THEN uc.params ELSE uc.query END as params
+        CASE uc.mode WHEN 1 THEN uc.params ELSE uc.query END as params
         FROM unit_command as uc
 
         INNER JOIN unit as u ON u.id = uc.unit_id
