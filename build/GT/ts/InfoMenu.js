@@ -120,7 +120,6 @@ export class InfoComm {
         let mainPanel = this.ul = main.create("div").addClass("info-comm").id("xxy");
     }
     add(message) {
-        console.log(message);
         this.lineId++;
         if (this.lineId > this.maxRecords) {
             this.deleteLast(this.ul);

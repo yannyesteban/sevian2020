@@ -173,7 +173,7 @@ export class InfoComm {
 
     }
     public add(message: any) {
-console.log(message)
+
         this.lineId++;
 
         if (this.lineId > this.maxRecords) {
