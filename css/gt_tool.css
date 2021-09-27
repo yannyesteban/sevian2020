@@ -403,4 +403,41 @@
   overflow: auto;
   height: 100%;
 }
+
+.info-main .info-menu * {
+  font-size: 10px;
+}
+
+.info-main .info-menu button {
+  background-color: #dbdbdb;
+  border: 1px solid #727272;
+  margin: 2px;
+  line-height: 1.5em;
+  vertical-align: middle;
+  width: 2.3em;
+}
+
+.info-main .info-menu button:hover {
+  background-color: #003b0a;
+  color: white;
+  cursor: pointer;
+}
+
+.info-main .pending-note {
+  background-color: #b40bdf;
+  border-radius: 20%;
+  padding: 1px;
+  position: absolute;
+  -webkit-transform: translate(5px, -160%);
+          transform: translate(5px, -160%);
+  color: #eeeeee;
+  font-weight: bold;
+  min-width: 12px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.info-main .pending-note:empty {
+  display: none;
+}
 /*# sourceMappingURL=gt_tool.css.map */

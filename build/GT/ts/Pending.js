@@ -38,6 +38,8 @@ export class Pending {
         this.infoMenuId = null;
         this.infoMenu = null;
         this.totalPending = -1;
+        this.onSubTotal = (unitId, total) => { };
+        this.subtotalButton = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -73,6 +75,7 @@ export class Pending {
         }
         //this.formIds["0"] = "form-" + String(new Date().getTime());
         this.create(main);
+        this.play();
     }
     create(main) {
         main.addClass("pending-tool");
@@ -90,10 +93,10 @@ export class Pending {
             className: ["sevian"],
             child: this.main,
             onshow: (info) => {
-                this.play();
+                //this.play();
             },
             onhide: (info) => {
-                this.stop();
+                //this.stop();
             },
         });
     }
@@ -108,6 +111,7 @@ export class Pending {
             this.goLoadPending(0);
             this.wins["main"].setCaption(`${this.caption} : Todos`);
             this.wins["main"].show({ left: "center", top: "middle" });
+            this.unitId = null;
             return;
         }
         let unitName = "";
@@ -130,7 +134,7 @@ export class Pending {
             window.clearTimeout(this.timer);
         }
         this.timer = setInterval(() => {
-            this.goLoadPending(this.unitId);
+            this.goLoadPending(this.getUnit());
         }, this.delay);
     }
     stop() {
@@ -144,6 +148,15 @@ export class Pending {
             this.infoMenu.updateType("P", this.totalPending);
         }
     }
+    setSubTotal(unitId, total) {
+        this.subtotalButton = this.unitPanel.getPendingButton();
+        if (this.subtotalButton) {
+            if (total == 0) {
+                total = "";
+            }
+            this.subtotalButton.text(`PN <span class="pending-note">${total}</span>`);
+        }
+    }
     goLoadPending(unitId) {
         S.go({
             async: true,
@@ -153,6 +166,9 @@ export class Pending {
                 f: (json) => {
                     this.loadPending(json.pendingList);
                     this.setTotal(json.totalPending);
+                    if (unitId > 0 && json.unitId == unitId) {
+                        this.setSubTotal(unitId, json.subTotalPending);
+                    }
                 },
             },
             params: [
@@ -254,6 +270,10 @@ export class Pending {
                         }).show({});
                         if (json.pendingList) {
                             this.loadPending(json.pendingList);
+                        }
+                        this.setTotal(json.totalPending);
+                        if (unitId > 0 && json.unitId == unitId) {
+                            this.setSubTotal(unitId, json.subTotalPending);
                         }
                     }
                     else {

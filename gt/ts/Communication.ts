@@ -159,7 +159,7 @@ export class Communication {
                     });
                     this._ws.send(openMessage);
                     this.setMode('connected');
-                    //db ("Websockect Connected...!");
+                    console.log ("Websockect Connected...!");
                 },
 
                 onclose: (event) => {
@@ -174,7 +174,7 @@ export class Communication {
                 onmessage: (event) => {
                     //db ("     onmessage !!!!");
                     const server_message = event.data;
-
+                    //console.log (server_message);
 
                     try {
                         let json = JSON.parse(server_message);

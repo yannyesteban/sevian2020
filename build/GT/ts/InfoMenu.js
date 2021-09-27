@@ -120,6 +120,7 @@ export class InfoComm {
         let mainPanel = this.ul = main.create("div").addClass("info-comm").id("xxy");
     }
     add(message) {
+        console.log(message);
         this.lineId++;
         if (this.lineId > this.maxRecords) {
             this.deleteLast(this.ul);
@@ -149,12 +150,12 @@ export class InfoComm {
         }
         div.create("div").addClass("ftime").text(message.ftime || "");
         div.create("div").addClass("_type").ds("type", message.type).text(message.title || "");
-        div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
-        //div.create("div").text(message.info || "");
-        div.create("div").text(message.user || "").addClass("user").on("click", (event) => {
+        div.create("div").text(message.speed || "").addClass("speed").on("click", (event) => {
             //this.deleteLine(event.currentTarget);
             //this.ondelete(message);
         });
+        div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
+        //div.create("div").text(message.info || "");
         /*
         div.create("div").text("x").addClass("btn-delete").on("click", (event)=>{
             //this.deleteLine(event.currentTarget);

@@ -344,6 +344,8 @@ export class Unit {
 	private traceTime:number = 60 * 5;
 	private modeFollow:number = 1;
 
+	private pendingButton: any = null;
+
 	public onGetPosition: (unitId:number) => void = (unitId:number) => { };
 	public onReset: (unitId:number) => void = (unitId:number) => { };
 	public onCall: (unitId: number) => void = (unitId: number) => { };
@@ -520,7 +522,7 @@ export class Unit {
 					});
 
 
-					menu.create("button").prop({type:"button", "value":"pn", "title":"Pending"}).text("PN")
+					this.pendingButton = menu.create("button").prop({type:"button", "value":"pn", "title":"Pending"}).text("PN")
 					.on("click", event=>{
 						this.onPending(this.getLastUnit());
 					});
@@ -1472,6 +1474,11 @@ export class Unit {
 			this.onChange(this._lastUnitId);
 			this.main.fire("unit_change")
 		}
+	}
+
+	public getPendingButton(){
+		
+		return this.pendingButton;
 	}
 }
 

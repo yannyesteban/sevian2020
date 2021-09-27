@@ -467,7 +467,7 @@ export class Report {
                             command.fields.forEach((element, index) => {
                                 params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
                             });
-                            form.getInput("status").setValue(1);
+                            form.getInput("status").setValue(0);
                             form.getInput("mode").setValue(1);
                             form.getInput("params").setValue(JSON.stringify(params));
                             this.goSave(type);
@@ -931,6 +931,7 @@ export class Report {
         });
     }
     goGetValue(unitId, commandId, index) {
+        console.log(unitId, commandId, index);
         S.go({
             async: true,
             valid: false,
@@ -938,9 +939,11 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+                    console.log(json);
                     for (let x in this.forms) {
                         const commandId2 = this.forms[x].getInput("command_id").getValue();
                         if (commandId == commandId2) {
+                            console.log(commandId);
                             this.forms[x].setValue(json);
                         }
                     }
@@ -1488,7 +1491,9 @@ export class Report {
     }
     decodeMessage(message) {
         if (message.type == 4) {
+            console.log(4);
             if (message.unitId == this.getUnitId()) {
+                console.log(message.unitId);
                 this.goGetValue(message.unitId, message.commandId, message.index);
             }
         }

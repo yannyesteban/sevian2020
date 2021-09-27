@@ -775,7 +775,7 @@ form {
     padding: 1px;
     display: grid;
     grid-gap: 0px;
-    grid-template-columns: 16px minmax(80px, 100px) 60px minmax(80px, 1fr) 50px auto;
+    grid-template-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
     grid-template-rows: 1.4em auto;
     overflow: hidden;
 
@@ -804,6 +804,13 @@ form {
       background-color: #a10c0ca9;
       &:hover {
         background-color: #0000009c;
+      }
+    }
+    .speed {
+      text-align: right;
+      background-color: rgba(54, 54, 54, 0.479);
+      &:empty {
+        background-color: transparent;
       }
     }
     .type {

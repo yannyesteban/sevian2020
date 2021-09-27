@@ -67,6 +67,10 @@ export class Pending {
     private infoMenu:any = null;
     private totalPending = -1;
 
+    public onSubTotal: (unitId:number, total:number)=>void = (unitId, total)=>{};
+
+    private subtotalButton: any = null;
+
     constructor(info: Pending) {
 
         for (var x in info) {
@@ -105,16 +109,20 @@ export class Pending {
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
             this.unitPanel.addEvent((unitId: number) => {
-
+                
+                
                 if (this.wins["main"].getVisible()) {
                     this.show(unitId);
                 }
-
+            
             });
             this.unitPanel.onPending = (unitId: number) => {
 
                 this.show(unitId);
             };
+
+            
+            
         }
 
         if (this.socketId) {
@@ -126,6 +134,7 @@ export class Pending {
         //this.formIds["0"] = "form-" + String(new Date().getTime());
 
         this.create(main);
+        this.play();
 
     }
 
@@ -149,10 +158,10 @@ export class Pending {
             className: ["sevian"],
             child: this.main,
             onshow: (info) => {
-                this.play();
+                //this.play();
             },
             onhide: (info) => {
-                this.stop();
+                //this.stop();
             },
         });
 
@@ -173,6 +182,7 @@ export class Pending {
             this.goLoadPending(0);
             this.wins["main"].setCaption(`${this.caption} : Todos`);
             this.wins["main"].show({left:"center", top:"middle"});
+            this.unitId = null;
             return;
         }
 
@@ -206,7 +216,7 @@ export class Pending {
 		}
 
         this.timer = setInterval(() => {
-            this.goLoadPending(this.unitId);
+            this.goLoadPending(this.getUnit());
          }, this.delay);
 
     }
@@ -226,6 +236,17 @@ export class Pending {
         
     }
 
+    setSubTotal(unitId, total){
+        this.subtotalButton = this.unitPanel.getPendingButton();
+        if(this.subtotalButton){
+            if(total == 0){
+                total = "";
+            }
+            this.subtotalButton.text(`PN <span class="pending-note">${total}</span>`);
+        }
+        
+        
+    }
 
 
     private goLoadPending(unitId: number) {
@@ -236,9 +257,14 @@ export class Pending {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-
+                    
                     this.loadPending(json.pendingList);
                     this.setTotal(json.totalPending);
+                   
+                    if(unitId > 0 && json.unitId == unitId){
+                        
+                        this.setSubTotal(unitId, json.subTotalPending);
+                    }
                 },
             },
 
@@ -363,6 +389,12 @@ export class Pending {
                         }).show({});
                         if (json.pendingList) {
                             this.loadPending(json.pendingList);
+                        }
+                        this.setTotal(json.totalPending);
+                   
+                        if(unitId > 0 && json.unitId == unitId){
+                            
+                            this.setSubTotal(unitId, json.subTotalPending);
                         }
 
 

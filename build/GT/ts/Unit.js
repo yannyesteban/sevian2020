@@ -261,6 +261,7 @@ export class Unit {
         this.statusInfo = null;
         this.traceTime = 60 * 5;
         this.modeFollow = 1;
+        this.pendingButton = null;
         this.onGetPosition = (unitId) => { };
         this.onReset = (unitId) => { };
         this.onCall = (unitId) => { };
@@ -393,7 +394,7 @@ export class Unit {
                         }
                         //this.followMe = event.currentTarget.checked;
                     });
-                    menu.create("button").prop({ type: "button", "value": "pn", "title": "Pending" }).text("PN")
+                    this.pendingButton = menu.create("button").prop({ type: "button", "value": "pn", "title": "Pending" }).text("PN")
                         .on("click", event => {
                         this.onPending(this.getLastUnit());
                     });
@@ -547,10 +548,14 @@ export class Unit {
         }
         let sum = 0;
         data.connected.forEach((tracking) => {
+            let updateLastConnection = false;
             if (this._lastUnitId === tracking.unitId && this.units[tracking.unitId].data.connected != tracking.connected) {
-                this.onInfoUpdate(this.getUnitInfo(tracking.unitId), this.units[tracking.unitId].getName());
+                updateLastConnection = true;
             }
             this.units[tracking.unitId].data.connected = tracking.connected;
+            if (updateLastConnection) {
+                this.onInfoUpdate(this.getUnitInfo(tracking.unitId), this.units[tracking.unitId].getName());
+            }
             //this.lastDate = e.last_date;
             this.statusInfo.add({
                 id: tracking.unitId,
@@ -1112,6 +1117,9 @@ export class Unit {
             this.onChange(this._lastUnitId);
             this.main.fire("unit_change");
         }
+    }
+    getPendingButton() {
+        return this.pendingButton;
     }
 }
 Unit._instances = [];

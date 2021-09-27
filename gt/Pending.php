@@ -55,8 +55,10 @@ class Pending
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
-                        "pendingList"     => $this->getPending($unitId),
-                        'totalPending'=>$this->getTotalPending(0),
+                        "pendingList"       => $this->getPending($unitId),
+                        'totalPending'      => $this->getTotalPending(0),
+                        'subTotalPending'   => $this->getTotalPending($unitId),
+                        'unitId'            => $unitId
                     ],
                     'iToken'=> $this->iToken
                 ]);
@@ -74,10 +76,12 @@ class Pending
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
-                        "message"     => $message,
-                        "error" => ($affectedRows>0)? 0: -1,
-                        "pendingList"     => $this->getPending($unitId),
-                        'totalPending'=>$this->getTotalPending(0),
+                        'message'           => $message,
+                        'error'             => ($affectedRows>0)? 0: -1,
+                        'pendingList'       => $this->getPending($unitId),
+                        'totalPending'      => $this->getTotalPending(0),
+                        'subTotalPending'   => $this->getTotalPending($unitId),
+                        'unitId'            => $unitId
                     ],
                     'iToken'=> $this->iToken
                 ]);

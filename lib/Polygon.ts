@@ -506,9 +506,13 @@ export class Polygon implements IPoly {
         if (!this.editMode) {
             return;
         }
-        console.log(this.defaultFeature);
-        this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
-        this.setProperties(this.defaultFeature.properties);
+        console.log("revisar");
+        if(this.defaultFeature){
+            console.log(this.defaultFeature);
+            this.updateSource(this.setFeature(JSON.parse(JSON.stringify(this.defaultFeature))));
+            this.setProperties(this.defaultFeature.properties);
+        }
+        
 
     }
 

@@ -143,7 +143,7 @@ class Communication extends
                 'port'  => $gtPort
             ],
             'winNow'=>[
-                'caption'=>'Inmediato',
+                'caption'=>'Inmediato: TODOS',
                 'top'=>'bottom',
                 'deltaX'=>-50-350,
                 'deltaY'=>-20,

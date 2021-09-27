@@ -2097,7 +2097,7 @@ trait DBEvent{
         e.date_time, u.id as unitId,
         e.mode, e.title, dn.name as device_name, e.stamp,
         date_format(e.stamp, '%d/%m/%Y') as fdate,
-        date_format(e.stamp, '%T') as ftime,
+        date_format(e.stamp, '%T') as ftime, t.speed,
         CONCAT(
             TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
             MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()), 24), ':',
@@ -2109,6 +2109,8 @@ trait DBEvent{
         LEFT JOIN device_name as dn ON dn.name = de.name
         LEFT JOIN unit_name as vn ON vn.id = u.name_id
         LEFT JOIN user_unit as uu ON uu.unit_id = u.id
+        LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
+
         WHERE
 
         e.status != 2

@@ -873,8 +873,8 @@ form {
   display: -ms-grid;
   display: grid;
   grid-gap: 0px;
-  -ms-grid-columns: 16px minmax(80px, 100px) 60px minmax(80px, 1fr) 50px auto;
-      grid-template-columns: 16px minmax(80px, 100px) 60px minmax(80px, 1fr) 50px auto;
+  -ms-grid-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
+      grid-template-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
   -ms-grid-rows: 1.4em auto;
       grid-template-rows: 1.4em auto;
   overflow: hidden;
@@ -909,6 +909,15 @@ form {
 
 .info-comm .main.new:hover {
   background-color: #0000009c;
+}
+
+.info-comm .main .speed {
+  text-align: right;
+  background-color: rgba(54, 54, 54, 0.479);
+}
+
+.info-comm .main .speed:empty {
+  background-color: transparent;
 }
 
 .info-comm .main .type[data-type="1"] {

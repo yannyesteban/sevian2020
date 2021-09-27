@@ -96,8 +96,8 @@ export class MarkControl {
         this.createPropertysControl(this.subPanel);
         this.mainButton = this.menu
             .create("button")
-            .prop({ type: "button", title: "Inicia la herramienta de Polígonos" })
-            .addClass("icon-poly");
+            .prop({ type: "button", title: "Inicia la herramienta de Sitios" })
+            .addClass("icon-marker");
         this.mainButton.on("click", () => {
             this.play({});
         });
