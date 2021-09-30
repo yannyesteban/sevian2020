@@ -152,7 +152,7 @@ class Communication extends
                 'closable'=> true
             ],
             'winUnit'=>[
-                'caption'=>'Unit',
+                'caption'=>'Inmediato',
                 'top'=>'bottom',
                 'deltaX'=>-50,
                 'deltaY'=>-20,
