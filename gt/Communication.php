@@ -134,6 +134,7 @@ class Communication extends
             'responseForm'  => $form2,
             'unitId'        => $unitId,
             'unitPanelId'	=> $this->eparams->unitPanelId ?? false,
+            'eventPanelId'	=> $this->eparams->eventPanelId ?? false,
             'gridId'        => $this->eparams->gridId?? '',
             'infoMenuId'    => $this->eparams->infoMenu?? '',
             'user'          => $this->_userInfo->user,

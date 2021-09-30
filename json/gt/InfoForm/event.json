@@ -1,0 +1,12 @@
+{
+	"name":"event",
+	"caption":"Event..",
+	"type":"popup",
+	"subType":"dropdown",
+	"className":["info-form"],
+	"autoClose":true,
+	"params":false,
+    "template" :"/gt/info-event",
+    "templateName" :"/gt/info-event",
+	"modePropertys" :["speed", "input"]
+}

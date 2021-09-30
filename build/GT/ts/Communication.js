@@ -37,6 +37,7 @@ export class Communication {
         this.responseForm = null;
         this._commandPanel = null;
         this.commandPanelId = "gtcomm-panel-1";
+        this.eventPanelId = "";
         this.mainPanelId = "gtcomm-panel-0";
         this._bodyPanel = null;
         this.bodyPanelId = "gtcomm-panel-2";
@@ -244,6 +245,7 @@ export class Communication {
                 if (info.unitId) {
                     this.unitPanel.setUnit(info.unitId);
                     this.unitPanel.showUnit3(info.unitId);
+                    this.getEventPanel().showEvent(info.id);
                 }
                 //infoMenu.updateType(1, counts[info.type] || "");
                 //console.log(info);
@@ -265,6 +267,7 @@ export class Communication {
                 if (info.unitId) {
                     this.unitPanel.setUnit(info.unitId);
                     this.unitPanel.showUnit3(info.unitId);
+                    this.getEventPanel().showEvent(info.id);
                 }
                 //const counts = this.getInfoWin(this.winNames.alarm).getCounts();
                 //infoMenu.updateType(0, counts[info.type] || "");
@@ -1307,6 +1310,9 @@ export class Communication {
     }
     deleteAll(windowId) {
         this.updateAllEventStatus({}, 2, windowId);
+    }
+    getEventPanel() {
+        return S.getElement(this.eventPanelId);
     }
 }
 //# sourceMappingURL=Communication.js.map

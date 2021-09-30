@@ -214,7 +214,7 @@ class UnitConfig
 
         $cn->query = "SELECT ue.id,
             '$unitId' as unit_id, COALESCE(uc.name, ue.name) as name, '$eventId' as event_id,
-            IFNULL(ue.mode, (SELECT e2.mode FROM unit_event as e2 WHERE e2.event_id = '$eventId')) as mode,
+            IFNULL(ue.mode, (SELECT e2.mode FROM unit_event as e2 WHERE e2.event_id = '$eventId' limit 1)) as mode,
 
             CASE WHEN ue.id IS NULL THEN 1 ELSE 2 END as __mode_,
             '' as __record_

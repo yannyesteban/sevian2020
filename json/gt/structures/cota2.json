@@ -36,7 +36,6 @@
 					"rule",
 					"poly2",
 					"mark2",
-					
 					"layer"
 				]
 			},
@@ -203,7 +202,8 @@
 				"mapName": "map_01",
 				"unitPanelId": "gt-unit-10",
 				"infoMenu": "panel-7",
-				"gtServer": "@GT_SERVER"
+				"gtServer": "@GT_SERVER",
+				"eventPanelId" : "event"
 			},
 			"type": 0,
 			"class": "",
@@ -212,9 +212,9 @@
 		},
 		{
 			"id": "event",
-			"element": "gt-event",
+			"element": "gt-event1",
 			"name": "gt-event",
-			"method": "load",
+			"method": "init",
 			"eparams": {
 				"mapName": "map_01"
 			},
@@ -229,7 +229,7 @@
 			"name": "gt-report",
 			"method": "load",
 			"eparams": {
-				"socketId":"comm",
+				"socketId": "comm",
 				"unitPanelId": "gt-unit-10"
 			},
 			"type": 0,
@@ -243,7 +243,7 @@
 			"name": "gt-pending",
 			"method": "load",
 			"eparams": {
-				"socketId":"comm",
+				"socketId": "comm",
 				"unitPanelId": "gt-unit-10",
 				"infoMenu": "panel-9"
 			},
@@ -258,7 +258,7 @@
 			"name": "gt-output",
 			"method": "load",
 			"eparams": {
-				"socketId":"comm",
+				"socketId": "comm",
 				"unitPanelId": "gt-unit-10"
 			},
 			"type": 0,
@@ -272,7 +272,7 @@
 			"name": "gt-event_admin",
 			"method": "load",
 			"eparams": {
-				"socketId":"comm",
+				"socketId": "comm",
 				"unitPanelId": "gt-unit-10"
 			},
 			"type": 0,

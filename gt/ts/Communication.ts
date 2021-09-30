@@ -7,6 +7,7 @@ import { Float } from '../../Sevian/ts/Window.js';
 
 import { S } from '../../Sevian/ts/Sevian.js';
 import { Socket } from './Socket.js';
+import { Event } from './Event.js';
 import { Sound } from './Sound.js';
 import { InfoComm, InfoMenu, InfoUnits } from './InfoMenu.js';
 
@@ -53,6 +54,7 @@ export class Communication {
 
     private _commandPanel: any = null;
     private commandPanelId: string = "gtcomm-panel-1";
+    private eventPanelId:string = "";
     private mainPanelId = "gtcomm-panel-0";
 
     private _bodyPanel: any = null;
@@ -340,6 +342,8 @@ export class Communication {
                     this.unitPanel.setUnit(info.unitId);
                     this.unitPanel.showUnit3(info.unitId);
 
+                    this.getEventPanel().showEvent(info.id);
+
                 }
 
 
@@ -368,6 +372,7 @@ export class Communication {
                 if (info.unitId) {
                     this.unitPanel.setUnit(info.unitId);
                     this.unitPanel.showUnit3(info.unitId);
+                    this.getEventPanel().showEvent(info.id);
                 }
                 //const counts = this.getInfoWin(this.winNames.alarm).getCounts();
                 //infoMenu.updateType(0, counts[info.type] || "");
@@ -1708,6 +1713,11 @@ alert(this.commandPanelId)
     }
     public deleteAll(windowId) {
         this.updateAllEventStatus({}, 2, windowId);
+    }
+
+    public getEventPanel():Event{
+        
+        return S.getElement(this.eventPanelId) as Event;
     }
 }
 

@@ -221,7 +221,7 @@
         "file": "{@MAIN_PATH}gt/Event.php",
         "class": "\\GT\\Event",
         "enable": true,
-        "module_":{
+        "module":{
             "name":"Event",
             "alias":"GTEvent",
             "src":"{@MAIN_PATH}build/GT/ts/Event.js"
