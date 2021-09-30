@@ -212,7 +212,7 @@
 		},
 		{
 			"id": "event",
-			"element": "gt-event1",
+			"element": "gt-event",
 			"name": "gt-event",
 			"method": "init",
 			"eparams": {

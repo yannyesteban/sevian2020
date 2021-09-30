@@ -81,7 +81,7 @@ export class Event {
         this.main = main;
         this.infoFormMain = new InfoForm(this.infoForm);
         this.wins["main"] = new Float.Window({
-            visible: true,
+            visible: false,
             caption: this.caption,
             left: 'right',
             top: 'bottom',
