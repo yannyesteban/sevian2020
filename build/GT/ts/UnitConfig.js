@@ -259,7 +259,7 @@ export class UnitConfig {
             input: "multi",
             type: "checkbox",
             value: record.mode,
-            data: [[1, "Inmediato"], [2, "Evento"], [4, "Alarm"], [8, "Unidad"]],
+            data: [[1, "Inmediato"], [2, "Evento"], [4, "Alarm"] /*, [8,"Unidad"]*/],
             check: (value, inputs) => {
                 inputs.forEach((input) => {
                     if ((parseInt(value, 10) & parseInt(input.value, 10)) ==
