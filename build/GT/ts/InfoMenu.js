@@ -199,7 +199,9 @@ export class InfoComm {
             else if (status == 1) {
                 ele.removeClass("new");
                 const cellUser = $((ele).query(`.user`));
-                cellUser.text(user || "");
+                if (cellUser) {
+                    cellUser.text(user || "");
+                }
             }
             else if (status == 2) {
                 ele.get().remove();
