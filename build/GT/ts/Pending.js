@@ -134,7 +134,7 @@ export class Pending {
             window.clearTimeout(this.timer);
         }
         this.timer = setInterval(() => {
-            this.goLoadPending(this.getUnit());
+            this.goLoadPending(this.unitId);
         }, this.delay);
     }
     stop() {

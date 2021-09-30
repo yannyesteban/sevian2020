@@ -42,6 +42,7 @@ export class Pending {
     private forms: { [key: string]: Form } = {};
 
     private unitId: number = null;
+    
     private unitName: string = "";
     private index: number = 100;
     private eventId: number = null;
@@ -183,8 +184,10 @@ export class Pending {
             this.wins["main"].setCaption(`${this.caption} : Todos`);
             this.wins["main"].show({left:"center", top:"middle"});
             this.unitId = null;
+            
             return;
         }
+        
 
         let unitName = "";
 
@@ -198,6 +201,7 @@ export class Pending {
         this.wins["main"].show({ left: "center", top: "middle" });
 
         this.unitId = unitId;
+        
 
     }
 
@@ -216,7 +220,7 @@ export class Pending {
 		}
 
         this.timer = setInterval(() => {
-            this.goLoadPending(this.getUnit());
+            this.goLoadPending(this.unitId);
          }, this.delay);
 
     }
