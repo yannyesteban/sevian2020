@@ -195,14 +195,14 @@ class UnitConfig
     private function getEvents($unitId){
         $cn = $this->cn;
 
-        $cn->query = "SELECT DISTINCT ue.id,u.id as unit_id, COALESCE(ue.mode, ue.mode, 0) as `mode`,
+        $cn->query = "SELECT DISTINCT ue.id,u.id as unit_id, COALESCE(ue.mode, (SELECT e2.mode FROM unit_event as e2 WHERE e2.event_id = ue.event_id limit 1), 0) as `mode`,
 
         de.event_id, de.name, CASE WHEN ue.unit_id IS NULL THEN 1 ELSE 2 END as __mode_, '' as __record_
         FROM device_event de
         INNER JOIN device_version as v ON v.id = de.version_id
         INNER JOIN device as d on d.version_id = v.id
         INNER JOIN unit as u ON u.device_id = d.id
-        LEFT JOIN unit_event as ue ON (ue.unit_id = u.id or ue.unit_id IS NULL) AND ue.event_id = de.event_id
+        LEFT JOIN unit_event as ue ON (ue.unit_id = u.id /*or ue.unit_id IS NULL*/) AND ue.event_id = de.event_id
         #LEFT JOIN unit_event as ue2 ON ue.unit_id IS NULL AND ue2.event_id = de.event_id
         
         WHERE u.id = '$unitId'";
