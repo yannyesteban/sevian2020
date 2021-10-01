@@ -1,4 +1,5 @@
 import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
+import { Float } from "../../Sevian/ts/Window.js";
 import { Input, } from "../../Sevian/ts/Input.js";
 import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { S } from "../../Sevian/ts/Sevian.js";
@@ -20,6 +21,7 @@ export class UnitConfig {
         this.tagMain = "div";
         this.list = null;
         this.formIds = {};
+        this.data = [];
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -63,6 +65,120 @@ export class UnitConfig {
             },
         });
         this.formIds["0"] = "f-unit-config" + String(new Date().getTime());
+    }
+    createGrid(data) {
+        this.data = data;
+        const main = this.main;
+        main.text("");
+        const table = main.create("table").addClass(["event-grid", "grid"]);
+        const row = table.create("tr");
+        row.create("td").text("evento");
+        row.create("td").text("Inm");
+        row.create("td").text("Ev");
+        row.create("td").text("Ala");
+        data.forEach((info, index) => {
+            const row = table.create("tr").addClass("grid-row").ds("id", info.id).ds("index", index);
+            row.create("td").text(info.name);
+            const cell1 = row.create("td");
+            const check1 = cell1.create("input").prop({
+                "type": "checkbox", value: 1, title: "Inmediato",
+                "checked": ((info.mode & 1) == 1) ? true : false
+            });
+            check1.on("change", (event) => {
+                this.goSaveEvent(index, 1);
+            });
+            const cell2 = row.create("td");
+            const check2 = cell2.create("input").prop({
+                "type": "checkbox",
+                value: 2,
+                title: "Evento",
+                "checked": ((info.mode & 2) == 2) ? true : false
+            });
+            check2.on("change", (event) => {
+                this.goSaveEvent(index, 2);
+            });
+            const cell3 = row.create("td");
+            const check3 = cell3.create("input").prop({ "type": "checkbox",
+                value: 4,
+                title: "Alarma",
+                "checked": ((info.mode & 4) == 4) ? true : false });
+            check3.on("change", (event) => {
+                this.goSaveEvent(index, 4);
+            });
+        });
+    }
+    getModeValue(index) {
+        const aux = this.main.queryAll(`[data-index="${index}"] input[type="checkbox"]`);
+        let value = 0;
+        if (aux) {
+            aux.forEach(chk => {
+                if (chk.checked) {
+                    value += Number.parseInt(chk.value, 10);
+                }
+            });
+        }
+        return value;
+    }
+    goSaveEvent(index, value) {
+        const mode = this.getModeValue(index);
+        console.log(this.data[index]);
+        const formData = new FormData();
+        formData.append("unit_id", this.data[index].unit_id);
+        formData.append("name", this.data[index].name);
+        formData.append("event_id", this.data[index].event_id);
+        formData.append("mode", mode.toString());
+        formData.append("__mode_", this.data[index].__mode_);
+        formData.append("__record_", this.data[index].__record_);
+        const unitId = this.data[index].unitId;
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    console.log(json);
+                    if (json.error) {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record wasn't saved!!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                    else {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record was saved!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                    //this.loadForm(json);
+                    //this.loadTab(json.command, type);
+                    //this.loadForm(json.command, type, index);
+                    //this.createForm(json.command, type);
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-unit-config",
+                    method: "save-event",
+                    name: "",
+                    eparams: {
+                        unitId
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
     }
     init(unitId) {
         this.unitId = unitId;
@@ -126,6 +242,8 @@ export class UnitConfig {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+                    this.createGrid(json.events);
+                    return;
                     this.list.setOptionsData([['', ' - ']].concat(json.eventList));
                 },
             },

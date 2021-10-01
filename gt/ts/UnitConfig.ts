@@ -22,17 +22,17 @@ export class UnitConfig {
     public id: any = null;
     public caption: string = "";
 
-    
+
 
     public className: any = "unit-config";
     private main: SQObject = null;
 
     private wins: any[] = [];
-    
+
     private forms: { [key: string]: Form } = {};
 
     private unitId: number = null;
-    
+
     private tab: Tab = null;
     private tabs: any[] = [];
 
@@ -43,10 +43,11 @@ export class UnitConfig {
     private unitPanel: any = null;
 
     private tagMain = "div";
-    private list:any = null;
+    private list: any = null;
 
     public formIds = {};
 
+    public data: any[] = [];
     constructor(info: any) {
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
@@ -58,7 +59,7 @@ export class UnitConfig {
 
         if (!main) {
             main = $.create(this.tagMain);
-            if(this.id){
+            if (this.id) {
                 main.id(this.id);
             }
         }
@@ -66,7 +67,7 @@ export class UnitConfig {
         this.create(main);
     }
 
-    public get(){
+    public get() {
         return this.main;
     }
     public create(main: SQObject) {
@@ -101,15 +102,145 @@ export class UnitConfig {
 
         this.formIds["0"] = "f-unit-config" + String(new Date().getTime());
 
-        
+
     }
 
-    public init(unitId:number){
-        this.unitId = unitId;
+    public createGrid(data) {
+        this.data = data;
+        const main = this.main;
+
+        main.text("");
+        const table = main.create("table").addClass(["event-grid", "grid"]);
+        const row = table.create("tr")
+        row.create("td").text("evento");
+        row.create("td").text("Inm");
+        row.create("td").text("Ev");
+        row.create("td").text("Ala");
+        data.forEach((info, index) => {
+            const row = table.create("tr").addClass("grid-row").ds("id", info.id).ds("index", index);
+            row.create("td").text(info.name);
+
+            const cell1 = row.create("td");
+            const check1 = cell1.create("input").prop({ 
+                "type": "checkbox", value: 1, title:"Inmediato",
+            "checked": ((info.mode & 1) == 1) ? true : false });
+
+            check1.on("change", (event) => {
+                this.goSaveEvent(index, 1);
+            });
+
+            const cell2 = row.create("td");
+            const check2 = cell2.create("input").prop({
+                "type": "checkbox",
+                value: 2,
+                title:"Evento",
+            
+            "checked": ((info.mode & 2) == 2) ? true : false });
+            check2.on("change", (event) => {
+                this.goSaveEvent(index, 2);
+            });
+            const cell3 = row.create("td");
+            const check3 = cell3.create("input").prop({ "type": "checkbox", 
+            value: 4,
+            title:"Alarma",
+            "checked": ((info.mode & 4) == 4) ? true : false });
+            check3.on("change", (event) => {
+                this.goSaveEvent(index, 4);
+            });
+
+
+
+        });
+    }
+
+    public getModeValue(index) {
+        const aux = this.main.queryAll(`[data-index="${index}"] input[type="checkbox"]`);
+        let value = 0;
+        if (aux) {
+            aux.forEach(chk => {
+                if (chk.checked) {
+                    value += Number.parseInt(chk.value, 10);
+                }
+
+            });
+        }
+        return value;
+    }
+
+    public goSaveEvent(index, value) {
+
+        const mode = this.getModeValue(index);
         
+        console.log(this.data[index]);
+
+        const formData = new FormData();
+        formData.append("unit_id", this.data[index].unit_id);
+        formData.append("name", this.data[index].name);
+        formData.append("event_id", this.data[index].event_id);
+        formData.append("mode", mode.toString());
+        formData.append("__mode_", this.data[index].__mode_);
+        formData.append("__record_", this.data[index].__record_);
+
+        const unitId = this.data[index].unitId;
+
+
+        S.go({
+            async: true,
+            valid: false,
+            form: formData,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    console.log(json)
+                    if(json.error){
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record wasn't saved!!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }else{
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record was saved!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                    //this.loadForm(json);
+                    //this.loadTab(json.command, type);
+                    //this.loadForm(json.command, type, index);
+                    //this.createForm(json.command, type);
+                },
+            },
+
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-unit-config",
+                    method: "save-event",
+                    name: "",
+                    eparams: {
+                        unitId
+
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
+    }
+    public init(unitId: number) {
+        this.unitId = unitId;
+
         this.goInit(this.unitId);
 
-        
+
     }
 
     public show(unitId?, index?: number) {
@@ -167,8 +298,8 @@ export class UnitConfig {
         return this.unitId;
     }
 
-  
-    
+
+
     public start(unitId?: number, index?: number) {
         if (unitId !== undefined) {
             this.unitId = unitId;
@@ -189,6 +320,12 @@ export class UnitConfig {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+
+                    
+
+                    this.createGrid(json.events);
+                    return;
+
                     this.list.setOptionsData([['', ' - ']].concat(json.eventList));
                 },
             },
@@ -201,8 +338,8 @@ export class UnitConfig {
                     name: "",
                     eparams: {
                         unitId: unitId,
-                        
-                        
+
+
                     },
                     iToken: "f",
                 },
@@ -235,7 +372,7 @@ export class UnitConfig {
                     eparams: {
                         unitId,
                         eventId,
-                        
+
                     },
                     iToken: "f",
                 },
@@ -298,7 +435,7 @@ export class UnitConfig {
         });
     }
 
-    private loadForm(record){
+    private loadForm(record) {
 
         const fields = [];
 
@@ -327,7 +464,7 @@ export class UnitConfig {
             value: record.unit_id,
         });
 
-        
+
 
         fields.push({
             caption: "Event Id",
@@ -337,9 +474,9 @@ export class UnitConfig {
             value: record.event_id,
         });
 
-       
 
-        
+
+
 
         fields.push({
             caption: "Mode",
@@ -347,7 +484,7 @@ export class UnitConfig {
             input: "multi",
             type: "checkbox",
             value: record.mode,
-            data: [[1,"Inmediato"], [2,"Evento"], [4, "Alarm"]/*, [8,"Unidad"]*/],
+            data: [[1, "Inmediato"], [2, "Evento"], [4, "Alarm"]/*, [8,"Unidad"]*/],
 
             check: (value, inputs) => {
                 inputs.forEach((input: HTMLInputElement) => {
@@ -393,7 +530,7 @@ export class UnitConfig {
             value: (record.__record_ != "") ? JSON.stringify(record.__record_) : "",
         });
 
-        
+
 
         const type = "0";
         const form = new Form({
@@ -412,7 +549,7 @@ export class UnitConfig {
                             this.goSave(form);
                         },
                     },
-                    
+
 
                 ],
             },

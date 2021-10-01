@@ -113,12 +113,15 @@
   color: #6e6e6e;
 }
 
-.sg-calendar .c-bar > *:HOVER {
+.sg-calendar .c-bar > *:hover {
   background-color: #747474;
   color: white;
 }
 
-.sg-calendar .c-bar > * .p-month:hover, .sg-calendar .c-bar > * .n-month:hover, .sg-calendar .c-bar > * .p-year:hover, .sg-calendar .c-bar > * .n-year:hover {
+.sg-calendar .c-bar > * .p-month:hover,
+.sg-calendar .c-bar > * .n-month:hover,
+.sg-calendar .c-bar > * .p-year:hover,
+.sg-calendar .c-bar > * .n-year:hover {
   color: #a8eeee;
 }
 
