@@ -418,6 +418,9 @@ export class Report {
                 type: "text",
                 value: item.value,
                 dataset: { type: "param" }
+                /*,rules:{
+                    required:{}
+                }*/
             };
 
             if (command.indexField && item.name == command.indexField) {
@@ -607,7 +610,15 @@ export class Report {
                         action: (item, event) => {
                             let params = {};
 
+                            if(command.level > 0){
 
+                                if(command.level == 2){
+                                    alert("this command is very sensitive !");
+                                }
+                                if(!confirm("Are you sure?")){
+                                    return;
+                                }
+                            }
 
                             command.fields.forEach((element, index: number) => {
 
@@ -625,8 +636,7 @@ export class Report {
                         action: (item, event) => {
                             let params = {};
 
-
-
+                            
                             command.fields.forEach((element, index2: number) => {
 
                                 params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue();
@@ -785,6 +795,10 @@ export class Report {
         index: number,
         type: string, mode: number
     ) {
+        
+        
+
+
         S.go({
             async: true,
             valid: false,
@@ -792,6 +806,8 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+
+                    console.log(json)
                     this.iniLists(json.eventList, json.commandList, type);
 
                     this.loadTab(json.command, type);
@@ -1197,7 +1213,7 @@ export class Report {
         if (type == "0") {
             //this.createMainForm(command);
             //this.loadTab(command, type);
-            console.log(command)
+            
             this.loadForm(command, type, command.index);
 
         } else if (type == "params") {

@@ -560,8 +560,8 @@ class UnitConfig
 
         WHERE
 
-        u.id = '$unitId' AND c.role_id != 1";
-
+        u.id = '$unitId' AND c.role_id = 0";
+hx($cn->query);
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
 

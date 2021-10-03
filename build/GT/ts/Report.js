@@ -317,6 +317,9 @@ export class Report {
                 type: "text",
                 value: item.value,
                 dataset: { type: "param" }
+                /*,rules:{
+                    required:{}
+                }*/
             };
             if (command.indexField && item.name == command.indexField) {
                 info.type = "text";
@@ -477,6 +480,14 @@ export class Report {
                         caption: "Send",
                         action: (item, event) => {
                             let params = {};
+                            if (command.level > 0) {
+                                if (command.level == 2) {
+                                    alert("this command is very sensitive !");
+                                }
+                                if (!confirm("Are you sure?")) {
+                                    return;
+                                }
+                            }
                             command.fields.forEach((element, index) => {
                                 params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
                             });
@@ -615,6 +626,7 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+                    console.log(json);
                     this.iniLists(json.eventList, json.commandList, type);
                     this.loadTab(json.command, type);
                     //this.loadForm(json.command, type, index);
@@ -969,7 +981,6 @@ export class Report {
         if (type == "0") {
             //this.createMainForm(command);
             //this.loadTab(command, type);
-            console.log(command);
             this.loadForm(command, type, command.index);
         }
         else if (type == "params") {

@@ -291,12 +291,13 @@ class Report
 
         $cn->query = "SELECT uc.id,
             '$unitId' as unit_id, c.id as command_id, '$index' as `index`,
-            uc.name, uc.params, uc.values,
+            uc.name, uc.params, uc.values, COALESCE(cr.level, 0) as level,
             IFNULL(uc.status, 0) as status, c.command as command,
             c.type, role_id,
             CASE WHEN uc.id IS NULL THEN 1 ELSE 2 END as __mode_,
-             '' as __record_
+            '' as __record_
             FROM device_command as c
+            LEFT JOIN command_role as cr ON cr.id = c.role_id
             LEFT JOIN unit_command as uc ON c.id = uc.command_id
             AND uc.index = '$index' AND uc.unit_id = '$unitId'
             WHERE c.id = '$commandId'
@@ -475,7 +476,7 @@ class Report
 
         $cn = $this->cn;
 
-        $cn->query = "SELECT c.id, c.command, c.type, IFNULL(uc.status, 0) as status
+        $cn->query = "SELECT c.id, c.command, c.type, IFNULL(uc.status, 0) as status, COALESCE(cr.level, 0) as level
         FROM device_command as c
         INNER JOIN device_version as v ON v.id = c.version_id
         INNER JOIN device as d ON d.version_id = v.id
@@ -483,10 +484,11 @@ class Report
         LEFT JOIN unit_command as uc ON uc.command_id = c.id
                 AND uc.unit_id = u.id
 
-
+        LEFT JOIN command_role as cr ON cr.id = c.role_id
         WHERE
 
-        u.id = '$unitId' AND c.role_id != 1";
+        u.id = '$unitId'
+        AND (cr.special = 0 or cr.special IS NULL)";
 
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
