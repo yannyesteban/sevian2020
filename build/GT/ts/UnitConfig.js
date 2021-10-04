@@ -84,15 +84,15 @@ export class UnitConfig {
                 "type": "checkbox", value: 1, title: "Inmediato",
                 "checked": ((info.mode & 1) == 1) ? true : false
             });
-            check1.on("change", (event) => {
-                this.goSaveEvent(index, 1);
-            });
             const cell2 = row.create("td");
             const check2 = cell2.create("input").prop({
                 "type": "checkbox",
                 value: 2,
                 title: "Evento",
                 "checked": ((info.mode & 2) == 2) ? true : false
+            });
+            check1.on("change", (event) => {
+                this.goSaveEvent(index, 1);
             });
             check2.on("change", (event) => {
                 this.goSaveEvent(index, 2);

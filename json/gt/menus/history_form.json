@@ -12,13 +12,7 @@
 			"events":{
 				"click":"this.find();"
 			}
-		},
-		{
-			"caption":"Test",
-			"events":{
-				"click":"this.find(true);"
-			}
 		}
-		
+
 	]
-}	
+}

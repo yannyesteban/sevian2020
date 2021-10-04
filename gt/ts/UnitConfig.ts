@@ -121,26 +121,28 @@ export class UnitConfig {
             row.create("td").text(info.name);
 
             const cell1 = row.create("td");
-            const check1 = cell1.create("input").prop({ 
+            const check1 = cell1.create("input").prop({
                 "type": "checkbox", value: 1, title:"Inmediato",
             "checked": ((info.mode & 1) == 1) ? true : false });
 
-            check1.on("change", (event) => {
-                this.goSaveEvent(index, 1);
-            });
+
 
             const cell2 = row.create("td");
             const check2 = cell2.create("input").prop({
                 "type": "checkbox",
                 value: 2,
                 title:"Evento",
-            
+
             "checked": ((info.mode & 2) == 2) ? true : false });
+
+            check1.on("change", (event) => {
+                this.goSaveEvent(index, 1);
+            });
             check2.on("change", (event) => {
                 this.goSaveEvent(index, 2);
             });
             const cell3 = row.create("td");
-            const check3 = cell3.create("input").prop({ "type": "checkbox", 
+            const check3 = cell3.create("input").prop({ "type": "checkbox",
             value: 4,
             title:"Alarma",
             "checked": ((info.mode & 4) == 4) ? true : false });
@@ -170,7 +172,7 @@ export class UnitConfig {
     public goSaveEvent(index, value) {
 
         const mode = this.getModeValue(index);
-        
+
         console.log(this.data[index]);
 
         const formData = new FormData();
@@ -321,7 +323,7 @@ export class UnitConfig {
             requestFunctions: {
                 f: (json) => {
 
-                    
+
 
                     this.createGrid(json.events);
                     return;
