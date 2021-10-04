@@ -8,7 +8,7 @@
 	"params":false,
 	"onDataUser_":"S.send3(dataUser);",
 	"items":[
-		
+
 		{
 			"caption":"",
 			"imageClass":"icon-unit",
@@ -61,9 +61,17 @@
 			"caption":"",
 			"imageClass":"icon-info",
 			"propertys":{
-				"title":"dministrador de Eventos"
+				"title":"Administrador de Eventos"
 			},
 			"action":"S.getElement('event_admin').show();"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-search",
+			"propertys":{
+				"title":"Buscar"
+			},
+			"action":"S.getElement('search').show();"
 		}
 
 	]

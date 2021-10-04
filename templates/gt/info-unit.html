@@ -8,6 +8,27 @@
         <div>ID {=unitId}</div>
         <div>{=device_name}</div>
     </div>
+
+    <div class="row">
+        <div>Marca</div>
+        <div>{=brand}</div>
+    </div>
+
+    <div class="row">
+        <div>Modelo</div>
+        <div>{=model}</div>
+    </div>
+
+    <div class="row">
+        <div>Color</div>
+        <div>{=color}</div>
+    </div>
+
+    <div class="row">
+        <div>Matrícula</div>
+        <div>{=plate}</div>
+    </div>
+
     <div class="row">
         <div>Fecha</div>
         <div>{=uDate}</div>
@@ -36,10 +57,7 @@
         <div>Satelites</div>
         <div>{=satellite}</div>
     </div>
-    <div class="row">
-        <div>Firmware</div>
-        <div>{=device_model}<br>{=version} - {=protocol}</div>
-    </div>
+
     <div class="inputs">
         <div data-detail="inputs" data-input-id="{=inputs.id}" data-input-value="{=inputs.on}">
             <span>{=inputs.name}</span><span data-input-value="{=inputs.value}">{=inputs.value}</span>
@@ -49,6 +67,14 @@
 
         <div data-detail="outputs" data-input-id="{=outputs.id}" data-input-value="{=outputs.on}"><span>{=outputs.name}</span><span data-input-value="{=outputs.value}">{=outputs.value}</span></div>
 
+    </div>
+    <div class="row">
+        <div>ültimo Event</div>
+        <div>{=myEvent}</div>
+    </div>
+    <div class="row">
+        <div>Firmware</div>
+        <div>{=device_model}<br>{=version} - {=protocol}</div>
     </div>
     <!--
     <div><input type="checkbox" data-follow="{=unitId}">Seguir</div>

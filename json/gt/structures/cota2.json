@@ -279,6 +279,20 @@
 			"class": "",
 			"debug": 0,
 			"design": 0
+		},
+		{
+			"id": "search",
+			"element": "gt-search",
+			"name": "gt-search",
+			"method": "load",
+			"eparams": {
+
+				"unitPanelId": "gt-unit-10"
+			},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
 		}
 	]
 }

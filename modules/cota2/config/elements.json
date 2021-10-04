@@ -346,6 +346,21 @@
         "init": {
             "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
         }
+    },
+    {
+        "name": "gt-search",
+        "file": "{@MAIN_PATH}gt/Search.php",
+        "class": "\\GT\\Search",
+        "enable": true,
+        "module":{
+            "name":"Search",
+            "alias":"GTSearch",
+            "src":"{@MAIN_PATH}build/GT/ts/Search.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
     }
 
 

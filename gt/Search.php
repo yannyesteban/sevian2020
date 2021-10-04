@@ -5,164 +5,173 @@ require_once MAIN_PATH.'gt/Trait.php';
 
 class Search
     extends \Sevian\Element
-	implements 
+	implements
 		\sevian\JasonComponent,
-		\sevian\JsonRequest
-	
+		\sevian\JsonRequest,
+		\Sevian\UserInfo
+
 {
 
-   
-    use DBGeofence;
-   
-    
-
-    public $_name = '';
-    public $_type = '';
-    public $_mode = '';
-    public $_info = null;
-	
 	private $_jsonRequest = null;
-
 	static $patternJsonFile = '';
-
-	private $popupTemplate = '<div class="wecar_info">
-		<div>{=name}</div>
-		<div>Categoria: {=category}</div>
-		
-
-		<div>{=latitude}, {=longitude}</div>
-		<div>Telefonos {=phone1} {=phone2} {=phone3}</div>
-		<div>Web: {=web}</div>
-		<div>Dirección: {=address}</div>
-
-	</div>';
-
-	private $infoTemplate = '
-	<div class="units-info">
-
-		<div>Nombre</div><div>{=name}</div>
-		<div>Categoria</div><div>{=category}</div>
-
-		<div>Longitud</div><div>{=longitude}</div>
-		<div>Latidud</div><div>{=latitude}</div>
-
-		<div>Dirección</div><div>{=address}</div>
-		<div>Teléfonos</div><div>{=phone1} {=phone2} {=phone3}</div>
-		<div>Correo</div><div>{=email}</div>
-		<div>Web</div><div>{=web}</div>
-		<div>Observaciones</div><div>{=observations}</div>
-	
-	</div>';
 
     public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
 		}
-		
+
         $this->cn = \Sevian\Connection::get();
 	}
 	public function config(){
-		
+
 	}
 
 	public function evalMethod($method = false): bool{
-		
+
 		if($method === false){
             $method = $this->method;
 		}
-		
+
 		switch($method){
 			case 'load':
 				$this->load();
 				break;
-            case 'load-sites':
-                
+            case 'search':
+				;
 
-                $this->_name = $this->name;
-                $this->_type = 'GTHistory';
-                $this->_mode = '';
-                $this->_info = [
-					'dataMain'		=> $this->loadGeofences(),
-					
-					'popupTemplate' => $this->popupTemplate,
-					'infoTemplate'	=> $this->infoTemplate,
-                    
-					'pathImages'	=> PATH_IMAGES,
-					'caption'		=> 'Historial',
-					'id'            => 'ks',
-					'followMe'		=> true,
-					'delay'			=> 60000,
-				];
-			case 'tracking':
-				
+
+				$this->addResponse([
+					'id'	=> $this->id,
+					'data'	=> $this->search($this->eparams->q?? '', $this->getUser()),
+					'iToken'=> $this->iToken
+				]);
 				break;
 			default:
 				break;
 
 		}
-		
+
 		return true;
 	}
-	
+
 	public function init(){
 
-		$form =  new \Sigefor\Component\Form2([
 
-			'id'		=> $this->containerId,
-			'panelId'	=> $this->id,
-			'name'		=> \Sigefor\JasonFile::getNameJasonFile('/form/history', self::$patternJsonFile),
-			'method'	=> $this->method,
-			'mode'		=> 1,
-			'userData'=> [],
-			
-			//'record'=>$this->getRecord()
-		]);
-
-		
-		return [
-			'form'     => $form,
-			
-			'popupTemplate' => $this->popupTemplate,
-			'infoTemplate'	=> $this->infoTemplate,
-			'pathImages'	=> PATH_IMAGES."sites/",
-			'caption'		=> 'Historial',
-			'id'            => 'ks',
-			'followMe'		=> true,
-			'delay'			=> 60000,
-		];
 	}
-	
+
 	private function load(){
-        $this->panel = new \Sevian\HTML('div');
-		$this->panel->id = 'gt-history-'.$this->id;
-		$this->panel->innerHTML = 'gt-history-'.$this->id;
-		$this->typeElement = 'GTHistory';
-
-		$this->info = [
-			'id'=>$this->panel->id,
-			'panel'=>$this->id,
-			'tapName'=>'yanny'
-		];
-
+		$this->setInfoElement([
+			'id'		=> $this->id,
+			'title'		=> 'Search',
+			'iClass'	=> 'GTSearch',
+			//'html'		=> $this->panel->render(),
+			'script'	=> '',
+			'css'		=> '',
+			'config'	=> [
+                'id'			=>$this->id,
+                'panel'			=>$this->id,
+                'caption'		=> 'Search...',
+                'unitPanelId'	=>$this->eparams->unitPanelId?? '',
+            ]
+		]);
     }
-    
-    public function jsonSerialize() {  
+
+	public function search($q, $user){
+
+		if($q == ''){
+			//return [];
+		}
+		$cn = $this->cn;
+		$path = PATH_IMAGES;
+        $cn->query = "SELECT u.id as unitId,
+		de.name,vn.name as vehicle_name, plate, br.name as brand,
+
+				u.id as unitId,
+				ac.client_id as client_id,
+				cl.name as client,
+				u.account_id,
+				ac.name as account,
+				u.device_id,
+				de.name as deviceName,
+				u.vehicle_id,
+				vn.name as vehicle_name,
+				CASE WHEN t.id IS NULL THEN 1 ELSE 0 END as noTracking,
+				CASE WHEN t.id IS NULL THEN 0 ELSE 1 END as valid,
+				vn.name as unitName,
+				CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,#,
+				' - ' as date_time, ' -' as longitude, ' -' as latitude,
+				' -' as heading, ' -' as satellite, '- ' as speed, u.conn_status as connected
+
+
+
+				FROM unit as u
+				INNER JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
+				INNER JOIN event as e ON t.unit_id = e.unit_id AND t.date_time = e.date_time
+				INNER JOIN user_unit as uu ON uu.unit_id = u.id
+
+				INNER JOIN device as de ON de.id = u.device_id
+				INNER JOIN device_name as dn ON dn.name = de.name
+
+				LEFT JOIN unit_name as vn ON vn.id = u.name_id
+
+				LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id
+
+				LEFT JOIN vehicle_brand as br ON br.id = ve.brand_id
+				LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
+
+				LEFT JOIN icon as ic ON ic.id = u.icon_id
+
+				LEFT JOIN account as ac ON ac.id = u.account_id
+				LEFT JOIN client as cl ON cl.id = ac.client_id
+
+				WHERE uu.user = '$user' AND
+
+				(de.name like '%$q%' OR
+				vn.name like '%$q%' OR
+				plate like '%$q%' OR
+				mo.name like '%$q%' OR
+				br.name like '%$q%')
+
+				ORDER BY client, account, vehicle_name
+
+        ";
+
+		//hx($cn->query);
+		$result = $cn->execute();
+
+        return $cn->getDataAll($result);
+
+
+
+
+
+	}
+    public function jsonSerialize() {
         return [
 			'name'	=> $this->_name,
 			'type'	=> $this->_type,
 			'mode'	=> $this->_mode,
 			'info'	=> $this->_info
-		];  
+		];
 	}
 
 	public function setRequest($data){
 		$this->_jsonRequest = $data;
 	}
-	
+
 	public function getRequest(){
 		return $this->_jsonRequest;
 	}
 
-	
+	public function setUserInfo($info){
+        $this->_userInfo = $info;
+    }
+    public function getUserInfo(){
+        return $this->_userInfo;
+    }
+	public function getUser(){
+        return $this->_userInfo->user;
+    }
+
 
 }

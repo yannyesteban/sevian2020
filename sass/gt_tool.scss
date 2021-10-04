@@ -433,3 +433,44 @@
     text-transform: uppercase;
   }
 }
+
+
+.search-tool{
+  overflow: auto;
+  display:flex;
+  height: 100%;
+  flex-direction: column;
+  img{
+
+    margin: auto;
+    height: 18px;
+    vertical-align: middle;
+  }
+
+.grid{
+  padding: 5px;
+  //background-color: #1cbaf8;
+  font-size: 11px;
+  color: #f4f7e0;
+  display: grid;
+
+  overflow: auto;
+  grid-template-columns: 20px minmax(50px, 100px) minmax(50px, 100px) 1fr;
+
+}
+
+  .row {
+    display: contents;
+    cursor: pointer;
+
+    > div{
+      line-height: 1.5em;
+      vertical-align: middle;
+      padding: 2px;
+    }
+    &:hover div{
+      background-color: #000000;
+
+    }
+  }
+}

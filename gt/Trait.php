@@ -1018,7 +1018,7 @@ trait DBTracking{
         AND TIMESTAMPDIFF(second, t.date_time, now())  < $this->traceTime
         AND t.date_time <=  now()
         ORDER BY t.date_time
-        
+
         ";
 
 
