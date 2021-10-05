@@ -25,14 +25,6 @@ export class Search {
         }
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
-            this.unitPanel.addEvent((unitId) => {
-                if (this.wins["main"].getVisible()) {
-                    this.show(unitId);
-                }
-            });
-            this.unitPanel.onPending = (unitId) => {
-                this.show(unitId);
-            };
         }
         this.create(main);
     }
