@@ -105,8 +105,8 @@ class Search
 
 
 				FROM unit as u
-				INNER JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
-				INNER JOIN event as e ON t.unit_id = e.unit_id AND t.date_time = e.date_time
+				LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
+
 				INNER JOIN user_unit as uu ON uu.unit_id = u.id
 
 				INNER JOIN device as de ON de.id = u.device_id
