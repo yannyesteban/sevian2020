@@ -132,7 +132,7 @@ class Search
 				mo.name like '%$q%' OR
 				br.name like '%$q%')
 
-				ORDER BY client, account, vehicle_name
+				ORDER BY vehicle_name
 
         ";
 
