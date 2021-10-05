@@ -46,9 +46,7 @@ export class Search {
 
         if (!main) {
             main = $.create("div").attr("id", this.id);
-            main.on("click", (event) => {
 
-            })
         }
 
         if (this.unitPanelId) {

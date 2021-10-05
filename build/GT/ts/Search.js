@@ -20,8 +20,6 @@ export class Search {
         let main = this.id ? $(this.id) : null;
         if (!main) {
             main = $.create("div").attr("id", this.id);
-            main.on("click", (event) => {
-            });
         }
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
