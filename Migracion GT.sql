@@ -40,8 +40,8 @@ i2.id as input_id,
 
 FROM cota.vehiculo_inputs vi
 INNER JOIN gt.index_aux as x
-INNER JOIN gt.vehicles as v ON v.id2=vi.codvehiculo
-INNER JOIN gt.units as u ON u.vehicle_id = v.id
+INNER JOIN gt.vehicle as v ON v.id2=vi.codvehiculo
+INNER JOIN gt.unit as u ON u.vehicle_id = v.id
 INNER JOIN gt.input as i2 ON i2.id2 = CASE x.pos
 WHEN 1 THEN input_1
 WHEN 2 THEN input_2
@@ -68,8 +68,8 @@ i2.id as input_id,
 
 FROM cota.vehiculo_inputs vi
 INNER JOIN gt.index_aux as x
-INNER JOIN gt.vehicles as v ON v.id2=vi.codvehiculo
-INNER JOIN gt.units as u ON u.vehicle_id = v.id
+INNER JOIN gt.vehicle as v ON v.id2=vi.codvehiculo
+INNER JOIN gt.unit as u ON u.vehicle_id = v.id
 INNER JOIN gt.input as i2 ON i2.id2 = CASE x.pos
 WHEN 1 THEN output_1
 WHEN 2 THEN output_2

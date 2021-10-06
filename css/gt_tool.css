@@ -411,4 +411,26 @@
 .search-tool .row:hover div {
   background-color: #000000;
 }
+
+.tool-import {
+  padding: 5px;
+  background-color: #ececec;
+  color: #4d4d4d;
+  font-size: 11px;
+  display: grid;
+  overflow: auto;
+  grid-template-columns: 20px 20px minmax(50px, 100px) minmax(100px, auto);
+}
+.tool-import .row {
+  display: contents;
+  cursor: pointer;
+}
+.tool-import .row > div {
+  line-height: 1.5em;
+  vertical-align: middle;
+  padding: 2px;
+}
+.tool-import .row:hover div {
+  background-color: #fffdfd;
+}
 /*# sourceMappingURL=gt_tool.css.map */

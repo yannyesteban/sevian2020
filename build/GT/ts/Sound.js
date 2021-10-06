@@ -3,8 +3,8 @@ export class Sound {
         this.sound = null;
         this.soundIndex = 0;
         this.src = [
-            "../../sounds/mixkit-classic-alarm-995.wav",
-            "../../sounds/mixkit-security-facility-breach-alarm-994.wav"
+            "http://web.bestsecurity.com:8008/gtcomm/sounds/mixkit-classic-alarm-995.wav",
+            "http://web.bestsecurity.com:8008/gtcomm//sounds/mixkit-security-facility-breach-alarm-994.wav"
         ];
         this.status = 0;
         for (var x in info) {

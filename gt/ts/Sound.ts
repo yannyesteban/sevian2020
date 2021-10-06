@@ -4,8 +4,8 @@ export class Sound {
     private sound: HTMLAudioElement = null;
     private soundIndex = 0;
     private src = [
-        "../../sounds/mixkit-classic-alarm-995.wav",
-        "../../sounds/mixkit-security-facility-breach-alarm-994.wav"
+        "http://web.bestsecurity.com:8008/gtcomm/sounds/mixkit-classic-alarm-995.wav",
+        "http://web.bestsecurity.com:8008/gtcomm//sounds/mixkit-security-facility-breach-alarm-994.wav"
     ];
 
     private status: number = 0;

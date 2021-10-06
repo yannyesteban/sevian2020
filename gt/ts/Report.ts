@@ -16,6 +16,7 @@ import { S } from "../../Sevian/ts/Sevian.js";
 import { InfoComm } from "./InfoMenu.js";
 import { Communication } from "./Communication.js";
 import { UnitConfig } from "./UnitConfig.js"
+import { ExpImp } from "./ExpImp.js";
 
 
 export class Report {
@@ -58,7 +59,7 @@ export class Report {
 
     private unitPanelId: string = "";
     private unitPanel: any = null;
-
+    private importModule: ExpImp = null;
 
     constructor(info: Report) {
         for (var x in info) {
@@ -128,6 +129,12 @@ export class Report {
         this.tab = new Tab({
             target: main,
             className: "tab-tool",
+            onOpen: (index) => {
+                if (index == 5) {
+                    this.importModule.init(this.unitId);
+                }
+
+            }
         });
 
         this.tabs["A"] = this.tab.add({
@@ -145,9 +152,11 @@ export class Report {
         });
 
 
-
+        this.importModule = new ExpImp({});
 
         this.tab.add({ caption: "Reportar", tagName: "form", set:this.unitConfig.get() });
+        this.tab.add({ caption: "Exp", tagName: "form", set: this.importModule.get() });
+        this.tab.add({ caption: "Imp", tagName: "form" });
 
         this.wins["main"] = new Float.Window({
             visible: false,
@@ -636,7 +645,7 @@ export class Report {
                         action: (item, event) => {
                             let params = {};
 
-                            
+
                             command.fields.forEach((element, index2: number) => {
 
                                 params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue();
@@ -795,8 +804,8 @@ export class Report {
         index: number,
         type: string, mode: number
     ) {
-        
-        
+
+
 
 
         S.go({
@@ -1213,7 +1222,7 @@ export class Report {
         if (type == "0") {
             //this.createMainForm(command);
             //this.loadTab(command, type);
-            
+
             this.loadForm(command, type, command.index);
 
         } else if (type == "params") {

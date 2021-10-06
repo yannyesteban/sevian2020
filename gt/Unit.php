@@ -49,7 +49,7 @@ class Unit
             $this->method = $method;
 		}
 
-		
+
 		switch($this->method){
 			case 'load':
 
@@ -225,7 +225,7 @@ class Unit
 			'draggable'=> true,
 			'closable'=> false
 
-		]; 
+		];
 
 		$this->info = [
 			'id'=>$this->id,
@@ -263,6 +263,7 @@ class Unit
 			'winStatus' => $winStatus
 		];
 
+		//hx($this->info);
 		$this->setSes('lastDateTime', $lastDateTime);
 		$this->setInit($this->info);
 

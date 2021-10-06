@@ -176,7 +176,14 @@ class Report
                     'iToken'=> $this->iToken
                 ]);
                 break;
+            case 'load-file':
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> $this->loadFile($unitId),
+                    'iToken'=> $this->iToken
+                ]);
 
+                break;
 			default:
 				break;
 
@@ -652,4 +659,28 @@ class Report
 
 
     }
+
+
+
+    private function loadFile($unitId){
+        $cn = $this->cn;
+
+        $cn->query = "
+        SELECT c.command, COALESCE(role, c.command) as role, uc.id, uc.unit_id, uc.command_id, uc.index, uc.mode, uc.name,
+        CASE when uc.index > 0 THEN COALESCE(uc.name, uc.index) ELSE '' end as cindex
+        FROM unit_command uc
+        INNER JOIN device_command as c ON c.id = uc.command_id
+        LEFT JOIN command_role as r ON r.id = c.role_id
+        WHERE uc.unit_id = '$unitId'
+
+        ";
+
+        $result = $this->cn->execute();
+
+
+        return $cn->getDataAll($result);
+
+
+    }
+
 }
