@@ -117,7 +117,7 @@ export class Search {
             blockingTarget: this.resultLayer,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
+
                     this.showResult(json);
                 },
             },

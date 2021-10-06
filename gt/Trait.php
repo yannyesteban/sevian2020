@@ -2097,7 +2097,7 @@ trait DBEvent{
         e.date_time, u.id as unitId,
         e.mode, e.title, dn.name as device_name, e.stamp,
         date_format(e.stamp, '%d/%m/%Y') as fdate,
-        date_format(e.stamp, '%T') as ftime, t.speed,
+        date_format(e.stamp, '%T') as ftime, t.speed, t.id as tracking_id,
         CONCAT(
             TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
             MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()), 24), ':',
@@ -2116,12 +2116,12 @@ trait DBEvent{
         e.status != 2
         AND ('$lastId'= 0 or e.id > '$lastId')
         AND uu.user = '$user'
-        #ORDER BY 1
+
         ORDER BY 1 desc
         LIMIT $this->maxRecords
         ";
 
-        //hx($cn->query);
+
 
         $result = $this->cn->execute();
         //hx($cn->getDataAll($result));

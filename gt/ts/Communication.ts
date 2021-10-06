@@ -111,7 +111,7 @@ export class Communication {
     private winNames = WNames;
 
     private maxRecords = 50;
-    private sound: any = null;
+    private sound: Sound = null;
     private socketServer = {
         host: "127.0.0.1",
         port: 3310
@@ -139,6 +139,8 @@ export class Communication {
 
         }
         this._create(main);
+        this.sound = new Sound({});
+
         $(window).on("load", () => {
             // newMenus();
             this._ws = new Socket({
@@ -148,8 +150,8 @@ export class Communication {
                 //name: S.getInstance(),
 
                 onopen: (event) => {
-                    
-                   
+
+
 
                     let openMessage = JSON.stringify({
                         type: "connect",
@@ -240,8 +242,7 @@ export class Communication {
                 }
             }
 
-            let s = new Sound();
-            this.sound = s.test("../../sounds/mixkit-classic-alarm-995.wav");//.play();
+
 
         });
 
@@ -338,26 +339,28 @@ export class Communication {
             mainClass: "event",
             showType: false,
             onread: (info) => {
+
                 if (info.unitId) {
-                    this.unitPanel.setUnit(info.unitId);
-                    this.unitPanel.showUnit3(info.unitId);
-
-                    this.getEventPanel().showEvent(info.id);
-
+                    if (info.tracking_id) {
+                        console.log(info.tracking_id);
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit4(info.unitId);
+                        this.getEventPanel().showEvent(info.id);
+                    } else {
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit3(info.unitId);
+                    }
                 }
 
-
-
-                //infoMenu.updateType(1, counts[info.type] || "");
-
-                //console.log(info);
-
                 this.updateEventStatus(info, 1, this.winNames.event);
+
             },
 
             onadd: (info) => {
                 const counts = this.getInfoWin(this.winNames.event).getCounts();
                 this.infoMenu.updateType(this.winNames.event, counts || "");
+                this.evalSound();
+
             },
             ondelete: (info) => {
                 this.updateEventStatus(info, 2, this.winNames.event);
@@ -370,12 +373,16 @@ export class Communication {
             showType: false,
             onread: (info) => {
                 if (info.unitId) {
-                    this.unitPanel.setUnit(info.unitId);
-                    this.unitPanel.showUnit3(info.unitId);
-                    this.getEventPanel().showEvent(info.id);
+                    if (info.tracking_id) {
+                        console.log(info.tracking_id);
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit4(info.unitId);
+                        this.getEventPanel().showEvent(info.id);
+                    } else {
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit3(info.unitId);
+                    }
                 }
-                //const counts = this.getInfoWin(this.winNames.alarm).getCounts();
-                //infoMenu.updateType(0, counts[info.type] || "");
 
                 this.updateEventStatus(info, 1, this.winNames.alarm);
 
@@ -385,6 +392,7 @@ export class Communication {
 
                 const counts = this.getInfoWin(this.winNames.alarm).getCounts();
                 this.infoMenu.updateType(this.winNames.alarm, counts || "");
+                this.evalSound();
 
             },
             ondelete: (info) => {
@@ -650,6 +658,8 @@ export class Communication {
 
         console.log(json.windowId, counts);
         this.infoMenu.updateType(json.windowId, counts);
+        this.evalSound();
+
         //this.infoMenu.updateType(1, 9);
 
     }
@@ -695,6 +705,7 @@ export class Communication {
         //console.log(json.windowId, counts);
         this.infoMenu.updateType(json.windowId, counts);
         //this.infoMenu.updateType(1, 9);
+        this.evalSound();
 
     }
     updateAllEventStatus(info, status, windowId) {
@@ -1716,8 +1727,24 @@ alert(this.commandPanelId)
     }
 
     public getEventPanel():Event{
-        
+
         return S.getElement(this.eventPanelId) as Event;
+    }
+
+
+    private evalSound() {
+        const alarms = this.getInfoWin(this.winNames.alarm).getCounts();
+
+        if (alarms > 0) {
+            this.sound.play(0);
+            return;
+        }
+        const events = this.getInfoWin(this.winNames.event).getCounts();
+        if (events > 0) {
+            this.sound.play(1);
+            return;
+        }
+        this.sound.pause();
     }
 }
 

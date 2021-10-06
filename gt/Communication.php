@@ -138,7 +138,7 @@ class Communication extends
             'gridId'        => $this->eparams->gridId?? '',
             'infoMenuId'    => $this->eparams->infoMenu?? '',
             'user'          => $this->_userInfo->user,
-            'maxRecord'     => $this->maxRecords?? 20,
+            'maxRecords'     => $this->maxRecords?? 20,
             'socketServer'  => [
                 'host'  => $gtServer,//'localhost',//'bests.no-ip.info',
                 'port'  => $gtPort

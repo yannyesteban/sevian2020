@@ -1095,6 +1095,37 @@ export class Unit {
             this.onInfoUpdate(this.getUnitInfo(unitId), info.unitName);
         }
     }
+    showUnit4(unitId) {
+        if (this._lastUnitId && this.units[this._lastUnitId] && this._lastUnitId !== unitId) {
+            const visible = this.units[this._lastUnitId].getVisible();
+            if (visible && !this.isChecked(this._lastUnitId)) {
+                this.units[this._lastUnitId].setVisible(false);
+            }
+        }
+        if (this.units[unitId].getValid()) {
+            this.units[unitId].setInfo(this.getUnitInfo(unitId));
+            this.units[unitId].show(true);
+            //this._lastUnitId = unitId;
+            //this.playTrace(unitId);
+        }
+        else {
+            new Float.Message({
+                "caption": this.units[unitId].getName(),
+                "text": this.msgErrortracking,
+                "className": "",
+                "delay": 3000,
+                "mode": "",
+                "left": "center",
+                "top": "top"
+            }).show({});
+            //alert(this.msgErrortracking);
+        }
+        this.change(unitId);
+        const info = this.dataUnits.find(e => e.unitId == unitId) || {};
+        if (info) {
+            this.onInfoUpdate(this.getUnitInfo(unitId), info.unitName);
+        }
+    }
     getLastUnit() {
         return this._lastUnitId;
     }

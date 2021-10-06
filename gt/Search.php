@@ -84,7 +84,7 @@ class Search
 		$cn = $this->cn;
 		$path = PATH_IMAGES;
         $cn->query = "SELECT u.id as unitId,
-		de.name,vn.name as vehicle_name, plate, br.name as brand,
+		de.name,vn.name as vehicle_name, br.name as brand,
 
 				u.id as unitId,
 				ac.client_id as client_id,
@@ -98,14 +98,14 @@ class Search
 				CASE WHEN t.id IS NULL THEN 1 ELSE 0 END as noTracking,
 				CASE WHEN t.id IS NULL THEN 0 ELSE 1 END as valid,
 				vn.name as unitName,
-				CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,#,
+				CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,
 				' - ' as date_time, ' -' as longitude, ' -' as latitude,
 				' -' as heading, ' -' as satellite, '- ' as speed, u.conn_status as connected
 
 
 
 				FROM unit as u
-				LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date #t.id = u.tracking_id
+				LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date
 
 				INNER JOIN user_unit as uu ON uu.unit_id = u.id
 

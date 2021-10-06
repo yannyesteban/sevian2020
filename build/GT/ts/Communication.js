@@ -94,6 +94,7 @@ export class Communication {
             main = $.create("div").attr("id", this.id);
         }
         this._create(main);
+        this.sound = new Sound({});
         $(window).on("load", () => {
             // newMenus();
             this._ws = new Socket({
@@ -178,8 +179,6 @@ export class Communication {
                     return mode;
                 };
             }
-            let s = new Sound();
-            this.sound = s.test("../../sounds/mixkit-classic-alarm-995.wav"); //.play();
         });
     }
     _create(main) {
@@ -243,17 +242,23 @@ export class Communication {
             showType: false,
             onread: (info) => {
                 if (info.unitId) {
-                    this.unitPanel.setUnit(info.unitId);
-                    this.unitPanel.showUnit3(info.unitId);
-                    this.getEventPanel().showEvent(info.id);
+                    if (info.tracking_id) {
+                        console.log(info.tracking_id);
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit4(info.unitId);
+                        this.getEventPanel().showEvent(info.id);
+                    }
+                    else {
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit3(info.unitId);
+                    }
                 }
-                //infoMenu.updateType(1, counts[info.type] || "");
-                //console.log(info);
                 this.updateEventStatus(info, 1, this.winNames.event);
             },
             onadd: (info) => {
                 const counts = this.getInfoWin(this.winNames.event).getCounts();
                 this.infoMenu.updateType(this.winNames.event, counts || "");
+                this.evalSound();
             },
             ondelete: (info) => {
                 this.updateEventStatus(info, 2, this.winNames.event);
@@ -265,17 +270,23 @@ export class Communication {
             showType: false,
             onread: (info) => {
                 if (info.unitId) {
-                    this.unitPanel.setUnit(info.unitId);
-                    this.unitPanel.showUnit3(info.unitId);
-                    this.getEventPanel().showEvent(info.id);
+                    if (info.tracking_id) {
+                        console.log(info.tracking_id);
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit4(info.unitId);
+                        this.getEventPanel().showEvent(info.id);
+                    }
+                    else {
+                        this.unitPanel.setUnit(info.unitId);
+                        this.unitPanel.showUnit3(info.unitId);
+                    }
                 }
-                //const counts = this.getInfoWin(this.winNames.alarm).getCounts();
-                //infoMenu.updateType(0, counts[info.type] || "");
                 this.updateEventStatus(info, 1, this.winNames.alarm);
             },
             onadd: (info) => {
                 const counts = this.getInfoWin(this.winNames.alarm).getCounts();
                 this.infoMenu.updateType(this.winNames.alarm, counts || "");
+                this.evalSound();
             },
             ondelete: (info) => {
                 this.updateEventStatus(info, 2, this.winNames.alarm);
@@ -467,6 +478,7 @@ export class Communication {
         const counts = infoWin.getCounts(); //counts[info.type]
         console.log(json.windowId, counts);
         this.infoMenu.updateType(json.windowId, counts);
+        this.evalSound();
         //this.infoMenu.updateType(1, 9);
     }
     updateEventStatus(info, status, windowId) {
@@ -501,6 +513,7 @@ export class Communication {
         //console.log(json.windowId, counts);
         this.infoMenu.updateType(json.windowId, counts);
         //this.infoMenu.updateType(1, 9);
+        this.evalSound();
     }
     updateAllEventStatus(info, status, windowId) {
         S.send3({
@@ -1313,6 +1326,19 @@ export class Communication {
     }
     getEventPanel() {
         return S.getElement(this.eventPanelId);
+    }
+    evalSound() {
+        const alarms = this.getInfoWin(this.winNames.alarm).getCounts();
+        if (alarms > 0) {
+            this.sound.play(0);
+            return;
+        }
+        const events = this.getInfoWin(this.winNames.event).getCounts();
+        if (events > 0) {
+            this.sound.play(1);
+            return;
+        }
+        this.sound.pause();
     }
 }
 //# sourceMappingURL=Communication.js.map

@@ -161,12 +161,12 @@ class Mobil {
 			this.trackingData.push(tracking);
 
 
-			
+
 			if (this.traceTime) {
 				const time = Math.trunc(Date.now() / 1000);
 				this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.traceTime);
 			}
-			
+
 
 			this.trace.setData(this.trackingData);
 		}
@@ -241,12 +241,12 @@ class Mobil {
 	}
 	cutTrace() {
 		if (this.trace.isActive() && this.traceTime) {
-			
+
 			let length = this.trackingData.length;
 			const time = Math.trunc(Date.now() / 1000);
 			this.trackingData = this.trackingData.filter((e) => (time - e.ts) < this.traceTime);
 			if (length != this.trackingData.length) {
-			
+
 				this.trace.setData(this.trackingData);
 			}
 		}
@@ -448,7 +448,7 @@ export class Unit {
 					if(e){
 						$(e).on("change", (event)=>{
 							//this.playTrace(data.unitId, event.currentTarget.value);
-							
+
 							if(event.currentTarget.value){
 								this.traceTool.play(data.unitId);
 							}else{
@@ -494,7 +494,7 @@ export class Unit {
 					});
 
 					traceCHK.on("change", event=>{
-						
+
 						if(event.currentTarget.checked){
 							this.traceTool.play(event.currentTarget.value);
 						}else{
@@ -509,7 +509,7 @@ export class Unit {
 						}else{
 							this.traceTool.stopFollow(event.currentTarget.value);
 						}
-						
+
 						//this.setFollowMe(event.currentTarget.value, event.currentTarget.checked);
 					});
 					followCHK2.on("change", event =>{
@@ -744,7 +744,7 @@ export class Unit {
 			let updateLastConnection = false;
 			if (this._lastUnitId === tracking.unitId && this.units[tracking.unitId].data.connected != tracking.connected) {
 				updateLastConnection = true;
-				
+
 			}
 
 			this.units[tracking.unitId].data.connected = tracking.connected;
@@ -906,7 +906,7 @@ export class Unit {
 	}
 	goPlayTrace(unitId: number) {
 
-		
+
 
 		S.go({
 			async: true,
@@ -1164,7 +1164,7 @@ export class Unit {
 	}
 
 	getDataInfo(id: number) {
-		
+
 		if (!this.dataUnits[id]) {
 			return;
 		}
@@ -1337,9 +1337,9 @@ export class Unit {
 			},
 			onStopFollow: (unitId) => {
 				const checkInfo = $(document).query(`input[type="checkbox"][data-follow="${unitId}"]`);
-				
+
 				if(checkInfo){
-					
+
 					checkInfo.checked = false;
 				}
 				this.setFollowMe(unitId, false);
@@ -1445,6 +1445,50 @@ export class Unit {
 
 	}
 
+
+	public showUnit4(unitId) {
+
+
+		if (this._lastUnitId && this.units[this._lastUnitId] && this._lastUnitId !== unitId) {
+
+			const visible = this.units[this._lastUnitId].getVisible();
+
+			if(visible && !this.isChecked(this._lastUnitId)){
+
+				this.units[this._lastUnitId].setVisible(false);
+			}
+		}
+
+
+		if (this.units[unitId].getValid()) {
+			this.units[unitId].setInfo(this.getUnitInfo(unitId));
+			this.units[unitId].show(true);
+
+			//this._lastUnitId = unitId;
+
+			//this.playTrace(unitId);
+
+		} else {
+			new Float.Message({
+				"caption": this.units[unitId].getName(),
+				"text": this.msgErrortracking,
+				"className": "",
+				"delay": 3000,
+				"mode": "",
+				"left": "center",
+				"top": "top"
+			}).show({});
+			//alert(this.msgErrortracking);
+		}
+		this.change(unitId);
+		const info = this.dataUnits.find(e => e.unitId == unitId) || {};
+		if (info) {
+
+			this.onInfoUpdate(this.getUnitInfo(unitId), info.unitName);
+		}
+
+	}
+
 	public getLastUnit() {
 
 		return this._lastUnitId;
@@ -1477,7 +1521,7 @@ export class Unit {
 	}
 
 	public getPendingButton(){
-		
+
 		return this.pendingButton;
 	}
 }

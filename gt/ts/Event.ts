@@ -80,6 +80,8 @@ export class Event {
     private map:MapApi;
     private mapName: string = "";
 
+    private mark: any = null;
+
     constructor(info: Event) {
 
         for (var x in info) {
@@ -90,7 +92,7 @@ export class Event {
 
         let main = this.id ? $(this.id) : null;
 
-        
+
 
         if (!main) {
             main = $.create("div").attr("id", this.id);
@@ -99,27 +101,27 @@ export class Event {
             })
         }
 
-       
-        
-        
+
+
+
 
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
             this.unitPanel.addEvent((unitId: number) => {
-                
-                
+
+
                 if (this.wins["main"].getVisible()) {
                     this.show(unitId);
                 }
-            
+
             });
             this.unitPanel.onPending = (unitId: number) => {
 
                 this.show(unitId);
             };
 
-            
-            
+
+
         }
 
         if (this.socketId) {
@@ -132,7 +134,7 @@ export class Event {
 
         Map.load(this.mapName, (mapApi: MapApi, map) => {
 
-			
+
 			this.map = mapApi;
         });
         this.create(main);
@@ -171,12 +173,12 @@ export class Event {
         });
 
 
-        
+
     }
 
     public showEvent(eventId){
         this.goShowEvent(eventId);
-        
+
 	}
 
     public getUnit() {
@@ -190,7 +192,7 @@ export class Event {
 
     public show(unitId?) {
 
-        
+
 
     }
 
@@ -221,9 +223,10 @@ export class Event {
 	}
 
 
-    
+
 
     private goShowEvent(eventId: number) {
+
         S.go({
             async: true,
             valid: false,
@@ -231,16 +234,24 @@ export class Event {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    const mark = this.map.createMark({
-                        latitude: 10.532533,
-                        longitude: -66.83021,
-                        heading: 0,
-                        image: "http://localhost/sevian2020/images/marks/squat_marker_orange-31px2.png",
-                        popupInfo: 456,//this.infoFormMain.get(),
-                        visible: true,//this.visible
-                    });
-                    mark.panTo();
-                   
+                    console.log(json);
+                    this.infoFormMain.setData(json);
+                    if (!this.mark) {
+                        this.mark = this.map.createMark({
+                            latitude: json.latitude,
+                            longitude: json.longitude,
+                            heading: 0,//json.heading,
+                            image: "http://localhost/sevian2020/images/marks/squat_marker_orange-31px2.png",
+                            popupInfo: this.infoFormMain.get(),
+                            visible: true,//this.visible
+                        });
+                    } else {
+                        this.mark.setLngLat([json.longitude, json.latitude]);
+                        //this.mark.setHeading(json.heading || 0);
+                    }
+
+                    this.mark.panTo();
+
                 },
             },
 
@@ -261,8 +272,8 @@ export class Event {
     }
 
 
-    
-    
+
+
 
 
 

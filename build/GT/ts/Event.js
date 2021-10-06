@@ -44,6 +44,7 @@ export class Event {
         this.onSubTotal = (unitId, total) => { };
         this.subtotalButton = null;
         this.mapName = "";
+        this.mark = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -137,15 +138,23 @@ export class Event {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    const mark = this.map.createMark({
-                        latitude: 10.532533,
-                        longitude: -66.83021,
-                        heading: 0,
-                        image: "http://localhost/sevian2020/images/marks/squat_marker_orange-31px2.png",
-                        popupInfo: 456,
-                        visible: true, //this.visible
-                    });
-                    mark.panTo();
+                    console.log(json);
+                    this.infoFormMain.setData(json);
+                    if (!this.mark) {
+                        this.mark = this.map.createMark({
+                            latitude: json.latitude,
+                            longitude: json.longitude,
+                            heading: 0,
+                            image: "http://localhost/sevian2020/images/marks/squat_marker_orange-31px2.png",
+                            popupInfo: this.infoFormMain.get(),
+                            visible: true, //this.visible
+                        });
+                    }
+                    else {
+                        this.mark.setLngLat([json.longitude, json.latitude]);
+                        //this.mark.setHeading(json.heading || 0);
+                    }
+                    this.mark.panTo();
                 },
             },
             params: [
