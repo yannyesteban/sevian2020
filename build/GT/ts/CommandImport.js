@@ -1,11 +1,13 @@
 import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
+import { Float } from "../../Sevian/ts/Window.js";
+import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { S } from "../../Sevian/ts/Sevian.js";
-export class ExpImp {
+export class CommandImport {
     constructor(info) {
-        this.id = "import-module1";
+        this.id = "import-module2";
         this.className = "tool-import";
         this.main = null;
-        this.grid = null;
+        this.form = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -22,43 +24,15 @@ export class ExpImp {
     }
     create(main) {
         this.main = main;
-        const menu = main.create("div").addClass("menu");
-        const chk = menu.create("input").prop({
-            type: "checkbox"
-        });
-        chk.on("change", (event) => {
-            const value = event.currentTarget.checked;
-            const elems = this.grid.queryAll(`input[type="checkbox"]`);
-            if (elems) {
-                elems.forEach(element => {
-                    element.checked = value;
-                });
-            }
-        });
-        this.grid = main.create("div").addClass("grid");
-        menu.create("span").text("todos");
-        const nav = main.create("div").addClass("nav");
-        nav.create("input").prop({
-            type: "text",
-            name: "name",
-            placeholder: "...Exportar Como"
-        });
-        nav.create("button").text("Exportar")
-            .on("click", event => {
-            this.goSave();
-        });
         main.addClass(this.className);
     }
     get() {
         return this.main;
     }
-    initExport(unitId) {
-        this.goInitExport(unitId);
+    init(unitId) {
+        this.goInit(unitId);
     }
-    initImportt(unitId) {
-        this.goInitImport(unitId);
-    }
-    goInitExport(unitId) {
+    goInit(unitId) {
         S.go({
             async: true,
             valid: false,
@@ -66,32 +40,7 @@ export class ExpImp {
             requestFunctions: {
                 f: (json) => {
                     console.log(json);
-                    this.createGrid(json);
-                },
-            },
-            params: [
-                {
-                    t: "setMethod",
-                    element: "gt-report",
-                    method: "load-file",
-                    name: "",
-                    eparams: {
-                        unitId
-                    },
-                    iToken: "f",
-                },
-            ],
-        });
-    }
-    goInitImport(unitId) {
-        S.go({
-            async: true,
-            valid: false,
-            blockingTarget: this.main,
-            requestFunctions: {
-                f: (json) => {
-                    console.log(json);
-                    this.createForm(json);
+                    this.createForm(json, unitId);
                 },
             },
             params: [
@@ -108,29 +57,97 @@ export class ExpImp {
             ],
         });
     }
-    goSave() {
-        if (this.getNameList() == "") {
-            alert("Nombre es Obligatorio!");
-            return;
-        }
+    goImport(unitId, fileId) {
         S.go({
             async: true,
             valid: false,
             blockingTarget: this.main,
+            //form: this.form.getFormData(),
             requestFunctions: {
                 f: (json) => {
                     console.log(json);
+                    this.createForm(json.files, unitId);
+                    if (!json.error) {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record was saved!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                    else {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record wasn't saved!!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
                 },
             },
             params: [
                 {
                     t: "setMethod",
                     element: "gt-report",
-                    method: "save-file",
+                    method: "import-file",
                     name: "",
                     eparams: {
-                        list: this.getCommandList(),
-                        name: this.getNameList()
+                        unitId,
+                        fileId
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
+    }
+    goDelete(unitId, fileId) {
+        S.go({
+            async: true,
+            valid: false,
+            blockingTarget: this.main,
+            form: this.form.getFormData(),
+            requestFunctions: {
+                f: (json) => {
+                    console.log(json);
+                    this.createForm(json.files, unitId);
+                    if (!json.error) {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record was saved!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                    else {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record wasn't saved!!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "delete-file",
+                    name: "",
+                    eparams: {
+                        fileId
                     },
                     iToken: "f",
                 },
@@ -173,27 +190,43 @@ export class ExpImp {
             //row.create("div").text(info.unitId);
         });
     }
-    createForm(data) {
+    createForm(data, unitId) {
+        const fields = [];
         fields.push({
-            caption: "command_name",
-            name: "command_name",
+            caption: "File",
+            name: "file_id",
+            input: "input",
+            type: "select",
+            value: "",
+            data: data.map((info) => [info.id, info.name])
+        });
+        fields.push({
+            caption: "Unit Id",
+            name: "unit_it",
             input: "input",
             type: "hidden",
-            value: command.command,
+            value: unitId
         });
-        const form = new Form({
-            target: this.tabs[type],
-            id: this.formIds[type],
-            caption: command.command,
+        this.form = new Form({
+            target: this.main,
+            id: "dddd",
+            caption: "Importación",
             fields: fields,
             menu: {
                 caption: "",
                 autoClose: false,
-                className: ["sevian", "horizontal", `type-${type}`],
+                className: ["sevian", "horizontal"],
                 items: [
                     {
-                        caption: "Save",
+                        caption: "Importar",
                         action: (item, event) => {
+                            this.goImport(unitId, this.form.getInput("file_id").getValue());
+                        }
+                    },
+                    {
+                        caption: "Eliminar Registro",
+                        action: (item, event) => {
+                            this.goDelete(unitId, this.form.getInput("file_id").getValue());
                         }
                     }
                 ]
@@ -201,4 +234,4 @@ export class ExpImp {
         });
     }
 }
-//# sourceMappingURL=ExpImp.js.map
+//# sourceMappingURL=CommandImport.js.map

@@ -1,60 +1,38 @@
-import { _sgQuery as $, SQObject } from "../../Sevian/ts/Query.js";
-import {
-    I,
-    Input,
-    Hidden,
-    InputDate,
-    InputInfo,
-    Multi,
-} from "../../Sevian/ts/Input.js";
-
+import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
+import { Float } from "../../Sevian/ts/Window.js";
 import { S } from "../../Sevian/ts/Sevian.js";
-
-
-export class ExpImp {
-    private id: any = "import-module1";
-    private className: any = "tool-import";
-    private main: SQObject = null;
-    private grid: SQObject = null;
-
-    constructor(info: any) {
+export class CommandExport {
+    constructor(info) {
+        this.id = "import-module1";
+        this.className = "tool-import";
+        this.main = null;
+        this.grid = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
             }
         }
-
         let main = this.id ? $(this.id) : null;
-
         if (!main) {
             main = $.create("div");
             if (this.id) {
                 main.id(this.id);
             }
         }
-
         this.create(main);
     }
-
-    private create(main) {
+    create(main) {
         this.main = main;
-
         const menu = main.create("div").addClass("menu");
         const chk = menu.create("input").prop({
             type: "checkbox"
-
-
-
         });
-
         chk.on("change", (event) => {
             const value = event.currentTarget.checked;
-
             const elems = this.grid.queryAll(`input[type="checkbox"]`);
             if (elems) {
                 elems.forEach(element => {
                     element.checked = value;
-
                 });
             }
         });
@@ -68,19 +46,17 @@ export class ExpImp {
         });
         nav.create("button").text("Exportar")
             .on("click", event => {
-                this.goSave();
-            });
+            this.goSave();
+        });
         main.addClass(this.className);
     }
-    public get() {
+    get() {
         return this.main;
     }
-
-    public init(unitId: number) {
+    init(unitId) {
         this.goInit(unitId);
     }
-
-    private goInit(unitId: number) {
+    goInit(unitId) {
         S.go({
             async: true,
             valid: false,
@@ -91,7 +67,6 @@ export class ExpImp {
                     this.createGrid(json);
                 },
             },
-
             params: [
                 {
                     t: "setMethod",
@@ -106,25 +81,41 @@ export class ExpImp {
             ],
         });
     }
-
-    private goSave() {
-
+    goSave() {
         if (this.getNameList() == "") {
-            alert("Nombre es Obligatorio!")
+            alert("Nombre es Obligatorio!");
             return;
         }
-
         S.go({
             async: true,
             valid: false,
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
-
+                    if (!json.error) {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record was saved!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                    else {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record wasn't saved!!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
                 },
             },
-
             params: [
                 {
                     t: "setMethod",
@@ -140,8 +131,7 @@ export class ExpImp {
             ],
         });
     }
-
-    private getCommandList() {
+    getCommandList() {
         const elems = this.grid.queryAll(`input[type="checkbox"]`);
         const result = [];
         if (elems) {
@@ -149,44 +139,34 @@ export class ExpImp {
                 if (element.checked) {
                     result.push(element.value);
                 }
-
             });
         }
-
         return result;
     }
-
-    private getNameList() {
+    getNameList() {
         const elems = this.main.query(`input[name="name"]`);
         const result = [];
         if (elems) {
             return elems.value;
         }
-
         return "";
     }
-    private createGrid(data) {
+    createGrid(data) {
         this.grid.text("");
-
         data.forEach(info => {
             const row = this.grid.create("div").addClass("row");
             row.on("click", (event) => {
-
             });
             row.create("input").prop({
                 type: "checkbox",
-                value: info.id
+                value: info.id,
+                checked: true
             });
-            row.create("div").text(info.id);
+            //row.create("div").text(info.id);
             row.create("div").text(info.role);
             row.create("div").text(info.cindex);
             //row.create("div").text(info.unitId);
-
-
-
-
-
         });
     }
-
 }
+//# sourceMappingURL=CommandExport.js.map

@@ -439,7 +439,7 @@
   height: 100%;
   display: grid;
   overflow: auto;
-  grid-template-columns: 20px 20px minmax(50px, 100px) minmax(100px, auto);
+  grid-template-columns: 20px minmax(50px, 100px) minmax(100px, auto);
 }
 .tool-import .grid .row {
   display: contents;

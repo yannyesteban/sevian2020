@@ -184,11 +184,45 @@ class Report
                 ]);
 
                 break;
+            case 'init-import':
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> $this->loadFiles(),
+                    'iToken'=> $this->iToken
+                ]);
+
+                break;
+            case 'import-file':
+                $fileId = $this->eparams->fileId ?? 0;
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> [
+                        "error" => $this->importFile($unitId, $fileId),
+                        "files" => $this->loadFiles()
+                    ],
+                    'iToken'=> $this->iToken
+                ]);
+
+                break;
+            case 'delete-file':
+                $fileId = $this->eparams->fileId ?? 0;
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> [
+                        "error" => $this->deleteFile($fileId),
+                        "files" => $this->loadFiles()
+                    ],
+                    'iToken'=> $this->iToken
+                ]);
+
+                break;
             case 'save-file':
 
                 $this->addResponse([
                     'id'	=> $this->id,
-                    'data'	=> $this->saveFile($this->eparams->name, $this->eparams->list),
+                    'data'	=> [
+                        "error" => $this->saveFile($this->eparams->name, $this->eparams->list)
+                    ],
                     'iToken'=> $this->iToken
                 ]);
 
@@ -680,7 +714,7 @@ class Report
         FROM unit_command uc
         INNER JOIN device_command as c ON c.id = uc.command_id
         LEFT JOIN command_role as r ON r.id = c.role_id
-        WHERE uc.unit_id = '$unitId'
+        WHERE uc.unit_id = '$unitId' AND c.role_id IN (0,1) AND c.type = 'A'
 
         ";
 
@@ -701,7 +735,7 @@ class Report
         }
         $cn = $this->cn;
 
-        $cn->query = "SELECT command_id, uc.index, name, uc.params
+        $cn->query = "SELECT command_id, uc.index, COALESCE(name, '') as name, uc.params
         FROM unit_command as uc  WHERE id IN ($sqlList)
         ";
         $data = [];
@@ -719,14 +753,74 @@ class Report
 
         }
 
-        $info = [
-            "name"=>$name,
-            "params"=>json_encode($data)
-        ];
-
-        hx($info);
+        $params =json_encode($data);
 
 
+        $query = "INSERT INTO command_saved (name, params) VALUES ('$name','$params')
+        ON DUPLICATE KEY UPDATE params = '$params';";
+        $result = $this->cn->execute($query);
+        return $cn->error;
+
+
+
+
+    }
+
+    private function deleteFile($id){
+        $cn = $this->cn;
+        $cn->query = "DELETE FROM command_saved WHERE id = '$id'";
+        $result = $this->cn->execute();
+        return $cn->error;
+    }
+
+    private function importFile($unitId, $id){
+        $cn = $this->cn;
+
+        $cn->query = "SELECT * FROM command_saved WHERE id = '$id'";
+        $data = [];
+        $result = $this->cn->execute();
+        if($rs = $cn->getDataAssoc($result)){
+            $params = json_decode($rs['params']);
+
+            if(is_array($params) and count($params) > 0){
+                foreach($params as $k => $item){
+                    $commandId = $item->command_id;
+                    $index = $item->index;
+                    $name = $item->name;
+                    //hx(json_encode($item->params));
+                    $params2 = json_encode($item->params);
+                    $cn->query = "INSERT INTO unit_command
+                            (`unit_id`, `command_id`, `index`, `name`, `params`)
+                        VALUES
+                            ('$unitId','$commandId', '$index', '$name','$params2')
+                        ON DUPLICATE KEY UPDATE
+                        params = '$params2', name = '$name';
+
+                        ";
+                   $result = $this->cn->execute();
+
+                }
+            }
+
+
+        }
+
+
+
+        return $cn->error;
+    }
+
+
+
+    private function loadFiles(){
+        $cn = $this->cn;
+
+        $cn->query = "SELECT id, name FROM command_saved";
+
+        $result = $this->cn->execute();
+
+
+        return $cn->getDataAll($result);
 
 
     }

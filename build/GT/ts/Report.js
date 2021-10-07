@@ -5,7 +5,8 @@ import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { Tab } from "../../Sevian/ts/Tab.js";
 import { S } from "../../Sevian/ts/Sevian.js";
 import { UnitConfig } from "./UnitConfig.js";
-import { ExpImp } from "./ExpImp.js";
+import { CommandExport } from "./CommandExport.js";
+import { CommandImport } from "./CommandImport.js";
 export class Report {
     constructor(info) {
         this.id = null;
@@ -37,7 +38,8 @@ export class Report {
         this.socket = null;
         this.unitPanelId = "";
         this.unitPanel = null;
-        this.importModule = null;
+        this.commandExport = null;
+        this.commandImport = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -88,7 +90,10 @@ export class Report {
             className: "tab-tool",
             onOpen: (index) => {
                 if (index == 5) {
-                    this.importModule.init(this.unitId);
+                    this.commandExport.init(this.unitId);
+                }
+                else if (index == 6) {
+                    this.commandImport.init(this.unitId);
                 }
             }
         });
@@ -103,10 +108,11 @@ export class Report {
         this.unitConfig = new UnitConfig({
             tagMain: "form"
         });
-        this.importModule = new ExpImp({});
+        this.commandExport = new CommandExport({});
+        this.commandImport = new CommandImport({});
         this.tab.add({ caption: "Reportar", tagName: "form", set: this.unitConfig.get() });
-        this.tab.add({ caption: "Exp", tagName: "form", set: this.importModule.get() });
-        this.tab.add({ caption: "Imp", tagName: "form" });
+        this.tab.add({ caption: "Exp", tagName: "form", set: this.commandExport.get() });
+        this.tab.add({ caption: "Imp", tagName: "form", set: this.commandImport.get() });
         this.wins["main"] = new Float.Window({
             visible: false,
             caption: this.caption,
