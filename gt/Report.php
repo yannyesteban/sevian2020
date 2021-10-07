@@ -184,6 +184,15 @@ class Report
                 ]);
 
                 break;
+            case 'save-file':
+
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> $this->saveFile($this->eparams->name, $this->eparams->list),
+                    'iToken'=> $this->iToken
+                ]);
+
+                break;
 			default:
 				break;
 
@@ -679,6 +688,45 @@ class Report
 
 
         return $cn->getDataAll($result);
+
+
+    }
+
+    private function saveFile($name, $list){
+
+        $sqlList = implode(",", $list);
+
+        if($sqlList == ""){
+            return 0;
+        }
+        $cn = $this->cn;
+
+        $cn->query = "SELECT command_id, uc.index, name, uc.params
+        FROM unit_command as uc  WHERE id IN ($sqlList)
+        ";
+        $data = [];
+        $result = $this->cn->execute();
+        while($rs = $cn->getDataAssoc($result)){
+
+            $data[] = [
+                'command_id'=>$rs['command_id'],
+                'index'=>$rs['index'],
+                'name'=>$rs['name'],
+                'params'=>json_decode($rs['params'])
+
+            ];
+
+
+        }
+
+        $info = [
+            "name"=>$name,
+            "params"=>json_encode($data)
+        ];
+
+        hx($info);
+
+
 
 
     }

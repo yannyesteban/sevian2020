@@ -22,7 +22,32 @@ export class ExpImp {
     }
     create(main) {
         this.main = main;
-        main.addClass(this.className).text("hello");
+        const menu = main.create("div").addClass("menu");
+        const chk = menu.create("input").prop({
+            type: "checkbox"
+        });
+        chk.on("change", (event) => {
+            const value = event.currentTarget.checked;
+            const elems = this.grid.queryAll(`input[type="checkbox"]`);
+            if (elems) {
+                elems.forEach(element => {
+                    element.checked = value;
+                });
+            }
+        });
+        this.grid = main.create("div").addClass("grid");
+        menu.create("span").text("todos");
+        const nav = main.create("div").addClass("nav");
+        nav.create("input").prop({
+            type: "text",
+            name: "name",
+            placeholder: "...Exportar Como"
+        });
+        nav.create("button").text("Exportar")
+            .on("click", event => {
+            this.goSave();
+        });
+        main.addClass(this.className);
     }
     get() {
         return this.main;
@@ -55,14 +80,64 @@ export class ExpImp {
             ],
         });
     }
+    goSave() {
+        if (this.getNameList() == "") {
+            alert("Nombre es Obligatorio!");
+            return;
+        }
+        S.go({
+            async: true,
+            valid: false,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    console.log(json);
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "save-file",
+                    name: "",
+                    eparams: {
+                        list: this.getCommandList(),
+                        name: this.getNameList()
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
+    }
+    getCommandList() {
+        const elems = this.grid.queryAll(`input[type="checkbox"]`);
+        const result = [];
+        if (elems) {
+            elems.forEach(element => {
+                if (element.checked) {
+                    result.push(element.value);
+                }
+            });
+        }
+        return result;
+    }
+    getNameList() {
+        const elems = this.main.query(`input[name="name"]`);
+        const result = [];
+        if (elems) {
+            return elems.value;
+        }
+        return "";
+    }
     createGrid(data) {
-        this.main.text("");
+        this.grid.text("");
         data.forEach(info => {
-            const row = this.main.create("div").addClass("row");
+            const row = this.grid.create("div").addClass("row");
             row.on("click", (event) => {
             });
             row.create("input").prop({
-                type: "checkbox"
+                type: "checkbox",
+                value: info.id
             });
             row.create("div").text(info.id);
             row.create("div").text(info.role);

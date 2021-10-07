@@ -413,24 +413,44 @@
 }
 
 .tool-import {
-  padding: 5px;
   background-color: #ececec;
   color: #4d4d4d;
   font-size: 11px;
+  overflow: auto;
+  height: 100%;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.tool-import .nav {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+.tool-import .grid {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  padding: 5px;
+  height: 100%;
   display: grid;
   overflow: auto;
   grid-template-columns: 20px 20px minmax(50px, 100px) minmax(100px, auto);
 }
-.tool-import .row {
+.tool-import .grid .row {
   display: contents;
   cursor: pointer;
 }
-.tool-import .row > div {
+.tool-import .grid .row > div {
   line-height: 1.5em;
   vertical-align: middle;
   padding: 2px;
 }
-.tool-import .row:hover div {
+.tool-import .grid .row:hover div {
   background-color: #fffdfd;
 }
 /*# sourceMappingURL=gt_tool.css.map */
