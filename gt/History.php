@@ -60,6 +60,7 @@ class History
 				$this->load();
 				break;
 			case 'load-data':
+
 				$unitId = \SEVIAN\S::getReq('unit_id');
 				$dateFrom = \SEVIAN\S::getReq('date_from');
 				$hourFrom = \SEVIAN\S::getReq('hour_from');

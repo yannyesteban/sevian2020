@@ -1882,6 +1882,7 @@ trait DBHistory{
 
         ";
         //#WHERE t.id >= 12699 ORDER BY t.id LIMIT 235
+        hx($cn->query);
         //print_r( $cn->query);exit;
 		$result = $cn->execute();
 		$data = $cn->getDataAll($result);
