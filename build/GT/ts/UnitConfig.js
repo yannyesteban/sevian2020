@@ -91,18 +91,28 @@ export class UnitConfig {
                 title: "Evento",
                 "checked": ((info.mode & 2) == 2) ? true : false
             });
+            const cell3 = row.create("td");
+            const check3 = cell3.create("input").prop({
+                "type": "checkbox",
+                value: 4,
+                title: "Alarma",
+                "checked": ((info.mode & 4) == 4) ? true : false
+            });
             check1.on("change", (event) => {
                 this.goSaveEvent(index, 1);
             });
             check2.on("change", (event) => {
+                const checked = event.currentTarget.checked;
+                if (checked) {
+                    check3.get().checked = false;
+                }
                 this.goSaveEvent(index, 2);
             });
-            const cell3 = row.create("td");
-            const check3 = cell3.create("input").prop({ "type": "checkbox",
-                value: 4,
-                title: "Alarma",
-                "checked": ((info.mode & 4) == 4) ? true : false });
             check3.on("change", (event) => {
+                const checked = event.currentTarget.checked;
+                if (checked) {
+                    check2.get().checked = false;
+                }
                 this.goSaveEvent(index, 4);
             });
         });

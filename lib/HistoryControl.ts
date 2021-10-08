@@ -23,7 +23,7 @@ export class HistoryControl{
     _unit:any = null;
     _group1:any = null;
     _group2:any = null;
-    
+
     _btnRule:any = null;
     _btnLine:any = null;
     _btnUnit:any = null;
@@ -44,7 +44,7 @@ export class HistoryControl{
     private factorSpeed = 0.005;//[0.005, 0.01, 0.05, 0.09, 0.13, 0.20];
 
     public onCheckLayer:Function = (layerId:number, checked:boolean) => {};
-    
+
     private mainTab:any = null;
     private data:any[] = [];
     private configData:any = null;
@@ -52,9 +52,12 @@ export class HistoryControl{
     private mode:string = "reset";
     private speed: number = 6;
     private speedRange2: number[] = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
-    //private speedRange: number[] = [1, 2, 4, 8, 16, 32];    
-    private speedRange: number[] = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];    
+    //private speedRange: number[] = [1, 2, 4, 8, 16, 32];
+    private speedRange: number[] = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
     private dir = 1;
+
+    public onOpen: () => void = () => { };
+    public onClose: () => void = () => { };
     constructor(object){
         this._parent = object;
     }
@@ -66,16 +69,16 @@ export class HistoryControl{
         this.configData = config;
     }
     onAdd(map){
-        
+
         this._map = map;
-        
+
         this._container = $.create("div").addClass(["trace-tool"]);
-        
-        
+
+
 
         this._group1 = this._container.create("div");
         this._group1.addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "trace-tool"]);
-        
+
         this._btnRule = this._group1.create("button").prop({"type": "button", "title":"Inicia la herramienta de Historial"}).addClass("icon-calendar_001");
         this._btnRule.on("click", ()=>{
             this.play();
@@ -97,25 +100,25 @@ export class HistoryControl{
         const tab = this.mainTab = new Tab({
             id:this._group,
             className:"trace-control",
-            
+
 
         });
-        
+
         tab.add({tagName:"form", active:true, className:"filter-form"});
         tab.add({});
         tab.add({});
         tab.add({tagName:"form"});
         tab.add({tagName:"form"});
 
-        
-        
+
+
         //this._length = this._group.create("span").addClass("rule-tool-value");
         //this._length.text("Layers");
         //this._unit = this._group.create("span");
-        
+
 
         this._group_b = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group"]);
-        
+
         this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Filtro"}).addClass(["icon-filter"])
         .on("click", ()=>{
             this.mainTab.show(0);
@@ -142,22 +145,23 @@ export class HistoryControl{
 
         this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Descarta Todo"}).addClass(["icon-trash"])
         .on("click", ()=>{
-            
+
             this.reset();
             //this.cmdTrace("stop");
         });
         this._btnExit = this._group_b.create("button").prop({"type": "button", "title":"Salir de la herramienta de medición"}).addClass(["icon-exit"])
         .on("click", ()=>{
-            
+
             this.stop();
         });
 
-        
+
         //this.showLayers();
         this.setSpeed(this.speed);
         this.setMode(this.mode);
+
         return this._container.get();
-        
+
     }
     getLayerControl(control){
         return this.layerControl;
@@ -174,7 +178,7 @@ export class HistoryControl{
         this.setMode("reset");
         this.getTrace().delete();
         this.mainTab.show(0);
-        
+
     }
     setMode(mode){
         this.mode = mode;
@@ -186,7 +190,7 @@ export class HistoryControl{
         }else{
             this._container.ds("modeSpeed", "r"+speed);
         }
-        
+
     }
     setSpeed(speed){
         this.speed = speed;
@@ -205,11 +209,11 @@ export class HistoryControl{
         const header = table.create("tr").addClass("trace-header");
         this.configData.labels.forEach((line)=>{
             header.create("th").text(line);
-            
+
         });
-        
+
         this.data.forEach((data, index) => {
-            
+
             const row = table.create("tr").addClass("trace-row");
             this.configData.fields.forEach((line)=>{
                 row.create("td").ds("value", index).text(data[line])
@@ -217,14 +221,14 @@ export class HistoryControl{
 
                     this._trace.goTo($(event.currentTarget).ds("value"));
                 });
-                
+
             });
-            
-            
+
+
         });
     }
     playBar(bar){
-        
+
         bar.create("button").prop({"type": "button", "title":"Rewind"}).addClass("icon-fb")
         .on("click", ()=>{
 
@@ -232,19 +236,19 @@ export class HistoryControl{
             if(this.speed < 0){
                 this.speed = 0;
             }
-            
+
             this.setSpeed(this.speed);
-            this._trace.setSpeed(this.factorSpeed * this.speedRange[this.speed]); 
+            this._trace.setSpeed(this.factorSpeed * this.speedRange[this.speed]);
 
 
         });
-        
+
 
        bar.create("button").prop({"type": "button", "title":"Ir al Principio"}).addClass("icon-go_begin")
        .on("click", ()=>{
            this.cmdTrace("go-begin");
        });
-        
+
         bar.create("button").prop({"type": "button", "title":"Retroceder un Paso"}).addClass("icon-sb")
         .on("click", ()=>{
             this.cmdTrace("sb");
@@ -257,7 +261,7 @@ export class HistoryControl{
             }else{
                 this.cmdTrace("play");
             }
-            
+
         });
 
 
@@ -265,7 +269,7 @@ export class HistoryControl{
         .on("click", ()=>{
             this.cmdTrace("sf");
         });
-        
+
         bar.create("button").prop({"type": "button", "title":"Ir al Final"}).addClass("icon-go_end")
         .on("click", ()=>{
             this.cmdTrace("go-end");
@@ -274,33 +278,33 @@ export class HistoryControl{
         bar.create("button").prop({"type": "button", "title":"fast forward"}).addClass("icon-ff")
         .on("click", ()=>{
 
-            
+
             this.speed++;
             if(this.speed >= this.speedRange.length){
                 this.speed = this.speedRange.length - 1;
             }
-            
+
             this.setSpeed(this.speed);
             this._trace.setSpeed(this.factorSpeed * this.speedRange[this.speed]);
         });
     }
     speedBar(bar:any, value?:number){
-        
+
         this.speedRange.forEach((e, index)=>{
             //const speed = this.speedRange.length - index - 1;  /
             const className = (this.speedRange[index]>=0)?`f-${this.speedRange[index]}`:`r${this.speedRange[index]}`
             bar.create("div").addClass(["speed", className]).prop("title", "x"+this.speedRange[index])
             .on("click", ()=>{
-                
+
                 this.setSpeed(index);
                 this._trace.setSpeed(this.factorSpeed * this.speedRange[index]);
             });
         });
 
         return;
-        
+
         this.speedRange.forEach((e, index)=>{
-            const speed = this.speedRange.length - index - 1;  
+            const speed = this.speedRange.length - index - 1;
             bar.create("div").addClass(["speed", `r-${speed}`]).prop("title", "x"+this.speedRange[speed])
             .on("click", ()=>{
                 this.dir = -1;
@@ -308,7 +312,7 @@ export class HistoryControl{
                 this._trace.setSpeed(this.dir * this.factorSpeed * this.speedRange[speed]);
             });
         });
-        
+
         this.speedRange.forEach((e, speed)=>{
             bar.create("div").addClass(["speed", `f-${speed}`]).prop("title", "x"+this.speedRange[speed])
             .on("click", ()=>{
@@ -317,7 +321,7 @@ export class HistoryControl{
                 this._trace.setSpeed(this.dir * this.factorSpeed * this.speedRange[speed]);
             });
         });
-        
+
 
 
     }
@@ -333,8 +337,9 @@ export class HistoryControl{
             this._group1.style("display","none");
             this._group2.style("display","");
             this._mode = 1;
+            this.onOpen();
         }
-       
+
     }
     init(){
 
@@ -345,16 +350,16 @@ export class HistoryControl{
             this._playButton.addClass("icon-play");
         }else{
             this._playButton.removeClass("icon-play");
-            this._playButton.addClass("icon-pause"); 
+            this._playButton.addClass("icon-pause");
         }
     }
-    
-    
+
+
 
     cmdTrace(cmd){
         switch(cmd){
             case "play":
-                
+
                 this.setIconPlay(false);
                 this._trace.play();
             break;
@@ -367,7 +372,7 @@ export class HistoryControl{
                 this.setIconPlay(true);
                 this._trace.play("fb");
             break;
-            
+
             case "ff":
                 this.setIconPlay(true);
                 this._trace.play("ff");
@@ -392,7 +397,7 @@ export class HistoryControl{
                 this.setIconPlay(true);
                 this._trace.stop();
             break;
-            
+
             }
     }
 
@@ -432,7 +437,7 @@ export class HistoryControl{
     }
 
     showLayers(){
-        
+
         this.getPage(1).text("");
 
         this.groups = this.getTraceGroupLayers();
@@ -442,7 +447,7 @@ export class HistoryControl{
         //return;
         let items = [];
 
-       
+
         let _menu:any = null;
         let index = 0;
         for(let layer of layers){
@@ -458,7 +463,7 @@ export class HistoryControl{
 
                 _menu = items[layer.group];
             }else{
-                
+
                 if(!items[0]){
                     items[0].items = items[layer.group] = {
                         caption:this.groups[layer.group].caption,
@@ -467,18 +472,18 @@ export class HistoryControl{
                     };
                 }
                 _menu = items[0];
-                
+
             }
             let icon = null;
-            
+
 
             if(layer.image){
-            
+
                  icon = $(this.getTrace().getImageObj(layer.image).getCanvas());
                 icon.addClass(["layer-icon", layer.image]);
             }
-            
-            
+
+
 
             _menu.items.push({
                 caption: layer.caption,
@@ -494,12 +499,12 @@ export class HistoryControl{
                     this.getTrace().showLayer(layer.id, event.currentTarget.checked);
                 }
             });
-        
+
 
         }
 
         let menu = new Menu({
-            
+
             autoClose: false,
             target:this.getPage(1),//this._group,
             items: items,
@@ -528,7 +533,7 @@ export class HistoryControl{
 
         };
 
-        
+
     }
     setLength(length){
         this.length = length;
@@ -539,39 +544,41 @@ export class HistoryControl{
             this._length.text(this.length.toLocaleString("de-DE",{minimumFractionDigits: 2, maximumFractionDigits: 2}));
             this._unit.text("m");
         }
-        
-        
+
+
     }
     toggleUnit(){
 
         if(this._meter == 0){
-            this._meter = 1; 
+            this._meter = 1;
         }else{
             this._meter = 0;
         }
         this.setLength(this.length);
-       
+
 
     }
-    
+
 
     delete(){
         //this._line.stop();
         this._parent.delete(this.id);
-        
+
     }
 
     stop(){
-        
-        if(this._mode == 1){
+
+        if (this._mode == 1) {
+
             //this.delete();
             this._group.style("display","none");
             this._group1.style("display","");
             this._group2.style("display", "none");
             this.setIconPlay(true);
             this._mode = 0;
+            this.onClose();
         }
     }
 
-    
+
 }

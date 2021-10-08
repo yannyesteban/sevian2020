@@ -239,7 +239,8 @@ class History
 			'id'            => $this->id,
 			'followMe'		=> true,
 			'delay'			=> 60000,
-			'infoForm'		=> $info->getInit()
+			'infoForm'		=> $info->getInit(),
+			'unitPanelId'=>$this->eparams->unitPanelId?? ''
 		];
 
 		$this->setInfoElement([

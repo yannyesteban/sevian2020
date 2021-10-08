@@ -41,9 +41,11 @@ export class HistoryControl {
         this.mode = "reset";
         this.speed = 6;
         this.speedRange2 = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
-        //private speedRange: number[] = [1, 2, 4, 8, 16, 32];    
+        //private speedRange: number[] = [1, 2, 4, 8, 16, 32];
         this.speedRange = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
         this.dir = 1;
+        this.onOpen = () => { };
+        this.onClose = () => { };
         this._parent = object;
     }
     setData(data) {
@@ -255,6 +257,7 @@ export class HistoryControl {
             this._group1.style("display", "none");
             this._group2.style("display", "");
             this._mode = 1;
+            this.onOpen();
         }
     }
     init() {
@@ -450,6 +453,7 @@ export class HistoryControl {
             this._group2.style("display", "none");
             this.setIconPlay(true);
             this._mode = 0;
+            this.onClose();
         }
     }
 }

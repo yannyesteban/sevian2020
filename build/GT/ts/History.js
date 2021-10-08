@@ -74,6 +74,8 @@ export class History {
         this.layerConfig = null;
         this.tracePopup = null;
         this.popupInfoForm = null;
+        this.unitPanelId = "";
+        this.unitPanel = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -95,6 +97,15 @@ export class History {
         else {
             main = $.create("div").attr("id", this.id);
             this._create(main);
+        }
+        if (this.unitPanelId) {
+            this.unitPanel = S.getElement(this.unitPanelId);
+            this.unitPanel.addEvent((unitId) => {
+                //alert("init history");
+                if (this._form) {
+                    this._form.getInput("unit_id").setValue(unitId);
+                }
+            });
         }
         Map.load(this.mapName, (map, s) => {
             this.setMap(map);
@@ -119,10 +130,13 @@ export class History {
             this.tracePopup.setDOMContent(divInfo.get());
             this.infoForm.id = divInfo;
             this.popupInfoForm = new InfoForm(this.infoForm);
+            this.getMap().getControl("history").onOpen = () => {
+                this.unitPanel.enableFollowMe(false);
+            };
+            this.getMap().getControl("history").onClose = () => {
+                this.unitPanel.enableFollowMe(true);
+            };
         });
-    }
-    static getInstance(name) {
-        return Unit._instances[name];
     }
     _create(main) {
         this.main = main;

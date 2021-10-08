@@ -172,7 +172,8 @@
 			"method": "load",
 			"eparams": {
 				"mapName": "map_01",
-				"infoId": ""
+				"infoId": "",
+				"unitPanelId": "gt-unit-10"
 			},
 			"type": 0,
 			"class": "",

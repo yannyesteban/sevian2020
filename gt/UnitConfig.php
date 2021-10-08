@@ -50,7 +50,8 @@ class UnitConfig
 				$this->load();
 				break;
             case 'init':
-                $config = $this->getEventConfig($unitId);
+
+                //$config = $this->getEventConfig($unitId);
                 $this->addResponse([
 					'id'	=> $this->id,
 					'data'	=> [
@@ -61,19 +62,19 @@ class UnitConfig
 				]);
                 break;
             case 'save-event':
-                
 
-               
+
+
 
                 $this->addResponse([
 					'id'	=> $this->id,
 					'data'	=> [
-                        
+
                         'error'=>  $this->saveEvent(\sevian\s::getVReq())
                     ],
 					'iToken'=> $this->iToken
 				]);
-                
+
                 break;
             case 'get-unit-event':
 
@@ -197,21 +198,24 @@ class UnitConfig
 
         $cn->query = "SELECT DISTINCT ue.id,u.id as unit_id, COALESCE(ue.mode, (SELECT e2.mode FROM unit_event as e2 WHERE e2.event_id = de.event_id limit 1), 0) as `mode`,
 
-        de.event_id, de.name, CASE WHEN ue.unit_id IS NULL THEN 1 ELSE 2 END as __mode_, '' as __record_
+        de.event_id, COALESCE (uc.name, de.name) as name, CASE WHEN ue.unit_id IS NULL THEN 1 ELSE 2 END as __mode_, '' as __record_
+
+
         FROM device_event de
         INNER JOIN device_version as v ON v.id = de.version_id
         INNER JOIN device as d on d.version_id = v.id
         INNER JOIN unit as u ON u.device_id = d.id
+        LEFT JOIN unit_command as uc ON uc.unit_id = u.id AND de.event_id = uc.index AND uc.index > 0
         LEFT JOIN unit_event as ue ON (ue.unit_id = u.id /*or ue.unit_id IS NULL*/) AND ue.event_id = de.event_id
         #LEFT JOIN unit_event as ue2 ON ue.unit_id IS NULL AND ue2.event_id = de.event_id
-        
+
         WHERE u.id = '$unitId'";
-        //hx($cn->query);
+
         $result = $this->cn->execute();
 
         $data = [];
         while($rs = $cn->getDataAssoc($result)){
-            
+
             if($rs['id']){
                 $rs['__record_'] = ["id" => $rs["id"]];
             }
@@ -225,15 +229,15 @@ class UnitConfig
 
     private function saveEvent($data){
         $cn = $this->cn;
-        
+
         $unitId = $data->unit_id;
         $eventId = $data->event_id;
         $mode = $data->mode;
 
         $cn->query = "SELECT * FROM unit_event WHERE unit_id = '$unitId' and event_id = '$eventId'";
-        
+
         $result = $this->cn->execute();
-        
+
         $id = 0;
         if($rs = $cn->getDataAssoc($result)){
             $id = $rs['id'];
@@ -242,19 +246,19 @@ class UnitConfig
             $cn->query = "UPDATE unit_event SET mode = '$mode' WHERE id = '$id'";
             $result = $this->cn->execute();
         }else{
-            $cn->query = "INSERT INTO unit_event 
+            $cn->query = "INSERT INTO unit_event
             (`unit_id`, `name`, `event_id`, `mode`, `mode2`)
             VALUES
             ('$unitId','','$eventId','$mode','$mode')
-            
+
             ";
             $result = $this->cn->execute();
         }
-        
-        
-        
-        
-        
+
+
+
+
+
 
 
         return $cn->error;

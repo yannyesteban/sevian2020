@@ -1245,7 +1245,12 @@ export class Unit {
 	getFollowMe() {
 		return this.followMe;
 	}
-
+	enableFollowMe(value) {
+		if (value !== undefined) {
+			this.followMe = value;
+		}
+		return this.followMe;
+	}
 
 	showStatusWin() {
 		S.send3({

@@ -238,7 +238,7 @@ export class History {
             }
             return false;
         }
-        
+
         this.iImages[info.name] = this.createImage(Object.assign({map:this.map}, info));
         this.map.addImage(info.name, this.iImages[info.name], { pixelRatio: 3 });
         this.onAddImage(info);
@@ -924,7 +924,7 @@ export class History {
             //filter: ["in", "type", "h", "m"]
             //filter: ["in", "type"]
         });
-      
+
     }
 
     setLine(info: object) {
@@ -1363,6 +1363,7 @@ export class History {
         }
         this._lastIndex = index;
         this.drawTraceLine(coordinates);
+        this.flyToMobil(nextPoint);
     }
 
     drawTraceLine(coordinates) {
@@ -1837,6 +1838,18 @@ export class History {
             this.onRemoveLayer(id);
         }
 
+    }
+    flyToMobil(point) {
+
+        this.map.flyTo({
+            center: point ,
+            //zoom: 16,
+            speed: 3.0,
+            curve: 1,
+            easing(t) {
+                return t;
+            }
+        });
     }
     playPopup(layerId, className){
         /*

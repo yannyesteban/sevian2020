@@ -1145,6 +1145,7 @@ export class History {
         }
         this._lastIndex = index;
         this.drawTraceLine(coordinates);
+        this.flyToMobil(nextPoint);
     }
     drawTraceLine(coordinates) {
         let geojson = {
@@ -1532,6 +1533,17 @@ export class History {
             this.map.removeLayer(id);
             this.onRemoveLayer(id);
         }
+    }
+    flyToMobil(point) {
+        this.map.flyTo({
+            center: point,
+            //zoom: 16,
+            speed: 3.0,
+            curve: 1,
+            easing(t) {
+                return t;
+            }
+        });
     }
     playPopup(layerId, className) {
         /*

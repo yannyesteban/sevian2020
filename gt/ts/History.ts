@@ -7,6 +7,7 @@ import {Float}  from '../../Sevian/ts/Window.js';
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 
 import { LayerTool } from './LayerTool.js';
+import { Unit } from './Unit.js';
 
 
 
@@ -88,11 +89,10 @@ export class History{
 	private tracePopup:any = null;
 	private popupInfoForm:any = null;
 
-	static _instances:object[] = [];
+	private unitPanelId: string = "";
+    private unitPanel: Unit = null;
 
-	static getInstance(name){
-		return Unit._instances[name];
-	}
+	static _instances:object[] = [];
 
 	constructor(info){
 
@@ -120,6 +120,20 @@ export class History{
 			main = $.create("div").attr("id", this.id);
 
 			this._create(main);
+		}
+
+
+		if (this.unitPanelId) {
+			this.unitPanel = S.getElement(this.unitPanelId) as Unit;
+
+			this.unitPanel.addEvent((unitId: number) => {
+
+				//alert("init history");
+				if (this._form) {
+					this._form.getInput("unit_id").setValue(unitId);
+				}
+
+			});
 		}
 
 		Map.load(this.mapName, (map, s)=>{
@@ -158,6 +172,12 @@ export class History{
 			this.popupInfoForm = new InfoForm(this.infoForm);
 
 
+			this.getMap().getControl("history").onOpen = () => {
+				this.unitPanel.enableFollowMe(false);
+			}
+			this.getMap().getControl("history").onClose = () => {
+				this.unitPanel.enableFollowMe(true);
+			}
 
 
 		});
@@ -331,8 +351,9 @@ export class History{
 			}
 
 		});
-		
+
 		this.trace.init();
+
 		this.getMap().getControl("history").setTrace(this.trace);
 		//this.getMap().getControl("history").reset();
 		this.getMap().getControl("history").showLayers();

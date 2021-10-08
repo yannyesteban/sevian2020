@@ -122,8 +122,9 @@ export class UnitConfig {
 
             const cell1 = row.create("td");
             const check1 = cell1.create("input").prop({
-                "type": "checkbox", value: 1, title:"Inmediato",
-            "checked": ((info.mode & 1) == 1) ? true : false });
+                "type": "checkbox", value: 1, title: "Inmediato",
+                "checked": ((info.mode & 1) == 1) ? true : false
+            });
 
 
 
@@ -131,22 +132,42 @@ export class UnitConfig {
             const check2 = cell2.create("input").prop({
                 "type": "checkbox",
                 value: 2,
-                title:"Evento",
+                title: "Evento",
 
-            "checked": ((info.mode & 2) == 2) ? true : false });
+                "checked": ((info.mode & 2) == 2) ? true : false
+            });
 
+
+
+            const cell3 = row.create("td");
+            const check3 = cell3.create("input").prop({
+                "type": "checkbox",
+                value: 4,
+                title: "Alarma",
+                "checked": ((info.mode & 4) == 4) ? true : false
+            });
             check1.on("change", (event) => {
+
+
                 this.goSaveEvent(index, 1);
             });
             check2.on("change", (event) => {
+                const checked = event.currentTarget.checked;
+
+                if (checked) {
+
+                    check3.get().checked = false;
+                }
                 this.goSaveEvent(index, 2);
             });
-            const cell3 = row.create("td");
-            const check3 = cell3.create("input").prop({ "type": "checkbox",
-            value: 4,
-            title:"Alarma",
-            "checked": ((info.mode & 4) == 4) ? true : false });
             check3.on("change", (event) => {
+                const checked = event.currentTarget.checked;
+
+                if (checked) {
+
+
+                    check2.get().checked = false;
+                }
                 this.goSaveEvent(index, 4);
             });
 
@@ -194,7 +215,7 @@ export class UnitConfig {
             requestFunctions: {
                 f: (json) => {
                     console.log(json)
-                    if(json.error){
+                    if (json.error) {
                         new Float.Message({
                             "caption": "Command",
                             "text": "Record wasn't saved!!!!",
@@ -204,7 +225,7 @@ export class UnitConfig {
                             "left": "center",
                             "top": "top"
                         }).show({});
-                    }else{
+                    } else {
                         new Float.Message({
                             "caption": "Command",
                             "text": "Record was saved!!!",
@@ -501,7 +522,7 @@ export class UnitConfig {
                 });
             },
 
-            onchange: function (item) {
+            onchange: function(item) {
                 const parent = $(item.get().parentNode.parentNode);
 
                 let input = parent.queryAll("input.option:checked");
