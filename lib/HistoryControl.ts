@@ -123,6 +123,21 @@ export class HistoryControl{
         .on("click", ()=>{
             this.mainTab.show(0);
         });
+
+        const ff = this._group_b.create("button").prop({"type": "button", "title":"Follow Me", "value":"f"}).text("f")
+        .on("click", (event)=>{
+            if (ff.val() == "F") {
+                ff.text('f');
+                ff.val('f');
+                this._trace.enableFollowMe(false);
+            } else {
+                ff.text('F');
+                ff.val('F');
+                this._trace.enableFollowMe(true);
+            }
+        });
+
+
         this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Mostrar Capas"}).addClass(["icon-layer2"])
         .on("click", ()=>{
             this.mainTab.show(1);

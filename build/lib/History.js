@@ -109,6 +109,7 @@ export class History {
         this.popup = null;
         this.onShowInfo = (info) => { };
         this.funContextMenu = null;
+        this.followMe = false;
         for (let x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -1534,7 +1535,16 @@ export class History {
             this.onRemoveLayer(id);
         }
     }
+    enableFollowMe(value) {
+        if (value !== undefined) {
+            this.followMe = value;
+        }
+        return this.followMe;
+    }
     flyToMobil(point) {
+        if (!this.followMe) {
+            return;
+        }
         this.map.flyTo({
             center: point,
             //zoom: 16,

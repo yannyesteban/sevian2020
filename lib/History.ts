@@ -140,7 +140,9 @@ export class History {
     private popup:any = null;
     public onShowInfo:Function = (info)=>{};
 
-    private funContextMenu:Function = null;
+    private funContextMenu: Function = null;
+    private followMe: boolean = false;
+
     constructor(info: object) {
 
         for (let x in info) {
@@ -1839,8 +1841,18 @@ export class History {
         }
 
     }
-    flyToMobil(point) {
 
+    enableFollowMe(value) {
+        if (value !== undefined) {
+            this.followMe = value;
+        }
+
+        return this.followMe;
+    }
+    flyToMobil(point) {
+        if (!this.followMe) {
+            return;
+        }
         this.map.flyTo({
             center: point ,
             //zoom: 16,
