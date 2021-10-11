@@ -58,6 +58,7 @@ export class HistoryControl{
     //private speedRange: number[] = [1, 2, 4, 8, 16, 32];
     private speedRange: number[] = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
     private dir = 1;
+    private win: any = null;
 
     public onOpen: () => void = () => { };
     public onClose: () => void = () => { };
@@ -158,7 +159,7 @@ export class HistoryControl{
 
         this._group_b.create("button").prop({"type": "button", "title":"Info"}).addClass(["icon-info-2"])
         .on("click", ()=>{
-            this.mainTab.show(4);
+            this.win.show({});
         });
 
         this._btnTrash = this._group_b.create("button").prop({"type": "button", "title":"Descarta Todo"}).addClass(["icon-trash"])
@@ -599,8 +600,8 @@ export class HistoryControl{
     }
 
     setInfoPage(page) {
-        const win = new Float.Window({
-            visible: true,
+        this.win = new Float.Window({
+            visible: false,
             caption: this.caption+ "- Info",
             left: 10 + 280 + 20,
             top: 100,
