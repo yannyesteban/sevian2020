@@ -3,11 +3,11 @@
 	"caption":"Info..",
 	"type":"popup",
 	"subType":"dropdown",
-	"className":["aaa","bbb","ccc"],
+	"className":["info-form"],
 	"autoClose":true,
 	"params":false,
     "template" :"/gt/info-history",
-    "templateName" :"/gt/info-history"
+    "templateName" :"/gt/info-history",
+	"modePropertys" :["speed"]
 
-	
-}	
+}

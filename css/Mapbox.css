@@ -415,11 +415,30 @@
 .info-form-popup,
 .info-form {
   text-transform: uppercase;
-  background-color: #a8059a;
   font-size: 9px;
   line-height: 1.5em;
   color: #eeeeee;
   padding: 4px;
+}
+
+.info-form-popup .unit-group,
+.info-form .unit-group {
+  cursor: pointer;
+}
+
+.info-form-popup .unit-group .body,
+.info-form .unit-group .body {
+  display: none !important;
+}
+
+.info-form-popup .unit-group:hover .body,
+.info-form .unit-group:hover .body {
+  display: contents !important;
+}
+
+.info-form-popup .last-event,
+.info-form .last-event {
+  background-color: #fcff33;
 }
 
 .info-form-popup[data-speed*="1"],
@@ -496,10 +515,13 @@
   background-color: rgba(0, 0, 0, 0.295);
 }
 
-.info-form-popup .inputs.inputs > [data-input-value="true"] span:nth-child(2),
+.info-form-popup .inputs.inputs > [data-input-value="true"] span:nth-child(2), .info-form-popup .inputs.inputs [data-input-value="1"] span:nth-child(2),
 .info-form-popup .outputs.inputs > [data-input-value="true"] span:nth-child(2),
+.info-form-popup .outputs.inputs [data-input-value="1"] span:nth-child(2),
 .info-form .inputs.inputs > [data-input-value="true"] span:nth-child(2),
-.info-form .outputs.inputs > [data-input-value="true"] span:nth-child(2) {
+.info-form .inputs.inputs [data-input-value="1"] span:nth-child(2),
+.info-form .outputs.inputs > [data-input-value="true"] span:nth-child(2),
+.info-form .outputs.inputs [data-input-value="1"] span:nth-child(2) {
   font-weight: bold;
   color: #fbff09;
 }
@@ -511,10 +533,13 @@
   background-color: rgba(0, 0, 0, 0.205);
 }
 
-.info-form-popup .inputs.outputs > [data-input-value="true"] span:nth-child(2),
+.info-form-popup .inputs.outputs > [data-input-value="true"] span:nth-child(2), .info-form-popup .inputs.outputs [data-input-value="1"] span:nth-child(2),
 .info-form-popup .outputs.outputs > [data-input-value="true"] span:nth-child(2),
+.info-form-popup .outputs.outputs [data-input-value="1"] span:nth-child(2),
 .info-form .inputs.outputs > [data-input-value="true"] span:nth-child(2),
-.info-form .outputs.outputs > [data-input-value="true"] span:nth-child(2) {
+.info-form .inputs.outputs [data-input-value="1"] span:nth-child(2),
+.info-form .outputs.outputs > [data-input-value="true"] span:nth-child(2),
+.info-form .outputs.outputs [data-input-value="1"] span:nth-child(2) {
   font-weight: bold;
   color: #fae738;
 }
@@ -647,7 +672,7 @@
 }
 
 .layer-tool {
-  font: 10px/15px sans-serif;
+  font: 9px/13px sans-serif;
 }
 
 .layer-tool form {
@@ -676,6 +701,12 @@
   font-family: futurab !important;
 }
 
+.layer-tool .sg-form .list {
+  width: 100%;
+  background-color: #c2c2c2 !important;
+  color: white !important;
+}
+
 .layer-tool .sg-form .page {
   grid-gap: 0px;
   padding: 0px;
@@ -696,7 +727,7 @@
 }
 
 .layer-tool .sg-form .page .field .input {
-  padding-left: 4px;
+  padding: 0px 4px 0px 4px;
 }
 
 .layer-tool .sg-form .page .field .label {
@@ -711,12 +742,11 @@
 .layer-tool .sg-form .page .field input,
 .layer-tool .sg-form .page .field textarea,
 .layer-tool .sg-form .page .field select,
-.layer-tool .sg-form .page .field label {
-  background-color: #eceaea;
-  color: #6d6d6d;
+.layer-tool .sg-form .page .field labelx {
+  background-color: #f8f8f8;
+  color: #9c9c9c;
   border: 0px;
   font-size: 1.2em;
-  font-family: futurab;
   max-width: 100%;
   max-height: 1.8em;
   margin: 0px;

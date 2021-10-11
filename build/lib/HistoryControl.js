@@ -1,8 +1,10 @@
 import { _sgQuery as $ } from '../Sevian/ts/Query.js';
 import { Menu } from '../Sevian/ts/Menu2.js';
+import { Float } from '../Sevian/ts/Window.js';
 import { Tab } from '../Sevian/ts/Tab.js';
 export class HistoryControl {
     constructor(object) {
+        this.caption = "History";
         this.id = "mapboxgl-ctrl-trace";
         this.layerControl = null;
         this.playControl = null;
@@ -131,7 +133,7 @@ export class HistoryControl {
         this.setMode(this.mode);
         return this._container.get();
     }
-    getLayerControl(control) {
+    getLayerControl() {
         return this.layerControl;
     }
     reset() {
@@ -468,6 +470,19 @@ export class HistoryControl {
             this._mode = 0;
             this.onClose();
         }
+    }
+    setInfoPage(page) {
+        const win = new Float.Window({
+            visible: true,
+            caption: this.caption + "- Info",
+            left: 10 + 280 + 20,
+            top: 100,
+            width: "600px",
+            height: "250px",
+            mode: "auto",
+            className: ["sevian"],
+            child: page
+        });
     }
 }
 //# sourceMappingURL=HistoryControl.js.map

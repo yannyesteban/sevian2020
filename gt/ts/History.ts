@@ -1,5 +1,5 @@
 import {_sgQuery as $}  from '../../Sevian/ts/Query.js';
-import {Map}  from './Map.js';
+import {Map, MapApi}  from './Map.js';
 import {S} from '../../Sevian/ts/Sevian.js';
 import {Form2 as Form2} from '../../Sevian/ts/Form2.js';
 import {Menu as Menu} from '../../Sevian/ts/Menu2.js';
@@ -10,15 +10,16 @@ import { LayerTool } from './LayerTool.js';
 import { Unit } from './Unit.js';
 
 
-
+import { HistoryControl } from '../../lib/HistoryControl.js';
 
 
 export class History{
 
-	private mapName:string = null;
+	private mapName: string = null;
+	private unitData: any = null;
 
 	id:any = null;
-	map:Map = null;
+	map:MapApi = null;
 
 
 	dataMain:any[] = null;
@@ -92,6 +93,7 @@ export class History{
 	private unitPanelId: string = "";
     private unitPanel: Unit = null;
 
+	private historyControl: HistoryControl = null;
 	static _instances:object[] = [];
 
 	constructor(info){
@@ -142,9 +144,9 @@ export class History{
 			//map.map.addImage("t1", new TraceMarker(map.map, 30), { pixelRatio: 1 });
 
 
-
+			this.historyControl = this.getMap().getControl("history") as HistoryControl;
 			//map.getControl("mark").onsave = ((info)=>{}
-			this.form.id = this.getMap().getControl("history").getPage(0);
+			this.form.id = this.historyControl.getPage(0);
 			this.form.parentContext =  this;
 
 			this._form = new Form2(this.form);
@@ -155,8 +157,10 @@ export class History{
 
 
 			if(this.infoForm){
-				this.infoForm.id = this.getMap().getControl("history").getPage(4);
+				//this.infoForm.id = this.getMap().getControl("history").getPage(4);
 				this._infoForm = new InfoForm(this.infoForm);
+				this.historyControl.setInfoPage(this._infoForm.get());
+
 			}
 
 
@@ -172,10 +176,10 @@ export class History{
 			this.popupInfoForm = new InfoForm(this.infoForm);
 
 
-			this.getMap().getControl("history").onOpen = () => {
+			this.historyControl.onOpen = () => {
 				this.unitPanel.enableFollowMe(false);
 			}
-			this.getMap().getControl("history").onClose = () => {
+			this.historyControl.onClose = () => {
 				this.unitPanel.enableFollowMe(true);
 			}
 
@@ -220,9 +224,12 @@ export class History{
 		this._parentContext =  context;
 	}
 
+	setUniData(data) {
+		this.unitData = data;
+	}
 	find(test?:boolean){
 
-		const blockingTarget = this.getMap().getControl("history").getLayerControl();
+		const blockingTarget = this.historyControl.getLayerControl();
 
 		//let unitId = this.form.getInput("unit_idx").getValue();
 
@@ -233,6 +240,17 @@ export class History{
 			element:this._form,
 			valid:true,
 			//"blockingTarget": blockingTarget,
+			requestFunctions: {
+				loadData: (json) => {
+					console.log(json);
+					this.setUniData(json.unitData);
+					this.setData(json.data);
+					this.setLayerConfig(json.config);
+					this.play();
+				}
+
+            },
+
 			"params":[
 
 				{
@@ -247,7 +265,8 @@ export class History{
 						//"mainId":this.bodyPanelId,
 						//"unitId":unitId,
 
-					}
+					},
+					iToken: "loadData",
 
 				}
 			],
@@ -262,11 +281,63 @@ export class History{
 
 	saveConfig(config){
 
-		const blockingTarget = this.getMap().getControl("history").getLayerControl();
+		const blockingTarget = this.historyControl.getLayerControl();
 
 		//let unitId = this.form.getInput("unit_idx").getValue();
 
-		let f  = this._form.getFormData();
+		let f = this._form.getFormData();
+
+		S.go({
+            async: true,
+            valid: false,
+            //confirm_: 'seguro?',
+            form: f,
+            blockingTarget: blockingTarget,
+            requestFunctions: {
+
+                goSave: (json) => {
+
+                    if (json.error) {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record wasn't saved!!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    } else {
+                        new Float.Message({
+                            "caption": "Command",
+                            "text": "Record was saved!!!",
+                            "className": "",
+                            "delay": 3000,
+                            "mode": "",
+                            "left": "center",
+                            "top": "top"
+                        }).show({});
+                    }
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    mode: "element",
+					"element":"gt_history",
+					"method":"save-config",
+
+                    name: "",
+					eparams: {
+						"config":config,
+
+					},
+                    iToken: "goSave",
+                }
+            ],
+        });
+		return;
+
 		S.send3({
 			"async":true,
 			"form":f,
@@ -323,7 +394,7 @@ export class History{
 
 		this.getMap().delete("traza2");
 		if(this.trace){
-			this.getMap().getControl("history").reset();
+			this.historyControl.reset();
 		}
 
 		this.trace = this.getMap().draw("traza2", "history", {
@@ -334,15 +405,9 @@ export class History{
 			images:this.layerConfig.images,
 			popup:this.tracePopup,
 			onShowInfo:(info)=>{
+				console.log(info)
+				info = Object.assign(this.unitData, this.data[info.i], info);
 
-				info = Object.assign(this.data[info.i], info);
-
-				let xInputs = "";
-				info.iInputs.forEach(element => {
-					xInputs += `<div>${element.name} ${element.value}</div>`;
-				});
-				info.xinputs = xInputs;
-				//console.log(info)
 				this.popupInfoForm.setMode(info.className);
 				this.popupInfoForm.setData(info);
 
@@ -354,11 +419,11 @@ export class History{
 
 		this.trace.init();
 
-		this.getMap().getControl("history").setTrace(this.trace);
-		//this.getMap().getControl("history").reset();
-		this.getMap().getControl("history").showLayers();
-		this.getMap().getControl("history").setData(this.data);
-		this.getMap().getControl("history").setConfigData({
+		this.historyControl.setTrace(this.trace);
+		//this.historyControl.reset();
+		this.historyControl.showLayers();
+		this.historyControl.setData(this.data);
+		this.historyControl.setConfigData({
 			className:"speed",
 			fields:	["uTime", "speed", "event"],
 			labels:	["Hora", "Km/h", "Evento"],
@@ -371,7 +436,7 @@ export class History{
 
 
 		const layerTool = new LayerTool({
-			id: this.getMap().getControl("history").getPage(3),
+			id: this.historyControl.getPage(3),
 			trace:this.trace,
 			data:this.layerConfig,
 			onNewLayer:(id, info)=>{
@@ -406,7 +471,7 @@ export class History{
 			}
 		});
 
-		this.getMap().getControl("history").createList();
+		this.historyControl.createList();
 		return;
 		const win = new Float.Window({
 			visible:true,
@@ -420,7 +485,7 @@ export class History{
 			className:["sevian"]
 		});
 
-		//this.getMap().getControl("history").setFilterPage(this._form.get());
+		//this.historyControl.setFilterPage(this._form.get());
 
 
 

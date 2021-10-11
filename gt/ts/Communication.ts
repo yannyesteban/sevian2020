@@ -819,6 +819,7 @@ export class Communication {
 
 
     play2() {
+        this.getDataEvent(); return;
 
         if (this._timer3) {
             clearTimeout(this._timer3);

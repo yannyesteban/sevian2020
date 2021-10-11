@@ -141,6 +141,7 @@ export class LayerTool{
                     type:"select",
                     name:"layerId",
                     value:"",
+                    className: "list",
                     caption:"Layers",
                     data:this.getLayerList(),
                     events:{
@@ -302,7 +303,8 @@ export class LayerTool{
                     type:"select",
                     name:"imageId",
                     value:"",
-                    caption:"",
+                    caption: "Images",
+                    className: "list",
                     data:this.getImageList(),
                     events:{
                         "change": event => {
@@ -411,7 +413,8 @@ export class LayerTool{
                     type:"select",
                     name:"groupId",
                     value:"",
-                    caption:"",
+                    caption: "Groups",
+                    className: "list",
                     data:this.getGroupList(),
                     events:{
                         "change": event => {

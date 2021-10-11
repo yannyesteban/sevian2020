@@ -415,7 +415,27 @@
 .info-form-popup,
 .info-form {
   text-transform: uppercase;
-  background-color: #a8059a;
+
+
+  .unit-group{
+    cursor: pointer;
+    .body{
+      display: none !important;
+
+    }
+    &:hover{
+      .body{
+        display: contents!important;
+
+
+      }
+    }
+
+  }
+
+  .last-event{
+    background-color: #fcff33;
+  }
   &[data-speed*="1"] {
     background-color: #0590a8;
   }
@@ -466,7 +486,7 @@
     margin-top: 3px;
     &.inputs {
       background-color: rgba(0, 0, 0, 0.295);
-      > [data-input-value="true"] {
+      > [data-input-value="true"], [data-input-value="1"] {
         span:nth-child(2) {
           font-weight: bold;
           color: rgb(251, 255, 9);
@@ -475,7 +495,7 @@
     }
     &.outputs {
       background-color: rgba(0, 0, 0, 0.205);
-      > [data-input-value="true"] {
+      > [data-input-value="true"], [data-input-value="1"] {
         span:nth-child(2) {
           font-weight: bold;
           color: rgb(250, 231, 56);
@@ -591,7 +611,7 @@
 }
 
 .layer-tool {
-  font: 10px/15px sans-serif;
+  font: 9px/13px sans-serif;
   form {
     margin: 0px;
     max-width: 100%;
@@ -621,6 +641,11 @@
         font-family: futurab !important;
       }
     }
+    .list{
+      width:100%;
+      background-color: #c2c2c2!important;
+      color:white!important;
+    }
     .page {
       //border: 10px solid transparent;
       //overflow: auto;
@@ -643,7 +668,8 @@
         .input {
           //background: rgb(231, 231, 231);
 
-          padding-left: 4px;
+          //padding-left: 4px;
+          padding: 0px 4px 0px 4px;
         }
         .label {
           color: rgb(145, 145, 145);
@@ -660,14 +686,14 @@
         input,
         textarea,
         select,
-        label {
-          background-color: rgb(236, 234, 234);
-          color: rgb(109, 109, 109);
+        labelx {
+          background-color: rgb(248, 248, 248);
+          color: rgb(156, 156, 156);
           border: 0px;
           //height: 30px;
           font-size: 1.2em;
           //padding: 4px;
-          font-family: futurab;
+          //font-family: futurab;
           max-width: 100%;
           max-height: 1.8em;
           margin: 0px;

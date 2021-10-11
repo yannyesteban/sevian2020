@@ -1829,87 +1829,7 @@ trait DBHistory{
         return $data;
     }
 
-    private function loadTracking($unitId, $from = null, $to = null){
-        /**
-         * test:2020-07-01 09:20:34
-         * 2020-07-01 12:09:50
-         */
-        $cn = $this->cn;
 
-        $cn->query = "
-
-        SELECT
-            t.unit_id as unitId, t.device_id as deviceId, t.date_time,
-            t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
-            t.event_id as eventId, t.mileage, t.input_status as inputStatus, t.voltage_level_i1 as voltageI1, t.voltage_level_i2 as voltageI2,
-            t.output_status as outputStatus, t.battery_voltage as batteryVoltage,
-
-            e.event_id as mainEvent,
-            date_format(t.date_time, '%d/%m/%Y %T') as dateTime,
-            date_format(t.date_time, '%T') as uTime,
-            date_format(t.date_time, '%d/%m/%Y') as uDate,
-            UNIX_TIMESTAMP(t.date_time) as ts, e.title as myEvent, de.name as event,
-
-         (input_status >> (1-1)) % 2 as i1,
-         (input_status >> (2-1)) % 2 as i2,
-         (input_status >> (3-1)) % 2 as i3,
-         (input_status >> (4-1)) % 2 as i4,
-         (input_status >> (5-1)) % 2 as i5,
-         (input_status >> (6-1)) % 2 as i6,
-         (input_status >> (7-1)) % 2 as i7,
-         (input_status >> (8-1)) % 2 as i8,
-
-         (output_status >> (1-1)) % 2 as o1,
-         (output_status >> (2-1)) % 2 as o2,
-         (output_status >> (3-1)) % 2 as o3,
-         (output_status >> (4-1)) % 2 as o4,
-         (output_status >> (5-1)) % 2 as o5,
-         (output_status >> (6-1)) % 2 as o6,
-         (output_status >> (7-1)) % 2 as o7,
-         (output_status >> (8-1)) % 2 as o8
-
-        FROM tracking as t
-
-        LEFT JOIN unit as u ON u.id = t.unit_id
-        LEFT JOIN device as v ON v.id = u.device_id
-        LEFT JOIN device_event de ON de.version_id = v.version_id AND de.event_id = t.event_id
-
-        LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
-
-        WHERE t.unit_id = '$unitId' AND t.date_time>='$from' AND t.date_time<='$to'
-
-
-
-        ";
-        //#WHERE t.id >= 12699 ORDER BY t.id LIMIT 235
-        hx($cn->query);
-        //print_r( $cn->query);exit;
-		$result = $cn->execute();
-		$data = $cn->getDataAll($result);
-        $data2 = $this->getConfigInput(2336);
-
-        $data = array_map(function($item) use($data2){
-            $item['iInputs'] = [];
-            foreach($data2 as $k => $v){
-                if(isset($item[$k]) && $item[$k]==1){
-                    $item['in'.$v['input_id']] = "on";
-                }else{
-                    $item['in'.$v['input_id']] = "off";
-                }
-
-                $item['iInputs'][] = [
-                    'name'=>$v['name'],
-                    'value'=>(isset($item[$k]) && $item[$k]==1)? $v['value_on']: $v['value_off']
-                ];
-            }
-            return $item;
-        }, $data);
-
-        //hx($f);
-        //$fields = $cn->fieldsName($result);
-
-        return $data;
-    }
 
     private function getInputLayers($unitId, $dateFrom = null, $dateTo = null, $input = null){
 
@@ -2071,17 +1991,7 @@ trait DBHistory{
 
     }
 
-    private function updateConfig($user, $config){
-        $cn = $this->cn;
-		$config = json_encode($config, JSON_PRETTY_PRINT);
-        //hx($user);
-        $cn->query = "UPDATE user_config SET layer = '$config'
-            WHERE user = '$user'";
 
-        $cn->execute();
-
-
-    }
 
 }
 

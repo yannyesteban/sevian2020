@@ -612,7 +612,7 @@ export class Unit {
         });
     }
     play() {
-        //return;
+        return;
         //console.log(this.map.map.map)
         /*
         const cluster = new Cluster({ map: this.map.map.map });
