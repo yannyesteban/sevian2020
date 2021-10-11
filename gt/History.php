@@ -288,7 +288,7 @@ class History
 			//hr($cn->query);
 			$result = $cn->execute();
 		}
-		hx($rr);
+
 	}
 	private function loadHistory($unitId, $dateFrom, $hourFrom, $dateTo, $hourTo){
 
