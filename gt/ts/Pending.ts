@@ -216,7 +216,7 @@ export class Pending {
 
     public play() {
 
-        return;
+
         if (this.timer) {
 			window.clearTimeout(this.timer);
 		}

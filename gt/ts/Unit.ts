@@ -837,7 +837,7 @@ export class Unit {
 
 	play() {
 
-		return;
+
 		//console.log(this.map.map.map)
 		/*
 		const cluster = new Cluster({ map: this.map.map.map });
