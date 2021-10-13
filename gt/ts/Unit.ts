@@ -772,6 +772,7 @@ export class Unit {
 
 
 		this._win["status"].setCaption("Conected Units: [ "+(sum)+" ]");
+		document.title = `GTComm [${sum}]`;
 
 		data.tracking2.forEach((tracking, i) => {
 
@@ -1528,6 +1529,10 @@ export class Unit {
 	public getPendingButton(){
 
 		return this.pendingButton;
+	}
+
+	loadUnitInfo(unitId){
+
 	}
 }
 

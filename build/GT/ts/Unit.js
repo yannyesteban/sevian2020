@@ -571,6 +571,7 @@ export class Unit {
             }
         });
         this._win["status"].setCaption("Conected Units: [ " + (sum) + " ]");
+        document.title = `GTComm [${sum}]`;
         data.tracking2.forEach((tracking, i) => {
             this.units[tracking.unitId].data = Object.assign(this.units[tracking.unitId].data, tracking);
             this.updateUnit(tracking);
@@ -1156,6 +1157,8 @@ export class Unit {
     }
     getPendingButton() {
         return this.pendingButton;
+    }
+    loadUnitInfo(unitId) {
     }
 }
 Unit._instances = [];

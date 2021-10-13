@@ -276,7 +276,7 @@ export class CommandImport {
                         }
                     }
                 ]
-            }
+            }});
     }
 
 }
