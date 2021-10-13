@@ -1004,10 +1004,11 @@ export class Unit {
 				action: (item, event) => {
 					let ch = item.getCheck();
 					ch.get().checked = true;
-
+					
+					this.loadUnitInfo(unitId);
 
 					if (this.units[unitId].getValid()) {
-						this.units[unitId].setInfo(this.getUnitInfo(unitId));
+						//this.units[unitId].setInfo(this.getUnitInfo(unitId));
 						this.units[unitId].show(true);
 						this.units[unitId].flyTo();
 						//this._lastUnitId = unitId;
@@ -1028,7 +1029,8 @@ export class Unit {
 					}
 					//this._lastUnitId = unitId;
 					this.change(unitId);
-					this.onInfoUpdate(this.getUnitInfo(unitId), info.vehicle_name);
+					
+					//this.onInfoUpdate(this.getUnitInfo(unitId), info.vehicle_name);
 					//this.setInfo(unitId);
 				}
 
@@ -1410,6 +1412,7 @@ export class Unit {
 
 	public showUnit3(unitId) {
 
+		this.loadUnitInfo(unitId);
 
 		if (this._lastUnitId && this.units[this._lastUnitId] && this._lastUnitId !== unitId) {
 
@@ -1423,7 +1426,7 @@ export class Unit {
 
 
 		if (this.units[unitId].getValid()) {
-			this.units[unitId].setInfo(this.getUnitInfo(unitId));
+			//this.units[unitId].setInfo(this.getUnitInfo(unitId));
 			this.units[unitId].show(true);
 			this.units[unitId].flyTo();
 			//this._lastUnitId = unitId;
@@ -1443,6 +1446,7 @@ export class Unit {
 			//alert(this.msgErrortracking);
 		}
 		this.change(unitId);
+		return;
 		const info = this.dataUnits.find(e => e.unitId == unitId) || {};
 		if (info) {
 
@@ -1532,7 +1536,35 @@ export class Unit {
 	}
 
 	loadUnitInfo(unitId){
+		S.go({
+            async: true,
+            valid: false,
+            //confirm_: 'seguro?',
+            //form: form.getFormData(),
+            //blockingTarget: this.main,
+            requestFunctions: {
+                info: (json) => {
+                    console.log(json);
+					this.units[unitId].setInfo(json.unitData);
+					this.onInfoUpdate(json.unitData, json.unitData.unitName);
+                },
+            },
+            params: [
+                
 
+                {
+                    t: "setMethod",
+                    element: "gt_unit",
+                    method: "get-info",//(type == "0") ? "get-event" : "get-command",
+                    name: "",
+                    eparams: {
+                        unitId: unitId,
+                       
+                    },
+                    iToken: "info",
+                }
+            ],
+        });
 	}
 }
 
