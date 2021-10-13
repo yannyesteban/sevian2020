@@ -285,7 +285,7 @@ export class Unit {
 	private propertysInfo: any[] = [];
 	private traceTool: TraceTool = null;
 
-
+	private infoLayer:GTInfo = null;
 	dataClients: any[] = null;
 	dataAccounts: any[] = null;
 	dataUnits: any[] = null;
@@ -464,6 +464,8 @@ export class Unit {
 
 				if (this.infoId) {
 					const winInfo: GTInfo = S.getElement(this.infoId) as GTInfo;
+
+					this.infoLayer = winInfo;
 
 					const div = $.create("div").addClass("info-main");
 
@@ -1541,10 +1543,10 @@ export class Unit {
             valid: false,
             //confirm_: 'seguro?',
             //form: form.getFormData(),
-            //blockingTarget: this.main,
+            blockingTarget: this.infoLayer.get(),
             requestFunctions: {
                 info: (json) => {
-                    console.log(json);
+                    
 					this.units[unitId].setInfo(json.unitData);
 					this.onInfoUpdate(json.unitData, json.unitData.unitName);
                 },

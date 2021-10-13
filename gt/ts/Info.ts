@@ -78,6 +78,10 @@ export class GTInfo{
 
 
     }
+
+    get(){
+        return this._main;
+    }
     show(){
         this._win["info-main"].show();
     }

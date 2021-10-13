@@ -222,6 +222,7 @@ export class Unit {
         this.traceTimer = null;
         this.propertysInfo = [];
         this.traceTool = null;
+        this.infoLayer = null;
         this.dataClients = null;
         this.dataAccounts = null;
         this.dataUnits = null;
@@ -347,6 +348,7 @@ export class Unit {
                 this.infoFormMain = new InfoForm(this.infoForm);
                 if (this.infoId) {
                     const winInfo = S.getElement(this.infoId);
+                    this.infoLayer = winInfo;
                     const div = $.create("div").addClass("info-main");
                     const body = div.create("div").addClass("info-body");
                     const menu = div.create("div").addClass("info-menu");
@@ -1167,10 +1169,9 @@ export class Unit {
             valid: false,
             //confirm_: 'seguro?',
             //form: form.getFormData(),
-            //blockingTarget: this.main,
+            blockingTarget: this.infoLayer.get(),
             requestFunctions: {
                 info: (json) => {
-                    console.log(json);
                     this.units[unitId].setInfo(json.unitData);
                     this.onInfoUpdate(json.unitData, json.unitData.unitName);
                 },
