@@ -343,7 +343,7 @@ export class MapBoxLib {
     }
 
     draw(name: string, type: string, info: Polylayer) {
-        console.log(name, info);
+        
         if (this._poly[name]) {
             return this._poly[name];
         }
@@ -369,7 +369,7 @@ export class MapBoxLib {
             case "mark":
 
                 this._poly[name] = new IMark(info);
-                console.log(this._poly);
+                
                 //this._poly[name] = new Trace(info);
                 break;
             case "jmark":
@@ -399,7 +399,7 @@ export class MapBoxLib {
     }
 
     delete(name) {
-
+        
         if (this._poly[name]) {
             this._poly[name].delete();
             delete this._poly[name];
@@ -421,15 +421,12 @@ export class MapBoxLib {
         }
     }
     getImage(name) {
-        console.log(name);
-        console.log(this.markImages)
+        
+        
 
         return this.markImages.find((img:any) => img.name == name).src;
 
 
-        alert(name)
-        console.log(this.markImages, this.markImages[name])
-        return this.markImages[name] || '';
     }
 
     createImage(info) {

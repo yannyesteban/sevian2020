@@ -543,4 +543,39 @@
 .tool-import .grid .row:hover div {
   background-color: #fffdfd;
 }
+
+.trace-control .trace-grid {
+  position: relative;
+  color: #919191;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+}
+
+.trace-control .trace-grid .trace-header {
+  position: relative;
+  display: contents;
+}
+
+.trace-control .trace-grid .trace-header div {
+  background-color: #056b72;
+  color: white;
+  text-align: center;
+}
+
+.trace-control .trace-grid .trace-row:nth-child(2n + 1) div {
+  background-color: #f1f1f1;
+}
+
+.trace-control .trace-grid .trace-row {
+  position: relative;
+  display: contents;
+  text-align: center;
+}
+
+.trace-control .trace-grid .trace-row.now div {
+  background-color: #054099;
+  color: #cfcfcf;
+}
 /*# sourceMappingURL=gt_tool.css.map */

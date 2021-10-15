@@ -139,6 +139,7 @@ export class History {
 
     private popup:any = null;
     public onShowInfo:Function = (info)=>{};
+    public onProgress: (number)=>void = ts => {};
 
     private funContextMenu: Function = null;
     private followMe: boolean = false;
@@ -230,7 +231,7 @@ export class History {
             return new Pulsing(info);
         }
     }
-    addImage(info) {console.log(1, info)
+    addImage(info) {
         if (this.map.hasImage(info.name)){
 
             if(!this.iImages[info.name]){
@@ -282,7 +283,7 @@ export class History {
         this.coordinates = [];
         let fixDelay = 0;
         let ts = [];
-        //console.log(this.data)
+        
         this.data.forEach((data, index) => {
             this.coordinates.push(data.coordinates);
 
@@ -533,7 +534,7 @@ export class History {
     }
 
     createMarksLayer(layers){
-
+        
         layers.forEach((layer, index) => {
 
             if (layer.features && Array.isArray(layer.features)) {
@@ -666,7 +667,7 @@ export class History {
             if (layer.features && Array.isArray(layer.features)) {
                 layer.features.forEach((feature) => {
                     //this.createLayer(index, feature);
-                    //console.log(feature)
+                    
                     const id = this.imageLayer(feature);
 
 
@@ -1366,6 +1367,8 @@ export class History {
         this._lastIndex = index;
         this.drawTraceLine(coordinates);
         this.flyToMobil(nextPoint);
+        this.onProgress(this.data[index].ts);
+        
     }
 
     drawTraceLine(coordinates) {
@@ -1611,7 +1614,7 @@ export class History {
                 }
 
             }
-            console.log(this.progress);
+            
             if (this.progress < 0) {
                 this.progress = 0;
             }
@@ -1729,6 +1732,7 @@ export class History {
 
         /* Delete Images */
         for(let x in this.iImages){
+            
             if (this.map.hasImage(x)){
                 this.map.removeImage(x);
              }
@@ -1791,7 +1795,6 @@ export class History {
 
     showLayer(id, value) {
         this.map.setLayoutProperty(id, "visibility", (value) ? "visible" : "none");
-
     }
 
     setTraceMode(mode, init?:boolean){
@@ -1816,7 +1819,7 @@ export class History {
     startSetPosition(){
         this.map.on("contextmenu", this.funContextMenu = (e) => {
 
-            console.log(this.coordinatesInit);
+            
             let line = turf.lineString(this.coordinatesInit);
             let snapped = turf.nearestPointOnLine(line,[e.lngLat.lng, e.lngLat.lat],  { units: "meters" });
             this.goTo(snapped.properties.index);

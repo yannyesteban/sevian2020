@@ -47,6 +47,8 @@ export class HistoryControl {
         this.speedRange = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
         this.dir = 1;
         this.win = null;
+        this.pageLayer = null;
+        this.pageGrid = null;
         this.onOpen = () => { };
         this.onClose = () => { };
         this._parent = object;
@@ -80,9 +82,10 @@ export class HistoryControl {
         });
         tab.add({ tagName: "form", active: true, className: "filter-form" });
         tab.add({});
-        tab.add({});
+        tab.add({ className: "grid" });
         tab.add({ tagName: "form" });
         tab.add({ tagName: "form" });
+        this.pageGrid = this.mainTab.getPage(2);
         //this._length = this._group.create("span").addClass("rule-tool-value");
         //this._length.text("Layers");
         //this._unit = this._group.create("span");
@@ -110,6 +113,7 @@ export class HistoryControl {
         });
         this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Mostrar Puntos" }).addClass(["icon-grid"])
             .on("click", () => {
+            this.createList();
             this.mainTab.show(2);
         });
         this._group_b.create("button").prop({ "type": "button", "title": "Configuración" }).addClass(["icon-setting-2"])
@@ -171,20 +175,127 @@ export class HistoryControl {
     getPage(index) {
         return this.mainTab.getPage(index);
     }
-    createList() {
-        let main = this.mainTab.getPage(2);
-        const table = main.create("table").addClass("trace-list");
-        const header = table.create("tr").addClass("trace-header");
-        this.configData.labels.forEach((line) => {
-            header.create("th").text(line);
+    createLayerFilter(condition, values, value) {
+        if (typeof value === "number") {
+            values[0] = Number(values[0] || null);
+            values[1] = Number(values[1] || null);
+        }
+        switch (condition) {
+            case "==":
+                if (value == values[0]) {
+                    return true;
+                }
+                return false;
+            case "!=":
+                if (value != values[0]) {
+                    return true;
+                }
+                return false;
+            case ">=":
+                if (value >= values[0]) {
+                    return true;
+                }
+                return false;
+            case ">":
+                if (value > values[0]) {
+                    return true;
+                }
+                return false;
+            case "<=":
+                if (value <= values[0]) {
+                    return true;
+                }
+                return false;
+            case "<":
+                if (value < values[0]) {
+                    return true;
+                }
+                return false;
+            case "()":
+                if (value > values[0] && value < values[1]) {
+                    return true;
+                }
+                return false;
+            case "[)":
+                if (value >= values[0] && value < values[1]) {
+                    return true;
+                }
+                return false;
+            case "[]":
+                if (value >= values[0] && value <= values[1]) {
+                    return true;
+                }
+                return false;
+            case "(]":
+                if (value > values[0] && value <= values[1]) {
+                    return true;
+                }
+                return false;
+        }
+        return true;
+    }
+    activeRow(ts) {
+        let tr = this.pageGrid.query(`.trace-row.now`);
+        if (tr) {
+            $(tr).removeClass("now");
+        }
+        tr = this.pageGrid.query(`.trace-row[data-ts="${ts}"]`);
+        if (tr) {
+            $(tr).addClass("now");
+        }
+    }
+    focus() {
+        const childs = this.pageGrid.queryAll(`.trace-row`);
+        let height = 0;
+        Array.from(childs).every((node) => {
+            if (node.classList.contains("now")) {
+                return false;
+            }
+            height += node.firstChild.getBoundingClientRect().height;
+            return true;
         });
-        this.data.forEach((data, index) => {
-            const row = table.create("tr").addClass("trace-row");
+        this.pageGrid.get().scrollTop = height;
+    }
+    createList() {
+        const layers = this.getTraceLayers();
+        const activeLayers = layers.filter((layer, index) => {
+            if (this.pageLayer.query(`input[type="checkbox"][value="${index}"]:checked`)) {
+                return true;
+            }
+            return false;
+        });
+        let main = this.mainTab.getPage(2);
+        main.text("");
+        const data = this.data.filter(d => {
+            for (let layer of activeLayers) {
+                if (layer.prop) {
+                    const property = layer.prop;
+                    const condition = layer.valueType;
+                    const values = (layer.value || "").toString().split(",");
+                    const value = d[property];
+                    if (this.createLayerFilter(condition, values, value)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+        const table = main.create("div").addClass("trace-grid");
+        const header = table.create("div").addClass("trace-header");
+        this.configData.labels.forEach((line) => {
+            header.create("div").text(line);
+        });
+        data.forEach((data, index) => {
+            const row = table.create("div").addClass("trace-row").
+                ds("ts", data.ts).
+                on("click", (event) => {
+                //this.activeRow(data.ts);
+                //this._trace.goTo($(event.currentTarget).ds("value"));
+                this._trace.setProgress(data.ts);
+            });
+            ;
             this.configData.fields.forEach((line) => {
-                row.create("td").ds("value", index).text(data[line])
-                    .on("click", (event) => {
-                    this._trace.goTo($(event.currentTarget).ds("value"));
-                });
+                row.create("div").ds("value", index).text(data[line]);
             });
         });
     }
@@ -201,27 +312,33 @@ export class HistoryControl {
         bar.create("button").prop({ "type": "button", "title": "Ir al Principio" }).addClass("icon-go_begin")
             .on("click", () => {
             this.cmdTrace("go-begin");
+            this.focus();
         });
         bar.create("button").prop({ "type": "button", "title": "Retroceder un Paso" }).addClass("icon-sb")
             .on("click", () => {
             this.cmdTrace("sb");
+            this.focus();
         });
         this._playButton = bar.create("button").prop({ "type": "button", "title": "Iniciar Movimiento" }).addClass("icon-play")
             .on("click", () => {
             if (this._trace.getStatus() == 1) {
                 this.cmdTrace("pause");
+                this.focus();
             }
             else {
                 this.cmdTrace("play");
+                this.focus();
             }
         });
         bar.create("button").prop({ "type": "button", "title": "Avanzar un Paso" }).addClass("icon-sf")
             .on("click", () => {
             this.cmdTrace("sf");
+            this.focus();
         });
         bar.create("button").prop({ "type": "button", "title": "Ir al Final" }).addClass("icon-go_end")
             .on("click", () => {
             this.cmdTrace("go-end");
+            this.focus();
         });
         bar.create("button").prop({ "type": "button", "title": "fast forward" }).addClass("icon-ff")
             .on("click", () => {
@@ -330,6 +447,9 @@ export class HistoryControl {
     }
     setTrace(trace) {
         this._trace = trace;
+        this._trace.onProgress = (ts) => {
+            this.activeRow(ts);
+        };
         this._trace.setSpeed(this.dir * this.factorSpeed * this.speedRange[this.speed]);
         this._trace.onAddLayer = (layer) => {
             this.showLayers();
@@ -359,16 +479,16 @@ export class HistoryControl {
         return this.getTrace().groups;
     }
     showLayers() {
-        this.getPage(1).text("");
+        this.pageLayer = this.getPage(1);
+        this.pageLayer.text("");
         this.groups = this.getTraceGroupLayers();
         const layers = this.getTraceLayers();
-        //console.log(layers);
         //alert(889);
         //return;
         let items = [];
         let _menu = null;
-        let index = 0;
-        for (let layer of layers) {
+        //let index = 0;
+        layers.forEach((layer, index) => {
             if (layer.group >= 0) {
                 if (!items[layer.group]) {
                     items[layer.group] = {
@@ -402,13 +522,17 @@ export class HistoryControl {
                 useCheck: true,
                 className: [layer.type, layer.color],
                 //imageClass:[layer.type, layer.color],
-                value: "" + index++,
+                value: index.toString(),
                 checked: layer.visible,
+                checkValue: index,
                 check: (x, event) => {
                     this.onCheckLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
                     this.getTrace().showLayer(layer.id, event.currentTarget.checked);
+                    //this.createList();
                 }
             });
+        });
+        for (let layer of layers) {
         }
         let menu = new Menu({
             autoClose: false,

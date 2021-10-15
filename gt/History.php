@@ -625,7 +625,7 @@ class History
 
         WHERE t.unit_id = '$unitId' AND t.date_time>='$from' AND t.date_time<='$to'
 
-
+		
 
         ";
 

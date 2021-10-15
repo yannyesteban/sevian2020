@@ -108,6 +108,7 @@ export class History {
         this.iImages = [];
         this.popup = null;
         this.onShowInfo = (info) => { };
+        this.onProgress = ts => { };
         this.funContextMenu = null;
         this.followMe = false;
         for (let x in info) {
@@ -185,7 +186,6 @@ export class History {
         }
     }
     addImage(info) {
-        console.log(1, info);
         if (this.map.hasImage(info.name)) {
             if (!this.iImages[info.name]) {
                 this.iImages[info.name] = this.createImage(Object.assign({ map: this.map }, info));
@@ -230,7 +230,6 @@ export class History {
         this.coordinates = [];
         let fixDelay = 0;
         let ts = [];
-        //console.log(this.data)
         this.data.forEach((data, index) => {
             this.coordinates.push(data.coordinates);
             ts[index] = data.ts;
@@ -566,7 +565,6 @@ export class History {
             if (layer.features && Array.isArray(layer.features)) {
                 layer.features.forEach((feature) => {
                     //this.createLayer(index, feature);
-                    //console.log(feature)
                     const id = this.imageLayer(feature);
                 });
             }
@@ -1147,6 +1145,7 @@ export class History {
         this._lastIndex = index;
         this.drawTraceLine(coordinates);
         this.flyToMobil(nextPoint);
+        this.onProgress(this.data[index].ts);
     }
     drawTraceLine(coordinates) {
         let geojson = {
@@ -1348,7 +1347,6 @@ export class History {
                     this.endTime = this.progress;
                 }
             }
-            console.log(this.progress);
             if (this.progress < 0) {
                 this.progress = 0;
             }
@@ -1514,7 +1512,6 @@ export class History {
     }
     startSetPosition() {
         this.map.on("contextmenu", this.funContextMenu = (e) => {
-            console.log(this.coordinatesInit);
             let line = turf.lineString(this.coordinatesInit);
             let snapped = turf.nearestPointOnLine(line, [e.lngLat.lng, e.lngLat.lat], { units: "meters" });
             this.goTo(snapped.properties.index);

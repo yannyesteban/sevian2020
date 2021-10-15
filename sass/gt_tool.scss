@@ -477,9 +477,9 @@
   font-size: 11px;
   overflow: auto;
   height: 100%;
-  display: flex!important;
+  display: flex !important;
   flex-direction: column;
-  .nav{
+  .nav {
     flex: 1 1 auto;
   }
   .grid {
@@ -501,6 +501,43 @@
       }
       &:hover div {
         background-color: #fffdfd;
+      }
+    }
+  }
+}
+
+.trace-control {
+  .trace-grid {
+    position: relative;
+    //background-color: red;
+    color: rgb(145, 145, 145);
+    display: grid;
+
+    //overflow: auto;
+    grid-template-columns: 1fr 1fr 1fr;
+    .trace-header {
+      position: relative;
+      display: contents;
+      div {
+        background-color: rgb(5, 107, 114);
+        color: white;
+        text-align: center;
+      }
+    }
+    .trace-row:nth-child(2n + 1) {
+      div {
+        background-color: rgb(241, 241, 241);
+      }
+    }
+    .trace-row {
+      position: relative;
+      display: contents;
+      text-align: center;
+      &.now {
+        div {
+          background-color: rgb(5, 64, 153);
+          color: rgb(207, 207, 207);
+        }
       }
     }
   }

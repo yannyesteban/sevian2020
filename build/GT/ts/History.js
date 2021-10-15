@@ -179,7 +179,6 @@ export class History {
             //"blockingTarget": blockingTarget,
             requestFunctions: {
                 loadData: (json) => {
-                    console.log(json);
                     this.setUniData(json.unitData);
                     this.setData(json.data);
                     this.setLayerConfig(json.config);
@@ -315,7 +314,6 @@ export class History {
             images: this.layerConfig.images,
             popup: this.tracePopup,
             onShowInfo: (info) => {
-                console.log(info);
                 info = Object.assign(this.unitData, this.data[info.i], info);
                 this.popupInfoForm.setMode(info.className);
                 this.popupInfoForm.setData(info);
@@ -366,7 +364,7 @@ export class History {
                 this.saveConfig(data);
             }
         });
-        this.historyControl.createList();
+        //this.historyControl.createList();
         return;
         const win = new Float.Window({
             visible: true,

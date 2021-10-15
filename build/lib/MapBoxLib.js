@@ -260,7 +260,6 @@ export class MapBoxLib {
         return this._poly[name];
     }
     draw(name, type, info) {
-        console.log(name, info);
         if (this._poly[name]) {
             return this._poly[name];
         }
@@ -284,7 +283,6 @@ export class MapBoxLib {
                 break;
             case "mark":
                 this._poly[name] = new IMark(info);
-                console.log(this._poly);
                 //this._poly[name] = new Trace(info);
                 break;
             case "jmark":
@@ -328,12 +326,7 @@ export class MapBoxLib {
         }
     }
     getImage(name) {
-        console.log(name);
-        console.log(this.markImages);
         return this.markImages.find((img) => img.name == name).src;
-        alert(name);
-        console.log(this.markImages, this.markImages[name]);
-        return this.markImages[name] || '';
     }
     createImage(info) {
         if (info.type == "arrow") {

@@ -242,7 +242,7 @@ export class History{
 			//"blockingTarget": blockingTarget,
 			requestFunctions: {
 				loadData: (json) => {
-					console.log(json);
+					
 					this.setUniData(json.unitData);
 					this.setData(json.data);
 					this.setLayerConfig(json.config);
@@ -382,6 +382,7 @@ export class History{
 
 
 		const layer2 = this.layerConfig.groups;
+		
 		this.layerConfig.layers.forEach((e, index)=>{
 
 			if(e.group !== undefined && layer2[e.group]){
@@ -397,6 +398,8 @@ export class History{
 			this.historyControl.reset();
 		}
 
+
+
 		this.trace = this.getMap().draw("traza2", "history", {
 			data:data,
 			layers:this.layerConfig.layers,
@@ -405,7 +408,7 @@ export class History{
 			images:this.layerConfig.images,
 			popup:this.tracePopup,
 			onShowInfo:(info)=>{
-				console.log(info)
+				
 				info = Object.assign(this.unitData, this.data[info.i], info);
 
 				this.popupInfoForm.setMode(info.className);
@@ -471,7 +474,7 @@ export class History{
 			}
 		});
 
-		this.historyControl.createList();
+		//this.historyControl.createList();
 		return;
 		const win = new Float.Window({
 			visible:true,

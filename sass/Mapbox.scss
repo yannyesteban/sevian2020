@@ -275,12 +275,19 @@
       display: none;
     }
     > .body {
+      position: relative;
       overflow: auto;
       height: 100%;
+      .grid {
+        position: relative;
+        overflow: auto;
+        height: 100%;
+      }
     }
   }
 }
 .trace-list {
+  position: relative;
   text-align: center;
   width: 100%;
 
@@ -298,6 +305,10 @@
     background-color: rgb(241, 241, 241);
   }
 
+  tr.now {
+    background-color: rgb(5, 64, 153);
+    color: rgb(207, 207, 207);
+  }
   tr:hover {
     cursor: pointer;
 
@@ -416,24 +427,19 @@
 .info-form {
   text-transform: uppercase;
 
-
-  .unit-group{
+  .unit-group {
     cursor: pointer;
-    .body{
+    .body {
       display: none !important;
-
     }
-    &:hover{
-      .body{
-        display: contents!important;
-
-
+    &:hover {
+      .body {
+        display: contents !important;
       }
     }
-
   }
 
-  .last-event{
+  .last-event {
     background-color: #fcff33;
   }
   &[data-speed*="1"] {
@@ -486,7 +492,8 @@
     margin-top: 3px;
     &.inputs {
       background-color: rgba(0, 0, 0, 0.295);
-      > [data-input-value="true"], [data-input-value="1"] {
+      > [data-input-value="true"],
+      [data-input-value="1"] {
         span:nth-child(2) {
           font-weight: bold;
           color: rgb(251, 255, 9);
@@ -495,7 +502,8 @@
     }
     &.outputs {
       background-color: rgba(0, 0, 0, 0.205);
-      > [data-input-value="true"], [data-input-value="1"] {
+      > [data-input-value="true"],
+      [data-input-value="1"] {
         span:nth-child(2) {
           font-weight: bold;
           color: rgb(250, 231, 56);
@@ -641,10 +649,10 @@
         font-family: futurab !important;
       }
     }
-    .list{
-      width:100%;
-      background-color: #c2c2c2!important;
-      color:white!important;
+    .list {
+      width: 100%;
+      background-color: #c2c2c2 !important;
+      color: white !important;
     }
     .page {
       //border: 10px solid transparent;
