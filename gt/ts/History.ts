@@ -146,6 +146,16 @@ export class History{
 
 			this.historyControl = this.getMap().getControl("history") as HistoryControl;
 			//map.getControl("mark").onsave = ((info)=>{}
+			this.historyControl.onProgress = (info)=>{
+				console.log(info);
+				info = Object.assign(this.unitData, info);
+
+				//this.popupInfoForm.setMode(info.className);
+				this.popupInfoForm.setData(info);
+
+				//this._infoForm.setMode(info.className);
+				this._infoForm.setData(info);
+			}
 			this.form.id = this.historyControl.getPage(0);
 			this.form.parentContext =  this;
 
@@ -627,7 +637,7 @@ export class History{
 		return this._info;
 	}
 
-
+	
 
 
 

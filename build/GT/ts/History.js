@@ -115,6 +115,14 @@ export class History {
             //map.map.addImage("t1", new TraceMarker(map.map, 30), { pixelRatio: 1 });
             this.historyControl = this.getMap().getControl("history");
             //map.getControl("mark").onsave = ((info)=>{}
+            this.historyControl.onProgress = (info) => {
+                console.log(info);
+                info = Object.assign(this.unitData, info);
+                //this.popupInfoForm.setMode(info.className);
+                this.popupInfoForm.setData(info);
+                //this._infoForm.setMode(info.className);
+                this._infoForm.setData(info);
+            };
             this.form.id = this.historyControl.getPage(0);
             this.form.parentContext = this;
             this._form = new Form2(this.form);

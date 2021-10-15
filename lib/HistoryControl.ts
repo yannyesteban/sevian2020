@@ -65,6 +65,7 @@ export class HistoryControl {
 
     public onOpen: () => void = () => { };
     public onClose: () => void = () => { };
+    public onProgress: (info) => void = (info) => { };
     constructor(object) {
         this._parent = object;
     }
@@ -299,9 +300,6 @@ export class HistoryControl {
 
         if (tr) {
             $(tr).addClass("now");
-
-
-
         }
     }
 
@@ -567,8 +565,10 @@ export class HistoryControl {
 
     setTrace(trace) {
         this._trace = trace;
-        this._trace.onProgress = (ts) => {
+        this._trace.onProgress = (ts, info) => {
+            
             this.activeRow(ts);
+            this.onProgress(info);
         };
         this._trace.setSpeed(this.dir * this.factorSpeed * this.speedRange[this.speed]);
         this._trace.onAddLayer = (layer) => {
@@ -759,10 +759,10 @@ export class HistoryControl {
         this.win = new Float.Window({
             visible: false,
             caption: this.caption + "- Info",
-            left: 10 + 280 + 20,
-            top: 100,
-            width: "600px",
-            height: "250px",
+            left: "center",
+            top: "middle",
+            //width: "600px",
+            //height: "250px",
             mode: "auto",
             className: ["sevian"],
             child: page

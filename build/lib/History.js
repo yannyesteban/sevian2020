@@ -108,7 +108,7 @@ export class History {
         this.iImages = [];
         this.popup = null;
         this.onShowInfo = (info) => { };
-        this.onProgress = ts => { };
+        this.onProgress = (ts, info) => { };
         this.funContextMenu = null;
         this.followMe = false;
         for (let x in info) {
@@ -1145,7 +1145,7 @@ export class History {
         this._lastIndex = index;
         this.drawTraceLine(coordinates);
         this.flyToMobil(nextPoint);
-        this.onProgress(this.data[index].ts);
+        this.onProgress(this.data[index].ts, this.data[index]);
     }
     drawTraceLine(coordinates) {
         let geojson = {
@@ -1585,6 +1585,7 @@ export class History {
             // Populate the popup and set its coordinates
             // based on the feature found.
             //popup.setLngLat(coordinates).setHTML(description).addTo(map);
+            console.log(info);
             this.onShowInfo(info);
             this.popup.setLngLat(coordinates).addTo(map);
         });

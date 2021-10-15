@@ -139,7 +139,7 @@ export class History {
 
     private popup:any = null;
     public onShowInfo:Function = (info)=>{};
-    public onProgress: (number)=>void = ts => {};
+    public onProgress: (number, info)=>void = (ts, info) => {};
 
     private funContextMenu: Function = null;
     private followMe: boolean = false;
@@ -1367,7 +1367,7 @@ export class History {
         this._lastIndex = index;
         this.drawTraceLine(coordinates);
         this.flyToMobil(nextPoint);
-        this.onProgress(this.data[index].ts);
+        this.onProgress(this.data[index].ts, this.data[index]);
         
     }
 
@@ -1902,6 +1902,7 @@ export class History {
                 // Populate the popup and set its coordinates
                 // based on the feature found.
                 //popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                console.log(info)
                 this.onShowInfo(info);
                 this.popup.setLngLat(coordinates).addTo(map);
             });
