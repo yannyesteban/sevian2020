@@ -452,6 +452,8 @@
 .info-form-popup .last-event,
 .info-form .last-event {
   background-color: #fcff33;
+  color: #f02020 !important;
+  text-align: center;
 }
 
 .info-form-popup[data-speed*="1"],

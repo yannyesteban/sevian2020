@@ -441,6 +441,8 @@
 
   .last-event {
     background-color: #fcff33;
+    color: rgb(240, 32, 32) !important;
+    text-align: center;
   }
   &[data-speed*="1"] {
     background-color: #0590a8;
