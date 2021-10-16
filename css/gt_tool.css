@@ -544,37 +544,43 @@
   background-color: #fffdfd;
 }
 
-.trace-control .trace-grid {
+.trace-grid {
+  color: #919191;
+  font-size: 11px;
+  line-height: 1.3em;
   position: relative;
+  background-color: #f0f0f0;
   color: #919191;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr 1fr;
-      grid-template-columns: 1fr 1fr 1fr;
+  -ms-grid-columns: auto auto 1fr;
+      grid-template-columns: auto auto 1fr;
+  -ms-grid-rows: auto;
+      grid-template-rows: auto;
 }
 
-.trace-control .trace-grid .trace-header {
+.trace-grid .trace-header {
   position: relative;
   display: contents;
 }
 
-.trace-control .trace-grid .trace-header div {
+.trace-grid .trace-header div {
   background-color: #056b72;
   color: white;
   text-align: center;
 }
 
-.trace-control .trace-grid .trace-row:nth-child(2n + 1) div {
+.trace-grid .trace-row:nth-child(2n + 1) div {
   background-color: #f1f1f1;
 }
 
-.trace-control .trace-grid .trace-row {
+.trace-grid .trace-row {
   position: relative;
   display: contents;
   text-align: center;
 }
 
-.trace-control .trace-grid .trace-row.now div {
+.trace-grid .trace-row.now div {
   background-color: #054099;
   color: #cfcfcf;
 }

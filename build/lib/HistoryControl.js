@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { _sgQuery as $ } from '../Sevian/ts/Query.js';
 import { Menu } from '../Sevian/ts/Menu2.js';
 import { Float } from '../Sevian/ts/Window.js';
@@ -46,7 +55,7 @@ export class HistoryControl {
         //private speedRange: number[] = [1, 2, 4, 8, 16, 32];
         this.speedRange = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
         this.dir = 1;
-        this.win = null;
+        this.win = [];
         this.pageLayer = null;
         this.pageGrid = null;
         this.onOpen = () => { };
@@ -77,16 +86,18 @@ export class HistoryControl {
         this.speedBar(this._group_speed);
         this.layerControl = this._group = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "trace-layer"])
             .style("display", "none");
+        this.pageGrid = $.create("div").addClass("grid");
+        this.setGridPage(this.pageGrid);
         const tab = this.mainTab = new Tab({
             id: this._group,
             className: "trace-control",
         });
         tab.add({ tagName: "form", active: true, className: "filter-form" });
         tab.add({});
-        tab.add({ className: "grid" });
+        tab.add({});
         tab.add({ tagName: "form" });
         tab.add({ tagName: "form" });
-        this.pageGrid = this.mainTab.getPage(2);
+        //this.pageGrid = this.mainTab.getPage(2);
         //this._length = this._group.create("span").addClass("rule-tool-value");
         //this._length.text("Layers");
         //this._unit = this._group.create("span");
@@ -115,7 +126,7 @@ export class HistoryControl {
         this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Mostrar Puntos" }).addClass(["icon-grid"])
             .on("click", () => {
             this.createList();
-            this.mainTab.show(2);
+            this.win["grid"].show({});
         });
         this._group_b.create("button").prop({ "type": "button", "title": "Configuración" }).addClass(["icon-setting-2"])
             .on("click", () => {
@@ -123,7 +134,7 @@ export class HistoryControl {
         });
         this._group_b.create("button").prop({ "type": "button", "title": "Info" }).addClass(["icon-info-2"])
             .on("click", () => {
-            this.win.show({});
+            this.win["info"].show({});
         });
         this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Descarta Todo" }).addClass(["icon-trash"])
             .on("click", () => {
@@ -258,45 +269,47 @@ export class HistoryControl {
         this.pageGrid.get().scrollTop = height;
     }
     createList() {
-        const layers = this.getTraceLayers();
-        const activeLayers = layers.filter((layer, index) => {
-            if (this.pageLayer.query(`input[type="checkbox"][value="${index}"]:checked`)) {
-                return true;
-            }
-            return false;
-        });
-        let main = this.mainTab.getPage(2);
-        main.text("");
-        const data = this.data.filter(d => {
-            for (let layer of activeLayers) {
-                if (layer.prop) {
-                    const property = layer.prop;
-                    const condition = layer.valueType;
-                    const values = (layer.value || "").toString().split(",");
-                    const value = d[property];
-                    if (this.createLayerFilter(condition, values, value)) {
-                        return true;
+        return __awaiter(this, void 0, void 0, function* () {
+            const layers = this.getTraceLayers();
+            const activeLayers = layers.filter((layer, index) => {
+                if (this.pageLayer.query(`input[type="checkbox"][value="${index}"]:checked`)) {
+                    return true;
+                }
+                return false;
+            });
+            let main = this.pageGrid;
+            main.text("");
+            const data = this.data.filter(d => {
+                for (let layer of activeLayers) {
+                    if (layer.prop) {
+                        const property = layer.prop;
+                        const condition = layer.valueType;
+                        const values = (layer.value || "").toString().split(",");
+                        const value = d[property];
+                        if (this.createLayerFilter(condition, values, value)) {
+                            return true;
+                        }
                     }
                 }
-            }
-            return false;
-        });
-        const table = main.create("div").addClass("trace-grid");
-        const header = table.create("div").addClass("trace-header");
-        this.configData.labels.forEach((line) => {
-            header.create("div").text(line);
-        });
-        data.forEach((data, index) => {
-            const row = table.create("div").addClass("trace-row").
-                ds("ts", data.ts).
-                on("click", (event) => {
-                //this.activeRow(data.ts);
-                //this._trace.goTo($(event.currentTarget).ds("value"));
-                this._trace.setProgress(data.ts);
+                return false;
             });
-            ;
-            this.configData.fields.forEach((line) => {
-                row.create("div").ds("value", index).text(data[line]);
+            const table = main.create("div").addClass("trace-grid");
+            const header = table.create("div").addClass("trace-header");
+            this.configData.labels.forEach((line) => {
+                header.create("div").text(line);
+            });
+            data.forEach((data, index) => {
+                const row = table.create("div").addClass("trace-row").
+                    ds("ts", data.ts).
+                    on("click", (event) => {
+                    //this.activeRow(data.ts);
+                    //this._trace.goTo($(event.currentTarget).ds("value"));
+                    this._trace.setProgress(data.ts);
+                });
+                ;
+                this.configData.fields.forEach((line) => {
+                    row.create("div").ds("value", index).text(data[line]);
+                });
             });
         });
     }
@@ -530,7 +543,7 @@ export class HistoryControl {
                 check: (x, event) => {
                     this.onCheckLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
                     this.getTrace().showLayer(layer.id, event.currentTarget.checked);
-                    //this.createList();
+                    this.createList();
                 }
             });
         });
@@ -599,9 +612,22 @@ export class HistoryControl {
         }
     }
     setInfoPage(page) {
-        this.win = new Float.Window({
+        this.win["info"] = new Float.Window({
             visible: false,
             caption: this.caption + "- Info",
+            left: "center",
+            top: "middle",
+            //width: "600px",
+            //height: "250px",
+            mode: "auto",
+            className: ["sevian"],
+            child: page
+        });
+    }
+    setGridPage(page) {
+        this.win["grid"] = new Float.Window({
+            visible: false,
+            caption: this.caption + "- Data",
             left: "center",
             top: "middle",
             //width: "600px",

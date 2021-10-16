@@ -58,7 +58,7 @@ export class HistoryControl {
     //private speedRange: number[] = [1, 2, 4, 8, 16, 32];
     private speedRange: number[] = [-32, -16, -8, -4, -2, -1, 1, 2, 4, 8, 16, 32];
     private dir = 1;
-    private win: any = null;
+    private win: any[] = [];
 
     private pageLayer: SQObject = null;
     private pageGrid: SQObject = null;
@@ -105,6 +105,9 @@ export class HistoryControl {
         this.layerControl = this._group = this._group2.create("div").addClass(["mapboxgl-ctrl", "mapboxgl-ctrl-group", "trace-layer"])
             .style("display", "none");
 
+
+        this.pageGrid = $.create("div").addClass("grid");
+        this.setGridPage(this.pageGrid);
         const tab = this.mainTab = new Tab({
             id: this._group,
             className: "trace-control",
@@ -114,12 +117,12 @@ export class HistoryControl {
 
         tab.add({ tagName: "form", active: true, className: "filter-form" });
         tab.add({});
-        tab.add({ className: "grid" });
+        tab.add({  });
         tab.add({ tagName: "form" });
         tab.add({ tagName: "form" });
 
 
-        this.pageGrid = this.mainTab.getPage(2);
+        //this.pageGrid = this.mainTab.getPage(2);
         //this._length = this._group.create("span").addClass("rule-tool-value");
         //this._length.text("Layers");
         //this._unit = this._group.create("span");
@@ -154,7 +157,8 @@ export class HistoryControl {
         this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Mostrar Puntos" }).addClass(["icon-grid"])
             .on("click", () => {
                 this.createList();
-                this.mainTab.show(2);
+                
+                this.win["grid"].show({});
             });
 
         this._group_b.create("button").prop({ "type": "button", "title": "Configuración" }).addClass(["icon-setting-2"])
@@ -164,7 +168,7 @@ export class HistoryControl {
 
         this._group_b.create("button").prop({ "type": "button", "title": "Info" }).addClass(["icon-info-2"])
             .on("click", () => {
-                this.win.show({});
+                this.win["info"].show({});
             });
 
         this._btnTrash = this._group_b.create("button").prop({ "type": "button", "title": "Descarta Todo" }).addClass(["icon-trash"])
@@ -323,7 +327,7 @@ export class HistoryControl {
 
         
     }
-    createList() {
+    async createList() {
         const layers = this.getTraceLayers();
         const activeLayers = layers.filter((layer, index) => {
             if (this.pageLayer.query(`input[type="checkbox"][value="${index}"]:checked`)) {
@@ -332,7 +336,7 @@ export class HistoryControl {
             return false;
         });
 
-        let main = this.mainTab.getPage(2);
+        let main = this.pageGrid;
 
         main.text("");
 
@@ -666,7 +670,7 @@ export class HistoryControl {
 
                     this.onCheckLayer(parseInt(x.ds("value"), 10), event.currentTarget.checked);
                     this.getTrace().showLayer(layer.id, event.currentTarget.checked);
-                    //this.createList();
+                    this.createList();
 
                 }
             });
@@ -756,9 +760,22 @@ export class HistoryControl {
     }
 
     setInfoPage(page) {
-        this.win = new Float.Window({
+        this.win["info"] = new Float.Window({
             visible: false,
             caption: this.caption + "- Info",
+            left: "center",
+            top: "middle",
+            //width: "600px",
+            //height: "250px",
+            mode: "auto",
+            className: ["sevian"],
+            child: page
+        });
+    }
+    setGridPage(page) {
+        this.win["grid"] = new Float.Window({
+            visible: false,
+            caption: this.caption + "- Data",
             left: "center",
             top: "middle",
             //width: "600px",
