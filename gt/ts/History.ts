@@ -443,7 +443,7 @@ export class History{
 
 		});
 
-
+		this.historyControl.createList();
 
 		//this.formHistoryConfig.id = ;
 

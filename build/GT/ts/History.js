@@ -339,6 +339,7 @@ export class History {
             fields: ["uTime", "speed", "event"],
             labels: ["Hora", "Km/h", "Evento"],
         });
+        this.historyControl.createList();
         //this.formHistoryConfig.id = ;
         const layerTool = new LayerTool({
             id: this.historyControl.getPage(3),
