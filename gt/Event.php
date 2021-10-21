@@ -389,7 +389,7 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
         WHERE
 
         e.status != 2
-        AND TIMESTAMPDIFF(MINUTE, e.stamp, now()) < 50
+        AND TIMESTAMPDIFF(MINUTE, e.stamp, now()) < 5
         AND uu.user = '$user' AND (e.mode & '$mode') = '$mode'
 
         ORDER BY 1 desc
