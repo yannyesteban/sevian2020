@@ -342,6 +342,13 @@ export class InfoComm {
             $(e).text(humanDiff(date, start));
         }
     }
+    getRow(id) {
+        const ele = this.main.query(`.row[data-id="${id}"]`);
+        if (ele) {
+            return ele;
+        }
+        return false;
+    }
     getCounts() {
         const ele = this.main.queryAll(`.new`);
         if (ele) {

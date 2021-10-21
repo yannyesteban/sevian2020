@@ -463,6 +463,18 @@ export class InfoComm {
 
     }
 
+    public getRow(id) {
+
+
+        const ele = this.main.query(`.row[data-id="${id}"]`);
+
+        if (ele) {
+            return ele;
+        }
+        return false;
+
+    }
+
     public getCounts() {
 
 

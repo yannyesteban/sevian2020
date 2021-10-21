@@ -239,7 +239,10 @@ export class Communication {
             },
             onadd: (info) => {
                 if (info.unitId == this.unitPanel.getLastUnit()) {
-                    this.getInfoWin(this.winNames.unit).addMessage(info);
+                    const win = this.getInfoWin(this.winNames.unit);
+                    if (!win.getRow(info.id)) {
+                        win.addMessage(info);
+                    }
                 }
             },
             ondelete: (info) => {
