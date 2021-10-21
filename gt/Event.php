@@ -345,6 +345,7 @@ class Event
     }
 
 	private function getLastEvents($mode){
+		$mode2 =  $mode + 1;
 		/*
 		CONCAT(
             TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
@@ -355,6 +356,17 @@ class Event
 		$user = $this->getUser();
 
         $cn = $this->cn;
+
+		$cn->query = "SELECT date_add(now(), INTERVAL -15 MINUTE) as date_now;";
+		$result = $this->cn->execute();
+		$now = "0000-00-00 00:00:00";
+		if($rs = $cn->getDataAssoc($result)){
+            $now = $rs['date_now'];
+        }
+
+        //hx($cn->getDataAll($result));
+       
+
         $cn->query = "SELECT * FROM (SELECT e.id, e.event_id, e.user, e.status,
         vn.name, 1 as type, 'x' as cType, e.info,
         e.date_time, u.id as unitId,
@@ -383,14 +395,17 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
         LEFT JOIN device as de ON de.id = u.device_id
         LEFT JOIN device_name as dn ON dn.name = de.name
         LEFT JOIN unit_name as vn ON vn.id = u.name_id
-        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id AND uu.user = '$user'
         #LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
 
         WHERE
 
         e.status != 2
-        AND TIMESTAMPDIFF(MINUTE, e.stamp, now()) < 5
-        AND uu.user = '$user' AND (e.mode & '$mode') = '$mode'
+        #AND TIMESTAMPDIFF(MINUTE, e.stamp, now()) < 5
+		AND e.stamp > '$now'
+        AND uu.user = '$user' 
+		AND (e.mode & '$mode') = '$mode'
+		#AND (e.mode = '$mode' or e.mode = '$mode2')
 
         ORDER BY 1 desc
         LIMIT $this->maxRecords) as e 
