@@ -83,7 +83,7 @@ export class Communication {
 
 
     private _timer3: any = null;
-    public delay3: number = 5000;
+    public delay3: number = 5000*2;
 
 
 

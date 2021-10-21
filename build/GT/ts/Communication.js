@@ -55,7 +55,7 @@ export class Communication {
         this._timer2 = null;
         this.delay2 = 5000;
         this._timer3 = null;
-        this.delay3 = 5000;
+        this.delay3 = 5000 * 2;
         this.lastEventId = 0;
         this.lastDate = null;
         this.statusId = null;
