@@ -358,9 +358,9 @@ class Event
         $cn->query = "SELECT * FROM (SELECT e.id, e.event_id, e.user, e.status,
         vn.name, 1 as type, 'x' as cType, e.info,
         e.date_time, u.id as unitId,
-        e.mode as mm, e.title as tt, dn.name as device_name, e.stamp,
+        e.mode, e.title, dn.name as device_name, e.stamp,
 
-		'yanny esteban' as title, 7 as mode,
+		
 
         date_format(e.stamp, '%d/%m/%Y') as fdate,
         date_format(e.stamp, '%T') as ftime, t.speed, t.id as tracking_id,
