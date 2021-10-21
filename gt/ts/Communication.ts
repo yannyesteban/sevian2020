@@ -762,7 +762,51 @@ export class Communication {
         this.evalSound();
 
     }
+
+
+    
     updateAllEventStatus(info, status, windowId) {
+        S.go({
+            async: true,
+            valid: false,
+            
+            
+            blockingTarget: this.getInfoWin(windowId).getMain(),
+            requestFunctions: {
+                getData: (json) => {
+                    this.reqAllEventStatus(json);
+                    console.log(json)
+
+                    for(const x in json.data){
+                        this._infoControl[x].setData(json.data[x]);
+                        const counts = this.getInfoWin(x).getCounts();
+                        this.infoMenu.updateType(x, counts || "");
+                    }
+                }
+                
+            },
+            params: [
+                {
+                    t: 'setMethod',
+                        id: 2,
+                        element: 'gt-event',
+                        method: 'update-all-status',
+                        name: 'x',
+                        eparams: {
+                            eventId: this.lastEventId,
+                            status: status,
+                            windowId: windowId,
+                            mode: 1,
+                            firstId: this.getInfoWin(windowId).firstId || 0,
+                            lastId: this.getInfoWin(windowId).lastId || 0,
+                        },
+                    iToken: "getData",
+                }
+            ],
+        });
+
+        return;
+
         S.send3(
             {
 
@@ -807,7 +851,7 @@ export class Communication {
                     }
 
                     
-                    console.log(json)
+                    
                     /*
                     json.forEach(data => {
                         this.reqDataEvent(data);

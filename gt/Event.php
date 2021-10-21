@@ -30,6 +30,8 @@ class Event
 
 
 	public $maxRecords = 100;
+	public $maxTime = 5;
+
 
     public function __construct($info = []){
         foreach($info as $k => $v){
@@ -101,15 +103,27 @@ class Event
 					]);
 				break;
 			case 'update-all-status':
+				
 				$userInfo = $this->getUserInfo();
-				$this->setStatusAll($this->eparams->eventId?? 0, $this->eparams->status?? 0, $userInfo->user, $this->eparams->windowId?? 0);
-				$this->setRequest([
-					"eventId"=>$this->eparams->eventId?? 0,
-					"status"=>$this->eparams->status?? null,
-					"windowId"=>$this->eparams->windowId?? 0,
-					'mode'=>$this->eparams->mode?? 0,
-					'user'=>$userInfo->user?? '',
-					]);
+				$this->setStatusAll($this->eparams->firstId?? 0, $this->eparams->lastId?? 0, $this->eparams->status?? 0);
+				$data = [];
+				//$data[1] = $this->getLastEvents(1);
+				//$data[2] = $this->getLastEvents(2);
+				$data[$this->eparams->windowId] = $this->getLastEvents($this->eparams->windowId);
+				$this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> [
+						"eventId"=>$this->eparams->eventId?? 0,
+						"status"=>$this->eparams->status?? null,
+						"windowId"=>$this->eparams->windowId?? 0,
+						'mode'=>$this->eparams->mode?? 0,
+						'user'=>$userInfo->user?? '',
+						'data'=>$data
+						],
+                    'iToken'=> $this->iToken
+                ]);
+
+				
 				break;
             case 'load-sites':
 
@@ -357,7 +371,7 @@ class Event
 
         $cn = $this->cn;
 
-		$cn->query = "SELECT date_add(now(), INTERVAL -15 MINUTE) as date_now;";
+		$cn->query = "SELECT date_add(now(), INTERVAL - '$this->maxTime' MINUTE) as date_now;";
 		$result = $this->cn->execute();
 		$now = "0000-00-00 00:00:00";
 		if($rs = $cn->getDataAssoc($result)){
@@ -421,16 +435,23 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
     }
 
 	private function setStatus($eventId, $status=0, $user=""){
+		$user = $this->getUser();
         $cn = $this->cn;
-        $cn->query = "UPDATE event SET status='$status', `user`='$user', attend=now() WHERE id='$eventId'";
+        $cn->query = "UPDATE event 
+			SET status='$status', `user`='$user', attend = IFNULL(attend, now())
+			WHERE id='$eventId'";
         $this->cn->execute();
     }
 
-    private function setStatusAll($eventId, $status=0, $user="", $mode=""){
+    private function setStatusAll($firstId, $lastId, $status){
+		$user = $this->getUser();
         $cn = $this->cn;
         $cn->query = "UPDATE event 
             SET status='$status', `user`='$user', attend = IFNULL(attend, now())
-            WHERE id<='$eventId' AND mode & '$mode'>0";
+
+            WHERE id >= '$firstId' and id <= '$lastId';";
         $this->cn->execute();
+
+		
     }
 }

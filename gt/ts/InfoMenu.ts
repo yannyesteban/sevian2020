@@ -73,6 +73,9 @@ export class InfoMenu {
 
     }
 
+    getMain() {
+        return this.main;
+    }
     public updateType(type, text) {
         if (text === 0) {
             text = "";
@@ -111,6 +114,9 @@ export class InfoComm {
 
 
     private ul: SQObject = null;
+
+    public firstId = 0;
+    public lastId = 0;
     /*
     types
     1:unit conected
@@ -211,6 +217,14 @@ export class InfoComm {
         data.forEach((message, index)=>{
             this.addMessage(message);
         });
+        if(data[0]){
+            this.firstId = data[0].id;
+        }
+
+        if(data[data.length - 1]){
+            this.lastId = data[data.length - 1].id;
+        }
+        
     }
     public addMessage(message: any) {
 
@@ -292,6 +306,9 @@ export class InfoComm {
 
     }
 
+    getMain() {
+        return this.main;
+    }
 
     public add(message: any) {
 

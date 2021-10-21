@@ -48,6 +48,9 @@ export class InfoMenu {
             items: items
         });
     }
+    getMain() {
+        return this.main;
+    }
     updateType(type, text) {
         if (text === 0) {
             text = "";
@@ -72,6 +75,8 @@ export class InfoComm {
         this.maxRecords = 5;
         this.showType = true;
         this.ul = null;
+        this.firstId = 0;
+        this.lastId = 0;
         /*
         types
         1:unit conected
@@ -153,6 +158,12 @@ export class InfoComm {
         data.forEach((message, index) => {
             this.addMessage(message);
         });
+        if (data[0]) {
+            this.firstId = data[0].id;
+        }
+        if (data[data.length - 1]) {
+            this.lastId = data[data.length - 1].id;
+        }
     }
     addMessage(message) {
         this.lineId++;
@@ -212,6 +223,9 @@ export class InfoComm {
             div.create("div").addClass("detail").text(message.info);
         }
         this.onadd(message);
+    }
+    getMain() {
+        return this.main;
     }
     add(message) {
         this.lineId++;
