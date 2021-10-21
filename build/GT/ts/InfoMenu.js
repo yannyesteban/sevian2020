@@ -61,6 +61,7 @@ export class InfoComm {
     constructor(info) {
         this.id = "";
         this.target = null;
+        this.fields = [];
         this.mainClass = "";
         this.main = null;
         this.counts = [];
@@ -117,7 +118,100 @@ export class InfoComm {
     _create(main) {
         this.main = main;
         main.addClass(this.mainClass);
-        let mainPanel = this.ul = main.create("div").addClass("info-comm").id("xxy");
+        main.addClass("info-comm");
+        let mainPanel = this.ul = main.create("div").addClass("grid");
+    }
+    setData(data) {
+        this.lineId = 0;
+        this.ul.text("");
+        this.fields = [
+            {
+                name: "name",
+            },
+            {
+                name: "ftime",
+            },
+            {
+                name: "title",
+            },
+            {
+                name: "speed",
+            },
+            {
+                name: "delay",
+            },
+            {
+                name: "attend",
+            },
+            {
+                name: "user",
+            },
+            {
+                name: "info",
+            }
+        ];
+        data.forEach((message, index) => {
+            this.addMessage(message);
+        });
+    }
+    addMessage(message) {
+        this.lineId++;
+        if (this.lineId > this.maxRecords) {
+            this.deleteLast(this.ul);
+        }
+        const div = this.ul.createFirst("div").addClass("row").removeClass("open")
+            .ds("id", message.id).ds("line", this.lineId).ds("type", message.type)
+            .ds("mode", message.mode).addClass(`ev-${message.event_id}`);
+        if (message.status == 0) {
+            div.addClass("new");
+        }
+        div.on("click", () => {
+            //div.removeClass("new");
+            this.onread(message);
+        });
+        div.on("dblclick", () => {
+            //div.removeClass("new");
+            this.ondelete(message);
+        });
+        div.create("div").text("").addClass("btn-new").on("click", () => {
+            div.toggleClass("open");
+        });
+        this.fields.forEach(field => {
+            div.create("div").addClass("cell").addClass(field.name).text(message[field.name] || "");
+        });
+        this.onadd(message);
+        return;
+        div.create("div").text(message.name || "");
+        const date = new Date();
+        const start = date.getTime();
+        if (this.showType) {
+            //div.create("div").addClass("type").ds("type", message.type).text(this.cTypes[message.type] || "");
+        }
+        div.create("div").addClass("ftime").text(message.ftime || "");
+        div.create("div").addClass("_type").ds("type", message.type).text(message.title || "");
+        div.create("div").text(message.speed || "").addClass("speed").on("click", (event) => {
+            //this.deleteLine(event.currentTarget);
+            //this.ondelete(message);
+        });
+        div.create("div").text("Ahora").addClass("date").ds("date", date.toISOString()).ds("time", start);
+        //div.create("div").text(message.info || "");
+        /*
+        div.create("div").text("x").addClass("btn-delete").on("click", (event)=>{
+            //this.deleteLine(event.currentTarget);
+            //this.ondelete(message);
+        });
+        */
+        if (typeof (message.info) === "object") {
+            const detail = div.create("div").addClass("detail");
+            for (let x in message.info) {
+                detail.create("span").text(x);
+                detail.create("span").text(message.info[x]);
+            }
+        }
+        else {
+            div.create("div").addClass("detail").text(message.info);
+        }
+        this.onadd(message);
     }
     add(message) {
         this.lineId++;

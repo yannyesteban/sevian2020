@@ -72,7 +72,7 @@ export class Communication {
     private _win: any[] = [];
 
 
-    private _infoControl: any[] = [];
+    private _infoControl: {[key: number]:InfoComm} = {};
 
     private _infoWin: any = null;
     private _infoWin2: any = null;
@@ -285,6 +285,33 @@ export class Communication {
         /* winNow */
         this.createInfoWindow(this.winNames.now, {
             mainClass: "now",
+            fields: [
+                {
+                    name:"name",
+                },
+                {
+                    name:"ftime",
+                },
+                {
+                    name:"title",
+                },
+                {
+                    name:"speed",
+                },
+                {
+                    name:"delay",
+                },
+                {
+                    name:"attend",
+                },
+                {
+                    name:"user",
+                },
+                {
+                    name:"info",
+                }
+    
+            ],
             onread: (info) => {
 
                 if (info.unitId) {
@@ -297,7 +324,7 @@ export class Communication {
 
             onadd: (info) => {
                 if (info.unitId == this.unitPanel.getLastUnit()) {
-                    this.getInfoWin(this.winNames.unit).add(info);
+                    this.getInfoWin(this.winNames.unit).addMessage(info);
                 }
 
              },
@@ -312,6 +339,33 @@ export class Communication {
         /* winNow2 */
         this.createInfoWindow(this.winNames.unit, {
             mainClass: "now",
+            fields: [
+                {
+                    name:"name",
+                },
+                {
+                    name:"ftime",
+                },
+                {
+                    name:"title",
+                },
+                {
+                    name:"speed",
+                },
+                {
+                    name:"delay",
+                },
+                {
+                    name:"attend",
+                },
+                {
+                    name:"user",
+                },
+                {
+                    name:"info",
+                }
+    
+            ],
             onread: (info) => {
 
                 if (info.unitId) {
@@ -736,6 +790,50 @@ export class Communication {
 
             });
     }
+
+    goGetEvents(){
+        S.go({
+            async: true,
+            valid: false,
+            
+            
+            blockingTarget: this.main,
+            requestFunctions: {
+                getData: (json) => {
+                    for(const x in json){
+                        this._infoControl[x].setData(json[x]);
+                        const counts = this.getInfoWin(x).getCounts();
+                        this.infoMenu.updateType(x, counts || "");
+                    }
+
+                    
+                    console.log(json)
+                    /*
+                    json.forEach(data => {
+                        this.reqDataEvent(data);
+                    })
+                    ;
+                */
+                    
+                }
+                
+            },
+            params: [
+                {
+                    t: 'setMethod',
+                    id: 2,
+                    element: 'gt-event',
+                    method: 'load',
+                    name: 'x',
+                    eparams: {
+                        lastEventId: this.lastEventId
+                    },
+                    iToken: "getData",
+                }
+            ],
+        });
+    }
+
     getDataEvent() {
 
         S.send3(
@@ -826,7 +924,8 @@ export class Communication {
         }
 
         this._timer3 = setInterval(() => {
-            this.getDataEvent();
+            this.goGetEvents();
+            //this.getDataEvent();
 
 
 

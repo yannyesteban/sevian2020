@@ -1998,58 +1998,11 @@ trait DBHistory{
 
 trait DBEvent{
     private $cn = null;
-    public $maxRecords = 100;
+    
 
-    private function loadDataEvent($lastId=0, $user=""){
+    
 
-        $cn = $this->cn;
-        $cn->query = "SELECT e.id, e.event_id, e.user, e.status,
-        vn.name, 1 as type, 'x' as cType, e.info,
-        e.date_time, u.id as unitId,
-        e.mode, e.title, dn.name as device_name, e.stamp,
-        date_format(e.stamp, '%d/%m/%Y') as fdate,
-        date_format(e.stamp, '%T') as ftime, t.speed, t.id as tracking_id,
-        CONCAT(
-            TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
-            MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()), 24), ':',
-            MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), NOW()), 60), ':',
-            MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.stamp), NOW()), 60),'' ) AS time
-        FROM event as e
-        LEFT JOIN unit as u ON u.id = e.unit_id
-        LEFT JOIN device as de ON de.id = u.device_id
-        LEFT JOIN device_name as dn ON dn.name = de.name
-        LEFT JOIN unit_name as vn ON vn.id = u.name_id
-        LEFT JOIN user_unit as uu ON uu.unit_id = u.id
-        LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
-
-        WHERE
-
-        e.status != 2
-        AND ('$lastId'= 0 or e.id > '$lastId')
-        AND uu.user = '$user'
-
-        ORDER BY 1 desc
-        LIMIT $this->maxRecords
-        ";
-
-
-
-        $result = $this->cn->execute();
-        //hx($cn->getDataAll($result));
-        return $cn->getDataAll($result);
-
-    }
-
-    private function setStatus($eventId, $status=0, $user=""){
-        $cn = $this->cn;
-        $cn->query = "UPDATE event SET status='$status', `user`='$user' WHERE id='$eventId'";
-        $this->cn->execute();
-    }
-    private function setStatusAll($eventId, $status=0, $user="", $mode=""){
-        $cn = $this->cn;
-        $cn->query = "UPDATE event SET status='$status', `user`='$user' WHERE id<='$eventId' AND mode & '$mode'>0";
-        $this->cn->execute();
-    }
+    
 
 }
 
