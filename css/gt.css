@@ -1201,8 +1201,8 @@ form {
   padding: 4px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 16px minmax(50px, 70px) 50px minmax(60px, 1fr) 22px 50px 50px 60px;
-      grid-template-columns: 16px minmax(50px, 70px) 50px minmax(60px, 1fr) 22px 50px 50px 60px;
+  -ms-grid-columns: 16px minmax(50px, 100px) 50px minmax(60px, 1fr) 22px 50px 50px 60px;
+      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(60px, 1fr) 22px 50px 50px 60px;
   -ms-grid-rows: 1.4em;
       grid-template-rows: 1.4em;
   overflow: auto;
