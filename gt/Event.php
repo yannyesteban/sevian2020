@@ -77,7 +77,7 @@ class Event
 
 				$data = [];
 				$data[1] = $this->getLastEvents(1);
-				$data[2] = $this->getLastEvents(4);
+				$data[2] = $this->getLastEvents(2);
 				$data[4] = $this->getLastEvents(4);
 				//$data[] = $this->getLastEvents(2);
 				//$this->setRequest($this->getLastEvents(1));
@@ -345,7 +345,7 @@ class Event
     }
 
 	private function getLastEvents($mode){
-		$mode2 =  $mode + 1;
+		
 		/*
 		CONCAT(
             TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
@@ -405,7 +405,7 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
 		AND e.stamp > '$now'
         AND uu.user = '$user' 
 		AND (e.mode & '$mode') = '$mode'
-		#AND (e.mode = '$mode' or e.mode = '$mode2')
+		
 
         ORDER BY 1 desc
         LIMIT $this->maxRecords) as e 
