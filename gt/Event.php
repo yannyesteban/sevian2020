@@ -396,7 +396,7 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
         LIMIT $this->maxRecords) as e 
 		ORDER BY e.id 
         ";
-		return [];
+		
 
 		//hx($cn->query);
         $result = $this->cn->execute();
