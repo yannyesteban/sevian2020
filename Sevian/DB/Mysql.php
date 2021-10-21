@@ -78,7 +78,7 @@ class Mysql extends DBase{
 			$this->query = $this->metaFunctions($this->query);
 			
 		}
-		
+		hr(wuery);
 		$this->error = false;
 		$this->errno = false;
 		$this->lastId = false;
