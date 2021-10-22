@@ -1210,6 +1210,26 @@ form {
   text-transform: uppercase;
 }
 
+.info-comm .ev-210 .title {
+  color: #f8c317;
+  font-weight: bold;
+}
+
+.info-comm .ev-210 .title::before {
+  content: "« ";
+}
+
+.info-comm .ev-209 .title,
+.info-comm .ev-211 .title {
+  color: #70c71f;
+  font-weight: bold;
+}
+
+.info-comm .ev-209 .title::after,
+.info-comm .ev-211 .title::after {
+  content: " »";
+}
+
 .info-comm.unit:not(.play).now {
   background-color: #878888a9;
 }
