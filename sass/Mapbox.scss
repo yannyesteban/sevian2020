@@ -444,11 +444,27 @@
     color: rgb(240, 32, 32) !important;
     text-align: center;
   }
+
   &[data-speed*="1"] {
-    background-color: #0590a8;
+    background-color: #1c7f91;
   }
   &[data-speed*="2"] {
-    background-color: rgb(89, 190, 21);
+    background-color: rgb(47, 117, 0);
+  }
+  &[data-speed*="3"] {
+    background-color: rgb(128, 21, 190);
+  }
+  &[data-speed*="4"] {
+    background-color: rgb(28, 10, 109);
+  }
+  &[data-speed*="5"] {
+    background-color: rgb(21, 111, 114);
+  }
+  &[data-speed*="6"],
+  &[data-speed*="7"],
+  &[data-speed*="8"],
+  &[data-speed*="9"] {
+    background-color: rgb(87, 20, 40);
   }
   &[data-speed^="0"] {
     background-color: #b85223;

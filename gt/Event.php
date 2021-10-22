@@ -75,12 +75,17 @@ class Event
 				//$this->load();
 				//hx($this->loadDataEvent($this->eparams->lastEventId?? 0, $this->getUser()));
 				//$this->load();
+				$unitId = $this->eparams->unitId?? 0;
 				
 
 				$data = [];
 				$data[1] = $this->getLastEvents(1);
 				$data[2] = $this->getLastEvents(2);
 				$data[4] = $this->getLastEvents(4);
+				if($unitId > 0){
+					$data[9999] = $this->getUnitEvents($unitId);
+					
+				}
 				//$data[] = $this->getLastEvents(2);
 				//$this->setRequest($this->getLastEvents(1));
 
@@ -94,18 +99,29 @@ class Event
 			case 'update-status':
 				$userInfo = $this->getUserInfo();
 				$this->setStatus($this->eparams->eventId?? 0, $this->eparams->status?? 0, $userInfo->user);
-				$this->setRequest([
-					"eventId"=>$this->eparams->eventId?? 0,
-					"status"=>$this->eparams->status?? null,
-					"windowId"=>$this->eparams->windowId?? 0,
-					'mode'=>$this->eparams->mode?? 0,
-					'user'=>$userInfo->user?? '',
-					]);
-				break;
+				
+				
+				$data = [];
+				//$data[1] = $this->getLastEvents(1);
+				//$data[2] = $this->getLastEvents(2);
+				$data[$this->eparams->windowId] = $this->getLastEvents($this->eparams->windowId);
+				$this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> [
+						"eventId"=>$this->eparams->eventId?? 0,
+						"status"=>$this->eparams->status?? null,
+						"windowId"=>$this->eparams->windowId?? 0,
+						'mode'=>$this->eparams->mode?? 0,
+						'user'=>$userInfo->user?? '',
+						'data'=>$data
+						],
+                    'iToken'=> $this->iToken
+                ]);
+				
 			case 'update-all-status':
 				
 				$userInfo = $this->getUserInfo();
-				$this->setStatusAll($this->eparams->firstId?? 0, $this->eparams->lastId?? 0, $this->eparams->status?? 0);
+				$this->setStatusAll($this->eparams->firstId?? 0, $this->eparams->lastId?? 0, $this->eparams->mode?? 0, $this->eparams->status?? 0);
 				$data = [];
 				//$data[1] = $this->getLastEvents(1);
 				//$data[2] = $this->getLastEvents(2);
@@ -394,14 +410,14 @@ class Event
 		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), now()) as delay,
         CONCAT(
 
-LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()),2,0), ':',
-LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), NOW()), 60),2,0), ':',
-LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.stamp), NOW()), 60),2,0),'' ) AS delay,
-			CONCAT(
+			LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), NOW()), 60),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.stamp), NOW()), 60),2,0),'' ) AS delay,
+		CONCAT(
 
-LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.attend), NOW()),2,0), ':',
-LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.attend), NOW()), 60),2,0), ':',
-LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS attend
+			LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.attend), NOW()),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.attend), NOW()), 60),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS attend
 
 
         FROM event as e
@@ -434,6 +450,86 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
 
     }
 
+	private function getUnitEvents($unitId){
+		$user = $this->getUser();
+		$mode = 1;
+		$maxTime = 10;//$this->maxTime / 2;
+		/*
+		CONCAT(
+            TIMESTAMPDIFF(DAY, TIMESTAMP(e.stamp), NOW()) ,'d ',
+            MOD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()), 24), ':',
+            MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), NOW()), 60), ':',
+            MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.stamp), NOW()), 60),'' ) AS delay,
+			 */
+		
+
+        $cn = $this->cn;
+
+		$cn->query = "SELECT date_add(now(), INTERVAL - '$maxTime' MINUTE) as date_now;";
+		$result = $this->cn->execute();
+		$now = "0000-00-00 00:00:00";
+		if($rs = $cn->getDataAssoc($result)){
+            $now = $rs['date_now'];
+        }
+
+        //hx($cn->getDataAll($result));
+       
+
+        $cn->query = "SELECT * FROM (SELECT e.id, e.event_id, e.user, e.status,
+        vn.name, 1 as type, 'x' as cType, e.info,
+        e.date_time, u.id as unitId,
+        e.mode, e.title, dn.name as device_name, e.stamp,
+
+		
+
+        date_format(e.stamp, '%d/%m/%Y') as fdate,
+        date_format(e.stamp, '%T') as ftime, t.speed, t.id as tracking_id,
+		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), attend) as attend,
+		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), now()) as delay,
+        CONCAT(
+
+			LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), NOW()), 60),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.stamp), NOW()), 60),2,0),'' ) AS delay,
+		CONCAT(
+
+			LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.attend), NOW()),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.attend), NOW()), 60),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS attend
+
+
+        FROM event as e
+        LEFT JOIN unit as u ON u.id = e.unit_id
+        LEFT JOIN device as de ON de.id = u.device_id
+        LEFT JOIN device_name as dn ON dn.name = de.name
+        LEFT JOIN unit_name as vn ON vn.id = u.name_id
+        LEFT JOIN user_unit as uu ON uu.unit_id = u.id AND uu.user = '$user'
+        LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
+
+        WHERE
+
+        e.status != 2
+        #AND TIMESTAMPDIFF(MINUTE, e.stamp, now()) < 5
+		AND e.unit_id = '$unitId'
+		AND e.stamp > '$now'
+        AND uu.user = '$user' 
+		AND (e.mode & '$mode') = '$mode'
+		
+
+        ORDER BY 1 desc
+        LIMIT $this->maxRecords) as e 
+		ORDER BY e.id 
+        ";
+		
+
+		//hx($cn->query);
+        $result = $this->cn->execute();
+        //hx($cn->getDataAll($result));
+        return $cn->getDataAll($result);
+
+    }
+
+
 	private function setStatus($eventId, $status=0, $user=""){
 		$user = $this->getUser();
         $cn = $this->cn;
@@ -443,13 +539,13 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
         $this->cn->execute();
     }
 
-    private function setStatusAll($firstId, $lastId, $status){
+    private function setStatusAll($firstId, $lastId, $mode, $status){
 		$user = $this->getUser();
         $cn = $this->cn;
         $cn->query = "UPDATE event 
             SET status='$status', `user`='$user', attend = IFNULL(attend, now())
 
-            WHERE id >= '$firstId' and id <= '$lastId';";
+            WHERE id >= '$firstId' and id <= '$lastId' AND mode & '$mode' > 0;";
         $this->cn->execute();
 
 		

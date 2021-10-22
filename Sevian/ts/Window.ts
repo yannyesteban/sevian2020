@@ -1109,6 +1109,10 @@ Float.Window = (($) => {
             let caption = this._main.query(".caption > .text");
             caption.innerHTML = text;
         }
+
+        getCaption(){
+            return $(this._main.query(".caption > .text"));
+        }
         setMode(mode:string){
 
 			this._main.ds("sgMode", mode);

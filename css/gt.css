@@ -1177,10 +1177,45 @@ form {
   max-height: 100%;
 }
 
+.sgWin.win-info-comm .caption .text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.sgWin.win-info-comm .caption .text button {
+  margin-left: 20px;
+  margin-top: 2px;
+  background-size: 80% 80%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 14px 14px;
+  background-color: white;
+  height: 12px;
+  width: 12px;
+  border: 0px;
+}
+
+.sgWin.win-info-comm .caption .text button.play {
+  background-image: url(../images/pause.png);
+}
+
+.sgWin.win-info-comm .caption .text button:not(.play) {
+  background-image: url(../images/play.png);
+}
+
 .info-comm {
   height: 100%;
   overflow: auto;
   text-transform: uppercase;
+}
+
+.info-comm.unit:not(.play).now {
+  background-color: #878888a9;
+}
+
+.info-comm.unit:not(.play) .delay {
+  color: #bebebe;
 }
 
 .info-comm.now {
@@ -1195,7 +1230,7 @@ form {
   background-color: #08796aa9;
 }
 
-.info-comm.alarm .grid, .info-comm.now .grid, .info-comm.event .grid {
+.info-comm.alarm .grid, .info-comm.event .grid {
   font-size: 10px;
   color: #f4f7e0;
   padding: 4px;
@@ -1210,7 +1245,7 @@ form {
   overflow: hidden;
 }
 
-.info-comm.alarm .cell, .info-comm.now .cell, .info-comm.event .cell {
+.info-comm.alarm .cell, .info-comm.event .cell {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1218,67 +1253,140 @@ form {
   padding: 2px;
 }
 
-.info-comm.alarm .row, .info-comm.now .row, .info-comm.event .row {
+.info-comm.alarm .row, .info-comm.event .row {
   display: contents;
 }
 
 .info-comm.alarm .row .name,
-.info-comm.alarm .row .title, .info-comm.now .row .name,
-.info-comm.now .row .title, .info-comm.event .row .name,
+.info-comm.alarm .row .title, .info-comm.event .row .name,
 .info-comm.event .row .title {
   text-align: left;
 }
 
-.info-comm.alarm .row:not(.open) > .info, .info-comm.now .row:not(.open) > .info, .info-comm.event .row:not(.open) > .info {
+.info-comm.alarm .row:not(.open) > .info, .info-comm.event .row:not(.open) > .info {
   display: none;
 }
 
-.info-comm.alarm .row:not(.open) .btn-new:after, .info-comm.now .row:not(.open) .btn-new:after, .info-comm.event .row:not(.open) .btn-new:after {
+.info-comm.alarm .row:not(.open) .btn-new:after, .info-comm.event .row:not(.open) .btn-new:after {
   content: "+";
 }
 
-.info-comm.alarm .row.open .btn-new:after, .info-comm.now .row.open .btn-new:after, .info-comm.event .row.open .btn-new:after {
+.info-comm.alarm .row.open .btn-new:after, .info-comm.event .row.open .btn-new:after {
   content: "-";
 }
 
-.info-comm.alarm .row:hover, .info-comm.now .row:hover, .info-comm.event .row:hover {
+.info-comm.alarm .row:hover, .info-comm.event .row:hover {
   cursor: pointer;
 }
 
 .info-comm.alarm .row:hover .cell,
-.info-comm.alarm .row:hover .btn-new, .info-comm.now .row:hover .cell,
-.info-comm.now .row:hover .btn-new, .info-comm.event .row:hover .cell,
+.info-comm.alarm .row:hover .btn-new, .info-comm.event .row:hover .cell,
 .info-comm.event .row:hover .btn-new {
   color: aqua !important;
   background-color: #000000be !important;
 }
 
 .info-comm.alarm .row:not(.new) .cell,
-.info-comm.alarm .row:not(.new) .btn-new, .info-comm.now .row:not(.new) .cell,
-.info-comm.now .row:not(.new) .btn-new, .info-comm.event .row:not(.new) .cell,
+.info-comm.alarm .row:not(.new) .btn-new, .info-comm.event .row:not(.new) .cell,
 .info-comm.event .row:not(.new) .btn-new {
   color: #949494;
 }
 
-.info-comm.alarm .row .speed, .info-comm.now .row .speed, .info-comm.event .row .speed {
+.info-comm.alarm .row .speed, .info-comm.event .row .speed {
   text-align: right;
   background-color: rgba(158, 13, 13, 0.479);
   text-align: center;
 }
 
-.info-comm.alarm .row .speed:empty, .info-comm.now .row .speed:empty, .info-comm.event .row .speed:empty {
+.info-comm.alarm .row .speed:empty, .info-comm.event .row .speed:empty {
   background-color: transparent;
 }
 
-.info-comm.alarm .info, .info-comm.now .info, .info-comm.event .info {
+.info-comm.alarm .info, .info-comm.event .info {
   -ms-grid-column: 1;
   -ms-grid-column-span: 8;
   grid-column: 1/9;
   background-color: #254605;
 }
 
-.info-comm.alarm .info:after, .info-comm.now .info:after, .info-comm.event .info:after {
-  content: "INFORMATION";
+.info-comm.now .grid {
+  font-size: 10px;
+  color: #f4f7e0;
+  padding: 4px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 16px minmax(50px, 100px) 50px minmax(110px, 1fr) 22px 50px;
+      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(110px, 1fr) 22px 50px;
+  -ms-grid-rows: 1.4em;
+      grid-template-rows: 1.4em;
+  overflow: auto;
+  text-align: center;
+  overflow: hidden;
+}
+
+.info-comm.now .cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 2px;
+}
+
+.info-comm.now .row {
+  display: contents;
+  /*
+      &:not(.new) {
+        .cell,
+        .btn-new {
+          color: #949494;
+          //background-color: #e7e7e76c !important;
+        }
+      }
+      */
+}
+
+.info-comm.now .row .name,
+.info-comm.now .row .title {
+  text-align: left;
+}
+
+.info-comm.now .row:not(.open) > .info {
+  display: none;
+}
+
+.info-comm.now .row:not(.open) .btn-new:after {
+  content: "+";
+}
+
+.info-comm.now .row.open .btn-new:after {
+  content: "-";
+}
+
+.info-comm.now .row:hover {
+  cursor: pointer;
+}
+
+.info-comm.now .row:hover .cell,
+.info-comm.now .row:hover .btn-new {
+  color: aqua !important;
+  background-color: #000000be !important;
+}
+
+.info-comm.now .row .speed {
+  text-align: right;
+  background-color: rgba(158, 13, 13, 0.479);
+  text-align: center;
+}
+
+.info-comm.now .row .speed:empty {
+  background-color: transparent;
+}
+
+.info-comm.now .info {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 6;
+  grid-column: 1/7;
+  background-color: #254605;
 }
 
 .info-comm .main {

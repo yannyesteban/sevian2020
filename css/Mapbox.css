@@ -458,12 +458,35 @@
 
 .info-form-popup[data-speed*="1"],
 .info-form[data-speed*="1"] {
-  background-color: #0590a8;
+  background-color: #1c7f91;
 }
 
 .info-form-popup[data-speed*="2"],
 .info-form[data-speed*="2"] {
-  background-color: #59be15;
+  background-color: #2f7500;
+}
+
+.info-form-popup[data-speed*="3"],
+.info-form[data-speed*="3"] {
+  background-color: #8015be;
+}
+
+.info-form-popup[data-speed*="4"],
+.info-form[data-speed*="4"] {
+  background-color: #1c0a6d;
+}
+
+.info-form-popup[data-speed*="5"],
+.info-form[data-speed*="5"] {
+  background-color: #156f72;
+}
+
+.info-form-popup[data-speed*="6"], .info-form-popup[data-speed*="7"], .info-form-popup[data-speed*="8"], .info-form-popup[data-speed*="9"],
+.info-form[data-speed*="6"],
+.info-form[data-speed*="7"],
+.info-form[data-speed*="8"],
+.info-form[data-speed*="9"] {
+  background-color: #571428;
 }
 
 .info-form-popup[data-speed^="0"],

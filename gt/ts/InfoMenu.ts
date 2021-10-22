@@ -26,6 +26,8 @@ export class InfoMenu {
     private types: any[] = [];
 
     private menu: any = null;
+
+    
     constructor(info) {
 
 
@@ -117,6 +119,8 @@ export class InfoComm {
 
     public firstId = 0;
     public lastId = 0;
+    public lastOpen = 0;
+    private onPlay: boolean = true;
     /*
     types
     1:unit conected
@@ -183,11 +187,24 @@ export class InfoComm {
 
     }
 
+    play(){
+        this.onPlay = true;
+        this.main.addClass("play");
+    }
+    pause(){
+        this.onPlay = false;
+        this.main.removeClass("play");
+    }
+
     public setData(data){
+
+        if(!this.onPlay){
+            return;
+        }
         this.lineId = 0;
         this.ul.text("");
 
-        this.fields = [
+        /*this.fields = [
             {
                 name:"name",
             },
@@ -214,6 +231,7 @@ export class InfoComm {
             }
 
         ];
+        */
         data.forEach((message, index)=>{
             this.addMessage(message);
         });
@@ -250,10 +268,20 @@ export class InfoComm {
             this.ondelete(message);
         });
 
+        
         div.create("div").text("").addClass("btn-new").on("click", () => {
             div.toggleClass("open");
+            if(div.hasClass("open")){
+                this.lastOpen = message.id;
+            }else{
+                this.lastOpen = 0;
+            }
 
         });
+
+        if(this.lastOpen == message.id){
+            div.addClass("open");
+        }
 
         this.fields.forEach(field => {
             div.create("div").addClass("cell").addClass(field.name).text(message[field.name] || "");

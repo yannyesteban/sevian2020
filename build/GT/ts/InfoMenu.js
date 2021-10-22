@@ -77,6 +77,8 @@ export class InfoComm {
         this.ul = null;
         this.firstId = 0;
         this.lastId = 0;
+        this.lastOpen = 0;
+        this.onPlay = true;
         /*
         types
         1:unit conected
@@ -126,35 +128,48 @@ export class InfoComm {
         main.addClass("info-comm");
         let mainPanel = this.ul = main.create("div").addClass("grid");
     }
+    play() {
+        this.onPlay = true;
+        this.main.addClass("play");
+    }
+    pause() {
+        this.onPlay = false;
+        this.main.removeClass("play");
+    }
     setData(data) {
+        if (!this.onPlay) {
+            return;
+        }
         this.lineId = 0;
         this.ul.text("");
-        this.fields = [
+        /*this.fields = [
             {
-                name: "name",
+                name:"name",
             },
             {
-                name: "ftime",
+                name:"ftime",
             },
             {
-                name: "title",
+                name:"title",
             },
             {
-                name: "speed",
+                name:"speed",
             },
             {
-                name: "delay",
+                name:"delay",
             },
             {
-                name: "attend",
+                name:"attend",
             },
             {
-                name: "user",
+                name:"user",
             },
             {
-                name: "info",
+                name:"info",
             }
+
         ];
+        */
         data.forEach((message, index) => {
             this.addMessage(message);
         });
@@ -186,7 +201,16 @@ export class InfoComm {
         });
         div.create("div").text("").addClass("btn-new").on("click", () => {
             div.toggleClass("open");
+            if (div.hasClass("open")) {
+                this.lastOpen = message.id;
+            }
+            else {
+                this.lastOpen = 0;
+            }
         });
+        if (this.lastOpen == message.id) {
+            div.addClass("open");
+        }
         this.fields.forEach(field => {
             div.create("div").addClass("cell").addClass(field.name).text(message[field.name] || "");
         });

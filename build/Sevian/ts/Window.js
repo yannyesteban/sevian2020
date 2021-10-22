@@ -827,6 +827,9 @@ Float.Window = (($) => {
             let caption = this._main.query(".caption > .text");
             caption.innerHTML = text;
         }
+        getCaption() {
+            return $(this._main.query(".caption > .text"));
+        }
         setMode(mode) {
             this._main.ds("sgMode", mode);
             this._main.removeClass(this.mode);

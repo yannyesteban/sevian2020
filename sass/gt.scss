@@ -1063,11 +1063,45 @@ form {
     }
   }
 }
+.sgWin.win-info-comm {
+  .caption .text {
+    display: flex;
+    button {
+      margin-left: 20px;
+      margin-top: 2px;
+
+      background-size: 80% 80%;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 14px 14px;
+      background-color: white;
+      height: 12px;
+      width: 12px;
+
+      border: 0px;
+      &.play {
+        background-image: url(#{$path_images}pause.png);
+      }
+      &:not(.play) {
+        background-image: url(#{$path_images}play.png);
+      }
+    }
+  }
+}
 
 .info-comm {
   height: 100%;
   overflow: auto;
   text-transform: uppercase;
+
+  &.unit:not(.play) {
+    &.now {
+      background-color: #878888a9;
+    }
+    .delay {
+      color: #bebebe;
+    }
+  }
   &.now {
     background-color: #7c1806a9;
   }
@@ -1078,7 +1112,6 @@ form {
     background-color: #08796aa9;
   }
   &.alarm,
-  &.now,
   &.event {
     .grid {
       font-size: 10px;
@@ -1160,9 +1193,93 @@ form {
     .info {
       grid-column: 1/9;
       background-color: rgb(37, 70, 5);
-      &:after {
-        content: "INFORMATION";
+    }
+  }
+
+  &.now {
+    .grid {
+      font-size: 10px;
+      color: rgb(244, 247, 224);
+
+      padding: 4px;
+      display: grid;
+      //grid-gap: 4px;
+      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(110px, 1fr) 22px 50px;
+      grid-template-rows: 1.4em;
+      overflow: auto;
+      text-align: center;
+      overflow: hidden;
+      //height: 100%;
+    }
+
+    .cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      padding: 2px;
+    }
+    .row {
+      display: contents;
+      .user.cell {
+        //background-color: red;
       }
+      .name,
+      .title {
+        text-align: left;
+      }
+      &:not(.open) {
+        > .info {
+          display: none;
+          //height: 0px;
+        }
+        .btn-new:after {
+          content: "+";
+        }
+      }
+      &.open {
+        .btn-new:after {
+          content: "-";
+        }
+      }
+      &.new {
+        .cell {
+          // background-color: #68be16 !important;
+        }
+      }
+      &:hover {
+        cursor: pointer;
+
+        .cell,
+        .btn-new {
+          //color: #949494;
+          color: aqua !important;
+          background-color: #000000be !important;
+        }
+      }
+      /*
+      &:not(.new) {
+        .cell,
+        .btn-new {
+          color: #949494;
+          //background-color: #e7e7e76c !important;
+        }
+      }
+      */
+      .speed {
+        text-align: right;
+        background-color: rgba(158, 13, 13, 0.479);
+        text-align: center;
+
+        &:empty {
+          background-color: transparent;
+        }
+      }
+    }
+
+    .info {
+      grid-column: 1/7;
+      background-color: rgb(37, 70, 5);
     }
   }
 

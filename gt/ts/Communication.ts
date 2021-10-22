@@ -43,6 +43,8 @@ export class Communication {
     private historyPanel: any = null;
     private infoMenuId: any = null;
 
+    private unitId: number = null;
+
     private paramCommandId = "xxx1";
     private paramCommand = null;
 
@@ -62,7 +64,7 @@ export class Communication {
 
     public _ws = null;
     public user: string = "";
-    private unitId: number = null;
+    
     private unitPanelId: string = null;
 
     private _grid: any = null;
@@ -83,7 +85,7 @@ export class Communication {
 
 
     private _timer3: any = null;
-    public delay3: number = 5000*2;
+    public delay3: number = 5000;
 
 
 
@@ -258,11 +260,25 @@ export class Communication {
 
         this.unitPanel = S.getElement(this.unitPanelId);
         this.unitPanel.onChange = (unitId) => {
-            console.log("CHANGE ", unitId);
+            this.setUnit(unitId);
+            
             this.getInfoWin(this.winNames.unit).reset();
+            this.getInfoWin(this.winNames.unit).play();
             const unitName = this.unitPanel.getUnitInfo(unitId).unitName;
-            this.getWin(this.winNames.unit).setCaption(`${this.winUnit.caption} : ${unitName}`);
+            this.getWin(this.winNames.unit).setCaption(`${this.winUnit.caption} : ${unitName} <button class="play"></button>`);
+            const button = this.getWin(this.winNames.unit).getCaption().query(`button`);
+            
+            $(button)
+            .prop("title", "Pausar la llegada de eventos")
+            .on("click", (event) => {
 
+                $(event.currentTarget).toggleClass("play");
+                if($(event.currentTarget).hasClass("play")){
+                    this.getInfoWin(this.winNames.unit).play();
+                }else{
+                    this.getInfoWin(this.winNames.unit).pause();
+                }
+            });
         }
 
         this.main = main;
@@ -302,12 +318,6 @@ export class Communication {
                     name:"delay",
                 },
                 {
-                    name:"attend",
-                },
-                {
-                    name:"user",
-                },
-                {
                     name:"info",
                 }
     
@@ -323,6 +333,8 @@ export class Communication {
             },
 
             onadd: (info) => {
+                
+                /*
                 if (info.unitId == this.unitPanel.getLastUnit()) {
                     const win = this.getInfoWin(this.winNames.unit);
                     if(!win.getRow(info.id)){
@@ -330,6 +342,7 @@ export class Communication {
                     }
                     
                 }
+                */
 
              },
 
@@ -342,7 +355,7 @@ export class Communication {
 
         /* winNow2 */
         this.createInfoWindow(this.winNames.unit, {
-            mainClass: "now",
+            mainClass: ["now", "unit"],
             fields: [
                 {
                     name:"name",
@@ -358,12 +371,6 @@ export class Communication {
                 },
                 {
                     name:"delay",
-                },
-                {
-                    name:"attend",
-                },
-                {
-                    name:"user",
                 },
                 {
                     name:"info",
@@ -395,6 +402,33 @@ export class Communication {
         /* winEvent */
         this.createInfoWindow(this.winNames.event, {
             mainClass: "event",
+            fields: [
+                {
+                    name:"name",
+                },
+                {
+                    name:"ftime",
+                },
+                {
+                    name:"title",
+                },
+                {
+                    name:"speed",
+                },
+                {
+                    name:"delay",
+                },
+                {
+                    name:"attend",
+                },
+                {
+                    name:"user",
+                },
+                {
+                    name:"info",
+                }
+    
+            ],
             showType: false,
             onread: (info) => {
 
@@ -428,6 +462,33 @@ export class Communication {
         /* winAlarm */
         this.createInfoWindow(this.winNames.alarm, {
             mainClass: "alarm",
+            fields: [
+                {
+                    name:"name",
+                },
+                {
+                    name:"ftime",
+                },
+                {
+                    name:"title",
+                },
+                {
+                    name:"speed",
+                },
+                {
+                    name:"delay",
+                },
+                {
+                    name:"attend",
+                },
+                {
+                    name:"user",
+                },
+                {
+                    name:"info",
+                }
+    
+            ],
             showType: false,
             onread: (info) => {
                 if (info.unitId) {
@@ -724,6 +785,46 @@ export class Communication {
 
 
     updateEventStatus(info, status, windowId) {
+        S.go({
+            async: true,
+            valid: false,
+            
+            
+            //blockingTarget: this.getInfoWin(windowId).getMain(),
+            requestFunctions: {
+                getData: (json) => {
+                    this.reqEventStatus(json);
+                    return;
+                    
+
+                    for(const x in json.data){
+                        this._infoControl[x].setData(json.data[x]);
+                        const counts = this.getInfoWin(x).getCounts();
+                        this.infoMenu.updateType(x, counts || "");
+                    }
+                }
+                
+            },
+            params: [
+                {
+                    t: 'setMethod',
+                        id: 2,
+                        element: 'gt-event',
+                        method: 'update-status',
+                        name: 'x',
+                        eparams: {
+                            eventId: info.id,
+                            status: status,
+                            windowId: windowId,
+                            mode: info.mode
+                        },
+                    iToken: "getData",
+                }
+            ],
+        });
+        
+        return;
+
         S.send3(
             {
 
@@ -800,7 +901,7 @@ export class Communication {
                             eventId: this.lastEventId,
                             status: status,
                             windowId: windowId,
-                            mode: 1,
+                            mode: windowId,
                             firstId: this.getInfoWin(windowId).firstId || 0,
                             lastId: this.getInfoWin(windowId).lastId || 0,
                         },
@@ -874,7 +975,8 @@ export class Communication {
                     method: 'load',
                     name: 'x',
                     eparams: {
-                        lastEventId: this.lastEventId
+                        lastEventId: this.lastEventId,
+                        unitId: this.unitId
                     },
                     iToken: "getData",
                 }
@@ -1811,6 +1913,7 @@ alert(this.commandPanelId)
         const typeGroup = [];
         const infoControl = this._infoControl[type] = new InfoComm(info);
 
+        
         const winInfo = {
             name: type + "_name",
             visible: true,
@@ -1820,7 +1923,7 @@ alert(this.commandPanelId)
             width: "330px",
             height: "120px",
             mode: "auto",
-            className: ["sevian"],
+            className: ["sevian","win-info-comm"],
             child: infoControl.get(),
             //deltaX:-50,
 
@@ -1829,6 +1932,7 @@ alert(this.commandPanelId)
             closable: false
         };
 
+        
         for (let x in window) {
             winInfo[x] = window[x];
         }
