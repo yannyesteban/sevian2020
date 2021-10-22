@@ -389,7 +389,7 @@ class Event
 		
 
         date_format(e.stamp, '%d/%m/%Y') as fdate,
-        date_format(e.stamp, '%T') as ftime, e.speed, 0 as tracking_id,
+        date_format(e.stamp, '%T') as ftime, t.speed, t.id as tracking_id,
 		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), attend) as attend,
 		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), now()) as delay,
         CONCAT(
@@ -410,7 +410,7 @@ LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.attend), NOW()), 60),2,0),'' ) AS att
         LEFT JOIN device_name as dn ON dn.name = de.name
         LEFT JOIN unit_name as vn ON vn.id = u.name_id
         LEFT JOIN user_unit as uu ON uu.unit_id = u.id AND uu.user = '$user'
-        #LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
+        LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
 
         WHERE
 
