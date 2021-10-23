@@ -41,7 +41,7 @@ trait DBClient{
         LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN device as de ON de.id = u.device_id
-        INNER JOIN device_name as dn ON dn.name = de.name
+        LEFT JOIN device_name as dn ON dn.name = de.name
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
@@ -181,7 +181,7 @@ trait DBUnit{
         INNER JOIN device as de ON de.id = u.device_id
         INNER JOIN device_version as v on v.id = de.version_id
         INNER JOIN device_model as m ON m.id = v.id_model
-        INNER JOIN device_name as dn ON dn.name = de.name
+        LEFT JOIN device_name as dn ON dn.name = de.name
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
@@ -249,7 +249,7 @@ trait DBUnit{
         LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN device as de ON de.id = u.device_id
-        INNER JOIN device_name as dn ON dn.name = de.name
+        LEFT JOIN device_name as dn ON dn.name = de.name
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
@@ -343,7 +343,7 @@ trait DBUnit{
             LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
             INNER JOIN device as de ON de.id = u.device_id
-            INNER JOIN device_name as dn ON dn.name = de.name
+            LEFT JOIN device_name as dn ON dn.name = de.name
 
 
             LEFT JOIN icon as ic ON ic.id = u.icon_id
@@ -404,7 +404,7 @@ trait DBUnit{
         LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
         INNER JOIN device as de ON de.id = u.device_id
-        INNER JOIN device_name as dn ON dn.name = de.name
+        LEFT JOIN device_name as dn ON dn.name = de.name
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
@@ -1776,7 +1776,7 @@ trait DBHistory{
             LEFT JOIN vehicle_model as mo ON mo.id = ve.model_id
 
             INNER JOIN device as de ON de.id = u.device_id
-            INNER JOIN device_name as dn ON dn.name = de.name
+            LEFT JOIN device_name as dn ON dn.name = de.name
 
 
             LEFT JOIN icon as ic ON ic.id = u.icon_id
