@@ -1266,8 +1266,8 @@ form {
 }
 
 .info-comm.alarm .grid:hover, .info-comm.event .grid:hover {
-  -ms-grid-columns: 16px minmax(50px, 100px) 50px minmax(120px, 1fr) 22px 50px 50px 60px;
-      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(120px, 1fr) 22px 50px 50px 60px;
+  -ms-grid-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px 50px 60px;
+      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px 50px 60px;
 }
 
 .info-comm.alarm .cell, .info-comm.event .cell {
@@ -1347,6 +1347,11 @@ form {
   overflow: auto;
   text-align: center;
   overflow: hidden;
+}
+
+.info-comm.now .grid:hover {
+  -ms-grid-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px;
+      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px;
 }
 
 .info-comm.now .cell {

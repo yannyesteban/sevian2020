@@ -1150,7 +1150,7 @@ form {
     }
 
     .grid:hover {
-      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(120px, 1fr) 22px 50px 50px 60px;
+      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px 50px 60px;
     }
     .cell {
       overflow: hidden;
@@ -1235,6 +1235,9 @@ form {
       text-align: center;
       overflow: hidden;
       //height: 100%;
+      &:hover {
+        grid-template-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px;
+      }
     }
 
     .cell {
