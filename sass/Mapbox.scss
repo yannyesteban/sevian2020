@@ -439,7 +439,8 @@
     }
   }
 
-  .last-event {
+  .last-event,
+  .event-name {
     background-color: #fcff33;
     color: rgb(240, 32, 32) !important;
     text-align: center;

@@ -572,6 +572,8 @@ class Event
         CONCAT('$path', ic.icon, '.png') as image, ve.plate, br.name as brand, mo.name as model, ve.color,
         u.conn_status as connected,
 
+		dev.name as lastEvent,
+
 		t.id as trackId,
         t.date_time,
             t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
@@ -603,6 +605,8 @@ class Event
         INNER JOIN device_version as v on v.id = de.version_id
         INNER JOIN device_model as m ON m.id = v.id_model
         LEFT JOIN device_name as dn ON dn.name = de.name
+
+		LEFT JOIN device_event as dev ON dev.version_id = de.version_id AND dev.event_id = e.event_id 
 
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id

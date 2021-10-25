@@ -450,7 +450,9 @@
 }
 
 .info-form-popup .last-event,
-.info-form .last-event {
+.info-form-popup .event-name,
+.info-form .last-event,
+.info-form .event-name {
   background-color: #fcff33;
   color: #f02020 !important;
   text-align: center;
