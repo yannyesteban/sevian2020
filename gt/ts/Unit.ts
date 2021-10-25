@@ -472,8 +472,14 @@ export class Unit {
 					const body = div.create("div").addClass("info-body");
 					const menu = div.create("div").addClass("info-menu");
 
+					menu.create("button").prop({type:"button", "value":"2", "title":"Ubicar"}).text("»")
+					.on("click", event=>{
+						
+						this.showUnit3(this._lastUnitId);
+					});
+
 					const traceCHK = menu.create("input").prop({type:"checkbox"});
-					menu.create("span").text("Activar Traza");
+					menu.create("span").text("Traza");
 
 					const followCHK = menu.create("input").prop({type:"hidden"});
 					const followCHK2 = menu.create("input").prop({type:"checkbox"});

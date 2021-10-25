@@ -1,4 +1,4 @@
-import { _sgQuery as $ } from './Query.js';
+import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
 export class InfoForm {
     constructor(info) {
         this.id = "";
@@ -147,7 +147,7 @@ export class InfoForm {
             let valid = true;
             levels.forEach(key => {
                 if (valid && tempData[key] !== undefined) {
-                    tempData = tempData[key];
+                    tempData = tempData[key] || "";
                     valid = true;
                 }
                 else {

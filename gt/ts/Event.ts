@@ -81,6 +81,7 @@ export class Event {
     private mapName: string = "";
 
     private mark: any = null;
+    private popup: any = null;
 
     constructor(info: Event) {
 
@@ -135,7 +136,18 @@ export class Event {
         Map.load(this.mapName, (mapApi: MapApi, map) => {
 
 
+            this.infoFormMain = new InfoForm(this.infoForm);
+
 			this.map = mapApi;
+            this.popup = this.map.createPopup( { 
+                focusAfterOpen: true,
+                //closeOnMove: true,
+                closeOnClick: false 
+            }
+            );
+
+            this.popup.setDOMContent(this.infoFormMain.get());                
+                
         });
         this.create(main);
         //this.play();
@@ -143,42 +155,12 @@ export class Event {
     }
 
     public create(main: SQObject) {
-
-        main.addClass("event-tool");
-
         this.main = main;
-
-
-        this.infoFormMain = new InfoForm(this.infoForm);
-
-        this.wins["main"] = new Float.Window({
-            visible: false,
-            caption: this.caption,
-            left:'right',
-			top:'bottom',
-			deltaX: -50 - 350,
-			deltaY:-140 - 20,
-            width: "330px",
-            height: "320px",
-
-            mode: "auto",
-            className: ["sevian"],
-            child: this.infoFormMain.get(),//this.main,
-            onshow: (info) => {
-                //this.play();
-            },
-            onhide: (info) => {
-                //this.stop();
-            },
-        });
-
-
-
+        main.addClass("event-tool");
     }
 
     public showEvent(eventId){
         this.goShowEvent(eventId);
-
 	}
 
     public getUnit() {
@@ -227,15 +209,25 @@ export class Event {
 
     private goShowEvent(eventId: number) {
 
+
+        console.log(this.infoFormMain.get());
+
         S.go({
             async: true,
             valid: false,
 
-            blockingTarget: this.main,
+            blockingTarget: this.infoFormMain,
             requestFunctions: {
-                f: (json) => {
+                getEven: (json) => {
                     console.log(json);
                     this.infoFormMain.setData(json);
+
+                    this.popup.setLngLat([json.longitude, json.latitude]);
+                    
+                    this.popup.addTo(this.map.map);
+                    this.map.flyTo(json.longitude, json.latitude);
+                    return;
+
                     if (!this.mark) {
                         this.mark = this.map.createMark({
                             latitude: json.latitude,
@@ -265,7 +257,7 @@ export class Event {
                         eventId: eventId,
 
                     },
-                    iToken: "f",
+                    iToken: "getEven",
                 },
             ],
         });

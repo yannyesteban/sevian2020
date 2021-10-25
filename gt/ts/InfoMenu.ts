@@ -1,5 +1,7 @@
 import { SQObject, _sgQuery as $ } from '../../Sevian/ts/Query.js';
 import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
+import { Float } from '../../Sevian/ts/Window.js';
+import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 
 function humanDiff(t1, t2) {
     const diff = Math.max(t1, t2) - Math.min(t1, t2)
@@ -121,6 +123,11 @@ export class InfoComm {
     public lastId = 0;
     public lastOpen = 0;
     private onPlay: boolean = true;
+
+    
+    private popup:any = null;
+    private infoForm:InfoForm = null;
+    private popupHTML: string = ""; 
     /*
     types
     1:unit conected
@@ -175,6 +182,7 @@ export class InfoComm {
 
         }
 
+
         this._create(main);
         this.initTimer();
     }
@@ -184,6 +192,15 @@ export class InfoComm {
         main.addClass(this.mainClass);
         main.addClass("info-comm");
         let mainPanel = this.ul = main.create("div").addClass("grid");
+
+        this.infoForm = new InfoForm({
+            data:{},
+            html: this.popupHTML
+        });
+        this.popup = new Float.Popup({
+            className:"info-menu",
+            child:this.infoForm.get()
+        });
 
     }
 
@@ -269,6 +286,8 @@ export class InfoComm {
         });
 
         
+        
+        
         div.create("div").text("").addClass("btn-new").on("click", () => {
             div.toggleClass("open");
             if(div.hasClass("open")){
@@ -277,6 +296,11 @@ export class InfoComm {
                 this.lastOpen = 0;
             }
 
+        }).on("mouseover", (event) => {
+            this.infoForm.setData(message);
+            this.popup.show( {context:event.currentTarget, left:"front", top:"middle"});
+        }).on("mouseout", (event) => {
+            this.popup.hide();
         });
 
         if(this.lastOpen == message.id){

@@ -1265,11 +1265,6 @@ form {
   overflow: hidden;
 }
 
-.info-comm.alarm .grid:hover, .info-comm.event .grid:hover {
-  -ms-grid-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px 50px 60px;
-      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px 50px 60px;
-}
-
 .info-comm.alarm .cell, .info-comm.event .cell {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1347,11 +1342,6 @@ form {
   overflow: auto;
   text-align: center;
   overflow: hidden;
-}
-
-.info-comm.now .grid:hover {
-  -ms-grid-columns: 16px minmax(90px, 100px) 50px minmax(200px, 1fr) 22px 50px;
-      grid-template-columns: 16px minmax(90px, 100px) 50px minmax(200px, 1fr) 22px 50px;
 }
 
 .info-comm.now .cell {
@@ -1545,5 +1535,75 @@ form {
       grid-template-columns: 1fr 1fr;
   -ms-grid-rows: auto auto;
       grid-template-rows: auto auto;
+}
+
+.sg-popup {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.sg-popup.hidden {
+  visibility: hidden;
+}
+
+.sg-popup.info-menu {
+  background-color: #000000bd;
+  color: white;
+  min-width: 160px;
+  font-size: 10px;
+  border: 1px solid white;
+  line-height: 1.8em;
+  padding: 10px;
+  text-transform: uppercase;
+}
+
+.sg-popup.info-menu .name {
+  font-weight: bold;
+  text-align: center;
+}
+
+.sg-popup.info-menu .title {
+  font-weight: bold;
+  color: #f8f41c;
+}
+
+.sg-popup.info-menu .speed {
+  text-align: center;
+  background-color: rgba(158, 13, 13, 0.479);
+}
+
+.sg-popup.info-menu .speed:empty {
+  background-color: transparent;
+}
+
+.sg-popup.info-menu .speed:empty::after {
+  content: "-";
+}
+
+.sg-popup.info-menu .user:empty::after,
+.sg-popup.info-menu .delay:empty::after,
+.sg-popup.info-menu .attend:empty::after {
+  content: "-";
+}
+
+.sg-popup.info-menu .ev-210.title {
+  color: #f8c317;
+  font-weight: bold;
+}
+
+.sg-popup.info-menu .ev-210.title::before {
+  content: "« ";
+}
+
+.sg-popup.info-menu .ev-209.title,
+.sg-popup.info-menu .ev-211.title {
+  color: #70c71f;
+  font-weight: bold;
+}
+
+.sg-popup.info-menu .ev-209.title::after,
+.sg-popup.info-menu .ev-211.title::after {
+  content: " »";
 }
 /*# sourceMappingURL=gt.css.map */

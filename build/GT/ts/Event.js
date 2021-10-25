@@ -1,5 +1,4 @@
 import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
-import { Float } from "../../Sevian/ts/Window.js";
 import { Map } from './Map.js';
 import { S } from "../../Sevian/ts/Sevian.js";
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
@@ -45,6 +44,7 @@ export class Event {
         this.subtotalButton = null;
         this.mapName = "";
         this.mark = null;
+        this.popup = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -72,34 +72,21 @@ export class Event {
         }
         //this.formIds["0"] = "form-" + String(new Date().getTime());
         Map.load(this.mapName, (mapApi, map) => {
+            this.infoFormMain = new InfoForm(this.infoForm);
             this.map = mapApi;
+            this.popup = this.map.createPopup({
+                focusAfterOpen: true,
+                //closeOnMove: true,
+                closeOnClick: false
+            });
+            this.popup.setDOMContent(this.infoFormMain.get());
         });
         this.create(main);
         //this.play();
     }
     create(main) {
-        main.addClass("event-tool");
         this.main = main;
-        this.infoFormMain = new InfoForm(this.infoForm);
-        this.wins["main"] = new Float.Window({
-            visible: false,
-            caption: this.caption,
-            left: 'right',
-            top: 'bottom',
-            deltaX: -50 - 350,
-            deltaY: -140 - 20,
-            width: "330px",
-            height: "320px",
-            mode: "auto",
-            className: ["sevian"],
-            child: this.infoFormMain.get(),
-            onshow: (info) => {
-                //this.play();
-            },
-            onhide: (info) => {
-                //this.stop();
-            },
-        });
+        main.addClass("event-tool");
     }
     showEvent(eventId) {
         this.goShowEvent(eventId);
@@ -132,14 +119,19 @@ export class Event {
         }
     }
     goShowEvent(eventId) {
+        console.log(this.infoFormMain.get());
         S.go({
             async: true,
             valid: false,
-            blockingTarget: this.main,
+            blockingTarget: this.infoFormMain,
             requestFunctions: {
-                f: (json) => {
+                getEven: (json) => {
                     console.log(json);
                     this.infoFormMain.setData(json);
+                    this.popup.setLngLat([json.longitude, json.latitude]);
+                    this.popup.addTo(this.map.map);
+                    this.map.flyTo(json.longitude, json.latitude);
+                    return;
                     if (!this.mark) {
                         this.mark = this.map.createMark({
                             latitude: json.latitude,
@@ -166,7 +158,7 @@ export class Event {
                     eparams: {
                         eventId: eventId,
                     },
-                    iToken: "f",
+                    iToken: "getEven",
                 },
             ],
         });

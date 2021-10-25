@@ -80,7 +80,7 @@
                 "begin_": true
             },
             {
-                "file": "https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js",
+                "file": "https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js",
                 "begin": true
             },
             {
@@ -102,7 +102,7 @@
             }
         ],
         "css": [
-            "https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css",
+            "https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css",
             "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css"
         ]
     },

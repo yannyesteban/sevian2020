@@ -1149,9 +1149,6 @@ form {
       //height: 100%;
     }
 
-    .grid:hover {
-      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(200px, 1fr) 22px 50px 50px 60px;
-    }
     .cell {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1235,9 +1232,6 @@ form {
       text-align: center;
       overflow: hidden;
       //height: 100%;
-      &:hover {
-        grid-template-columns: 16px minmax(90px, 100px) 50px minmax(200px, 1fr) 22px 50px;
-      }
     }
 
     .cell {
@@ -1425,6 +1419,78 @@ form {
       grid-gap: 4px;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: auto auto;
+    }
+  }
+}
+
+.sg-popup {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  &.hidden {
+    visibility: hidden;
+  }
+}
+
+.sg-popup {
+  &.info-menu {
+    background-color: #000000bd;
+    color: white;
+    min-width: 160px;
+    font-size: 10px;
+    border: 1px solid white;
+    line-height: 1.8em;
+    padding: 10px;
+    text-transform: uppercase;
+    .name {
+      font-weight: bold;
+      text-align: center;
+    }
+    .title {
+      font-weight: bold;
+      color: #f8f41c;
+    }
+    .speed {
+      //text-align: right;
+      //background-color: rgba(54, 54, 54, 0.479);
+      text-align: center;
+      background-color: rgba(158, 13, 13, 0.479);
+      &:empty {
+        background-color: transparent;
+        &::after {
+          content: "-";
+        }
+      }
+    }
+    .user,
+    .delay,
+    .attend {
+      &:empty {
+        &::after {
+          content: "-";
+        }
+      }
+    }
+
+    .ev-210 {
+      &.title {
+        color: rgb(248, 195, 23);
+        font-weight: bold;
+      }
+      &.title::before {
+        content: "« ";
+      }
+    }
+
+    .ev-209,
+    .ev-211 {
+      &.title {
+        color: rgb(112, 199, 31);
+        font-weight: bold;
+      }
+      &.title::after {
+        content: " »";
+      }
     }
   }
 }

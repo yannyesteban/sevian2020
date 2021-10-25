@@ -1,5 +1,7 @@
 import { _sgQuery as $ } from '../../Sevian/ts/Query.js';
 import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
+import { Float } from '../../Sevian/ts/Window.js';
+import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 function humanDiff(t1, t2) {
     const diff = Math.max(t1, t2) - Math.min(t1, t2);
     const SEC = 1000, MIN = 60 * SEC, HRS = 60 * MIN;
@@ -79,6 +81,9 @@ export class InfoComm {
         this.lastId = 0;
         this.lastOpen = 0;
         this.onPlay = true;
+        this.popup = null;
+        this.infoForm = null;
+        this.popupHTML = "";
         /*
         types
         1:unit conected
@@ -127,6 +132,14 @@ export class InfoComm {
         main.addClass(this.mainClass);
         main.addClass("info-comm");
         let mainPanel = this.ul = main.create("div").addClass("grid");
+        this.infoForm = new InfoForm({
+            data: {},
+            html: this.popupHTML
+        });
+        this.popup = new Float.Popup({
+            className: "info-menu",
+            child: this.infoForm.get()
+        });
     }
     play() {
         this.onPlay = true;
@@ -207,6 +220,11 @@ export class InfoComm {
             else {
                 this.lastOpen = 0;
             }
+        }).on("mouseover", (event) => {
+            this.infoForm.setData(message);
+            this.popup.show({ context: event.currentTarget, left: "front", top: "middle" });
+        }).on("mouseout", (event) => {
+            this.popup.hide();
         });
         if (this.lastOpen == message.id) {
             div.addClass("open");

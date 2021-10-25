@@ -1,11 +1,11 @@
-import {_sgQuery as $}  from './Query.js';
+import { _sgQuery as $, SQObject } from "../../Sevian/ts/Query.js";
 import {LayerTool}  from '../../gt/ts/LayerTool.js';
 import {Float}  from './Window.js';
 
 export class InfoForm{
 
     public id:any = "";
-    private main:any = null;
+    private main:SQObject = null;
     private target:any = null;
     private value:any = null;
     private data:any = null;
@@ -146,6 +146,7 @@ export class InfoForm{
             let lastNode = child;
 
             if (data[key]) {
+                
                 let auxKey = alias;
 
                 if (master) {
@@ -203,7 +204,7 @@ export class InfoForm{
             levels.forEach(key => {
 
                 if (valid && tempData[key] !== undefined) {
-                    tempData = tempData[key];
+                    tempData = tempData[key] || "";
                     valid = true;
                 } else {
                     valid = false;

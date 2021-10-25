@@ -14,7 +14,8 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-html, body {
+html,
+body {
   margin: 0px;
   height: 100%;
 }
@@ -285,18 +286,18 @@ table tr td {
   background-color: #b3b3b3;
 }
 
-div[data-sg-type=sg-ajax] {
+div[data-sg-type="sg-ajax"] {
   background-repeat: no-repeat;
   background-position: center center;
 }
 
-div[data-sg-type=sg-ajax].isie {
+div[data-sg-type="sg-ajax"].isie {
   background-color: rgba(255, 255, 255, 0.8);
   background-image: url(images/wait1.gif);
   _background-size: 40px 40px;
 }
 
-div[data-sg-type=sg-ajax]:not(.isie) {
+div[data-sg-type="sg-ajax"]:not(.isie) {
   background-color: rgba(0, 0, 0, 0.52);
   background-image: url(images/default2.svg);
   background-size: 40px 40px;
@@ -314,8 +315,8 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   display: grid;
   -ms-grid-columns: (1fr)[3];
       grid-template-columns: repeat(3, 1fr);
-  -ms-grid-rows: auto  auto;
-      grid-template-rows: auto  auto;
+  -ms-grid-rows: auto auto;
+      grid-template-rows: auto auto;
 }
 
 .drag > * {
@@ -570,12 +571,15 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   color: #6e6e6e;
 }
 
-.sg-calendar .c-bar > *:HOVER {
+.sg-calendar .c-bar > *:hover {
   background-color: #747474;
   color: white;
 }
 
-.sg-calendar .c-bar > * .p-month:hover, .sg-calendar .c-bar > * .n-month:hover, .sg-calendar .c-bar > * .p-year:hover, .sg-calendar .c-bar > * .n-year:hover {
+.sg-calendar .c-bar > * .p-month:hover,
+.sg-calendar .c-bar > * .n-month:hover,
+.sg-calendar .c-bar > * .p-year:hover,
+.sg-calendar .c-bar > * .n-year:hover {
   color: #a8eeee;
 }
 
@@ -738,7 +742,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 .cal-note .note-title {
   color: #b3e4ff;
   text-align: right;
-  border-bottom: 1px solid  #b3e4ff;
+  border-bottom: 1px solid #b3e4ff;
 }
 
 .cal-note .note-body {
@@ -776,7 +780,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   background-color: #c0c0c0;
   text-align: center;
   color: white;
-  line-height: 2.0em;
+  line-height: 2em;
   text-transform: uppercase;
 }
 
@@ -809,7 +813,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 }
 
 .sg-form > .page > .field > .input button {
-  height: 2.0em;
+  height: 2em;
   color: #585858;
   border: 1px solid #d8d7d7;
 }
@@ -912,7 +916,8 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   background-color: #e9e9e9;
 }
 
-.sg-grid > .body > .grid-table > tbody > tr.active td > [data-name]:not(.zone-edit), .sg-grid > .body > .grid-table > tbody > tr.active td > .text:not(.zone-edit) {
+.sg-grid > .body > .grid-table > tbody > tr.active td > [data-name]:not(.zone-edit),
+.sg-grid > .body > .grid-table > tbody > tr.active td > .text:not(.zone-edit) {
   display: none;
 }
 
@@ -946,17 +951,20 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   visibility: hidden;
 }
 
-.sg-map, .leatflet-map {
+.sg-map,
+.leatflet-map {
   height: 100%;
 }
 
-.sg-map .leaflet-control-attribution.leaflet-control, .leatflet-map .leaflet-control-attribution.leaflet-control {
+.sg-map .leaflet-control-attribution.leaflet-control,
+.leatflet-map .leaflet-control-attribution.leaflet-control {
   z-index: 0 !important;
   pointer-events: none;
 }
 
 .sg-map .mapboxgl-ctrl-bottom-right,
-.sg-map .mapboxgl-ctrl-bottom-left, .leatflet-map .mapboxgl-ctrl-bottom-right,
+.sg-map .mapboxgl-ctrl-bottom-left,
+.leatflet-map .mapboxgl-ctrl-bottom-right,
 .leatflet-map .mapboxgl-ctrl-bottom-left {
   z-index: 0 !important;
   pointer-events: none;
@@ -1251,8 +1259,8 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 .sg-message-box.hidden {
   visibility: hidden;
   opacity: 0;
-  -webkit-transition: visibility 0.9s linear,opacity 0.9s linear;
-  transition: visibility 0.9s linear,opacity 0.9s linear;
+  -webkit-transition: visibility 0.9s linear, opacity 0.9s linear;
+  transition: visibility 0.9s linear, opacity 0.9s linear;
 }
 
 .sg-form.mode-insert {
@@ -1273,7 +1281,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 }
 
 .input-info div:empty::before {
-  content: '-';
+  content: "-";
   font-style: italic;
   color: #999;
 }
@@ -1550,7 +1558,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
 #menu {
   position: absolute;
   background: #fff;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 .map-main {
@@ -1643,7 +1651,7 @@ div[data-sg-type=sg-ajax]:not(.isie) {
   padding: 3px;
 }
 
-.units-info > div:nth-child(2n+1) {
+.units-info > div:nth-child(2n + 1) {
   color: #929292;
   font-weight: bold;
 }

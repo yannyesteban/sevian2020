@@ -299,8 +299,18 @@ export class Communication {
         });
 
         /* winNow */
+        const nowTemplate = `<div class="info-form-detail">
+            <div class="name">{=name}</div>
+            <div class="ftime">{=ftime}</div>
+            <div class="title ev-{=event_id}">{=title}</div>
+            <div class="speed">{=speed}</div>
+            <div class="delay">{=delay}</div>
+            <div class="info">{=info}</div>
+        </div>    
+    `
         this.createInfoWindow(this.winNames.now, {
             mainClass: "now",
+            popupHTML: nowTemplate,
             fields: [
                 {
                     name:"name",
@@ -324,11 +334,16 @@ export class Communication {
             ],
             onread: (info) => {
 
-                if (info.unitId) {
+
+                if (info.tracking_id) {
+                    
+                    this.unitPanel.setUnit(info.unitId);
+                    this.unitPanel.showUnit4(info.unitId);
+                    this.getEventPanel().showEvent(info.id);
+                } else {
                     this.unitPanel.setUnit(info.unitId);
                     this.unitPanel.showUnit3(info.unitId);
                 }
-
                 //this.updateEventStatus(info, 1, this.winNames.now);
             },
 
@@ -356,6 +371,7 @@ export class Communication {
         /* winNow2 */
         this.createInfoWindow(this.winNames.unit, {
             mainClass: ["now", "unit"],
+            popupHTML: nowTemplate,
             fields: [
                 {
                     name:"name",
@@ -379,7 +395,13 @@ export class Communication {
             ],
             onread: (info) => {
 
-                if (info.unitId) {
+                
+                if (info.tracking_id) {
+                    
+                    this.unitPanel.setUnit(info.unitId);
+                    this.unitPanel.showUnit4(info.unitId);
+                    this.getEventPanel().showEvent(info.id);
+                } else {
                     this.unitPanel.setUnit(info.unitId);
                     this.unitPanel.showUnit3(info.unitId);
                 }
@@ -399,9 +421,21 @@ export class Communication {
         }, this.winUnit);
 
 
+        const alarmTemplate = `<div class="info-form-detail">
+            <div class="name">{=name}</div>
+            <div class="ftime">{=ftime}</div>
+            <div class="title ev-{=event_id}">{=title}</div>
+            <div class="speed">{=speed}</div>
+            <div class="delay">{=delay}</div>
+            <div class="attend">{=attend}</div>
+            <div class="user">{=user}</div>
+            <div class="info">{=info}</div>
+        </div>    
+    `
         /* winEvent */
         this.createInfoWindow(this.winNames.event, {
             mainClass: "event",
+            popupHTML: alarmTemplate,
             fields: [
                 {
                     name:"name",
@@ -462,6 +496,7 @@ export class Communication {
         /* winAlarm */
         this.createInfoWindow(this.winNames.alarm, {
             mainClass: "alarm",
+            popupHTML: alarmTemplate,
             fields: [
                 {
                     name:"name",

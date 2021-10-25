@@ -172,8 +172,8 @@ export var Float = (($) => {
 				z = (opt.z !== undefined)? opt.z: undefined,
 
 
-				left:any = null,
-				top:any = null,
+				left = null,
+				top = null,
 				c = this.getXY(context),
 
 				fixed = (e.style.position === "fixed"),
@@ -1452,7 +1452,7 @@ Float.Popup = (($) => {
     }
     Float.Message = Message;
     $(window).on("load_", ()=>{
-let div = $("").create("div").addClass("popup").text("Help?");
+        let div = $("").create("div").addClass("popup").text("Help?");
 
         let popup = new Float.Popup({child:div});
 

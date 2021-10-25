@@ -296,8 +296,8 @@ export class MapBoxLib {
 
     }
 
-    flyTo(lat, lng) {
-
+    flyTo(lng, lat) {
+        
         this.map.flyTo({
             center: [lng, lat],
             zoom: 16,
