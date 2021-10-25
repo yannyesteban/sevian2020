@@ -610,7 +610,7 @@ class Event
         LEFT JOIN account as ac ON ac.id = u.account_id
         LEFT JOIN client as cl ON cl.id = ac.client_id
 
-        LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date
+        LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = e.date_time
       	
         WHERE uu.user = '$user' and e.id = '$eventId'
         ORDER BY client, account, vehicle_name
