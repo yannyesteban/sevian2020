@@ -1494,3 +1494,14 @@ form {
     }
   }
 }
+
+.event-admin {
+  tr:hover {
+    background-color: #2e2e2e !important;
+    td {
+      color: white !important;
+    }
+
+    cursor: pointer;
+  }
+}

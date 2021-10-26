@@ -36,6 +36,7 @@ export class EventAdmin {
         this.socket = null;
         this.unitPanelId = "";
         this.unitPanel = null;
+        this.eventPanelId = "";
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -81,6 +82,9 @@ export class EventAdmin {
             child: this.main
         });
         //this.show(4031);
+    }
+    getEventPanel() {
+        return S.getElement(this.eventPanelId);
     }
     getUnit() {
         if (this.unitPanel) {
@@ -217,17 +221,23 @@ export class EventAdmin {
             allowSearch: false,
             allowPaginator: false,
             selectMode: "",
+            className: "event-admin",
+            action: (index) => {
+                if (json.events[index].tracking_id) {
+                    this.getEventPanel().showEvent(json.events[index].id);
+                }
+            },
             fields: [
                 {
                     name: "f_date",
                     caption: "Date"
                 },
                 {
-                    name: "title",
+                    name: "event_name",
                     caption: "Title"
                 },
                 {
-                    name: "status",
+                    name: "status_name",
                     caption: "Status"
                 },
                 {

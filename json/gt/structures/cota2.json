@@ -274,7 +274,8 @@
 			"method": "load",
 			"eparams": {
 				"socketId": "comm",
-				"unitPanelId": "gt-unit-10"
+				"unitPanelId": "gt-unit-10",
+				"eventPanelId" : "event"
 			},
 			"type": 0,
 			"class": "",

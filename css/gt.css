@@ -1606,4 +1606,13 @@ form {
 .sg-popup.info-menu .ev-211.title::after {
   content: " »";
 }
+
+.event-admin tr:hover {
+  background-color: #2e2e2e !important;
+  cursor: pointer;
+}
+
+.event-admin tr:hover td {
+  color: white !important;
+}
 /*# sourceMappingURL=gt.css.map */

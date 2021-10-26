@@ -106,7 +106,9 @@ class EventAdmin
 
                 'caption'		=> 'Event Admin',
                 'socketId'=>$this->eparams->socketId?? '',
-                'unitPanelId'=>$this->eparams->unitPanelId?? ''
+                'unitPanelId'=>$this->eparams->unitPanelId?? '',
+                'eventPanelId'=>$this->eparams->eventPanelId?? '',
+                
 
             ]
 
@@ -140,9 +142,16 @@ class EventAdmin
             $where = "WHERE $where";
         }
 
-        $cn->query = "SELECT e.*, ucase(e.title) as title,
-        date_format (stamp, '%d/%m/%Y %H:%m:%s') as f_date
-        FROM event as e
+        $cn->query = "SELECT ue.name , CASE WHEN ue.name != '' and ue.name IS NOT NULL THEN ue.name ELSE e.title END as event_name,
+
+        COALESCE(t.id, '') as tracking_id,
+        CASE e.status WHEN 0 THEN 'NO LEÍDO' WHEN 1 THEN 'LEÍDO' WHEN 2 THEN 'ELIMINADO' ELSE'' END as status_name , e.*, ucase(e.title) as title,
+                date_format (stamp, '%d/%m/%Y %H:%m:%s') as f_date
+                FROM event as e
+        
+        
+        LEFT JOIN unit_event as ue ON e.unit_id = ue.unit_id AND e.event_id = ue.event_id
+        LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
         $where
         ORDER BY e.id desc
         LIMIT 1000

@@ -2,6 +2,7 @@ import { _sgQuery as $, SQObject } from "../../Sevian/ts/Query.js";
 import { Menu as Menu } from "../../Sevian/ts/Menu2.js";
 import { Float } from "../../Sevian/ts/Window.js";
 
+import { Event } from './Event.js';
 
 import {
     I,
@@ -65,7 +66,7 @@ export class EventAdmin {
     private unitPanelId: string = "";
     private unitPanel: any = null;
 
-
+    private eventPanelId:string = "";
 
 
     constructor(info: EventAdmin) {
@@ -136,6 +137,11 @@ export class EventAdmin {
         //this.show(4031);
 
 
+    }
+
+    public getEventPanel():Event{
+
+        return S.getElement(this.eventPanelId) as Event;
     }
 
     public getUnit() {
@@ -299,6 +305,7 @@ export class EventAdmin {
 
     private createGrid(json) {
 
+
         const grid = new Grid2({
             id: this.gridId,
             target:this.main,
@@ -310,6 +317,14 @@ export class EventAdmin {
             allowSearch: false,
             allowPaginator: false,
             selectMode: "",
+            className: "event-admin",
+            action:(index) => {
+                
+                if(json.events[index].tracking_id){
+                    this.getEventPanel().showEvent(json.events[index].id);
+                }
+                
+            },
             fields: [
                 {
                     name: "f_date",
@@ -317,11 +332,11 @@ export class EventAdmin {
                 },
 
                 {
-                    name: "title",
+                    name: "event_name",
                     caption: "Title"
                 },
                                {
-                    name: "status",
+                    name: "status_name",
                     caption: "Status"
                 },
                 {
