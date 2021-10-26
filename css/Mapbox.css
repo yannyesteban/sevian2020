@@ -1218,14 +1218,14 @@ ul.trace-tool li.followNO a:after {
   margin: 0px;
 }
 
-.info-form-main.unit-conn-0 .false {
+.info-form-main.unit-conn-0 .false, .info-form-main.unit-conn- .false {
   color: red;
   background-color: #fcff33;
   text-align: center;
   font-weight: bold;
 }
 
-.info-form-main.unit-conn-0 .true {
+.info-form-main.unit-conn-0 .true, .info-form-main.unit-conn- .true {
   display: none;
 }
 

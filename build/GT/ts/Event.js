@@ -76,8 +76,10 @@ export class Event {
             this.map = mapApi;
             this.popup = this.map.createPopup({
                 focusAfterOpen: true,
-                //closeOnMove: true,
                 closeOnClick: false
+            });
+            this.map.map.on("click", () => {
+                this.popup.remove();
             });
             this.popup.setDOMContent(this.infoFormMain.get());
         });

@@ -1103,7 +1103,8 @@ ul.trace-tool {
 }
 
 .info-form-main {
-  &.unit-conn-0 {
+  &.unit-conn-0,
+  &.unit-conn- {
     .false {
       color: red;
       background-color: #fcff33;
