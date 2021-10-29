@@ -527,7 +527,7 @@ class Unit
 				FROM unit_input as ui
 				INNER JOIN input as i ON i.id = ui.input_id
 				INNER JOIN user_unit as uu ON uu.unit_id = ui.unit_id
-				WHERE uu.user = '$user' AND ui.unit_id = '$unitId' AND i.type = 1
+				WHERE uu.user = '$user' AND ui.unit_id = '$unitId' AND ui.type = 1
 
 		union
 
@@ -541,7 +541,7 @@ class Unit
 				FROM unit_input as ui
 				INNER JOIN input as i ON i.id = ui.input_id
 				INNER JOIN user_unit as uu ON uu.unit_id = ui.unit_id
-				WHERE uu.user = '$user' AND ui.unit_id = '$unitId' AND i.type = 2
+				WHERE uu.user = '$user' AND ui.unit_id = '$unitId' AND ui.type = 2
 
 			ORDER BY unitId, type, number
 

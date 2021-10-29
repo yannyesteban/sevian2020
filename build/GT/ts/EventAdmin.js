@@ -155,6 +155,7 @@ export class EventAdmin {
         })));
     }
     createForm(json) {
+        const date = new Date();
         const form = this.form = new Form({
             id: this.formId,
             target: this.main,
@@ -165,12 +166,14 @@ export class EventAdmin {
                     caption: "Desde",
                     input: "input",
                     type: "date",
+                    value: date.toISOString().substring(0, 10)
                 },
                 {
                     name: "dateTo",
                     caption: "Hasta",
                     input: "input",
                     type: "date",
+                    value: date.toISOString().substring(0, 10)
                 },
                 {
                     name: "eventId",
