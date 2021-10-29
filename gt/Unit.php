@@ -519,7 +519,7 @@ class Unit
 
         $cn->query = "SELECT ui.unit_id as unitId,
 
-		i.type,
+		ui.type,
 
 		'i' as ctype, number, ui.input_id as inputId, i.name,
 		($input >> (number - 1 ))%2 as `on`,
@@ -533,7 +533,7 @@ class Unit
 
 		SELECT ui.unit_id as unitId,
 
-		i.type,
+		ui.type,
 
 		'o' as ctype, number, ui.input_id as inputId, i.name,
 		($output >> (number - 1 ))%2 as `on`,
