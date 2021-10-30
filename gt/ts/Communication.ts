@@ -491,6 +491,7 @@ export class Communication {
             },
             ondelete: (info) => {
                 this.updateEventStatus(info, 2, this.winNames.event);
+                this.evalSound();
             }
         }, this.winEvent);
 
@@ -552,6 +553,7 @@ export class Communication {
             },
             ondelete: (info) => {
                 this.updateEventStatus(info, 2, this.winNames.alarm);
+                this.evalSound();
             }
         }, this.winAlarm);
         //this.createInfoWindow(3, {}, {caption:"Message"});
@@ -2024,12 +2026,13 @@ alert(this.commandPanelId)
 
     private evalSound() {
         const alarms = this.getInfoWin(this.winNames.alarm).getCounts();
-
+        console.log(alarms);
         if (alarms > 0) {
             this.sound.play(0);
             return;
         }
         const events = this.getInfoWin(this.winNames.event).getCounts();
+        console.log(events);
         if (events > 0) {
             this.sound.play(1);
             return;
