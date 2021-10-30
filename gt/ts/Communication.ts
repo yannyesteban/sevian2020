@@ -305,6 +305,7 @@ export class Communication {
             <div class="title ev-{=event_id}">{=title}</div>
             <div class="speed">{=speed}</div>
             <div class="delay">{=delay}</div>
+            <div class="user">{=user}</div>
             <div class="info">{=info}</div>
         </div>    
     `
