@@ -756,6 +756,7 @@ export class Communication {
         });
     }
     goGetEvents() {
+        this.evalSound();
         S.go({
             async: true,
             valid: false,
