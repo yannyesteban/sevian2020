@@ -1514,6 +1514,7 @@ export class Communication {
         this._ws.send(str);
     }
     sendCommand(query) {
+        query.user = this.user;
         this._ws.send(JSON.stringify(query));
     }
     updateType(type, text) {

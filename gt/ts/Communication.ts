@@ -1934,6 +1934,8 @@ alert(this.commandPanelId)
     }
 
     public sendCommand(query:{}) {
+        
+        query.user = this.user;
         this._ws.send(JSON.stringify(query));
     }
 
