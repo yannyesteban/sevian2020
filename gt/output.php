@@ -54,11 +54,11 @@ class Output
 
                 $record = null;
                 $command = null;
-
+                $command = $this->getCommandConfig($unitId, 5, true);
                 if($index >= 0 ){
 
                     $record = $this->getRecord($unitId, $index);
-                    $command = $this->getCommandConfig($unitId, 5, true);
+                    
 
 
 

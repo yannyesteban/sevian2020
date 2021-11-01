@@ -71,7 +71,7 @@ export class Output {
         }
 
         if (this.id === null) {
-           this.id = "output-" + String(new Date().getTime());
+            this.id = "output-" + String(new Date().getTime());
         }
         let main = this.id ? $(this.id) : null;
 
@@ -116,10 +116,10 @@ export class Output {
         this.wins["main"] = new Float.Window({
             visible: false,
             caption: "Output",
-            left:'right',
-			top:'bottom',
-			deltaX: -50 - 350,
-			deltaY:-140 - 20,
+            left: 'right',
+            top: 'bottom',
+            deltaX: -50 - 350,
+            deltaY: -140 - 20,
             width: "330px",
             height: "300px",
 
@@ -149,7 +149,7 @@ export class Output {
 
             events: {
                 change: (event) => {
-                    this.goLoadPage(this.unitId, event.currentTarget.value);
+                    this.goLoadPage(this.unitId, event.currentTarget.value, event.currentTarget.options[event.currentTarget.selectedIndex].text);
                 },
             },
         });
@@ -168,9 +168,9 @@ export class Output {
 
         if (unitId == 0 || unitId === undefined) {
 
-            this.goLoadPage(0,-1);
+            this.goLoadPage(0, -1);
             this.wins["main"].setCaption(`${this.caption} : Todos`);
-            this.wins["main"].show({left:"center", top:"middle"});
+            this.wins["main"].show({ left: "center", top: "middle" });
             return;
         }
 
@@ -185,7 +185,7 @@ export class Output {
         this.goLoadPage(unitId, -1);
 
         this.wins["main"].setCaption(`${this.caption} : ${unitName}`);
-        this.wins["main"].show({left:"center", top:"middle"});
+        this.wins["main"].show({ left: "center", top: "middle" });
 
     }
 
@@ -197,7 +197,7 @@ export class Output {
     }
 
 
-    private goLoadPage(unitId: number, index?) {
+    private goLoadPage(unitId: number, index?, caption?) {
 
         if (index < 0 && $(this.formId)) {
             $(this.formId).text("...");
@@ -212,7 +212,7 @@ export class Output {
 
                     this.loadPage(json);
                     if (json.command) {
-                        this.loadForm(json.command, 0, index);
+                        this.loadForm(json.command, 0, index, caption);
                     }
 
                 },
@@ -236,15 +236,30 @@ export class Output {
     }
 
     private loadPage(info) {
+       
+
         if (info.list) {
             this.eventList = info.list;
-            this.listCommand["0"].setOptionsData(
-                [['', ' - ']].concat(info.list
 
-                    .map((e) => {
-                        return [e.number, e.number + ": " + e.name/*, "*", e.status*/];
-                }))
-            );
+            if (info.command && info.command.bitwise) {
+                this.listCommand["0"].setOptionsData(
+                    [['', ' - ']].concat(info.list
+
+                        .map((e) => {
+                            return [Math.pow(2, e.number - 1), e.number + ": " + e.name/*, "*", e.status*/];
+                        }))
+                );
+            } else {
+                this.listCommand["0"].setOptionsData(
+                    [['', ' - ']].concat(info.list
+
+                        .map((e) => {
+                            return [e.number, e.number + ": " + e.name/*, "*", e.status*/];
+                        }))
+                );
+            }
+
+
         }
     }
 
@@ -260,8 +275,8 @@ export class Output {
     }
 
 
-    private loadForm(command, type, index) {
-
+    private loadForm(command, type, index, caption?) {
+        console.log(command)
         const fields = [];
 
         fields.push({
@@ -269,7 +284,7 @@ export class Output {
             name: "name",
             input: "input",
             type: "text",
-            value: command.name,
+            value: caption || command.name,
         });
 
         command.fields.forEach((item, index2: number) => {
@@ -295,6 +310,18 @@ export class Output {
 
             if (command.indexField && item.name == command.indexField) {
                 info.type = "hidden";
+                /*info.data = range;
+                        info.events = {change: (event) => {
+                            this.setIndex(event.currentTarget.value);
+                            this.start();
+                        }};*/
+                info.value = index;
+
+
+            }
+
+            if (item.type == "output") {
+                info.type = "text";
                 /*info.data = range;
                         info.events = {change: (event) => {
                             this.setIndex(event.currentTarget.value);
@@ -441,7 +468,7 @@ export class Output {
         const form = this.forms[type] = new Form({
             target: this.main,//this.tabs[type],
             id: this.formId,
-            caption: command.command + ": "+ this.getIndexName(index),
+            caption: command.command + ": " + this.getIndexName(index),
             fields: fields,
             menu: {
                 caption: "",

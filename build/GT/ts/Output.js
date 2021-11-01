@@ -98,7 +98,7 @@ export class Output {
             },
             events: {
                 change: (event) => {
-                    this.goLoadPage(this.unitId, event.currentTarget.value);
+                    this.goLoadPage(this.unitId, event.currentTarget.value, event.currentTarget.options[event.currentTarget.selectedIndex].text);
                 },
             },
         });
@@ -131,7 +131,7 @@ export class Output {
     getUnitId() {
         return this.unitId;
     }
-    goLoadPage(unitId, index) {
+    goLoadPage(unitId, index, caption) {
         if (index < 0 && $(this.formId)) {
             $(this.formId).text("...");
         }
@@ -143,7 +143,7 @@ export class Output {
                 f: (json) => {
                     this.loadPage(json);
                     if (json.command) {
-                        this.loadForm(json.command, 0, index);
+                        this.loadForm(json.command, 0, index, caption);
                     }
                 },
             },
@@ -165,10 +165,18 @@ export class Output {
     loadPage(info) {
         if (info.list) {
             this.eventList = info.list;
-            this.listCommand["0"].setOptionsData([['', ' - ']].concat(info.list
-                .map((e) => {
-                return [e.number, e.number + ": " + e.name /*, "*", e.status*/];
-            })));
+            if (info.command && info.command.bitwise) {
+                this.listCommand["0"].setOptionsData([['', ' - ']].concat(info.list
+                    .map((e) => {
+                    return [Math.pow(2, e.number - 1), e.number + ": " + e.name /*, "*", e.status*/];
+                })));
+            }
+            else {
+                this.listCommand["0"].setOptionsData([['', ' - ']].concat(info.list
+                    .map((e) => {
+                    return [e.number, e.number + ": " + e.name /*, "*", e.status*/];
+                })));
+            }
         }
     }
     getIndexName(index) {
@@ -180,14 +188,15 @@ export class Output {
         }
         return "";
     }
-    loadForm(command, type, index) {
+    loadForm(command, type, index, caption) {
+        console.log(command);
         const fields = [];
         fields.push({
             caption: "[Description]",
             name: "name",
             input: "input",
             type: "text",
-            value: command.name,
+            value: caption || command.name,
         });
         command.fields.forEach((item, index2) => {
             /*
@@ -209,6 +218,15 @@ export class Output {
             };
             if (command.indexField && item.name == command.indexField) {
                 info.type = "hidden";
+                /*info.data = range;
+                        info.events = {change: (event) => {
+                            this.setIndex(event.currentTarget.value);
+                            this.start();
+                        }};*/
+                info.value = index;
+            }
+            if (item.type == "output") {
+                info.type = "text";
                 /*info.data = range;
                         info.events = {change: (event) => {
                             this.setIndex(event.currentTarget.value);
