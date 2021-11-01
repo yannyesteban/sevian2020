@@ -321,7 +321,7 @@ export class Output {
             }
 
             if (item.type == "output") {
-                info.type = "text";
+                info.type = "hidden";
                 /*info.data = range;
                         info.events = {change: (event) => {
                             this.setIndex(event.currentTarget.value);
