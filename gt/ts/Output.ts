@@ -332,6 +332,12 @@ export class Output {
 
             }
 
+            if (item.type == "mask") {
+                info.type = "select";
+                info.data = [[0,"Off"], [index,"On"]];
+                fields.push(info);
+                return;
+            }
             if (item.type == "select") {
                 info.type = "select";
                 info.data = item.data;

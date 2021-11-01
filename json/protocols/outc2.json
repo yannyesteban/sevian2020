@@ -18,7 +18,7 @@
     {
       "name": "output_control",
       "label": "Output Control",
-      "type": "output",
+      "type": "mask",
       "value": 0,
       "data": [],
       "description": "This parameter is to set the output state to 0 (off) or 1(on) of the defined output port in the “Output Port” parameter."
