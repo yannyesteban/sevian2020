@@ -2027,13 +2027,13 @@ alert(this.commandPanelId)
 
     private evalSound() {
         const alarms = this.getInfoWin(this.winNames.alarm).getCounts();
-        console.log(alarms);
+        
         if (alarms > 0) {
             this.sound.play(0);
             return;
         }
         const events = this.getInfoWin(this.winNames.event).getCounts();
-        console.log(events);
+        
         if (events > 0) {
             this.sound.play(1);
             return;

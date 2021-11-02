@@ -189,7 +189,6 @@ export class Output {
         return "";
     }
     loadForm(command, type, index, caption) {
-        console.log(command);
         const fields = [];
         fields.push({
             caption: "[Description]",
@@ -307,7 +306,7 @@ export class Output {
             name: "index",
             input: "input",
             type: "hidden",
-            value: index,
+            value: 0,
         });
         fields.push({
             caption: "Status",

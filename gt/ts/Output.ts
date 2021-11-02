@@ -276,7 +276,7 @@ export class Output {
 
 
     private loadForm(command, type, index, caption?) {
-        console.log(command)
+        
         const fields = [];
 
         fields.push({
@@ -418,7 +418,7 @@ export class Output {
             name: "index",
             input: "input",
             type: "hidden",
-            value: index,
+            value: 0,
         });
 
         fields.push({

@@ -1853,9 +1853,9 @@ export class Report {
 
 
         if (message.type == 4) {
-            console.log(4)
+            
             if (message.unitId == this.getUnitId()) {
-                console.log(message.unitId)
+                
                 this.goGetValue(message.unitId, message.commandId, message.index);
             }
         }
