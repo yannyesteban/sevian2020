@@ -68,6 +68,11 @@ export class EventAdmin {
 
     private eventPanelId:string = "";
 
+    private dateFrom:string = "";
+    private dateTo:string = "";
+
+    private mode:string = "0";
+    private status:string = "-1";
 
     constructor(info: EventAdmin) {
 
@@ -181,6 +186,14 @@ export class EventAdmin {
         this.wins["main"].show({ left: "center", top: "middle" });
 
 
+
+        const dateZero = new Date(Date.now() - ((new Date().getTimezoneOffset()+120)) * 60000);
+        const date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
+
+        this.dateFrom = dateZero.toISOString().substring(0,10) + " " + dateZero.toISOString().substring(11,19);
+        this.dateTo = date.toISOString().substring(0,10) + " " + date.toISOString().substring(11,19);
+
+
         this.goLoadEvents(unitId);
 
     }
@@ -220,10 +233,12 @@ export class EventAdmin {
                     name: "events",
                     eparams: {
                         unitId,
-                        dateFrom,
-                        dateTo,
+                        dateFrom: this.dateFrom,
+                        dateTo: this.dateTo,
                         eventId,
-                        page:1
+                        page:1,
+                        mode: this.mode,
+                        status: this.status,
 
 
                     },
@@ -246,7 +261,11 @@ export class EventAdmin {
 
     }
     private createForm(json) {
-        const date = new Date();
+        
+        
+        const dateZero = new Date(Date.now() - ((new Date().getTimezoneOffset()+120)) * 60000);
+        const date = new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000);
+        
         const form = this.form = new Form({
             id:this.formId,
             target: this.main,
@@ -257,7 +276,14 @@ export class EventAdmin {
                     caption: "Desde",
                     input: "input",
                     type:"date",
-                    value: date.toISOString().substring(0,10)
+                    value: dateZero.toISOString().substring(0,10)
+                },
+                {
+                    name: "timeFrom",
+                    caption: "",
+                    input: "input",
+                    type:"time",
+                    value: dateZero.toISOString().substring(11,19)
                 },
                 {
                     name: "dateTo",
@@ -265,6 +291,13 @@ export class EventAdmin {
                     input: "input",
                     type:"date",
                     value: date.toISOString().substring(0,10)
+                },
+                {
+                    name: "timeTo",
+                    caption: "",
+                    input: "input",
+                    type:"time",
+                    value: date.toISOString().substring(11,19)
                 },
                 {
                     name: "eventId",
@@ -276,6 +309,22 @@ export class EventAdmin {
                         .map((e) => {
                             return [e.event_id, e.event_id + ": " + e.name/*, "*", e.status*/];
                     }))
+                },
+                {
+                    name: "status",
+                    caption: "Status",
+                    input: "input",
+                    type: "select",
+                    value: "-1",
+                    data: [['-1', ' - Todos'], ['0', 'No leído'], ['1', 'Leído'], ['2', 'Eliminado']]
+                },
+                {
+                    name: "mode",
+                    caption: "Bandeja",
+                    input: "input",
+                    type: "select",
+                    value: "0",
+                    data: [['0', ' - Todos'], ['1', 'Unit'], ['2', 'Evento'], ['4', 'Alarma']]
                 },
                 {
                     name: "unitId",
@@ -294,10 +343,21 @@ export class EventAdmin {
                         caption: "Buscar",
                         action: (item, event) => {
                             const unitId = form.getInput("unitId").getValue();
+                            
                             const dateFrom = form.getInput("dateFrom").getValue();
                             const dateTo = form.getInput("dateTo").getValue();
-                            const eventId = form.getInput("eventId").getValue();
 
+                            const timeFrom = form.getInput("timeFrom").getValue();
+                            const timeTo = form.getInput("timeTo").getValue();
+
+                            const eventId = form.getInput("eventId").getValue();
+                            
+                            this.dateFrom = dateFrom + " " + timeFrom;
+                            this.dateTo = dateTo + " " + timeTo;
+
+                            this.mode = form.getInput("mode").getValue();
+                            this.status = form.getInput("status").getValue();
+                            
                             this.goLoadEvents(unitId, dateFrom, dateTo, eventId, this.page);
                         },
                     },

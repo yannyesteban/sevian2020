@@ -13,6 +13,7 @@ class EventAdmin
     private $commandId = 0;
     private $index = 0;
     private $mode = 0;
+    private $status = -1;
     private $type = '0';
     private $roleId = 5;
 
@@ -46,6 +47,7 @@ class EventAdmin
         $commandId = $this->eparams->commandId ?? $this->commandId;
         $index = $this->eparams->index ?? $this->index;
         $mode = $this->eparams->mode ?? $this->mode;
+        $status = $this->eparams->status ?? $this->status;
 
         $page = $this->eparams->page ?? $this->page;
         $dateFrom = $this->eparams->dateFrom ?? $this->dateFrom;
@@ -66,7 +68,7 @@ class EventAdmin
             case 'get-events':
 
 
-
+                //hx(" $this->getEvents($unitId, $dateFrom, $dateTo, $eventId, $mode, $status, $page),");
 
                 $this->addResponse([
                     'id'	=> $this->id,
@@ -74,7 +76,7 @@ class EventAdmin
                         'unitId'=>$unitId,
                         'eventList'=>$this->getEventList($unitId),
 
-                        'events'     => $this->getEvents($unitId, $dateFrom, $dateTo, $eventId, $page),
+                        'events'     => $this->getEvents($unitId, $dateFrom, $dateTo, $eventId, $mode, $status, $page),
 
                     ],
                     'iToken'=> $this->iToken
@@ -117,7 +119,8 @@ class EventAdmin
     }
 
 
-    private function getEvents($unitId = '',$dateFrom = "", $dateTo = "", $eventId = 0, $page = 1){
+    private function getEvents($unitId = '',$dateFrom = "", $dateTo = "", $eventId = 0, $mode=0, $status=0, $page = 1){
+        
         $cn = $this->cn;
 
         $where = '';
@@ -137,6 +140,15 @@ class EventAdmin
         if($eventId != '-1' and $eventId != ''){
             $where .= (($where != "")? ' and ': ''). "e.event_id = '$eventId' ";
         }
+
+        if($status != '-1'){
+            $where .= (($where != "")? ' and ': ''). "e.status = '$status' ";
+        }
+
+        if($mode != '0'){
+            $where .= (($where != "")? ' and ': ''). "e.mode & '$mode' > 0 ";
+        }
+
 
         if($where != ''){
             $where = "WHERE $where";
