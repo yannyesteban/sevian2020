@@ -168,7 +168,7 @@ class EventAdmin
         LEFT JOIN tracking as t ON t.date_time = e.date_time AND t.unit_id = e.unit_id
         $where
         ORDER BY e.id desc
-        LIMIT 1000
+        LIMIT 200
        ";
 
         //hx($cn->query);
