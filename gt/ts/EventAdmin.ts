@@ -414,6 +414,14 @@ export class EventAdmin {
                     name: "user",
                     caption: "User"
                 },
+                {
+                    name: "alarm",
+                    caption: "Alarma"
+                },
+                {
+                    name: "event",
+                    caption: "Event"
+                },
 
 
 

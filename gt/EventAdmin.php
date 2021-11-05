@@ -155,6 +155,8 @@ class EventAdmin
         }
 
         $cn->query = "SELECT ue.name , CASE WHEN ue.name != '' and ue.name IS NOT NULL THEN ue.name ELSE e.title END as event_name,
+        CASE  WHEN e.mode & '4' > 0 THEN 'Alarma' ELSE '' end as alarm,
+        CASE WHEN e.mode & '2' > 0 THEN 'event' ELSE '' end as 'event',
 
         COALESCE(t.id, '') as tracking_id,
         CASE e.status WHEN 0 THEN 'NO LEÍDO' WHEN 1 THEN 'LEÍDO' WHEN 2 THEN 'ELIMINADO' ELSE'' END as status_name , e.*, ucase(e.title) as title,
