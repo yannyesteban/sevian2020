@@ -184,7 +184,7 @@ export class EventAdmin {
                     caption: "",
                     input: "input",
                     type: "time",
-                    value: dateZero.toISOString().substring(11, 19)
+                    value: "00:00:00", //dateZero.toISOString().substring(11,19)
                 },
                 {
                     name: "dateTo",
