@@ -297,7 +297,7 @@ export class EventAdmin {
                     caption: "",
                     input: "input",
                     type:"time",
-                    value: date.toISOString().substring(11,19)
+                    value: "23:59:59",//date.toISOString().substring(11,19)
                 },
                 {
                     name: "eventId",
