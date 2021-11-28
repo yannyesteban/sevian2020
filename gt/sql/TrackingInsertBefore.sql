@@ -7,6 +7,11 @@ BEGIN
     
     SET NEW.date_time = DATE_ADD(NEW.date_time, interval -4 hour);
 	
+    IF NEW.date_time IS NULL THEN
+		SET NEW.date_time = now();
+
+    END IF;
+    
 	UPDATE unit 
 	SET 
 		tracking_id = NEW.id,
