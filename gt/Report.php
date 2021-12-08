@@ -51,7 +51,7 @@ class Report
                 $this->addResponse([
 					'id'	=> $this->id,
 					'data'	=> [
-                        "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
+                        "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0]?? 0, $config['params']->eventRange[1]?? 0),
                         "commandList"   => $this->getCommandFieldsList($unitId)
                     ],
 					'iToken'=> $this->iToken
@@ -310,7 +310,7 @@ class Report
                 "commandParam" => $this->getCommandFieldsParams($unitId, $commandId),
                 //"paramData"   => ,
                 "command"       =>  $c,
-                "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0], $config['params']->eventRange[1]),
+                "eventList"     => $this->getEventList($unitId, $config['params']->eventRange[0]??0, $config['params']->eventRange[1]??0),
                 "commandList"   => $this->getCommandFieldsList($unitId)
 
             ];
@@ -526,7 +526,7 @@ class Report
 
         $cn = $this->cn;
 
-        $cn->query = "SELECT c.id, c.command, c.type, IFNULL(uc.status, 0) as status, COALESCE(cr.level, 0) as level
+        $cn->query = "SELECT c.id, IFNULL(c.label, c.command) as command, c.type, IFNULL(uc.status, 0) as status, COALESCE(cr.level, 0) as level
         FROM device_command as c
         INNER JOIN device_version as v ON v.id = c.version_id
         INNER JOIN device as d ON d.version_id = v.id
