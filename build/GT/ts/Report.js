@@ -241,13 +241,17 @@ export class Report {
             this.index = index;
         }
         let last = null;
-        try {
+        if ($(this.formIds["0"])) {
             $(this.formIds["0"]).text("");
-            $(this.formIds["A"]).text("");
-            $(this.formIds["M"]).text("");
-            $(this.formIds["W"]).text("");
         }
-        catch (e) {
+        if ($(this.formIds["A"])) {
+            $(this.formIds["A"]).text("");
+        }
+        if ($(this.formIds["M"])) {
+            $(this.formIds["M"]).text("");
+        }
+        if ($(this.formIds["W"])) {
+            $(this.formIds["W"]).text("");
         }
         if (unitId !== undefined) {
             this.unitId = unitId;

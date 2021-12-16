@@ -36,12 +36,20 @@ BEGIN
     ORDER BY ue.unit_id DESC
     LIMIT 1;
     
-    IF NEW.event_id = 0 THEN
+    IF NEW.event_id = 0 or NEW.event_id = 34 THEN
 		UPDATE
 			unit_command as uc
 		INNER JOIN device_command as dc ON dc.id = uc.command_id AND dc.role_id = 2
 		SET uc.status = 2
-		WHERE uc.status = 1 AND uc.unit_id = NEW.unit_id;
+		WHERE uc.status = 1 AND uc.unit_id = NEW.unit_id
+		AND (SELECT de.role_id
+
+			FROM unit as u
+			INNER JOIN device as d ON d.id = u.device_id
+			INNER JOIN device_event as de ON de.version_id = d.version_id
+			WHERE u.id = NEW.unit_id and de.event_id = NEW.event_id) = 1
+		
+		;
 
     END IF;
     
