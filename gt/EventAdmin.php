@@ -82,7 +82,20 @@ class EventAdmin
                     'iToken'=> $this->iToken
                 ]);
                 break;
+            case 'get-native-events':
 
+
+                //hx(" $this->getEvents($unitId, $dateFrom, $dateTo, $eventId, $mode, $status, $page),");
+
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> [
+                        'unitId'=>$unitId,
+                        'eventList'=>$this->getNativeEventList($unitId)
+                    ],
+                    'iToken'=> $this->iToken
+                ]);
+                break;
 
 			default:
 				break;
@@ -192,9 +205,24 @@ class EventAdmin
 
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
+    }
+
+    private function getNativeEventList($unitId){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT de.event_id, ucase(de.name) as name
+
+        FROM unit as u
+        INNER JOIN device as d ON d.id = u.device_id
+        INNER JOIN device_event as de ON de.version_id = d.version_id
+        WHERE u.id = '$unitId'
+        ORDER BY de.event_id
+        ";
 
 
-
+        $result = $this->cn->execute();
+        return $cn->getDataAll($result);
     }
 
 

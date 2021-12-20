@@ -18,7 +18,7 @@ import { Communication } from "./Communication.js";
 import { UnitConfig } from "./UnitConfig.js"
 import { CommandExport } from "./CommandExport.js";
 import { CommandImport } from "./CommandImport.js";
-
+import { IStartekEvent } from "./IStartekEvent.js";
 
 export class Report {
     public id: any = null;
@@ -62,6 +62,7 @@ export class Report {
     private unitPanel: any = null;
     private commandExport: CommandExport = null;
     private commandImport: CommandImport = null;
+    private iStartek: IStartekEvent = null;
 
     constructor(info: Report) {
         for (var x in info) {
@@ -136,13 +137,15 @@ export class Report {
                     this.commandExport.init(this.unitId);
                 } else if (index == 6) {
                     this.commandImport.init(this.unitId);
+                } else if(index == 7){
+                    this.iStartek.init(this.unitId);
                 }
 
             }
         });
 
         this.tabs["A"] = this.tab.add({
-            caption: "Configuración",
+            caption: "Conf.",
             tagName: "div",
             active: true,
         });
@@ -158,10 +161,15 @@ export class Report {
 
         this.commandExport = new CommandExport({});
         this.commandImport = new CommandImport({});
+        this.iStartek = new IStartekEvent({});
 
         this.tab.add({ caption: "Reportar", tagName: "form", set:this.unitConfig.get() });
         this.tab.add({ caption: "Exp", tagName: "form", set: this.commandExport.get() });
         this.tab.add({ caption: "Imp", tagName: "form", set: this.commandImport.get() });
+        
+
+
+        this.tab.add({ caption: "Ext", tagName: "form", set: this.iStartek.get() });
 
         this.wins["main"] = new Float.Window({
             visible: false,
