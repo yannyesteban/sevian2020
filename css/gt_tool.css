@@ -585,6 +585,14 @@
   color: #cfcfcf;
 }
 
+.tool-istartek {
+  display: -ms-grid;
+  display: grid;
+  overflow: auto;
+  -ms-grid-columns: 1fr auto;
+      grid-template-columns: 1fr auto;
+}
+
 .tool-istartek .grid {
   padding: 5px;
   font-size: 11px;
@@ -592,8 +600,8 @@
   display: -ms-grid;
   display: grid;
   overflow: auto;
-  -ms-grid-columns: 1fr auto auto;
-      grid-template-columns: 1fr auto auto;
+  -ms-grid-columns: 1fr auto;
+      grid-template-columns: 1fr auto;
 }
 
 .tool-istartek .row {

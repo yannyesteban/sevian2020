@@ -161,7 +161,7 @@ export class Report {
 
         this.commandExport = new CommandExport({});
         this.commandImport = new CommandImport({});
-        this.iStartek = new IStartekEvent({});
+        this.iStartek = new IStartekEvent({socket: this.socket});
 
         this.tab.add({ caption: "Reportar", tagName: "form", set:this.unitConfig.get() });
         this.tab.add({ caption: "Exp", tagName: "form", set: this.commandExport.get() });

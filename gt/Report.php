@@ -229,14 +229,38 @@ class Report
                 break;
             case 'get-native-events':
 
+                $c = $this->getCommand($unitId, $commandId, $index);
 
-                //hx(" $this->getEvents($unitId, $dateFrom, $dateTo, $eventId, $mode, $status, $page),");
+                $c['fields'] = $this->getCommandFields($unitId, $commandId, $index);
+                $c['paramData'] = $this->getParamData($unitId, $commandId);
+                
+
+                $config = $this->getEventConfig($unitId);
+
+                foreach($c['fields'] as $k => $v){
+
+                    $subdata = array_filter($c['paramData'], function($m) use ($v){
+
+                        return $v['id'] == $m['param_id'];
+                    });
+
+                    $c['fields'][$k]['data'] = [];
+                    foreach($subdata as $x){
+                        $c['fields'][$k]['data'][] = [$x['value'], ($x['title']!='')?$x['title']:$x['value']];
+                    }
+
+                }
+            
 
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
                         'unitId'=>$unitId,
-                        'eventList'=>$this->getNativeEventList($unitId)
+                        'commandParam' => $this->getCommandFieldsParams($unitId, $commandId),
+                        //"paramData"   => ,
+                        'command'       =>  $c,
+                        'eventList'    => $this->getNativeEventList($unitId),
+                        'commandList'   => null
                     ],
                     'iToken'=> $this->iToken
                 ]);
