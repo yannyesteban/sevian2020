@@ -544,3 +544,34 @@
     }
   }
 }
+ .tool-istartek{
+  display: grid;
+
+  overflow: auto;
+  grid-template-columns: 1fr auto;
+
+  .grid {
+    padding: 5px;
+    //background-color: #1cbaf8;
+    font-size: 11px;
+    color: #f4f7e0;
+    display: grid;
+
+    overflow: auto;
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .row {
+    display: contents;
+    cursor: pointer;
+
+    > div {
+      line-height: 1.5em;
+      vertical-align: middle;
+      padding: 2px;
+    }
+    &:hover div {
+      background-color: #000000;
+    }
+  }
+ }

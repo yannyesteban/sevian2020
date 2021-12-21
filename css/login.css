@@ -1,0 +1,105 @@
+@font-face {
+  font-family: Hemihead;
+  src: url(../../../fonts/HEMIHEAD.TTF);
+}
+
+@font-face {
+  font-family: Bestlovers;
+  src: url(../../../fonts/Bestlovers.TTF);
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: arial;
+}
+
+body, html {
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+}
+
+.sevian {
+  background-color: #272727f8;
+  background: -webkit-gradient(linear, left top, left bottom, from(#040404), color-stop(#949494), to(#d6c8c8));
+  background: linear-gradient(#040404, #949494, #d6c8c8);
+  background-image: linear-gradient(-60deg, black, #706f6f, #2c2c2c);
+  height: 100%;
+}
+
+.wrapper {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: auto;
+  grid-column-gap: 20px;
+  grid-row-gap: 1em;
+  height: 100%;
+}
+
+.box1 {
+  -ms-grid-column: 1;
+      grid-column-start: 1;
+  grid-column-end: 4;
+  -ms-grid-row: 1;
+      grid-row-start: 1;
+  grid-row-end: 3;
+  height: 60px;
+}
+
+.box2 {
+  -ms-grid-column: 1;
+      grid-column-start: 1;
+  -ms-grid-row: 3;
+      grid-row-start: 3;
+  grid-row-end: 5;
+}
+
+.wrapper {
+  border: 2px solid #f76707;
+  border-radius: 5px;
+  background-color: #fff4e6;
+}
+
+.wrapper > div {
+  border: 2px solid #ffa94d;
+  border-radius: 5px;
+  background-color: #ffd8a8;
+  padding: 1em;
+  color: #d9480f;
+}
+
+.main {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 2fr 1fr;
+      grid-template-columns: 2fr 1fr;
+  -ms-grid-rows: 100px auto;
+      grid-template-rows: 100px auto;
+  height: 100%;
+}
+
+.main .menu {
+  -ms-grid-column: 1;
+      grid-column-start: 1;
+  grid-column-end: 3;
+  margin: 4px 4px 0px 4px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.main .panel-left {
+  margin: 4px 0px 4px 4px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.main .panel-right {
+  margin: 4px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+img.logo {
+  width: 80px;
+}
+/*# sourceMappingURL=login.css.map */

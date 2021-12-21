@@ -11,13 +11,15 @@ import {
 import { Float } from "../../Sevian/ts/Window.js";
 import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { S } from "../../Sevian/ts/Sevian.js";
-
+import { Tab } from "../../Sevian/ts/Tab.js";
 
 export class IStartekEvent {
     private id: any = "istartek-module";
     private className: any = "tool-istartek";
     private main: SQObject = null;
     private form: Form = null;
+    private tab: Tab = null;
+    private tabs: any[] = [];
 
     constructor(info: any) {
         for (var x in info) {
@@ -234,15 +236,31 @@ export class IStartekEvent {
     }
 
     private createForm(data, unitId) {
+        this.main.text("");
+        this.tab = new Tab({
+            target: this.main,
+            className: "tab-tool",
+            onOpen: (index) => {
+               
 
-        const grid = this.main.create("div").addClass("grid");
+            }
+        });
 
+        const button = this.main.create("button").text("Send");
+        
+        this.tabs["212"] = this.tab.add({ caption: "212", tagName: "form" });
+        this.tabs["210"] = this.tab.add({ caption: "210", tagName: "form" });
+        this.tabs["203"] = this.tab.add({ caption: "203", tagName: "form" });
+
+
+        const grid = this.tabs["212"].create("div").addClass("grid");
+        
         data.forEach(element => {
             const row = grid.create("div").addClass("row");
 
-            const label  = grid.create("span").addClass("label").text(element.name);
-            const output1  = grid.create("input").attr("type","checkbox").val(element.event_id).addClass(["o1"]);
-            const output2  = grid.create("input").attr("type","checkbox").val(element.event_id).addClass(["o2"]);
+            const label  = row.create("span").addClass("label").text(element.name);
+            const output1  = row.create("input").attr("type","checkbox").val(element.event_id).addClass(["o1"]);
+            const output2  = row.create("input").attr("type","checkbox").val(element.event_id).addClass(["o2"]);
         });
 
 

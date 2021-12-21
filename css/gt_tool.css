@@ -584,4 +584,30 @@
   background-color: #054099;
   color: #cfcfcf;
 }
+
+.tool-istartek .grid {
+  padding: 5px;
+  font-size: 11px;
+  color: #f4f7e0;
+  display: -ms-grid;
+  display: grid;
+  overflow: auto;
+  -ms-grid-columns: 1fr auto auto;
+      grid-template-columns: 1fr auto auto;
+}
+
+.tool-istartek .row {
+  display: contents;
+  cursor: pointer;
+}
+
+.tool-istartek .row > div {
+  line-height: 1.5em;
+  vertical-align: middle;
+  padding: 2px;
+}
+
+.tool-istartek .row:hover div {
+  background-color: #000000;
+}
 /*# sourceMappingURL=gt_tool.css.map */

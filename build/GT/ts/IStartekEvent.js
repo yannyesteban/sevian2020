@@ -2,12 +2,15 @@ import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
 import { Float } from "../../Sevian/ts/Window.js";
 import { Form2 as Form } from "../../Sevian/ts/Form2.js";
 import { S } from "../../Sevian/ts/Sevian.js";
+import { Tab } from "../../Sevian/ts/Tab.js";
 export class IStartekEvent {
     constructor(info) {
         this.id = "istartek-module";
         this.className = "tool-istartek";
         this.main = null;
         this.form = null;
+        this.tab = null;
+        this.tabs = [];
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -191,12 +194,23 @@ export class IStartekEvent {
         });
     }
     createForm(data, unitId) {
-        const grid = this.main.create("div").addClass("grid");
+        this.main.text("");
+        this.tab = new Tab({
+            target: this.main,
+            className: "tab-tool",
+            onOpen: (index) => {
+            }
+        });
+        const button = this.main.create("button").text("Send");
+        this.tabs["212"] = this.tab.add({ caption: "212", tagName: "form" });
+        this.tabs["210"] = this.tab.add({ caption: "210", tagName: "form" });
+        this.tabs["203"] = this.tab.add({ caption: "203", tagName: "form" });
+        const grid = this.tabs["212"].create("div").addClass("grid");
         data.forEach(element => {
             const row = grid.create("div").addClass("row");
-            const label = grid.create("span").addClass("label").text(element.name);
-            const output1 = grid.create("input").attr("type", "checkbox").val(element.event_id).addClass(["o1"]);
-            const output2 = grid.create("input").attr("type", "checkbox").val(element.event_id).addClass(["o2"]);
+            const label = row.create("span").addClass("label").text(element.name);
+            const output1 = row.create("input").attr("type", "checkbox").val(element.event_id).addClass(["o1"]);
+            const output2 = row.create("input").attr("type", "checkbox").val(element.event_id).addClass(["o2"]);
         });
         return;
         const fields = [];

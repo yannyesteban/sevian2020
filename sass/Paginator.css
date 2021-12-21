@@ -1,0 +1,60 @@
+.sg-paginator {
+  padding: 4px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 9pt;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.sg-paginator .page {
+  width: 30px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  line-height: 2em;
+  vertical-align: middle;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 9pt;
+}
+
+.sg-paginator .page:not(.active):not(.hidden) {
+  background-color: #e7e7e7;
+  cursor: pointer;
+  color: #757575;
+}
+
+.sg-paginator .page:not(.active):not(.hidden):hover {
+  background-color: black;
+  color: aqua;
+}
+
+.sg-paginator .active {
+  background-color: #a8a8a8;
+  color: #424242;
+  -webkit-transition: background-color .5s;
+  transition: background-color .5s;
+}
+
+.sg-paginator .hidden {
+  background-color: #e7e7e7;
+  cursor: default;
+}
+
+.sg-paginator select {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 9pt;
+  border: 1px solid #e0e0e0;
+  color: #757575;
+}
+/*# sourceMappingURL=Paginator.css.map */

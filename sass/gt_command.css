@@ -1,0 +1,132 @@
+.btn-connect {
+  background-color: #45fd45;
+  color: #047248 !important;
+  padding-right: 6px !important;
+  padding-left: 6px !important;
+  text-align: center;
+  border: 1px solid #00aeff;
+}
+
+.gtxxx {
+  width: 100%;
+  height: 100%;
+  background-color: #8fa1bb;
+  overflow: auto;
+}
+
+.gtxxx ._body {
+  height: 100%;
+  border: 2px solid green;
+  padding: 10px;
+  overflow: auto;
+}
+
+.gtxxx ._body > * {
+  border: 3px solid #0866b3;
+  margin: 2px;
+  padding: 3px;
+  display: block;
+  min-height: 20px;
+  min-width: 40px;
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.gtxxx ._body > * > * {
+  border: 2px solid #da0782;
+  overflow: auto;
+  max-height: 200px;
+}
+
+.gtxxx fform {
+  overflow: auto;
+  border: 2px solid #63a000;
+}
+
+.gtxxx fform > * {
+  overflow: auto;
+}
+
+.gtxxx fform > * > * {
+  overflow: auto;
+  border: 0px solid blue;
+}
+
+.gtxxx fform > * > * > * {
+  overflow: auto;
+  border: 0px solid #a04cb9;
+}
+
+.gtxxx > .body {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  overflow: auto;
+}
+
+.gtxxx > .body > * {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  border: 4px solid #686868;
+  margin: 10px;
+  overflow: auto;
+}
+
+.gtxxx > .body .p5 {
+  display: none;
+}
+
+.gtxxx .command_name {
+  color: #474747;
+  font-weight: bold;
+}
+
+.gt-command-main {
+  background-color: #e7e7e7;
+}
+
+.gt-command-main .page {
+  overflow: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.gt-command-main .page .field {
+  margin: 2px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.gt-command-main .page .field label {
+  margin-right: 5px;
+}
+
+.gt-command-main .page .field input {
+  padding: 4px;
+}
+/*# sourceMappingURL=gt_command.css.map */
