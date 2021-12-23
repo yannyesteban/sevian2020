@@ -229,13 +229,21 @@ class Report
                 break;
             case 'get-native-events':
 
-                $c = $this->getCommand($unitId, $commandId, $index);
+
+
+                $roleId = $this->eparams->roleId ?? 0;
+
+                $commandConfig = $this->getCommandByRole($unitId, $roleId);
+
+                
+
+                $c = $this->getCommand($unitId, $commandConfig['command_id'], $index);
 
                 $c['fields'] = $this->getCommandFields($unitId, $commandId, $index);
                 $c['paramData'] = $this->getParamData($unitId, $commandId);
                 
 
-                $config = $this->getEventConfig($unitId);
+               // $config = $this->getEventConfig($unitId);
 
                 foreach($c['fields'] as $k => $v){
 
@@ -256,11 +264,12 @@ class Report
                     'id'	=> $this->id,
                     'data'	=> [
                         'unitId'=>$unitId,
-                        'commandParam' => $this->getCommandFieldsParams($unitId, $commandId),
+                        //'commandParam' => $this->getCommandFieldsParams($unitId, $commandId),
                         //"paramData"   => ,
                         'command'       =>  $c,
                         'eventList'    => $this->getNativeEventList($unitId),
-                        'commandList'   => null
+                        'commandList'   => null,
+                        'commandConfig'=>$commandConfig
                     ],
                     'iToken'=> $this->iToken
                 ]);
@@ -880,6 +889,30 @@ class Report
 
         $result = $this->cn->execute();
         return (array)$cn->getDataAll($result);
+    }
+
+    private function getCommandByRole($unitId, $roleId){
+
+        $cn = $this->cn;
+
+        $cn->query = "SELECT c.*
+        FROM unit u
+        INNER JOIN device as d on d.id = u.device_id
+        INNER JOIN device_version as v ON v.id = d.version_id
+        INNER JOIN device_command as dc ON dc.version_id = v.id
+        INNER JOIN command as c ON c.command_id = dc.id
+        WHERE u.id = '$unitId' AND dc.role_id = ' $roleId'";
+        
+        $data = [
+            'params'=>null 
+        ];
+        $result = $this->cn->execute();
+        $list = [];
+        if($data = $cn->getDataAssoc($result)){
+            $params = $data['params'] = json_decode($data["params"]);
+        }
+
+        return $data;
     }
 
 }
