@@ -1534,7 +1534,7 @@ export class Unit {
 		if (this._lastUnitId !== unitId) {
 			this._lastUnitId = unitId;
 			this.onChange(this._lastUnitId);
-			this.main.fire("unit_change")
+			this.main.fire("unit_change");
 		}
 	}
 

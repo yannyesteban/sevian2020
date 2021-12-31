@@ -67,12 +67,17 @@ export class IStartekEvent {
                     this.config.roleId = 9;
                     this.goInit(this.tabs["212"],  this.config);
                 }
+                if(index === 3){
+                    this.config.roleId = 10;
+                    this.goInit808(this.tabs["808"],  this.config);
+                }
 
             }
         });
         this.tabs["203"] = this.tab.add({ caption: "203", tagName: "form" });
         this.tabs["210"] = this.tab.add({ caption: "210", tagName: "form" });
         this.tabs["212"] = this.tab.add({ caption: "212", tagName: "form" });
+        this.tabs["808"] = this.tab.add({ caption: "808", tagName: "form" });
         
         
 
@@ -104,12 +109,12 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
+                    
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     console.log(json);
 
-                    this.createForm(main, config.roleId, json.commandConfig.params, json.eventList, config.unitId, json.command);
+                    this.createForm(main, config.unitId, config.index, json.eventList, json.config.params, json.data);
                 },
             },
 
@@ -122,7 +127,7 @@ export class IStartekEvent {
                     eparams: {
                         unitId: config.unitId,
                         commandId: config.commandId,
-                        index: config.index,
+                        index: 0,
                         mode: config.mode,
                         type: config.type,
                         roleId: config.roleId
@@ -133,13 +138,46 @@ export class IStartekEvent {
         });
     }
 
-    private createForm(main, roleId, commandConfig, data, unitId, command) {
+    private goInit808(main, config:any) {
+        console.log(config)
+        S.go({
+            async: true,
+            valid: false,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    console.log(json);
+                    //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
+                    //this.createForm(json.eventList, unitId);
+                    console.log(json);
+                    this.createForm808(main, config.unitId, config.index, json.eventList, json.config.params, json.data);
+                    
+                },
+            },
 
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "get-native-events",
+                    name: "",
+                    eparams: {
+                        unitId: config.unitId,
+                        commandId: config.commandId,
+                        index: 0,
+                        mode: config.mode,
+                        type: config.type,
+                        roleId: config.roleId
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
+    }
+    
+    private createForm(main,unitId, index, eventList, config, command) {
 
-        
-        console.log(command);
         main.text("");
-
 
 
         const list = new Input({
@@ -147,9 +185,9 @@ export class IStartekEvent {
             input: "input",
             type: "select",
             name: "list",
-            value: command.index,
+            value: index,
             caption: "Alarmas",
-            data: commandConfig.indexRange.map(e=> [e, e]),
+            data: config.indexRange.map(e=> [e, e]),
 
             onAddOption: (option, data) => {
                 if (data[3] !== undefined) {
@@ -161,7 +199,6 @@ export class IStartekEvent {
                 change: (event) => {
                     this.config.index = event.currentTarget.value;
                     this.config.commandId = command.command_id;
-                    this.config.roleId = roleId;
                     this.goInit(main, this.config);
                     //this.setIndex(event.currentTarget.value);
                     //this.goConfig(this.unitId, this.index, 1, "0");
@@ -172,7 +209,7 @@ export class IStartekEvent {
             },
         });
 
-        if(command.index < 0){
+        if(index < 0){
             return;
         }
 
@@ -181,13 +218,15 @@ export class IStartekEvent {
         let params = "";
         let param2 = "";
 
-        if(command.params  && command.params.param_2){
-            param2 = command.params.param_2 + "";
+        const query = command.query || {};
+
+        if(query && query[index]  && query[index].param_2){
+            param2 = query[index].param_2.toString() + "";
         }
         console.log(param2)
         const paramValues = param2.split(",");
         
-        data.forEach(element => {
+        eventList.forEach(element => {
             const row = grid.create("div").addClass("row");
 
             const label  = row.create("span").addClass("label").text(element.name);
@@ -208,23 +247,30 @@ export class IStartekEvent {
             
         });
 
+       
 
         const button = main.create("button").prop({"type":"button", innerHTML:"SEND" });
 
         button.on("click", (event)=>{
             
+            console.log(params)
+            query[index] = {
+                param_0: index,
+                param_1: 1,
+                param_2: params
+            };
             const formData = new FormData();
             formData.append("id", command.id || "");
             formData.append("unit_id", command.unit_id);
             formData.append("command_id", command.command_id);
-            formData.append("index", command.index);
+            formData.append("index", "0");
             formData.append("status", "1");
             formData.append("params", JSON.stringify({
-                param_0: command.index,
+                param_0: index,
                 param_1: 1,
                 param_2: params
             }));
-            formData.append("query", "");
+            formData.append("query", JSON.stringify(query));
             formData.append("mode", "1");
 
             formData.append("__mode_", command.__mode_);
@@ -241,6 +287,160 @@ export class IStartekEvent {
         
     }
 
+    private createForm808(main,unitId, index, eventList, config, command) {
+
+
+        
+        console.log(config);
+        main.text("");
+
+
+
+        const list = new Input({
+            target: main,
+            input: "input",
+            type: "select",
+            name: "list",
+            value: index,
+            caption: "Alarmas",
+            data: config.fields[0].data,
+
+            onAddOption: (option, data) => {
+                if (data[3] !== undefined) {
+                    $(option).addClass("status-" + data[3]);
+                }
+            },
+
+            events: {
+                change: (event) => {
+                    this.config.index = event.currentTarget.value;
+                    this.config.commandId = command.command_id;
+                    
+                    this.goInit808(main, this.config);
+                    //this.setIndex(event.currentTarget.value);
+                    //this.goConfig(this.unitId, this.index, 1, "0");
+                    //this.goGetCommand(this.unitId, null, event.currentTarget.value, "0", 1);
+
+                    //this.goGetCommand(this.unitId, event.currentTarget.value, 0, "0", 1);
+                },
+            },
+        });
+
+        if(index < 0){
+            return;
+        }
+        
+
+        const grid = main.create("div").addClass("grid");
+        
+        let params = "";
+        let param2 = "";
+
+        const query = command.query || {};
+
+        if(query && query[index]  && query[index].param_2){
+            param2 = query[index].param_2.toString() + "";
+        }
+        
+        const values = command.values || {};
+
+        
+        
+        const paramValues = param2.split(",");
+        
+        config.request[index].forEach((element, index) => {
+            const row = grid.create("div").addClass("row");
+
+            let value = "";
+            if(values && values[`param_${index + 1}`]){
+                value = values[`param_${index + 1}`];
+            }
+            
+            const label  = row.create("span").addClass("label").text(element);
+            const output1  = row.create("input").prop({"type": "text"}).addClass(["p"]).val(value);
+            
+            
+        });
+
+
+        const button = main.create("button").prop({"type":"button", innerHTML:"SEND->" });
+        console.log(command)
+        button.on("click", (event)=>{
+            
+            const formData = new FormData();
+            formData.append("id", command.id || "0");
+            formData.append("unit_id", command.unit_id);
+            formData.append("command_id", command.command_id);
+            formData.append("name", command.name);
+            formData.append("index", command.index);
+            formData.append("status", "1");
+            formData.append("read", "0");
+            formData.append("params", JSON.stringify({
+                param_0: index
+            }));
+            formData.append("query", "");
+            formData.append("mode", "1");
+
+            formData.append("__mode_", command.__mode_);
+            formData.append("__record_", (command.__record_ != "") ? JSON.stringify(command.__record_) : "");
+            
+
+            
+            this.goSave808(formData, "W", 1);
+        });
+
+        console.log(params)
+        return;
+
+        
+    }
+
+    public goGetValues(unitId, commandId, index) {
+
+       
+
+       
+
+        S.go({
+            async: true,
+            valid: false,
+            //confirm_: 'seguro?',
+            //form: form,
+            blockingTarget: this.main,
+            requestFunctions: {
+                
+                go: (json) => {
+                    console.log(json)
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    mode: "element",
+                    element: "s-form",
+                    method: "save",
+
+                    name: "/gt/forms/unit_command",
+                    eparams: {},
+                    iToken: "goSave",
+                },
+
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "get-values",
+                    name: "",
+                    eparams: {
+                        unitId,
+                        commandId,
+                        index
+                        
+                    },
+                    iToken: "go",
+                }
+            ],
+        });
+    }
 
     public goSave(form, type, send?) {
 
@@ -270,6 +470,7 @@ export class IStartekEvent {
 
                     if (send) {
                         this.send(unitId, commandId, index, mode);
+                        
                     }
                 },
             },
@@ -303,6 +504,68 @@ export class IStartekEvent {
         });
     }
 
+
+    public goSave808(form, type, send?) {
+
+       
+
+        const unitId = form.get("unit_id");
+        const commandId = form.get("command_id");
+        const index = form.get("index");
+        const mode = form.get("mode");
+
+
+        S.go({
+            async: true,
+            valid: false,
+            //confirm_: 'seguro?',
+            form: form,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    
+
+                },
+                goSave: (json) => {
+                    //this.iniLists(json.eventList, json.commandList, type);
+                    //this.createForm(json.command, type);
+                    //this.loadTab(json.command, type);
+                    console.log(json);
+                    if (send) {
+                        this.send(unitId, commandId, index, mode);
+                        
+                    }
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    mode: "element",
+                    element: "s-form",
+                    method: "save",
+
+                    name: "/gt/forms/unit_command",
+                    eparams: {},
+                    iToken: "goSave",
+                },
+
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "get-command",//(type == "0") ? "get-event" : "get-command",
+                    name: "",
+                    eparams: {
+                        unitId: unitId,
+                        commandId: commandId,
+                        index: index,
+                        mode: mode,
+                        type: type,
+                    },
+                    iToken: "goSave",
+                }
+            ],
+        });
+    }
     public send(unitId, commandId, index, mode) {
 
 
@@ -313,9 +576,12 @@ export class IStartekEvent {
             index: Number.parseInt(index, 10),
             mode: Number.parseInt(mode, 10),
         });
+
+        //this.goGetValues(unitId, commandId, index);
     }
 
 
+    
   
 
 }

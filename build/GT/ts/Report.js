@@ -54,6 +54,7 @@ export class Report {
         if (this.socketId) {
             this.socket = S.getElement(this.socketId);
             this.socket.callOnMessage = (json) => {
+                console.log(json);
                 this.decodeMessage(json);
             };
         }

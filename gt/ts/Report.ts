@@ -83,8 +83,9 @@ export class Report {
 
             this.socket = S.getElement(this.socketId) as Communication;
             this.socket.callOnMessage = (json) => {
-
+                console.log(json);
                 this.decodeMessage(json);
+                
             };
 
         }
@@ -1213,6 +1214,7 @@ export class Report {
                             this.forms[x].setValue(json);
                         }
                     }
+                    
                 },
             },
 
@@ -2167,4 +2169,7 @@ export class Report {
             this.disconnect(unitId);
         }
     }
+
+
+    
 }

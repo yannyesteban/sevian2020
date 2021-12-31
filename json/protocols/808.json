@@ -1,0 +1,33 @@
+{
+  "name": "808",
+  "description": "Check device Parameters",
+  "indexField": "command",
+  "indexRange": [1, 2],
+  "indexValue": [100,101,102,105,106,109],
+  "bitwise": true,
+  "usePassword": true,
+  "useTag": true,
+  "fields": [
+    {
+      "name": "command",
+      "label": "command",
+      "type": "list",
+      "data": [
+          [100, "100: Get the GPRS parameters of server 1"],
+          [101, "101: Get up a Backup Server for Server 1"],
+          [102, "102: Get the GPRS Time Interval of Server 1"],
+          [105, "105: Get the GPRS Parameters of Server 2"],
+          [106, "106: Get the GPRS Time Interval of Server 2"],
+          [109, "109: Get APN"] ],
+      "description": ""
+    }
+  ],
+  "request":{
+      "100":["mode", "ip", "port"],
+      "101":["ip", "port"],
+      "102":["normal_time", "ACC_Off_time", "stopping_time"],
+      "105":["mode", "ip", "port"],
+      "106":["normal_time", "ACC_Off_time", "stopping_time"],
+      "109":["APN", "APN_User_Name", "APN_Password"]
+  }
+}

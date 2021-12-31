@@ -1552,14 +1552,17 @@ class S{
 
 
 		if(self::$_jsonRequest !== null){
+			header('Content-Type: application/json; charset=utf-8');
 			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
 		}
 
 		if(self::$onAjax == 2){
+			header('Content-Type: application/json; charset=utf-8');
 			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
 		}
 
 		if(self::$onAjax){
+			header('Content-Type: application/json; charset=utf-8');
 			return self::jsonDoc3();
 		}else{
 			return self::htmlDoc();
