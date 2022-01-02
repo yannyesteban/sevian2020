@@ -54,7 +54,6 @@ export class Report {
         if (this.socketId) {
             this.socket = S.getElement(this.socketId);
             this.socket.callOnMessage = (json) => {
-                console.log(json);
                 this.decodeMessage(json);
             };
         }
@@ -654,7 +653,6 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
                     this.iniLists(json.eventList, json.commandList, type);
                     this.loadTab(json.command, type);
                     //this.loadForm(json.command, type, index);
@@ -947,7 +945,6 @@ export class Report {
             requestFunctions: {
                 f: (json) => {
                     if (json.commandId > 0) {
-                        console.log("commnadId", json.commandId);
                         this.sendRapidCommand(role, unitId, json.commandId, json.command);
                     }
                     else {
@@ -971,7 +968,6 @@ export class Report {
         });
     }
     goGetValue(unitId, commandId, index) {
-        console.log(unitId, commandId, index);
         S.go({
             async: true,
             valid: false,
@@ -979,11 +975,9 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
                     for (let x in this.forms) {
                         const commandId2 = this.forms[x].getInput("command_id").getValue();
                         if (commandId == commandId2) {
-                            console.log(commandId);
                             this.forms[x].setValue(json);
                         }
                     }
@@ -1455,7 +1449,6 @@ export class Report {
             },
         });
         if (__mode_ == 2) {
-            console.log(command.params);
             form.setValue(command.params);
         }
         form.setMode(status);

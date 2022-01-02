@@ -246,7 +246,17 @@ class Report
                     ],
                     'iToken'=> $this->iToken
                 ]);
-                break;                
+                break;  
+            case 'get-command-data':
+                
+
+
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> $this->getCommandData($unitId, $commandId, $index),
+                    'iToken'=> $this->iToken
+                ]);
+                break;                              
 			default:
 				break;
 
@@ -720,8 +730,31 @@ class Report
             }
         }
         return $data;
+    }
+
+    private function getCommandData($unitId = 0, $commandId = 0, $index = 0){
+
+        $cn = $this->cn;
 
 
+        $cn->query = "SELECT *
+
+                FROM unit_command as uc
+
+            WHERE uc.unit_id = '$unitId' AND uc.command_id = '$commandId' AND uc.index = '$index'
+            ";
+
+        $result = $this->cn->execute();
+
+
+        $data = null;
+        if($data = $cn->getDataAssoc($result)){
+            $data['values'] = $data['values'] !='' ? json_decode($data["values"]) : '';
+            $data['query'] = $data['query'] !='' ? json_decode($data["query"]) : '';
+            $data['params'] = $data['params'] !='' ? json_decode($data["params"]) : '';
+            
+        }
+        return $data;
     }
 
     private function getCommandResponse($unitId = 0, $commandId = 0, $index = 0){
