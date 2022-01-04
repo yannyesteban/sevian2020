@@ -109,6 +109,7 @@ export class IStartekEvent {
         });
     }
     goInit808(main, config) {
+        console.log(808);
         S.go({
             async: true,
             valid: false,

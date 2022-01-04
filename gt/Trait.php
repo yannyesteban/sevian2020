@@ -835,7 +835,7 @@ trait DBTracking{
         $cn = $this->cn;
 
         $cn->query = "SELECT u.id as unitId, u.conn_status as connected, t.id as tracking_id,
-        UNIX_TIMESTAMP(now()) as ants,
+        UNIX_TIMESTAMP(now()) as ants, now() as time_now,
              t.device_id as deviceId, t.date_time,
             t.longitude, t.latitude, t.speed, t.heading, t.altitude, t.satellite,
             t.event_id as eventId, t.mileage, t.input_status as inputStatus, t.voltage_level_i1 as voltageI1, t.voltage_level_i2 as voltageI2,
@@ -891,8 +891,8 @@ trait DBTracking{
         $len = count($tracking);
 
         if($len > 0){
-            if($tracking[$len - 1]['date_time']){
-                $lastDateTime = $tracking[$len - 1]['date_time'];
+            if($tracking[$len - 1]['time_now']){
+                $lastDateTime = $tracking[$len - 1]['time_now'];
             }
 
             //hx($lastDateTime);
