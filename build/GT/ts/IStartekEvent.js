@@ -52,9 +52,9 @@ export class IStartekEvent {
                 }
             }
         });
-        this.tabs["203"] = this.tab.add({ caption: "203", tagName: "form" });
-        this.tabs["210"] = this.tab.add({ caption: "210", tagName: "form" });
-        this.tabs["212"] = this.tab.add({ caption: "212", tagName: "form" });
+        this.tabs["203"] = this.tab.add({ caption: "203 Num", tagName: "form" });
+        this.tabs["210"] = this.tab.add({ caption: "210 Srv", tagName: "form" });
+        this.tabs["212"] = this.tab.add({ caption: "212 Out", tagName: "form" });
         this.tabs["808"] = this.tab.add({ caption: "808", tagName: "form" });
     }
     get() {
