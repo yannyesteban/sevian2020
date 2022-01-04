@@ -78,9 +78,15 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+                    console.log(json);
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
-                    this.createForm(main, config.unitId, config.index, json.eventList, json.config.params, json.data);
+                    main.text("");
+                    let params = null;
+                    if (json.config && json.config.params) {
+                        params = json.config.params;
+                    }
+                    this.createForm(main, config.unitId, config.index, json.eventList, params, json.data);
                 },
             },
             params: [
@@ -109,9 +115,15 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+                    console.log(json);
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
-                    this.createForm808(main, config.unitId, config.index, json.eventList, json.config.params, json.data);
+                    main.text("");
+                    let params = null;
+                    if (json.config && json.config.params) {
+                        params = json.config.params;
+                    }
+                    this.createForm808(main, config.unitId, config.index, json.eventList, params, json.data);
                 },
             },
             params: [
@@ -134,7 +146,9 @@ export class IStartekEvent {
         });
     }
     createForm(main, unitId, index, eventList, config, command) {
-        main.text("");
+        if (!config) {
+            return;
+        }
         const list = new Input({
             target: main,
             input: "input",
@@ -211,7 +225,9 @@ export class IStartekEvent {
         return;
     }
     createForm808(main, unitId, index, eventList, config, command) {
-        main.text("");
+        if (!config) {
+            return;
+        }
         const list = new Input({
             target: main,
             input: "input",

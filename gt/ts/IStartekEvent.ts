@@ -109,12 +109,20 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    
+                    console.log(json)
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
-                    
+                    main.text("");
 
-                    this.createForm(main, config.unitId, config.index, json.eventList, json.config.params, json.data);
+                    let params = null;
+                    
+                    if(json.config && json.config.params){
+                        params = json.config.params;
+                    }
+
+                    this.createForm(main, config.unitId, config.index, json.eventList, params, json.data);
+
+                    
                 },
             },
 
@@ -146,11 +154,15 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    
+                    console.log(json)
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
-                    
-                    this.createForm808(main, config.unitId, config.index, json.eventList, json.config.params, json.data);
+                    main.text("");
+                    let params = null;
+                    if(json.config && json.config.params){
+                        params = json.config.params;
+                    }
+                    this.createForm808(main, config.unitId, config.index, json.eventList, params, json.data);                    
                     
                 },
             },
@@ -177,8 +189,9 @@ export class IStartekEvent {
     
     private createForm(main,unitId, index, eventList, config, command) {
 
-        main.text("");
-
+        if(!config){
+            return;
+        }
 
         const list = new Input({
             target: main,
@@ -290,10 +303,9 @@ export class IStartekEvent {
     private createForm808(main,unitId, index, eventList, config, command) {
 
 
-        
-        
-        main.text("");
-
+        if(!config){
+            return;
+        }
 
 
         const list = new Input({

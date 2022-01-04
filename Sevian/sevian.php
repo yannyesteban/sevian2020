@@ -3,7 +3,7 @@ namespace Sevian;
 
 date_default_timezone_set ( 'America/Caracas' );
 ini_set('max_execution_time', 180);
-ini_set('memory_limit','256M');
+ini_set('memory_limit','512M');
 ini_set("session.gc_maxlifetime","18000");
 include 'JasonFileInfo.php';
 include 'Types.php';

@@ -232,7 +232,7 @@ class Report
                 $roleId = $this->eparams->roleId ?? 0;
 
                 $commandConfig = $this->getCommandByRole($unitId, $roleId);
-                $commandData = $this->getCommand($unitId, $commandConfig['command_id'], $index);
+                $commandData = $this->getCommand($unitId, $commandConfig['command_id']?? 0, $index);
             
 
                 $this->addResponse([
