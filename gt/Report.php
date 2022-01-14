@@ -585,7 +585,10 @@ class Report
         WHERE
 
         u.id = '$unitId'
-        AND (cr.special = 0 or cr.special IS NULL)";
+        AND (cr.special = 0 or cr.special IS NULL) 
+        ORDER BY c.command
+        
+        ";
 
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
