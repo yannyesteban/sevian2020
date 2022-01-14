@@ -77,7 +77,7 @@ class Report
 
             case 'get-command':
 
-
+               
 
 
                 $this->addResponse([
@@ -166,8 +166,8 @@ class Report
             case 'get-values':
                 $config = $this->getEventConfig($unitId);
                 $command = $this->getUnitCommand( $unitId, $index);
-                $command['fields'] = $config['params']->fields;
-                $command['indexField'] = $config['params']->indexField;
+                $command['fields'] = $config['params']->fields??[];
+                $command['indexField'] = $config['params']->indexField??0;
 
 
                 $this->addResponse([
@@ -229,51 +229,34 @@ class Report
                 break;
             case 'get-native-events':
 
-
-
                 $roleId = $this->eparams->roleId ?? 0;
 
                 $commandConfig = $this->getCommandByRole($unitId, $roleId);
-
-                
-
-                $c = $this->getCommand($unitId, $commandConfig['command_id'], $index);
-
-                $c['fields'] = $this->getCommandFields($unitId, $commandId, $index);
-                $c['paramData'] = $this->getParamData($unitId, $commandId);
-                
-
-               // $config = $this->getEventConfig($unitId);
-
-                foreach($c['fields'] as $k => $v){
-
-                    $subdata = array_filter($c['paramData'], function($m) use ($v){
-
-                        return $v['id'] == $m['param_id'];
-                    });
-
-                    $c['fields'][$k]['data'] = [];
-                    foreach($subdata as $x){
-                        $c['fields'][$k]['data'][] = [$x['value'], ($x['title']!='')?$x['title']:$x['value']];
-                    }
-
-                }
+                $commandData = $this->getCommand($unitId, $commandConfig['command_id']?? 0, $index);
             
 
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
-                        'unitId'=>$unitId,
-                        //'commandParam' => $this->getCommandFieldsParams($unitId, $commandId),
-                        //"paramData"   => ,
-                        'command'       =>  $c,
-                        'eventList'    => $this->getNativeEventList($unitId),
+                        'unitId'        => $unitId,
+                        'data'       => $commandData,
+                        'eventList'     => $this->getNativeEventList($unitId),
                         'commandList'   => null,
-                        'commandConfig'=>$commandConfig
+                        'config'        => $commandConfig
                     ],
                     'iToken'=> $this->iToken
                 ]);
-                break;                
+                break;  
+            case 'get-command-data':
+                
+
+
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> $this->getCommandData($unitId, $commandId, $index),
+                    'iToken'=> $this->iToken
+                ]);
+                break;                              
 			default:
 				break;
 
@@ -388,7 +371,7 @@ class Report
 
         $cn->query = "SELECT uc.id,
             '$unitId' as unit_id, c.id as command_id, '$index' as `index`,
-            uc.name, uc.params, uc.values, COALESCE(cr.level, 0) as level,
+            uc.name, uc.params, uc.query,uc.values, COALESCE(cr.level, 0) as level,
             IFNULL(uc.status, 0) as status, c.command as command,
             c.type, role_id,
             CASE WHEN uc.id IS NULL THEN 1 ELSE 2 END as __mode_,
@@ -407,6 +390,7 @@ class Report
         if($data = $cn->getDataAssoc($result)){
             if($data['id'] > 0){
                 $data['params'] = json_decode($data["params"]);
+                $data['query'] = json_decode($data["query"]);
                 $data['values'] = json_decode($data["values"]);
                 $data['__record_'] = ["id"=>$data["id"]];
             }
@@ -749,11 +733,59 @@ class Report
             }
         }
         return $data;
+    }
+
+    private function getCommandData($unitId = 0, $commandId = 0, $index = 0){
+
+        $cn = $this->cn;
+
+
+        $cn->query = "SELECT *
+
+                FROM unit_command as uc
+
+            WHERE uc.unit_id = '$unitId' AND uc.command_id = '$commandId' AND uc.index = '$index'
+            ";
+
+        $result = $this->cn->execute();
+
+
+        $data = null;
+        if($data = $cn->getDataAssoc($result)){
+            $data['values'] = $data['values'] !='' ? json_decode($data["values"]) : '';
+            $data['query'] = $data['query'] !='' ? json_decode($data["query"]) : '';
+            $data['params'] = $data['params'] !='' ? json_decode($data["params"]) : '';
+            
+        }
+        return $data;
+    }
+
+    private function getCommandResponse($unitId = 0, $commandId = 0, $index = 0){
+
+        $cn = $this->cn;
+
+
+        $cn->query = "SELECT uc.values
+
+                FROM unit_command as uc
+
+            WHERE uc.unit_id = '$unitId' AND uc.command_id = '$commandId' AND uc.index = '$index'
+            ";
+
+        $result = $this->cn->execute();
+
+
+        $data = [];
+        if($data = $cn->getDataAssoc($result)){
+            if($data['values'] != ""){
+                $data['values']  = json_decode($data["values"]);
+
+            }
+        }
+        return $data;
 
 
     }
-
-
 
     private function loadFile($unitId){
         $cn = $this->cn;

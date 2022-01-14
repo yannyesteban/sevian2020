@@ -88,6 +88,7 @@ class Unit
 				$value = $this->getSes('last_id');
 				$lastDateTime = $this->getSes('lastDateTime');
 				$this->setRequest([
+					'$lastDateTime'=>$lastDateTime,
 					'tracking2'=>$this->updateTracking2($this->getUser(), $lastDateTime),
 					//'tracking'=>$this->updateTracking($this->getUser(), $lastDateTime),
 					'connected'=>$this->unitConected($this->getUser(), $lastDateTime)

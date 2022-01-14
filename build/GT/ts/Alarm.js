@@ -1,10 +1,10 @@
-import { _sgQuery as $ } from '../../Sevian/ts/Query.js';
-import { Menu as Menu } from '../../Sevian/ts/Menu2.js';
-import { Float } from '../../Sevian/ts/Window.js';
-import { Input } from '../../Sevian/ts/Input.js';
-import { Form2 as Form } from '../../Sevian/ts/Form2.js';
-import { Tab } from '../../Sevian/ts/Tab.js';
-import { S } from '../../Sevian/ts/Sevian.js';
+import { _sgQuery as $ } from "../../Sevian/ts/Query.js";
+import { Menu as Menu } from "../../Sevian/ts/Menu2.js";
+import { Float } from "../../Sevian/ts/Window.js";
+import { Input, } from "../../Sevian/ts/Input.js";
+import { Form2 as Form } from "../../Sevian/ts/Form2.js";
+import { Tab } from "../../Sevian/ts/Tab.js";
+import { S } from "../../Sevian/ts/Sevian.js";
 export class Alarm {
     //private alarmData: any[] = [];
     //private geofenceData: any[] = [];
@@ -27,7 +27,7 @@ export class Alarm {
                 this[x] = info[x];
             }
         }
-        let main = (this.id) ? $(this.id) : false;
+        let main = this.id ? $(this.id) : false;
         if (main) {
             if (main.ds("gtType") === "alarm") {
                 return;
@@ -49,14 +49,18 @@ export class Alarm {
             name: "mode",
             value: "1",
             caption: "Alarmas",
-            data: ["Traza completa", "Traza ajustada al Recorrido", "Traza hasta al Recorrido"].map((e, index) => [index, e]),
+            data: [
+                "Traza completa",
+                "Traza ajustada al Recorrido",
+                "Traza hasta al Recorrido",
+            ].map((e, index) => [index, e]),
             events: {
-                change: event => this.getRecord(event.currentTarget.value)
-            }
+                change: (event) => this.getRecord(event.currentTarget.value),
+            },
         });
         this.tab = new Tab({
             target: main,
-            className: "layer-tool"
+            className: "layer-tool",
         });
         this.tab.add({ caption: "Definición", tagName: "form", active: true });
         this.tab.add({ caption: "Geocercas", tagName: "form" });
@@ -74,21 +78,21 @@ export class Alarm {
                     caption: "+",
                     action: (item, event) => {
                         this.initRecord();
-                    }
+                    },
                 },
                 {
                     caption: "Guardar",
                     action: (item, event) => {
                         this.save();
-                    }
+                    },
                 },
                 {
                     caption: "Eliminar",
                     action: (item, event) => {
                         this.delete();
-                    }
+                    },
                 },
-            ]
+            ],
         });
         this.loadRecord(this.data);
         this.wins["main"] = new Float.Window({
@@ -100,20 +104,20 @@ export class Alarm {
             width: "280px",
             height: "250px",
             mode: "auto",
-            className: ["sevian"]
+            className: ["sevian"],
         });
     }
     initRecord() {
         S.go({
             async: true,
             valid: false,
-            confirm_: 'seguro?',
+            confirm_: "seguro?",
             blockingTarget: this.main,
             requestFunctions: {
-                "f": (json) => {
+                f: (json) => {
                     console.log(json);
                     this.loadRecord(json);
-                }
+                },
             },
             params: [
                 {
@@ -122,22 +126,22 @@ export class Alarm {
                     method: "init-record",
                     name: "/form/geofence",
                     eparams: {},
-                    iToken: "f"
-                }
-            ]
+                    iToken: "f",
+                },
+            ],
         });
     }
     getRecord(id) {
         S.go({
             async: true,
             valid: false,
-            confirm_: 'seguro?',
+            confirm_: "seguro?",
             blockingTarget: this.main,
             requestFunctions: {
-                "f": (json) => {
+                f: (json) => {
                     console.log(json);
                     this.loadRecord(json);
-                }
+                },
             },
             params: [
                 {
@@ -146,11 +150,11 @@ export class Alarm {
                     method: "get-record",
                     name: "/form/geofence",
                     eparams: {
-                        id: id
+                        id: id,
                     },
-                    iToken: "f"
-                }
-            ]
+                    iToken: "f",
+                },
+            ],
         });
     }
     newRecord() {
@@ -161,7 +165,9 @@ export class Alarm {
         this.loadUnits(this.tab.getPage(4), []);
     }
     loadRecord(data) {
-        const listData = [{ id: "", name: " + nueva" }].concat(data.alarm).map((e, index) => [e.id, e.name]);
+        const listData = [{ id: "", name: " + nueva" }]
+            .concat(data.alarm)
+            .map((e, index) => [e.id, e.name]);
         this.listInput.setOptionsData(listData);
         if (data.record && data.record !== null) {
             data.record.__mode_ = 2;
@@ -219,8 +225,11 @@ export class Alarm {
                     value: "0",
                     default: "0",
                     caption: "Ámbito",
-                    data: ["Usuario", "Cuenta Cliente", "Cliente"].map((e, index) => [index, e]),
-                    events: {}
+                    data: ["Usuario", "Cuenta Cliente", "Cliente"].map((e, index) => [
+                        index,
+                        e,
+                    ]),
+                    events: {},
                 },
                 {
                     input: "input",
@@ -229,8 +238,11 @@ export class Alarm {
                     value: 0,
                     default: "0",
                     caption: "Tipo",
-                    data: [[205, "Alarma"], [206, "Advertenica"]],
-                    events: {}
+                    data: [
+                        [205, "Alarma"],
+                        [206, "Advertenica"],
+                    ],
+                    events: {},
                 },
                 {
                     input: "input",
@@ -255,7 +267,8 @@ export class Alarm {
                         //console.log(values)
                         inputs.forEach((input) => {
                             //console.log(parseInt(value, 10), parseInt(input.value, 10), parseInt(value, 10) & parseInt(input.value, 10))
-                            if ((parseInt(value, 10) & parseInt(input.value, 10)) == parseInt(input.value)) {
+                            if ((parseInt(value, 10) & parseInt(input.value, 10)) ==
+                                parseInt(input.value)) {
                                 input.checked = true;
                             }
                             else {
@@ -273,7 +286,15 @@ export class Alarm {
                             this._input.val(str);
                         }
                     },
-                    data: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"].map((e, index) => [Math.pow(2, (index)), e]),
+                    data: [
+                        "domingo",
+                        "lunes",
+                        "martes",
+                        "miércoles",
+                        "jueves",
+                        "viernes",
+                        "sábado",
+                    ].map((e, index) => [Math.pow(2, index), e]),
                 },
                 {
                     input: "input",
@@ -310,7 +331,7 @@ export class Alarm {
                     default: "1",
                     caption: "Activar",
                     data: ["No", "Si"].map((e, index) => [index, e]),
-                    events: {}
+                    events: {},
                 },
                 {
                     input: "input",
@@ -318,9 +339,9 @@ export class Alarm {
                     name: "__mode_",
                     caption: "__mode_",
                     value: 1,
-                    default: 1
+                    default: 1,
                 },
-            ]
+            ],
         });
     }
     loadGeofences(main, data) {
@@ -331,7 +352,7 @@ export class Alarm {
             mapValue: () => {
                 const values = this.forms["geofence"].getValue();
                 const result = [];
-                data.forEach(e => {
+                data.forEach((e) => {
                     if (values["geo_" + e.id] > 0) {
                         result.push({
                             id: e.id,
@@ -340,15 +361,15 @@ export class Alarm {
                     }
                 });
                 return result;
-            }
+            },
         });
-        data.forEach(e => {
+        data.forEach((e) => {
             this.forms["geofence"].addField({
                 input: "input",
                 type: "select",
                 name: "geo_" + e.id,
                 dataset: {
-                    id: e.id
+                    id: e.id,
                 },
                 value: e.mode || 0,
                 default: 0,
@@ -357,7 +378,7 @@ export class Alarm {
             });
         });
         return;
-        data.forEach(e => {
+        data.forEach((e) => {
             const container = main.create("div");
             container.create("div").text(e.name);
             new Input({
@@ -379,19 +400,20 @@ export class Alarm {
             mapValue: () => {
                 const values = this.forms["mark"].getValue();
                 const result = [];
-                data.forEach(e => {
-                    if (values["mark_radius_" + e.id] > 0 && values["mark_mode_" + e.id] > 0) {
+                data.forEach((e) => {
+                    if (values["mark_radius_" + e.id] > 0 &&
+                        values["mark_mode_" + e.id] > 0) {
                         result.push({
                             id: e.id,
                             radius: values["mark_radius_" + e.id],
-                            mode: values["mark_mode_" + e.id]
+                            mode: values["mark_mode_" + e.id],
                         });
                     }
                 });
                 return result;
-            }
+            },
         });
-        data.forEach(e => {
+        data.forEach((e) => {
             this.forms["mark"].createGroupInputs({
                 caption: e.name,
                 inputs: [
@@ -402,8 +424,8 @@ export class Alarm {
                         value: e.radius,
                         propertys: { placeholder: "Radio (m)", size: 8 },
                         dataset: {
-                            id: e.id
-                        }
+                            id: e.id,
+                        },
                     },
                     {
                         input: "input",
@@ -414,14 +436,14 @@ export class Alarm {
                         default: 0,
                         data: ["No Aplica", "Activar Dentro", "Activar Afuera"].map((e, index) => [index, e]),
                         dataset: {
-                            id: e.id
-                        }
-                    }
+                            id: e.id,
+                        },
+                    },
                 ],
             });
         });
         return;
-        data.forEach(e => {
+        data.forEach((e) => {
             const container = main.create("div");
             container.create("div").text("..." + e.name);
             new Input({
@@ -429,7 +451,7 @@ export class Alarm {
                 input: "input",
                 type: "text",
                 value: e.radius,
-                propertys: { placeholder: "Radio (m)", size: 8 }
+                propertys: { placeholder: "Radio (m)", size: 8 },
             });
             new Input({
                 target: container,
@@ -443,7 +465,10 @@ export class Alarm {
     }
     loadUnits(main, data) {
         main.text("");
-        const values = data.filter(e => e.mode == 1).map(e => e.id).join();
+        const values = data
+            .filter((e) => e.mode == 1)
+            .map((e) => e.id)
+            .join();
         this.forms["unit"] = new Form({
             id: main,
             fields: [
@@ -454,7 +479,7 @@ export class Alarm {
                     caption: "Unidades",
                     value: values,
                     data: data.map((e, index) => [e.id, e.name]),
-                }
+                },
             ],
             mapValue: () => {
                 const values = this.forms["unit"].getValue("units");
@@ -463,7 +488,7 @@ export class Alarm {
                 }
                 return [];
                 const result = [];
-                data.forEach(e => {
+                data.forEach((e) => {
                     if (values["input_" + e.id] != 2) {
                         result.push({
                             id: e.id,
@@ -472,7 +497,7 @@ export class Alarm {
                     }
                 });
                 return result;
-            }
+            },
         });
         return;
         const container = main.create("div");
@@ -484,7 +509,7 @@ export class Alarm {
             name: "mode",
             value: "1",
         });
-        data.forEach(e => {
+        data.forEach((e) => {
             container.create("div").text(e.name);
             new Input({
                 target: container,
@@ -493,8 +518,8 @@ export class Alarm {
                 name: "mode",
                 value: e.id,
                 propertys: {
-                    checked: (e.mode) ? true : false
-                }
+                    checked: e.mode ? true : false,
+                },
             });
         });
     }
@@ -505,7 +530,7 @@ export class Alarm {
             mapValue: () => {
                 const values = this.forms["input"].getValue();
                 const result = [];
-                data.forEach(e => {
+                data.forEach((e) => {
                     if (values["input_" + e.id] != 2) {
                         result.push({
                             id: e.id,
@@ -514,9 +539,9 @@ export class Alarm {
                     }
                 });
                 return result;
-            }
+            },
         });
-        data.forEach(e => {
+        data.forEach((e) => {
             this.forms["input"].addField({
                 caption: e.name,
                 input: "input",
@@ -524,12 +549,16 @@ export class Alarm {
                 name: "input_" + e.id,
                 value: e.mode,
                 default: 2,
-                data: [["2", "No Aplica"], ["1", e.value_on], ["0", e.value_off]],
+                data: [
+                    ["2", "No Aplica"],
+                    ["1", e.value_on],
+                    ["0", e.value_off],
+                ],
             });
         });
         return;
         main.text("");
-        data.forEach(e => {
+        data.forEach((e) => {
             const container = main.create("div");
             container.create("div").text(e.name);
             new Input({
@@ -538,7 +567,11 @@ export class Alarm {
                 type: "select",
                 value: e.mode,
                 caption: "Alarmas",
-                data: [["2", "No Aplica"], ["1", e.value_on], ["0", e.value_off]],
+                data: [
+                    ["2", "No Aplica"],
+                    ["1", e.value_on],
+                    ["0", e.value_off],
+                ],
             });
         });
     }
@@ -557,7 +590,7 @@ export class Alarm {
         const formData = this.forms["config"].getFormData();
         if (this.forms["config"].getValue("__mode_") == 2) {
             formData.append("__record_", JSON.stringify({
-                id: this.forms["config"].getValue("id")
+                id: this.forms["config"].getValue("id"),
             }));
         }
         formData.append("config", JSON.stringify({
@@ -569,50 +602,49 @@ export class Alarm {
         S.go({
             async: true,
             valid: false,
-            confirm_: 'seguro?',
+            confirm_: "seguro?",
             form: formData,
             //blockingTarget: mapControl.getPanel(),
             requestFunctions: {
-                "f": (json) => {
+                f: (json) => {
                     console.log(json);
                     this.loadRecord(json);
                 },
-                "f2": (json) => {
+                f2: (json) => {
                     if (!json.data.__error_) {
                         new Float.Message({
-                            "caption": "Alarma",
-                            "text": "Record was saved!!!",
-                            "className": "",
-                            "delay": 3000,
-                            "mode": "",
-                            "left": "center",
-                            "top": "top"
+                            caption: "Alarma",
+                            text: "Record was saved!!!",
+                            className: "",
+                            delay: 3000,
+                            mode: "",
+                            left: "center",
+                            top: "top",
                         }).show({});
                     }
                     else {
                         new Float.Message({
-                            "caption": "Alarma",
-                            "text": "Record wasn't saved!!!!",
-                            "className": "",
-                            "delay": 3000,
-                            "mode": "",
-                            "left": "center",
-                            "top": "top"
+                            caption: "Alarma",
+                            text: "Record wasn't saved!!!!",
+                            className: "",
+                            delay: 3000,
+                            mode: "",
+                            left: "center",
+                            top: "top",
                         }).show({});
                     }
-                }
+                },
             },
-            _requestFunction: (json) => {
-            },
+            _requestFunction: (json) => { },
             params: [
                 {
                     t: "setMethod",
-                    'mode': 'element',
+                    mode: "element",
                     element: "gt-alarm",
                     method: "save",
                     name: "/form/geofence",
                     eparams: { getResult: true },
-                    iToken: "f2"
+                    iToken: "f2",
                 },
                 {
                     t: "setMethod",
@@ -620,9 +652,9 @@ export class Alarm {
                     method: "get-record",
                     name: "/form/geofence",
                     eparams: {},
-                    iToken: "f"
-                }
-            ]
+                    iToken: "f",
+                },
+            ],
         });
     }
     delete() {
@@ -630,7 +662,7 @@ export class Alarm {
         if (this.forms["config"].getValue("__mode_") == 2) {
             formData.append("__mode_", 3);
             formData.append("__record_", JSON.stringify({
-                id: this.forms["config"].getValue("id")
+                id: this.forms["config"].getValue("id"),
             }));
         }
         else {
@@ -639,51 +671,50 @@ export class Alarm {
         S.go({
             async: true,
             valid: false,
-            confirm_: 'seguro?',
+            confirm_: "seguro?",
             form: formData,
             //blockingTarget: mapControl.getPanel(),
             requestFunctions: {
-                "f": (json) => {
+                f: (json) => {
                     console.log(json);
                     this.loadRecord(json);
                 },
-                "f2": (json) => {
+                f2: (json) => {
                     this.reset();
                     if (!json.data.__error_) {
                         new Float.Message({
-                            "caption": "Alarma",
-                            "text": "Record was saved!!!",
-                            "className": "",
-                            "delay": 3000,
-                            "mode": "",
-                            "left": "center",
-                            "top": "top"
+                            caption: "Alarma",
+                            text: "Record was saved!!!",
+                            className: "",
+                            delay: 3000,
+                            mode: "",
+                            left: "center",
+                            top: "top",
                         }).show({});
                     }
                     else {
                         new Float.Message({
-                            "caption": "Alarma",
-                            "text": "Record wasn't saved!!!!",
-                            "className": "",
-                            "delay": 3000,
-                            "mode": "",
-                            "left": "center",
-                            "top": "top"
+                            caption: "Alarma",
+                            text: "Record wasn't saved!!!!",
+                            className: "",
+                            delay: 3000,
+                            mode: "",
+                            left: "center",
+                            top: "top",
                         }).show({});
                     }
-                }
+                },
             },
-            _requestFunction: (json) => {
-            },
+            _requestFunction: (json) => { },
             params: [
                 {
                     t: "setMethod",
-                    'mode': 'element',
+                    mode: "element",
                     element: "gt-alarm",
                     method: "delete",
                     name: "/form/geofence",
                     eparams: { getResult: true },
-                    iToken: "f2"
+                    iToken: "f2",
                 },
                 {
                     t: "setMethod",
@@ -691,9 +722,9 @@ export class Alarm {
                     method: "get-record",
                     name: "/form/geofence",
                     eparams: {},
-                    iToken: "f"
-                }
-            ]
+                    iToken: "f",
+                },
+            ],
         });
     }
     showMenu() {

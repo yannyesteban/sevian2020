@@ -3,7 +3,7 @@ namespace Sevian;
 
 date_default_timezone_set ( 'America/Caracas' );
 ini_set('max_execution_time', 180);
-ini_set('memory_limit','256M');
+ini_set('memory_limit','512M');
 ini_set("session.gc_maxlifetime","18000");
 include 'JasonFileInfo.php';
 include 'Types.php';
@@ -1552,14 +1552,17 @@ class S{
 
 
 		if(self::$_jsonRequest !== null){
+			header('Content-Type: application/json; charset=utf-8');
 			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
 		}
 
 		if(self::$onAjax == 2){
+			header('Content-Type: application/json; charset=utf-8');
 			return json_encode(self::$_jsonRequest, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
 		}
 
 		if(self::$onAjax){
+			header('Content-Type: application/json; charset=utf-8');
 			return self::jsonDoc3();
 		}else{
 			return self::htmlDoc();
