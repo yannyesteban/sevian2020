@@ -34,6 +34,7 @@ export class IStartekEvent {
             target: this.main,
             className: "tab-tool",
             onOpen: (index) => {
+                this.config.index = -1;
                 if (index === 0) {
                     this.config.roleId = 7;
                     this.goInit(this.tabs["203"], this.config);
@@ -98,7 +99,6 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");
@@ -135,7 +135,6 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");
@@ -172,7 +171,6 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");
@@ -203,14 +201,12 @@ export class IStartekEvent {
         });
     }
     goInit808(main, config) {
-        console.log(808);
         S.go({
             async: true,
             valid: false,
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");

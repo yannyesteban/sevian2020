@@ -54,6 +54,7 @@ export class IStartekEvent {
             target: this.main,
             className: "tab-tool",
             onOpen: (index) => {
+                this.config.index = -1;
                 if(index === 0){
                     this.config.roleId = 7;
                     this.goInit(this.tabs["203"],  this.config);
@@ -134,7 +135,7 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json)
+                    
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");
@@ -180,7 +181,7 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json)
+                    
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");
@@ -225,7 +226,7 @@ export class IStartekEvent {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json)
+                    
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");
@@ -263,14 +264,14 @@ export class IStartekEvent {
     }
 
     private goInit808(main, config:any) {
-        console.log(808);
+        
         S.go({
             async: true,
             valid: false,
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-                    console.log(json)
+                    
                     //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
                     //this.createForm(json.eventList, unitId);
                     main.text("");
@@ -674,6 +675,7 @@ export class IStartekEvent {
             return;
         }
         
+        
 
         const grid = main.create("div").addClass("grid").ds("commandId", command.command_id);
         
@@ -693,7 +695,7 @@ export class IStartekEvent {
         const paramValues = param2.split(",");
         
         
-
+        
         config.request[index].forEach((element, index) => {
             const row = grid.create("div").addClass("row");
 
