@@ -1,0 +1,26 @@
+{
+    "name": "204",
+    "description": "Set the Characters for Event SMS Alarm",
+    "indexField": "index",
+    "indexRange": [1, 2, 3],
+    "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
+    "bitwise": false,
+    "usePassword": false,
+    "useTag": false,
+    "fields": [
+      {
+        "name": "code",
+        "label": "code",
+        "type": "event",
+        "data": [],
+        "description": "event code"
+      },
+      {
+        "name": "string:",
+        "label": "string:",
+        "type": "text",
+        "description": "string: The description character of the SMS alarm, the longest is 32 characters"
+      }
+    ]
+  }
+  

@@ -50,12 +50,32 @@ export class IStartekEvent {
                     this.config.roleId = 10;
                     this.goInit808(this.tabs["808"], this.config);
                 }
+                if (index === 4) {
+                    this.config.roleId = 11;
+                    this.goInit204(this.tabs["204"], this.config);
+                }
+                if (index === 5) {
+                    this.config.roleId = 12;
+                    this.goInit(this.tabs["205"], this.config);
+                }
+                if (index === 6) {
+                    this.config.roleId = 13;
+                    this.goInit(this.tabs["206"], this.config);
+                }
+                if (index === 7) {
+                    this.config.roleId = 14;
+                    this.goInit250(this.tabs["250"], this.config);
+                }
             }
         });
         this.tabs["203"] = this.tab.add({ caption: "203 Num", tagName: "form" });
         this.tabs["210"] = this.tab.add({ caption: "210 Srv", tagName: "form" });
         this.tabs["212"] = this.tab.add({ caption: "212 Out", tagName: "form" });
         this.tabs["808"] = this.tab.add({ caption: "808", tagName: "form" });
+        this.tabs["204"] = this.tab.add({ caption: "204", tagName: "form" });
+        this.tabs["205"] = this.tab.add({ caption: "205", tagName: "form" });
+        this.tabs["206"] = this.tab.add({ caption: "206", tagName: "form" });
+        this.tabs["250"] = this.tab.add({ caption: "250", tagName: "form" });
     }
     get() {
         return this.main;
@@ -87,6 +107,80 @@ export class IStartekEvent {
                         params = json.config.params;
                     }
                     this.createForm(main, config.unitId, config.index, json.eventList, params, json.data);
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "get-native-events",
+                    name: "",
+                    eparams: {
+                        unitId: config.unitId,
+                        commandId: config.commandId,
+                        index: 0,
+                        mode: config.mode,
+                        type: config.type,
+                        roleId: config.roleId
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
+    }
+    goInit204(main, config) {
+        S.go({
+            async: true,
+            valid: false,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    console.log(json);
+                    //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
+                    //this.createForm(json.eventList, unitId);
+                    main.text("");
+                    let params = null;
+                    if (json.config && json.config.params) {
+                        params = json.config.params;
+                    }
+                    this.createForm204(main, config.unitId, config.index, json.eventList, params, json.data);
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "get-native-events",
+                    name: "",
+                    eparams: {
+                        unitId: config.unitId,
+                        commandId: config.commandId,
+                        index: 0,
+                        mode: config.mode,
+                        type: config.type,
+                        roleId: config.roleId
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
+    }
+    goInit250(main, config) {
+        S.go({
+            async: true,
+            valid: false,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    console.log(json);
+                    //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
+                    //this.createForm(json.eventList, unitId);
+                    main.text("");
+                    let params = null;
+                    if (json.config && json.config.params) {
+                        params = json.config.params;
+                    }
+                    this.createForm250(main, config.unitId, config.index, json.eventList, params, json.data);
                 },
             },
             params: [
@@ -216,6 +310,159 @@ export class IStartekEvent {
                 param_0: index,
                 param_1: 1,
                 param_2: params
+            }));
+            formData.append("query", JSON.stringify(query));
+            formData.append("mode", "1");
+            formData.append("__mode_", command.__mode_);
+            formData.append("__record_", (command.__record_ != "") ? JSON.stringify(command.__record_) : "");
+            this.goSave(formData, "W", 1);
+        });
+        return;
+    }
+    createForm204(main, unitId, index, eventList, config, command) {
+        if (!config) {
+            return;
+        }
+        const list = new Input({
+            target: main,
+            input: "input",
+            type: "select",
+            name: "list",
+            value: index,
+            caption: "Alarmas",
+            data: eventList.map(e => [e.event_id, e.event_id + ": " + e.name]),
+            onAddOption: (option, data) => {
+                if (data[3] !== undefined) {
+                    $(option).addClass("status-" + data[3]);
+                }
+            },
+            events: {
+                change: (event) => {
+                    this.config.index = event.currentTarget.value;
+                    this.config.commandId = command.command_id;
+                    this.goInit204(main, this.config);
+                },
+            },
+        });
+        if (index < 0) {
+            return;
+        }
+        const grid = main.create("div").addClass("grid");
+        let params = "";
+        let param2 = "";
+        const query = command.query || {};
+        if (query && query[index] && query[index].param_2) {
+            param2 = query[index].param_2.toString() + "";
+        }
+        const paramValues = param2.split(",");
+        const row = grid.create("div").addClass("row");
+        row.create("span").addClass("label").text("string");
+        const textString = row.create("input").prop({ "type": "text", "name": "string" }).addClass(["o1"]).val("");
+        const button = main.create("button").prop({ "type": "button", innerHTML: "SEND" });
+        button.on("click", (event) => {
+            query[index] = {
+                param_0: index,
+                param_1: textString.val()
+            };
+            const formData = new FormData();
+            formData.append("id", command.id || "");
+            formData.append("unit_id", command.unit_id);
+            formData.append("command_id", command.command_id);
+            formData.append("index", "0");
+            formData.append("status", "1");
+            formData.append("params", JSON.stringify({
+                param_0: index,
+                param_1: textString.val()
+            }));
+            formData.append("query", JSON.stringify(query));
+            formData.append("mode", "1");
+            formData.append("__mode_", command.__mode_);
+            formData.append("__record_", (command.__record_ != "") ? JSON.stringify(command.__record_) : "");
+            this.goSave(formData, "W", 1);
+        });
+        return;
+    }
+    createForm250(main, unitId, index, eventList, config, command) {
+        if (!config) {
+            return;
+        }
+        const list = new Input({
+            target: main,
+            input: "input",
+            type: "select",
+            name: "list",
+            value: index,
+            caption: "Alarmas",
+            data: config.data.map(e => [e[0], e[1]]),
+            onAddOption: (option, data) => {
+                if (data[3] !== undefined) {
+                    $(option).addClass("status-" + data[3]);
+                }
+            },
+            events: {
+                change: (event) => {
+                    this.config.index = event.currentTarget.value;
+                    this.config.commandId = command.command_id;
+                    this.goInit250(main, this.config);
+                },
+            },
+        });
+        if (index < 0) {
+            return;
+        }
+        const grid = main.create("div").addClass("grid");
+        let params = "";
+        let param2 = "";
+        const query = command.query || {};
+        if (query && query[index] && query[index].param_2) {
+            param2 = query[index].param_2.toString() + "";
+        }
+        const paramValues = param2.split(",");
+        const row = grid.create("div").addClass("row");
+        row.create("span").addClass("label").text("mode");
+        //const output1  = row.create("input").prop({"type": "input", "name":"mode"}).addClass(["o1"]).val();
+        const mode = new Input({
+            target: row,
+            input: "input",
+            type: "select",
+            name: "mode",
+            value: index,
+            caption: "mode",
+            data: config.fields[1].data.map(e => [e[0], e[1]])
+        });
+        row.create("span").addClass("label").text("time");
+        const time1 = row.create("input").prop({ "type": "input", "name": "time" }).addClass(["o1"]);
+        /*
+        eventList.forEach(element => {
+            const row = grid.create("div").addClass("row");
+            const label  = row.create("span").addClass("label").text(element.name);
+            const output1  = row.create("input").prop({"type": "checkbox", checked:(paramValues.find(e=> e ==element.event_id))}).addClass(["o1"]).val(element.event_id);
+            output1.on("change", (event)=>{
+                const elem = grid.queryAll(`.o1:checked`);
+                params = "";
+                elem.forEach(e=>{
+                    params += ((params!=="")?",":"") + e.value;
+                })
+            });
+        });
+        */
+        const button = main.create("button").prop({ "type": "button", innerHTML: "SEND" });
+        button.on("click", (event) => {
+            query[index] = {
+                param_0: index,
+                param_1: mode.getValue(),
+                param_2: time1.val()
+            };
+            const formData = new FormData();
+            formData.append("id", command.id || "");
+            formData.append("unit_id", command.unit_id);
+            formData.append("command_id", command.command_id);
+            formData.append("index", "0");
+            formData.append("status", "1");
+            formData.append("params", JSON.stringify({
+                param_0: index,
+                param_1: mode.getValue(),
+                param_2: time1.val()
             }));
             formData.append("query", JSON.stringify(query));
             formData.append("mode", "1");
