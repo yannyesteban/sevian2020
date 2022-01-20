@@ -20,7 +20,7 @@
       "label": "Modo",
       "type": "select",
       "value": 1,
-      "data": [[1, "turn on the output"], [2, "close the output"], [3, "pulse output"]],
+      "data": [[2, "Desactivar el Output"], [1, "Activar el Output"], [3, "Intermitente"]],
       "description": "This parameter is to set the output state to 0 (off) or 1(on) of the defined output port in the “Output Port” parameter."
     },
     {

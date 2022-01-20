@@ -276,6 +276,16 @@ export class IStartekEvent {
             param2 = query[index].param_2.toString() + "";
         }
         const paramValues = param2.split(",");
+        let array2 = [];
+        //eventList = eventList.filter(e=>e.event_id>=20) ;
+        if (config.extra && config.extra.filter) {
+            eventList = eventList.filter(e => {
+                if (config.extra.filter.some(x => x == e.event_id)) {
+                    return false;
+                }
+                return true;
+            });
+        }
         eventList.forEach(element => {
             const row = grid.create("div").addClass("row");
             const label = row.create("span").addClass("label").text(element.name);

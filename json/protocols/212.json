@@ -1,34 +1,40 @@
 {
-    "name": "212",
-    "description": "Set Output to Generate Output Events",
-    "indexField": "output",
-    "indexRange": [1, 2],
-    "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
-    "bitwise": false,
-    "usePassword": false,
-    "useTag": false,
-    "fields": [
-      {
-        "name": "output",
-        "label": "Output Port",
-        "type": "output",
-        "data": [],
-        "description": "This parameter can specify what output port will be activated"
-      },
-      {
-        "name": "operation",
-        "label": "operation",
-        "type": "select",
-        "value": 1,
-        "data": [[1, "setting"], [2, "adding"], [3, "deleting"]],
-        "description": "operation code, 1 is setting, 2 is adding, 3 is deleting"
-      },
-      {
-        "name": "code:",
-        "label": "code:",
-        "type": "textList",
-        "description": "event code table, each event is separated by‘,’;"
-      }
-    ]
-  }
-  
+  "name": "212",
+  "description": "Set Output to Generate Output Events",
+  "indexField": "output",
+  "indexRange": [1, 2],
+  "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
+  "bitwise": false,
+  "usePassword": false,
+  "useTag": false,
+  "extra": {
+    "filter": [0, 17, 20, 23, 24, 27, 28, 29, 30, 31, 32, 33, 34, 36, 37, 54]
+  },
+  "fields": [
+    {
+      "name": "output",
+      "label": "Output Port",
+      "type": "output",
+      "data": [],
+      "description": "This parameter can specify what output port will be activated"
+    },
+    {
+      "name": "operation",
+      "label": "operation",
+      "type": "select",
+      "value": 1,
+      "data": [
+        [1, "setting"],
+        [2, "adding"],
+        [3, "deleting"]
+      ],
+      "description": "operation code, 1 is setting, 2 is adding, 3 is deleting"
+    },
+    {
+      "name": "code:",
+      "label": "code:",
+      "type": "textList",
+      "description": "event code table, each event is separated by‘,’;"
+    }
+  ]
+}
