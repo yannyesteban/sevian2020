@@ -4,6 +4,12 @@
     "indexField": "index",
     "indexRange": [1, 2],
     "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
+    "data":[
+      [0,"-- seleccione"],
+      [1,"GPRS 1"],
+      [2,"GPRS 2"]
+      
+    ],
     "bitwise": false,
     "usePassword": false,
     "useTag": false,

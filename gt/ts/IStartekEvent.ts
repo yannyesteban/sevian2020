@@ -317,7 +317,7 @@ export class IStartekEvent {
             name: "list",
             value: index,
             caption: "Alarmas",
-            data: config.indexRange.map(e => [e, e]),
+            data: config.data.map(e => [e[0], e[1]]),
 
             onAddOption: (option, data) => {
                 if (data[3] !== undefined) {
@@ -328,6 +328,11 @@ export class IStartekEvent {
             events: {
                 change: (event) => {
                     this.config.index = event.currentTarget.value;
+
+                    if( this.config.index <= 0){
+                        alert("seleccione una opción");
+                        return false;
+                    }
                     this.config.commandId = command.command_id;
                     this.goInit(main, this.config);
                     //this.setIndex(event.currentTarget.value);

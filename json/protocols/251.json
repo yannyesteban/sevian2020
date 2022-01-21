@@ -4,6 +4,12 @@
   "indexField": "output",
   "indexRange": [1, 2],
   "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
+  "data":[
+    [0,"-- seleccione"],
+    [1,"output 1"],
+    [2,"output 2"]
+    
+  ],
   "bitwise": true,
   "usePassword": true,
   "useTag": true,

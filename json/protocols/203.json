@@ -4,6 +4,12 @@
     "indexField": "index",
     "indexRange": [1, 2, 3],
     "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
+    "data":[
+      [0,"-- seleccione"],
+      [1,"authorized number [1]"],
+      [2,"authorized number [2]"],
+      [3,"authorized number [3]"]
+    ],
     "bitwise": false,
     "usePassword": false,
     "useTag": false,
