@@ -67,16 +67,26 @@ export class IStartekEvent {
                     this.config.roleId = 14;
                     this.goInit250(this.tabs["250"], this.config);
                 }
+                if (index === 8) {
+                    this.config.roleId = 16;
+                    this.goInit202(this.tabs["202"], this.config);
+                }
+                if (index === 9) {
+                    this.config.roleId = 17;
+                    this.goInit251(this.tabs["251"], this.config);
+                }
             }
         });
-        this.tabs["203"] = this.tab.add({ caption: "203 Num", tagName: "form" });
-        this.tabs["210"] = this.tab.add({ caption: "210 Srv", tagName: "form" });
-        this.tabs["212"] = this.tab.add({ caption: "212 Out", tagName: "form" });
+        this.tabs["203"] = this.tab.add({ caption: "203", tagName: "form" });
+        this.tabs["210"] = this.tab.add({ caption: "210", tagName: "form" });
+        this.tabs["212"] = this.tab.add({ caption: "212", tagName: "form" });
         this.tabs["808"] = this.tab.add({ caption: "808", tagName: "form" });
         this.tabs["204"] = this.tab.add({ caption: "204", tagName: "form" });
         this.tabs["205"] = this.tab.add({ caption: "205", tagName: "form" });
         this.tabs["206"] = this.tab.add({ caption: "206", tagName: "form" });
         this.tabs["250"] = this.tab.add({ caption: "250", tagName: "form" });
+        this.tabs["202"] = this.tab.add({ caption: "202", tagName: "form" });
+        this.tabs["251"] = this.tab.add({ caption: "251", tagName: "form" });
     }
     get() {
         return this.main;
@@ -107,6 +117,42 @@ export class IStartekEvent {
                         params = json.config.params;
                     }
                     this.createForm(main, config.unitId, config.index, json.eventList, params, json.data);
+                },
+            },
+            params: [
+                {
+                    t: "setMethod",
+                    element: "gt-report",
+                    method: "get-native-events",
+                    name: "",
+                    eparams: {
+                        unitId: config.unitId,
+                        commandId: config.commandId,
+                        index: 0,
+                        mode: config.mode,
+                        type: config.type,
+                        roleId: config.roleId
+                    },
+                    iToken: "f",
+                },
+            ],
+        });
+    }
+    goInit202(main, config) {
+        S.go({
+            async: true,
+            valid: false,
+            blockingTarget: this.main,
+            requestFunctions: {
+                f: (json) => {
+                    //this.goGetCommand(new FormData(), unitId, 2554, 0, 1, "W");
+                    //this.createForm(json.eventList, unitId);
+                    main.text("");
+                    let params = null;
+                    if (json.config && json.config.params) {
+                        params = json.config.params;
+                    }
+                    this.createForm202(main, config.unitId, config.index, json.eventList, params, json.data);
                 },
             },
             params: [
@@ -329,6 +375,90 @@ export class IStartekEvent {
         });
         return;
     }
+    createForm202(main, unitId, index, eventList, config, command) {
+        if (!config) {
+            return;
+        }
+        const list = new Input({
+            target: main,
+            input: "input",
+            type: "select",
+            name: "list",
+            value: index,
+            caption: "Alarmas",
+            data: config.data.map(e => [e[0], e[1]]),
+            onAddOption: (option, data) => {
+                if (data[3] !== undefined) {
+                    $(option).addClass("status-" + data[3]);
+                }
+            },
+            events: {
+                change: (event) => {
+                    this.config.index = event.currentTarget.value;
+                    if (this.config.index <= 0) {
+                        alert("seleccione una opción");
+                        return false;
+                    }
+                    this.config.commandId = command.command_id;
+                    this.goInit202(main, this.config);
+                    //this.setIndex(event.currentTarget.value);
+                    //this.goConfig(this.unitId, this.index, 1, "0");
+                    //this.goGetCommand(this.unitId, null, event.currentTarget.value, "0", 1);
+                    //this.goGetCommand(this.unitId, event.currentTarget.value, 0, "0", 1);
+                },
+            },
+        });
+        if (index < 0) {
+            return;
+        }
+        const grid = main.create("div").addClass("grid");
+        let param3 = "";
+        let param2 = "";
+        const query = command.query || {};
+        if (query && query[index] && query[index].param_2 >= 0) {
+            param2 = query[index].param_2.toString() + "";
+            param3 = query[index].param_3.toString() + "";
+        }
+        const row = grid.create("div").addClass("row");
+        row.create("span").addClass("label").text("Operación");
+        //const output1  = row.create("input").prop({"type": "input", "name":"mode"}).addClass(["o1"]).val();
+        const mode = new Input({
+            target: row,
+            input: "input",
+            type: "select",
+            name: "mode",
+            value: param2,
+            caption: "mode",
+            data: config.fields[2].data.map(e => [e[0], e[1]])
+        });
+        row.create("span").addClass("label").text("Replicar con SMS");
+        const time1 = row.create("input").prop({ "type": "checkbox", "name": "time", "value": "3" }).addClass(["o1"]);
+        if (param3) {
+            time1.attr("checked", true);
+        }
+        const button = main.create("button").prop({ "type": "button", innerHTML: "SEND" });
+        button.on("click", (event) => {
+            query[index] = {
+                param_0: index,
+                param_1: 1,
+                param_2: mode.getValue(),
+                param_3: (time1.attr("checked")) ? time1.val() : ""
+            };
+            const formData = new FormData();
+            formData.append("id", command.id || "");
+            formData.append("unit_id", command.unit_id);
+            formData.append("command_id", command.command_id);
+            formData.append("index", "0");
+            formData.append("status", "1");
+            formData.append("params", JSON.stringify(query[index]));
+            formData.append("query", JSON.stringify(query));
+            formData.append("mode", "1");
+            formData.append("__mode_", command.__mode_);
+            formData.append("__record_", (command.__record_ != "") ? JSON.stringify(command.__record_) : "");
+            this.goSave(formData, "W", 1);
+        });
+        return;
+    }
     createForm204(main, unitId, index, eventList, config, command) {
         if (!config) {
             return;
@@ -421,12 +551,14 @@ export class IStartekEvent {
             return;
         }
         const grid = main.create("div").addClass("grid");
-        let params = "";
+        let param1 = "";
         let param2 = "";
         const query = command.query || {};
         if (query && query[index] && query[index].param_2) {
+            param1 = query[index].param_1.toString() + "";
             param2 = query[index].param_2.toString() + "";
         }
+        console.log(param2);
         const paramValues = param2.split(",");
         const row = grid.create("div").addClass("row");
         row.create("span").addClass("label").text("mode");
@@ -436,26 +568,15 @@ export class IStartekEvent {
             input: "input",
             type: "select",
             name: "mode",
-            value: index,
+            value: param1,
             caption: "mode",
-            data: config.fields[1].data.map(e => [e[0], e[1]])
+            data: config.fields[1].data.filter(e => e[2] == index).map(e => [e[0], e[1]])
         });
         row.create("span").addClass("label").text("time");
         const time1 = row.create("input").prop({ "type": "input", "name": "time" }).addClass(["o1"]);
-        /*
-        eventList.forEach(element => {
-            const row = grid.create("div").addClass("row");
-            const label  = row.create("span").addClass("label").text(element.name);
-            const output1  = row.create("input").prop({"type": "checkbox", checked:(paramValues.find(e=> e ==element.event_id))}).addClass(["o1"]).val(element.event_id);
-            output1.on("change", (event)=>{
-                const elem = grid.queryAll(`.o1:checked`);
-                params = "";
-                elem.forEach(e=>{
-                    params += ((params!=="")?",":"") + e.value;
-                })
-            });
-        });
-        */
+        if (param2) {
+            time1.val(param2);
+        }
         const button = main.create("button").prop({ "type": "button", innerHTML: "SEND" });
         button.on("click", (event) => {
             query[index] = {

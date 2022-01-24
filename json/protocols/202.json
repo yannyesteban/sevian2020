@@ -1,0 +1,49 @@
+{
+    "name": "202",
+    "description": "Set Device Call Event",
+    "indexField": "index",
+    "indexRange": [1, 2, 3],
+    "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
+    "data":[
+      [0,"-- seleccione"],
+      [1,"authorized number [1]"],
+      [2,"authorized number [2]"],
+      [3,"authorized number [3]"]
+    ],
+    "bitwise": false,
+    "usePassword": false,
+    "useTag": false,
+    "fields": [
+      {
+        "name": "index",
+        "label": "index",
+        "type": "index",
+        "data": [],
+        "description": "the position number of the authorized number, 1 is the first number, 2 is the second number, and 3 is the third number"
+      },
+      {
+        "name": "operation",
+        "label": "operation",
+        "type": "select",
+        "value": 1,
+        "data": [[1, "setting"], [2, "adding"], [3, "deleting"]],
+        "description": "operation code, 1 is setting, 2 is adding, 3 is deleting"
+      },
+      {
+        "name": "code:",
+        "label": "code:",
+        "type": "select",
+        "data": [[0, "Manos Libre"], [1, "Escuchar"], [2, "colgar"]],
+        "description": "0=automatically answer, 1=automatically monitor, 2=automatically hang up"
+      }
+      ,
+      {
+        "name": "replay:",
+        "label": "replay:",
+        "type": "checkbox",
+        
+        "description": "automatically reply location information"
+      }
+    ]
+  }
+  

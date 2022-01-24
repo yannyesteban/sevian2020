@@ -5,10 +5,10 @@
   "indexRange": [1, 2, 3, 4, 5, 6],
   "indexValue": [1, 2, 4, 8, 16, 32, 64, 128],
   "data":[
-      [1,"IN1"],
-      [2,"IN2"],
-      [3,"IN3"],
-      [4,"IN4 (AD1)"]
+      [1,"IN1", "+/-"],
+      [2,"IN2", "+/-"],
+      [3,"IN3", "+/-/A" ],
+      [4,"IN4 (AD1)", "+/A"]
       
   ],
   "bitwise": true,
@@ -27,7 +27,12 @@
       "label": "Modo",
       "type": "select",
       "value": 1,
-      "data": [[0, "low level trigger"], [1, "high level trigger"], [2, "AD analog input"]],
+      "data": [
+        [0, "negativo", 1], [1, "positivo", 1],
+        [0, "negativo", 2], [1, "positivo", 2],
+        [0, "negativo", 3], [1, "positivo", 3], [2, "Análogo", 3],
+        [1, "positivo",4], [2, "Análogo",4]
+      ],
       "description": ""
     },
     {

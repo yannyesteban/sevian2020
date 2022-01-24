@@ -180,7 +180,7 @@ export class Communication {
                 onmessage: (event) => {
                     //db ("     onmessage !!!!");
                     const server_message = event.data;
-                    //console.log (server_message);
+                    console.log (server_message);
 
                     try {
                         let json = JSON.parse(server_message);
