@@ -618,4 +618,26 @@
 .tool-istartek .row:hover div {
   background-color: #000000;
 }
+
+.tool-istartek-ext .command-boby {
+  background-color: #b4b4b4;
+  padding: 5px;
+}
+
+.tool-istartek-ext .command-boby > select {
+  width: 100%;
+}
+
+.tool-istartek-ext .grid {
+  display: -ms-grid;
+  display: grid;
+  width: 80%;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  color: #272727;
+}
+
+.tool-istartek-ext .grid .row {
+  display: contents;
+}
 /*# sourceMappingURL=gt_tool.css.map */

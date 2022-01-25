@@ -1,0 +1,61 @@
+{
+    "name": "802",
+    "description": "Get Device Working Status",
+    "indexField": "output",
+    "indexRange": [],
+    "indexValue": [],
+    "bitwise": true,
+    "usePassword": true,
+    "useTag": true,
+    "fields": [
+        {
+            "name": "system_status",
+            "label": "device system status",
+            "type": "text",
+            "data": [],
+            "description": ""
+        },
+        {
+            "name": "input_status",
+            "label": "input status",
+            "type": "text",
+            "data": [],
+            "description": ""
+        },
+        {
+            "name": "output_status",
+            "label": "output status",
+            "type": "text",
+            "data": [],
+            "description": ""
+        },
+        {
+            "name": "CSQ",
+            "label": "Señal GSM",
+            "type": "text",
+            "data": [],
+            "description": ""
+        },
+        {
+            "name": "satellite",
+            "label": "Satelites",
+            "type": "text",
+            "data": [],
+            "description": ""
+        },
+        {
+            "name": "internal_voltage",
+            "label": "internal battery voltage",
+            "type": "text",
+            "data": [],
+            "description": ""
+        },
+        {
+            "name": "external_power",
+            "label": "external power supply voltage",
+            "type": "text",
+            "data": [],
+            "description": ""
+        }
+    ]
+}
