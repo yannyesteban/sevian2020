@@ -1,0 +1,37 @@
+{
+  "name": "910",
+  "label": "910: Reiniciar Dispositivo",
+  "description": "»» Comando de uso delicado: <br>»» Reinicia el equipo el módulo GPS o GPRS o ambos",
+  "indexField": "output",
+  "indexRange": [],
+  "indexValue": [],
+  "bitwise": false,
+  "usePassword": true,
+  "useTag": false,
+  "confirm":["Este comando reinicia el equipo, desea continuar?", "Está seguro?"],
+  "useEvents" : false,
+  "useInputs" : false,
+  "useOutPuts" : false,
+  "onSave" : false,
+  "onSend" : "Enviar",
+  "onGet" : "Último",
+  "closeCommand" : true,
+  "useData":{
+    "operation":"events",
+    "operation2":"outputs"
+  },
+  "fields": [
+    {
+      "name": "operation",
+      "label": "Operación",
+      "type": "select",
+      "data": [["","-- Seleccione"], [1, "Restart the GSM module"],[2, "Restart the GPS module"],[3, "Restart the device"]],
+      "description": "",
+      "rules":{
+        "required":{
+          "msg":"seleccione un valor por favor!!!"
+        }
+      }
+    }
+  ]
+}

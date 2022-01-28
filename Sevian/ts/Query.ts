@@ -245,20 +245,17 @@ export class SQObject{
 	addClass(className){
 
 		if(className){
-			if(typeof(className) === "object"){
-				for(var x in className){
-					if(className[x] !== false && className[x] !== null && className[x] !== ""){
-						this.e.classList.add(className[x]);
-					}
-
-				}
-			}else if(className !== false && className !== null && className !== ""){
+			if(Array.isArray(className)){
+				className.forEach(item => this.e.classList.add(item || ""));
+				
+			}else if(typeof className === "string"){
 				this.e.classList.add(className);
 			}
 		}
 		return this;
 
 	}
+	
 	removeClass(className){
 		if(className){
 			if(typeof(className) === "object"){

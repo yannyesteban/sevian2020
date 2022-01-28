@@ -8,6 +8,7 @@ import { UnitConfig } from "./UnitConfig.js";
 import { CommandExport } from "./CommandExport.js";
 import { CommandImport } from "./CommandImport.js";
 import { IStartekEvent } from "./IStartekEvent.js";
+import { RapidCommand } from "./CommandForm.js";
 export class Report {
     constructor(info) {
         this.id = null;
@@ -56,6 +57,7 @@ export class Report {
             this.socket.callOnMessage = (json) => {
                 this.decodeMessage(json);
             };
+            RapidCommand.setWebSocket(this.socket);
         }
         if (this.unitPanelId) {
             this.unitPanel = S.getElement(this.unitPanelId);
@@ -68,7 +70,8 @@ export class Report {
                 this.goCommandId(null, 2);
             };
             this.unitPanel.onReset = (unitId) => {
-                this.goCommandId(null, 3);
+                RapidCommand.flashCommand(unitId, 3);
+                //this.goCommandId(null, 3);
             };
             this.unitPanel.onCall = (unitId) => {
                 this.goCommandId(null, 4);
@@ -944,6 +947,7 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+                    console.log(json);
                     if (json.commandId > 0) {
                         this.sendRapidCommand(role, unitId, json.commandId, json.command);
                     }

@@ -1,0 +1,26 @@
+{
+  "name": "reset",
+  "description": "Restart Device or Module",
+  "indexField": "",
+  "indexRange": [],
+  "indexValue": [],
+  "bitwise": false,
+  "usePassword": true,
+  "useTag": false,
+  "confirm":["secure?", "really secure?"],
+  "useEvents" : false,
+  "useInputs" : false,
+  "useOutPuts" : false,
+  "onSave" : "Guardar",
+  "onSend" : "Enviar",
+  "onGet" : "Último",
+  "useRapidCommand": true,
+  "useParam" : ["1", "1"],
+  "useData":{
+    "operation":"events",
+    "operation2":"outputs"
+  },
+  "fields": [
+    
+  ]
+}

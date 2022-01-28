@@ -147,6 +147,7 @@
           //-height: 2em;
           //margin: 0px;
         }
+        .input-info,
         input,
         textarea,
         select,
@@ -165,6 +166,9 @@
         }
         label {
           padding-left: 6px;
+        }
+        .input-info{
+          color: rgb(255, 60, 0);
         }
       }
     }

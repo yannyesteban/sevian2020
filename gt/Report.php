@@ -140,7 +140,34 @@ class Report
                     'iToken'=> $this->iToken
                 ]);
                 break;
+            case 'get-command-config':
 
+                $roleId = $this->eparams->roleId ?? null;
+                $commandId = $this->eparams->commandId ?? null;
+
+                $config = $this->getCommandConfig($unitId, $roleId, $commandId);
+                
+                $events = null;
+                if($config['useEvents'] ?? false && $config['useEvents'] === true){
+                    $events = $this->getUnitEvents($unitId);
+                }
+                
+                $inputs = null;
+                if($config['useInputs'] ?? false && $config['useInputs'] === true){
+                    $inputs = $this->getUnitInputs($unitId);
+                }
+
+                $this->addResponse([
+                    'id'	=> $this->id,
+                    'data'	=> [
+                        'config'        => $config,
+                        'commandData'   => $this->getCommand($unitId, $config['commandId'], 0),
+                        'events'        => $events,
+                        'inputs'        => $inputs
+                    ],
+                    'iToken'=> $this->iToken
+                ]);
+                break;
             case 'get-command-id':
 
                 $role = $this->eparams->role ?? 2;
@@ -156,7 +183,7 @@ class Report
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
-                        "commandId" => $this->getCommandId($unitId, $role),
+                        "commandId" => $commandId,
                         "command"=>$c
                     ],
                     'iToken'=> $this->iToken
@@ -393,6 +420,10 @@ class Report
                 $data['query'] = json_decode($data["query"]);
                 $data['values'] = json_decode($data["values"]);
                 $data['__record_'] = ["id"=>$data["id"]];
+            }else{
+                $data['params'] = new \stdClass;
+                $data['query'] = new \stdClass;
+                $data['values'] = new \stdClass;
             }
         }
         return $data;
@@ -688,10 +719,6 @@ class Report
 
         $cn->query = "SELECT c.id as command_id, c.command, role_id
 
-
-
-
-
         FROM unit as u
         INNER JOIN device as d ON d.id = u.device_id
         INNER JOIN device_command as c ON c.version_id = d.version_id
@@ -707,6 +734,52 @@ class Report
             }
         }
         return $commandId;
+
+    }
+
+    private function getCommandConfig($unitId, $roleId, $commandId = null){
+        $cn = $this->cn;
+
+        if($roleId > 0){
+            $cn->query = "SELECT c.id as commandId, c.command, role_id as roleId, cc.id as config_id, 
+                cc.params as config, IFNULL(un.name, 'unkown') as unitName
+
+            FROM unit as u
+            LEFT JOIN unit_name as un ON un.id = u.name_id
+            INNER JOIN device as d ON d.id = u.device_id
+            INNER JOIN device_command as c ON c.version_id = d.version_id
+            LEFT JOIN command as cc ON cc.id = c.config_id
+    
+            WHERE  u.id = '$unitId' and c.role_id = '$roleId'
+            ";
+        }else{
+            $cn->query = "SELECT c.id as commandId, c.command, role_id as roleId, cc.id as config_id, 
+                cc.params as config, IFNULL(un.name, 'unkown') as unitName
+
+            FROM unit as u
+            LEFT JOIN unit_name as un ON un.id = u.name_id
+            INNER JOIN device as d ON d.id = u.device_id
+            INNER JOIN device_command as c ON c.version_id = d.version_id
+            LEFT JOIN command as cc ON cc.id = c.config_id
+
+            WHERE  u.id = '$unitId' and c.id = '$commandId'
+        ";
+        }
+        
+        $result = $this->cn->execute();
+
+        $info = [];
+        if($data = $cn->getDataAssoc($result)){
+            if( $data['config_id']){
+                $info = json_decode($data['config'] ?? "", true);
+            }
+            $info['commandId'] = $data['commandId'];
+            $info['roleId'] = $data['roleId'];
+            $info['name'] = $data['command'];
+            $info['unitName'] = $data['unitName'];
+           
+        }
+        return $info;
 
     }
 
@@ -758,6 +831,33 @@ class Report
             
         }
         return $data;
+    }
+
+    private function getUnitInputs($unitId){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT i.id as inpuId, ui.type, i.name, value_on as valueOn, value_off as valueOff
+            FROM unit_input as ui
+            INNER JOIN input as i ON i.id = ui.input_id
+            WHERE ui.unit_id = '$unitId'
+            ORDER BY ui.type";
+
+        $result = $this->cn->execute();
+        return  $cn->getDataAll($result);
+    }
+
+    private function getUnitEvents($unitId){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT e.event_id as eventId, e.name, e.role_id as roleId
+            FROM unit as u
+            INNER JOIN device as d ON d.id = u.device_id
+            INNER JOIN device_event as e ON e.version_id = d.version_id
+            WHERE u.id = '$unitId'
+            ORDER BY eventId";
+
+        $result = $this->cn->execute();
+        return  $cn->getDataAll($result);
     }
 
     private function getCommandResponse($unitId = 0, $commandId = 0, $index = 0){

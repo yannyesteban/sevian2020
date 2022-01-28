@@ -160,6 +160,7 @@
   margin-bottom: 50px;
 }
 
+.report-tool .sg-form .page .field .input-info,
 .report-tool .sg-form .page .field input,
 .report-tool .sg-form .page .field textarea,
 .report-tool .sg-form .page .field select,
@@ -176,6 +177,10 @@
 
 .report-tool .sg-form .page .field label {
   padding-left: 6px;
+}
+
+.report-tool .sg-form .page .field .input-info {
+  color: #ff3c00;
 }
 
 .report-tool .sg-form .sg-menu {

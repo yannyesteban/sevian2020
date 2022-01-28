@@ -2,6 +2,9 @@ import { _sgQuery as $, SQObject } from "../../Sevian/ts/Query.js";
 import { Menu as Menu } from "../../Sevian/ts/Menu2.js";
 import { Float } from "../../Sevian/ts/Window.js";
 
+
+
+
 import {
     I,
     Input,
@@ -19,6 +22,9 @@ import { UnitConfig } from "./UnitConfig.js"
 import { CommandExport } from "./CommandExport.js";
 import { CommandImport } from "./CommandImport.js";
 import { IStartekEvent } from "./IStartekEvent.js";
+
+import { RapidCommand } from "./CommandForm.js";
+
 
 export class Report {
     public id: any = null;
@@ -88,6 +94,8 @@ export class Report {
                 
             };
 
+            RapidCommand.setWebSocket(this.socket);
+
         }
 
         if (this.unitPanelId) {
@@ -105,7 +113,10 @@ export class Report {
                 this.goCommandId(null, 2);
             };
             this.unitPanel.onReset = (unitId: number) => {
-                this.goCommandId(null, 3);
+
+                RapidCommand.flashCommand(unitId, 3);
+
+                //this.goCommandId(null, 3);
             };
             this.unitPanel.onCall = (unitId: number) => {
                 this.goCommandId(null, 4);
@@ -1163,7 +1174,7 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-
+                    console.log(json);
                     if (json.commandId > 0) {
                         
                         this.sendRapidCommand(role, unitId, json.commandId, json.command);

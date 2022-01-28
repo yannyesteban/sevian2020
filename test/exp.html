@@ -7,6 +7,27 @@
 </head>
 <body>wewe
 	<script>
+function hexTobin(hex){
+    return (parseInt(hex, 16).toString(2));
+}
+
+function hexToBit(hex){
+    return hexTobin(hex).split("").reverse();
+}
+
+
+
+param0 = "1E";
+
+let value = hexToBit(param0);
+console.log(value)
+const p1 = [
+	["GPRS connection status", value[10] ? "connected": "disconnected"],
+];
+
+console.log(p1)
+
+
 		let image = "http://localhost/sevian2020/images/sites maison - _viii_256.png";
 var myRe = /(?:\w|\s|\.|-)*(?=.png|.jpg|.svg)/gim;
 //myRe = /\w+/

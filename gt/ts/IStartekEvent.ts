@@ -14,6 +14,14 @@ import { S } from "../../Sevian/ts/Sevian.js";
 import { Tab } from "../../Sevian/ts/Tab.js";
 
 import { Communication } from "./Communication.js";
+function hexTobin(hex){
+    return (parseInt(hex, 16).toString(2));
+}
+
+function hexToBit(hex){
+    return hexTobin(hex).split("").reverse().map(e=>Number.parseInt(e, 10));
+}
+
 
 export class IStartekEvent {
     private id: any = "istartek-module";
@@ -242,6 +250,10 @@ export class IStartekEvent {
         }
         //this.goInit(unitId, 2554, 0, 1, "W");
 
+
+        
+
+       
     }
 
 
@@ -952,38 +964,63 @@ export class IStartekEvent {
 
         const grid = main.create("div").addClass("grid");
 
-        let param0 = "";
-        let param1 = "";
-        let param2 = "";
-        let param3 = "";
-        let param4 = "";
-        let param5 = "";
-        let param6 = "";
-
-
         
         const query = command.values || {};
 
-       
-            param0 = query.param_0 || "" + "";
-            param1 = query.param_1 || "" + "";
-            param2 = query.param_2 || "" + "";
-            param3 = query.param_3 || "" + "";
-            param4 = query.param_4 || "" + "";
-            param5 = query.param_5 || "" + "";
-            param6 = query.param_6 || "" + "";
-       
+    
+        let param0 = query.param_0 || "" + "";
+        let param1 = query.param_1 || "" + "";
+        let param2 = query.param_2 || "" + "";
+        let param3 = query.param_3 || "" + "";
+        let param4 = query.param_4 || "" + "";
+        let param5 = query.param_5 || "" + "";
+        let param6 = query.param_6 || "" + "";
+    
 
         const row = grid.create("div").addClass("row");
 
-        row.create("span").addClass("label").text(config.fields[0].label);
-        const text0 = row.create("div").text(param0);
+        param0 = "01";
 
-        row.create("span").addClass("label").text(config.fields[1].label);
-        const text1 = row.create("div").text(param1);
+        let value = hexToBit(param0);
 
-        row.create("span").addClass("label").text(config.fields[2].label);
-        const text2 = row.create("div").text(param2);
+        const p1 = [
+            ["GPRS connection status of IP1", value[0] ? "connected": "disconnected"],
+            ["GPRS connection status of IP2", value[1] ? "connected": "disconnected"],
+            ["GPS positioning status", value[2] ? "valid": "invalid"],
+            ["External power connection status", value[3] ? "connected": "disconnected"],
+
+            ["GPS antenna connection status", value[4] ? "connected": "disconnected"],
+            ["Stop status", value[5] ? "stop": "move"],
+            ["Armed state", value[6] ? "armed": "disarmed"],
+            ["RFID/iButton login status", value[7] ? "log in,": "log out"]
+        ];
+
+        param1 = "02";
+
+        value = hexToBit(param1);
+
+        const p2 = [
+            ["input 1 status", value[0] ? "Activo": "Inactivo"],
+            ["input 2 status", value[1] ? "Activo": "Inactivo"],
+            ["input 3 status", value[2] ? "Activo": "Inactivo"],
+            ["input 4 status", value[3] ? "Activo": "Inactivo"]
+        ];
+
+        param2 = "00";
+
+        value = hexToBit(param2);
+        
+        const p3 = [
+            ["output 1 status", value[0] ? "Activo": "Inactivo"],
+            ["output 2 status", value[1] ? "Activo": "Inactivo"],
+            ["output 3 status", value[2] ? "Activo": "Inactivo"],
+            ["output 4 status", value[3] ? "Activo": "Inactivo"]
+        ];
+
+        p1.concat(p2).concat(p3).forEach(e=>{
+            row.create("span").addClass("label").text(e[0]);
+            row.create("div").text(e[1]);
+        })
 
         row.create("span").addClass("label").text(config.fields[3].label);
         const text3 = row.create("div").text(param3);
@@ -994,18 +1031,13 @@ export class IStartekEvent {
         row.create("span").addClass("label").text(config.fields[5].label);
         const text5 = row.create("div").text(param5);
         
-
+        row.create("span").addClass("label").text(config.fields[6].label);
+        const text6 = row.create("div").text(param6);
 
         const _func = (event)=>{
             
             query[index] = {
-                param_0: text0.val(),
-                param_1: text1.val(),
-                param_2: text2.val(),
-                param_3: text3.val(),
-                param_4: text4.val(),
-                param_5: text5.val(),
-                param_6: text5.val()
+                
 
             };
             const formData = new FormData();
