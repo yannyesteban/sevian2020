@@ -51,7 +51,6 @@ export class CommandForm {
             __record_ = JSON.stringify(command.__record_);
         }
         const fields = [];
-        console.log(command.params);
         fields.push({
             caption: "Descripción",
             name: "help",

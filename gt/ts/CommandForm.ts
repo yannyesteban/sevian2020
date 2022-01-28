@@ -93,7 +93,7 @@ export class CommandForm {
 
         const fields = [];
 
-        console.log(command.params)
+        
 
         fields.push({
             caption: "Descripción",
