@@ -651,7 +651,7 @@ export class Report {
                                 if(command.level == 2){
                                     alert("this command is very sensitive !");
                                 }
-                                if(!confirm("Are you sure?")){
+                                if(!confirm("Está seguro?")){
                                     return;
                                 }
                             }
