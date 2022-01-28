@@ -649,7 +649,7 @@ export class Report {
                             if(command.level > 0){
 
                                 if(command.level == 2){
-                                    alert("this command is very sensitive !");
+                                    alert("este comando es muy delicado !");
                                 }
                                 if(!confirm("Está seguro?")){
                                     return;
