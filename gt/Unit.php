@@ -271,9 +271,10 @@ class Unit
 			'infoTrace'		=> $infoTrace->getInit(),
 			'propertysInfo' => $this->getPropertysInfo(),
 			'traceTime'		=> $this->traceTime,
-			'winStatus' => $winStatus
+			'winStatus' 	=> $winStatus,
+			'startSynch'		=> $this->eparams->startSynch ?? false
 		];
-
+		//hx($this->eparams->startSynch );
 		//hx($this->info);
 		$this->setSes('lastDateTime', $lastDateTime);
 		$this->setInit($this->info);

@@ -1,7 +1,7 @@
 {
   "name": "910",
   "label": "910: Reiniciar Dispositivo",
-  "description": "»» Comando de uso delicado: <br>»» Reinicia el equipo el módulo GPS o GPRS o ambos",
+  "description": "»» Comando de uso delicado: <br>»» reinciar el modulo GSM o el GPS o todo el equipo",
   "indexField": "output",
   "indexRange": [],
   "indexValue": [],

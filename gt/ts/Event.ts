@@ -82,7 +82,9 @@ export class Event {
 
     private mark: any = null;
     private popup: any = null;
-
+    
+    private startSynch: boolean = true;
+    
     constructor(info: Event) {
 
         for (var x in info) {

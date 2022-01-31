@@ -40,6 +40,7 @@ export class Pending {
         this.totalPending = -1;
         this.onSubTotal = (unitId, total) => { };
         this.subtotalButton = null;
+        this.startSynch = true;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -75,7 +76,9 @@ export class Pending {
         }
         //this.formIds["0"] = "form-" + String(new Date().getTime());
         this.create(main);
-        this.play();
+        if (this.startSynch) {
+            this.play();
+        }
     }
     create(main) {
         main.addClass("pending-tool");

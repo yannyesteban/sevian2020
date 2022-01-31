@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #map {
+            height: 400px;
+            /* The height is 400 pixels */
+            width: 100%;
+            /* The width is the width of the web page */
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="start()">START</button>
+    <div id="map"></div>
+    <!--<script src="../../build/test/google/index.js" type="module"></script>-->
+    <script>
+
+        const loadScriptFile = (url, async) => {
+            return new Promise((resolve, reject) => {
+                try {
+                    const myScript = document.createElement("script");
+                    //const key = "AIzaSyDZ4BkTZxNRh8GZTqmgGfDI4c2PgcbSuMM";
+                    //const url = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap&libraries=&v=weekly`;
+                    myScript.setAttribute("src", url);//"../../build/test/google/index.js"
+                    myScript.setAttribute("async", async)
+
+                    myScript.addEventListener("load", (event) => {
+                        resolve({
+                            status: true
+                        });
+                    });
+
+                    myScript.addEventListener("error", (event) => {
+                        reject({
+                            status: false,
+                            msg: "error"
+                        });
+                    });
+                    
+                    document.body.appendChild(myScript);
+                } catch (error) {
+                    reject ({
+                        status: false,
+                        msg: error
+                    })
+
+                }
+            });
+
+        };
+
+        function initMap() {
+            // The location of Uluru
+            const uluru = { lat: -25.344, lng: 131.036 };
+            // The map, centered at Uluru
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: uluru,
+            });
+            // The marker, positioned at Uluru
+            const marker = new google.maps.Marker({
+                position: uluru,
+                map: map,
+            });
+        }
+
+        function start(){
+            const key = "AIzaSyDZ4BkTZxNRh8GZTqmgGfDI4c2PgcbSuMM";
+            const url = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap&libraries=&v=weekly`;
+            loadScriptFile(url, true)
+            .then(message => {
+                console.log(message);
+            })
+            .catch(message=>{
+                console.log(message);
+            })
+        }
+        
+    </script>
+    <!--<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZ4BkTZxNRh8GZTqmgGfDI4c2PgcbSuMM&callback=initMap&libraries=&v=weekly"></script>-->
+</body>
+
+</html>

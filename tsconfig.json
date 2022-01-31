@@ -18,6 +18,6 @@
 
     },
     //"include":["ts/y2/*", "ts/*"]
-    "include": ["./test/*.*","./sevian/ts/*","./gt/ts/*","./lib/*"],
+    "include": ["./test/*.*","./test/google/*.*","./sevian/ts/*","./gt/ts/*","./lib/*"],
 
 }

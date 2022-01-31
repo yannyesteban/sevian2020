@@ -233,11 +233,13 @@ class Event
                 'unitPanelId'	=>$this->eparams->unitPanelId?? '',
 				'infoForm' 		=> $infoForm->getInit(),
 				'mapName'     	=> $this->eparams->mapName ?? '',
+				'startSynch'		=> $this->eparams->startSynch ?? false
 
 
             ]
 
 		]);
+		
 
     }
 

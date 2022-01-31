@@ -114,6 +114,9 @@ export class Communication {
 
     private maxRecords = 50;
     private sound: Sound = null;
+
+    private startSynch: boolean = true;
+
     private socketServer = {
         host: "127.0.0.1",
         port: 3310
@@ -228,9 +231,8 @@ export class Communication {
             });
 
 
-            if (this.showConnectedUnit) {
-                //return;
-                this.play2();
+            if(this.startSynch){
+                this.play();
             }
 
             if (this.connectionId) {
@@ -1105,7 +1107,7 @@ export class Communication {
     }
 
 
-    play2() {
+    play() {
 
 
         if (this._timer3) {

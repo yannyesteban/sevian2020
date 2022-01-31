@@ -2,6 +2,7 @@
 namespace GT;
 
 require_once MAIN_PATH.'gt/Trait.php';
+require_once MAIN_PATH.'gt/Trait/DBConfig.php';
 
 class History
     extends \Sevian\Element

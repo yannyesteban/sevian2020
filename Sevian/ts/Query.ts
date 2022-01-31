@@ -246,7 +246,7 @@ export class SQObject{
 
 		if(className){
 			if(Array.isArray(className)){
-				className.forEach(item => this.e.classList.add(item || ""));
+				className.forEach(item => this.e.classList.add(item));
 				
 			}else if(typeof className === "string"){
 				this.e.classList.add(className);

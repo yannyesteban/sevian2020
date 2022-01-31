@@ -74,6 +74,7 @@ export class Communication {
         this.winNames = WNames;
         this.maxRecords = 50;
         this.sound = null;
+        this.startSynch = true;
         this.socketServer = {
             host: "127.0.0.1",
             port: 3310
@@ -166,9 +167,8 @@ export class Communication {
                     }
                 }
             });
-            if (this.showConnectedUnit) {
-                //return;
-                this.play2();
+            if (this.startSynch) {
+                this.play();
             }
             if (this.connectionId) {
                 const connectionButton = $(this.connectionId);
@@ -853,7 +853,7 @@ export class Communication {
             }
         });
     }
-    play2() {
+    play() {
         if (this._timer3) {
             clearTimeout(this._timer3);
         }

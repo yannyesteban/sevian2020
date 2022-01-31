@@ -1,15 +1,19 @@
 <?php
-
+//AIzaSyDZ4BkTZxNRh8GZTqmgGfDI4c2PgcbSuMM
 namespace GT;
-require_once MAIN_PATH.'gt/Trait.php';
+require_once MAIN_PATH.'gt/Trait/DBConfig.php';
 
 class Map extends \Sevian\Element implements \Sevian\UserInfo{
 
 	public $jsClassName = 'GTMap';
+	
 	use DBConfig;
+	/*
 	use DBImage {
 		load as loadImage;
 	}
+	*/
+	
 	public function __construct($info = []){
         foreach($info as $k => $v){
 			$this->$k = $v;
@@ -80,12 +84,41 @@ class Map extends \Sevian\Element implements \Sevian\UserInfo{
 		
 	}
 
+	private function loadImage(){
+
+        $path = PATH_IMAGES.'marks/';
+        $cn = $this->cn;
+        $cn->query = "SELECT name, CONCAT('$path', image,'.png') as src FROM image";
+
+        $result = $this->cn->execute();
+
+		return $cn->getDataAll($result);
+
+    }
+
+    private function load2(){
+
+        $cn = $this->cn;
+        $cn->query = "SELECT * FROM image";
+
+        $result = $this->cn->execute();
+        $data = [];
+		while($rs = $cn->getDataAssoc($result)){
+
+            $data[$rs['name']] = PATH_IMAGES."marks/".$rs['image'];
+        }
+
+        return $data;
+    }
+
 	public function setUserInfo($info){
         $this->_userInfo = $info;
     }
-    public function getUserInfo(){
+   
+	public function getUserInfo(){
         return $this->_userInfo;
     }
+	
 	public function getUser(){
         return $this->_userInfo->user;
     }

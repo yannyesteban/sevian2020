@@ -115,6 +115,7 @@ class Pending
                 'unitPanelId'=>$this->eparams->unitPanelId?? "",
                 'infoMenuId'    => $this->eparams->infoMenu?? '',
                 'totalPending'=>$this->getTotalPending(0),
+                'startSynch'		=> $this->eparams->startSynch ?? false
 
             ]
 

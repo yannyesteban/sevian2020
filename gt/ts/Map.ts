@@ -59,6 +59,7 @@ export class Map {
             Map._loadFunctions[mapName] = [];
         }
         Map._loadFunctions[mapName].push(fn);
+
     }
     constructor(info) {
         
@@ -93,6 +94,7 @@ export class Map {
 
         this.map.on("load", (event) => {
             if (Map._loadFunctions[this.name]) {
+                
                 for (let fn of Map._loadFunctions[this.name]) {
                     fn(this.map, this);
                 }

@@ -2006,7 +2006,7 @@ trait DBEvent{
 
 }
 
-trait DBConfig{
+trait DBConfig1{
     private $cn = null;
     private function loadUserConfig($user){
 

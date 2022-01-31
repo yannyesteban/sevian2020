@@ -45,6 +45,7 @@ export class Event {
         this.mapName = "";
         this.mark = null;
         this.popup = null;
+        this.startSynch = true;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];

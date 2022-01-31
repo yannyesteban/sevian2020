@@ -72,6 +72,7 @@ export class Pending {
 
     private subtotalButton: any = null;
 
+    private startSynch: boolean = true;
     constructor(info: Pending) {
 
         for (var x in info) {
@@ -135,7 +136,9 @@ export class Pending {
         //this.formIds["0"] = "form-" + String(new Date().getTime());
 
         this.create(main);
-        this.play();
+        if(this.startSynch){
+            this.play();
+        }
 
     }
 

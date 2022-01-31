@@ -355,6 +355,9 @@ export class Unit {
 
 	public onChange: (unitId:number) => void = (unitId:number) => { };
 
+
+	private startSynch: boolean = true;
+
 	static _instances: object[] = [];
 
 
@@ -364,7 +367,7 @@ export class Unit {
 	}
 
 	constructor(info) {
-
+		console.log(info)
 		for (var x in info) {
 			if (this.hasOwnProperty(x)) {
 				this[x] = info[x];
@@ -576,7 +579,10 @@ export class Unit {
 				}
 			}
 
-			this.play();
+			if(this.startSynch){
+				this.play();
+			}
+			
 
 			this.initTraceControl();
 			//this.playTrace();
@@ -588,9 +594,6 @@ export class Unit {
 
 		});
 
-		if (this.showConnectedUnit) {
-			this.play2();
-		}
 
 
 	}

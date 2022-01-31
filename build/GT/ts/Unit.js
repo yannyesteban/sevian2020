@@ -270,6 +270,8 @@ export class Unit {
         this.onOutput = (unitId) => { };
         this.onAny = (unitId, type) => { };
         this.onChange = (unitId) => { };
+        this.startSynch = true;
+        console.log(info);
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -433,15 +435,14 @@ export class Unit {
                     };
                 }
             }
-            this.play();
+            if (this.startSynch) {
+                this.play();
+            }
             this.initTraceControl();
             //this.playTrace();
             //map.map.addImage("t1", new TraceMarker(map.map, 30), { pixelRatio: 1 });
             return;
         });
-        if (this.showConnectedUnit) {
-            this.play2();
-        }
     }
     static getInstance(name) {
         return Unit._instances[name];

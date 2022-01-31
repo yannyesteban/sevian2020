@@ -130,7 +130,8 @@
 				"mapName": "map_01",
 				"infoId": "gt-info-11",
 				"infoMenuId": "panel-7",
-				"searchUnitId": 3
+				"searchUnitId": 3,
+				"startSynch": "@start_synch"
 			},
 			"type": 0,
 			"class": "",
@@ -204,7 +205,8 @@
 				"unitPanelId": "gt-unit-10",
 				"infoMenu": "panel-7",
 				"gtServer": "@GT_SERVER",
-				"eventPanelId" : "event"
+				"eventPanelId": "event",
+				"startSynch": "@start_synch"
 			},
 			"type": 0,
 			"class": "",
@@ -217,7 +219,8 @@
 			"name": "gt-event",
 			"method": "init",
 			"eparams": {
-				"mapName": "map_01"
+				"mapName": "map_01",
+				"startSynch": "@start_synch"
 			},
 			"type": 0,
 			"class": "",
@@ -246,7 +249,8 @@
 			"eparams": {
 				"socketId": "comm",
 				"unitPanelId": "gt-unit-10",
-				"infoMenu": "panel-9"
+				"infoMenu": "panel-9",
+				"startSynch": "@start_synch"
 			},
 			"type": 0,
 			"class": "",
@@ -275,7 +279,7 @@
 			"eparams": {
 				"socketId": "comm",
 				"unitPanelId": "gt-unit-10",
-				"eventPanelId" : "event"
+				"eventPanelId": "event"
 			},
 			"type": 0,
 			"class": "",
@@ -288,7 +292,6 @@
 			"name": "gt-search",
 			"method": "load",
 			"eparams": {
-
 				"unitPanelId": "gt-unit-10"
 			},
 			"type": 0,
