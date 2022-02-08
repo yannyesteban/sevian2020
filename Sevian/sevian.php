@@ -1181,7 +1181,9 @@ class S{
 			//echo $script;exit;
 
 		//echo	$json = json_encode(self::getJsPanel(), JSON_PRETTY_PRINT);
-		return json_encode(self::$_response, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+		return json_encode(self::$_response, JSON_PRETTY_PRINT 
+		#| JSON_NUMERIC_CHECK
+	);
 
 	}
 

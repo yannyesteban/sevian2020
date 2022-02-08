@@ -633,7 +633,7 @@ export class Report {
 
                             command.fields.forEach((element, index: number) => {
 
-                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue().toString();
                             });
                             form.getInput("status").setValue(0);
                             form.getInput("mode").setValue(1);
@@ -658,7 +658,7 @@ export class Report {
 
                             command.fields.forEach((element, index: number) => {
 
-                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue().toString();
                             });
                             form.getInput("status").setValue(1);
                             form.getInput("mode").setValue(1);
@@ -675,7 +675,7 @@ export class Report {
 
                             command.fields.forEach((element, index2: number) => {
 
-                                params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue();
+                                params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue().toString();
                             });
                             form.getInput("status").setValue(1);
                             form.getInput("mode").setValue(2);
@@ -889,6 +889,7 @@ export class Report {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
+                    
                     if (type == "0") {
                         this.iniLists(json.eventList, json.commandList, type);
                         this.createMainForm(json.command)
@@ -899,6 +900,7 @@ export class Report {
 
                 },
                 goSave: (json) => {
+                    
                     this.iniLists(json.eventList, json.commandList, type);
                     //this.createForm(json.command, type);
                     this.loadTab(json.command, type);

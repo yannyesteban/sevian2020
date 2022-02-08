@@ -363,6 +363,9 @@ class Report
         }
        // hx("");
         //hx($c['fields']);
+
+        
+
         return [
                 "commandParam" => $this->getCommandFieldsParams($unitId, $commandId),
                 //"paramData"   => ,

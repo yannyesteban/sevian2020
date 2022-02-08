@@ -498,7 +498,7 @@ export class Report {
                         action: (item, event) => {
                             let params = {};
                             command.fields.forEach((element, index) => {
-                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue().toString();
                             });
                             form.getInput("status").setValue(0);
                             form.getInput("mode").setValue(1);
@@ -519,7 +519,7 @@ export class Report {
                                 }
                             }
                             command.fields.forEach((element, index) => {
-                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue();
+                                params[`param_${index}`] = form.getInput(`param_${index}`).getValue().toString();
                             });
                             form.getInput("status").setValue(1);
                             form.getInput("mode").setValue(1);
@@ -532,7 +532,7 @@ export class Report {
                         action: (item, event) => {
                             let params = {};
                             command.fields.forEach((element, index2) => {
-                                params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue();
+                                params[`param_${index2}`] = form.getInput(`param_${index2}`).getValue().toString();
                             });
                             form.getInput("status").setValue(1);
                             form.getInput("mode").setValue(2);
