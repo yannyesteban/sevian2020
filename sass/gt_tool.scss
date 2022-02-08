@@ -258,7 +258,7 @@
       }
     }
     &.type-W {
-      li:not(li:nth-child(2)) {
+      li:not(li:nth-child(2)):not(li:nth-child(1)) {
         display: none !important;
       }
     }

@@ -257,7 +257,7 @@
   display: none !important;
 }
 
-.report-tool .sg-menu.type-W li:not(li:nth-child(2)) {
+.report-tool .sg-menu.type-W li:not(li:nth-child(2)):not(li:nth-child(1)) {
   display: none !important;
 }
 
