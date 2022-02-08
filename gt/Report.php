@@ -890,13 +890,15 @@ class Report
     private function loadFile($unitId){
         $cn = $this->cn;
 
-        $cn->query = "
-        SELECT c.command, COALESCE(role, c.command) as role, uc.id, uc.unit_id, uc.command_id, uc.index, uc.mode, uc.name,
+        $cn->query = "SELECT
+        c.command,
+        COALESCE(c.label, role, c.command) as role, uc.id, uc.unit_id, uc.command_id, uc.index, uc.mode, uc.name,
         CASE when uc.index > 0 THEN COALESCE(uc.name, uc.index) ELSE '' end as cindex
         FROM unit_command uc
         INNER JOIN device_command as c ON c.id = uc.command_id
         LEFT JOIN command_role as r ON r.id = c.role_id
-        WHERE uc.unit_id = '$unitId' AND c.role_id IN (0,1) AND c.type = 'A'
+        WHERE uc.unit_id = '$unitId' 
+        #AND c.role_id IN (0,1) AND c.type = 'A'
 
         ";
 
@@ -917,18 +919,25 @@ class Report
         }
         $cn = $this->cn;
 
-        $cn->query = "SELECT command_id, uc.index, COALESCE(name, '') as name, uc.params
-        FROM unit_command as uc  WHERE id IN ($sqlList)
+        $cn->query = "SELECT command_id, uc.index, COALESCE(name, '') as name, uc.params, uc.query
+        FROM unit_command as uc 
+        WHERE id IN ($sqlList)
         ";
         $data = [];
         $result = $this->cn->execute();
+        $query2 = '';
         while($rs = $cn->getDataAssoc($result)){
 
             $data[] = [
                 'command_id'=>$rs['command_id'],
                 'index'=>$rs['index'],
                 'name'=>$rs['name'],
-                'params'=>json_decode($rs['params'])
+
+                'data'=>[
+                    'params'=>json_decode($rs['params']),
+                    'query'=>json_decode($rs['query'])
+                ]
+                
 
             ];
 
@@ -957,9 +966,9 @@ class Report
 
     private function importFile($unitId, $id){
         $cn = $this->cn;
-
+        $unitId=5555;
         $cn->query = "SELECT * FROM command_saved WHERE id = '$id'";
-        $data = [];
+        
         $result = $this->cn->execute();
         if($rs = $cn->getDataAssoc($result)){
             $params = json_decode($rs['params']);
@@ -969,16 +978,21 @@ class Report
                     $commandId = $item->command_id;
                     $index = $item->index;
                     $name = $item->name;
-                    //hx(json_encode($item->params));
-                    $params2 = json_encode($item->params);
+                    //hr($item->data);
+                    $params2 = json_encode($item->data);
+                    //hx($item->data->params);
+
+                    $p = json_encode($item->data->params??'');
+                    $q = json_encode($item->data->query??'');
                     $cn->query = "INSERT INTO unit_command
-                            (`unit_id`, `command_id`, `index`, `name`, `params`)
+                            (`unit_id`, `command_id`, `index`, `name`, `params`, `query`)
                         VALUES
-                            ('$unitId','$commandId', '$index', '$name','$params2')
+                            ('$unitId','$commandId', '$index', '$name','$p', '$q')
                         ON DUPLICATE KEY UPDATE
-                        params = '$params2', name = '$name';
+                        params = '$p', name = '$name', query = '$q';
 
                         ";
+                    //hr($cn->query);
                    $result = $this->cn->execute();
 
                 }

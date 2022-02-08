@@ -609,3 +609,19 @@
     }
    }
  }
+
+
+ .info-form{
+   height: 100%;
+   overflow: auto;
+   padding: 2px;
+   .info-form-main{
+     display: flex;
+     flex-direction: column;
+     height: 100%;
+     overflow: auto;
+   }
+   &[data-info-mode="error"]{
+     display: none;
+   }
+ }

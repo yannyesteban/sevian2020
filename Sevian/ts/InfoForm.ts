@@ -24,9 +24,9 @@ export class InfoForm{
 
     public onSetData: (data:any) => void = (data) => { };
     constructor(info:any){
-        let x:string;
+        
 
-        for(x in info){
+        for(let x in info){
             if(this.hasOwnProperty(x)) {
                 this[x] = info[x];
             }
@@ -101,9 +101,8 @@ export class InfoForm{
     }
 
     public setMode(mode?: string) {
-        if(mode){
-            this.mode = mode;
-        }
+        this.mode = mode || "";
+        
 
         this.main.ds("infoMode", this.mode);
     }
@@ -203,8 +202,11 @@ export class InfoForm{
 
             levels.forEach(key => {
 
-                if (valid && tempData[key] !== undefined) {
-                    tempData = tempData[key] || "";
+                if(valid && tempData[key] !== undefined && tempData[key] === null){
+                    tempData = "";
+                    valid = false;
+                }else if (valid && tempData[key] !== undefined) {
+                    tempData = tempData[key];
                     valid = true;
                 } else {
                     valid = false;

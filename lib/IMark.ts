@@ -77,6 +77,7 @@ export class IMark{
 
 
         this.setImage(this.image);
+        console.log(this.image)
         this._marker = new mapboxgl.Marker(this._image).setLngLat(this.coordinates);
         this._marker.setPopup(popup);
         this._marker.setRotation(this.rotation);

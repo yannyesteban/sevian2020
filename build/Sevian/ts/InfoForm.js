@@ -18,8 +18,7 @@ export class InfoForm {
         this.mode = "";
         this.modePropertys = [];
         this.onSetData = (data) => { };
-        let x;
-        for (x in info) {
+        for (let x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
             }
@@ -73,9 +72,7 @@ export class InfoForm {
         });
     }
     setMode(mode) {
-        if (mode) {
-            this.mode = mode;
-        }
+        this.mode = mode || "";
         this.main.ds("infoMode", this.mode);
     }
     setTemplate(template, data, master) {
@@ -146,8 +143,12 @@ export class InfoForm {
             let tempData = data;
             let valid = true;
             levels.forEach(key => {
-                if (valid && tempData[key] !== undefined) {
-                    tempData = tempData[key] || "";
+                if (valid && tempData[key] !== undefined && tempData[key] === null) {
+                    tempData = "";
+                    valid = false;
+                }
+                else if (valid && tempData[key] !== undefined) {
+                    tempData = tempData[key];
                     valid = true;
                 }
                 else {

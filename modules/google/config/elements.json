@@ -1,0 +1,440 @@
+[
+    {
+        "name": "s-info-form",
+        "enable": true,
+        "file": "{@MAIN_PATH}Sigefor/InfoForm.php",
+        "class": "\\Sigefor\\InfoForm",
+        "init": {
+            "patternJsonFile": "{@JSON_PATH}/{name}.json",
+            "patternTemplateFile": "{@TEMPLATES_PATH}/{name}.html"
+        },
+        "js": [],
+        "css": []
+    },
+    {
+        "name": "s-structure",
+        "enable": true,
+        "file": "{@MAIN_PATH}Sigefor/Structure3.php",
+        "class": "\\Sigefor\\structure3",
+        "init": {
+            "patternJsonFile": "{@JSON_PATH}/{name}.json",
+            "patternTemplateFile": "{@TEMPLATES_PATH}/{name}.html"
+        },
+        "js": [],
+        "css": []
+    },
+    {
+        "name": "s-module",
+        "enable": true,
+        "file": "{@MAIN_PATH}Sigefor/Module3.php",
+        "class": "\\Sigefor\\Module3",
+        "js": [],
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "s-menu",
+        "enable": true,
+        "file": "{@MAIN_PATH}Sigefor/Menu2.php",
+        "class": "\\Sigefor\\Menu2",
+        "js": [],
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "s-form",
+        "enable": true,
+        "file": "{@MAIN_PATH}Sigefor/Form2.php",
+        "class": "\\Sigefor\\Form2",
+        "js": [],
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json",
+            "patternFormFile": "{@MAIN_PATH}json/form/{name}.json",
+            "patternMenuFile": "{@MAIN_PATH}json/menu/{name}.json"
+        }
+    },
+    {
+        "name": "form",
+        "enable": true,
+        "file": "{@MAIN_PATH}Sigefor/Form.php",
+        "class": "\\Sigefor\\Form",
+        "js": [],
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "sgMap",
+        "file": "{@MAIN_PATH}Sigefor/Map.php",
+        "class": "\\Sevian\\Sigefor\\Map",
+        "enable": false,
+        "js": [
+            {
+                "file_": "https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js",
+                "begin_": true
+            },
+            {
+                "file": "https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js",
+                "begin": true
+            },
+            {
+                "file": "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v0.10.1/mapbox-gl-language.js",
+                "begin": true
+            },
+            {
+                "file": "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js",
+                "begin": true
+            },
+            {
+                "file": "https://unpkg.com/@turf/turf/turf.min.js",
+                "begin": true
+            },
+            {
+                "file2": "{@MAIN_PATH}build/lib/MapBox.js",
+
+                "begin": true
+            }
+        ],
+        "css": [
+            "https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css",
+            "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css"
+        ]
+    },
+
+    {
+        "name": "map-admin",
+        "file": "{@MAIN_PATH}gt/MapAdmin.php",
+        "class": "\\GT\\MapAdmin",
+        "enable": true,
+        "module":{
+            "name":"MapAdmin",
+            "alias":"GTMapAdmin",
+            "src":"{@MAIN_PATH}build/GT/ts/MapAdmin.js"
+        },
+        "css": [
+            "https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css",
+            "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css"
+        ]
+    },
+    {
+        "name": "gt-unit-map",
+        "file": "{@MAIN_PATH}gt/UnitMap.php",
+        "class": "\\GT\\UnitMap",
+        "enable": true,
+        "module":{
+            "name":"UnitMap",
+            "alias":"GTUnitMap",
+            "src":"{@MAIN_PATH}build/GT/ts/UnitMap.js"
+        },
+        "css": [],
+        "init": {
+            
+        }
+    },
+    {
+        "name": "gt-unit-menu",
+        "file": "{@MAIN_PATH}gt/UnitMenu.php",
+        "class": "\\GT\\UnitMenu",
+        "enable": true,
+        "module":{
+            "name":"UnitMenu",
+            "alias":"GTUnitMenu",
+            "src":"{@MAIN_PATH}build/GT/ts/UnitMenu.js"
+        },
+        "css": [],
+        "init": {
+            
+        }
+    },
+    {
+        "name": "gt-unit-info",
+        "file": "{@MAIN_PATH}gt/UnitInfo.php",
+        "class": "\\GT\\UnitInfo",
+        "enable": true,
+        "module":{
+            "name":"UnitInfo",
+            "alias":"GTUnitInfo",
+            "src":"{@MAIN_PATH}build/GT/ts/UnitInfo.js"
+        },
+        "css": [],
+        "init": {
+            
+        }
+    },
+    {
+        "name": "gt-map",
+        "file": "{@MAIN_PATH}gt/Map.php",
+        "class": "\\GT\\Map",
+        "enable": true,
+        "module":{
+            "name":"Map",
+            "alias":"GTMap",
+            "src":"{@MAIN_PATH}build/GT/ts/Map.js"
+        },
+        "js": [
+            {
+                "file_": "{@MAIN_PATH}build/GT/ts/Map.js",
+                "module": true
+            }
+        ],
+        "css": []
+    },
+    {
+        "name": "gt-info",
+        "file": "{@MAIN_PATH}gt/Info.php",
+        "class": "\\GT\\Info",
+        "enable": true,
+        "module":{
+            "name":"GTInfo",
+            "src":"{@MAIN_PATH}build/GT/ts/Info.js"
+        },
+        "js": [
+            {
+                "file_": "{@MAIN_PATH}build/GT/ts/Info.js"
+            }
+        ],
+        "css": [],
+        "init": {}
+    },
+    {
+        "name": "gt_unit",
+        "file": "{@MAIN_PATH}gt/Unit.php",
+        "class": "\\GT\\Unit",
+        "enable": true,
+        "module":{
+            "name":"Unit",
+            "alias":"GTUnit",
+            "src":"{@MAIN_PATH}build/GT/ts/Unit.js"
+        },
+        "js": [
+            {
+                "file_": "{@MAIN_PATH}build/GT/ts/Unit.js",
+                "begin": false
+            }
+        ],
+        "css": []
+    },
+    {
+        "name": "gt_history",
+        "file": "{@MAIN_PATH}gt/History.php",
+        "class": "\\GT\\History",
+        "enable": true,
+        "module":{
+            "name":"History",
+            "alias":"GTHistory",
+            "src":"{@MAIN_PATH}build/GT/ts/History.js"
+        },
+        "js": [
+            {
+                "file_": "{@MAIN_PATH}build/GT/ts/History.js",
+                "begin": false
+            }
+        ],
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-site",
+        "file": "{@MAIN_PATH}gt/Site.php",
+        "class": "\\GT\\Site",
+        "enable": true,
+        "module":{
+            "name":"Site",
+            "alias":"GTSite",
+            "src":"{@MAIN_PATH}build/GT/ts/Site.js"
+        },
+        "js": [
+            {
+                "file_": "{@MAIN_PATH}build/GT/ts/Site.js",
+                "begin": false
+            }
+        ],
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-communication",
+        "file": "{@MAIN_PATH}gt/Communication.php",
+        "class": "\\GT\\Communication",
+        "enable": true,
+        "module":{
+            "name":"Communication",
+            "alias":"GTCommunication",
+            "src":"{@MAIN_PATH}build/GT/ts/Communication.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-event",
+        "file": "{@MAIN_PATH}gt/Event.php",
+        "class": "\\GT\\Event",
+        "enable": true,
+        "module":{
+            "name":"Event",
+            "alias":"GTEvent",
+            "src":"{@MAIN_PATH}build/GT/ts/Event.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "h-command",
+        "file": "{@MAIN_PATH}gt/HCommand.php",
+        "class": "\\GT\\HCommand",
+        "enable": true,
+        "module_":{ },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-geofence",
+        "file": "{@MAIN_PATH}gt/Geofence.php",
+        "class": "\\GT\\Geofence",
+        "enable": true,
+        "module":{
+            "name":"Geofence",
+            "alias":"GTGeofence",
+            "src":"{@MAIN_PATH}build/GT/ts/Geofence.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-alarm",
+        "file": "{@MAIN_PATH}gt/Alarm.php",
+        "class": "\\GT\\Alarm",
+        "enable": true,
+        "module":{
+            "name":"Alarm",
+            "alias":"GTAlarm",
+            "src":"{@MAIN_PATH}build/GT/ts/Alarm.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-report",
+        "file": "{@MAIN_PATH}gt/Report.php",
+        "class": "\\GT\\Report",
+        "enable": true,
+        "module":{
+            "name":"Report",
+            "alias":"GTReport",
+            "src":"{@MAIN_PATH}build/GT/ts/Report.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-unit-config",
+        "file": "{@MAIN_PATH}gt/UnitConfig.php",
+        "class": "\\GT\\UnitConfig",
+        "enable": true,
+        "module":{
+            "name":"UnitConfig",
+            "alias":"GTUnitConfig",
+            "src":"{@MAIN_PATH}build/GT/ts/UnitConfig.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-pending",
+        "file": "{@MAIN_PATH}gt/Pending.php",
+        "class": "\\GT\\Pending",
+        "enable": true,
+        "module":{
+            "name":"Pending",
+            "alias":"GTPending",
+            "src":"{@MAIN_PATH}build/GT/ts/Pending.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-output",
+        "file": "{@MAIN_PATH}gt/Output.php",
+        "class": "\\GT\\Output",
+        "enable": true,
+        "module":{
+            "name":"Output",
+            "alias":"GTOutput",
+            "src":"{@MAIN_PATH}build/GT/ts/Output.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-event_admin",
+        "file": "{@MAIN_PATH}gt/EventAdmin.php",
+        "class": "\\GT\\EventAdmin",
+        "enable": true,
+        "module":{
+            "name":"EventAdmin",
+            "alias":"GTEventAdmin",
+            "src":"{@MAIN_PATH}build/GT/ts/EventAdmin.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-search",
+        "file": "{@MAIN_PATH}gt/Search.php",
+        "class": "\\GT\\Search",
+        "enable": true,
+        "module":{
+            "name":"Search",
+            "alias":"GTSearch",
+            "src":"{@MAIN_PATH}build/GT/ts/Search.js"
+        },
+        "css": [],
+        "init": {
+            "patternJsonFile": "{@MAIN_PATH}json/{name}.json"
+        }
+    },
+    {
+        "name": "gt-unit-store",
+        "file": "{@MAIN_PATH}gt/UnitStore.php",
+        "class": "\\GT\\UnitStore",
+        "enable": true,
+        "module":{
+            "name":"UnitStore",
+            "alias":"GTUnitStore",
+            "src":"{@MAIN_PATH}build/GT/ts/UnitStore.js"
+        }
+        
+    }
+
+
+]

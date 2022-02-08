@@ -72,11 +72,13 @@
         }
 
         function start(){
-            const key = "AIzaSyDZ4BkTZxNRh8GZTqmgGfDI4c2PgcbSuMM";
-            const url = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap&libraries=&v=weekly`;
+            const key = "AIzaSyBhPsH8OjHCypjgwt_Dl7A_W8wlBbyPink";//"AIzaSyDZ4BkTZxNRh8GZTqmgGfDI4c2PgcbSuMM";
+            const url = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=&v=weekly`;//&callback=initMap
+            //const url = "https://maps.google.com/maps/api/js?key=AIzaSyCr8MljMe17YC07PuG9CtOdHSZDZgAvmew&libraries=drawing";
             loadScriptFile(url, true)
             .then(message => {
                 console.log(message);
+                initMap();
             })
             .catch(message=>{
                 console.log(message);

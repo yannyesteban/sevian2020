@@ -1,0 +1,118 @@
+{
+	"structure": "cota",
+	"title": "Módulo GT",
+	"template": "gt-cota",
+	"templateNameIni": "/gt-webcar",
+	"templateName": "/gt/webcar",
+	"themeTemplate": "",
+	"class": "webcar",
+	"mainPanel": "panel-4",
+	"params": {},
+	"wins": [
+		{
+			"name": "v1",
+			"caption": "Catálogo @module_name",
+			"mode": "custom",
+			"width": "400px",
+			"height": "400px",
+			"top": "middle",
+			"left": "center",
+			"visible": false,
+			"child": "#win_001"
+		}
+	],
+	"roles": [],
+	"publicRole": true,
+	"elements": [
+		{
+			"id": "unit-store",
+			"element": "gt-unit-store",
+			"name": "",
+			"method": "load",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		},
+		{
+			"id": "panel-4",
+			"element": "map-admin",
+			"name": "map_01",
+			"method": "load",
+			"eparams": {
+				
+				"clients" : ["unit-menu"]
+			},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		},
+		{
+			"id": "unit-map",
+			"element": "gt-unit-map",
+			"name": "",
+			"method": "load",
+			"eparams": {
+				"unitStoreId" : "unit-store",
+				"mapAdminId": "panel-4"
+			 },
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		},
+		
+		
+		{
+			"id": "unit-menu",
+			"element": "gt-unit-menu",
+			"name": "",
+			"method": "load",
+			"eparams": {
+				"unitStoreId" : "unit-store"
+			 },
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		},
+
+		{
+			"id": "unit-info",
+			"element": "gt-unit-info",
+			"name": "",
+			"method": "load",
+			"eparams": {
+				"unitStoreId" : "unit-store"
+			 },
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		},
+		{
+			"id": "panel-2",
+			"element": "s-menu",
+			"name": "/gt/menus/google",
+			"method": "create",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		},
+		{
+			"id": "panel-3",
+			"element": "form",
+			"name": "/gt/forms/main_unit2",
+			"method": "request",
+			"eparams": {},
+			"type": 0,
+			"class": "",
+			"debug": 0,
+			"design": 0
+		}
+	]
+}

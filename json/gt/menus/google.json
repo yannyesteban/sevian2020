@@ -1,0 +1,30 @@
+{
+	"name":"geofence_menu",
+	"caption":"",
+	"type":"accordion",
+	"subType":"default",
+	"className":["sevian","horizontal","webcar-menu"],
+	"autoClose":false,
+	"params":false,
+	"onDataUser_":"S.send3(dataUser);",
+	"items":[
+
+		{
+			"caption":"",
+			"imageClass":"icon-unit",
+			"propertys":{
+				"title":"Menú Unidades"
+			},
+			"action":"S.getElement('unit-menu').showMenu()"
+		},
+		{
+			"caption":"",
+			"imageClass":"icon-unit",
+			"propertys":{
+				"title":"Menú Unidades"
+			},
+			"action":"S.getElement('panel-4').toggleMap()"
+		}
+
+	]
+}

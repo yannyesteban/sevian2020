@@ -645,4 +645,26 @@
 .tool-istartek-ext .grid .row {
   display: contents;
 }
+
+.info-form {
+  height: 100%;
+  overflow: auto;
+  padding: 2px;
+}
+
+.info-form .info-form-main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.info-form[data-info-mode="error"] {
+  display: none;
+}
 /*# sourceMappingURL=gt_tool.css.map */

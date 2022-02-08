@@ -1,0 +1,16 @@
+{
+	"module": "Google",
+	"title": "Módulo Principal",
+	"structure": "login",
+	"config": {},
+	"procedure": {},
+	"sequence": {},
+	"params": {},
+	"vars": {
+		"structure": "google",
+		"module_name": "@GT_TITLE",
+		"start_synch": "@GT_INIT_SYNC"
+	},
+	"theme": "sevian",
+	"debug": true
+}

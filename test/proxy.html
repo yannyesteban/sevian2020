@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+let handlers = Symbol('handlers');
+
+function makeObservable(target) {
+  // 1. Initialize handlers store
+  target[handlers] = [];
+
+  // Store the handler function in array for future calls
+  target.observe = function(handler) {
+    this[handlers].push(handler);
+  };
+
+  // 2. Create a proxy to handle changes
+  return new Proxy(target, {
+    set(target, property, value, receiver) {
+      let success = Reflect.set(...arguments); // forward the operation to object
+      if (success) { // if there were no error while setting the property
+        // call all handlers
+        console.log(target)
+        target[handlers].forEach(handler => handler(property, value));
+      }
+      return success;
+    }
+  });
+}
+
+let user = {};
+
+user = makeObservable(user);
+
+user.observe((key, value) => {
+  alert(`SET ${key}=${value}`);
+});
+
+user.name = "John";
+user.p = []
+
+user.p.push(888)
+
+
+    </script>
+</body>
+</html>

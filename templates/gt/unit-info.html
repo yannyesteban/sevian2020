@@ -1,0 +1,105 @@
+<div class="info-form-main info-main gt-info-main unit-conn-{=connected}">
+  <div class="info-body">
+    <div class="name" data-id="vehicle_name"></div>
+    <div class="unit-conn">
+      <div class="true">Unidad Conectada</div>
+      <div class="false">Unidad Desconectada</div>
+    </div>
+    <div class="row">
+      <div>ID {=unitId}</div>
+      <div>{=device_name}</div>
+    </div>
+
+    <div class="row">
+      <div>Marca</div>
+      <div>{=brand}</div>
+    </div>
+
+    <div class="row">
+      <div>Modelo</div>
+      <div>{=model}</div>
+    </div>
+
+    <div class="row">
+      <div>Color</div>
+      <div>{=color}</div>
+    </div>
+
+    <div class="row">
+      <div>Matrícula</div>
+      <div>{=plate}</div>
+    </div>
+
+    <div class="row">
+      <div>Fecha</div>
+      <div>{=uDate}</div>
+    </div>
+    <div class="row">
+      <div>Hora</div>
+      <div>{=uTime}</div>
+    </div>
+    <div class="row">
+      <div>Longitud</div>
+      <div>{=longitude}</div>
+    </div>
+    <div class="row">
+      <div>Latitud</div>
+      <div>{=latitude}</div>
+    </div>
+    <div class="row">
+      <div>Velocidad</div>
+      <div>{=speed}</div>
+    </div>
+    <div class="row">
+      <div>Rumbo</div>
+      <div>{=heading}</div>
+    </div>
+    <div class="row">
+      <div>Satelites</div>
+      <div>{=satellite}</div>
+    </div>
+
+    <div class="inputs">
+      <div
+        data-detail="inputs"
+        data-input-id="{=inputs.id}"
+        data-input-value="{=inputs.on}"
+      >
+        <span>{=inputs.name}</span
+        ><span data-input-value="{=inputs.value}">{=inputs.value}</span>
+      </div>
+    </div>
+    <div class="outputs">
+      <div
+        data-detail="outputs"
+        data-input-id="{=outputs.id}"
+        data-input-value="{=outputs.on}"
+      >
+        <span>{=outputs.name}</span
+        ><span data-input-value="{=outputs.value}">{=outputs.value}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div>Último Event</div>
+      <div>{=myEvent}</div>
+    </div>
+    <div class="row">
+      <div>Firmware</div>
+      <div>{=device_model} [ {=version} - {=protocol} ]</div>
+    </div>
+  </div>
+  <div class="info-menu">
+    <button type="button" data-rol="goto" value="2" title="Ubicar">»</button
+    ><input type="checkbox" data-rol="trace" data-trace="4032" value="4032" /><span>Traza</span
+    ><input type="hidden" data-fn="hidden" data-follow="4032" value="4032" /><input
+      type="checkbox"
+      value="4032"
+    /><span>Seguir</span
+    ><button type="button" data-rol="position" value="4032" title="Get Position">P</button
+    ><button type="button" data-rol="reboot" value="4032" title="Reboot">R</button
+    ><button type="button" data-rol="callback" value="4" title="Callback">C</button
+    ><button type="button" data-rol="pending" value="pn" title="Pending">PN</button
+    ><button type="button" data-rol="disconecting" value="dc" title="Disconnect">DC</button
+    ><button type="button" data-rol="output" value="out" title="Output">O</button>
+  </div>
+</div>

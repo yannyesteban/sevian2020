@@ -10,6 +10,13 @@
     
 
 <script>
+
+const arr = [1, 2, 3];
+
+const iterator = arr[Symbol.iterator]();
+
+console.log(iterator.next()); // {value: 'a', done: false}
+
 function ran(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
@@ -27,7 +34,7 @@ async function timeoutPromise(interval) {
   });
 };
 
-await timeoutPromise(3000);
+timeoutPromise(3000);
 
 timeoutPromise(2000).then(console.log).catch(console.log)
 

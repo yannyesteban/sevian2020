@@ -1,0 +1,54 @@
+{
+	"form":"gt_cota_unit",
+	"caption":"",
+	"className":["cota-unit","flat"],
+    "query":"SELECT '' as unit_id,'' as go,'' as follow_me",
+    "query2":"SELECT '' as unit_id, '' as go, '' as go2, '' as info, '' as cmd, '' as t1, '' as t2, '' as t3, '' as c, '' as h",
+	"menuName":"",
+	"methods":{
+		"request":{
+			"menuName":""
+		},
+		"load":{
+			"menuName":""
+		}
+	},
+	"params":"",
+
+	"pages":[],
+	"groups":{},
+	"infoFields":[
+        {"name":"unit_id","caption":"","input":"list","type":"text",
+			"data":[["","","*"],"SELECT u.id as unit_id, COALESCE(vn.name, '  -- undefined --') as vehicle_name FROM unit as u INNER JOIN user_unit as uu ON uu.unit_id = u.id LEFT JOIN unit_name as vn ON vn.id = u.name_id LEFT JOIN vehicle as ve ON ve.id = u.vehicle_id WHERE uu.user = '@SS_USER' ORDER BY vehicle_name"],
+			"events":{
+				"change":"S.getElement('unit-store').loadUnit(this.getInput('unit_id').getValue());"
+			},
+			"placeholder":"...Buscar"
+        },
+		{
+			"name":"go",
+			"default":"»",
+			"input":"input","type":"button",
+			"events":{
+
+				"click":";S.getElement('unit-store').loadUnit(this.getInput('unit_id').getValue());"
+			}
+		},
+		{
+			"name":"follow_me",
+			"default":"»",
+			"title":"hola",
+			"input":"input","type":"hidden",
+			"events":{
+
+				"click":";S.getElement('gt-unit-10').findUnit(this.getInput('unit_id').getValue());"
+			}
+		}
+
+	],
+
+	"searchFor":[
+		"brand"
+	]
+
+}

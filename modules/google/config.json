@@ -1,0 +1,38 @@
+[
+    {
+        "type": "css",
+        "file": "{@CONFIG_PATH}css.json"
+    },
+    {
+        "type": "js",
+        "file": "{@CONFIG_PATH}js.json"
+    },
+    {
+        "type": "themes",
+        "file": "{@CONFIG_PATH}themes.json"
+    },
+    {
+        "type": "bd",
+        "file": "{@CONFIG_PATH}bd.json"
+    },
+    {
+        "type": "inputs",
+        "file": "{@CONFIG_PATH}inputs.json"
+    },
+    {
+        "type": "actions",
+        "file": "{@CONFIG_PATH}actions.json"
+    },
+    {
+        "type": "elements",
+        "file": "{@CONFIG_PATH}elements.json"
+    },
+    {
+        "type": "commands",
+        "file": "{@CONFIG_PATH}commands.json"
+    },
+    {
+        "type": "init",
+        "file": "{@CONFIG_PATH}init.json"
+    }
+]
