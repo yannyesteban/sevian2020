@@ -62,6 +62,7 @@ export class CommandImport {
             async: true,
             valid: false,
             blockingTarget: this.main,
+            confirm: "Segura de Importar la información?",
             //form: this.form.getFormData(),
             requestFunctions: {
                 f: (json) => {

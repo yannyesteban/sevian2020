@@ -966,7 +966,7 @@ class Report
 
     private function importFile($unitId, $id){
         $cn = $this->cn;
-        $unitId=5555;
+        //$unitId=5555;
         $cn->query = "SELECT * FROM command_saved WHERE id = '$id'";
         
         $result = $this->cn->execute();
