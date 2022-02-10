@@ -209,7 +209,7 @@ export class Output {
             blockingTarget: this.main,
             requestFunctions: {
                 f: (json) => {
-
+                    console.log(json)
                     this.loadPage(json);
                     if (json.command) {
                         this.loadForm(json.command, 0, index, caption);
@@ -540,7 +540,13 @@ export class Output {
         const index = form.getInput("index").getValue();
         const mode = form.getInput("mode").getValue();
 
-
+        console.log({
+            unitId,
+            commandId,
+            index,
+            mode,
+            type,
+        });
         S.go({
             async: true,
             valid: false,

@@ -137,7 +137,9 @@ class FormSave{
     private static function saveRecord($info, $data, $masterData){
 
         if($data->__mode_ <= 0){
-            return false;
+            $result = new \stdClass;
+            $result->error = 0;
+            return $result;
         }
 
         $cn = self::$cn;

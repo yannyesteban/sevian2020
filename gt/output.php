@@ -147,7 +147,7 @@ class Output
             LEFT JOIN unit_command as c
                 ON c.command_id = dc.id
                 AND c.unit_id = u.id
-                AND c.index = '$index'
+                AND (c.index = '2' or c.index=0)
 
 
             WHERE u.id = '$unitId' AND dc.role_id = '$role'";
