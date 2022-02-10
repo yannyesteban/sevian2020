@@ -27,13 +27,13 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER cota.cot_equipos
-AFTER UPDATE ON equipos
+BEFORE UPDATE ON equipos
 FOR EACH ROW
 BEGIN
 
 	UPDATE gt.device as d
 	INNER JOIN cota.equipos as e ON e.codequipo = d.id2
-	INNER JOIN codigos_equipos as ce ON ce.id = e.codigo_und
+	INNER JOIN cota.codigos_equipos as ce ON ce.id = e.codigo_und
 
 	SET d.name = ce.codigo
 	WHERE d.id2 = NEW.codequipo;
@@ -52,8 +52,8 @@ BEGIN
 
 UPDATE gt.unit as u
 INNER JOIN cota.cuenta_vehiculos as cv ON cv.codvehiculo = u.codvehiculo AND cv.coddato = u.coddato
-INNER JOIN gt.equipos as e ON e.codequipo = cv.codequipo
-INNER JOIN gt.device as d ON d.id2 = e.codequipo
+LEFT JOIN cota.equipos as e ON e.codequipo = cv.codequipo
+LEFT JOIN gt.device as d ON d.id2 = e.codequipo
 
 
 SET u.device_id = d.id

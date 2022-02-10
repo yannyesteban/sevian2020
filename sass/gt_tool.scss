@@ -167,7 +167,7 @@
         label {
           padding-left: 6px;
         }
-        .input-info{
+        .input-info {
           color: rgb(255, 60, 0);
         }
       }
@@ -483,6 +483,10 @@
   height: 100%;
   display: flex !important;
   flex-direction: column;
+  .report-opt {
+    font-weight: bold;
+    color: #b35600;
+  }
   .nav {
     flex: 1 1 auto;
   }
@@ -493,7 +497,7 @@
     display: grid;
 
     overflow: auto;
-    grid-template-columns: 20px minmax(50px, 100px) minmax(100px, auto);
+    grid-template-columns: 20px minmax(50px, 200px) 0px;
     .row {
       display: contents;
       cursor: pointer;
@@ -548,7 +552,7 @@
     }
   }
 }
- .tool-istartek{
+.tool-istartek {
   display: grid;
 
   overflow: auto;
@@ -578,50 +582,44 @@
       background-color: #000000;
     }
   }
- }
+}
 
-
- .tool-istartek-ext{
-   
-   .command-boby{
+.tool-istartek-ext {
+  .command-boby {
     background-color: #b4b4b4;
     padding: 5px;
-    > select{
-     width: 100%;
-     
+    > select {
+      width: 100%;
     }
-   }
+  }
 
-   .grid{
-
+  .grid {
     display: grid;
     width: 80%;
 
     //overflow: auto;
     grid-template-columns: auto auto;
-    
+
     //background-color: #ececec;
     color: rgb(39, 39, 39);
     //padding: 5px;
-    .row{
+    .row {
       display: contents;
-      
     }
-   }
- }
+  }
+}
 
-
- .info-form{
-   height: 100%;
-   overflow: auto;
-   padding: 2px;
-   .info-form-main{
-     display: flex;
-     flex-direction: column;
-     height: 100%;
-     overflow: auto;
-   }
-   &[data-info-mode="error"]{
-     display: none;
-   }
- }
+.info-form {
+  height: 100%;
+  overflow: auto;
+  padding: 2px;
+  .info-form-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+  }
+  &[data-info-mode="error"] {
+    display: none;
+  }
+}

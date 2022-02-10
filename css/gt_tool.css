@@ -515,6 +515,11 @@
           flex-direction: column;
 }
 
+.tool-import .report-opt {
+  font-weight: bold;
+  color: #b35600;
+}
+
 .tool-import .nav {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
@@ -530,8 +535,8 @@
   display: -ms-grid;
   display: grid;
   overflow: auto;
-  -ms-grid-columns: 20px minmax(50px, 100px) minmax(100px, auto);
-      grid-template-columns: 20px minmax(50px, 100px) minmax(100px, auto);
+  -ms-grid-columns: 20px minmax(50px, 200px) 0px;
+      grid-template-columns: 20px minmax(50px, 200px) 0px;
 }
 
 .tool-import .grid .row {

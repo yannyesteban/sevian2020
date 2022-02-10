@@ -248,7 +248,7 @@ class Report
                 $this->addResponse([
                     'id'	=> $this->id,
                     'data'	=> [
-                        "error" => $this->saveFile($this->eparams->name, $this->eparams->list)
+                        "error" => $this->saveFile($unitId, $this->eparams->name, $this->eparams->list, $this->eparams->report ?? false)
                     ],
                     'iToken'=> $this->iToken
                 ]);
@@ -913,7 +913,47 @@ class Report
 
     }
 
-    private function saveFile($name, $list){
+    private function getReportConfig($unitId){
+        $cn = $this->cn;
+
+        $cn->query = "SELECT name, event_id as eventId, mode, mode2
+            FROM unit_event as ue 
+            WHERE unit_id = '$unitId'
+        ";
+        
+        $result = $this->cn->execute();
+
+        return $cn->getDataAll($result);
+        
+    }
+
+    private function importReportConfig($unitId, $data){
+
+        $params = json_decode($data);
+        $cn = $this->cn;
+
+        if(is_array($params)){
+
+            $cn->query = "DELETE FROM unit_event WHERE unit_id = '$unitId'";
+            $result = $this->cn->execute();
+
+            foreach($params as $k => $item){
+                $name = $item->name;
+                $eventId = $item->eventId;
+                $mode = $item->mode;
+                $mode2 = $item->mode2;
+                
+                $cn->query = "INSERT INTO unit_event
+                        (`unit_id`, `name`, `event_id`, `mode`, `mode2`)
+                    VALUES
+                        ('$unitId','$name', '$eventId', '$mode','$mode2');
+                ";
+                $result = $this->cn->execute();
+            }
+        }
+    }
+
+    private function saveFile($unitId, $name, $list, $report = false){
 
         $sqlList = implode(",", $list);
 
@@ -935,23 +975,23 @@ class Report
                 'command_id'=>$rs['command_id'],
                 'index'=>$rs['index'],
                 'name'=>$rs['name'],
-
                 'data'=>[
                     'params'=>json_decode($rs['params']),
                     'query'=>json_decode($rs['query'])
                 ]
-                
-
             ];
-
-
         }
 
         $params =json_encode($data);
+        
+        $reportConfig = '';
 
+        if($report){
+            $reportConfig = json_encode($this->getReportConfig($unitId));
+        }
 
-        $query = "INSERT INTO command_saved (name, params) VALUES ('$name','$params')
-        ON DUPLICATE KEY UPDATE params = '$params';";
+        $query = "INSERT INTO command_saved (name, params, report) VALUES ('$name','$params', '$reportConfig')
+        ON DUPLICATE KEY UPDATE params = '$params', report = '$reportConfig';";
         $result = $this->cn->execute($query);
         return $cn->error;
 
@@ -999,6 +1039,10 @@ class Report
                    $result = $this->cn->execute();
 
                 }
+            }
+
+            if($rs['report']){
+                $this->importReportConfig($unitId, $rs['report']);
             }
 
 

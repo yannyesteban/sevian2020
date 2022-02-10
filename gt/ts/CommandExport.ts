@@ -16,6 +16,7 @@ export class CommandExport {
     private className: any = "tool-import";
     private main: SQObject = null;
     private grid: SQObject = null;
+    private unitId: number = 0;
 
     constructor(info: any) {
         for (var x in info) {
@@ -40,11 +41,14 @@ export class CommandExport {
         this.main = main;
 
         const menu = main.create("div").addClass("menu");
+        const chk1 = menu.create("input").prop({
+            type: "checkbox"
+        });
+
+        menu.create("span").text("Reportes").addClass("report-opt");
+        menu.create("div").text("");
         const chk = menu.create("input").prop({
             type: "checkbox"
-
-
-
         });
 
         chk.on("change", (event) => {
@@ -59,7 +63,8 @@ export class CommandExport {
             }
         });
         this.grid = main.create("div").addClass("grid");
-        menu.create("span").text("todos");
+        
+        menu.create("span").text("Comandos");
         const nav = main.create("div").addClass("nav");
         nav.create("input").prop({
             type: "text",
@@ -77,6 +82,7 @@ export class CommandExport {
     }
 
     public init(unitId: number) {
+        this.unitId = unitId;
         this.goInit(unitId);
     }
 
@@ -157,13 +163,21 @@ export class CommandExport {
                     method: "save-file",
                     name: "",
                     eparams: {
+                        unitId: this.unitId,
                         list: this.getCommandList(),
-                        name: this.getNameList()
+                        name: this.getNameList(),
+                        report: this.getReportOption(),
+
                     },
                     iToken: "f",
                 },
             ],
         });
+    }
+
+    private getReportOption(){
+        const element = this.main.query("input.report-opt");
+        return element.checked;
     }
 
     private getCommandList() {
