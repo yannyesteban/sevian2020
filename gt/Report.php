@@ -900,9 +900,9 @@ class Report
         FROM unit_command uc
         INNER JOIN device_command as c ON c.id = uc.command_id
         LEFT JOIN command_role as r ON r.id = c.role_id
-        WHERE uc.unit_id = '$unitId' 
+        WHERE uc.unit_id = '$unitId' AND (c.exportable = 2 or c.exportable is null)
         #AND c.role_id IN (0,1) AND c.type = 'A'
-
+        
         ";
 
         $result = $this->cn->execute();

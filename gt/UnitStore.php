@@ -181,15 +181,18 @@ class UnitStore extends \Sevian\Element implements \Sevian\UserInfo{
         ";
 		
 		$result = $cn->execute();
-		$data = $cn->getDataAssoc($result);
-		if($data['trackId']??false){
-			$io = $this->evalInput($user, $unitId, $data['inputStatus'], $data['outputStatus']);
-			$data['inputs'] = $io['inputs'] ?? [];
-			$data['outputs'] = $io['outputs'] ?? [];
+		$data = $cn->getJson($result);
+
+        //hx($data);
+		if($data->trackId??false){
+			$io = $this->evalInput($user, $unitId, $data->inputStatus, $data->outputStatus);
+			$data->inputs = $io['inputs'] ?? [];
+			$data->outputs = $io['outputs'] ?? [];
 		}
 		
 		//hx($cn->query);
-        return $data;
+        //print_r(json_decode(json_encode($data)));
+        return json_decode(json_encode($data, JSON_NUMERIC_CHECK));
         
     }
 

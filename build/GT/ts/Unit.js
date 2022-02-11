@@ -9,6 +9,7 @@ import { TraceTool } from './TraceTool.js';
 import { InfoForm } from '../../Sevian/ts/InfoForm.js';
 import { LayerMenu } from './LayerMenu.js';
 import { InfoUnits } from './InfoMenu.js';
+import { RapidCommand } from "./CommandForm.js";
 const evalInputs = (data) => {
     let xInputs = "";
     let xOutputs = "";
@@ -370,6 +371,10 @@ export class Unit {
                     const b2 = menu.create("button").prop({ type: "button", "value": "3", "title": "Reboot" }).text("R")
                         .on("click", event => {
                         this.onReset(event.currentTarget.value);
+                    });
+                    menu.create("button").prop({ type: "button", "value": "3", "title": "Set Arming/Disarming" }).text("A")
+                        .on("click", event => {
+                        RapidCommand.flashCommand(this._lastUnitId, 19);
                     });
                     const b3 = menu.create("button").prop({ type: "button", "value": "4", "title": "Callback" }).text("C")
                         .on("click", event => {

@@ -18,6 +18,8 @@ import { Cluster } from '../../lib/Cluster.js';
 
 import { InfoComm, InfoMenu, InfoUnits } from './InfoMenu.js';
 
+import { RapidCommand } from "./CommandForm.js";
+
 const evalInputs = (data) => {
 
 	let xInputs = "";
@@ -498,6 +500,13 @@ export class Unit {
 					.on("click", event=>{
 						this.onReset(event.currentTarget.value);
 					});
+
+					menu.create("button").prop({type:"button", "value":"3", "title":"Set Arming/Disarming"}).text("A")
+					.on("click", event=>{
+						RapidCommand.flashCommand(this._lastUnitId, 19);
+					});
+
+					
 
 					const b3 = menu.create("button").prop({type:"button", "value":"4", "title":"Callback"}).text("C")
 					.on("click", event=>{

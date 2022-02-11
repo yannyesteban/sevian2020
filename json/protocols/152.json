@@ -1,0 +1,37 @@
+{
+  "name": "152",
+  "label": "152 – Set Arming/Disarming",
+  "description": "»» En el estado de armado, activación de entrada (puerta abierta, encendido, etc.), remolque, interferencia GSM generar una alarma de robo de coche. ",
+  "indexField": "",
+  "indexRange": [],
+  "indexValue": [],
+  "bitwise": false,
+  "usePassword": true,
+  "useTag": false,
+  "confirm":[],
+  "useEvents" : false,
+  "useInputs" : false,
+  "useOutPuts" : false,
+  "onSave" : false,
+  "onSend" : "Enviar",
+  "onGet" : "Último",
+  "closeCommand" : true,
+  "useData":{
+    "operation":"events",
+    "operation2":"outputs"
+  },
+  "fields": [
+    {
+      "name": "flag",
+      "label": "Operación",
+      "type": "select",
+      "data": [["0","Desarmado"], [1, "Armado"]],
+      "description": "",
+      "rules":{
+        "required_x":{
+          "msg":"seleccione un valor por favor!!!"
+        }
+      }
+    }
+  ]
+}

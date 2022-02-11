@@ -169,6 +169,19 @@ class Mysql extends DBase{
 		
 	}
 
+	public function getJsonAll($result='', $resulttype=MYSQLI_ASSOC){
+   		
+		if ($result!=''){
+			$this->result = $result;
+        }
+		
+		if(!$this->result->field_count){
+			return false;
+		}
+
+		return json_decode(json_encode($this->result->fetch_all(MYSQLI_ASSOC), JSON_NUMERIC_CHECK));
+	}
+
 	public function getData($result=''){
    		
 		
@@ -220,11 +233,20 @@ class Mysql extends DBase{
 			return false;
 		}
 		return $this->result->fetch_assoc();			
-			
-		
-
 	}
 	
+	public function getJson($result=''){
+
+		if ($result!=''){
+			$this->result = $result;
+        }
+		
+		if($this->errno or !$this->result->field_count){
+			return null;
+		}
+		return json_decode(json_encode($this->result->fetch_assoc(), JSON_NUMERIC_CHECK));
+	}
+
 	public function getLastId(){
 		
 		return $this->c->insert_id;	
