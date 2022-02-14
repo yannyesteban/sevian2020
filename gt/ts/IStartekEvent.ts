@@ -1377,6 +1377,7 @@ export class IStartekEvent {
 		
         main.create("button").prop({ "type": "button", innerHTML: "Recibir" })
         .on("click", (event) => {
+            
             this.goSave(_func(event), "W", 1);
         });
 
@@ -1637,7 +1638,7 @@ export class IStartekEvent {
             mode: Number.parseInt(mode, 10),
         });
 
-        //this.goGetValues(unitId, commandId, index);
+        this.goGetValues(unitId, commandId, index);
     }
 
 

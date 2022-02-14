@@ -286,7 +286,7 @@ export var S = (($) => {
 		}
 
 		static requestPanel3(data: IResponse[], requestFunctions?: (config) => void[]) {
-
+			console.log(data)
 			data.forEach(item => {
 				if (item.iToken && requestFunctions && requestFunctions[item.iToken]) {
 					requestFunctions[item.iToken](item.data);

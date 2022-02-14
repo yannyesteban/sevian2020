@@ -1229,7 +1229,7 @@ export class IStartekEvent {
             index: Number.parseInt(index, 10),
             mode: Number.parseInt(mode, 10),
         });
-        //this.goGetValues(unitId, commandId, index);
+        this.goGetValues(unitId, commandId, index);
     }
 }
 //# sourceMappingURL=IStartekEvent.js.map

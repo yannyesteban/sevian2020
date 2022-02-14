@@ -27,7 +27,7 @@ const loadScriptFile = (url, async) => {
             //const key = "AIzaSyDZ4BkTZxNRh8GZTqmgGfDI4c2PgcbSuMM";
             //const url = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap&libraries=&v=weekly`;
             myScript.setAttribute("src", url);//"../../build/test/google/index.js"
-            myScript.setAttribute("async", async)
+            myScript.setAttribute("async", async);
 
             myScript.addEventListener("load", (event) => {
                 resolve({

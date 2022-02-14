@@ -140,6 +140,7 @@ export var S = (($) => {
             return this._e[id];
         }
         static requestPanel3(data, requestFunctions) {
+            console.log(data);
             data.forEach(item => {
                 if (item.iToken && requestFunctions && requestFunctions[item.iToken]) {
                     requestFunctions[item.iToken](item.data);
