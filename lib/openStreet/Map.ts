@@ -15,9 +15,6 @@ export interface MapAdminOption {
     symbols?: any[];
     className?: string | string[];
     onLoad?:(map:any) => void;
-
-
-
 }
 
 const loadScriptFile = (url, async) => {
