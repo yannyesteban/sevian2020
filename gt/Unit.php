@@ -473,7 +473,8 @@ class Unit
 
             UNIX_TIMESTAMP(now()) as ts,
             e.title as myEvent,
-            de.name as event,m.name as device_model, v.version,IFNULL(v.name, '') as protocol
+            de.name as event,m.name as device_model, v.version,IFNULL(v.name, '') as protocol,
+			voice_number as phone
 
 
         FROM unit as u
@@ -489,7 +490,7 @@ class Unit
         INNER JOIN device_version as v on v.id = de.version_id
         INNER JOIN device_model as m ON m.id = v.id_model
         LEFT JOIN device_name as dn ON dn.name = de.name
-
+		LEFT JOIN phone_number as ph ON ph.id = de.phone_number_id
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
 
