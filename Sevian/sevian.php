@@ -1564,7 +1564,7 @@ class S{
 		}
 
 		if(self::$onAjax){
-			header('Content-Type: application/json; charset=utf-8');
+			//header('Content-Type: application/json; charset=utf-8');
 			return self::jsonDoc3();
 		}else{
 			return self::htmlDoc();

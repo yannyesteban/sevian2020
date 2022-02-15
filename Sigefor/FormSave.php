@@ -203,12 +203,12 @@ class FormSave{
                 $name = $field->name;
 
                 $field = new InfoRecordField($field);
-                
+
                 if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->isUpdate)){
                     continue;
                 }
 
-                if(($field->serial) and $field->notNull and $data->$name == '' and $mode == 1){
+                if(($field->serial) and $field->notNull and $data->$name??'' == '' and $mode == 1){
                     $serial = $field->field;
                     continue;
                 }

@@ -129,6 +129,8 @@
 }
 
 .report-tool .sg-form .page {
+  display: -ms-grid;
+  display: grid;
   grid-gap: 0px;
   padding: 0px;
   -ms-grid-columns: ([cc-start] minmax(180px, 1fr) [cc-end])[auto-fit];

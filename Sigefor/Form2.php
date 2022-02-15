@@ -299,20 +299,16 @@ class Form2
 
 		foreach($formSave->getResult() as $k => $v){
 
-			if(!$v->error){
-
-				$this->setInfoElement(new \Sevian\iMessage([
-					'caption'	=> $formSave->getCaption(),
-					'text'		=> 'Record was saved!!!'
-				]));
-
-			}else{
-
+			if($v->error){
 				$this->setInfoElement(new \Sevian\iMessage([
 					'caption'	=> 'Error '.$formSave->getCaption(),
 					'text'		=> "Record wasn't saved!!!"
 				]));
-
+			}else{
+				$this->setInfoElement(new \Sevian\iMessage([
+					'caption'	=> $formSave->getCaption(),
+					'text'		=> 'Record was saved!!!'
+				]));
 			}
 		}
 

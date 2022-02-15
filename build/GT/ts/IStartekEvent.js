@@ -49,7 +49,7 @@ export class IStartekEvent {
                 [204, "204 descripcion sms / alarma"],
                 [205, "205 llamada / evento"],
                 [206, "206 escuchar / evento"],
-                [210, "210 servidor / eventos"],
+                [210, "210 GPRS / eventos"],
                 [212, "212 outpus / eventos"],
                 [250, "250 niveles inputs"],
                 [251, "251 config output / eventos"],
@@ -476,12 +476,12 @@ export class IStartekEvent {
             return;
         }
         const grid = main.create("div").addClass("grid");
-        let params = "";
         let param2 = "";
         const query = command.query || {};
         if (query && query[index] && query[index].param_2) {
             param2 = query[index].param_2.toString() + "";
         }
+        let params = param2;
         const paramValues = param2.split(",");
         let array2 = [];
         //eventList = eventList.filter(e=>e.event_id>=20) ;
@@ -1030,7 +1030,11 @@ export class IStartekEvent {
         };
         main.create("button").prop({ "type": "button", innerHTML: "Recibir" })
             .on("click", (event) => {
-            this.goSave(_func(event), "W", 1);
+            this.goSave(_func(event), "W", 1, () => {
+                const timer = setTimeout(() => {
+                    this.goCommandData(unitId, command.command_id, command.index);
+                }, 5000);
+            });
         });
     }
     goGetValues(unitId, commandId, index) {
@@ -1048,7 +1052,7 @@ export class IStartekEvent {
                 {
                     t: "setMethod",
                     mode: "element",
-                    element: "s-form",
+                    element: "s-formm",
                     method: "save",
                     name: "/gt/forms/unit_command",
                     eparams: {},
@@ -1069,7 +1073,7 @@ export class IStartekEvent {
             ],
         });
     }
-    goSave(form, type, send) {
+    goSave(form, type, send, callBack) {
         const unitId = form.get("unit_id");
         const commandId = form.get("command_id");
         const index = form.get("index");
@@ -1089,6 +1093,9 @@ export class IStartekEvent {
                     //this.loadTab(json.command, type);
                     if (send) {
                         this.send(unitId, commandId, index, mode);
+                        if (callBack) {
+                            callBack();
+                        }
                     }
                 },
             },
@@ -1191,7 +1198,7 @@ export class IStartekEvent {
                         const elems = this.main.queryAll(`.grid[data-command-id='${commandId}'] input.p`);
                         if (elems) {
                             elems.forEach((e, index) => {
-                                e.value = data[index];
+                                e.value = data[index] || "";
                             });
                         }
                     }
