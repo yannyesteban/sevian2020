@@ -505,7 +505,7 @@ class Unit
         ";
 		$result = $cn->execute();
 		$data = $cn->getDataAssoc($result);
-		if($data['trackId']){
+		if($data['trackId']??false){
 			$io = $this->evalInput($unitId, $data['inputStatus'], $data['outputStatus']);
 			$data['inputs'] = $io['inputs'] ?? [];
 			$data['outputs'] = $io['outputs'] ?? [];

@@ -203,7 +203,7 @@ class FormSave{
                 $name = $field->name;
 
                 $field = new InfoRecordField($field);
-
+                
                 if($field->aux or $field->table == '' OR $field->table != $table or ($mode > 1 and !$field->isUpdate)){
                     continue;
                 }
