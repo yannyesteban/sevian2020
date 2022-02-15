@@ -48,7 +48,7 @@ class Document{
 				$link = new HTML("link");
 				$link->rel="icon";
 				$link->type="image/png";
-				$link->href = "../../images/vehicle_005.png";
+				$link->href = "http://web.bestsecurity.com:8008/sevian2020/images/setting-2.png";
 
 				$this->head->appendChild($link);
 				$this->head->appendChild("\n");
