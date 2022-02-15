@@ -779,7 +779,7 @@ export class Communication {
             params: [
                 {
                     t: 'setMethod',
-                    id: 2,
+                    id: "pp2",
                     element: 'gt-event',
                     method: 'load',
                     name: 'x',

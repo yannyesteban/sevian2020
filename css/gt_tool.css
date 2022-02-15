@@ -129,8 +129,6 @@
 }
 
 .report-tool .sg-form .page {
-  display: -ms-grid;
-  display: grid;
   grid-gap: 0px;
   padding: 0px;
   -ms-grid-columns: ([cc-start] minmax(180px, 1fr) [cc-end])[auto-fit];
@@ -173,7 +171,6 @@
   font-size: 0.8em;
   font-family: futurab;
   max-width: 100%;
-  max-height: 1.8em;
   margin: 0px;
 }
 
