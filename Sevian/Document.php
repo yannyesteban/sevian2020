@@ -44,6 +44,13 @@ class Document{
 				$this->head->appendChild("\n");
 				
 				$this->head->appendChild($this->title = new HTML("title"));
+
+				$link = new HTML("link");
+				$link->rel="icon";
+				$link->type="image/png";
+				$link->href = "../../images/vehicle_005.png";
+
+				$this->head->appendChild($link);
 				$this->head->appendChild("\n");
 
 				$this->head->appendChild($this->_style);
