@@ -625,7 +625,8 @@ class Event
 
 		//hx($cn->query);
 		$result = $cn->execute();
-		$data = $cn->getDataAssoc($result);
+		$data = (array)$cn->getJson($result);
+		//hx($data);
 		if($data['trackId']){
 			$io = $this->evalInput($data['unitId'], $data['inputStatus'], $data['outputStatus']);
 			$data['inputs'] = $io['inputs'] ?? [];

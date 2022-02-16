@@ -758,9 +758,9 @@ export class Unit {
 		}
 
 		let sum = 0;
-
+		console.log({_lastUnitId:this._lastUnitId})
 		data.connected.forEach((tracking)=>{
-
+console.log(tracking)
 			let updateLastConnection = false;
 			if (this._lastUnitId === tracking.unitId && this.units[tracking.unitId].data.connected != tracking.connected) {
 				updateLastConnection = true;
@@ -1521,7 +1521,7 @@ export class Unit {
 
 	public getLastUnit() {
 
-		return this._lastUnitId;
+		return this._lastUnitId*1;
 
 	}
 
@@ -1542,7 +1542,8 @@ export class Unit {
 	}
 
 	public change(unitId) {
-
+		unitId = unitId * 1;
+		
 		if (this._lastUnitId !== unitId) {
 			this._lastUnitId = unitId;
 			this.onChange(this._lastUnitId);

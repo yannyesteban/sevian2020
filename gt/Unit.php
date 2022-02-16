@@ -511,7 +511,7 @@ class Unit
 			$data['outputs'] = $io['outputs'] ?? [];
 		}
 		
-		//hx($cn->query);
+		//hx($data);
         return $data;
         
     }

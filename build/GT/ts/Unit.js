@@ -559,7 +559,9 @@ export class Unit {
             return;
         }
         let sum = 0;
+        console.log({ _lastUnitId: this._lastUnitId });
         data.connected.forEach((tracking) => {
+            console.log(tracking);
             let updateLastConnection = false;
             if (this._lastUnitId === tracking.unitId && this.units[tracking.unitId].data.connected != tracking.connected) {
                 updateLastConnection = true;
@@ -1148,7 +1150,7 @@ export class Unit {
         }
     }
     getLastUnit() {
-        return this._lastUnitId;
+        return this._lastUnitId * 1;
     }
     isChecked(unitId) {
         const input = this.main.query(`a > input[data-level="units"][data-unit-id="${unitId}"]`);
@@ -1164,6 +1166,7 @@ export class Unit {
         });
     }
     change(unitId) {
+        unitId = unitId * 1;
         if (this._lastUnitId !== unitId) {
             this._lastUnitId = unitId;
             this.onChange(this._lastUnitId);
