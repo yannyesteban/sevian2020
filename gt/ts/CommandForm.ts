@@ -267,10 +267,10 @@ export class CommandForm {
             items: []
         }
 
-
+        
         const doParams = (status?: number) => {
             const params = {};
-
+        
             config.fields.forEach((element, index) => {
                 params[`param_${index}`] = this.form.getInput(`param_${index}`).getValue();
             });
@@ -306,7 +306,7 @@ export class CommandForm {
                 caption: config.onSend,
                 action: (event) => {
 
-                    doParams();
+                    doParams(1);
 
                     if (!this.form.valid()) {
                         return;

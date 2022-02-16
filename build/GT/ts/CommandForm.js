@@ -226,7 +226,7 @@ export class CommandForm {
             menu.items.push({
                 caption: config.onSend,
                 action: (event) => {
-                    doParams();
+                    doParams(1);
                     if (!this.form.valid()) {
                         return;
                     }
