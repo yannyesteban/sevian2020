@@ -126,7 +126,7 @@ trait DBUnit{
         u.device_id,
         de.name as device_name,
         u.vehicle_id,
-        vn.name as vehicle_name,
+        vn.name as vehicle_name, voice_number as phone,
         CASE WHEN t.id IS NULL THEN 1 ELSE 0 END as noTracking,
         CASE WHEN t.id IS NULL THEN 0 ELSE 1 END as valid,
         vn.name as unitName,
@@ -182,7 +182,7 @@ trait DBUnit{
         INNER JOIN device_version as v on v.id = de.version_id
         INNER JOIN device_model as m ON m.id = v.id_model
         LEFT JOIN device_name as dn ON dn.name = de.name
-
+        LEFT JOIN phone_number as ph ON ph.id = de.phone_number_id
 
         LEFT JOIN icon as ic ON ic.id = u.icon_id
 
@@ -196,7 +196,7 @@ trait DBUnit{
 
         ";
 		$result = $cn->execute();
-
+        //hx($cn->getDataAll($result));
         return $cn->getDataAll($result);
         $data = $cn->getDataAll($result);
 		//hx($data);

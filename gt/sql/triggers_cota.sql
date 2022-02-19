@@ -164,3 +164,62 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE TRIGGER cota.cot_insert_cfg_usuarios
+AFTER INSERT ON cota.cfg_usuarios
+FOR EACH ROW
+BEGIN
+	INSERT INTO gt._sg_users (user, pass, expiration, status, clave)
+
+	SELECT u.usuario, md5(u.clave), vencimiento, u.status, u.clave
+	FROM cota.cfg_usuarios as u
+	LEFT JOIN gt._sg_users as u2 ON u2.user = u.usuario
+	WHERE u2.user IS NULL;
+
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER cota.cot_usuario_vehiculos
+AFTER INSERT ON cota.usuario_vehiculos
+FOR EACH ROW
+BEGIN
+	INSERT INTO gt.user_unit (user, unit_id)
+	SELECT uv.usuario as user, u.id as unit_id
+	FROM cota.usuario_vehiculos as uv
+
+	INNER JOIN gt.vehicle as v ON v.id2=uv.codvehiculo
+	INNER JOIN  gt.unit as u ON u.vehicle_id = v.id
+	LEFT JOIN  gt.user_unit as uu ON uu.user = uv.usuario AND uu.unit_id = u.id
+	WHERE uu.user IS NULL;
+
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER cota.cot_update_usuario_vehiculos
+AFTER UPDATE ON cota.usuario_vehiculos
+FOR EACH ROW
+BEGIN
+
+	DELETE FROM gt.user_unit WHERE `user` = NEW.usuario;
+	INSERT INTO gt.user_unit (user, unit_id)
+	SELECT uv.usuario as user, u.id as unit_id
+	FROM cota.usuario_vehiculos as uv
+
+	INNER JOIN gt.vehicle as v ON v.id2=uv.codvehiculo
+	INNER JOIN  gt.unit as u ON u.vehicle_id = v.id
+	LEFT JOIN  gt.user_unit as uu ON uu.user = uv.usuario AND uu.unit_id = u.id
+	WHERE uu.user IS NULL;
+
+END $$
+
+DELIMITER ;
+
