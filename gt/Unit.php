@@ -62,6 +62,7 @@ class Unit
 
 				break;
             case 'load-units':
+				hx(8);
                 $data = $this->loadUnits();
 
                 $this->_name = $this->name;
@@ -474,7 +475,7 @@ class Unit
             UNIX_TIMESTAMP(now()) as ts,
             e.title as myEvent,
             de.name as event,m.name as device_model, v.version,IFNULL(v.name, '') as protocol,
-			voice_number as phone
+			voice_number as phone, dv.name as event
 
 
         FROM unit as u
@@ -489,6 +490,8 @@ class Unit
         INNER JOIN device as de ON de.id = u.device_id
         INNER JOIN device_version as v on v.id = de.version_id
         INNER JOIN device_model as m ON m.id = v.id_model
+		
+
         LEFT JOIN device_name as dn ON dn.name = de.name
 		LEFT JOIN phone_number as ph ON ph.id = de.phone_number_id
 
@@ -499,6 +502,7 @@ class Unit
 
         LEFT JOIN tracking as t ON t.unit_id = u.id AND t.date_time = u.tracking_date
       	LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
+		  LEFT JOIN device_event as dv ON dv.version_id = v.id AND dv.event_id = t.event_id
         WHERE uu.user = '$user' and u.id = '$unitId'
         ORDER BY client, account, vehicle_name
 

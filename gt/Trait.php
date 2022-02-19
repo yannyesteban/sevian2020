@@ -217,7 +217,7 @@ trait DBUnit{
 
 
 
-    public function loadUnits($user){
+    public function loadUnits($user=""){
         $cn = $this->cn;
 		$path = PATH_IMAGES;
         $cn->query = "SELECT
