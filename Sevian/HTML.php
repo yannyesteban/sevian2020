@@ -212,7 +212,7 @@ class HTML{
 			}// next
 
 			$script = "";
-			if(strtolower($this->tagName) == "body"){
+			if(strtolower($this->tagName??'') == "body"){
 				$script = "<script>".$this->getScript()."</script>";
 			}
 			

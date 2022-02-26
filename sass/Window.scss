@@ -1,223 +1,203 @@
 $delta_y: 100px;
 $delta_y_h: -240px;
 
-@mixin btn-color($delta, $delta_hover){
-  >.win-btn{
-    flex:0 0 auto;
-    background-image: url(../images/win_icons.png?i=18);
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    &.min{
-      background-position: 0px $delta;	
-      &:HOVER{
-        background-position: -0px $delta_hover;	
-      }
-    }
-    &.max{
-      background-position: -40px $delta;	
-      &:HOVER{
-        background-position: -40px $delta_hover;	
-      }
-    }
-    &.auto{
-      background-position: -20px $delta;	
-      &:HOVER{
-        background-position: -20px $delta_hover;	
-      }
-    }
-    &.close{
-      margin-right: 4px;
-      background-position: -60px $delta;	
-      &:HOVER{
-        background-position: -60px $delta_hover;	
-      }
-    }
-  }
+@mixin btn-color($delta, $delta_hover) {
+	> .win-btn {
+		flex: 0 0 auto;
+		background-image: url(../images/win_icons.png?i=18);
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+		&.min {
+			background-position: 0px $delta;
+			&:hover {
+				background-position: -0px $delta_hover;
+			}
+		}
+		&.max {
+			background-position: -40px $delta;
+			&:hover {
+				background-position: -40px $delta_hover;
+			}
+		}
+		&.auto {
+			background-position: -20px $delta;
+			&:hover {
+				background-position: -20px $delta_hover;
+			}
+		}
+		&.close {
+			margin-right: 4px;
+			background-position: -60px $delta;
+			&:hover {
+				background-position: -60px $delta_hover;
+			}
+		}
+	}
 }
 
-.sgWin{
-    //background-color: rgb(231, 231, 231);
-    //border: 2px solid rgb(212, 211, 211);
-    >.caption{
-      //background-color: rgb(8, 55, 112);
-      
-      //background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
-  
-      //color: rgb(114, 114, 114);
-      >.icon{
-        //border: 0px solid white;
-      }
+.sgWin {
+	//background-color: rgb(231, 231, 231);
+	//border: 2px solid rgb(212, 211, 211);
+	> .caption {
+		//background-color: rgb(8, 55, 112);
 
+		//background: linear-gradient(to bottom, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
 
-      
-    }
-    &.moving{
-      //border-color: rgb(21, 117, 58);
-    }
-    &.resizing{
-     // border-color: rgb(30, 210, 201);
-    }
-    .rs.rb {
-      border-radius: 5px;
-      height: 0px !important;
-      width: 0px !important;
-      border: 5px solid rgb(61, 61, 61);
-    }
-  }
-  
-  .sgWin.sevian{
-    position: fixed;
-    //width: fit-content;
-    //box-sizing: border-box;
-    min-width: 160px;
-    min-height: 28px;
-    max-height: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 5px 6px 12px -4px rgba(0,0,0,0.50);
-    background-color: rgba(1, 1, 1, 0.6);
-    border: 1px solid red;
-    transition: 0.5s ease-in background-color;
-    &:hover{
-      
-      background-color: rgba(1, 1, 1, 0.8);
-    }
-  
-    &.hidden{
-      visibility: hidden;
-      //display: none;
-      >.body>*{
-        //visibility: hidden;
-        display: none;
-      }
-    }
-    >.caption{
-      background-color: rgba(185, 6, 0, 0.719);
-      flex: 0 0 auto;
-      
-      height: 28px;
-      align-items: center;
-      display: flex;
-      color:white;
-      //text-transform: uppercase;
-      font-size: 13px;
-      cursor: default;
-      @include btn-color(-20px, -200px);
-      >.icon{
-        flex:0 0 auto;
-        
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-        pointer-events: none;
-        margin-left: 4px;
-      }
-      >.text{
-        flex:1 1 auto;
-        padding-left: 10px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-   
-      
-    }
-  
-    >.body{
-      overflow: auto !important;
-    }
-    
-    &.min{
-      height: auto !important;
-      max-width: 160px !important;
-      >.caption{
-        >.win-btn.min{
-          display: none;
-        }
-      }
-      >.body{
-        flex: 0 0 0px !important;
-        height: 0px;
-      }
-    }
-    &.auto{
-      height: auto!important;
-      width: auto !important;
-      >.caption{
-        >.win-btn.auto{
-          display: none;
-        }
-      }
-      >.body{
-        height: auto !important;
-        width: auto !important;
-      }
-    }
+		//color: rgb(114, 114, 114);
+		> .icon {
+			//border: 0px solid white;
+		}
+	}
+	&.moving {
+		//border-color: rgb(21, 117, 58);
+	}
+	&.resizing {
+		// border-color: rgb(30, 210, 201);
+	}
+	.rs.rb {
+		border-radius: 5px;
+		height: 0px !important;
+		width: 0px !important;
+		border: 5px solid rgb(61, 61, 61);
+	}
+}
 
-    &.w-auto{
-      
-      width: auto !important;
-      >.caption{
-        >.win-btn.auto{
-          //display: none;
-        }
-      }
-      >.body{
-      
-        width: auto !important;
-      }
-    }
+.sgWin.sevian {
+	position: fixed;
+	//width: fit-content;
+	//box-sizing: border-box;
+	min-width: 160px;
+	min-height: 28px;
+	max-height: 100%;
+	max-width: 100%;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
+	background-color: rgba(1, 1, 1, 0.6);
+	border: 1px solid red;
+	transition: 0.5s ease-in background-color;
+	&:hover {
+		background-color: rgba(1, 1, 1, 0.8);
+	}
 
-    &.h-auto{
-      height: auto!important;
-      
-      >.caption{
-        >.win-btn.auto{
-          //display: none;
-        }
-      }
-      >.body{
-        height: auto !important;
-      
-      }
-    }
-  
-    &.max{
-      width:calc(100% - 20px) !important;
-      height: calc(100% - 20px)!important;
-      top: 10px !important;
-      left: 10px !important;
-      >.caption{
-        >.win-btn.max{
-          display: none;
-        }
-      }
-    }
-    &.close{
-      visibility: hidden;
-    }
-    &.moving{
-  
-      user-select: none;
-    }
-    &.resizing{
-  
-      user-select: none;
-    }
-  
-    
-  }
+	&.hidden {
+		visibility: hidden;
+		//display: none;
+		> .body > * {
+			//visibility: hidden;
+			display: none;
+		}
+	}
+	> .caption {
+		background-color: rgba(185, 6, 0, 0.719);
+		flex: 0 0 auto;
 
+		height: 28px;
+		align-items: center;
+		display: flex;
+		color: white;
+		//text-transform: uppercase;
+		font-size: 13px;
+		cursor: default;
+		@include btn-color(-20px, -200px);
+		> .icon {
+			flex: 0 0 auto;
 
+			width: 20px;
+			height: 20px;
+			display: inline-block;
+			pointer-events: none;
+			margin-left: 4px;
+		}
+		> .text {
+			flex: 1 1 auto;
+			padding-left: 10px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
 
+	> .body {
+		overflow: auto !important;
+	}
 
-.sgWin{
+	&.min {
+		height: auto !important;
+		max-width: 160px !important;
+		> .caption {
+			> .win-btn.min {
+				display: none;
+			}
+		}
+		> .body {
+			flex: 0 0 0px !important;
+			height: 0px;
+		}
+	}
+	&.auto {
+		height: auto !important;
+		width: auto !important;
+		> .caption {
+			> .win-btn.auto {
+				display: none;
+			}
+		}
+		> .body {
+			height: auto !important;
+			width: auto !important;
+		}
+	}
 
-  >.caption{
-    
-  }
-  
-}  
+	&.w-auto {
+		width: auto !important;
+		> .caption {
+			> .win-btn.auto {
+				//display: none;
+			}
+		}
+		> .body {
+			width: auto !important;
+		}
+	}
 
+	&.h-auto {
+		height: auto !important;
+
+		> .caption {
+			> .win-btn.auto {
+				//display: none;
+			}
+		}
+		> .body {
+			height: auto !important;
+		}
+	}
+
+	&.max {
+		width: calc(100% - 20px) !important;
+		height: calc(100% - 20px) !important;
+		top: 10px !important;
+		left: 10px !important;
+		> .caption {
+			> .win-btn.max {
+				display: none;
+			}
+		}
+	}
+	&.close {
+		visibility: hidden;
+	}
+	&.moving {
+		user-select: none;
+	}
+	&.resizing {
+		user-select: none;
+	}
+}
+
+.sgWin {
+	> .caption {
+	}
+}

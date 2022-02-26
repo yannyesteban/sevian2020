@@ -67,7 +67,7 @@ interface JsElementRequest{
 }
 
 interface JasonComponent extends \JsonSerializable{
-	
+	public function jsonSerialize(): mixed;
     //public function getJsComponents();
     //public function jasonRender();
 

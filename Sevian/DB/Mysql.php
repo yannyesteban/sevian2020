@@ -55,7 +55,8 @@ class Mysql extends DBase{
         }
 	    $this->c = new \mysqli($this->server, $this->user, $this->pass, $this->dbase);
 		//$this->c->set_charset('latin1');
-		$this->c->set_charset($this->charset);
+		//hr($this->charset);
+		//$this->c->set_charset($this->charset);
 		if (!$this->c->connect_errno){
 			$this->status = true;
 		}		

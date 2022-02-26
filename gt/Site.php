@@ -281,7 +281,7 @@ class Site
 			}
 		}
 	}
-    public function jsonSerialize() {
+    public function jsonSerialize(): mixed {
         return [
 			'name'	=> $this->_name,
 			'type'	=> $this->_type,

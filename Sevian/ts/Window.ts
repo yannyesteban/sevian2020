@@ -569,7 +569,7 @@ export var Float = (($) => {
 
             if(this.info.onmove && this.info.onmove(this.posX, this.posY, left, top)){
                 this.sX = this.main.offsetLeft;
-            this.sY = this.main.offsetTop;
+                this.sY = this.main.offsetTop;
                 //this.restart();
             }
 

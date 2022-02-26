@@ -99,7 +99,7 @@ class InfoElement{
 			if(property_exists($this, $k)){
 
 				if($k === 'eparams' and gettype($v) !== 'object' and gettype($v) !== 'array'){
-					$this->$k = \json_decode($v);
+					$this->$k = \json_decode($v?? '');
 					continue;
 				}
 

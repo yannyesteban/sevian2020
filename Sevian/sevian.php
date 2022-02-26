@@ -76,7 +76,7 @@ class S{
 	private static $_css = [];
 
 	private static $_str = false;
-	private static $_templates = false;
+	private static $_templates = [];
 	private static $_themes = [];
 	private static $_template = false;
 	private static $_strPanels = false;

@@ -254,7 +254,7 @@ class Communication extends
         ];
        return $this;
     }
-    public function jsonSerialize(){
+    public function jsonSerialize(): mixed{
         return $this->_info;
     }
 
