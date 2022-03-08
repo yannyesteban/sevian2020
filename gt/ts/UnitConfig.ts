@@ -106,6 +106,7 @@ export class UnitConfig {
     }
 
     public createGrid(data) {
+        
         this.data = data;
         const main = this.main;
 
@@ -344,7 +345,7 @@ export class UnitConfig {
             requestFunctions: {
                 f: (json) => {
 
-
+                    
 
                     this.createGrid(json.events);
                     return;

@@ -196,7 +196,10 @@ class UnitConfig
     private function getEvents($unitId){
         $cn = $this->cn;
 
-        $cn->query = "SELECT DISTINCT ue.id,u.id as unit_id, COALESCE(ue.mode, (SELECT e2.mode FROM unit_event as e2 WHERE e2.event_id = de.event_id limit 1), 0) as `mode`,
+        $cn->query = "SELECT DISTINCT ue.id,u.id as unit_id, 
+        
+        ue.mode,
+        #COALESCE(ue.mode, (SELECT e2.mode FROM unit_event as e2 WHERE e2.event_id = de.event_id limit 1), 0) as `mode`,
 
         de.event_id, COALESCE (uc.name, de.name) as name, CASE WHEN ue.unit_id IS NULL THEN 1 ELSE 2 END as __mode_, '' as __record_
 
@@ -212,7 +215,7 @@ class UnitConfig
         WHERE u.id = '$unitId'";
 
         $result = $this->cn->execute();
-
+        //hx($cn->query);
         $data = [];
         while($rs = $cn->getDataAssoc($result)){
 
@@ -285,6 +288,7 @@ class UnitConfig
         ORDER BY de.event_id
         ;";
 
+        //hx($cn->query);
         $result = $this->cn->execute();
         $data = $cn->getDataAll($result);
 
@@ -565,7 +569,7 @@ class UnitConfig
         WHERE
 
         u.id = '$unitId' AND c.role_id = 0";
-hx($cn->query);
+        //hx($cn->query);
         $result = $this->cn->execute();
         return $cn->getDataAll($result);
 
