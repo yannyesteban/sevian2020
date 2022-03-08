@@ -732,7 +732,7 @@ class History
         ";
 		$result = $cn->execute();
 		$data = $cn->getDataAssoc($result);
-		$io = $this->getUnitInput($unitId, $data['inputStatus'], $data['outputStatus']);
+		$io = $this->getUnitInput($unitId, $data['inputStatus']??0, $data['outputStatus']??0);
 		$data['inputs'] = $io['inputs'];
 		$data['outputs'] = $io['outputs'];
 		;
