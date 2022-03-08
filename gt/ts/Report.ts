@@ -70,6 +70,7 @@ export class Report {
     private commandImport: CommandImport = null;
     private iStartek: IStartekEvent = null;
 
+    
     constructor(info: Report) {
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
@@ -172,7 +173,7 @@ export class Report {
 
 
         this.commandExport = new CommandExport({});
-        this.commandImport = new CommandImport({});
+        this.commandImport = new CommandImport({context:this});
         this.iStartek = new IStartekEvent({socket: this.socket});
 
         this.tab.add({ caption: "Reportar", tagName: "form", set:this.unitConfig.get() });

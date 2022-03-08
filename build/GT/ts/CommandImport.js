@@ -8,6 +8,7 @@ export class CommandImport {
         this.className = "tool-import";
         this.main = null;
         this.form = null;
+        this.context = null;
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
@@ -66,7 +67,6 @@ export class CommandImport {
             //form: this.form.getFormData(),
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
                     this.createForm(json.files, unitId);
                     if (!json.error) {
                         new Float.Message({
@@ -90,6 +90,7 @@ export class CommandImport {
                             "top": "top"
                         }).show({});
                     }
+                    this.context.show();
                 },
             },
             params: [

@@ -18,7 +18,7 @@ export class CommandImport {
     private className: any = "tool-import";
     private main: SQObject = null;
     private form: Form = null;
-
+    private context = null;
     constructor(info: any) {
         for (var x in info) {
             if (this.hasOwnProperty(x)) {
@@ -91,7 +91,7 @@ export class CommandImport {
             //form: this.form.getFormData(),
             requestFunctions: {
                 f: (json) => {
-                    console.log(json);
+                    
                     this.createForm(json.files, unitId);
                     if (!json.error) {
                         new Float.Message({
@@ -116,6 +116,7 @@ export class CommandImport {
                         }).show({});
                     }
 
+                    this.context.show();
                 },
             },
 
