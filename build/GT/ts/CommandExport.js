@@ -26,7 +26,8 @@ export class CommandExport {
         this.main = main;
         const menu = main.create("div").addClass("menu");
         const chk1 = menu.create("input").prop({
-            type: "checkbox"
+            type: "checkbox",
+            className: "report-opt"
         });
         menu.create("span").text("Reportes").addClass("report-opt");
         menu.create("div").text("");
@@ -142,7 +143,10 @@ export class CommandExport {
     }
     getReportOption() {
         const element = this.main.query("input.report-opt");
-        return element.checked;
+        if (element) {
+            return element.checked;
+        }
+        return false;
     }
     getCommandList() {
         const elems = this.grid.queryAll(`input[type="checkbox"]`);
