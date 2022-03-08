@@ -954,35 +954,40 @@ class Report
     }
 
     private function saveFile($unitId, $name, $list, $report = false){
+       
 
         $sqlList = implode(",", $list);
 
         if($sqlList == ""){
-            return 0;
+            //return 0;
         }
         $cn = $this->cn;
-
-        $cn->query = "SELECT command_id, uc.index, COALESCE(name, '') as name, uc.params, uc.query
-        FROM unit_command as uc 
-        WHERE id IN ($sqlList)
-        ";
-        $data = [];
-        $result = $this->cn->execute();
-        $query2 = '';
-        while($rs = $cn->getDataAssoc($result)){
-
-            $data[] = [
-                'command_id'=>$rs['command_id'],
-                'index'=>$rs['index'],
-                'name'=>$rs['name'],
-                'data'=>[
-                    'params'=>json_decode($rs['params']),
-                    'query'=>json_decode($rs['query'])
-                ]
-            ];
+        $params = "";
+        if($sqlList){
+            $cn->query = "SELECT command_id, uc.index, COALESCE(name, '') as name, uc.params, uc.query
+            FROM unit_command as uc 
+            WHERE id IN ($sqlList)
+            ";
+            $data = [];
+            $result = $this->cn->execute();
+            
+            $query2 = '';
+            while($rs = $cn->getDataAssoc($result)){
+    
+                $data[] = [
+                    'command_id'=>$rs['command_id'],
+                    'index'=>$rs['index'],
+                    'name'=>$rs['name'],
+                    'data'=>[
+                        'params'=>json_decode($rs['params']),
+                        'query'=>json_decode($rs['query'])
+                    ]
+                ];
+            }
+    
+            $params =json_encode($data);
         }
-
-        $params =json_encode($data);
+        
         
         $reportConfig = '';
 
