@@ -66,7 +66,7 @@
 			"caption": "Hora Final",
 			"input": "input",
 			"type": "time",
-			"default": "&EX_TIME"
+			"default": "23:59:59"
 		},
 		{
 			"name": "mode",
