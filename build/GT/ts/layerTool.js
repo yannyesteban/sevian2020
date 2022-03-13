@@ -346,7 +346,7 @@ export class LayerTool {
                         id: 2,
                         caption: "Save",
                         action: (item, event) => {
-                            if (this.forms["layer"].valid()) {
+                            if (this.forms["image"].valid()) {
                                 this.saveImage(this.forms["image"].getValue());
                             }
                         }

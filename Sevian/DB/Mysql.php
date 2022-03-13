@@ -15,7 +15,7 @@ class Mysql extends DBase{
 	public $charset = "utf-8";
 	
 	
-	public $result = false;
+	public $result = null;
 	public $pagination = false;
 	public $page = 1;
 	public $pageLimit = 10;
@@ -25,7 +25,7 @@ class Mysql extends DBase{
 	public $error = false;
 	public $lastId = false;
 	public $affectedRows = false;	
-	private $c = false;
+	private $c = null;
 	
 	public function __construct($server='', $user='', $pass='', $database='', $port='', $charset='') {
 		

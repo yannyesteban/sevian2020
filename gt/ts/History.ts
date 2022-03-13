@@ -147,7 +147,7 @@ export class History{
 			this.historyControl = this.getMap().getControl("history") as HistoryControl;
 			//map.getControl("mark").onsave = ((info)=>{}
 			this.historyControl.onProgress = (info)=>{
-				console.log(info);
+				//console.log(info);
 				info = Object.assign(this.unitData, info);
 
 				//this.popupInfoForm.setMode(info.className);
@@ -252,7 +252,7 @@ export class History{
 			//"blockingTarget": blockingTarget,
 			requestFunctions: {
 				loadData: (json) => {
-					
+					//console.log(json)
 					this.setUniData(json.unitData);
 					this.setData(json.data);
 					this.setLayerConfig(json.config);
@@ -392,7 +392,7 @@ export class History{
 
 
 		const layer2 = this.layerConfig.groups;
-		
+		//console.log(layer2)
 		this.layerConfig.layers.forEach((e, index)=>{
 
 			if(e.group !== undefined && layer2[e.group]){

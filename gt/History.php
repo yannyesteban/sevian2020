@@ -313,7 +313,7 @@ class History
 
 		$config = $this->loadUserConfig($this->_userInfo->user);
 		$config->propertys = $this->getPropertysInfo();
-		$config->propertys = array_merge($config->propertys, $this->getInputName(1626));
+		$config->propertys = array_merge($config->propertys, $this->getInputName($unitId));
 
 		$data = $this->loadTracking($unitId, $from, $to);
 		//print_r(json_encode($data, JSON_NUMERIC_CHECK));exit;
@@ -631,9 +631,17 @@ class History
         ";
 
 		$result = $cn->execute();
-		$data = $cn->getDataAll($result);
+		$data = $cn->getJsonAll($result);
 
+		$data = array_map(function($item){
 
+			$io = $this->getUnitInput($item->unitId, $item->inputStatus, $item->outputStatus);
+			$item->inputs = $io['inputs'];
+			$item->outputs = $io['outputs'];
+
+            return $item;
+        }, $data);
+		/*
         $data = array_map(function($item){
 
 			$io = $this->getUnitInput($item['unitId'], $item['inputStatus'], $item['outputStatus']);
@@ -642,7 +650,7 @@ class History
 
             return $item;
         }, $data);
-
+		*/
 
 
         return $data;

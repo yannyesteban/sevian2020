@@ -203,7 +203,7 @@ export class History {
         */
         this.setData(this.data);
         //this.drawLineA();
-
+        console.log(this.layers2);
         this.initSource(this.coordinatesInit);
         this.createRoadLayer(this.roadLayerInfo);
         this.createTraceLayer(this.traceLayerInfo);
