@@ -521,9 +521,9 @@ export class Output {
         });
         if (command.__mode_ == 2) {
 
+            //console.log(command.params)
 
-
-            form.setValue(command.params);
+           // form.setValue(command.params);
         }
 
         form.setMode(command.status);

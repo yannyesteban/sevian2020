@@ -395,7 +395,8 @@ export class Output {
             },
         });
         if (command.__mode_ == 2) {
-            form.setValue(command.params);
+            //console.log(command.params)
+            // form.setValue(command.params);
         }
         form.setMode(command.status);
     }
