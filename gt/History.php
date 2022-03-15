@@ -624,7 +624,11 @@ class History
 
         LEFT JOIN event as e ON e.unit_id = t.unit_id AND e.date_time = t.date_time
 
-        WHERE t.unit_id = '$unitId' AND t.date_time>='$from' AND t.date_time<='$to'
+        WHERE t.unit_id = '$unitId' 
+		AND t.date_time>='$from' 
+		AND t.date_time<='$to'
+		AND t.latitude < 90
+		AND t.longitude < 90
 
 		
 

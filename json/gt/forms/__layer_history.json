@@ -1,0 +1,519 @@
+{
+    "images": [
+        {
+            "name": "pulsing-1",
+            "type": "pulsing",
+            "color": "#ff6464",
+            "border": "#ffffff",
+            "halo": "#FFC8C8",
+            "imageId": 0
+        },
+        {
+            "name": "pulsing-2",
+            "type": "pulsing",
+            "color": "#12AAC8",
+            "border": "#ffffff",
+            "halo": "#CCF2F9",
+            "imageId": 1
+        },
+        {
+            "name": "pulsing-3",
+            "type": "pulsing",
+            "color": "#FFFC84",
+            "border": "#FF4500",
+            "halo": "#FFD3C6",
+            "imageId": 2
+        },
+        {
+            "imageId": 3,
+            "name": "circle-verde",
+            "type": "circle",
+            "color": "#008000",
+            "border": "#ffffff",
+            "halo": "#000000"
+        },
+        {
+            "imageId": 4,
+            "name": "circle-naranja",
+            "type": "circle",
+            "color": "#ff8000",
+            "border": "#ffffff",
+            "halo": "#000000"
+        },
+        {
+            "imageId": 5,
+            "name": "circle-marron",
+            "type": "circle",
+            "color": "#804040",
+            "border": "#ffffff",
+            "halo": "#000000"
+        },
+        {
+            "name": "circle-3",
+            "type": "circle",
+            "color": "#FF0000",
+            "border": "#ffffff",
+            "imageId": 6
+        },
+        {
+            "name": "circle-4",
+            "type": "circle",
+            "color": "#3366cc",
+            "border": "#ffffff",
+            "imageId": 7
+        },
+        {
+            "imageId": 8,
+            "name": "arrow-azul",
+            "type": "arrow",
+            "color": "#0000ff",
+            "border": "#0000ff",
+            "halo": "#000000"
+        },
+        {
+            "imageId": 9,
+            "name": "arrow-verde",
+            "type": "arrow",
+            "color": "#008000",
+            "border": "#ffffff",
+            "halo": "#000000"
+        },
+        {
+            "imageId": 10,
+            "name": "arrow-naranja",
+            "type": "arrow",
+            "color": "#ff8040",
+            "border": "#ffffff",
+            "halo": "#000000"
+        },
+        {
+            "imageId": 11,
+            "name": "arrow-marron",
+            "type": "arrow",
+            "color": "#804040",
+            "border": "#ffffff",
+            "halo": "#000000"
+        },
+        {
+            "name": "arrow-5",
+            "type": "arrow",
+            "color": "#ffccff",
+            "border": "#ffffff",
+            "imageId": 12
+        },
+        {
+            "name": "arrow-6",
+            "type": "arrow",
+            "color": "#ff9900",
+            "border": "#ffffff",
+            "imageId": 13
+        },
+        {
+            "name": "arrow-7",
+            "type": "arrow",
+            "color": "#cc3399",
+            "border": "#FFC0CB",
+            "imageId": 14
+        },
+        {
+            "imageId": 15,
+            "name": "arrow-rojo",
+            "type": "arrow",
+            "color": "#ff0000",
+            "border": "#ff0000",
+            "halo": "#000000"
+        }
+    ],
+    "colors": [
+        "#FF0000",
+        "#FFFF00",
+        "#0000FF",
+        "#008000",
+        "#FF0000",
+        "#FF4500",
+        "#000000",
+        "#ffffff",
+        "aquamarine",
+        "brown",
+        "fuchsia",
+        "#008000#FFFF00",
+        "lime",
+        "magenta",
+        "dark#0000FF"
+    ],
+    "groups": [
+        {
+            "caption": "Principales",
+            "className": "x",
+            "mode": "close",
+            "groupId": 0
+        },
+        {
+            "caption": "Velocidad",
+            "className": "x",
+            "mode": "close",
+            "features": [
+                
+            ],
+            "groupId": 1
+        },
+        {
+            "caption": "Inputs",
+            "className": "x",
+            "mode": "close",
+            "groupId": 2
+        },
+        {
+            "caption": "Opuputs",
+            "className": "x",
+            "mode": "close",
+            "groupId": 3
+        },
+        {
+            "caption": "Eventos",
+            "className": "x",
+            "mode": "close",
+            "groupId": 4
+        },
+        {
+            "caption": "Mis Alarmas",
+            "className": "x",
+            "mode": "close",
+            "groupId": 5
+        },
+        {
+            "caption": "Mis Eventos",
+            "className": "x",
+            "mode": "close",
+            "groupId": 6
+        }
+    ],
+    "layers": [
+        {
+            "prop": "speed",
+            "caption": "Detenido",
+            "image": "pulsing-1",
+            "scale": 1,
+            "valueType": "==",
+            "value": 0,
+            "className": "pulsing",
+            "group": 1,
+            "visible": true,
+            "id": "p1647037725170-i-14",
+            "layerId": 0
+        },
+        {
+            "layerId": 1,
+            "id": "p1647037725170-i-15",
+            "prop": "speed",
+            "caption": "0+ a 20 Km/h",
+            "image": "arrow-rojo",
+            "scale": "1",
+            "valueType": "(]",
+            "value": "0,20",
+            "group": "1",
+            "visible": "1"
+        },
+        {
+            "layerId": 2,
+            "id": "p1647037725170-i-16",
+            "prop": "speed",
+            "caption": "20 a 40 Km/h",
+            "image": "arrow-azul",
+            "scale": "1",
+            "valueType": "(]",
+            "value": "20,40",
+            "group": "1",
+            "visible": "1"
+        },
+        {
+            "layerId": 3,
+            "id": "p1647037725170-i-17",
+            "prop": "speed",
+            "caption": "40 a 60 Km/h",
+            "image": "arrow-verde",
+            "scale": "1",
+            "valueType": "(]",
+            "value": "40,60",
+            "group": "1",
+            "visible": "1"
+        },
+        {
+            "layerId": 4,
+            "id": "p1647037725170-i-18",
+            "prop": "speed",
+            "caption": "60 a 80 Km/h",
+            "image": "arrow-naranja",
+            "scale": "1",
+            "valueType": "(]",
+            "value": "60,80",
+            "group": "1",
+            "visible": "1"
+        },
+        {
+            "layerId": 5,
+            "id": "p1647037725170-i-19",
+            "prop": "speed",
+            "caption": "80 a 120 Km/h",
+            "image": "arrow-marron",
+            "scale": "1",
+            "valueType": "(]",
+            "value": "80,120",
+            "group": "1",
+            "visible": "1"
+        },
+        {
+            "layerId": 6,
+            "id": "p1647037725170-i-20",
+            "prop": "speed",
+            "caption": "120+ Km/h",
+            "image": "pulsing-2",
+            "scale": "1",
+            "valueType": ">",
+            "value": "100",
+            "group": "1",
+            "visible": "1"
+        }
+    ],
+    "roadLayer": {
+        "caption": "Camino Recorrido",
+        "color": "#ff9900",
+        "width": "2",
+        "opacity": 0.8,
+        "dash": 2,
+        "visible": true
+    },
+    "traceLayer": {
+        "caption": "Rastro",
+        "color": "#f743d8",
+        "width": "4",
+        "opacity": 1,
+        "dash": 0,
+        "length": 1000,
+        "visible": true
+    },
+    "config": {
+        "mode": 1,
+        "speedFactor": 0.01
+    },
+    "propertys": [
+        {
+            "name": "speed",
+            "caption": "Velocidad",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "heading",
+            "caption": "Orientaciu00f3n",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "satellite",
+            "caption": "Satu00e9lites",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "voltage_level_i2",
+            "caption": "Voltaje I1",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "voltage_level_i2",
+            "caption": "Voltaje I2",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "longitude",
+            "caption": "Longitud",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "latitude",
+            "caption": "Latitud",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "altitude",
+            "caption": "Altitud",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "eventId",
+            "caption": "Evento",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "mileage",
+            "caption": "Millas",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "batteryVoltage",
+            "caption": "Voltaje de la Bateru00eda",
+            "type": "text",
+            "options": null
+        },
+        {
+            "name": "in3",
+            "caption": "i-BOTu00d3N Pu00c1NICO",
+            "options": [
+                "ACTIVADO",
+                "NORMAL"
+            ]
+        },
+        {
+            "name": "in4",
+            "caption": "i-BOTu00d3N SEPARACIu00d3N",
+            "options": [
+                "ACTIVADO",
+                "NORMAL"
+            ]
+        },
+        {
+            "name": "in5",
+            "caption": "i-CAPu00d3",
+            "options": [
+                "ABIERTO",
+                "CERRADO"
+            ]
+        },
+        {
+            "name": "in6",
+            "caption": "i-CAVA",
+            "options": [
+                "ABIERTA",
+                "CERRADA"
+            ]
+        },
+        {
+            "name": "in7",
+            "caption": "i-CILINDRO",
+            "options": [
+                "SIN LLAVE",
+                "CON LLAVE"
+            ]
+        },
+        {
+            "name": "in8",
+            "caption": "i-COMPACTADORA",
+            "options": [
+                "ENCENDIDA",
+                "APAGADA"
+            ]
+        },
+        {
+            "name": "in11",
+            "caption": "i-ESCOTILLA",
+            "options": [
+                "ABIERTA",
+                "CERRADA"
+            ]
+        },
+        {
+            "name": "in13",
+            "caption": "i-MOTOR",
+            "options": [
+                "ENCENDIDO",
+                "APAGADO"
+            ]
+        },
+        {
+            "name": "in15",
+            "caption": "i-PANICO INALAMBRICO",
+            "options": [
+                "ACTIVADO",
+                "NORMAL"
+            ]
+        },
+        {
+            "name": "in16",
+            "caption": "i-PUERTA",
+            "options": [
+                "ABIERTAS",
+                "CERRADAS"
+            ]
+        },
+        {
+            "name": "in17",
+            "caption": "i-SIRENA",
+            "options": [
+                "ACTIVADA",
+                "NORMAL"
+            ]
+        },
+        {
+            "name": "in18",
+            "caption": "i-TRAILER",
+            "options": [
+                "CONECTADO",
+                "DESCONECTADO"
+            ]
+        },
+        {
+            "name": "in1",
+            "caption": "o-ARRANQUE",
+            "options": [
+                "BLOQUEADO",
+                "DESBLOQUEADO"
+            ]
+        },
+        {
+            "name": "in2",
+            "caption": "o-BOMBA",
+            "options": [
+                "BLOQUEADA",
+                "DESBLOQUEADA"
+            ]
+        },
+        {
+            "name": "in9",
+            "caption": "o-CORNETA",
+            "options": [
+                "ACTIVADA",
+                "NORMAL"
+            ]
+        },
+        {
+            "name": "in10",
+            "caption": "o-CORTACORRIENTE",
+            "options": [
+                "BLOQUEADO",
+                "DESBLOQUEADO"
+            ]
+        },
+        {
+            "name": "in12",
+            "caption": "o-LUCES",
+            "options": [
+                "ENCENDIDAS",
+                "APAGADAS"
+            ]
+        },
+        {
+            "name": "in14",
+            "caption": "o-MOTOR OUTPUT",
+            "options": [
+                "BLOQUEADO",
+                "DESBLOQUEADO"
+            ]
+        },
+        {
+            "name": "in19",
+            "caption": "o-TRAVEGAS",
+            "options": [
+                "BLOQUEADO",
+                "DESBLOQUEADO"
+            ]
+        }
+    ]
+}
