@@ -1,7 +1,6 @@
 /* Scss Document */
 * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -37,11 +36,8 @@ body, html {
 }
 
 .sg-menu.horizontal .menu {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .sg-menu.horizontal .item button {
@@ -67,27 +63,15 @@ body, html {
 }
 
 .sg-page > .body {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .sg-page > .body > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .sg-input {
@@ -96,21 +80,11 @@ body, html {
   margin: 4px;
   padding: 4px;
   border-radius: 4px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .sg-input input {
@@ -132,21 +106,13 @@ body, html {
 }
 
 .ss-form .form-group, .form .form-group {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .ss-form .form-group > *, .form .form-group > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .ss-form .form-group .form-field, .form .form-group .form-field {
@@ -175,20 +141,17 @@ body, html {
 .ss-form .form-nav input, .form .form-nav input {
   border: 0px;
   padding: 8px;
-  background: -webkit-gradient(linear, left top, left bottom, from(#2368b0), to(#145aa3));
   background: linear-gradient(#2368b0, #145aa3);
   color: white;
 }
 
 .ss-form .form-nav input:hover, .form .form-nav input:hover {
-  background: -webkit-gradient(linear, left top, left bottom, from(#c02d2d), to(#e04545));
   background: linear-gradient(#c02d2d, #e04545);
   cursor: pointer;
 }
 
 .ss-form1, .form {
   width: 100%;
-  background: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e1e1e1));
   background: linear-gradient(#f7f7f7, #e1e1e1);
   border: 1px solid #DCDCDC;
   padding: 5px;
@@ -202,17 +165,12 @@ body, html {
 }
 
 .ss-form1 .form-group, .form .form-group {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .ss-form1 .form-group > *, .form .form-group > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .ss-form1 .form-group .form-field, .form .form-group .form-field {
@@ -242,13 +200,11 @@ body, html {
 .ss-form1 .form-nav input, .form .form-nav input {
   border: 0px;
   padding: 8px;
-  background: -webkit-gradient(linear, left top, left bottom, from(#2368b0), to(#145aa3));
   background: linear-gradient(#2368b0, #145aa3);
   color: white;
 }
 
 .ss-form1 .form-nav input:hover, .form .form-nav input:hover {
-  background: -webkit-gradient(linear, left top, left bottom, from(#c02d2d), to(#e04545));
   background: linear-gradient(#c02d2d, #e04545);
   cursor: pointer;
 }

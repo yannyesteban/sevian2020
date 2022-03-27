@@ -15,8 +15,7 @@
 }
 
 * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif, tahoma;
 }
 
@@ -35,42 +34,28 @@ form {
 }
 
 .gt-layout {
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr;
-      grid-template-columns: 1fr;
-  -ms-grid-rows: 60px auto 1fr;
-      grid-template-rows: 60px auto 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 60px auto 1fr;
   height: 100%;
   overflow: auto;
   background: black;
 }
 
 .gt-layout > .banner {
-  -ms-grid-row: 1;
   grid-row: 1;
-  -ms-grid-column: 1;
   grid-column: 1;
   background-color: #003b38;
 }
 
 .gt-layout > .menu {
-  -ms-grid-row: 2;
   grid-row: 2;
-  -ms-grid-column: 1;
   grid-column: 1;
   background-color: #0d838b;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
   justify-items: stretch;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
 
 .gt-layout > .menu .sg-menu {
@@ -78,9 +63,7 @@ form {
 }
 
 .gt-layout > .body {
-  -ms-grid-row: 3;
   grid-row: 3;
-  -ms-grid-column: 1;
   grid-column: 1;
   background-color: #66c725;
 }
@@ -323,12 +306,9 @@ form {
 }
 
 .mark-tool-value .mark-tool-g1 {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   padding: 2px;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
+  justify-content: space-around;
 }
 
 .mark-tool-value .mark-tool-g1 input {
@@ -345,13 +325,9 @@ form {
   border: 3px solid white;
   height: 120px;
   overflow: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -ms-flex-line-pack: stretch;
-      align-content: stretch;
+  flex-wrap: wrap;
+  align-content: stretch;
   /*
 		display: grid;
 		grid-template-columns: repeat(8, 30px);
@@ -360,9 +336,7 @@ form {
 }
 
 .mark-tool-value .mark-tool-g2 * > {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .mark-tool-value .mark-tool-g2 div {
@@ -392,10 +366,8 @@ form {
 }
 
 .poly-tool-main .poly-tool-info .propertys {
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 5px;
 }
 
@@ -404,31 +376,22 @@ form {
 }
 
 .gt-webcar-login {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   height: 100%;
   background-image: url(../../../wallpaper/001.webp);
   background-size: auto 1080px;
   background-position-x: center;
   background-position-y: bottom;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   padding: 100px;
 }
 
 .gt-webcar-login .main {
-  display: -ms-grid;
   display: grid;
   border-radius: 10px;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
-  -ms-grid-rows: auto;
-      grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
   height: 100%;
   width: 800px;
   overflow: auto;
@@ -444,18 +407,13 @@ form {
 }
 
 .gt-webcar-login .main > .left-side {
-  -ms-grid-row: 1;
   grid-row: 1;
-  -ms-grid-column: 1;
   grid-column: 1;
   background-color: rgba(0, 0, 0, 0.445);
   overflow: auto;
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr;
-      grid-template-columns: 1fr;
-  -ms-grid-rows: 100px auto 30px;
-      grid-template-rows: 100px auto 30px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 100px auto 30px;
 }
 
 .gt-webcar-login .main > .left-side .webcar-name {
@@ -463,50 +421,35 @@ form {
   color: white;
   text-transform: capitalize;
   font-family: andreab;
-  -ms-grid-column-align: center;
-      justify-self: center;
+  justify-self: center;
   text-align: center;
-  -ms-flex-item-align: end;
-      align-self: flex-end;
+  align-self: flex-end;
 }
 
 .gt-webcar-login .main > .left-side .gtrack-logo {
-  -ms-grid-column-align: center;
-      justify-self: center;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
+  justify-self: center;
+  align-self: center;
   width: 180px;
 }
 
 .gt-webcar-login .main > .left-side .webcar-foot {
   color: snow;
   font-size: 8pt;
-  -ms-grid-column-align: center;
-      justify-self: center;
+  justify-self: center;
   text-align: center;
 }
 
 .gt-webcar-login .main > .right-side {
-  -ms-grid-row: 1;
   grid-row: 1;
-  -ms-grid-column: 2;
   grid-column: 2;
   overflow: auto;
   border-left: 2px solid #ffde4c;
   background-color: rgba(0, 0, 0, 0.616);
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 2fr;
-      grid-template-columns: 2fr;
-  -ms-grid-rows: 100px auto 120px;
-      grid-template-rows: 100px auto 120px;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  grid-template-columns: 2fr;
+  grid-template-rows: 100px auto 120px;
+  justify-content: center;
+  align-items: center;
 }
 
 .gt-webcar-login .main > .right-side .webcar-name {
@@ -514,19 +457,14 @@ form {
   color: white;
   text-transform: capitalize;
   font-family: andreab;
-  -ms-grid-column-align: center;
-      justify-self: center;
+  justify-self: center;
   text-align: center;
-  -ms-flex-item-align: end;
-      align-self: flex-end;
+  align-self: flex-end;
 }
 
 .gt-webcar-login .main > .right-side form {
-  -ms-grid-column-align: center;
-      justify-self: center;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
+  justify-self: center;
+  align-self: center;
 }
 
 .gt-webcar-login .main > .right-side form .menu {
@@ -547,28 +485,18 @@ form {
 }
 
 .gt-webcar-login .main > .right-side .gtrack-logo {
-  -ms-grid-column-align: center;
-      justify-self: center;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
+  justify-self: center;
+  align-self: center;
   width: 180px;
 }
 
 .sg-form.flat {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
 }
 
 .sg-form.flat > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .sg-form.flat .caption {
@@ -576,18 +504,10 @@ form {
 }
 
 .sg-form.flat .page {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
 }
 
 .sg-form.flat .page > .field *:not(.option) {
@@ -654,14 +574,12 @@ form {
 
 ._sg-menu- .item.open > .sub-menu {
   border: 3px solid #0077ff;
-  -webkit-animation: acc-open 0.5s ease-out forwards;
-          animation: acc-open 0.5s ease-out forwards;
+  animation: acc-open 0.5s ease-out forwards;
 }
 
 ._sg-menu- .item.close > .sub-menu {
   border: 3px solid red;
-  -webkit-animation: acc-close 0.5s ease-out forwards;
-          animation: acc-close 0.5s ease-out forwards;
+  animation: acc-close 0.5s ease-out forwards;
 }
 
 .icon-unit {
@@ -764,8 +682,7 @@ form {
   border-radius: 20%;
   padding: 1px;
   position: absolute;
-  -webkit-transform: translate(15px, -10px);
-          transform: translate(15px, -10px);
+  transform: translate(15px, -10px);
   color: #777777;
   font-weight: bold;
   min-width: 12px;
@@ -778,27 +695,18 @@ form {
 }
 
 .banner {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
   justify-items: stretch;
 }
 
 .banner > * {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 .banner .logo-bestsecurity {
   padding-left: 10px;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
+  align-self: center;
 }
 
 .banner .logo-bestsecurity img {
@@ -806,19 +714,14 @@ form {
 }
 
 .banner .logo-webcar {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1;
-          flex: 1 1;
+  flex: 1 1;
   text-align: right;
   font-size: 20pt;
   color: white;
   text-transform: capitalize;
   font-family: andreab;
-  -ms-grid-column-align: right;
-      justify-self: right;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
+  justify-self: right;
+  align-self: center;
   padding-right: 10px;
 }
 
@@ -831,13 +734,8 @@ form {
 }
 
 .unit-main {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
   height: 100%;
 }
 
@@ -870,13 +768,10 @@ form {
   color: #f4f7e0;
   background-color: #3a3a3aa9;
   padding: 1px;
-  display: -ms-grid;
   display: grid;
   grid-gap: 0px;
-  -ms-grid-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
-      grid-template-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
-  -ms-grid-rows: 1.4em auto;
-      grid-template-rows: 1.4em auto;
+  grid-template-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
+  grid-template-rows: 1.4em auto;
   overflow: hidden;
 }
 
@@ -971,10 +866,7 @@ form {
 }
 
 .info-commNO .main > .detail {
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 6;
   grid-column: 1/7;
-  -ms-grid-row: 2;
   grid-row: 2;
   background-color: rgba(209, 24, 24, 0.808);
 }
@@ -984,26 +876,20 @@ form {
 }
 
 .info-commNO .main > .detail {
-  display: -ms-grid;
   display: grid;
   grid-gap: 4px;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
-  -ms-grid-rows: auto auto;
-      grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
 }
 
 .info-comm-units .main {
   font-size: 11px;
   color: #f4f7e0;
   background-color: #3a3a3aa9;
-  display: -ms-grid;
   display: grid;
   grid-gap: 0px;
-  -ms-grid-columns: 20px 100px 100px 90px 90px 0px;
-      grid-template-columns: 20px 100px 100px 90px 90px 0px;
-  -ms-grid-rows: 1.4em auto;
-      grid-template-rows: 1.4em auto;
+  grid-template-columns: 20px 100px 100px 90px 90px 0px;
+  grid-template-rows: 1.4em auto;
   overflow: hidden;
   border-bottom: 1px solid white;
 }
@@ -1082,10 +968,7 @@ form {
 }
 
 .info-comm-units .main > :nth-child(7) {
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 6;
   grid-column: 1/7;
-  -ms-grid-row: 2;
   grid-row: 2;
   background-color: rgba(209, 24, 24, 0.808);
 }
@@ -1095,13 +978,10 @@ form {
 }
 
 .info-comm-units .main > .detail {
-  display: -ms-grid;
   display: grid;
   grid-gap: 4px;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
-  -ms-grid-rows: auto auto;
-      grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
 }
 
 .blocking-layer {
@@ -1118,13 +998,8 @@ form {
 }
 
 .alarm-main {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   overflow: auto;
   height: 100%;
 }
@@ -1143,13 +1018,9 @@ form {
   border: 3px solid white;
   height: 120px;
   overflow: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -ms-flex-line-pack: stretch;
-      align-content: stretch;
+  flex-wrap: wrap;
+  align-content: stretch;
   /*
 	display: grid;
 	grid-template-columns: repeat(8, 30px);
@@ -1158,9 +1029,7 @@ form {
 }
 
 .mark-tool-g2 * > {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .mark-tool-g2 div {
@@ -1178,8 +1047,6 @@ form {
 }
 
 .sgWin.win-info-comm .caption .text {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -1254,12 +1121,9 @@ form {
   font-size: 10px;
   color: #f4f7e0;
   padding: 4px;
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 16px minmax(50px, 100px) 50px minmax(60px, 1fr) 22px 50px 50px 60px;
-      grid-template-columns: 16px minmax(50px, 100px) 50px minmax(60px, 1fr) 22px 50px 50px 60px;
-  -ms-grid-rows: 1.4em;
-      grid-template-rows: 1.4em;
+  grid-template-columns: 16px minmax(50px, 100px) 50px minmax(60px, 1fr) 22px 50px 50px 60px;
+  grid-template-rows: 1.4em;
   overflow: auto;
   text-align: center;
   overflow: hidden;
@@ -1323,8 +1187,6 @@ form {
 }
 
 .info-comm.alarm .info, .info-comm.event .info {
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 8;
   grid-column: 1/9;
   background-color: #254605;
 }
@@ -1333,12 +1195,9 @@ form {
   font-size: 10px;
   color: #f4f7e0;
   padding: 4px;
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 16px minmax(70px, 100px) 50px minmax(110px, 1fr) 22px 50px;
-      grid-template-columns: 16px minmax(70px, 100px) 50px minmax(110px, 1fr) 22px 50px;
-  -ms-grid-rows: 1.4em;
-      grid-template-rows: 1.4em;
+  grid-template-columns: 16px minmax(70px, 100px) 50px minmax(110px, 1fr) 22px 50px;
+  grid-template-rows: 1.4em;
   overflow: auto;
   text-align: center;
   overflow: hidden;
@@ -1403,8 +1262,6 @@ form {
 }
 
 .info-comm.now .info {
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 6;
   grid-column: 1/7;
   background-color: #254605;
 }
@@ -1414,13 +1271,10 @@ form {
   color: #f4f7e0;
   background-color: #3a3a3aa9;
   padding: 1px;
-  display: -ms-grid;
   display: grid;
   grid-gap: 0px;
-  -ms-grid-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
-      grid-template-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
-  -ms-grid-rows: 1.4em auto;
-      grid-template-rows: 1.4em auto;
+  grid-template-columns: 16px minmax(70px, 90px) 50px 80px 20px auto;
+  grid-template-rows: 1.4em auto;
   overflow: hidden;
 }
 
@@ -1515,10 +1369,7 @@ form {
 }
 
 .info-comm .main > .detail {
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 6;
   grid-column: 1/7;
-  -ms-grid-row: 2;
   grid-row: 2;
   background-color: rgba(209, 24, 24, 0.808);
 }
@@ -1528,13 +1379,10 @@ form {
 }
 
 .info-comm .main > .detail {
-  display: -ms-grid;
   display: grid;
   grid-gap: 4px;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
-  -ms-grid-rows: auto auto;
-      grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
 }
 
 .sg-popup {

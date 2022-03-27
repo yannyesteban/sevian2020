@@ -1,29 +1,10 @@
 /* Scss Document */
-@-webkit-keyframes w-visible {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 @keyframes w-visible {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
-  }
-}
-
-@-webkit-keyframes w-hidden {
-  0% {
-    visibility: visible;
-    opacity: 1;
-  }
-  100% {
-    visibility: hidden;
-    opacity: 0;
   }
 }
 
@@ -39,13 +20,11 @@
 }
 
 .sgPopup.visible {
-  -webkit-animation: 0.5s w-visible ease-in forwards;
-          animation: 0.5s w-visible ease-in forwards;
+  animation: 0.5s w-visible ease-in forwards;
 }
 
 .sgPopup.hidden {
-  -webkit-animation: 0.2s w-hidden ease-out backwards;
-          animation: 0.2s w-hidden ease-out backwards;
+  animation: 0.2s w-hidden ease-out backwards;
 }
 
 #menu_01 {
@@ -63,44 +42,31 @@
 }
 
 .sgWindow {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   background-color: white;
   min-width: 160px;
   min-height: 44px;
-  -webkit-box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
-          box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
+  box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
   border: 2px solid #868484;
   _border-radius: 4px;
   max-height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -ms-flex-line-pack: stretch;
-      align-content: stretch;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  align-content: stretch;
+  justify-content: center;
 }
 
 .sgWindow.active {
-  -webkit-box-sizing: padding-box;
-          box-sizing: padding-box;
+  box-sizing: padding-box;
   border-color: red;
 }
 
 .sgWindow.visible {
-  -webkit-animation: 0.5s w-visible ease-in forwards;
-          animation: 0.5s w-visible ease-in forwards;
+  animation: 0.5s w-visible ease-in forwards;
 }
 
 .sgWindow.hidden {
-  -webkit-animation: 0.2s w-hidden ease-out backwards;
-          animation: 0.2s w-hidden ease-out backwards;
+  animation: 0.2s w-hidden ease-out backwards;
 }
 
 .sgWindow.min {
@@ -110,15 +76,14 @@
 .sgWindow.resize, .sgWindow.move {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
 
 .sgWindow > .header {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 .sgWindow > .header img {
@@ -127,9 +92,7 @@
 
 .sgWindow > .body {
   position: relative;
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   overflow: auto;
 }
 
@@ -145,21 +108,15 @@
 
 .sgWindow > .header {
   _background-color: black;
-  background: -webkit-gradient(linear, left top, left bottom, from(#4a0303), to(#a50c00));
   background: linear-gradient(#4a0303, #a50c00);
   height: 40px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: flex-start;
+  align-items: center;
   padding: 0px 8px 0px 8px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
@@ -174,9 +131,7 @@
 }
 
 .sgWindow > .header .caption {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   color: white;
   padding-left: 10px;
   white-space: nowrap;

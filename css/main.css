@@ -7,8 +7,7 @@ html, body {
 }
 
 * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   font-family: tahoma;
   font-size: 11pt;
 }
@@ -42,8 +41,7 @@ html, body {
   top: 50%;
   left: 50%;
   /* bring your own prefixes */
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .rs_ {
@@ -72,9 +70,7 @@ html, body {
   padding: 10px;
   overflow: auto;
   max-height: 100%;
-  -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
   -moz-user-select: none;
 }
 
@@ -83,12 +79,7 @@ html, body {
   color: white;
   height: 100px;
   width: 500px;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  flex-direction: column;
   display: flex;
   min-width: 50px;
   min-height: 60px;
@@ -96,9 +87,8 @@ html, body {
 
 #m11 .sss {
   -moz-user-select: none;
-  -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
 }
 
 #m11 .hand {
@@ -108,17 +98,13 @@ html, body {
 }
 
 #m11 .hand > * {
-  -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
   -moz-user-select: none;
   pointer-events: none;
 }
 
 #m11 ul {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   margin: 0px;
   background: #838080;
   display: block;

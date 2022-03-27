@@ -11,18 +11,11 @@
   min-height: 28px;
   max-height: 100%;
   max-width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
-          box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  box-shadow: 5px 6px 12px -4px rgba(0, 0, 0, 0.5);
   background-color: rgba(1, 1, 1, 0.6);
   border: 1px solid red;
-  -webkit-transition: 0.5s ease-in background-color;
   transition: 0.5s ease-in background-color;
 }
 
@@ -40,15 +33,9 @@
 
 .sgWin.sevian > .caption {
   background-color: rgba(185, 6, 0, 0.719);
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
+  flex: 0 0 auto;
   height: 28px;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  align-items: center;
   display: flex;
   color: white;
   font-size: 13px;
@@ -56,9 +43,7 @@
 }
 
 .sgWin.sevian > .caption > .win-btn {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
+  flex: 0 0 auto;
   background-image: url(../images/win_icons.png?i=18);
   width: 20px;
   height: 20px;
@@ -69,7 +54,7 @@
   background-position: 0px -20px;
 }
 
-.sgWin.sevian > .caption > .win-btn.min:HOVER {
+.sgWin.sevian > .caption > .win-btn.min:hover {
   background-position: 0px -200px;
 }
 
@@ -77,7 +62,7 @@
   background-position: -40px -20px;
 }
 
-.sgWin.sevian > .caption > .win-btn.max:HOVER {
+.sgWin.sevian > .caption > .win-btn.max:hover {
   background-position: -40px -200px;
 }
 
@@ -85,7 +70,7 @@
   background-position: -20px -20px;
 }
 
-.sgWin.sevian > .caption > .win-btn.auto:HOVER {
+.sgWin.sevian > .caption > .win-btn.auto:hover {
   background-position: -20px -200px;
 }
 
@@ -94,14 +79,12 @@
   background-position: -60px -20px;
 }
 
-.sgWin.sevian > .caption > .win-btn.close:HOVER {
+.sgWin.sevian > .caption > .win-btn.close:hover {
   background-position: -60px -200px;
 }
 
 .sgWin.sevian > .caption > .icon {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
+  flex: 0 0 auto;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -110,9 +93,7 @@
 }
 
 .sgWin.sevian > .caption > .text {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   padding-left: 10px;
   white-space: nowrap;
   overflow: hidden;
@@ -133,9 +114,7 @@
 }
 
 .sgWin.sevian.min > .body {
-  -webkit-box-flex: 0 !important;
-      -ms-flex: 0 0 0px !important;
-          flex: 0 0 0px !important;
+  flex: 0 0 0px !important;
   height: 0px;
 }
 
@@ -185,16 +164,10 @@
 }
 
 .sgWin.sevian.moving {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .sgWin.sevian.resizing {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 /*# sourceMappingURL=Window.css.map */

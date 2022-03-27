@@ -14,10 +14,7 @@
 }
 
 .sg-cal {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
   background-color: white;
   color: #686868;
   width: 100%;
@@ -134,14 +131,9 @@
 }
 
 .sg-cal .sg-cal-months {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-line-pack: stretch;
-      align-content: stretch;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-content: stretch;
+  justify-content: space-between;
   _background-color: gainsboro;
   color: #777777;
 }
@@ -155,7 +147,6 @@
   text-align: center;
   font-size: 8pt;
   line-height: 2em;
-  -webkit-transition: 0.5s all ease-out;
   transition: 0.5s all ease-out;
   cursor: pointer;
 }
@@ -172,14 +163,9 @@
 }
 
 .sg-cal .sg-cal-years {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-line-pack: stretch;
-      align-content: stretch;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-content: stretch;
+  justify-content: space-between;
   background-color: #f0f0f0;
   color: #777777;
   margin: 1px;
@@ -208,35 +194,24 @@
 
 .sg-cal .sg-cal-head {
   background-color: #cdcdcd;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   height: 2em;
   margin: 1px;
-  _-ms-flex-line-pack: center;
-  _    align-content: center;
-  _-webkit-box-pack: justify;
-  _    -ms-flex-pack: justify;
-  _        justify-content: space-between;
+  _align-content: center;
+  _justify-content: space-between;
   cursor: pointer;
 }
 
 .sg-cal .sg-cal-head > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   _border: 1px solid white;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
 .sg-cal .sg-cal-head > * > * {
   font-size: 9pt;
   text-align: center;
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   _margin: auto;
   line-height: 2em;
 }
@@ -261,9 +236,7 @@
 
 .sg-cal .sg-cal-head select {
   font-size: 9pt;
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
+  flex: 0 0 auto;
   text-align: left;
   margin: auto;
 }
@@ -310,8 +283,7 @@
   padding: 4px;
   min-width: 160px;
   min-height: 60px;
-  -webkit-box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
-          box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
+  box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
   _border: 2px solid gray;
   border-radius: 4px;
 }
@@ -347,8 +319,7 @@
   padding: 4px;
   min-width: 160px;
   min-height: 60px;
-  -webkit-box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
-          box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
+  box-shadow: 5px 5px 5px rgba(132, 132, 132, 0.5);
   _border: 2px solid gray;
   border-radius: 4px;
 }

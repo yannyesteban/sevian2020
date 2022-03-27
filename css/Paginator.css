@@ -1,19 +1,11 @@
 .sg-paginator {
   padding: 4px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
   font-family: 'Courier New', Courier, monospace;
   font-size: 9pt;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .sg-paginator .page {
@@ -42,7 +34,6 @@
 .sg-paginator .active {
   background-color: #a8a8a8;
   color: #424242;
-  -webkit-transition: background-color .5s;
   transition: background-color .5s;
 }
 

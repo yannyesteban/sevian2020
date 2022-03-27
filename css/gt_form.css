@@ -59,7 +59,6 @@
   color: #e7e7e7;
   border: 2px solid #ececec;
   cursor: pointer;
-  -webkit-transition: 0.5s all ease-out;
   transition: 0.5s all ease-out;
 }
 
@@ -69,13 +68,8 @@
 }
 
 .sg-form.gt_cota_unit > .page {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
 }
 
 .sg-form.gt_cota_unit > .page > .field {

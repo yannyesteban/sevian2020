@@ -7,150 +7,64 @@ html, body {
 }
 
 * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
-@-webkit-keyframes open_fly {
-  0% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 0;
-    -webkit-transform: translate(-10%, -210%);
-            transform: translate(-10%, -210%);
-  }
-  100% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 1;
-    -webkit-transform: translate(-10%, -210%);
-            transform: translate(-10%, -210%);
-  }
+  box-sizing: border-box;
 }
 
 @keyframes open_fly {
   0% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 0;
-    -webkit-transform: translate(-10%, -210%);
-            transform: translate(-10%, -210%);
+    transform: translate(-10%, -210%);
   }
   100% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 1;
-    -webkit-transform: translate(-10%, -210%);
-            transform: translate(-10%, -210%);
-  }
-}
-
-@-webkit-keyframes close_fly {
-  0% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 1;
-    -webkit-transform: translate(-10%, -110%);
-            transform: translate(-10%, -110%);
-  }
-  15% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 1;
-    -webkit-transform: translate(-10%, -10%);
-            transform: translate(-10%, -10%);
-  }
-  85% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 1;
-    -webkit-transform: translate(-10%, -10%);
-            transform: translate(-10%, -10%);
-  }
-  100% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 0;
-    -webkit-transform: translate(-10%, 110%);
-            transform: translate(-10%, 110%);
+    transform: translate(-10%, -210%);
   }
 }
 
 @keyframes close_fly {
   0% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 1;
-    -webkit-transform: translate(-10%, -110%);
-            transform: translate(-10%, -110%);
+    transform: translate(-10%, -110%);
   }
   15% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 1;
-    -webkit-transform: translate(-10%, -10%);
-            transform: translate(-10%, -10%);
+    transform: translate(-10%, -10%);
   }
   85% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 1;
-    -webkit-transform: translate(-10%, -10%);
-            transform: translate(-10%, -10%);
+    transform: translate(-10%, -10%);
   }
   100% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 0;
-    -webkit-transform: translate(-10%, 110%);
-            transform: translate(-10%, 110%);
-  }
-}
-
-@-webkit-keyframes close_fly2 {
-  0% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 1;
-    _-webkit-transform: translate(-10%, -10%);
-    _        transform: translate(-10%, -10%);
-  }
-  100% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
-    opacity: 0;
-    _-webkit-transform: translate(-10%, 110%);
-    _        transform: translate(-10%, 110%);
+    transform: translate(-10%, 110%);
   }
 }
 
 @keyframes close_fly2 {
   0% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 1;
-    _-webkit-transform: translate(-10%, -10%);
-    _        transform: translate(-10%, -10%);
+    _transform: translate(-10%, -10%);
   }
   100% {
-    -webkit-transform-origin: 0% 0%;
-            transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
     opacity: 0;
-    _-webkit-transform: translate(-10%, 110%);
-    _        transform: translate(-10%, 110%);
+    _transform: translate(-10%, 110%);
   }
 }
 
 #x1.fly {
   background-color: chocolate;
-  -webkit-transition-property: opacity;
   transition-property: opacity;
-  -webkit-transition-duration: 2s;
-          transition-duration: 2s;
-  -webkit-transition-delay: 2s;
-          transition-delay: 2s;
-  -webkit-transform: translate(-150%, -200%);
-          transform: translate(-150%, -200%);
+  transition-duration: 2s;
+  transition-delay: 2s;
+  transform: translate(-150%, -200%);
   opacity: 0;
   _visibility: hidden;
   width: 300px;
@@ -163,31 +77,23 @@ html, body {
   opacity: 1;
   border: 2px solid red;
   background-color: aqua;
-  -webkit-transform: translate(-10%, -110%);
-          transform: translate(-10%, -110%);
-  -webkit-animation: close_fly  4s ease-in 6s forwards;
-          animation: close_fly  4s ease-in 6s forwards;
+  transform: translate(-10%, -110%);
+  animation: close_fly  4s ease-in 6s forwards;
 }
 
 #x1[data-sg-mode=close] {
   _visibility: hidden;
   _opacity: 1;
-  -webkit-transform: translate(-10%, 10%);
-          transform: translate(-10%, 10%);
-  -webkit-animation: none;
-          animation: none;
+  transform: translate(-10%, 10%);
+  animation: none;
 }
 
 #x2.fly {
   background-color: chocolate;
-  -webkit-transition-property: opacity;
   transition-property: opacity;
-  -webkit-transition-duration: 2s;
-          transition-duration: 2s;
-  -webkit-transition-delay: 0s;
-          transition-delay: 0s;
-  -webkit-transform: translate(-80%, -110%);
-          transform: translate(-80%, -110%);
+  transition-duration: 2s;
+  transition-delay: 0s;
+  transform: translate(-80%, -110%);
   opacity: 0;
   _visibility: hidden;
   width: 300px;
@@ -200,18 +106,14 @@ html, body {
   opacity: 1;
   border: 2px solid red;
   background-color: #d0d0d0;
-  -webkit-transform: translate(-10%, -10%);
-          transform: translate(-10%, -10%);
-  -webkit-animation: close_fly2  3s ease-out 4s forwards;
-          animation: close_fly2  3s ease-out 4s forwards;
+  transform: translate(-10%, -10%);
+  animation: close_fly2  3s ease-out 4s forwards;
 }
 
 #x2[data-sg-mode=close] {
   _visibility: hidden;
   _opacity: 1;
-  -webkit-transform: translate(-10%, 10%);
-          transform: translate(-10%, 10%);
-  -webkit-animation: none;
-          animation: none;
+  transform: translate(-10%, 10%);
+  animation: none;
 }
 /*# sourceMappingURL=flyPopup.css.map */

@@ -223,3 +223,23 @@ END $$
 
 DELIMITER ;
 
+
+DELIMITER $$
+CREATE TRIGGER cota.cot_update_vehiculos
+AFTER UPDATE ON vehiculos
+FOR EACH ROW
+BEGIN
+
+	UPDATE gt.vehicle as v
+
+    SET plate = NEW.placa,
+   v.year = NEW.ano,
+   color = NEW.color,
+   v.serial = NEW.serial
+
+
+  WHERE id2 = NEW.codvehiculo;
+
+END $$
+
+DELIMITER ;

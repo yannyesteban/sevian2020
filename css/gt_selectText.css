@@ -1,6 +1,5 @@
 .mapboxgl-ctrl {
-  -webkit-transform: none !important;
-          transform: none !important;
+  transform: none !important;
 }
 
 .list-menu {
@@ -11,10 +10,7 @@
   min-height: 2px;
   min-width: 50px;
   width: auto;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
   background-color: #ffffff;
   overflow: auto;
   padding: 0px;

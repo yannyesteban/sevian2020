@@ -1,50 +1,16 @@
 /* Scss Document */
-@-webkit-keyframes ac_open {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(0.5);
-            transform: scale(0.5);
-    -webkit-transform-origin: 0 0;
-            transform-origin: 0 0;
-    max-height: 0px;
-  }
-  100% {
-    max-height: 600px;
-    opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    -webkit-transform-origin: 0 0;
-            transform-origin: 0 0;
-  }
-}
 @keyframes ac_open {
   0% {
     opacity: 0;
-    -webkit-transform: scale(0.5);
-            transform: scale(0.5);
-    -webkit-transform-origin: 0 0;
-            transform-origin: 0 0;
+    transform: scale(0.5);
+    transform-origin: 0 0;
     max-height: 0px;
   }
   100% {
     max-height: 600px;
     opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    -webkit-transform-origin: 0 0;
-            transform-origin: 0 0;
-  }
-}
-
-@-webkit-keyframes ac_close {
-  0% {
-    opacity: 1;
-    max-height: 600px;
-  }
-  100% {
-    opacity: 0;
-    max-height: 0px;
-    overflow: hidden;
+    transform: scale(1);
+    transform-origin: 0 0;
   }
 }
 
@@ -62,10 +28,7 @@
 
 .sg-tab > .menu > .tab-menu {
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .sg-tab > .body > .tab-body:not(.tab-active) {
@@ -82,16 +45,12 @@
   text-overflow: ellipsis "...";
   max-width: 90px;
   min-width: 70px;
-  -webkit-box-sizing: padding-box;
-          box-sizing: padding-box;
+  box-sizing: padding-box;
   border-radius: 4px 12px 0px 0px;
   margin: 0px 2px 0px 0px;
   padding: 4px 10px 4px 10px;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .sg-tab2021 > .menu > .tab-menu.tab-active {
@@ -108,33 +67,20 @@
   width: 100%;
   background-color: #cfcfcf;
   padding: 4px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   overflow: auto;
 }
 
 .sg-tab_ > .tab-menu {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 auto;
-          flex: 0 0 auto;
-  -webkit-box-sizing: padding-box !important;
-          box-sizing: padding-box !important;
+  flex: 0 0 auto;
+  box-sizing: padding-box !important;
   padding: 0px;
   margin: 0px;
   padding: 0px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: baseline;
-      -ms-flex-pack: baseline;
-          justify-content: baseline;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  justify-content: baseline;
+  flex-wrap: wrap;
   font-size: 9pt;
 }
 
@@ -144,8 +90,7 @@
   text-overflow: ellipsis "...";
   max-width: 90px;
   min-width: 70px;
-  -webkit-box-sizing: padding-box;
-          box-sizing: padding-box;
+  box-sizing: padding-box;
   background-color: #6f6f6f;
   text-decoration: none;
   color: white;
@@ -168,14 +113,10 @@
 }
 
 .sg-tab_ > .tab-body {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   color: white !important;
   border-top: 4px solid #cc530d;
   overflow: auto;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -188,17 +129,13 @@
 }
 
 .sg-tab_ > .tab-body > div.tab-active {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   overflow: auto;
   border: 4px solid red;
 }
 
 .sg-tab_ > .tab-body > div.tab-active > * {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
+  flex: 1 1 auto;
   overflow: auto;
   border: 4px solid #a33582;
 }
@@ -212,14 +149,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis "...";
-  -webkit-box-sizing: padding-box;
-          box-sizing: padding-box;
+  box-sizing: padding-box;
   padding: 4px 10px 4px 10px;
   cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .sg-accordion > .menu > .tab-menu.tab-active {
@@ -227,13 +160,11 @@
 }
 
 .sg-accordion > .menu > .tab-body.tab-active {
-  -webkit-animation: ac_open  0.5s ease-out forwards;
-          animation: ac_open  0.5s ease-out forwards;
+  animation: ac_open  0.5s ease-out forwards;
   color: yellow;
 }
 
 .sg-accordion > .menu > .tab-body:not(.tab-active) {
-  -webkit-animation: ac_close  0.1s ease-out forwards;
-          animation: ac_close  0.1s ease-out forwards;
+  animation: ac_close  0.1s ease-out forwards;
 }
 /*# sourceMappingURL=sgTab.css.map */
