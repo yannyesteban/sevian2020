@@ -11,6 +11,11 @@ BEGIN
 		SET NEW.date_time = now();
 
     END IF;
+	
+	
+	If(year(NEW.date_time) < YEAR(NOW())) THEN
+    	SET NEW.date_time = now();
+	END IF;
     
 	UPDATE unit 
 	SET 
