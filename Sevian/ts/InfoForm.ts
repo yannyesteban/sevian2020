@@ -1,42 +1,42 @@
 import { _sgQuery as $, SQObject } from "../../Sevian/ts/Query.js";
-import {LayerTool}  from '../../gt/ts/LayerTool.js';
-import {Float}  from './Window.js';
+import { LayerTool } from '../../gt/ts/LayerTool.js';
+import { Float } from './Window.js';
 
-export class InfoForm{
+export class InfoForm {
 
-    public id:any = "";
-    private main:SQObject = null;
-    private target:any = null;
-    private value:any = null;
-    private data:any = null;
+    public id: any = "";
+    private main: SQObject = null;
+    private target: any = null;
+    private value: any = null;
+    private data: any = null;
     private html: any = "";
     private templateHtml: any = "";
-    private template:any = null;
-    private context:any = null;
-    private caption:any = null;
-    private dataUser:any = null;
-    private onDataUser:Function = null;
-    private propertys:any = null;
-    private className:any = null;
+    private template: any = null;
+    private context: any = null;
+    private caption: any = null;
+    private dataUser: any = null;
+    private onDataUser: Function = null;
+    private propertys: any = null;
+    private className: any = null;
     private mode: string = "";
     private modePropertys: string[] = [];
 
 
-    public onSetData: (data:any) => void = (data) => { };
-    constructor(info:any){
-        
+    public onSetData: (data: any) => void = (data) => { };
+    constructor(info: any) {
 
-        for(let x in info){
-            if(this.hasOwnProperty(x)) {
+
+        for (let x in info) {
+            if (this.hasOwnProperty(x)) {
                 this[x] = info[x];
             }
         }
 
         this.templateHtml = this.html;
 
-        let main = (this.id)? $(this.id): false;
+        let main = (this.id) ? $(this.id) : false;
 
-        if(!main){
+        if (!main) {
             main = $.create("div").attr("id", this.id);
 
         }
@@ -51,10 +51,10 @@ export class InfoForm{
             target.append(main);
         }
     }
-    public getMain(){
+    public getMain() {
         return this.main;
     }
-    public get(){
+    public get() {
         return this.main.get();
     }
 
@@ -82,14 +82,14 @@ export class InfoForm{
 
         let elems = this.main.queryAll("[data-id]");
 
-        for(let e of elems){
+        for (let e of elems) {
             const elem = $(e);
             elem.text(data[elem.ds("id")]);
         }
 
 
     }
-    public setcaption(caption:any){
+    public setcaption(caption: any) {
 
     }
 
@@ -102,7 +102,7 @@ export class InfoForm{
 
     public setMode(mode?: string) {
         this.mode = mode || "";
-        
+
 
         this.main.ds("infoMode", this.mode);
     }
@@ -127,9 +127,9 @@ export class InfoForm{
 
         while (child = template.querySelector("[data-detail]")) {
 
-            const myKey:string = child.dataset.detailKey || null;
+            const myKey: string = child.dataset.detailKey || null;
             const myIndex: string = child.dataset.detailIndex || null;
-            const myExp:string = child.dataset.detailExp;
+            const myExp: string = child.dataset.detailExp;
 
             let aKey = child.dataset.detail.split(":");
 
@@ -145,7 +145,7 @@ export class InfoForm{
             let lastNode = child;
 
             if (data[key]) {
-                
+
                 let auxKey = alias;
 
                 if (master) {
@@ -177,7 +177,7 @@ export class InfoForm{
         }
     }
 
-    evalAttributes(element:HTMLElement, data, key?) {
+    evalAttributes(element: HTMLElement, data, key?) {
 
         for (let i = element.attributes.length - 1; i >= 0; i--) {
             element.setAttribute(element.attributes[i].name, this.evalHTML(element.attributes[i].value, data, key));
@@ -202,10 +202,10 @@ export class InfoForm{
 
             levels.forEach(key => {
 
-                if(valid && tempData[key] !== undefined && tempData[key] === null){
+                if (valid && tempData[key] !== undefined && tempData[key] === null) {
                     tempData = "";
                     valid = false;
-                }else if (valid && tempData[key] !== undefined) {
+                } else if (valid && tempData[key] !== undefined) {
                     tempData = tempData[key];
                     valid = true;
                 } else {
@@ -230,7 +230,7 @@ export class InfoForm{
         let info = exp.matchAll(regex);
         for (let match of info) {
             try {
-                const F =  $.bind("return "+match[3], data);
+                const F = $.bind("return " + match[3], data);
                 data[match[2]] = F();
             } catch (error) {
                 console.log(error);
