@@ -734,6 +734,7 @@ export class IStartekEvent {
         }
         const grid = main.create("div").addClass("grid");
         const query = command.values || {};
+        console.log(command.values);
         let param0 = query.param_0 || "" + "";
         let param1 = query.param_1 || "" + "";
         let param2 = query.param_2 || "" + "";
@@ -754,7 +755,7 @@ export class IStartekEvent {
             ["Armed state", value[1] ? "armed" : "disarmed"],
             ["RFID/iButton login status", value[0] ? "log in," : "log out"]
         ];
-        param1 = "02";
+        //param1 = "02";
         value = hexToBit(param1);
         const p2 = [
             ["input 1 status", value[3] ? "Activo" : "Inactivo"],
@@ -762,7 +763,7 @@ export class IStartekEvent {
             ["input 3 status", value[1] ? "Activo" : "Inactivo"],
             ["input 4 status", value[0] ? "Activo" : "Inactivo"]
         ];
-        param2 = "00";
+        //param2 = "00";
         value = hexToBit(param2);
         const p3 = [
             ["output 1 status", value[3] ? "Activo" : "Inactivo"],

@@ -972,7 +972,7 @@ export class IStartekEvent {
 
         
         const query = command.values || {};
-
+        console.log(command.values);
     
         let param0 = query.param_0 || "" + "";
         let param1 = query.param_1 || "" + "";
@@ -1001,7 +1001,7 @@ export class IStartekEvent {
             ["RFID/iButton login status", value[0] ? "log in,": "log out"]
         ];
 
-        param1 = "02";
+        //param1 = "02";
 
         value = hexToBit(param1);
 
@@ -1012,7 +1012,7 @@ export class IStartekEvent {
             ["input 4 status", value[0] ? "Activo": "Inactivo"]
         ];
 
-        param2 = "00";
+        //param2 = "00";
 
         value = hexToBit(param2);
         
