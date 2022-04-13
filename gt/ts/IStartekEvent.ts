@@ -1006,10 +1006,10 @@ export class IStartekEvent {
         value = hexToBit(param1);
 
         const p2 = [
-            ["input 1 status", value[0] ? "Activo": "Inactivo"],
-            ["input 2 status", value[1] ? "Activo": "Inactivo"],
-            ["input 3 status", value[2] ? "Activo": "Inactivo"],
-            ["input 4 status", value[3] ? "Activo": "Inactivo"]
+            ["input 1 status", value[3] ? "Activo": "Inactivo"],
+            ["input 2 status", value[2] ? "Activo": "Inactivo"],
+            ["input 3 status", value[1] ? "Activo": "Inactivo"],
+            ["input 4 status", value[0] ? "Activo": "Inactivo"]
         ];
 
         param2 = "00";
