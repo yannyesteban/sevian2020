@@ -985,7 +985,7 @@ export class IStartekEvent {
 
         const row = grid.create("div").addClass("row");
 
-        param0 = "01";
+        //param0 = "01";
 
         let value = hexToBit(param0);
 

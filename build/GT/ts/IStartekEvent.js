@@ -742,7 +742,7 @@ export class IStartekEvent {
         let param5 = query.param_5 || "" + "";
         let param6 = query.param_6 || "" + "";
         const row = grid.create("div").addClass("row");
-        param0 = "01";
+        //param0 = "01";
         let value = hexToBit(param0);
         const p1 = [
             ["GPRS connection status of IP1", value[7] ? "connected" : "disconnected"],

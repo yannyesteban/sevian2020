@@ -38,6 +38,14 @@ BEGIN
 	SET d.name = ce.codigo
 	WHERE d.id2 = NEW.codequipo;
 
+	UPDATE gt.device as d
+	INNER JOIN cota.equipos as e ON e.codequipo = d.id2
+	INNER JOIN cota.lineas as l ON l.codlinea = e.linea_celular
+	INNER JOIN gt.phone_number as ph ON ph.id2= l.codlinea
+
+	SET d.phone_number_id = ph.id
+	WHERE d.id2 = NEW.codequipo;
+
 END $$
 
 DELIMITER ;
