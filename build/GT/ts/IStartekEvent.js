@@ -765,10 +765,10 @@ export class IStartekEvent {
         param2 = "00";
         value = hexToBit(param2);
         const p3 = [
-            ["output 1 status", value[0] ? "Activo" : "Inactivo"],
-            ["output 2 status", value[1] ? "Activo" : "Inactivo"],
-            ["output 3 status", value[2] ? "Activo" : "Inactivo"],
-            ["output 4 status", value[3] ? "Activo" : "Inactivo"]
+            ["output 1 status", value[3] ? "Activo" : "Inactivo"],
+            ["output 2 status", value[2] ? "Activo" : "Inactivo"],
+            ["output 3 status", value[1] ? "Activo" : "Inactivo"],
+            ["output 4 status", value[0] ? "Activo" : "Inactivo"]
         ];
         p1.concat(p2).concat(p3).forEach(e => {
             row.create("span").addClass("label").text(e[0]);
