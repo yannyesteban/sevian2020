@@ -746,22 +746,22 @@ export class IStartekEvent {
         //param0 = "01";
         let value = hexToBit(param0);
         const p1 = [
-            ["GPRS connection status of IP1", value[7] ? "connected" : "disconnected"],
-            ["GPRS connection status of IP2", value[6] ? "connected" : "disconnected"],
-            ["GPS positioning status", value[5] ? "valid" : "invalid"],
-            ["External power connection status", value[4] ? "connected" : "disconnected"],
-            ["GPS antenna connection status", value[3] ? "connected" : "disconnected"],
-            ["Stop status", value[2] ? "stop" : "move"],
-            ["Armed state", value[1] ? "armed" : "disarmed"],
-            ["RFID/iButton login status", value[0] ? "log in," : "log out"]
+            ["GPRS connection status of IP1", value[0] ? "connected" : "disconnected"],
+            ["GPRS connection status of IP2", value[1] ? "connected" : "disconnected"],
+            ["GPS positioning status", value[2] ? "valid" : "invalid"],
+            ["External power connection status", value[3] ? "connected" : "disconnected"],
+            ["GPS antenna connection status", value[4] ? "connected" : "disconnected"],
+            ["Stop status", value[5] ? "stop" : "move"],
+            ["Armed state", value[6] ? "armed" : "disarmed"],
+            ["RFID/iButton login status", value[7] ? "log in," : "log out"]
         ];
         //param1 = "02";
         value = hexToBit(param1);
         const p2 = [
-            ["input 1 status", value[3] ? "Activo" : "Inactivo"],
-            ["input 2 status", value[2] ? "Activo" : "Inactivo"],
-            ["input 3 status", value[1] ? "Activo" : "Inactivo"],
-            ["input 4 status", value[0] ? "Activo" : "Inactivo"]
+            ["input 1 status", value[0] ? "Activo" : "Inactivo"],
+            ["input 2 status", value[1] ? "Activo" : "Inactivo"],
+            ["input 3 status", value[2] ? "Activo" : "Inactivo"],
+            ["input 4 status", value[3] ? "Activo" : "Inactivo"]
         ];
         //param2 = "00";
         value = hexToBit(param2);
