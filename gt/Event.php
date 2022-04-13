@@ -588,7 +588,7 @@ class Event
             date_format(t.date_time, '%d/%m/%Y') as uDate,
 
             UNIX_TIMESTAMP(now()) as ts,
-            e.title as myEvent,
+            e.title as myEvent, voice_number as phone,
             de.name as event,m.name as device_model, v.version,IFNULL(v.name, '') as protocol
 
 
@@ -607,6 +607,7 @@ class Event
         INNER JOIN device_version as v on v.id = de.version_id
         INNER JOIN device_model as m ON m.id = v.id_model
         LEFT JOIN device_name as dn ON dn.name = de.name
+		LEFT JOIN phone_number as ph ON ph.id = de.phone_number_id
 
 		LEFT JOIN device_event as dev ON dev.version_id = de.version_id AND dev.event_id = e.event_id 
 
