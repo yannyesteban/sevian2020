@@ -1,0 +1,212 @@
+{
+    "name": "iStartek_v1.0",
+    "pass":"0000",
+    "header":3564,
+    "brand": "s",
+    "decode": {
+        "cmd": "&&(\\w)(\\d+),(\\w+),(\\w+)(?:,(.+))?(\\w{2})",
+        "cmd_element" :["index","packlen","device_id","command","params","checksum"],
+
+        "icmd": "&&(\\w)(\\d+),(\\w+),(\\w+)(?:,(.+))?(\\w{2})",
+        "icmd_element" :["index","packlen","device_id","command","params","checksum"],
+        "delta_index": 58,
+
+        "param_sep": ",",
+        "tracking_elem": [
+            "packno",
+            "packlen",
+            "device_id",
+            "cmd",
+            "event_id",
+            "alarm",
+            "date_time",
+            "fix_flag",
+            "latitude",
+            "longitude",
+            "satellite",
+            "hdop",
+            "speed",
+            "heading",
+            "altitude",
+            "odometer",
+            "bs_inf",
+            "csq",
+            "system_sta",
+            "input_status",
+            "output_status",
+            "voltage",
+            "pro_code",
+            "fule_liter",
+            "temp_sensor",
+            "obd",
+            "checksum"
+        ],
+        "tracking": "^&&(\\w)(\\d+),([^,]+),([^,]+),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*)(?:,([^,]*))?([\\w]{2})",
+        
+        "tracking_field": [
+            {
+                "name":"alarm",
+                "type":"info"
+
+            },
+            {
+                "name":"fix_flag",
+                "type":"info"
+
+            },
+            {
+                "name":"hdop",
+                "type":"info"
+
+            },
+            {
+                "name":"odometer",
+                "type":"info"
+
+            },
+            {
+                "name":"bs_inf",
+                "type":"info"
+
+            },
+            {
+                "name":"csq",
+                "type":"info"
+
+            },
+            {
+                "name":"system_sta",
+                "type":"info"
+
+            },
+            {
+                "name":"input_status",
+                "type":"hex"
+
+            },
+            {
+                "name":"output_status",
+                "type":"hex"
+
+            },
+            {
+                "name":"voltage",
+                "type":"info"
+
+            },
+            {
+                "name":"pro_code",
+                "type":"info"
+
+            },
+            {
+                "name":"fule_liter",
+                "type":"info"
+
+            },
+            {
+                "name":"temp_sensor",
+                "type":"info"
+
+            },
+
+            {
+                "name":"obd",
+                "type":"info"
+
+            }
+        ],
+        "ttracking_field": {
+            "alarm":{
+                "type": "info"
+            },
+            "fix_flag":{
+                "type": "info"
+            },
+            "hdop":{
+                "type": "info"
+            },
+            "odometer":{
+                "type": "info"
+            },
+            "bs_inf":{
+                "type": "info"
+            },
+            "csq":{
+                "type": "info"
+            },
+            "system_sta":{
+                "type": "info"
+            },
+            "input_status": {
+                "to": "input_status",
+                "type": "hex"
+            },
+            "output_status": {
+                "to": "input_status",
+                "type": "hex"
+            },
+            "voltage":{
+                "type": "info"
+            },
+            "pro_code":{
+                "type": "info"
+            },
+            "fule_liter":{
+                "type": "info"
+            },
+            "temp_sensor":{
+                "type": "info"
+            },
+            "obd":{
+                "type": "info"
+            }
+        }
+    },
+    "encode": {
+        "cmd": "$$<packno><packlen>,<id>,<cmd><params><checksum>\r\n",
+        "icmd": "$$<index><packlen>,<id>,<cmd><params><checksum>\r\n",
+        "fpacklen": ",<id>,<cmd><params>",
+        "fchecksum": "$$<packno><packlen>,<id>,<cmd><params>",
+        "packno_begin": 58,
+        "packno_end": 126,
+        "delta_index": 58
+    },
+    "commands": {
+        "801": {
+            "index": true
+        }
+    },
+    "formats": {
+        "cmd": "$$<packno><packlen>,<id>,<cmd><params><checksum>\r\n",
+        "icmd": "$$<charindex><packlen>,<id>,<cmd><params><checksum>\r\n",
+        "exp_tracking": "&&([A-Z])([0-9]{1,3}),(\\w+),([0-9]{3})",
+        "dec_tracking": [
+            "long",
+            "lat"
+        ],
+        "exp_cmd": "&&()",
+        "exp_icmd": "&&()",
+        "dec_cmd": [
+            "",
+            ""
+        ],
+        "dec_icmd": [
+            "",
+            ""
+        ],
+        "dec_param": {
+            "obd": {
+                "type": "list",
+                "sep": "|",
+                "fields": 9
+            },
+            "in-sta": {
+                "type": "hex"
+            },
+            "system-sta": {
+                "type": "info"
+            }
+        }
+    }
+}
