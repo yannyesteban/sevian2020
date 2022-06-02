@@ -420,8 +420,13 @@ class Report
         if($data = $cn->getDataAssoc($result)){
             if($data['id'] > 0){
                 $data['params'] = json_decode($data["params"]);
-                $data['query'] = json_decode($data["query"]);
-                $data['values'] = json_decode($data["values"]);
+                if($data["query"]){
+                    $data['query'] = json_decode($data["query"]);
+                }
+                if($data["values"]){
+                    $data['values'] = json_decode($data["values"]);
+                }
+                
                 $data['__record_'] = ["id"=>$data["id"]];
             }else{
                 $data['params'] = new \stdClass;

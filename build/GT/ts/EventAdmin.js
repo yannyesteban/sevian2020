@@ -242,7 +242,7 @@ export class EventAdmin {
                     {
                         caption: "Buscar",
                         action: (item, event) => {
-                            const unitId = form.getInput("unitId").getValue();
+                            const unitId = this.getUnitId();
                             const dateFrom = form.getInput("dateFrom").getValue();
                             const dateTo = form.getInput("dateTo").getValue();
                             const timeFrom = form.getInput("timeFrom").getValue();

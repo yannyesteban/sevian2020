@@ -17,7 +17,7 @@ AFTER UPDATE ON codigos_equipos
 FOR EACH ROW
 BEGIN
 
-	UPDATE gt.device_name SET name = NEW.codigo WHERE name = OLD.codigo;
+	UPDATE gt.device SET name = null  WHERE name = NEW.codigo;
 	UPDATE gt.device SET name = NEW.codigo  WHERE name = OLD.codigo;
 
 END $$

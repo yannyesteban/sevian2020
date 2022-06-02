@@ -529,8 +529,8 @@ class Unit
 		ui.type,
 
 		'i' as ctype, number, ui.input_id as inputId, i.name,
-		($input >> (number - 1 ))%2 as `on`,
-		CASE ($input >> (number - 1 ))%2 WHEN 1 THEN value_on ELSE value_off END as value
+		('$input' >> (number - 1 ))%2 as `on`,
+		CASE ('$input' >> (number - 1 ))%2 WHEN 1 THEN value_on ELSE value_off END as value
 				FROM unit_input as ui
 				INNER JOIN input as i ON i.id = ui.input_id
 				INNER JOIN user_unit as uu ON uu.unit_id = ui.unit_id
@@ -543,8 +543,8 @@ class Unit
 		ui.type,
 
 		'o' as ctype, number, ui.input_id as inputId, i.name,
-		($output >> (number - 1 ))%2 as `on`,
-		CASE ($output >> (number - 1 ))%2 WHEN 1 THEN value_on ELSE value_off END as value
+		('$output' >> (number - 1 ))%2 as `on`,
+		CASE ('$output' >> (number - 1 ))%2 WHEN 1 THEN value_on ELSE value_off END as value
 				FROM unit_input as ui
 				INNER JOIN input as i ON i.id = ui.input_id
 				INNER JOIN user_unit as uu ON uu.unit_id = ui.unit_id
@@ -554,6 +554,7 @@ class Unit
 
 		";
 
+		//hx($cn->query);
         $result = $cn->execute();
 		$data = $cn->getDataAll($result);
 		$inputs = [];
