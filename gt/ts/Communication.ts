@@ -232,8 +232,7 @@ export class Communication {
 
 
             if(this.startSynch){
-               
-               // this.play();
+                this.play();
             }
 
             if (this.connectionId) {
