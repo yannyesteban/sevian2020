@@ -193,6 +193,7 @@ export class Event {
 
 
     public play() {
+        return;
         if (this.timer) {
 			window.clearTimeout(this.timer);
 		}
