@@ -570,7 +570,7 @@ export class Unit {
                 this.units[tracking.unitId].data.connected = tracking.connected;
             }
             catch (e) {
-                console.log(e);
+                console.log(e, tracking.unitId, this.units);
             }
             if (updateLastConnection) {
                 this.onInfoUpdate(this.getUnitInfo(tracking.unitId), this.units[tracking.unitId].getName());

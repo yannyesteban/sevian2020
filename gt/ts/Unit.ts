@@ -770,7 +770,7 @@ export class Unit {
 			try{
 				this.units[tracking.unitId].data.connected = tracking.connected;
 			}catch(e){
-				console.log(e)
+				console.log(e, tracking.unitId, this.units)
 			}
 			
 
