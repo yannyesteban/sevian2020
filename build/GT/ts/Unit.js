@@ -552,6 +552,7 @@ export class Unit {
         }
     }
     updateTracking(data) {
+        console.log(data);
         for (let unitId in this.units) {
             this.units[unitId].cutTrace();
         }
