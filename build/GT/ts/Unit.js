@@ -552,7 +552,6 @@ export class Unit {
         }
     }
     updateTracking(data) {
-        console.log(data);
         for (let unitId in this.units) {
             this.units[unitId].cutTrace();
         }
@@ -560,18 +559,16 @@ export class Unit {
             return;
         }
         let sum = 0;
-        console.log({ _lastUnitId: this._lastUnitId });
         data.connected.forEach((tracking) => {
+            if (tracking.unitId in this.units == false) {
+                console.log({ _lastUnitId: this._lastUnitId, unitId: tracking.unitId });
+                return;
+            }
             let updateLastConnection = false;
             if (this._lastUnitId === tracking.unitId && this.units[tracking.unitId].data.connected != tracking.connected) {
                 updateLastConnection = true;
             }
-            try {
-                this.units[tracking.unitId].data.connected = tracking.connected;
-            }
-            catch (e) {
-                console.log(e, tracking.unitId, this.units);
-            }
+            this.units[tracking.unitId].data.connected = tracking.connected;
             if (updateLastConnection) {
                 this.onInfoUpdate(this.getUnitInfo(tracking.unitId), this.units[tracking.unitId].getName());
             }
