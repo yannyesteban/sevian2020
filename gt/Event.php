@@ -485,15 +485,15 @@ class Event
 
 		
 
-        date_format(e.stamp, '%d/%m/%Y') as fdate,
-        date_format(e.stamp, '%T') as ftime, t.speed, t.id as tracking_id,
+        date_format(coalesce(t.date_time, e.stamp), '%d/%m/%Y') as fdate,
+        date_format(coalesce(t.date_time, e.stamp), '%T') as ftime, t.speed, t.id as tracking_id,
 		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), attend) as attend,
 		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), now()) as delay,
         CONCAT(
 
-			LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.stamp), NOW()),2,0), ':',
-			LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), NOW()), 60),2,0), ':',
-			LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(e.stamp), NOW()), 60),2,0),'' ) AS delay,
+			LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(coalesce(t.date_time, e.stamp)), NOW()),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(MINUTE, TIMESTAMP(coalesce(t.date_time, e.stamp)), NOW()), 60),2,0), ':',
+			LPAD(MOD(TIMESTAMPDIFF(SECOND, TIMESTAMP(coalesce(t.date_time, e.stamp)), NOW()), 60),2,0),'' ) AS delay,
 		CONCAT(
 
 			LPAD(TIMESTAMPDIFF(HOUR, TIMESTAMP(e.attend), NOW()),2,0), ':',
