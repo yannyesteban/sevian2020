@@ -408,7 +408,7 @@ class Event
 		
 
         date_format(coalesce(t.date_time, e.stamp), '%d/%m/%Y') as fdate,
-        date_format(e.stamp, '%T') as ftime, t.speed, t.id as tracking_id,
+        date_format(coalesce(t.date_time, e.stamp), '%T') as ftime, t.speed, t.id as tracking_id,
 		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), attend) as attend,
 		#TIMESTAMPDIFF(MINUTE, TIMESTAMP(e.stamp), now()) as delay,
         CONCAT(
